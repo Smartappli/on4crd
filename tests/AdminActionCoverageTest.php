@@ -72,7 +72,7 @@ final class AdminActionCoverageTest extends TestCase
                 'page' => 'pages/admin_articles.php',
                 'controller_snippets' => ["'bulk_update_articles'", "'save_category'", "'retry_scheduled_article'", "'retry_scheduled_bulk'"],
                 'selenium' => 'tests/selenium/admin-maintenance-coverage.test.js',
-                'selenium_snippets' => ['bulk_update_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
+                'selenium_snippets' => ['save_category', 'bulk_update_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
             ],
             'admin article editor actions' => [
                 'page' => 'pages/admin_articles.php',
@@ -108,7 +108,7 @@ final class AdminActionCoverageTest extends TestCase
                 'page' => 'pages/admin_library.php',
                 'controller_snippets' => ["'upload'", "'delete_document'", "'add_category'", "'update_category'", "'delete_category'", "'add_subcategory'", "'update_subcategory'", "'delete_subcategory'", 'library_store_upload('],
                 'selenium' => 'tests/selenium/admin-module-crud-workflows.test.js',
-                'selenium_snippets' => ['admin_library', 'admin-library-upload-form', 'delete_document', 'createLibraryDocumentFromAdminRoute'],
+                'selenium_snippets' => ['admin_library', 'admin-library-upload-form', 'delete_document', 'createLibraryDocumentFromAdminRoute', 'createUpdateDeleteAdminTaxonomy'],
             ],
             'admin classifieds bulk actions' => [
                 'page' => 'pages/admin_classifieds.php',
@@ -124,9 +124,9 @@ final class AdminActionCoverageTest extends TestCase
             ],
             'admin privacy status actions' => [
                 'page' => 'pages/admin_privacy.php',
-                'controller_snippets' => ['privacy_update_request_status('],
+                'controller_snippets' => ['privacy_update_request_status(', 'apply_erasure'],
                 'selenium' => 'tests/selenium/member-privacy-notifications.test.js',
-                'selenium_snippets' => ['admin_privacy', 'select[name="status"]', "'resolved'"],
+                'selenium_snippets' => ['admin_privacy', 'select[name="status"]', "'resolved'", 'apply_erasure', 'createErasureRequestFixture'],
             ],
             'admin translation review actions' => [
                 'page' => 'pages/admin_translation_reviews.php',
@@ -181,6 +181,13 @@ final class AdminActionCoverageTest extends TestCase
                 'controller_snippets' => ["'update_page_status'", "'add_category'", "'update_category'", "'delete_category'", "'add_subcategory'", "'update_subcategory'", "'delete_subcategory'", 'wiki_revisions'],
                 'selenium' => 'tests/selenium/admin-articles-wiki-workflow.test.js',
                 'selenium_snippets' => ['admin_wiki', 'add_category', 'add_subcategory', 'pageStatusForm', 'delete_subcategory', 'delete_category'],
+            ],
+            'admin taxonomy label update actions' => [
+                'page' => 'pages/admin_articles.php',
+                'source_paths' => ['pages/admin_wiki.php', 'pages/admin_library.php', 'app/member_webotheque.php', 'app/member_module_documents.php'],
+                'controller_snippets' => ["'update_category'", "'update_subcategory'"],
+                'selenium' => 'tests/selenium/admin-maintenance-coverage.test.js',
+                'selenium_snippets' => ['update_category', 'update_subcategory', 'taxonomyEditState'],
             ],
             'admin album lifecycle and taxonomy actions' => [
                 'page' => 'pages/admin_albums.php',

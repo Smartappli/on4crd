@@ -52,6 +52,15 @@ async function setFieldValue(driver, element, value) {
   `, element, value);
 }
 
+async function setCheckbox(driver, element, checked) {
+  await driver.executeScript(`
+    const element = arguments[0];
+    element.checked = Boolean(arguments[1]);
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+    element.dispatchEvent(new Event('change', { bubbles: true }));
+  `, element, checked);
+}
+
 function seleniumJson(source, env = {}) {
   return JSON.parse(runSeleniumPhp(source, env) || 'null');
 }
@@ -219,6 +228,96 @@ echo (int) ($stmt->fetchColumn() ?: 0);
 `, { SELENIUM_TOKEN: token }).trim());
 }
 
+function createErasureRequestFixture(token) {
+  const fixture = seleniumJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/privacy_helpers.php';
+privacy_ensure_tables();
+$token = trim((string) getenv('SELENIUM_TOKEN'));
+if ($token === '' || !table_exists('members')) {
+    throw new RuntimeException('Fixture effacement RGPD impossible.');
+}
+$callsign = 'ERASE' . substr(preg_replace('/[^0-9A-Za-z]/', '', $token), -8);
+$email = strtolower($callsign) . '@example.test';
+$columns = ['callsign', 'full_name', 'email', 'password_hash', 'is_active'];
+$values = [$callsign, 'Selenium Erasure ' . $token, $email, password_hash(bin2hex(random_bytes(8)), PASSWORD_DEFAULT), 1];
+if (table_has_column('members', 'auth_user_id')) {
+    $columns[] = 'auth_user_id';
+    $values[] = 0;
+}
+if (table_has_column('members', 'first_name')) {
+    $columns[] = 'first_name';
+    $values[] = 'Selenium';
+}
+if (table_has_column('members', 'last_name')) {
+    $columns[] = 'last_name';
+    $values[] = 'Erasure';
+}
+db()->prepare('INSERT INTO members (' . implode(', ', $columns) . ') VALUES (' . implode(', ', array_fill(0, count($columns), '?')) . ')')
+    ->execute($values);
+$memberId = (int) db()->lastInsertId();
+db()->prepare('INSERT INTO privacy_requests (member_id, request_type, status, notes) VALUES (?, "erasure", "pending", ?)')
+    ->execute([$memberId, 'Demande effacement Selenium ' . $token]);
+$requestId = (int) db()->lastInsertId();
+echo json_encode(['member_id' => $memberId, 'request_id' => $requestId, 'callsign' => $callsign], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_TOKEN: token });
+  assert.ok(fixture && Number(fixture.member_id) > 0 && Number(fixture.request_id) > 0, 'La fixture effacement RGPD doit etre creee.');
+  return fixture;
+}
+
+function erasureFixtureState(fixture) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/privacy_helpers.php';
+privacy_ensure_tables();
+$requestId = (int) getenv('SELENIUM_REQUEST_ID');
+$memberId = (int) getenv('SELENIUM_MEMBER_ID');
+$stmt = db()->prepare('SELECT id, status, admin_notes, erasure_completed_at FROM privacy_requests WHERE id = ? LIMIT 1');
+$stmt->execute([$requestId]);
+$request = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+$memberStmt = db()->prepare('SELECT id, callsign, email, is_active FROM members WHERE id = ? LIMIT 1');
+$memberStmt->execute([$memberId]);
+$member = $memberStmt->fetch(PDO::FETCH_ASSOC) ?: null;
+$eventCount = 0;
+if (table_exists('privacy_request_events')) {
+    $eventStmt = db()->prepare('SELECT COUNT(*) FROM privacy_request_events WHERE request_id = ? AND event_type = "erasure_applied"');
+    $eventStmt->execute([$requestId]);
+    $eventCount = (int) ($eventStmt->fetchColumn() ?: 0);
+}
+echo json_encode(['request' => $request, 'member' => $member, 'erasure_events' => $eventCount], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, {
+    SELENIUM_REQUEST_ID: String(fixture.request_id),
+    SELENIUM_MEMBER_ID: String(fixture.member_id),
+  });
+}
+
+function cleanupErasureRequestFixture(fixture) {
+  runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$requestId = (int) getenv('SELENIUM_REQUEST_ID');
+$memberId = (int) getenv('SELENIUM_MEMBER_ID');
+if ($requestId > 0 && table_exists('privacy_request_events')) {
+    db()->prepare('DELETE FROM privacy_request_events WHERE request_id = ?')->execute([$requestId]);
+}
+if ($requestId > 0 && table_exists('privacy_requests')) {
+    db()->prepare('DELETE FROM privacy_requests WHERE id = ? LIMIT 1')->execute([$requestId]);
+}
+if ($memberId > 0) {
+    foreach (['member_roles', 'member_permissions', 'member_notifications', 'member_favorites'] as $table) {
+        if (table_exists($table)) {
+            db()->prepare('DELETE FROM ' . $table . ' WHERE member_id = ?')->execute([$memberId]);
+        }
+    }
+    if (table_exists('members')) {
+        db()->prepare('DELETE FROM members WHERE id = ? LIMIT 1')->execute([$memberId]);
+    }
+}
+`, {
+    SELENIUM_REQUEST_ID: String(fixture.request_id || 0),
+    SELENIUM_MEMBER_ID: String(fixture.member_id || 0),
+  });
+}
+
 function createNotification(memberId, title, body) {
   return Number(runSeleniumPhp(`
 require_once 'app/bootstrap.php';
@@ -309,6 +408,50 @@ test('Selenium membre RGPD: demande non-admin, validation admin et suivi Mes con
     } finally {
       cleanupPrivacyRequest(token);
       cleanupMemberPrivacyRequests(member.id);
+    }
+  });
+});
+
+test('Selenium admin RGPD: resoudre une demande avec effacement applique', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+  const token = `SELENIUMERASURE${Date.now()}`;
+  const adminNote = `Effacement applique ${token}`;
+  const fixture = createErasureRequestFixture(token);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      await visit(driver, 'admin_privacy');
+      let text = await pagePlainText(driver);
+      assert.match(text, new RegExp(token), 'La demande d effacement isolee doit apparaitre en admin.');
+
+      const adminForm = await driver.findElement(By.xpath(`//input[@name="request_id" and @value="${fixture.request_id}"]/ancestor::form[1]`));
+      await setFieldValue(driver, await adminForm.findElement(By.css('select[name="status"]')), 'resolved');
+      await setCheckbox(driver, await adminForm.findElement(By.css('input[name="apply_erasure"]')), true);
+      await setFieldValue(driver, await adminForm.findElement(By.css('textarea[name="admin_notes"]')), adminNote);
+      await submitForm(driver, adminForm);
+
+      const state = erasureFixtureState(fixture);
+      assert.equal(state.request.status, 'resolved', 'La demande d effacement doit etre resolue.');
+      assert.equal(state.request.admin_notes, adminNote, 'La note admin d effacement doit etre conservee.');
+      assert.ok(state.request.erasure_completed_at, 'La date d effacement doit etre renseignee.');
+      assert.equal(state.member.callsign, `ERASED${fixture.member_id}`, 'Le membre temporaire doit etre anonymise.');
+      assert.equal(Number(state.member.is_active), 0, 'Le membre temporaire anonymise doit etre desactive.');
+      assert.equal(state.member.email, null, 'L email du membre temporaire doit etre efface.');
+      assert.ok(Number(state.erasure_events) > 0, 'Un evenement erasure_applied doit etre journalise.');
+
+      await visit(driver, 'admin_privacy');
+      text = await pagePlainText(driver);
+      assert.match(text, /anonym|effacement|erasure/i, 'La page admin doit afficher le suivi de l effacement.');
+    } finally {
+      cleanupErasureRequestFixture(fixture);
     }
   });
 });

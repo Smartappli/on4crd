@@ -12,7 +12,7 @@ test('Selenium admin: contrats des actions hors propositions', () => {
     {
       label: 'articles bulk and scheduled retries',
       file: 'tests/selenium/admin-maintenance-coverage.test.js',
-      snippets: ['bulk_update_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
+      snippets: ['save_category', 'bulk_update_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
     },
     {
       label: 'article editor preview restore and delete',
@@ -42,7 +42,7 @@ test('Selenium admin: contrats des actions hors propositions', () => {
     {
       label: 'library upload taxonomy and delete',
       file: 'tests/selenium/admin-module-crud-workflows.test.js',
-      snippets: ['admin_library', 'admin-library-upload-form', 'delete_document', 'createLibraryDocumentFromAdminRoute'],
+      snippets: ['admin_library', 'admin-library-upload-form', 'delete_document', 'createLibraryDocumentFromAdminRoute', 'createUpdateDeleteAdminTaxonomy'],
     },
     {
       label: 'classifieds bulk moderation and delete',
@@ -57,7 +57,7 @@ test('Selenium admin: contrats des actions hors propositions', () => {
     {
       label: 'privacy status handling',
       file: 'tests/selenium/member-privacy-notifications.test.js',
-      snippets: ['admin_privacy', 'select[name="status"]', "'resolved'"],
+      snippets: ['admin_privacy', 'select[name="status"]', "'resolved'", 'apply_erasure', 'createErasureRequestFixture'],
     },
     {
       label: 'translation reviews',
@@ -103,6 +103,11 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       label: 'wiki taxonomy and status',
       file: 'tests/selenium/admin-articles-wiki-workflow.test.js',
       snippets: ['admin_wiki', 'add_category', 'add_subcategory', 'pageStatusForm', 'delete_subcategory', 'delete_category'],
+    },
+    {
+      label: 'taxonomy label updates',
+      file: 'tests/selenium/admin-maintenance-coverage.test.js',
+      snippets: ['update_category', 'update_subcategory', 'taxonomyEditState'],
     },
     {
       label: 'album lifecycle and taxonomy',
