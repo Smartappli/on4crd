@@ -2,6 +2,7 @@ const test = require('node:test');
 const {
   By,
   assert,
+  routeUrl,
   withSelenium,
   visit,
   waitForDocumentReady,
@@ -346,6 +347,47 @@ if ($id > 0 && table_exists('member_notifications')) {
 `, { SELENIUM_NOTIFICATION_ID: String(notificationId || 0) });
 }
 
+function notificationReadState(notificationId) {
+  return Number(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$id = (int) getenv('SELENIUM_NOTIFICATION_ID');
+if ($id <= 0 || !table_exists('member_notifications')) {
+    echo 0;
+    return;
+}
+$stmt = db()->prepare('SELECT is_read FROM member_notifications WHERE id = ? LIMIT 1');
+$stmt->execute([$id]);
+echo (int) ($stmt->fetchColumn() ?: 0);
+`, { SELENIUM_NOTIFICATION_ID: String(notificationId || 0) }).trim());
+}
+
+async function postDashboardMarkNotificationsRead(driver) {
+  const response = await driver.executeAsyncScript(`
+    const done = arguments[arguments.length - 1];
+    const grid = document.querySelector('#dashboard-grid');
+    const config = grid ? JSON.parse(grid.getAttribute('data-config') || '{}') : {};
+    const form = new FormData();
+    form.append('_csrf', config.csrf || '');
+    form.append('action', 'mark_notifications_read');
+    fetch(arguments[0], {
+      method: 'POST',
+      body: form,
+      credentials: 'same-origin',
+      redirect: 'follow',
+    }).then(async (result) => ({
+      ok: result.ok,
+      status: result.status,
+      body: await result.text(),
+    })).catch((error) => ({
+      ok: false,
+      status: 0,
+      body: String(error),
+    })).then(done);
+  `, routeUrl('dashboard'));
+  assert.equal(response.ok, true, `Le POST dashboard mark_notifications_read doit reussir: ${response.status} ${response.body}`);
+  assert.doesNotMatch(response.body, /Fatal error|Parse error|Internal Server Error|HTTP ERROR 5\d\d/i);
+}
+
 async function loginAsMember(driver) {
   await loginAsAdmin(driver, memberUsername, memberPassword);
 }
@@ -470,7 +512,10 @@ test('Selenium membre notifications: filtrer et marquer comme lu', async (t) => 
   const title = `Notification Selenium ${suffix}`;
   const body = `Corps notification Selenium ${suffix}`;
   const notificationId = createNotification(member.id, title, body);
+  const dashboardTitle = `Notification dashboard Selenium ${suffix}`;
+  const dashboardNotificationId = createNotification(member.id, dashboardTitle, body);
   assert.ok(notificationId > 0, 'La notification Selenium doit etre creee.');
+  assert.ok(dashboardNotificationId > 0, 'La notification dashboard Selenium doit etre creee.');
 
   await withSelenium(t, async (driver) => {
     try {
@@ -492,11 +537,18 @@ echo (int) ($stmt->fetchColumn() ?: 0);
 `, { SELENIUM_NOTIFICATION_ID: String(notificationId) }).trim());
       assert.equal(isRead, 1, 'La notification doit etre marquee comme lue.');
 
+      assert.equal(notificationReadState(dashboardNotificationId), 0, 'La notification dashboard doit etre non lue avant le POST dashboard.');
+      await visit(driver, 'dashboard');
+      await postDashboardMarkNotificationsRead(driver);
+      assert.equal(notificationReadState(dashboardNotificationId), 1, 'Le dashboard doit marquer toutes les notifications comme lues.');
+
       await visit(driver, 'notifications', { filter: 'unread' });
       text = await pagePlainText(driver);
       assert.doesNotMatch(text, new RegExp(title), 'La notification lue ne doit plus apparaitre dans le filtre non lu.');
+      assert.doesNotMatch(text, new RegExp(dashboardTitle), 'La notification lue depuis dashboard ne doit plus apparaitre dans le filtre non lu.');
     } finally {
       cleanupNotification(notificationId);
+      cleanupNotification(dashboardNotificationId);
     }
   });
 });
