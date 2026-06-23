@@ -6,6 +6,7 @@ const {
   By,
   until,
   assert,
+  routeUrl,
   timeoutMs,
   withSelenium,
   visit,
@@ -67,6 +68,7 @@ require_once 'app/route_helper_loader.php';
 app_load_route_helpers('__all');
 $title = getenv('SELENIUM_TEST_TITLE') ?: '';
 if ($title !== '') {
+    $like = '%' . $title . '%';
     if (table_exists('albums')) {
         $stmt = db()->prepare('SELECT id FROM albums WHERE title = ? OR title = ?');
         $stmt->execute([$title, $title . ' updated']);
@@ -102,6 +104,13 @@ if ($title !== '') {
     if (table_exists('content_proposals')) {
         db()->prepare('DELETE FROM content_proposals WHERE title = ?')->execute([$title]);
         db()->prepare('DELETE FROM content_proposals WHERE title = ?')->execute([$title . ' updated']);
+        db()->prepare('DELETE FROM content_proposals WHERE title LIKE ?')->execute([$title . '%']);
+    }
+    if (table_exists('member_library_subcategories')) {
+        db()->prepare('DELETE FROM member_library_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+    }
+    if (table_exists('member_library_categories')) {
+        db()->prepare('DELETE FROM member_library_categories WHERE code <> "general" AND (code LIKE ? OR label LIKE ?)')->execute([$like, $like]);
     }
     if (table_exists('member_library_documents')) {
         $stmt = db()->prepare('SELECT id, file_path FROM member_library_documents WHERE title = ? OR title = ?');
@@ -121,6 +130,107 @@ if ($title !== '') {
     }
 }
 `, { SELENIUM_TEST_TITLE: title });
+}
+
+function memberLibraryDocumentByTitle(title) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$title = (string) getenv('SELENIUM_TEST_TITLE');
+if ($title === '' || !table_exists('member_library_documents')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, member_id, title, file_path FROM member_library_documents WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$title]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_TEST_TITLE: title }).trim() || 'null');
+}
+
+function memberLibraryCategoryByLabel(label) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$label = (string) getenv('SELENIUM_LIBRARY_LABEL');
+if ($label === '' || !table_exists('member_library_categories')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT code, label FROM member_library_categories WHERE label = ? ORDER BY code DESC LIMIT 1');
+$stmt->execute([$label]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_LIBRARY_LABEL: label }).trim() || 'null');
+}
+
+function memberLibrarySubcategoryByLabel(label) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$label = (string) getenv('SELENIUM_LIBRARY_LABEL');
+if ($label === '' || !table_exists('member_library_subcategories')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT category_code, code, label FROM member_library_subcategories WHERE label = ? ORDER BY code DESC LIMIT 1');
+$stmt->execute([$label]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_LIBRARY_LABEL: label }).trim() || 'null');
+}
+
+function contentProposalExists(area, type, title) {
+  return Number(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$area = (string) getenv('SELENIUM_PROPOSAL_AREA');
+$type = (string) getenv('SELENIUM_PROPOSAL_TYPE');
+$title = (string) getenv('SELENIUM_PROPOSAL_TITLE');
+if ($area === '' || $type === '' || $title === '' || !table_exists('content_proposals')) {
+    echo 0;
+    return;
+}
+$stmt = db()->prepare('SELECT COUNT(*) FROM content_proposals WHERE area = ? AND proposal_type = ? AND title = ?');
+$stmt->execute([$area, $type, $title]);
+echo (int) ($stmt->fetchColumn() ?: 0);
+`, {
+    SELENIUM_PROPOSAL_AREA: area,
+    SELENIUM_PROPOSAL_TYPE: type,
+    SELENIUM_PROPOSAL_TITLE: title,
+  }).trim()) > 0;
+}
+
+function libraryFavoriteSaved(memberId, documentId) {
+  return Number(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$memberId = (int) getenv('SELENIUM_MEMBER_ID');
+$documentId = (int) getenv('SELENIUM_DOCUMENT_ID');
+if ($memberId <= 0 || $documentId <= 0 || !table_exists('member_favorites')) {
+    echo 0;
+    return;
+}
+$stmt = db()->prepare('SELECT COUNT(*) FROM member_favorites WHERE member_id = ? AND target_type = "library_document" AND target_id = ?');
+$stmt->execute([$memberId, $documentId]);
+echo (int) ($stmt->fetchColumn() ?: 0);
+`, {
+    SELENIUM_MEMBER_ID: String(memberId),
+    SELENIUM_DOCUMENT_ID: String(documentId),
+  }).trim()) > 0;
+}
+
+async function fetchAuthenticatedResource(driver, url) {
+  return driver.executeAsyncScript(`
+    const url = arguments[0];
+    const done = arguments[arguments.length - 1];
+    fetch(url, { credentials: 'same-origin' })
+      .then(async (response) => ({
+        ok: response.ok,
+        status: response.status,
+        contentType: response.headers.get('content-type') || '',
+        body: await response.arrayBuffer().then((buffer) => buffer.byteLength)
+      }))
+      .catch((error) => ({
+        ok: false,
+        status: 0,
+        contentType: '',
+        body: String(error)
+      }))
+      .then(done);
+  `, url);
 }
 
 test('Selenium membre: creer, modifier et vendre une petite annonce', async (t) => {
@@ -261,6 +371,13 @@ test('Selenium membre: ajouter un document bibliotheque et le retrouver en ligne
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'Le document .doc ajoute doit etre visible en ligne dans la bibliotheque membre.');
 
+      const document = memberLibraryDocumentByTitle(title);
+      assert.ok(document && Number(document.id) > 0, 'Le document bibliotheque doit exister apres upload admin.');
+      const preview = await fetchAuthenticatedResource(driver, routeUrl('member_library_preview', { id: document.id, download: '1' }));
+      assert.equal(preview.ok, true, `member_library_preview doit servir le document (${preview.status}).`);
+      assert.match(preview.contentType, /application\/msword|application\/octet-stream/i, 'member_library_preview doit renvoyer un type de document bureautique.');
+      assert.ok(Number(preview.body) > 0, 'member_library_preview doit renvoyer un fichier non vide.');
+
       await visit(driver, 'my_requests');
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'Le document .doc ajoute doit apparaitre dans Mes contenus.');
@@ -279,6 +396,9 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
 
   const title = `selenium-library-member-form-${Date.now()}`;
   const updatedTitle = `${title} updated`;
+  const categoryTitle = `${title}-category`;
+  const subcategoryTitle = `${title}-subcategory`;
+  const tagTitle = `${title}-tag`;
   const fixtureDir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
   fs.mkdirSync(fixtureDir, { recursive: true });
   const fixture = path.join(fixtureDir, `${title}.txt`);
@@ -293,6 +413,32 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
       ensureSeleniumFixtures();
       await loginAsAdmin(driver, credentials.username, credentials.password);
       await visit(driver, 'members_library');
+
+      const categoryForm = await driver.findElement(By.xpath('//dialog[@id="members-library-category-dialog"]//form[.//input[@name="action" and @value="propose_category"]]'));
+      await setInputValue(driver, await categoryForm.findElement(By.css('input[name="proposal_category_name"]')), categoryTitle);
+      await setInputValue(driver, await categoryForm.findElement(By.css('textarea[name="proposal_reason"]')), 'Categorie bibliotheque proposee par Selenium.');
+      await submitForm(driver, categoryForm);
+      const category = memberLibraryCategoryByLabel(categoryTitle);
+      assert.ok(category && category.code, 'La proposition de categorie bibliotheque doit creer la categorie en admin.');
+
+      await visit(driver, 'members_library');
+      const subcategoryForm = await driver.findElement(By.xpath('//dialog[@id="members-library-subcategory-dialog"]//form[.//input[@name="action" and @value="propose_subcategory"]]'));
+      await setInputValue(driver, await subcategoryForm.findElement(By.css('select[name="proposal_parent_category"]')), category.code);
+      await setInputValue(driver, await subcategoryForm.findElement(By.css('input[name="proposal_subcategory_name"]')), subcategoryTitle);
+      await setInputValue(driver, await subcategoryForm.findElement(By.css('textarea[name="proposal_reason"]')), 'Sous-categorie bibliotheque proposee par Selenium.');
+      await submitForm(driver, subcategoryForm);
+      const subcategory = memberLibrarySubcategoryByLabel(subcategoryTitle);
+      assert.ok(subcategory && subcategory.code, 'La proposition de sous-categorie bibliotheque doit creer la sous-categorie en admin.');
+      assert.equal(subcategory.category_code, category.code, 'La sous-categorie doit etre rattachee a la categorie proposee.');
+
+      await visit(driver, 'members_library');
+      const tagForm = await driver.findElement(By.xpath('//dialog[@id="members-library-tag-dialog"]//form[.//input[@name="action" and @value="propose_tag"]]'));
+      await setInputValue(driver, await tagForm.findElement(By.css('input[name="proposal_tag"]')), tagTitle);
+      await setInputValue(driver, await tagForm.findElement(By.css('textarea[name="proposal_reason"]')), 'Mot cle bibliotheque propose par Selenium.');
+      await submitForm(driver, tagForm);
+      assert.equal(contentProposalExists('members_library', 'tag', tagTitle), true, 'La proposition de tag bibliotheque doit etre enregistree.');
+
+      await visit(driver, 'members_library');
       await driver.executeScript(`
         const dialog = document.getElementById('members-library-document-dialog');
         if (dialog && !dialog.open) {
@@ -304,10 +450,12 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
         }
       `);
 
-      const form = await driver.wait(until.elementLocated(By.css('#members-library-document-dialog form')), timeoutMs);
+      const form = await driver.wait(until.elementLocated(By.xpath('//dialog[@id="members-library-document-dialog"]//form[.//input[@name="action" and @value="propose_document"]]')), timeoutMs);
       await driver.wait(until.elementIsVisible(form), timeoutMs);
       await setInputValue(driver, await form.findElement(By.css('input[name="proposal_title"]')), title);
-      await setInputValue(driver, await form.findElement(By.css('input[name="proposal_tags"]')), 'formation');
+      await setInputValue(driver, await form.findElement(By.css('select[name="proposal_category"]')), category.code);
+      await setInputValue(driver, await form.findElement(By.css('select[name="proposal_subcategory_ref"]')), `${category.code}:${subcategory.code}`);
+      await setInputValue(driver, await form.findElement(By.css('input[name="proposal_tags"]')), tagTitle);
       await form.findElement(By.css('input[type="file"][name="proposal_file"]')).sendKeys(path.resolve(fixture));
       await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Document propose depuis la bibliotheque membre.');
 
@@ -319,6 +467,12 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
       await visit(driver, 'members_library', { q: title });
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'Le document soumis depuis members_library doit etre visible en bibliotheque.');
+
+      const document = memberLibraryDocumentByTitle(title);
+      assert.ok(document && Number(document.id) > 0, 'Le document soumis depuis members_library doit exister en base.');
+      const favoriteForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="toggle_favorite_document"] and .//input[@name="document_id" and @value="${document.id}"]]`));
+      await submitForm(driver, favoriteForm);
+      assert.equal(libraryFavoriteSaved(Number(document.member_id), Number(document.id)), true, 'Le document members_library doit etre ajoutable aux favoris.');
 
       await visit(driver, 'my_requests');
       text = await pagePlainText(driver);

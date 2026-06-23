@@ -264,7 +264,7 @@ $webId = webotheque_insert_link($memberId, 'general', $webTitle, 'https://exampl
 
 echo json_encode([
     'article' => ['id' => $articleId, 'slug' => $articleSlug, 'title' => $articleTitle],
-    'wiki' => ['id' => $wikiId, 'title' => $wikiTitle],
+    'wiki' => ['id' => $wikiId, 'slug' => $wikiSlug, 'title' => $wikiTitle],
     'album' => ['id' => $albumId, 'title' => $albumTitle],
     'webotheque' => ['id' => $webId, 'title' => $webTitle],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -304,6 +304,20 @@ $stmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
 $stmt->execute([$albumId]);
 echo (int) ($stmt->fetchColumn() ?: 0);
 `, { SELENIUM_ALBUM_ID: String(albumId) }).trim());
+}
+
+function wikiPageRecord(pageId) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$pageId = (int) getenv('SELENIUM_WIKI_PAGE_ID');
+if ($pageId <= 0 || !table_exists('wiki_pages')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, slug, title, content FROM wiki_pages WHERE id = ? LIMIT 1');
+$stmt->execute([$pageId]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_WIKI_PAGE_ID: String(pageId) });
 }
 
 async function submitProposal(driver, route, query, action, fields) {
@@ -467,6 +481,49 @@ test('Selenium membre/public: detail article et album couvrent favoris et upload
       await uploadForm.findElement(By.css('input[type="file"][name="photos[]"]')).sendKeys(photoFixture);
       await submitForm(driver, uploadForm);
       assert.equal(albumPhotoCount(fixtures.album.id), beforePhotos + 1, 'Le detail album doit accepter l upload de photo.');
+    } finally {
+      cleanupCoverageRows(token);
+    }
+  });
+});
+
+test('Selenium membre/public: detail wiki couvre modification et suppression admin', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  const token = `SELENIUMWIKIDETAIL${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+  const member = memberByCallsign(credentials.username.toUpperCase());
+  cleanupCoverageRows(token);
+  const fixtures = prepareFavoriteFixtures(token, Number(member.id));
+  const updatedTitle = `${fixtures.wiki.title} updated`;
+  const updatedSlug = `${fixtures.wiki.slug}-updated`;
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+
+      await visit(driver, 'wiki_view', { slug: fixtures.wiki.slug });
+      const updateForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="update_page"]]'));
+      await setFieldValue(driver, await updateForm.findElement(By.css('input[name="title"]')), updatedTitle);
+      await setFieldValue(driver, await updateForm.findElement(By.css('input[name="slug"]')), updatedSlug);
+      await setFieldValue(driver, await updateForm.findElement(By.css('textarea[name="content"]')), `<p>Wiki detail ${token} modifie.</p>`);
+      await submitForm(driver, updateForm);
+
+      const updatedRecord = wikiPageRecord(fixtures.wiki.id);
+      assert.ok(updatedRecord, 'La page wiki doit encore exister apres modification.');
+      assert.equal(updatedRecord.title, updatedTitle, 'Le detail wiki doit mettre a jour le titre.');
+      assert.equal(updatedRecord.slug, updatedSlug, 'Le detail wiki doit mettre a jour le slug.');
+      assert.match(String(updatedRecord.content), new RegExp(token), 'Le detail wiki doit mettre a jour le contenu.');
+
+      await visit(driver, 'wiki_view', { slug: updatedSlug });
+      const deleteForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="delete_page"]]'));
+      await submitForm(driver, deleteForm);
+      assert.equal(wikiPageRecord(fixtures.wiki.id), null, 'Le detail wiki doit supprimer la page pour un administrateur.');
     } finally {
       cleanupCoverageRows(token);
     }
