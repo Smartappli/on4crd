@@ -113,7 +113,7 @@ function newsPostBySlug(slug) {
   const output = runSeleniumPhp(`
 require_once 'app/bootstrap.php';
 $slug = trim((string) (getenv('SELENIUM_CONTENT_SLUG') ?: ''));
-$stmt = db()->prepare('SELECT slug, title, excerpt, content, status, published_at FROM news_posts WHERE slug = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, section_id, author_id, slug, title, excerpt, content, status, published_at FROM news_posts WHERE slug = ? LIMIT 1');
 $stmt->execute([$slug]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_CONTENT_SLUG: slug });
@@ -125,7 +125,7 @@ function eventBySlug(slug) {
   const output = runSeleniumPhp(`
 require_once 'app/bootstrap.php';
 $slug = trim((string) (getenv('SELENIUM_CONTENT_SLUG') ?: ''));
-$stmt = db()->prepare('SELECT slug, title, summary, description, kind, start_at, end_at, location, external_url, status FROM events WHERE slug = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, slug, title, summary, description, kind, start_at, end_at, location, external_url, status FROM events WHERE slug = ? LIMIT 1');
 $stmt->execute([$slug]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_CONTENT_SLUG: slug });
@@ -167,10 +167,17 @@ test('Selenium admin actualites: creer, modifier, rechercher et consulter publiq
 
       let newsPost = newsPostBySlug(slug);
       assert.ok(newsPost, 'L actualite creee doit etre presente en DB.');
+      assert.ok(Number(newsPost.id) > 0, 'L actualite creee doit avoir un identifiant DB.');
+      assert.ok(Number(newsPost.section_id) > 0, 'L actualite creee doit etre rattachee a une rubrique.');
+      assert.ok(Number(newsPost.author_id) > 0, 'L actualite creee doit etre rattachee a un auteur.');
+      assert.equal(newsPost.slug, slug, 'Le slug initial de l actualite doit etre persiste.');
       assert.equal(newsPost.title, title, 'Le titre initial de l actualite doit etre persiste.');
       assert.equal(newsPost.excerpt, 'Resume Selenium actualite.', 'Le resume initial de l actualite doit etre persiste.');
       assert.match(newsPost.content, /Contenu public Selenium actualite\./, 'Le contenu initial de l actualite doit etre persiste.');
       assert.equal(newsPost.status, 'published', 'L actualite creee doit etre publiee en DB.');
+      assert.ok(String(newsPost.published_at || '') !== '', 'L actualite publiee doit avoir une date de publication.');
+      const originalNewsSectionId = Number(newsPost.section_id);
+      const originalNewsAuthorId = Number(newsPost.author_id);
 
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'L actualite creee doit apparaitre en admin.');
@@ -195,6 +202,9 @@ test('Selenium admin actualites: creer, modifier, rechercher et consulter publiq
       assert.equal(newsPost.excerpt, 'Resume Selenium actualite modifie.', 'Le resume modifie de l actualite doit etre persiste.');
       assert.match(newsPost.content, /Contenu public Selenium actualite modifie/, 'Le contenu modifie de l actualite doit etre persiste.');
       assert.equal(newsPost.status, 'published', 'L actualite modifiee doit rester publiee en DB.');
+      assert.equal(Number(newsPost.section_id), originalNewsSectionId, 'La modification actualite doit conserver la rubrique.');
+      assert.equal(Number(newsPost.author_id), originalNewsAuthorId, 'La modification actualite doit conserver l auteur.');
+      assert.ok(String(newsPost.published_at || '') !== '', 'La modification actualite ne doit pas perdre published_at.');
 
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(updatedTitle), 'L actualite modifiee doit rester visible en admin.');
@@ -248,10 +258,14 @@ test('Selenium admin evenements: creer, modifier, flux public et export ICS', as
 
       let event = eventBySlug(slug);
       assert.ok(event, 'L evenement cree doit etre present en DB.');
+      assert.ok(Number(event.id) > 0, 'L evenement cree doit avoir un identifiant DB.');
+      assert.equal(event.slug, slug, 'Le slug initial de l evenement doit etre persiste.');
       assert.equal(event.title, title, 'Le titre initial de l evenement doit etre persiste.');
       assert.equal(event.summary, 'Resume Selenium evenement.', 'Le resume initial de l evenement doit etre persiste.');
       assert.match(event.description, /Description publique Selenium evenement\./, 'La description initiale doit etre persistee.');
       assert.equal(event.kind, 'club', 'Le type evenement doit etre persiste.');
+      assert.match(String(event.start_at), /^2026-12-18 18:00:00$/, 'La date de debut initiale doit etre persistee.');
+      assert.match(String(event.end_at), /^2026-12-18 20:00:00$/, 'La date de fin initiale doit etre persistee.');
       assert.equal(event.location, 'Durnal Selenium', 'Le lieu initial doit etre persiste.');
       assert.equal(event.external_url, 'https://example.org/selenium-event', 'L URL externe initiale doit etre persistee.');
       assert.equal(event.status, 'published', 'L evenement cree doit etre publie en DB.');
@@ -276,7 +290,11 @@ test('Selenium admin evenements: creer, modifier, flux public et export ICS', as
       assert.equal(event.title, updatedTitle, 'Le titre modifie de l evenement doit etre persiste en DB.');
       assert.equal(event.summary, 'Resume Selenium evenement modifie.', 'Le resume modifie de l evenement doit etre persiste.');
       assert.match(event.description, /Description publique Selenium evenement modifie/, 'La description modifiee doit etre persistee.');
+      assert.equal(event.kind, 'club', 'La modification evenement doit conserver le type.');
+      assert.match(String(event.start_at), /^2026-12-18 18:00:00$/, 'La modification evenement doit conserver la date de debut.');
+      assert.match(String(event.end_at), /^2026-12-18 20:00:00$/, 'La modification evenement doit conserver la date de fin.');
       assert.equal(event.location, 'Durnal Selenium modifie', 'Le lieu modifie doit etre persiste en DB.');
+      assert.equal(event.external_url, 'https://example.org/selenium-event', 'La modification evenement doit conserver l URL externe.');
       assert.equal(event.status, 'published', 'L evenement modifie doit rester publie en DB.');
 
       text = await pagePlainText(driver);
