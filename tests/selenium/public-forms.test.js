@@ -43,7 +43,7 @@ require_once 'app/bootstrap.php';
 require_once 'app/newsletter.php';
 $email = getenv('SELENIUM_NEWSLETTER_EMAIL') ?: '';
 newsletter_ensure_tables();
-$stmt = db()->prepare('SELECT email, status, unsubscribe_token FROM newsletter_subscribers WHERE email = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, email, member_id, status, source, subscribe_token, unsubscribe_token, consented_at, consent_proof, unsubscribed_at FROM newsletter_subscribers WHERE email = ? LIMIT 1');
 $stmt->execute([$email]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: [], JSON_THROW_ON_ERROR);
 `, { SELENIUM_NEWSLETTER_EMAIL: email });
@@ -140,9 +140,16 @@ test('Selenium newsletter publique: inscription puis desinscription par jeton', 
       await driver.wait(async () => /newsletter|abonn|subscription|confirmed/i.test(await pagePlainText(driver)), timeoutMs);
 
       let subscriber = newsletterSubscriber(email);
+      assert.ok(Number(subscriber.id) > 0, 'L inscription publique doit creer une ligne newsletter.');
       assert.equal(subscriber.email, email);
+      assert.equal(subscriber.member_id, null, 'Une inscription publique ne doit pas etre rattachee a un membre.');
       assert.equal(subscriber.status, 'active');
+      assert.equal(subscriber.source, 'public_form', 'La source newsletter publique doit etre persistee.');
+      assert.match(subscriber.subscribe_token, /^[a-f0-9]{48}$/);
       assert.match(subscriber.unsubscribe_token, /^[a-f0-9]{48}$/);
+      assert.ok(String(subscriber.consented_at || '') !== '', 'Le consentement public doit etre horodate.');
+      assert.ok(String(subscriber.consent_proof || '') !== '', 'La preuve de consentement public doit etre stockee.');
+      assert.equal(subscriber.unsubscribed_at, null, 'Une inscription publique active ne doit pas avoir de date de desinscription.');
 
       await visit(driver, 'newsletter_unsubscribe', { token: subscriber.unsubscribe_token });
       const text = await pagePlainText(driver);
@@ -150,6 +157,8 @@ test('Selenium newsletter publique: inscription puis desinscription par jeton', 
 
       subscriber = newsletterSubscriber(email);
       assert.equal(subscriber.status, 'unsubscribed');
+      assert.equal(subscriber.source, 'public_form', 'La desinscription par jeton doit conserver la source publique.');
+      assert.ok(String(subscriber.unsubscribed_at || '') !== '', 'La desinscription par jeton doit etre horodatee.');
     } finally {
       cleanupNewsletterEmail(email);
     }

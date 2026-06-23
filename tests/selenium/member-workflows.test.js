@@ -212,6 +212,20 @@ echo (int) ($stmt->fetchColumn() ?: 0);
   }).trim()) > 0;
 }
 
+function classifiedByTitle(title) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$title = (string) getenv('SELENIUM_TEST_TITLE');
+if ($title === '' || !table_exists('classified_ads')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, owner_member_id, category_code, title, description, location, contact, price_cents, status, expires_at FROM classified_ads WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$title]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_TEST_TITLE: title }).trim() || 'null');
+}
+
 async function fetchAuthenticatedResource(driver, url) {
   return driver.executeAsyncScript(`
     const url = arguments[0];
@@ -265,6 +279,16 @@ test('Selenium membre: creer, modifier et vendre une petite annonce', async (t) 
 
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'La nouvelle annonce doit apparaitre dans Mes annonces.');
+      let classified = classifiedByTitle(title);
+      assert.ok(classified && Number(classified.id) > 0, 'La petite annonce membre doit etre creee en DB.');
+      assert.ok(Number(classified.owner_member_id) > 0, 'La petite annonce membre doit etre rattachee au membre connecte.');
+      assert.equal(classified.category_code, 'gear', 'La categorie par defaut de l annonce membre doit etre persistee.');
+      assert.equal(classified.description, 'Annonce Selenium de regression.', 'La description initiale de l annonce membre doit etre persistee.');
+      assert.equal(Number(classified.price_cents), 1250, 'Le prix initial de l annonce membre doit etre persiste en cents.');
+      assert.equal(classified.location, 'Durnal', 'Le lieu initial de l annonce membre doit etre persiste.');
+      assert.equal(classified.contact, 'selenium@example.test', 'Le contact initial de l annonce membre doit etre persiste.');
+      assert.equal(classified.status, 'draft', 'La creation membre doit rester en brouillon tant que la publication active n est pas demandee.');
+      assert.equal(classified.expires_at, null, 'Une annonce brouillon ne doit pas avoir de date expiration.');
 
       const editLink = await driver.findElement(By.xpath(`//article[contains(@class,"classifieds-my-card")][.//*[contains(normalize-space(.), "${title}")]]//a[contains(@href,"edit=")]`));
       await driver.get(await editLink.getAttribute('href'));
@@ -279,6 +303,11 @@ test('Selenium membre: creer, modifier et vendre une petite annonce', async (t) 
 
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(updatedTitle), 'Le titre modifie doit apparaitre dans Mes annonces.');
+      classified = classifiedByTitle(updatedTitle);
+      assert.ok(classified && Number(classified.id) > 0, 'La petite annonce modifiee doit rester en DB.');
+      assert.equal(classified.description, 'Annonce Selenium de regression.', 'La modification du titre ne doit pas perdre la description.');
+      assert.equal(Number(classified.price_cents), 1250, 'La modification du titre ne doit pas perdre le prix.');
+      assert.equal(classified.status, 'draft', 'La modification du titre doit conserver le statut brouillon.');
 
       let statusForm = await driver.findElement(By.xpath(`//article[contains(@class,"classifieds-my-card")][.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[contains(@class,"classifieds-status-form")]`));
       await driver.executeScript(`
@@ -295,6 +324,10 @@ test('Selenium membre: creer, modifier et vendre une petite annonce', async (t) 
 
       text = await pagePlainText(driver);
       assert.match(text, /actif|active|en ligne/i, 'Le statut actif doit etre visible apres reactualisation.');
+      classified = classifiedByTitle(updatedTitle);
+      assert.equal(classified.status, 'active', 'Le passage actif doit etre persiste en DB.');
+      assert.ok(String(classified.expires_at || '') !== '', 'Le passage actif doit calculer une date expiration.');
+      const activeExpiresAt = String(classified.expires_at || '');
 
       statusForm = await driver.findElement(By.xpath(`//article[contains(@class,"classifieds-my-card")][.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[contains(@class,"classifieds-status-form")]`));
       const renewButton = await statusForm.findElement(By.css('button[name="action"][value="renew"]'));
@@ -312,6 +345,9 @@ test('Selenium membre: creer, modifier et vendre une petite annonce', async (t) 
 
       text = await pagePlainText(driver);
       assert.match(text, /renouvel|renew|actif|active|en ligne/i, 'Le renouvellement doit rester visible apres action renew.');
+      classified = classifiedByTitle(updatedTitle);
+      assert.equal(classified.status, 'active', 'Le renouvellement doit conserver le statut actif.');
+      assert.ok(String(classified.expires_at || '') >= activeExpiresAt, 'Le renouvellement ne doit pas raccourcir la date expiration.');
 
       statusForm = await driver.findElement(By.xpath(`//article[contains(@class,"classifieds-my-card")][.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[contains(@class,"classifieds-status-form")]`));
       await driver.executeScript(`
@@ -328,6 +364,9 @@ test('Selenium membre: creer, modifier et vendre une petite annonce', async (t) 
 
       text = await pagePlainText(driver);
       assert.match(text, /vendu|sold/i, 'Le statut vendu doit etre visible apres marquage.');
+      classified = classifiedByTitle(updatedTitle);
+      assert.equal(classified.status, 'sold', 'Le statut vendu doit etre persiste en DB.');
+      assert.equal(classified.expires_at, null, 'Une annonce vendue ne doit plus avoir de date expiration active.');
     } finally {
       cleanupWorkflowRows(title);
     }

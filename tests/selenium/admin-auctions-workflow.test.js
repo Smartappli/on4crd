@@ -57,7 +57,7 @@ function auctionLotBySlug(slug) {
   const output = runSeleniumPhp(`
 require_once 'app/bootstrap.php';
 $slug = trim((string) (getenv('SELENIUM_AUCTION_SLUG') ?: ''));
-$stmt = db()->prepare('SELECT id, slug, title, summary, description, starting_price_cents, min_increment_cents, current_price_cents, starts_at, ends_at, status, winner_member_id FROM auction_lots WHERE slug = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, slug, title, summary, description, starting_price_cents, reserve_price_cents, min_increment_cents, buy_now_price_cents, current_price_cents, starts_at, ends_at, status, winner_member_id FROM auction_lots WHERE slug = ? LIMIT 1');
 $stmt->execute([$slug]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_AUCTION_SLUG: slug });
@@ -70,7 +70,7 @@ function auctionBidState(lotId) {
 require_once 'app/bootstrap.php';
 $lotId = (int) (getenv('SELENIUM_AUCTION_LOT_ID') ?: 0);
 $stmt = db()->prepare(
-    'SELECT b.amount_cents, m.callsign
+    'SELECT b.id, b.member_id, b.amount_cents, b.created_at, m.callsign
      FROM auction_bids b
      INNER JOIN members m ON m.id = b.member_id
      WHERE b.lot_id = ?
@@ -146,12 +146,19 @@ test('Selenium admin encheres: creer, modifier, publier et enchérir sur un lot'
 
       let lot = auctionLotBySlug(slug);
       assert.ok(lot && Number(lot.id) > 0, 'Le lot cree doit etre present en DB.');
+      assert.equal(lot.slug, slug, 'Le slug initial du lot doit etre persiste.');
       assert.equal(lot.title, title, 'Le titre initial du lot doit etre persiste.');
       assert.equal(lot.summary, 'Resume Selenium enchere.', 'Le resume initial du lot doit etre persiste.');
       assert.match(lot.description, /Description Selenium enchere\./, 'La description initiale du lot doit etre persistee.');
       assert.equal(Number(lot.starting_price_cents), 1000, 'Le prix de depart doit etre persiste en cents.');
+      assert.equal(lot.reserve_price_cents, null, 'Sans prix de reserve, la colonne reserve_price_cents doit rester nulle.');
       assert.equal(Number(lot.min_increment_cents), 200, 'L increment minimum doit etre persiste en cents.');
+      assert.equal(lot.buy_now_price_cents, null, 'Sans prix achat immediat, la colonne buy_now_price_cents doit rester nulle.');
+      assert.equal(Number(lot.current_price_cents), 0, 'Avant la premiere enchere, le prix courant DB doit rester a 0.');
+      assert.match(String(lot.starts_at), /^2020-01-01 00:00:00$/, 'La date de debut du lot doit etre persistee.');
+      assert.match(String(lot.ends_at), /^2099-12-31 23:00:00$/, 'La date de fin du lot doit etre persistee.');
       assert.equal(lot.status, 'active', 'Le lot cree doit etre actif en DB.');
+      assert.equal(lot.winner_member_id, null, 'Un lot sans enchere ne doit pas avoir de gagnant.');
 
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'Le lot cree doit apparaitre en admin.');
@@ -172,6 +179,10 @@ test('Selenium admin encheres: creer, modifier, publier et enchérir sur un lot'
       assert.equal(lot.title, updatedTitle, 'Le titre modifie du lot doit etre persiste en DB.');
       assert.equal(lot.summary, 'Resume Selenium enchere modifie.', 'Le resume modifie du lot doit etre persiste.');
       assert.match(lot.description, /Description Selenium enchere modifiee/, 'La description modifiee du lot doit etre persistee.');
+      assert.equal(Number(lot.starting_price_cents), 1000, 'La modification du texte ne doit pas changer le prix de depart.');
+      assert.equal(Number(lot.min_increment_cents), 200, 'La modification du texte ne doit pas changer l increment minimum.');
+      assert.match(String(lot.starts_at), /^2020-01-01 00:00:00$/, 'La modification du texte ne doit pas changer la date de debut.');
+      assert.match(String(lot.ends_at), /^2099-12-31 23:00:00$/, 'La modification du texte ne doit pas changer la date de fin.');
       assert.equal(lot.status, 'active', 'Le lot modifie doit rester actif en DB.');
 
       text = await pagePlainText(driver);
@@ -192,8 +203,11 @@ test('Selenium admin encheres: creer, modifier, publier et enchérir sur un lot'
       assert.equal(Number(lot.current_price_cents), 1200, 'Le prix courant du lot doit refleter l enchere en DB.');
       const bids = auctionBidState(lot.id);
       assert.ok(bids.length >= 1, 'L enchere doit creer une ligne auction_bids.');
+      assert.ok(Number(bids[0].id) > 0, 'La ligne auction_bids doit avoir un identifiant.');
+      assert.ok(Number(bids[0].member_id) > 0, 'La ligne auction_bids doit etre rattachee a un membre.');
       assert.equal(Number(bids[0].amount_cents), 1200, 'Le montant de l enchere doit etre persiste en cents.');
       assert.equal(bids[0].callsign, credentials.username.toUpperCase(), 'L enchere doit etre reliee au membre connecte.');
+      assert.ok(String(bids[0].created_at || '') !== '', 'La ligne auction_bids doit enregistrer created_at.');
 
       text = await pagePlainText(driver);
       assert.match(text, /ench[eè]re|bid/i, 'Le retour apres enchere doit rester sur le contexte enchere.');

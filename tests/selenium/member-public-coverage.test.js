@@ -298,6 +298,24 @@ echo favorite_is_saved($memberId, $type, $targetId) ? '1' : '0';
   }).trim()) === 1;
 }
 
+function favoriteRecord(memberId, type, targetId) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/member_favorites.php';
+ensure_member_favorites_table();
+$memberId = (int) getenv('SELENIUM_MEMBER_ID');
+$type = (string) getenv('SELENIUM_TYPE');
+$targetId = (int) getenv('SELENIUM_TARGET_ID');
+$stmt = db()->prepare('SELECT id, member_id, target_type, target_id, target_key, title, url, created_at FROM member_favorites WHERE member_id = ? AND target_type = ? AND target_id = ? LIMIT 1');
+$stmt->execute([$memberId, $type, $targetId]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, {
+    SELENIUM_MEMBER_ID: String(memberId),
+    SELENIUM_TYPE: type,
+    SELENIUM_TARGET_ID: String(targetId),
+  });
+}
+
 async function submitFavorite(driver, route, query, action, idName, targetId) {
   await visit(driver, route, query);
   const form = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="${action}"] and .//input[@name="${idName}" and @value="${targetId}"]]`));
@@ -316,6 +334,20 @@ $stmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
 $stmt->execute([$albumId]);
 echo (int) ($stmt->fetchColumn() ?: 0);
 `, { SELENIUM_ALBUM_ID: String(albumId) }).trim());
+}
+
+function latestAlbumPhoto(albumId) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$albumId = (int) getenv('SELENIUM_ALBUM_ID');
+if ($albumId <= 0 || !table_exists('album_photos')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, album_id, sort_order, title, caption, file_path, created_at FROM album_photos WHERE album_id = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$albumId]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_ALBUM_ID: String(albumId) });
 }
 
 function wikiPageRecord(pageId) {
@@ -385,6 +417,20 @@ echo (int) ($stmt->fetchColumn() ?: 0);
 `, { SELENIUM_TOKEN: token, SELENIUM_MEMBER_ID: String(memberId) }).trim());
 }
 
+function toolPresetRecord(presetId) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$presetId = (int) getenv('SELENIUM_PRESET_ID');
+if ($presetId <= 0 || !table_exists('member_tool_presets')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, member_id, tool_id, label, payload_json, created_at FROM member_tool_presets WHERE id = ? LIMIT 1');
+$stmt->execute([$presetId]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_PRESET_ID: String(presetId) });
+}
+
 function createUnreadNotifications(token, memberId) {
   return seleniumJson(`
 require_once 'app/bootstrap.php';
@@ -415,6 +461,36 @@ echo (int) ($stmt->fetchColumn() ?: 0);
 `, { SELENIUM_TOKEN: token, SELENIUM_MEMBER_ID: String(memberId) }).trim());
 }
 
+function notificationRows(token, memberId) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$token = trim((string) getenv('SELENIUM_TOKEN'));
+$memberId = (int) getenv('SELENIUM_MEMBER_ID');
+if (!table_exists('member_notifications')) {
+    echo '[]';
+    return;
+}
+$stmt = db()->prepare('SELECT id, member_id, type, title, body, url, is_read, read_at, created_at FROM member_notifications WHERE member_id = ? AND title LIKE ? ORDER BY id ASC');
+$stmt->execute([$memberId, '%' . $token . '%']);
+echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC) ?: [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_TOKEN: token, SELENIUM_MEMBER_ID: String(memberId) });
+}
+
+function chatbotLogForQuestion(question, memberId) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$question = trim((string) getenv('SELENIUM_QUESTION'));
+$memberId = (int) getenv('SELENIUM_MEMBER_ID');
+if (!table_exists('chatbot_logs')) {
+    echo json_encode(['table_exists' => false, 'row' => null], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    return;
+}
+$stmt = db()->prepare('SELECT id, member_id, question, answer, source_name, latency_ms, had_error, confidence_score, freshness_hours, created_at FROM chatbot_logs WHERE member_id = ? AND question = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$memberId, $question]);
+echo json_encode(['table_exists' => true, 'row' => ($stmt->fetch(PDO::FETCH_ASSOC) ?: null)], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_QUESTION: question, SELENIUM_MEMBER_ID: String(memberId) });
+}
+
 test('Selenium membre/public: favoris articles, wiki, albums et webotheque', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
@@ -442,6 +518,14 @@ test('Selenium membre/public: favoris articles, wiki, albums et webotheque', asy
       for (const [route, title, action, idName, targetId, type] of targets) {
         await submitFavorite(driver, route, { q: title }, action, idName, targetId);
         assert.equal(favoriteSaved(Number(member.id), type, Number(targetId)), true, `${type} doit etre ajoute aux favoris.`);
+        const favorite = favoriteRecord(Number(member.id), type, Number(targetId));
+        assert.ok(favorite && Number(favorite.id) > 0, `${type} doit creer une ligne member_favorites.`);
+        assert.equal(Number(favorite.member_id), Number(member.id), `${type} doit rattacher le favori au membre connecte.`);
+        assert.equal(favorite.target_type, type, `${type} doit stocker le type cible.`);
+        assert.equal(Number(favorite.target_id), Number(targetId), `${type} doit stocker l id cible.`);
+        assert.equal(favorite.title, title, `${type} doit stocker le titre du favori.`);
+        assert.ok(String(favorite.url || '') !== '', `${type} doit stocker une URL de retour.`);
+        assert.ok(String(favorite.created_at || '') !== '', `${type} doit horodater le favori.`);
       }
 
       for (const [route, title, action, idName, targetId, type] of targets) {
@@ -450,6 +534,7 @@ test('Selenium membre/public: favoris articles, wiki, albums et webotheque', asy
         assert.match(text, new RegExp(escapeRegExp(title)), `${type} favori doit apparaitre dans le filtre Favoris.`);
         await submitFavorite(driver, route, { favorites: '1' }, action, idName, targetId);
         assert.equal(favoriteSaved(Number(member.id), type, Number(targetId)), false, `${type} doit etre retire des favoris.`);
+        assert.equal(favoriteRecord(Number(member.id), type, Number(targetId)), null, `${type} doit supprimer la ligne member_favorites.`);
       }
     } finally {
       cleanupCoverageRows(token);
@@ -480,19 +565,35 @@ test('Selenium membre/public: detail article et album couvrent favoris et upload
       const articleFavoriteForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="toggle_favorite"]]'));
       await submitForm(driver, articleFavoriteForm);
       assert.equal(favoriteSaved(Number(member.id), 'article', Number(fixtures.article.id)), true, 'Le detail article doit ajouter le favori.');
+      let favorite = favoriteRecord(Number(member.id), 'article', Number(fixtures.article.id));
+      assert.ok(favorite && Number(favorite.id) > 0, 'Le detail article doit creer la ligne favori.');
+      assert.equal(favorite.title, fixtures.article.title, 'Le detail article doit stocker le titre du favori.');
+      assert.match(String(favorite.url || ''), /route=article/, 'Le detail article doit stocker une URL article.');
 
       await visit(driver, 'album', { id: fixtures.album.id });
       const albumFavoriteForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="toggle_favorite"]]'));
       await submitForm(driver, albumFavoriteForm);
       assert.equal(favoriteSaved(Number(member.id), 'album', Number(fixtures.album.id)), true, 'Le detail album doit ajouter le favori.');
+      favorite = favoriteRecord(Number(member.id), 'album', Number(fixtures.album.id));
+      assert.ok(favorite && Number(favorite.id) > 0, 'Le detail album doit creer la ligne favori.');
+      assert.equal(favorite.title, fixtures.album.title, 'Le detail album doit stocker le titre du favori.');
+      assert.match(String(favorite.url || ''), /route=album/, 'Le detail album doit stocker une URL album.');
 
       const beforePhotos = albumPhotoCount(fixtures.album.id);
       await visit(driver, 'album', { id: fixtures.album.id });
       const uploadForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="upload_album_photos"]]'));
-      await setFieldValue(driver, await uploadForm.findElement(By.css('textarea[name="caption"]')), `Photo detail ${token}`);
+      const photoCaption = `Photo detail ${token}`;
+      await setFieldValue(driver, await uploadForm.findElement(By.css('textarea[name="caption"]')), photoCaption);
       await uploadForm.findElement(By.css('input[type="file"][name="photos[]"]')).sendKeys(photoFixture);
       await submitForm(driver, uploadForm);
       assert.equal(albumPhotoCount(fixtures.album.id), beforePhotos + 1, 'Le detail album doit accepter l upload de photo.');
+      const uploadedPhoto = latestAlbumPhoto(fixtures.album.id);
+      assert.ok(uploadedPhoto && Number(uploadedPhoto.id) > 0, 'L upload album doit creer une ligne photo.');
+      assert.equal(Number(uploadedPhoto.album_id), Number(fixtures.album.id), 'La photo uploadee doit etre rattachee au bon album.');
+      assert.equal(uploadedPhoto.caption, photoCaption, 'La legende de la photo doit etre persistee.');
+      assert.match(String(uploadedPhoto.file_path || ''), /^storage\/uploads\/albums\/.+\.png$/i, 'La photo uploadee doit pointer vers le stockage albums.');
+      assert.ok(Number(uploadedPhoto.sort_order) > 0, 'La photo uploadee doit avoir un ordre de tri.');
+      assert.ok(String(uploadedPhoto.created_at || '') !== '', 'La photo uploadee doit etre horodatee.');
     } finally {
       cleanupCoverageRows(token);
     }
@@ -523,6 +624,10 @@ test('Selenium membre/public: detail wiki couvre modification et suppression adm
       const favoriteForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="toggle_favorite"]]'));
       await submitForm(driver, favoriteForm);
       assert.equal(favoriteSaved(Number(member.id), 'wiki_page', Number(fixtures.wiki.id)), true, 'Le detail wiki doit ajouter le favori.');
+      const favorite = favoriteRecord(Number(member.id), 'wiki_page', Number(fixtures.wiki.id));
+      assert.ok(favorite && Number(favorite.id) > 0, 'Le detail wiki doit creer la ligne favori.');
+      assert.equal(favorite.title, fixtures.wiki.title, 'Le detail wiki doit stocker le titre favori.');
+      assert.match(String(favorite.url || ''), /route=wiki_view/, 'Le detail wiki doit stocker une URL wiki.');
 
       const updateForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="update_page"]]'));
       await setFieldValue(driver, await updateForm.findElement(By.css('input[name="title"]')), updatedTitle);
@@ -707,6 +812,18 @@ test('Selenium membre: RGPD, notifications, chatbot, outils et newsletter', asyn
   cleanupCoverageRows(token);
   const notificationIds = createUnreadNotifications(token, Number(member.id));
   assert.equal(notificationIds.length, 2, 'Deux notifications Selenium doivent etre creees.');
+  let notifications = notificationRows(token, Number(member.id));
+  assert.equal(notifications.length, 2, 'Les deux notifications doivent exister en DB.');
+  for (const [index, notification] of notifications.entries()) {
+    assert.equal(Number(notification.id), Number(notificationIds[index]), 'L id notification retourne doit correspondre a la DB.');
+    assert.equal(Number(notification.member_id), Number(member.id), 'La notification doit etre rattachee au membre.');
+    assert.equal(notification.type, 'selenium', 'Le type notification doit etre persiste.');
+    assert.match(notification.title, new RegExp(`${escapeRegExp(token)} #${index + 1}`), 'Le titre notification doit etre persiste.');
+    assert.match(String(notification.body || ''), new RegExp(`${escapeRegExp(token)} #${index + 1}`), 'Le corps notification doit etre persiste.');
+    assert.match(String(notification.url || ''), /route=dashboard/, 'La notification doit conserver son URL.');
+    assert.equal(Number(notification.is_read), 0, 'La notification doit demarrer non lue.');
+    assert.equal(notification.read_at, null, 'Une notification non lue ne doit pas avoir read_at.');
+  }
 
   await withSelenium(t, async (driver) => {
     let visibilityField = '';
@@ -759,6 +876,9 @@ echo (string) ($stmt->fetchColumn() ?: '');
       const markAllForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="mark_all_read"]]'));
       await submitForm(driver, markAllForm);
       assert.equal(unreadNotificationCount(token, Number(member.id)), 0, 'mark_all_read doit marquer les notifications comme lues.');
+      notifications = notificationRows(token, Number(member.id));
+      assert.ok(notifications.every((notification) => Number(notification.is_read) === 1), 'mark_all_read doit passer toutes les notifications a lues.');
+      assert.ok(notifications.every((notification) => String(notification.read_at || '') !== ''), 'mark_all_read doit horodater read_at.');
 
       await visit(driver, 'chatbot');
       const question = `Question chatbot ${token}`;
@@ -767,6 +887,16 @@ echo (string) ($stmt->fetchColumn() ?: '');
       await submitForm(driver, askForm);
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(escapeRegExp(question)), 'La question chatbot doit rester dans le fil.');
+      const chatbotLog = chatbotLogForQuestion(question, Number(member.id));
+      if (chatbotLog.table_exists) {
+        assert.ok(chatbotLog.row && Number(chatbotLog.row.id) > 0, 'Le chatbot doit journaliser la question en DB.');
+        assert.equal(Number(chatbotLog.row.member_id), Number(member.id), 'Le log chatbot doit etre rattache au membre.');
+        assert.equal(chatbotLog.row.question, question, 'Le log chatbot doit stocker la question exacte.');
+        assert.ok(String(chatbotLog.row.answer || '') !== '', 'Le log chatbot doit stocker une reponse.');
+        assert.ok(String(chatbotLog.row.source_name || '') !== '', 'Le log chatbot doit stocker la source.');
+        assert.equal(Number(chatbotLog.row.had_error), 0, 'Le log chatbot de ce parcours ne doit pas etre en erreur.');
+        assert.ok(Number(chatbotLog.row.latency_ms) >= 0, 'Le log chatbot doit stocker une latence.');
+      }
       const clearForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="clear"]]'));
       await submitForm(driver, clearForm);
       text = await pagePlainText(driver);
@@ -790,6 +920,13 @@ echo (string) ($stmt->fetchColumn() ?: '');
       assert.doesNotMatch(savePreset.body, /Une erreur interne|Internal Server Error|HTTP ERROR 5\d\d|Fatal error/i);
       const presetId = toolPresetId(token, Number(member.id));
       assert.ok(presetId > 0, 'Le preset outil doit etre enregistre.');
+      const presetRecord = toolPresetRecord(presetId);
+      assert.ok(presetRecord && Number(presetRecord.id) === presetId, 'Le preset outil doit etre lisible en DB.');
+      assert.equal(Number(presetRecord.member_id), Number(member.id), 'Le preset outil doit etre rattache au membre.');
+      assert.equal(presetRecord.tool_id, 'tool-unit-converter', 'Le preset outil doit stocker tool_id.');
+      assert.equal(presetRecord.label, presetLabel, 'Le preset outil doit stocker le label.');
+      assert.deepEqual(JSON.parse(presetRecord.payload_json), { input: `input-${token}`, output: `output-${token}` }, 'Le preset outil doit stocker le payload JSON.');
+      assert.ok(String(presetRecord.created_at || '') !== '', 'Le preset outil doit etre horodate.');
       await visit(driver, 'gdpr');
       const deletePreset = await postBrowserForm(driver, routeUrl('tools'), {
         _csrf: await firstCsrfToken(driver),
@@ -798,6 +935,7 @@ echo (string) ($stmt->fetchColumn() ?: '');
       });
       assert.equal(deletePreset.ok, true, deletePreset.body);
       assert.equal(toolPresetId(token, Number(member.id)), 0, 'Le preset outil doit etre supprime.');
+      assert.equal(toolPresetRecord(presetId), null, 'La suppression du preset doit retirer la ligne DB.');
 
       await visit(driver, 'settings');
       const newsletterForms = await driver.findElements(By.xpath('//form[.//input[@name="action" and @value="toggle_newsletter"]]'));

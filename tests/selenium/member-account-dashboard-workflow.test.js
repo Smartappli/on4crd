@@ -56,6 +56,22 @@ async function setCheckbox(driver, element, checked) {
   `, element, checked);
 }
 
+async function setCheckboxGroupValues(driver, form, name, values) {
+  await driver.executeScript(`
+    const form = arguments[0];
+    const name = arguments[1];
+    const values = new Set(arguments[2]);
+    for (const checkbox of form.querySelectorAll('input[type="checkbox"]')) {
+      if (checkbox.name !== name + '[]') {
+        continue;
+      }
+      checkbox.checked = values.has(checkbox.value);
+      checkbox.dispatchEvent(new Event('input', { bubbles: true }));
+      checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  `, form, name, values);
+}
+
 function seleniumJson(source, env = {}) {
   return JSON.parse(runSeleniumPhp(source, env) || 'null');
 }
@@ -273,6 +289,26 @@ echo json_encode($stmt->fetchAll(PDO::FETCH_COLUMN) ?: [], JSON_UNESCAPED_UNICOD
 `, { SELENIUM_MEMBER_ID: String(memberId) });
 }
 
+function dashboardWidgetRows(memberId) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+if (!table_exists('dashboard_widgets')) {
+    echo '[]';
+    return;
+}
+$stmt = db()->prepare('SELECT widget_key, config_json, position FROM dashboard_widgets WHERE member_id = ? ORDER BY position ASC, id ASC');
+$stmt->execute([(int) getenv('SELENIUM_MEMBER_ID')]);
+echo json_encode($stmt->fetchAll() ?: [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_MEMBER_ID: String(memberId) });
+}
+
+function assertEmptyDashboardWidgetConfigs(rows, message) {
+  assert.ok(rows.every((row) => {
+    const parsed = JSON.parse(String(row.config_json || '{}'));
+    return parsed !== null && typeof parsed === 'object' && Object.keys(parsed).length === 0;
+  }), message);
+}
+
 function captureWidgetSettings() {
   return seleniumJson(`
 require_once 'app/bootstrap.php';
@@ -332,6 +368,13 @@ test('Selenium membre compte: profil, preferences et newsletter se modifient san
   const newsletterBefore = captureNewsletterRows(member.id);
   const suffix = Date.now();
   const token = `selenium-settings-${suffix}`;
+  const profileCountry = 'France';
+  const profileAddress = `1 rue Selenium ${suffix}`;
+  const profilePostalCode = '75001';
+  const profileQth = `QTH Selenium ${suffix}`;
+  const profileStation = `Station Selenium ${suffix}`;
+  const profileAntennas = `Antennes Selenium ${suffix}`;
+  const profileInterests = `Interets Selenium ${suffix}`;
 
   await withSelenium(t, async (driver) => {
     try {
@@ -341,11 +384,21 @@ test('Selenium membre compte: profil, preferences et newsletter se modifient san
       const profileForm = await driver.findElement(By.css('form[enctype="multipart/form-data"]'));
       await setFieldValue(driver, await profileForm.findElement(By.css('input[name="first_name"]')), 'Selenium');
       await setFieldValue(driver, await profileForm.findElement(By.css('input[name="last_name"]')), `Compte ${suffix}`);
-      await setFieldValue(driver, await profileForm.findElement(By.css('select[name="country"]')), String(member.country || 'Belgium'));
-      await setFieldValue(driver, await profileForm.findElement(By.css('input[name="qth"]')), `QTH Selenium ${suffix}`);
+      await setFieldValue(driver, await profileForm.findElement(By.css('select[name="country"]')), profileCountry);
+      await setFieldValue(driver, await profileForm.findElement(By.css('input[name="address"]')), profileAddress);
+      await setFieldValue(driver, await profileForm.findElement(By.css('input[name="postal_code"]')), profilePostalCode);
+      await setFieldValue(driver, await profileForm.findElement(By.css('input[name="qth"]')), profileQth);
       await setFieldValue(driver, await profileForm.findElement(By.css('input[name="locator"]')), 'JO20AA');
-      await setFieldValue(driver, await profileForm.findElement(By.css('textarea[name="station_equipment"]')), `Station Selenium ${suffix}`);
-      await setFieldValue(driver, await profileForm.findElement(By.css('textarea[name="interests"]')), `Interets Selenium ${suffix}`);
+      await setFieldValue(driver, await profileForm.findElement(By.css('select[name="licence_class"]')), 'HAREC');
+      await setFieldValue(driver, await profileForm.findElement(By.css('select[name="operator_since"]')), '2020');
+      await setFieldValue(driver, await profileForm.findElement(By.css('input[name="cq_zone"]')), '14');
+      await setFieldValue(driver, await profileForm.findElement(By.css('input[name="itu_zone"]')), '27');
+      await setFieldValue(driver, await profileForm.findElement(By.css('select[name="qsl_via"]')), 'bureau_direct');
+      await setCheckboxGroupValues(driver, profileForm, 'favourite_bands', ['20m', '2m', 'QO-100']);
+      await setCheckboxGroupValues(driver, profileForm, 'favourite_modes', ['SSB', 'CW', 'FT8']);
+      await setFieldValue(driver, await profileForm.findElement(By.css('textarea[name="station_equipment"]')), profileStation);
+      await setFieldValue(driver, await profileForm.findElement(By.css('textarea[name="antennas"]')), profileAntennas);
+      await setFieldValue(driver, await profileForm.findElement(By.css('textarea[name="interests"]')), profileInterests);
       const geocodeBoxes = await profileForm.findElements(By.css('input[name="allow_geocode"]'));
       if (geocodeBoxes.length > 0) {
         await setCheckbox(driver, geocodeBoxes[0], false);
@@ -355,9 +408,22 @@ test('Selenium membre compte: profil, preferences et newsletter se modifient san
       const profileAfter = memberByCallsign(credentials.username.toUpperCase());
       assert.equal(profileAfter.first_name, 'Selenium', 'Le prenom du profil doit etre persiste.');
       assert.equal(profileAfter.last_name, `Compte ${suffix}`, 'Le nom du profil doit etre persiste.');
-      assert.equal(profileAfter.qth, `QTH Selenium ${suffix}`, 'Le QTH du profil doit etre persiste.');
+      assert.equal(profileAfter.full_name, `Selenium Compte ${suffix}`, 'Le nom complet du profil doit etre recalcule en DB.');
+      assert.equal(profileAfter.country, profileCountry, 'Le pays du profil doit etre persiste.');
+      assert.equal(profileAfter.address, profileAddress, 'L adresse du profil doit etre persistee.');
+      assert.equal(profileAfter.postal_code, profilePostalCode, 'Le code postal du profil doit etre persiste.');
+      assert.equal(profileAfter.qth, profileQth, 'Le QTH du profil doit etre persiste.');
       assert.equal(profileAfter.locator, 'JO20AA', 'Le locator du profil doit etre persiste.');
-      assert.match(String(profileAfter.station_equipment || ''), new RegExp(String(suffix)), 'La station doit etre persistee.');
+      assert.equal(profileAfter.licence_class, 'HAREC', 'La classe de licence doit etre persistee.');
+      assert.equal(profileAfter.operator_since, '2020', 'L annee operateur doit etre persistee.');
+      assert.equal(profileAfter.cq_zone, '14', 'La zone CQ doit etre persistee.');
+      assert.equal(profileAfter.itu_zone, '27', 'La zone ITU doit etre persistee.');
+      assert.equal(profileAfter.qsl_via, 'bureau_direct', 'Le mode QSL doit etre persiste.');
+      assert.equal(profileAfter.favourite_bands, '20m, 2m, QO-100', 'Les bandes preferees doivent etre persistees dans l ordre du formulaire.');
+      assert.equal(profileAfter.favourite_modes, 'SSB, CW, FT8', 'Les modes preferes doivent etre persistes dans l ordre du formulaire.');
+      assert.equal(profileAfter.station_equipment, profileStation, 'La station doit etre persistee.');
+      assert.equal(profileAfter.antennas, profileAntennas, 'Les antennes doivent etre persistees.');
+      assert.equal(profileAfter.interests, profileInterests, 'Les centres d interet doivent etre persistes.');
 
       await visit(driver, 'change_password');
       const passwordForm = await driver.findElement(By.xpath('//input[@name="current_password"]/ancestor::form[1]'));
@@ -379,6 +445,9 @@ require_once 'app/member_preferences.php';
 echo member_preference_bool((int) getenv('SELENIUM_MEMBER_ID'), 'personalized_recommendations_enabled', true) ? '1' : '0';
 `, { SELENIUM_MEMBER_ID: String(member.id) }).trim();
       assert.equal(preferenceValue, '0', 'La preference recommandations doit pouvoir etre desactivee.');
+      let preferenceRows = capturePreferences(member.id);
+      let preferenceMap = Object.fromEntries(preferenceRows.map((row) => [row.preference_key, row.preference_value]));
+      assert.equal(preferenceMap.personalized_recommendations_enabled, '0', 'La preference recommandations doit etre stockee a 0 en DB.');
 
       await visit(driver, 'settings');
       const signalsAction = await driver.findElement(By.css('input[name="action"][value="toggle_recommendation_signals"]'));
@@ -400,7 +469,14 @@ foreach ($keys as $key) {
 }
 echo json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_MEMBER_ID: String(member.id) });
-      assert.deepEqual(signalState, { article: true, wiki: false, classified: false, album: false, library: false }, 'Les signaux de recommandations doivent etre persistés.');
+      assert.deepEqual(signalState, { article: true, wiki: false, classified: false, album: false, library: false }, 'Les signaux de recommandations doivent etre persistes.');
+      preferenceRows = capturePreferences(member.id);
+      preferenceMap = Object.fromEntries(preferenceRows.map((row) => [row.preference_key, row.preference_value]));
+      assert.equal(preferenceMap.recommendations_signal_article_enabled, '1', 'Le signal article doit etre stocke a 1.');
+      assert.equal(preferenceMap.recommendations_signal_wiki_enabled, '0', 'Le signal wiki doit etre stocke a 0.');
+      assert.equal(preferenceMap.recommendations_signal_classified_enabled, '0', 'Le signal petites annonces doit etre stocke a 0.');
+      assert.equal(preferenceMap.recommendations_signal_album_enabled, '0', 'Le signal albums doit etre stocke a 0.');
+      assert.equal(preferenceMap.recommendations_signal_library_enabled, '0', 'Le signal bibliotheque doit etre stocke a 0.');
 
       await visit(driver, 'settings');
       const unsubscribeButtons = await driver.findElements(By.xpath('//input[@name="newsletter_action" and @value="unsubscribe"]/ancestor::form[1]//button'));
@@ -417,12 +493,20 @@ echo json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 require_once 'app/bootstrap.php';
 require_once 'app/newsletter.php';
 newsletter_ensure_tables();
-$stmt = db()->prepare('SELECT email, status, source FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, email, status, source, subscribe_token, unsubscribe_token, consented_at, consent_proof, unsubscribed_at FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
 $stmt->execute([(int) getenv('SELENIUM_MEMBER_ID'), (string) getenv('SELENIUM_EMAIL')]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_MEMBER_ID: String(member.id), SELENIUM_EMAIL: `${token}@example.test` });
       assert.ok(newsletterStatus, 'L abonnement newsletter doit etre cree depuis les reglages.');
+      assert.ok(Number(newsletterStatus.id) > 0, 'L abonnement newsletter doit avoir un id DB.');
+      assert.equal(newsletterStatus.email, `${token}@example.test`, 'L email newsletter doit etre normalise et persiste.');
       assert.equal(newsletterStatus.status, 'active', 'L abonnement newsletter doit etre actif.');
+      assert.equal(newsletterStatus.source, 'member_settings', 'La source newsletter doit identifier les reglages membre.');
+      assert.match(String(newsletterStatus.subscribe_token || ''), /^[a-f0-9]{48}$/, 'Le token inscription newsletter doit etre genere.');
+      assert.match(String(newsletterStatus.unsubscribe_token || ''), /^[a-f0-9]{48}$/, 'Le token desinscription newsletter doit etre genere.');
+      assert.ok(String(newsletterStatus.consented_at || '') !== '', 'Le consentement newsletter doit etre horodate.');
+      assert.ok(String(newsletterStatus.consent_proof || '') !== '', 'La preuve de consentement newsletter doit etre stockee.');
+      assert.equal(newsletterStatus.unsubscribed_at, null, 'Un abonnement actif ne doit pas avoir de date de desinscription.');
 
       await visit(driver, 'settings');
       const unsubscribeAction = await driver.findElement(By.css('input[name="newsletter_action"][value="unsubscribe"]'));
@@ -431,11 +515,14 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
 require_once 'app/bootstrap.php';
 require_once 'app/newsletter.php';
 newsletter_ensure_tables();
-$stmt = db()->prepare('SELECT status FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
+$stmt = db()->prepare('SELECT status, source, unsubscribed_at FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
 $stmt->execute([(int) getenv('SELENIUM_MEMBER_ID'), (string) getenv('SELENIUM_EMAIL')]);
-echo json_encode($stmt->fetchColumn() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_MEMBER_ID: String(member.id), SELENIUM_EMAIL: `${token}@example.test` });
-      assert.equal(afterUnsubscribe, 'unsubscribed', 'Le desabonnement newsletter doit etre persiste.');
+      assert.ok(afterUnsubscribe, 'La ligne newsletter doit toujours exister apres desabonnement.');
+      assert.equal(afterUnsubscribe.status, 'unsubscribed', 'Le desabonnement newsletter doit etre persiste.');
+      assert.equal(afterUnsubscribe.source, 'member_settings', 'Le desabonnement ne doit pas perdre la source initiale.');
+      assert.ok(String(afterUnsubscribe.unsubscribed_at || '') !== '', 'Le desabonnement newsletter doit etre horodate.');
     } finally {
       restoreMemberProfile(member);
       restorePreferences(member.id, preferencesBefore);
@@ -474,13 +561,20 @@ test('Selenium membre newsletter: abonnement et desabonnement depuis la page ded
 require_once 'app/bootstrap.php';
 require_once 'app/newsletter.php';
 newsletter_ensure_tables();
-$stmt = db()->prepare('SELECT email, status, source FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, email, status, source, subscribe_token, unsubscribe_token, consented_at, consent_proof, unsubscribed_at FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
 $stmt->execute([(int) getenv('SELENIUM_MEMBER_ID'), (string) getenv('SELENIUM_EMAIL')]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_MEMBER_ID: String(member.id), SELENIUM_EMAIL: email });
       assert.ok(newsletterStatus, 'La page newsletter doit creer un abonnement membre.');
+      assert.ok(Number(newsletterStatus.id) > 0, 'La page newsletter doit creer une ligne DB identifiee.');
+      assert.equal(newsletterStatus.email, email, 'La page newsletter doit persister l email soumis.');
       assert.equal(newsletterStatus.status, 'active', 'La page newsletter doit activer l abonnement.');
       assert.equal(newsletterStatus.source, 'member', 'La source de l abonnement doit etre la page newsletter membre.');
+      assert.match(String(newsletterStatus.subscribe_token || ''), /^[a-f0-9]{48}$/, 'La page newsletter doit generer un token inscription.');
+      assert.match(String(newsletterStatus.unsubscribe_token || ''), /^[a-f0-9]{48}$/, 'La page newsletter doit generer un token desinscription.');
+      assert.ok(String(newsletterStatus.consented_at || '') !== '', 'La page newsletter doit horodater le consentement.');
+      assert.ok(String(newsletterStatus.consent_proof || '') !== '', 'La page newsletter doit stocker la preuve de consentement.');
+      assert.equal(newsletterStatus.unsubscribed_at, null, 'Un abonnement actif depuis la page newsletter ne doit pas avoir de date de desinscription.');
 
       await visit(driver, 'newsletter');
       const unsubscribeAction = await driver.findElement(By.css('input[name="action"][value="unsubscribe"]'));
@@ -490,11 +584,14 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
 require_once 'app/bootstrap.php';
 require_once 'app/newsletter.php';
 newsletter_ensure_tables();
-$stmt = db()->prepare('SELECT status FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
+$stmt = db()->prepare('SELECT status, source, unsubscribed_at FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
 $stmt->execute([(int) getenv('SELENIUM_MEMBER_ID'), (string) getenv('SELENIUM_EMAIL')]);
-echo json_encode($stmt->fetchColumn() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_MEMBER_ID: String(member.id), SELENIUM_EMAIL: email });
-      assert.equal(newsletterStatus, 'unsubscribed', 'La page newsletter doit permettre le desabonnement.');
+      assert.ok(newsletterStatus, 'La ligne newsletter doit rester disponible apres desabonnement depuis la page dediee.');
+      assert.equal(newsletterStatus.status, 'unsubscribed', 'La page newsletter doit permettre le desabonnement.');
+      assert.equal(newsletterStatus.source, 'member', 'Le desabonnement depuis la page dediee doit conserver la source membre.');
+      assert.ok(String(newsletterStatus.unsubscribed_at || '') !== '', 'Le desabonnement depuis la page dediee doit etre horodate.');
     } finally {
       restoreNewsletterRows(member.id, newsletterBefore, token);
     }
@@ -541,6 +638,10 @@ test('Selenium membre dashboard: widgets, rendu AJAX, sauvegarde et retour au ca
       }, timeoutMs, 'Le widget radio_clocks doit etre ajoute au dashboard.');
       await waitForSavedStatus(driver);
       assert.deepEqual(dashboardWidgetKeys(member.id), ['welcome', 'radio_clocks'], 'La sauvegarde AJAX doit enregistrer le widget ajoute.');
+      let dashboardRows = dashboardWidgetRows(member.id);
+      assert.deepEqual(dashboardRows.map((row) => row.widget_key), ['welcome', 'radio_clocks'], 'La DB doit conserver l ordre des widgets ajoutes.');
+      assert.deepEqual(dashboardRows.map((row) => Number(row.position)), [0, 1], 'Les positions dashboard doivent etre reindexees a partir de 0.');
+      assertEmptyDashboardWidgetConfigs(dashboardRows, 'Les widgets sans configuration doivent persister un JSON vide.');
 
       await driver.findElement(By.css('#close-widgets-panel')).click();
       await driver.wait(async () => {
@@ -556,6 +657,10 @@ test('Selenium membre dashboard: widgets, rendu AJAX, sauvegarde et retour au ca
       }, timeoutMs, 'Le widget radio_clocks doit etre retire du dashboard.');
       await waitForSavedStatus(driver);
       assert.deepEqual(dashboardWidgetKeys(member.id), ['welcome'], 'La sauvegarde AJAX doit retirer le widget supprime.');
+      dashboardRows = dashboardWidgetRows(member.id);
+      assert.deepEqual(dashboardRows.map((row) => row.widget_key), ['welcome'], 'La DB doit supprimer uniquement le widget retire.');
+      assert.deepEqual(dashboardRows.map((row) => Number(row.position)), [0], 'La position du widget restant doit etre normalisee.');
+      assertEmptyDashboardWidgetConfigs(dashboardRows, 'La suppression ne doit pas corrompre config_json.');
 
       await driver.findElement(By.css('#open-widgets-panel')).click();
       await driver.wait(async () => {
@@ -577,6 +682,14 @@ $stmt->execute();
 echo (int) ($stmt->fetchColumn() ?: 0);
 `).trim();
       assert.equal(disabled, '0', 'L admin doit pouvoir desactiver un widget dashboard.');
+      const widgetSettingsAfterDisable = seleniumJson(`
+require_once 'app/bootstrap.php';
+$stmt = db()->query('SELECT widget_key, is_enabled FROM dashboard_widget_settings WHERE widget_key IN ("welcome", "radio_clocks") ORDER BY widget_key');
+echo json_encode($stmt->fetchAll() ?: [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`);
+      const widgetSettingMap = Object.fromEntries(widgetSettingsAfterDisable.map((row) => [row.widget_key, Number(row.is_enabled)]));
+      assert.equal(widgetSettingMap.radio_clocks, 0, 'La valeur DB radio_clocks doit etre desactivee.');
+      assert.equal(widgetSettingMap.welcome, 1, 'La valeur DB welcome doit rester active.');
     } finally {
       restoreDashboardRows(member.id, dashboardBefore);
       restoreWidgetSettings(settingsBefore);
