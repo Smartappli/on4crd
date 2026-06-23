@@ -2,6 +2,7 @@ const test = require('node:test');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { Key } = require('selenium-webdriver');
 const {
   By,
   assert,
@@ -71,6 +72,28 @@ async function setFieldValue(driver, field, value) {
       editor.dispatchEvent(new Event('change', { bubbles: true }));
     }
   `, field, value);
+}
+
+async function replaceVisibleFieldText(driver, field, value) {
+  const isDisplayed = await field.isDisplayed().catch(() => false);
+  if (isDisplayed) {
+    await field.click();
+    await field.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.BACK_SPACE, value);
+    return;
+  }
+
+  const editor = await driver.executeScript(`
+    const field = arguments[0];
+    const label = field.closest('label');
+    return label ? label.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+  `, field);
+  if (editor) {
+    await editor.click();
+    await editor.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.BACK_SPACE, value);
+    return;
+  }
+
+  await setFieldValue(driver, field, value);
 }
 
 async function setCheckbox(driver, checkbox, checked) {
@@ -723,8 +746,8 @@ async function updateAndDeleteAlbum(driver, fixture, token) {
   await assertPageContains(driver, fixture.title, 'L album fixture doit apparaitre dans admin_albums avant modification.');
 
   const editForm = await driver.findElement(By.xpath(`//article[contains(@class,"article-item")][.//input[@name="album_id" and @value="${fixture.id}"]]//form[.//input[@name="action" and @value="update_album"]]`));
-  await setFieldValue(driver, await editForm.findElement(By.css('input[name="title"]')), updatedTitle);
-  await setFieldValue(driver, await editForm.findElement(By.css('textarea[name="description"]')), updatedDescription);
+  await replaceVisibleFieldText(driver, await editForm.findElement(By.css('input[name="title"]')), updatedTitle);
+  await replaceVisibleFieldText(driver, await editForm.findElement(By.css('textarea[name="description"]')), updatedDescription);
   await setCheckbox(driver, await editForm.findElement(By.css('input[type="checkbox"][name="is_public"]')), true);
   const featuredCheckboxes = await editForm.findElements(By.css('input[type="checkbox"][name="album_is_featured"]'));
   let expectedFeatured = Number(albumRecord(fixture.id)?.is_featured || 0);
@@ -754,8 +777,26 @@ async function updateAndDeleteAlbum(driver, fixture, token) {
   assert.ok(updated, 'L album modifie doit exister en base.');
   assert.equal(updated.title, updatedTitle, 'Le titre album doit etre mis a jour depuis admin_albums.');
   assert.equal(updated.description, updatedDescription, 'La description album doit etre mise a jour depuis admin_albums.');
+  assert.equal(albumRecordByTitle(fixture.title), null, 'L ancien titre album ne doit plus rester en base apres modification admin.');
   assert.equal(Number(updated.is_public), 1, 'La visibilite publique de l album doit etre persistee.');
   assert.equal(Number(updated.is_featured), expectedFeatured, 'Le statut album a la une doit etre persiste.');
+
+  await visit(driver, 'admin_albums');
+  const refreshedEditForm = await driver.findElement(By.xpath(`//article[contains(@class,"article-item")][.//input[@name="album_id" and @value="${fixture.id}"]]//form[.//input[@name="action" and @value="update_album"]]`));
+  assert.equal(
+    await refreshedEditForm.findElement(By.css('input[name="title"]')).getAttribute('value'),
+    updatedTitle,
+    'Le formulaire admin_albums doit reafficher le titre modifie.'
+  );
+
+  await visit(driver, 'albums', { q: updatedTitle });
+  await assertPageContains(driver, updatedTitle, 'Le titre modifie depuis admin_albums doit apparaitre sur la galerie publique.');
+  await assertPageContains(driver, updatedDescription, 'La description modifiee depuis admin_albums doit apparaitre sur la galerie publique.');
+  const publicDetailLink = await driver.findElement(By.xpath(`//article[contains(@class,"album-tile")][.//a[contains(normalize-space(.), "${updatedTitle}")]]//a[contains(@href,"route=album")]`));
+  await driver.get(await publicDetailLink.getAttribute('href'));
+  await waitForDocumentReady(driver);
+  await assertNoServerError(driver);
+  await assertPageContains(driver, updatedTitle, 'La fiche publique doit afficher le titre modifie depuis admin_albums.');
 
   await visit(driver, 'admin_albums');
   const deleteForm = await driver.findElement(By.xpath(`//article[contains(@class,"article-item")][.//input[@name="album_id" and @value="${fixture.id}"]]//form[.//input[@name="action" and @value="delete_album"]]`));
