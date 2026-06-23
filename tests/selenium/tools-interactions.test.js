@@ -100,8 +100,8 @@ test('Selenium outils: calcul frequence longueur onde dans le navigateur', async
     }
 
     await setInputValue(driver, '#freq-mhz', '145.5');
-    await driver.wait(async () => /2\.061/.test(await textContent(driver, '#freq-wavelength')), timeoutMs);
-    assert.match(await textContent(driver, '#freq-wavelength'), /2\.061\s*m/i);
+    await driver.wait(async () => /2\.060/.test(await textContent(driver, '#freq-wavelength')), timeoutMs);
+    assert.match(await textContent(driver, '#freq-wavelength'), /2\.060\s*m/i);
 
     await setInputValue(driver, '#freq-mhz', '-1');
     assert.match(await textContent(driver, '#freq-wavelength'), /-|—/);
@@ -163,8 +163,8 @@ test('Selenium outils: convertisseur unites applique les familles RF et puissanc
 
     await setSelectValue(driver, '#unit-conv-group', 'power');
     await setInputValue(driver, '#unit-conv-input', '5');
-    await driver.wait(async () => /36\.989|36\.99/.test(await textContent(driver, '#unit-conv-output')), timeoutMs);
-    assert.match(await textContent(driver, '#unit-conv-output'), /36\.989|36\.99/);
+    await driver.wait(async () => /36[,.]989|36[,.]99/.test(await textContent(driver, '#unit-conv-output')), timeoutMs);
+    assert.match(await textContent(driver, '#unit-conv-output'), /36[,.]989|36[,.]99/);
 
     const reference = await textContent(driver, '#unit-conv-reference');
     assert.match(reference, /5\s*W/i);
@@ -174,7 +174,7 @@ test('Selenium outils: convertisseur unites applique les familles RF et puissanc
 
 test('Selenium outils: panneaux radio avances calculent des resultats', async (t) => {
   await withSelenium(t, async (driver) => {
-    if (!(await openInteractiveTool(driver, t, 'tool-dbsum'))) {
+    if (!(await openInteractiveTool(driver, t, 'tool-db-sum'))) {
       return;
     }
     await setInputValue(driver, '#dbsum-a', '30');
