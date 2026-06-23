@@ -54,6 +54,26 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       file: 'tests/selenium/admin-configuration-workflows.test.js',
       snippets: ['assign_role', 'remove_role'],
     },
+    {
+      label: 'press contacts and releases',
+      file: 'tests/selenium/admin-configuration-workflows.test.js',
+      snippets: ['admin_press', 'contact', 'release'],
+    },
+    {
+      label: 'live feed updates',
+      file: 'tests/selenium/admin-configuration-workflows.test.js',
+      snippets: ['admin_live_feeds', 'feeds[', 'notes'],
+    },
+    {
+      label: 'dinner reservations',
+      file: 'tests/selenium/admin-configuration-workflows.test.js',
+      snippets: ['admin_dinner_reservations', 'reserved_by', 'quantity-input'],
+    },
+    {
+      label: 'committee membership updates',
+      file: 'tests/selenium/admin-committee-workflow.test.js',
+      snippets: ['admin_committee', 'committee_role', 'committee_bio'],
+    },
   ];
 
   for (const contract of contracts) {
