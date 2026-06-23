@@ -33,7 +33,7 @@ if (!in_array($requestedLocale, $supportedLocales, true)) {
     return;
 }
 
-$xml = cache_remember('seo_sitemap_xml_v10_' . $requestedLocale, 300, static function () use ($requestedLocale): string {
+$xml = cache_remember('seo_sitemap_xml_v11_' . $requestedLocale, 300, static function () use ($requestedLocale): string {
     /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
     $entries = [];
     $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries, $requestedLocale): void {
@@ -83,6 +83,9 @@ $xml = cache_remember('seo_sitemap_xml_v10_' . $requestedLocale, 300, static fun
         ['route' => 'events', 'module' => 'events', 'priority' => '0.8', 'changefreq' => 'weekly'],
         ['route' => 'auctions', 'module' => 'auctions', 'priority' => '0.8', 'changefreq' => 'daily'],
         ['route' => 'relais', 'priority' => '0.5', 'changefreq' => 'monthly'],
+        ['route' => 'llms.txt', 'priority' => '0.4', 'changefreq' => 'weekly'],
+        ['route' => 'ai-index.json', 'priority' => '0.4', 'changefreq' => 'weekly'],
+        ['route' => 'knowledge-graph.jsonld', 'priority' => '0.4', 'changefreq' => 'weekly'],
     ];
     // Member-only routes such as webotheque, presentations, videos, fichiers and pv are noindex/login-protected and intentionally omitted.
 

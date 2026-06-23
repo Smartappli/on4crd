@@ -207,8 +207,8 @@ function seo_apply_defaults(string $route): void
         'sponsoring' => ['title' => 'Sponsoring', 'description' => 'Soutenez les projets du club ON4CRD via le sponsoring.'],
         'mentions_legales' => ['title' => 'Mentions légales', 'description' => 'Informations légales et éditeur du site ON4CRD.'],
         'conditions_utilisation' => ['title' => 'Conditions d’utilisation', 'description' => 'Conditions générales d’utilisation de la plateforme ON4CRD.'],
-        'llms.txt' => ['title' => 'LLMS ON4CRD', 'description' => 'Fichier de contexte public ON4CRD pour assistants et moteurs generatifs.'],
-        'ai-index.json' => ['title' => 'AI index ON4CRD', 'description' => 'Index JSON public des contenus ON4CRD pour moteurs generatifs.'],
+        'llms.txt' => ['title' => 'LLMS ON4CRD', 'description' => 'Fichier de contexte public ON4CRD pour assistants et moteurs génératifs.'],
+        'ai-index.json' => ['title' => 'AI index ON4CRD', 'description' => 'Index JSON public des contenus ON4CRD pour moteurs génératifs.'],
         'knowledge-graph.jsonld' => ['title' => 'Knowledge graph ON4CRD', 'description' => 'Graphe JSON-LD public du Radio Club Durnal ON4CRD.'],
     ];
 
