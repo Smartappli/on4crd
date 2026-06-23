@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'studio' => 'Studio QSL - simple, guidé et efficace',
+  'studio' => 'Studio QSL – simple, guidé et efficace',
   'studio_help' => 'Tout est conçu pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.',
   'design' => '1) Concevoir vos fonds QSL',
   'create' => '2) Créer facilement des cartes QSL',
@@ -13,11 +13,11 @@ return array (
   'page' => 'Page',
   'previous' => 'Précédent',
   'next' => 'Suivant',
-  'nav_design' => '1 - Personnaliser le design',
+  'nav_design' => '1 – Personnaliser le design',
   'nav_design_help' => 'Ajoutez un fond image, une couleur unie, un dégradé ou une palette prête à l’emploi.',
-  'nav_create' => '2 - Créer / importer',
+  'nav_create' => '2 – Créer / importer',
   'nav_create_help' => 'Créez une QSL manuelle ou importez vos fichiers ADIF par glisser-déposer.',
-  'nav_manage' => '3 - Gérer et exporter',
+  'nav_manage' => '3 – Gérer et exporter',
   'nav_manage_help' => 'Filtrez vos QSO, générez des cartes en lot et exportez les rectos/versos.',
   'bulk_generate' => 'Générer les cartes QSL sélectionnées',
   'select_all' => 'Tout sélectionner',
