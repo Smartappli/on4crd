@@ -108,6 +108,66 @@ if (is_array($state) && (int) ($state['id'] ?? 0) > 0) {
 `, { SELENIUM_MEMBER_STATE: JSON.stringify(state) });
 }
 
+function cleanupCreatedAdminMember(callsign, email) {
+  runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$callsign = strtoupper(trim((string) getenv('SELENIUM_CREATED_CALLSIGN')));
+$email = trim((string) getenv('SELENIUM_CREATED_EMAIL'));
+if ($callsign === '') {
+    return;
+}
+$memberIds = [];
+$authUserIds = [];
+if (table_exists('members')) {
+    $stmt = db()->prepare('SELECT id, auth_user_id FROM members WHERE UPPER(callsign) = ? OR email = ?');
+    $stmt->execute([$callsign, $email]);
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: [] as $row) {
+        $memberId = (int) ($row['id'] ?? 0);
+        if ($memberId > 0) {
+            $memberIds[] = $memberId;
+        }
+        $authUserId = (int) ($row['auth_user_id'] ?? 0);
+        if ($authUserId > 0) {
+            $authUserIds[] = $authUserId;
+        }
+    }
+}
+if (table_exists('users')) {
+    $stmt = db()->prepare('SELECT id FROM users WHERE username = ? OR email = ?');
+    $stmt->execute([$callsign, $email]);
+    foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $id) {
+        $authUserIds[] = (int) $id;
+    }
+}
+$memberIds = array_values(array_unique(array_filter($memberIds, static fn(int $id): bool => $id > 0)));
+$authUserIds = array_values(array_unique(array_filter($authUserIds, static fn(int $id): bool => $id > 0)));
+if ($memberIds !== []) {
+    $placeholders = implode(',', array_fill(0, count($memberIds), '?'));
+    foreach (['member_roles', 'member_permissions', 'member_notifications', 'member_favorites'] as $table) {
+        if (table_exists($table)) {
+            db()->prepare('DELETE FROM ' . $table . ' WHERE member_id IN (' . $placeholders . ')')->execute($memberIds);
+        }
+    }
+    db()->prepare('DELETE FROM members WHERE id IN (' . $placeholders . ')')->execute($memberIds);
+}
+if ($authUserIds !== []) {
+    $placeholders = implode(',', array_fill(0, count($authUserIds), '?'));
+    foreach (['users_2fa', 'users_remembered', 'users_confirmations', 'users_resets'] as $table) {
+        if (table_exists($table)) {
+            $column = $table === 'users_confirmations' || $table === 'users_resets' ? 'user_id' : 'user';
+            if ($table === 'users_2fa') {
+                $column = 'user_id';
+            }
+            db()->prepare('DELETE FROM ' . $table . ' WHERE ' . $column . ' IN (' . $placeholders . ')')->execute($authUserIds);
+        }
+    }
+    if (table_exists('users')) {
+        db()->prepare('DELETE FROM users WHERE id IN (' . $placeholders . ')')->execute($authUserIds);
+    }
+}
+`, { SELENIUM_CREATED_CALLSIGN: callsign, SELENIUM_CREATED_EMAIL: email });
+}
+
 function moduleState(code, seed = false) {
   const state = seleniumJson(`
 require_once 'app/bootstrap.php';
@@ -241,6 +301,9 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
   const updatedName = `Selenium Admin ${Date.now()}`;
   const updatedLocator = 'JO20AA';
   const newVisibility = moduleOriginal.visibility === 'members' ? 'public' : 'members';
+  const createdCallsign = `T${String(Date.now()).slice(-7)}`;
+  const createdEmail = `${createdCallsign.toLowerCase()}@example.test`;
+  cleanupCreatedAdminMember(createdCallsign, createdEmail);
 
   await withSelenium(t, async (driver) => {
     try {
@@ -270,14 +333,30 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
       assert.match(source, new RegExp(updatedName), 'Le nom modifie doit rester rendu dans le formulaire admin_members.');
       assert.match(source, new RegExp(updatedLocator), 'Le locator modifie doit rester rendu dans le formulaire admin_members.');
 
+      await visit(driver, 'admin_members');
+      const createMemberForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="create_member"]]'));
+      await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="callsign"]')), createdCallsign);
+      await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="full_name"]')), `Membre Selenium ${createdCallsign}`);
+      await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="email"]')), createdEmail);
+      await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="locator"]')), 'JO20BB');
+      await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="password"]')), 'Selenium!2026');
+      await submitForm(driver, createMemberForm);
+      const createdMember = adminMemberState(createdCallsign);
+      assert.equal(createdMember.email, createdEmail, 'Le membre cree depuis admin_members doit etre persiste avec son email.');
+      assert.equal(createdMember.full_name, `Membre Selenium ${createdCallsign}`, 'Le membre cree depuis admin_members doit etre persiste avec son nom.');
+      await visit(driver, 'admin_members', { member_q: createdCallsign });
+      const createdMemberForm = await driver.findElement(By.xpath(`//input[@name="member_id" and @value="${createdMember.id}"]/ancestor::form[1]`));
+      const createdCallsignValue = await createdMemberForm.findElement(By.css('input[name="callsign"]')).getAttribute('value');
+      assert.equal(createdCallsignValue, createdCallsign, 'Le membre cree doit etre retrouvable dans la recherche admin.');
+
       await visit(driver, 'admin_permissions');
       const assignForm = await driver.findElement(By.css('input[name="action"][value="assign_role"]'));
       const form = await assignForm.findElement(By.xpath('ancestor::form[1]'));
       await setFieldValue(driver, await form.findElement(By.css('select[name="member_id"]')), String(memberState.id));
       await setFieldValue(driver, await form.findElement(By.css('select[name="role_id"]')), String(role.id));
       await submitForm(driver, form);
-      let text = await pagePlainText(driver);
-      assert.match(text, new RegExp(role.label), 'Le role temporaire doit apparaitre dans les attributions.');
+      const roleText = await pagePlainText(driver);
+      assert.match(roleText, new RegExp(role.label), 'Le role temporaire doit apparaitre dans les attributions.');
 
       const removeForm = await driver.findElement(By.xpath(`//input[@name="action" and @value="remove_role"]/ancestor::form[input[@name="member_id" and @value="${memberState.id}"] and input[@name="role_id" and @value="${role.id}"]][1]`));
       await submitForm(driver, removeForm);
@@ -291,6 +370,7 @@ echo (int) $stmt->fetchColumn();
     } finally {
       restoreModule(moduleOriginal);
       restoreAdminMember(memberState);
+      cleanupCreatedAdminMember(createdCallsign, createdEmail);
       cleanupTemporaryRole(role);
     }
   });

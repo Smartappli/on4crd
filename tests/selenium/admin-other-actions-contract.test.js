@@ -20,6 +20,16 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       snippets: ['save_article', 'preview_article', 'restore_revision', 'delete_article'],
     },
     {
+      label: 'article taxonomy',
+      file: 'tests/selenium/admin-articles-wiki-workflow.test.js',
+      snippets: ['add_category', 'add_subcategory', 'delete_subcategory', 'delete_category'],
+    },
+    {
+      label: 'news create update and public view',
+      file: 'tests/selenium/admin-content-workflows.test.js',
+      snippets: ['admin_news', 'save_post', 'news_view'],
+    },
+    {
       label: 'news moderation and managers',
       file: 'tests/selenium/admin-maintenance-coverage.test.js',
       snippets: ['moderate_post', 'assign_section_manager'],
@@ -30,9 +40,14 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       snippets: ['bulk_delete_documents', 'merge_tags'],
     },
     {
-      label: 'classifieds bulk moderation',
+      label: 'library upload taxonomy and delete',
+      file: 'tests/selenium/admin-module-crud-workflows.test.js',
+      snippets: ['admin_library', 'admin-library-upload-form', 'delete_document', 'createLibraryDocumentFromAdminRoute'],
+    },
+    {
+      label: 'classifieds bulk moderation and delete',
       file: 'tests/selenium/admin-maintenance-coverage.test.js',
-      snippets: ['bulk_update', 'admin_classifieds'],
+      snippets: ['bulk_update', 'admin_classifieds', 'classifiedEditForm', 'singleDeleteForm'],
     },
     {
       label: 'advertising placements and moderation',
@@ -55,14 +70,19 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       snippets: ['set_status', 'delete_subscriber', 'send_campaign'],
     },
     {
+      label: 'newsletters import and campaign',
+      file: 'tests/selenium/admin-newsletters-workflow.test.js',
+      snippets: ['add_subscriber', 'import_csv', 'create_campaign'],
+    },
+    {
       label: 'permission assignments',
       file: 'tests/selenium/admin-configuration-workflows.test.js',
       snippets: ['assign_role', 'remove_role'],
     },
     {
-      label: 'member account forms',
-      file: 'tests/selenium/admin-module-contract.test.js',
-      snippets: ["admin_members: ['update_member', 'create_member']"],
+      label: 'member account workflows',
+      file: 'tests/selenium/admin-configuration-workflows.test.js',
+      snippets: ['admin_members', 'create_member', 'memberForm', 'createdMemberForm'],
     },
     {
       label: 'module visibility updates',
@@ -75,9 +95,24 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       snippets: ['admin_events', 'event_view', 'events_feed', "format: 'ics'"],
     },
     {
+      label: 'dashboard widgets',
+      file: 'tests/selenium/member-account-dashboard-workflow.test.js',
+      snippets: ['admin_dashboard', 'widget_radio_clocks', 'dashboard_widget_settings'],
+    },
+    {
       label: 'wiki taxonomy and status',
       file: 'tests/selenium/admin-articles-wiki-workflow.test.js',
-      snippets: ['admin_wiki', 'pageStatusForm', 'delete_subcategory', 'delete_category'],
+      snippets: ['admin_wiki', 'add_category', 'add_subcategory', 'pageStatusForm', 'delete_subcategory', 'delete_category'],
+    },
+    {
+      label: 'album lifecycle and taxonomy',
+      file: 'tests/selenium/admin-module-crud-workflows.test.js',
+      snippets: ['admin_albums', 'createAlbumFromAdminRoute', 'update_album', 'delete_album', 'createUpdateDeleteAdminTaxonomy'],
+    },
+    {
+      label: 'album wizard upload',
+      file: 'tests/selenium/admin-albums.test.js',
+      snippets: ['create_album', 'upload_photo', 'album-wizard'],
     },
     {
       label: 'album maintenance and photos',
@@ -93,6 +128,26 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       label: 'editorial content saves',
       file: 'tests/selenium/admin-editorial-translation-workflow.test.js',
       snippets: ['admin_editorial', 'content[committee_title][fr]', 'editorial_contents'],
+    },
+    {
+      label: 'webotheque links and taxonomy',
+      file: 'tests/selenium/admin-module-crud-workflows.test.js',
+      snippets: ['admin_webotheque', 'createWebothequeFromAdminRoute', 'update_link', 'delete_link', 'createUpdateDeleteAdminTaxonomy'],
+    },
+    {
+      label: 'presentation and video documents',
+      file: 'tests/selenium/admin-module-crud-workflows.test.js',
+      snippets: ['admin_presentations', 'admin_videos', 'createModuleDocumentFromAdminRoute', 'deleteMemberModuleDocumentFromAdminRoute', 'createUpdateDeleteAdminTaxonomy'],
+    },
+    {
+      label: 'pv fichiers and telechargements documents',
+      file: 'tests/selenium/member-document-modules.test.js',
+      snippets: ['admin_pv', 'admin_fichiers', 'telechargements', 'delete_document', '#admin-member-document-upload'],
+    },
+    {
+      label: 'pv and fichiers taxonomy',
+      file: 'tests/selenium/admin-module-crud-workflows.test.js',
+      snippets: ['admin_pv', 'admin_fichiers', 'createUpdateDeleteAdminTaxonomy'],
     },
     {
       label: 'press contacts and releases',

@@ -185,7 +185,7 @@ if (table_exists('member_webotheque_categories')) {
 }
 
 if (table_exists('member_module_documents')) {
-    $stmt = db()->prepare('SELECT id, module_code, file_path FROM member_module_documents WHERE module_code IN ("presentations", "videos") AND (title LIKE ? OR description LIKE ? OR tags LIKE ? OR file_path LIKE ?)');
+    $stmt = db()->prepare('SELECT id, module_code, file_path FROM member_module_documents WHERE module_code IN ("presentations", "videos", "pv", "fichiers") AND (title LIKE ? OR description LIKE ? OR tags LIKE ? OR file_path LIKE ?)');
     $stmt->execute([$like, $like, $like, $like]);
     $moduleRows = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     $moduleIds = [];
@@ -206,10 +206,10 @@ if (table_exists('member_module_documents')) {
     }
 }
 if (table_exists('member_module_subcategories')) {
-    db()->prepare('DELETE FROM member_module_subcategories WHERE module_code IN ("presentations", "videos") AND (category_code LIKE ? OR code LIKE ? OR label LIKE ?)')->execute([$like, $like, $like]);
+    db()->prepare('DELETE FROM member_module_subcategories WHERE module_code IN ("presentations", "videos", "pv", "fichiers") AND (category_code LIKE ? OR code LIKE ? OR label LIKE ?)')->execute([$like, $like, $like]);
 }
 if (table_exists('member_module_categories')) {
-    db()->prepare('DELETE FROM member_module_categories WHERE module_code IN ("presentations", "videos") AND (code LIKE ? OR label LIKE ?)')->execute([$like, $like]);
+    db()->prepare('DELETE FROM member_module_categories WHERE module_code IN ("presentations", "videos", "pv", "fichiers") AND (code LIKE ? OR label LIKE ?)')->execute([$like, $like]);
 }
 
 if (table_exists('member_library_documents')) {
@@ -489,7 +489,7 @@ if ($code !== '') {
         $stmt = db()->prepare('SELECT code, label, NULL AS deleted_at FROM member_library_categories WHERE code = ? LIMIT 1');
         $stmt->execute([$code]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
-    } elseif (in_array($area, ['presentations', 'videos'], true) && table_exists('member_module_categories')) {
+    } elseif (in_array($area, ['presentations', 'videos', 'pv', 'fichiers'], true) && table_exists('member_module_categories')) {
         $stmt = db()->prepare('SELECT code, label, deleted_at FROM member_module_categories WHERE module_code = ? AND code = ? LIMIT 1');
         $stmt->execute([$area, $code]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
@@ -519,7 +519,7 @@ if ($category !== '' && $code !== '') {
         $stmt = db()->prepare('SELECT category_code, code, label, NULL AS deleted_at FROM member_library_subcategories WHERE category_code = ? AND code = ? LIMIT 1');
         $stmt->execute([$category, $code]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
-    } elseif (in_array($area, ['presentations', 'videos'], true) && table_exists('member_module_subcategories')) {
+    } elseif (in_array($area, ['presentations', 'videos', 'pv', 'fichiers'], true) && table_exists('member_module_subcategories')) {
         $stmt = db()->prepare('SELECT category_code, code, label, deleted_at FROM member_module_subcategories WHERE module_code = ? AND category_code = ? AND code = ? LIMIT 1');
         $stmt->execute([$area, $category, $code]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
@@ -916,6 +916,8 @@ test('Selenium admin: ajouter modifier supprimer thematiques et sous-thematiques
     { area: 'library', route: 'admin_library' },
     { area: 'presentations', route: 'admin_presentations' },
     { area: 'videos', route: 'admin_videos' },
+    { area: 'pv', route: 'admin_pv' },
+    { area: 'fichiers', route: 'admin_fichiers' },
   ];
 
   await withSelenium(t, async (driver) => {

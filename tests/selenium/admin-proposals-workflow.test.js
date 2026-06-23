@@ -1,0 +1,531 @@
+const test = require('node:test');
+const {
+  By,
+  assert,
+  timeoutMs,
+  withSelenium,
+  visit,
+  waitForDocumentReady,
+  assertNoServerError,
+  pagePlainText,
+  loginAsAdmin,
+  requireAdminCredentials,
+  ensureSeleniumRunnable,
+  runSeleniumPhp,
+} = require('./helpers');
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function xpathLiteral(value) {
+  const text = String(value);
+  if (!text.includes("'")) {
+    return `'${text}'`;
+  }
+  if (!text.includes('"')) {
+    return `"${text}"`;
+  }
+
+  return `concat('${text.split("'").join(`', "'", '`)}')`;
+}
+
+async function submitForm(driver, form) {
+  await driver.executeScript(`
+    const form = arguments[0];
+    const submitter = form.querySelector('button[type="submit"], button:not([type="button"]), input[type="submit"]');
+    if (typeof form.requestSubmit === 'function') {
+      form.requestSubmit(submitter || undefined);
+    } else {
+      form.submit();
+    }
+  `, form);
+  await waitForDocumentReady(driver);
+  await assertNoServerError(driver);
+}
+
+async function setFieldValue(driver, field, value) {
+  await driver.executeScript(`
+    const field = arguments[0];
+    field.value = arguments[1];
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+    field.dispatchEvent(new Event('change', { bubbles: true }));
+    const label = field.closest('label');
+    const editor = label ? label.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (editor) {
+      editor.innerHTML = arguments[1];
+      editor.dispatchEvent(new Event('input', { bubbles: true }));
+      editor.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  `, field, value);
+}
+
+async function setSelectValue(driver, select, value) {
+  await driver.executeScript(`
+    const select = arguments[0];
+    const value = arguments[1];
+    select.value = value;
+    select.dispatchEvent(new Event('input', { bubbles: true }));
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  `, select, value);
+}
+
+function phpJson(source, env = {}) {
+  return JSON.parse(runSeleniumPhp(source, env).trim() || 'null');
+}
+
+function cleanupAdminProposalFixtures(token) {
+  runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/cache.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+
+$token = trim((string) (getenv('SELENIUM_ADMIN_PROPOSAL_TOKEN') ?: ''));
+if ($token === '') {
+    return;
+}
+$like = '%' . $token . '%';
+
+if (table_exists('content_proposals')) {
+    db()->prepare('DELETE FROM content_proposals WHERE title LIKE ? OR summary LIKE ? OR contact LIKE ? OR source_ref LIKE ?')
+        ->execute([$like, $like, $like, $like]);
+}
+
+if (table_exists('member_webotheque_links')) {
+    $stmt = db()->prepare('SELECT id FROM member_webotheque_links WHERE title LIKE ? OR url LIKE ? OR description LIKE ? OR tags LIKE ?');
+    $stmt->execute([$like, $like, $like, $like]);
+    $ids = array_values(array_filter(array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN) ?: []), static fn(int $id): bool => $id > 0));
+    if ($ids !== []) {
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        if (table_exists('member_favorites')) {
+            db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')
+                ->execute(array_merge(['webotheque_link'], $ids));
+        }
+        db()->prepare('DELETE FROM member_webotheque_links WHERE id IN (' . $placeholders . ')')->execute($ids);
+    }
+}
+
+if (table_exists('member_library_subcategories')) {
+    db()->prepare('DELETE FROM member_library_subcategories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+
+if (table_exists('member_library_categories')) {
+    db()->prepare('DELETE FROM member_library_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+
+foreach (['webotheque_links_v2', 'webotheque_categories_v2'] as $cacheKey) {
+    if (function_exists('cache_forget')) {
+        cache_forget($cacheKey);
+    }
+}
+`, { SELENIUM_ADMIN_PROPOSAL_TOKEN: token });
+}
+
+function prepareAdminProposalFixtures(token) {
+  return phpJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/cache.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+
+$token = trim((string) (getenv('SELENIUM_ADMIN_PROPOSAL_TOKEN') ?: ''));
+if ($token === '') {
+    throw new RuntimeException('Jeton Selenium absent.');
+}
+if (!ensure_content_proposals_table() || !ensure_webotheque_table()) {
+    throw new RuntimeException('Stockage des propositions ou webotheque indisponible.');
+}
+$memberId = (int) (db()->query('SELECT id FROM members ORDER BY id ASC LIMIT 1')->fetchColumn() ?: 0);
+if ($memberId <= 0) {
+    throw new RuntimeException('Aucun membre disponible pour les propositions Selenium.');
+}
+
+$lowerToken = strtolower($token);
+$createTitle = 'selenium admin proposal create ' . $token;
+$reviewTitle = 'selenium admin proposal review ' . $token;
+$rejectTitle = 'selenium admin proposal reject ' . $token;
+$updateOriginalTitle = 'selenium admin proposal update original ' . $token;
+$updateTitle = 'selenium admin proposal update accepted ' . $token;
+$deleteOriginalTitle = 'selenium admin proposal delete original ' . $token;
+$deleteTitle = 'selenium admin proposal delete accepted ' . $token;
+
+$createUrl = 'https://example.org/selenium-admin-proposal-create-' . $lowerToken;
+$rejectUrl = 'https://example.org/selenium-admin-proposal-reject-' . $lowerToken;
+$updateOriginalUrl = 'https://example.org/selenium-admin-proposal-update-original-' . $lowerToken;
+$updateUrl = 'https://example.org/selenium-admin-proposal-update-accepted-' . $lowerToken;
+$deleteUrl = 'https://example.org/selenium-admin-proposal-delete-original-' . $lowerToken;
+
+$updateLinkId = webotheque_insert_link(
+    $memberId,
+    'general',
+    $updateOriginalTitle,
+    $updateOriginalUrl,
+    'Lien original avant modification ' . $token,
+    'selenium,proposal'
+);
+$deleteLinkId = webotheque_insert_link(
+    $memberId,
+    'general',
+    $deleteOriginalTitle,
+    $deleteUrl,
+    'Lien original avant suppression ' . $token,
+    'selenium,proposal'
+);
+
+$createSummary = content_proposal_details_text([
+    'Domain' => 'general',
+    'Description' => 'Lien cree depuis une proposition admin ' . $token,
+    'Tags' => 'selenium, admin-proposal',
+]);
+$updateSummary = content_proposal_details_text([
+    'Action' => 'update_link',
+    'Link ID' => (string) $updateLinkId,
+    'Domain' => 'general',
+    'Description' => 'Lien modifie depuis une proposition admin ' . $token,
+    'Tags' => 'selenium, admin-proposal, updated',
+]);
+$deleteSummary = content_proposal_details_text([
+    'Action' => 'delete_link',
+    'Link ID' => (string) $deleteLinkId,
+    'Reason' => 'Suppression demandee par Selenium ' . $token,
+]);
+
+$proposalIds = [
+    'create' => content_proposal_create($memberId, 'webotheque', 'content', $createTitle, $createSummary, 'selenium-admin-proposals@example.test', $createUrl, 'pending'),
+    'review' => content_proposal_create($memberId, 'webotheque', 'content', $reviewTitle, 'Proposition a relire ' . $token, 'selenium-admin-proposals@example.test', '', 'pending'),
+    'reject' => content_proposal_create($memberId, 'webotheque', 'content', $rejectTitle, 'Proposition a refuser ' . $token, 'selenium-admin-proposals@example.test', $rejectUrl, 'pending'),
+    'update' => content_proposal_create($memberId, 'webotheque', 'content', $updateTitle, $updateSummary, 'selenium-admin-proposals@example.test', $updateUrl, 'pending'),
+    'delete' => content_proposal_create($memberId, 'webotheque', 'content', $deleteTitle, $deleteSummary, 'selenium-admin-proposals@example.test', $deleteUrl, 'pending'),
+];
+
+echo json_encode([
+    'ids' => $proposalIds,
+    'titles' => [
+        'create' => $createTitle,
+        'review' => $reviewTitle,
+        'reject' => $rejectTitle,
+        'update' => $updateTitle,
+        'delete' => $deleteTitle,
+    ],
+    'urls' => [
+        'create' => $createUrl,
+        'reject' => $rejectUrl,
+        'update_original' => $updateOriginalUrl,
+        'update' => $updateUrl,
+        'delete' => $deleteUrl,
+    ],
+    'links' => [
+        'update' => $updateLinkId,
+        'delete' => $deleteLinkId,
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_ADMIN_PROPOSAL_TOKEN: token });
+}
+
+function prepareAdminModuleProposalFixtures(token) {
+  return phpJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/cache.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+require_once 'app/member_library_helpers.php';
+
+$token = trim((string) (getenv('SELENIUM_ADMIN_PROPOSAL_TOKEN') ?: ''));
+if ($token === '') {
+    throw new RuntimeException('Jeton Selenium absent.');
+}
+if (!ensure_content_proposals_table() || !ensure_webotheque_table() || !member_library_ensure_categories_table()) {
+    throw new RuntimeException('Stockage des propositions ou modules indisponible.');
+}
+$memberId = (int) (db()->query('SELECT id FROM members ORDER BY id ASC LIMIT 1')->fetchColumn() ?: 0);
+if ($memberId <= 0) {
+    throw new RuntimeException('Aucun membre disponible pour les propositions Selenium.');
+}
+
+$lowerToken = strtolower($token);
+$libraryCategoryTitle = 'selenium admin library category ' . $token;
+$webothequeTitle = 'selenium admin webotheque module ' . $token;
+$webothequeUrl = 'https://example.org/selenium-admin-webotheque-module-' . $lowerToken;
+$webothequeSummary = content_proposal_details_text([
+    'Domain' => 'general',
+    'Description' => 'Lien valide depuis admin_webotheque ' . $token,
+    'Tags' => 'selenium, admin-module-proposal',
+]);
+
+$proposalIds = [
+    'library_category' => content_proposal_create(
+        $memberId,
+        'members_library',
+        'category',
+        $libraryCategoryTitle,
+        'Creation thematique bibliotheque ' . $token,
+        'selenium-admin-proposals@example.test',
+        '',
+        'pending'
+    ),
+    'webotheque_content' => content_proposal_create(
+        $memberId,
+        'webotheque',
+        'content',
+        $webothequeTitle,
+        $webothequeSummary,
+        'selenium-admin-proposals@example.test',
+        $webothequeUrl,
+        'pending'
+    ),
+];
+
+echo json_encode([
+    'ids' => $proposalIds,
+    'titles' => [
+        'library_category' => $libraryCategoryTitle,
+        'webotheque_content' => $webothequeTitle,
+    ],
+    'urls' => [
+        'webotheque_content' => $webothequeUrl,
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_ADMIN_PROPOSAL_TOKEN: token });
+}
+
+function proposalRecord(id) {
+  return phpJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/content_helpers.php';
+ensure_content_proposals_table();
+$id = (int) (getenv('SELENIUM_PROPOSAL_ID') ?: 0);
+$stmt = db()->prepare('SELECT id, title, status, moderation_note FROM content_proposals WHERE id = ? LIMIT 1');
+$stmt->execute([$id]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_PROPOSAL_ID: String(id) });
+}
+
+function webothequeLinkById(id) {
+  return phpJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+$id = (int) (getenv('SELENIUM_LINK_ID') ?: 0);
+if ($id <= 0 || !ensure_webotheque_table()) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, title, url, description, tags FROM member_webotheque_links WHERE id = ? LIMIT 1');
+$stmt->execute([$id]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_LINK_ID: String(id) });
+}
+
+function webothequeLinkByUrl(url) {
+  return phpJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+$url = trim((string) (getenv('SELENIUM_LINK_URL') ?: ''));
+if ($url === '' || !ensure_webotheque_table()) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, title, url, description, tags FROM member_webotheque_links WHERE url = ? LIMIT 1');
+$stmt->execute([$url]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_LINK_URL: url });
+}
+
+function libraryCategoryByLabel(label) {
+  return phpJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/member_library_helpers.php';
+if (!member_library_ensure_categories_table()) {
+    echo 'null';
+    return;
+}
+$label = trim((string) (getenv('SELENIUM_LIBRARY_CATEGORY_LABEL') ?: ''));
+$stmt = db()->prepare('SELECT code, label FROM member_library_categories WHERE label = ? LIMIT 1');
+$stmt->execute([$label]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_LIBRARY_CATEGORY_LABEL: label });
+}
+
+async function proposalDashboardForm(driver, title) {
+  return driver.findElement(By.xpath(
+    `//article[contains(@class,"admin-pending-item")][.//h3[contains(normalize-space(.), ${xpathLiteral(title)})]]//form[.//input[@name="action" and @value="update_content_proposal_status"]]`,
+  ));
+}
+
+async function moduleProposalForm(driver, title) {
+  return driver.findElement(By.xpath(
+    `//article[.//h3[contains(normalize-space(.), ${xpathLiteral(title)})]]//form[.//input[@name="action" and @value="update_proposal_status"]]`,
+  ));
+}
+
+async function updateDashboardProposal(driver, title, status, note) {
+  await visit(driver, 'admin');
+  const form = await proposalDashboardForm(driver, title);
+  await setSelectValue(driver, await form.findElement(By.css('select[name="proposal_status"]')), status);
+  await setFieldValue(driver, await form.findElement(By.css('textarea[name="moderation_note"]')), note);
+  await submitForm(driver, form);
+}
+
+async function updateModuleProposal(driver, route, title, status, note, category = '') {
+  await visit(driver, route, { status: 'pending' });
+  const form = await moduleProposalForm(driver, title);
+  await setSelectValue(driver, await form.findElement(By.css('select[name="proposal_status"]')), status);
+  if (category !== '') {
+    const categorySelects = await form.findElements(By.css('select[name="proposal_category"]'));
+    if (categorySelects.length > 0) {
+      await setSelectValue(driver, categorySelects[0], category);
+    }
+  }
+  await setFieldValue(driver, await form.findElement(By.css('textarea[name="moderation_note"]')), note);
+  await submitForm(driver, form);
+}
+
+async function assertDashboardDoesNotList(driver, title) {
+  await visit(driver, 'admin');
+  const text = await pagePlainText(driver);
+  assert.doesNotMatch(
+    text,
+    new RegExp(escapeRegExp(title)),
+    `La proposition ${title} ne doit plus apparaitre dans la file admin une fois traitee.`,
+  );
+}
+
+test('Selenium admin propositions: relire, refuser, accepter creation, modification et suppression', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `ADMPROP${Date.now()}`;
+  cleanupAdminProposalFixtures(token);
+  const fixture = prepareAdminProposalFixtures(token);
+  const notes = {
+    review: `Note relecture ${token}`,
+    reject: `Note refus ${token}`,
+    create: `Note creation ${token}`,
+    update: `Note modification ${token}`,
+    delete: `Note suppression ${token}`,
+  };
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      await visit(driver, 'admin');
+
+      let text = await pagePlainText(driver);
+      for (const title of Object.values(fixture.titles)) {
+        assert.match(text, new RegExp(escapeRegExp(title)), `La proposition ${title} doit apparaitre dans la file admin.`);
+      }
+
+      const moduleLinks = await driver.findElements(By.css('a[href*="route=admin_webotheque"]'));
+      assert.ok(moduleLinks.length > 0, 'La file admin doit proposer un lien vers le module webotheque concerne.');
+      const pendingCardLinks = await driver.findElements(By.css('a[href*="route=admin_webotheque"][href*="status=pending"]'));
+      assert.ok(pendingCardLinks.length > 0, 'La carte admin webotheque doit pointer vers les propositions en attente.');
+
+      await updateDashboardProposal(driver, fixture.titles.review, 'reviewed', notes.review);
+      let record = proposalRecord(fixture.ids.review);
+      assert.equal(record.status, 'reviewed', 'La proposition relue doit passer au statut reviewed.');
+      assert.equal(record.moderation_note, notes.review, 'La note de relecture doit etre conservee.');
+      await assertDashboardDoesNotList(driver, fixture.titles.review);
+
+      await updateDashboardProposal(driver, fixture.titles.reject, 'rejected', notes.reject);
+      record = proposalRecord(fixture.ids.reject);
+      assert.equal(record.status, 'rejected', 'La proposition refusee doit passer au statut rejected.');
+      assert.equal(record.moderation_note, notes.reject, 'La note de refus doit etre conservee.');
+      assert.equal(webothequeLinkByUrl(fixture.urls.reject), null, 'Un refus ne doit pas creer de lien webotheque.');
+      await assertDashboardDoesNotList(driver, fixture.titles.reject);
+
+      await updateDashboardProposal(driver, fixture.titles.create, 'accepted', notes.create);
+      record = proposalRecord(fixture.ids.create);
+      assert.equal(record.status, 'accepted', 'La creation acceptee doit passer au statut accepted.');
+      assert.equal(record.moderation_note, notes.create, 'La note de validation creation doit etre conservee.');
+      const createdLink = webothequeLinkByUrl(fixture.urls.create);
+      assert.ok(createdLink && Number(createdLink.id) > 0, 'La proposition acceptee doit creer un lien webotheque.');
+      assert.equal(createdLink.title, fixture.titles.create, 'Le lien cree doit reprendre le titre propose.');
+      assert.match(createdLink.description, new RegExp(escapeRegExp(token)), 'Le lien cree doit reprendre la description proposee.');
+
+      await visit(driver, 'webotheque', { q: fixture.titles.create });
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(escapeRegExp(fixture.titles.create)), 'Le lien cree doit etre visible dans la webotheque publique.');
+
+      await updateDashboardProposal(driver, fixture.titles.update, 'accepted', notes.update);
+      record = proposalRecord(fixture.ids.update);
+      assert.equal(record.status, 'accepted', 'La modification acceptee doit passer au statut accepted.');
+      assert.equal(record.moderation_note, notes.update, 'La note de validation modification doit etre conservee.');
+      const updatedLink = webothequeLinkById(fixture.links.update);
+      assert.ok(updatedLink, 'Le lien a modifier doit exister apres validation.');
+      assert.equal(updatedLink.title, fixture.titles.update, 'La proposition acceptee doit modifier le titre du lien.');
+      assert.equal(updatedLink.url, fixture.urls.update, 'La proposition acceptee doit modifier l URL du lien.');
+      assert.match(updatedLink.description, /Lien modifie depuis une proposition admin/i, 'La proposition acceptee doit modifier la description du lien.');
+
+      await updateDashboardProposal(driver, fixture.titles.delete, 'accepted', notes.delete);
+      record = proposalRecord(fixture.ids.delete);
+      assert.equal(record.status, 'accepted', 'La suppression acceptee doit passer au statut accepted.');
+      assert.equal(record.moderation_note, notes.delete, 'La note de validation suppression doit etre conservee.');
+      assert.equal(webothequeLinkById(fixture.links.delete), null, 'La proposition acceptee doit supprimer le lien cible.');
+      await assertDashboardDoesNotList(driver, fixture.titles.delete);
+    } finally {
+      cleanupAdminProposalFixtures(token);
+    }
+  });
+});
+
+test('Selenium admin propositions: validation depuis admin_library et admin_webotheque', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `ADMMODPROP${Date.now()}`;
+  cleanupAdminProposalFixtures(token);
+  const fixture = prepareAdminModuleProposalFixtures(token);
+  const notes = {
+    libraryCategory: `Note module bibliotheque ${token}`,
+    webothequeContent: `Note module webotheque ${token}`,
+  };
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+
+      await visit(driver, 'admin_library', { status: 'pending' });
+      let text = await pagePlainText(driver);
+      assert.match(text, new RegExp(escapeRegExp(fixture.titles.library_category)), 'La proposition bibliotheque doit apparaitre dans admin_library.');
+      await updateModuleProposal(driver, 'admin_library', fixture.titles.library_category, 'accepted', notes.libraryCategory);
+      let record = proposalRecord(fixture.ids.library_category);
+      assert.equal(record.status, 'accepted', 'La proposition categorie bibliotheque doit passer au statut accepted.');
+      assert.equal(record.moderation_note, notes.libraryCategory, 'La note de validation bibliotheque doit etre conservee.');
+      const category = libraryCategoryByLabel(fixture.titles.library_category);
+      assert.ok(category && category.code, 'La validation admin_library doit creer la thematique bibliotheque.');
+
+      await visit(driver, 'admin_library');
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(escapeRegExp(fixture.titles.library_category)), 'La thematique creee doit etre visible dans admin_library.');
+
+      await visit(driver, 'admin_webotheque', { status: 'pending' });
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(escapeRegExp(fixture.titles.webotheque_content)), 'La proposition webotheque doit apparaitre dans admin_webotheque.');
+      await updateModuleProposal(driver, 'admin_webotheque', fixture.titles.webotheque_content, 'accepted', notes.webothequeContent, 'general');
+      record = proposalRecord(fixture.ids.webotheque_content);
+      assert.equal(record.status, 'accepted', 'La proposition lien webotheque doit passer au statut accepted.');
+      assert.equal(record.moderation_note, notes.webothequeContent, 'La note de validation webotheque doit etre conservee.');
+      const link = webothequeLinkByUrl(fixture.urls.webotheque_content);
+      assert.ok(link && Number(link.id) > 0, 'La validation admin_webotheque doit creer le lien webotheque.');
+      assert.equal(link.title, fixture.titles.webotheque_content, 'Le lien webotheque cree doit reprendre le titre propose.');
+
+      await visit(driver, 'webotheque', { q: fixture.titles.webotheque_content });
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(escapeRegExp(fixture.titles.webotheque_content)), 'Le lien valide depuis admin_webotheque doit etre visible publiquement.');
+    } finally {
+      cleanupAdminProposalFixtures(token);
+    }
+  });
+});

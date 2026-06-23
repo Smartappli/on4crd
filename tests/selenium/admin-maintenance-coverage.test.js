@@ -483,6 +483,25 @@ echo json_encode($rows, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_IDS: ids.join(',') });
 }
 
+function classifiedRows(ids) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$ids = array_values(array_filter(array_map('intval', explode(',', (string) getenv('SELENIUM_IDS')))));
+if ($ids === [] || !table_exists('classified_ads')) {
+    echo json_encode([]);
+    return;
+}
+$placeholders = implode(',', array_fill(0, count($ids), '?'));
+$stmt = db()->prepare('SELECT id, title, status, description FROM classified_ads WHERE id IN (' . $placeholders . ') ORDER BY id ASC');
+$stmt->execute($ids);
+$rows = [];
+foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: [] as $row) {
+    $rows[(int) $row['id']] = $row;
+}
+echo json_encode($rows, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_IDS: ids.join(',') });
+}
+
 function prepareTaxonomyEditFixture(token) {
   return seleniumJson(`
 require_once 'app/bootstrap.php';
@@ -882,7 +901,7 @@ test('Selenium admin news: moderation et attribution de responsable de rubrique'
   });
 });
 
-test('Selenium admin bibliotheque et petites annonces: fusion tags, bulk delete et bulk statuts', async (t) => {
+test('Selenium admin bibliotheque et petites annonces: fusion tags, modification, suppression et bulk statuts', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
     return;
@@ -925,6 +944,7 @@ test('Selenium admin bibliotheque et petites annonces: fusion tags, bulk delete 
       docs = libraryDocs(library.ids);
       assert.equal(Object.keys(docs).length, 0, 'La suppression groupée bibliotheque doit retirer les documents.');
 
+      const [singleClassifiedId, bulkClassifiedId] = classifieds.ids;
       await visit(driver, 'admin_classifieds', { q: token });
       const classifiedForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="bulk_update"]]'));
       await setFieldValue(driver, await classifiedForm.findElement(By.css('select[name="bulk_op"]')), 'active');
@@ -936,15 +956,33 @@ test('Selenium admin bibliotheque et petites annonces: fusion tags, bulk delete 
       let statuses = classifiedStatuses(classifieds.ids);
       assert.equal(Object.values(statuses).every((status) => status === 'active'), true, 'Le bulk update annonces doit activer les annonces.');
 
+      const singleTitle = `Classified single ${token}`;
+      await visit(driver, 'admin_classifieds', { edit: singleClassifiedId });
+      const classifiedEditForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save"]]'));
+      await setFieldValue(driver, await classifiedEditForm.findElement(By.css('input[name="title"]')), singleTitle);
+      await setFieldValue(driver, await classifiedEditForm.findElement(By.css('textarea[name="description"]')), `Classified single description ${token}`);
+      await setFieldValue(driver, await classifiedEditForm.findElement(By.css('select[name="status"]')), 'sold');
+      await submitForm(driver, classifiedEditForm);
+      let rows = classifiedRows(classifieds.ids);
+      assert.equal(rows[singleClassifiedId].title, singleTitle, 'La modification unitaire admin_classifieds doit persister le titre.');
+      assert.equal(rows[singleClassifiedId].status, 'sold', 'La modification unitaire admin_classifieds doit persister le statut.');
+
+      await visit(driver, 'admin_classifieds', { edit: singleClassifiedId });
+      const singleDeleteForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="delete"]]'));
+      await submitForm(driver, singleDeleteForm);
+      rows = classifiedRows(classifieds.ids);
+      assert.equal(Object.prototype.hasOwnProperty.call(rows, String(singleClassifiedId)), false, 'La suppression unitaire admin_classifieds doit retirer l annonce.');
+      assert.equal(Object.prototype.hasOwnProperty.call(rows, String(bulkClassifiedId)), true, 'La seconde annonce doit rester disponible pour le bulk delete.');
+
       await visit(driver, 'admin_classifieds', { q: token });
       const deleteClassifiedForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="bulk_update"]]'));
       await setFieldValue(driver, await deleteClassifiedForm.findElement(By.css('select[name="bulk_op"]')), 'delete');
-      for (const id of classifieds.ids) {
+      for (const id of [bulkClassifiedId]) {
         const checkbox = await deleteClassifiedForm.findElement(By.css(`input[name="ids[]"][value="${id}"]`));
         await setCheckbox(driver, checkbox, true);
       }
       await submitForm(driver, deleteClassifiedForm);
-      statuses = classifiedStatuses(classifieds.ids);
+      statuses = classifiedStatuses([bulkClassifiedId]);
       assert.equal(Object.keys(statuses).length, 0, 'La suppression groupée annonces doit retirer les annonces.');
     } finally {
       cleanupAdminRows(token);
