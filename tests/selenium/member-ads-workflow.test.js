@@ -34,6 +34,15 @@ async function setFieldValue(driver, element, value) {
     const element = arguments[0];
     const value = arguments[1];
     element.value = value;
+    const wysiwygWrapper = element.previousElementSibling && element.previousElementSibling.querySelector
+      ? element.previousElementSibling
+      : null;
+    const editor = wysiwygWrapper ? wysiwygWrapper.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (editor) {
+      editor.innerHTML = value;
+      editor.dispatchEvent(new Event('input', { bubbles: true }));
+      element.value = editor.innerHTML;
+    }
     element.dispatchEvent(new Event('input', { bubbles: true }));
     element.dispatchEvent(new Event('change', { bubbles: true }));
   `, element, value);
@@ -121,6 +130,55 @@ foreach (glob(rtrim($cacheDir, '/') . '/*') ?: [] as $file) {
   });
 }
 
+function adPlacementByCode(code) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$code = trim((string) getenv('SELENIUM_AD_CODE'));
+if ($code === '' || !table_exists('ad_placements')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, code, name, description, sort_order, is_active FROM ad_placements WHERE code = ? LIMIT 1');
+$stmt->execute([$code]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_AD_CODE: code }).trim() || 'null');
+}
+
+function adCampaignByTitle(title) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$title = trim((string) getenv('SELENIUM_AD_TITLE'));
+if ($title === '' || !table_exists('ads')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT a.id, a.owner_member_id, a.placement_id, a.format_code, a.title, a.description, a.image_path, a.target_url, a.start_at, a.duration_days, a.end_at, a.max_impressions, a.weight, a.status, a.moderation_note, a.created_at, a.updated_at, p.code AS placement_code, p.name AS placement_name FROM ads a INNER JOIN ad_placements p ON p.id = a.placement_id WHERE a.title = ? ORDER BY a.id DESC LIMIT 1');
+$stmt->execute([$title]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_AD_TITLE: title }).trim() || 'null');
+}
+
+function adEventCounts(adId) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$adId = (int) getenv('SELENIUM_AD_ID');
+if ($adId <= 0 || !table_exists('ad_events')) {
+    echo json_encode(['impression' => 0, 'click' => 0, 'rows' => []]);
+    return;
+}
+$stmt = db()->prepare('SELECT event_type, COUNT(*) AS total FROM ad_events WHERE ad_id = ? GROUP BY event_type');
+$stmt->execute([$adId]);
+$out = ['impression' => 0, 'click' => 0, 'rows' => []];
+foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: [] as $row) {
+    $out[(string) $row['event_type']] = (int) $row['total'];
+}
+$rows = db()->prepare('SELECT id, event_type, placement_code, member_id, ip_hash, user_agent_hash, created_at FROM ad_events WHERE ad_id = ? ORDER BY id ASC');
+$rows->execute([$adId]);
+$out['rows'] = $rows->fetchAll(PDO::FETCH_ASSOC) ?: [];
+echo json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_AD_ID: String(adId) }).trim() || '{"impression":0,"click":0,"rows":[]}');
+}
+
 test('Selenium publicites: placement, campagne, clic suivi, stats et moderation', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
@@ -151,6 +209,13 @@ test('Selenium publicites: placement, campagne, clic suivi, stats et moderation'
 
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(placementCode), 'Le placement publicitaire cree doit apparaitre en admin.');
+      const placement = adPlacementByCode(placementCode);
+      assert.ok(placement && Number(placement.id) > 0, 'Le placement publicitaire doit etre cree en DB.');
+      assert.equal(placement.code, placementCode, 'Le code placement doit etre persiste.');
+      assert.equal(placement.name, placementName, 'Le nom placement doit etre persiste.');
+      assert.equal(placement.description, 'Placement Selenium publicite.', 'La description placement doit etre persistee.');
+      assert.equal(Number(placement.sort_order), 5, 'L ordre placement doit etre persiste.');
+      assert.equal(Number(placement.is_active), 1, 'Le placement cree doit etre actif.');
 
       await visit(driver, 'ads');
       const createForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save_ad"]]'));
@@ -181,6 +246,21 @@ test('Selenium publicites: placement, campagne, clic suivi, stats et moderation'
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'La campagne publicitaire creee doit apparaitre dans Mes publicites.');
       assert.match(text, new RegExp(placementName), 'La campagne doit etre rattachee au placement cree.');
+      let ad = adCampaignByTitle(title);
+      assert.ok(ad && Number(ad.id) > 0, 'La campagne publicitaire doit etre creee en DB.');
+      assert.ok(Number(ad.owner_member_id) > 0, 'La campagne doit etre rattachee au membre createur.');
+      assert.equal(Number(ad.placement_id), Number(placement.id), 'La campagne doit stocker le placement choisi.');
+      assert.equal(ad.placement_code, placementCode, 'La campagne doit exposer le code placement en DB.');
+      assert.equal(ad.placement_name, placementName, 'La campagne doit exposer le nom placement en DB.');
+      assert.equal(ad.format_code, 'square', 'Le format publicitaire doit etre persiste.');
+      assert.equal(ad.title, title, 'Le titre publicitaire doit etre persiste.');
+      assert.equal(ad.description, 'Campagne Selenium publicite.', 'La description publicitaire doit etre persistee.');
+      assert.match(String(ad.target_url || ''), /route=home\b/, 'La cible publicitaire doit etre persistee.');
+      assert.equal(Number(ad.duration_days), 10, 'La duree publicitaire doit etre persistee.');
+      assert.equal(Number(ad.max_impressions), 100, 'Le plafond impressions doit etre persiste.');
+      assert.equal(Number(ad.weight), 100, 'Le poids publicitaire doit etre persiste.');
+      assert.equal(ad.status, 'active', 'La campagne creee doit etre active.');
+      assert.equal(ad.moderation_note, null, 'Une campagne creee ne doit pas avoir de note de moderation.');
 
       const editLink = await driver.findElement(By.xpath(`//tr[.//*[contains(normalize-space(.), "${title}")]]//a[contains(@href,"edit=")]`));
       await driver.get(await editLink.getAttribute('href'));
@@ -199,12 +279,24 @@ test('Selenium publicites: placement, campagne, clic suivi, stats et moderation'
       await visit(driver, 'admin_ads', { refresh: '1' });
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(updatedTitle), 'La campagne modifiee doit apparaitre dans les campagnes admin.');
+      assert.equal(adCampaignByTitle(title), null, 'La modification doit retirer l ancien titre de la DB.');
+      ad = adCampaignByTitle(updatedTitle);
+      assert.ok(ad && Number(ad.id) > 0, 'La campagne modifiee doit rester en DB.');
+      assert.equal(ad.description, 'Campagne Selenium publicite modifiee.', 'La description modifiee doit etre persistee.');
+      assert.equal(ad.status, 'active', 'La modification doit conserver le statut actif.');
+      assert.equal(Number(ad.placement_id), Number(placement.id), 'La modification ne doit pas changer le placement.');
 
       const clickLink = await driver.findElement(By.xpath(`//tr[.//*[contains(normalize-space(.), "${updatedTitle}")]]//a[contains(@href,"route=ad_click")]`));
       await driver.get(await clickLink.getAttribute('href'));
       await waitForDocumentReady(driver);
       await assertNoServerError(driver);
       await driver.wait(async () => /route=home\b/.test(await driver.getCurrentUrl()), timeoutMs, 'Le clic publicitaire doit rediriger vers la cible.');
+      let events = adEventCounts(Number(ad.id));
+      assert.equal(Number(events.click), 1, 'Le clic publicitaire doit creer un evenement click en DB.');
+      assert.equal(events.rows.length, 1, 'Un seul evenement publicitaire doit etre cree par le clic suivi.');
+      assert.equal(events.rows[0].event_type, 'click', 'L evenement publicitaire doit etre un clic.');
+      assert.equal(events.rows[0].placement_code, placementCode, 'L evenement publicitaire doit conserver le code placement.');
+      assert.ok(String(events.rows[0].created_at || '') !== '', 'L evenement publicitaire doit etre horodate.');
 
       await visit(driver, 'ads');
       const statsLink = await driver.findElement(By.xpath(`//tr[.//*[contains(normalize-space(.), "${updatedTitle}")]]//a[contains(@href,"stats=")]`));
@@ -222,6 +314,8 @@ test('Selenium publicites: placement, campagne, clic suivi, stats et moderation'
 
       text = await pagePlainText(driver);
       assert.match(text, /pause|paused|en pause/i, 'La campagne doit pouvoir etre mise en pause.');
+      ad = adCampaignByTitle(updatedTitle);
+      assert.equal(ad.status, 'paused', 'Le changement de statut membre doit etre persiste en DB.');
 
       await visit(driver, 'admin_ads', { refresh: '1' });
       const moderationForm = await driver.findElement(By.xpath(`//article[.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[.//input[@name="action" and @value="moderate_ad"]]`));
@@ -232,6 +326,11 @@ test('Selenium publicites: placement, campagne, clic suivi, stats et moderation'
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(updatedTitle), 'La campagne reactivee doit rester visible dans les campagnes recentes.');
       assert.match(text, /active/i, 'La moderation admin doit pouvoir reactiver la campagne.');
+      ad = adCampaignByTitle(updatedTitle);
+      assert.equal(ad.status, 'active', 'La moderation admin doit reactiver la campagne en DB.');
+      assert.equal(ad.moderation_note, 'Reactivation Selenium.', 'La note de moderation doit etre persistee.');
+      events = adEventCounts(Number(ad.id));
+      assert.equal(Number(events.click), 1, 'La moderation ne doit pas modifier les evenements de clic.');
     } finally {
       ensureAdStorageAndCleanup(placementCode, title);
     }

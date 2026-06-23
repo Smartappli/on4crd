@@ -162,17 +162,17 @@ $token = trim((string) (getenv('SELENIUM_TOKEN') ?: ''));
 $memberId = (int) (db()->query("SELECT id FROM members WHERE callsign = 'SELENIUMADMIN' LIMIT 1")->fetchColumn() ?: 0);
 $out = ['backgrounds' => [], 'qsos' => [], 'cards' => []];
 if ($memberId > 0 && $token !== '' && table_exists('qsl_background_presets')) {
-    $stmt = db()->prepare('SELECT label, type, is_default FROM qsl_background_presets WHERE member_id = ? AND label LIKE ? ORDER BY id ASC');
+    $stmt = db()->prepare('SELECT id, label, type, image_data_uri, color_primary, color_secondary, is_default, created_at FROM qsl_background_presets WHERE member_id = ? AND label LIKE ? ORDER BY id ASC');
     $stmt->execute([$memberId, '%' . $token . '%']);
     $out['backgrounds'] = $stmt->fetchAll() ?: [];
 }
 if ($memberId > 0 && $qsoCall !== '' && table_exists('qso_logs')) {
-    $stmt = db()->prepare('SELECT qso_call, qso_date, time_on, band, mode FROM qso_logs WHERE member_id = ? AND UPPER(qso_call) = ? ORDER BY id ASC');
+    $stmt = db()->prepare('SELECT id, qso_call, qso_date, time_on, band, mode, rst_sent, rst_recv, raw_payload, created_at FROM qso_logs WHERE member_id = ? AND UPPER(qso_call) = ? ORDER BY id ASC');
     $stmt->execute([$memberId, $qsoCall]);
     $out['qsos'] = $stmt->fetchAll() ?: [];
 }
 if ($memberId > 0 && $qsoCall !== '' && table_exists('qsl_cards')) {
-    $stmt = db()->prepare('SELECT qso_call, template_name, svg_content FROM qsl_cards WHERE member_id = ? AND UPPER(qso_call) = ? ORDER BY id ASC');
+    $stmt = db()->prepare('SELECT id, title, qso_call, qso_date, time_on, band, mode, rst_sent, rst_recv, template_name, svg_content, created_at FROM qsl_cards WHERE member_id = ? AND UPPER(qso_call) = ? ORDER BY id ASC');
     $stmt->execute([$memberId, $qsoCall]);
     $out['cards'] = $stmt->fetchAll() ?: [];
 }
@@ -230,6 +230,14 @@ test('Selenium membre QSL: fond, creation manuelle, preview, export et suppressi
 
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(backgroundLabel), 'Le fond QSL cree doit apparaitre dans la table des fonds.');
+      let state = qslState(qsoCall, backgroundLabel);
+      assert.equal(state.backgrounds.length, 1, 'Le fond gradient QSL doit etre persiste en DB.');
+      assert.equal(state.backgrounds[0].label, backgroundLabel, 'Le libelle du fond gradient doit etre persiste.');
+      assert.equal(state.backgrounds[0].type, 'gradient', 'Le type du fond gradient doit etre persiste.');
+      assert.equal(String(state.backgrounds[0].color_primary || '').toLowerCase(), '#123456', 'La couleur primaire gradient doit etre persistee.');
+      assert.equal(String(state.backgrounds[0].color_secondary || '').toLowerCase(), '#abcdef', 'La couleur secondaire gradient doit etre persistee.');
+      assert.equal(Number(state.backgrounds[0].is_default), 1, 'Le fond gradient doit etre marque par defaut.');
+      assert.ok(String(state.backgrounds[0].created_at || '') !== '', 'Le fond gradient doit etre horodate.');
 
       const manualForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="create_manual"]]'));
       await setInputValue(driver, await manualForm.findElement(By.css('input[name="qso_call"]')), qsoCall);
@@ -258,6 +266,18 @@ test('Selenium membre QSL: fond, creation manuelle, preview, export et suppressi
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(qsoCall, 'i'), 'La carte QSL generee doit apparaitre dans la gestion.');
       assert.match(text, /Selenium QSL regression|recto|front|verso|back/i, 'Le parcours recto/verso doit rester visible apres creation.');
+      state = qslState(qsoCall, backgroundLabel);
+      assert.equal(state.cards.length, 1, 'La creation manuelle doit creer une carte QSL en DB.');
+      assert.equal(state.cards[0].qso_call, qsoCall.toUpperCase(), 'La carte manuelle doit stocker l indicatif QSO.');
+      assert.equal(String(state.cards[0].qso_date), '20260618', 'La carte manuelle doit stocker la date QSO au format ADIF.');
+      assert.equal(String(state.cards[0].time_on), '1435', 'La carte manuelle doit stocker l heure QSO au format ADIF.');
+      assert.equal(state.cards[0].band, '20M', 'La carte manuelle doit stocker la bande.');
+      assert.equal(state.cards[0].mode, 'SSB', 'La carte manuelle doit stocker le mode.');
+      assert.equal(state.cards[0].rst_sent, '59', 'La carte manuelle doit stocker le RST envoye.');
+      assert.equal(state.cards[0].rst_recv, '57', 'La carte manuelle doit stocker le RST recu.');
+      assert.equal(state.cards[0].template_name, 'classic_duplex', 'La carte manuelle doit stocker le template choisi.');
+      assert.match(state.cards[0].svg_content, /QSL recto|front/i, 'Le SVG manuel stocke doit correspondre au recto.');
+      assert.match(state.cards[0].svg_content, /#123456/i, 'Le SVG manuel doit utiliser la couleur primaire du fond.');
 
       await visit(driver, 'qsl', { qsl_search: qsoCall });
       await activateQslPanel(driver, 'manage');
@@ -288,6 +308,9 @@ test('Selenium membre QSL: fond, creation manuelle, preview, export et suppressi
       await activateQslPanel(driver, 'manage');
       text = await pagePlainText(driver);
       assert.doesNotMatch(text, new RegExp(qsoCall, 'i'), 'La QSL supprimee ne doit plus apparaitre.');
+      state = qslState(qsoCall, backgroundLabel);
+      assert.equal(state.cards.length, 0, 'La suppression QSL doit retirer la carte de la DB.');
+      assert.equal(state.backgrounds.length, 1, 'La suppression QSL ne doit pas supprimer le fond.');
 
       await activateQslPanel(driver, 'design');
       const deleteBackgroundForm = await driver.findElement(By.xpath(`//tr[.//*[contains(normalize-space(.), "${backgroundLabel}")]]//form[.//button[@name="action" and @value="delete_background"]]`));
@@ -307,6 +330,8 @@ test('Selenium membre QSL: fond, creation manuelle, preview, export et suppressi
       await activateQslPanel(driver, 'design');
       text = await pagePlainText(driver);
       assert.doesNotMatch(text, new RegExp(backgroundLabel), 'Le fond QSL supprime ne doit plus apparaitre.');
+      state = qslState(qsoCall, backgroundLabel);
+      assert.equal(state.backgrounds.length, 0, 'La suppression du fond doit retirer la ligne DB.');
     } finally {
       cleanupQslRows(qsoCall, backgroundLabel);
     }
@@ -374,8 +399,16 @@ test('Selenium membre QSL: import ADIF, generation groupee et fonds avances', as
       await assertNoServerError(driver);
 
       let state = qslState(qsoCall, token);
-      assert.equal(state.backgrounds.length, 3, 'Les trois fonds QSL avances doivent etre persistés.');
+      assert.equal(state.backgrounds.length, 3, 'Les trois fonds QSL avances doivent etre persistes.');
       assert.equal(state.backgrounds.some((row) => row.label === imageLabel && Number(row.is_default) === 1), true, 'Le fond image doit pouvoir devenir le fond par defaut.');
+      const backgroundsByLabel = Object.fromEntries(state.backgrounds.map((row) => [row.label, row]));
+      assert.equal(backgroundsByLabel[imageLabel].type, 'image', 'Le fond image doit stocker son type.');
+      assert.match(String(backgroundsByLabel[imageLabel].image_data_uri || ''), /^data:image\/png;base64,/, 'Le fond image doit stocker le data URI.');
+      assert.equal(backgroundsByLabel[solidLabel].type, 'solid', 'Le fond uni doit stocker son type.');
+      assert.equal(String(backgroundsByLabel[solidLabel].color_primary || '').toLowerCase(), '#225588', 'Le fond uni doit stocker sa couleur.');
+      assert.equal(backgroundsByLabel[paletteLabel].type, 'gradient', 'Le fond palette doit etre stocke comme un gradient.');
+      assert.ok(String(backgroundsByLabel[paletteLabel].color_primary || '') !== '', 'Le fond palette doit stocker une couleur primaire.');
+      assert.ok(state.backgrounds.every((row) => String(row.created_at || '') !== ''), 'Chaque fond avance doit etre horodate.');
 
       await activateQslPanel(driver, 'adif');
       const adifForm = await driver.findElement(By.css('#adif-dropzone-form'));
@@ -383,8 +416,15 @@ test('Selenium membre QSL: import ADIF, generation groupee et fonds avances', as
 
       state = qslState(qsoCall, token);
       assert.equal(state.qsos.length, 1, 'L import ADIF doit creer le QSO.');
+      assert.equal(state.qsos[0].qso_call, qsoCall.toUpperCase(), 'Le QSO importe doit conserver l indicatif.');
+      assert.equal(String(state.qsos[0].qso_date), '20260618', 'Le QSO importe doit conserver la date ADIF compacte.');
+      assert.equal(String(state.qsos[0].time_on), '1542', 'Le QSO importe doit conserver l heure ADIF compacte.');
       assert.equal(state.qsos[0].band, '20M', 'Le QSO importe doit conserver la bande.');
       assert.equal(state.qsos[0].mode, 'SSB', 'Le QSO importe doit conserver le mode.');
+      assert.equal(state.qsos[0].rst_sent, '59', 'Le QSO importe doit conserver le RST envoye.');
+      assert.equal(state.qsos[0].rst_recv, '57', 'Le QSO importe doit conserver le RST recu.');
+      assert.match(String(state.qsos[0].raw_payload || ''), new RegExp(token), 'Le QSO importe doit conserver le payload ADIF brut.');
+      assert.ok(String(state.qsos[0].created_at || '') !== '', 'Le QSO importe doit etre horodate.');
 
       await visit(driver, 'qsl', { qso_search: qsoCall });
       await activateQslPanel(driver, 'manage');
@@ -415,7 +455,15 @@ test('Selenium membre QSL: import ADIF, generation groupee et fonds avances', as
       state = qslState(qsoCall, token);
       assert.equal(state.cards.length, 1, 'La generation groupee doit creer une carte QSL.');
       assert.equal(state.cards[0].template_name, 'classic_duplex', 'La generation groupee doit respecter le format recto verso.');
+      assert.equal(state.cards[0].qso_call, qsoCall.toUpperCase(), 'La carte groupee doit conserver l indicatif.');
+      assert.equal(String(state.cards[0].qso_date), '20260618', 'La carte groupee doit conserver la date ADIF compacte.');
+      assert.equal(String(state.cards[0].time_on), '1542', 'La carte groupee doit conserver l heure ADIF compacte.');
+      assert.equal(state.cards[0].band, '20M', 'La carte groupee doit conserver la bande.');
+      assert.equal(state.cards[0].mode, 'SSB', 'La carte groupee doit conserver le mode.');
+      assert.equal(state.cards[0].rst_sent, '59', 'La carte groupee doit conserver le RST envoye.');
+      assert.equal(state.cards[0].rst_recv, '57', 'La carte groupee doit conserver le RST recu.');
       assert.match(state.cards[0].svg_content, new RegExp(qsoCall), 'La carte generee doit contenir l indicatif importe.');
+      assert.ok(String(state.cards[0].created_at || '') !== '', 'La carte groupee doit etre horodatee.');
 
       await activateQslPanel(driver, 'manage');
       text = await pagePlainText(driver);

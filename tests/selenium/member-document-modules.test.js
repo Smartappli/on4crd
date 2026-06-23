@@ -37,6 +37,15 @@ async function setFieldValue(driver, field, value) {
     const field = arguments[0];
     const value = arguments[1];
     field.value = value;
+    const wysiwygWrapper = field.previousElementSibling && field.previousElementSibling.querySelector
+      ? field.previousElementSibling
+      : null;
+    const editor = wysiwygWrapper ? wysiwygWrapper.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (editor) {
+      editor.innerHTML = value;
+      editor.dispatchEvent(new Event('input', { bubbles: true }));
+      field.value = editor.innerHTML;
+    }
     field.dispatchEvent(new Event('input', { bubbles: true }));
     field.dispatchEvent(new Event('change', { bubbles: true }));
   `, field, value);
@@ -98,10 +107,50 @@ if ($module === '' || $title === '' || !ensure_member_module_documents_table()) 
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, module_code, title, file_path FROM member_module_documents WHERE module_code = ? AND title = ? ORDER BY id DESC LIMIT 1');
+$stmt = db()->prepare('SELECT id, module_code, member_id, category, subcategory, tags, title, description, file_path, extracted_text, uploaded_at FROM member_module_documents WHERE module_code = ? AND title = ? ORDER BY id DESC LIMIT 1');
 $stmt->execute([$module, $title]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null);
 `, { SELENIUM_DOCUMENT_MODULE: module, SELENIUM_DOCUMENT_TITLE: title }).trim() || 'null');
+}
+
+function memberDocumentFavoriteRecord(memberId, documentId) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/member_favorites.php';
+ensure_member_favorites_table();
+$memberId = (int) getenv('SELENIUM_MEMBER_ID');
+$documentId = (int) getenv('SELENIUM_DOCUMENT_ID');
+$stmt = db()->prepare('SELECT id, member_id, target_type, target_id, title, url, created_at FROM member_favorites WHERE member_id = ? AND target_type = "member_module_document" AND target_id = ? LIMIT 1');
+$stmt->execute([$memberId, $documentId]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null);
+`, { SELENIUM_MEMBER_ID: String(memberId), SELENIUM_DOCUMENT_ID: String(documentId) }).trim() || 'null');
+}
+
+function memberDocumentTaxonomyState(module, categoryCode, subcategoryCode) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+$module = preg_replace('/[^a-z0-9_]/', '', strtolower((string) getenv('SELENIUM_DOCUMENT_MODULE')));
+$category = (string) getenv('SELENIUM_DOCUMENT_CATEGORY');
+$subcategory = (string) getenv('SELENIUM_DOCUMENT_SUBCATEGORY');
+member_document_ensure_categories_table($module);
+member_document_ensure_subcategories_table($module);
+$out = ['category' => null, 'subcategory' => null];
+$categoryDeletedSql = table_has_column('member_module_categories', 'deleted_at') ? ' AND deleted_at IS NULL' : '';
+$subcategoryDeletedSql = table_has_column('member_module_subcategories', 'deleted_at') ? ' AND deleted_at IS NULL' : '';
+$stmt = db()->prepare('SELECT module_code, code, label, sort_order FROM member_module_categories WHERE module_code = ? AND code = ?' . $categoryDeletedSql . ' LIMIT 1');
+$stmt->execute([$module, $category]);
+$out['category'] = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+$stmt = db()->prepare('SELECT module_code, category_code, code, label, sort_order FROM member_module_subcategories WHERE module_code = ? AND category_code = ? AND code = ?' . $subcategoryDeletedSql . ' LIMIT 1');
+$stmt->execute([$module, $category, $subcategory]);
+$out['subcategory'] = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+echo json_encode($out);
+`, {
+    SELENIUM_DOCUMENT_MODULE: module,
+    SELENIUM_DOCUMENT_CATEGORY: categoryCode,
+    SELENIUM_DOCUMENT_SUBCATEGORY: subcategoryCode,
+  }).trim() || '{"category":null,"subcategory":null}');
 }
 
 async function fetchAuthenticatedText(driver, url) {
@@ -166,6 +215,16 @@ for (const moduleCode of ['pv', 'fichiers']) {
 
         const document = memberDocumentByTitle(moduleCode, title);
         assert.ok(document && Number(document.id) > 0, `Le document ${moduleCode} doit exister en base apres upload admin.`);
+        assert.equal(document.module_code, moduleCode, `Le document ${moduleCode} doit stocker son module.`);
+        assert.ok(Number(document.member_id) > 0, `Le document ${moduleCode} doit etre rattache a un membre.`);
+        assert.equal(document.category, 'general', `Le document ${moduleCode} doit rester dans la categorie generale par defaut.`);
+        assert.equal(document.subcategory, '', `Le document ${moduleCode} ne doit pas inventer de sous-categorie.`);
+        assert.equal(document.title, title, `Le titre ${moduleCode} doit etre persiste.`);
+        assert.equal(document.description, `Document Selenium ${moduleCode}.`, `La description ${moduleCode} doit etre persistee.`);
+        assert.equal(document.tags, `selenium,${moduleCode}`, `Les tags ${moduleCode} doivent etre persistes.`);
+        assert.match(String(document.file_path || ''), /^storage\/(?:private|uploads)\/member_modules\//, `Le fichier ${moduleCode} doit etre stocke dans member_modules.`);
+        assert.match(String(document.extracted_text || ''), new RegExp(fixtureText), `Le texte extrait ${moduleCode} doit contenir le fichier uploade.`);
+        assert.ok(String(document.uploaded_at || '') !== '', `Le document ${moduleCode} doit etre horodate.`);
 
         await visit(driver, memberRoute, { q: title });
         text = await pagePlainText(driver);
@@ -173,6 +232,13 @@ for (const moduleCode of ['pv', 'fichiers']) {
 
         const favoriteForm = await driver.findElement(By.xpath(`//article[contains(@class,"member-document-card")][.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="toggle_favorite_document"]]`));
         await submitForm(driver, favoriteForm);
+        const favorite = memberDocumentFavoriteRecord(Number(document.member_id), Number(document.id));
+        assert.ok(favorite && Number(favorite.id) > 0, `Le favori ${moduleCode} doit etre cree en DB.`);
+        assert.equal(Number(favorite.member_id), Number(document.member_id), `Le favori ${moduleCode} doit etre rattache au membre.`);
+        assert.equal(favorite.target_type, 'member_module_document', `Le favori ${moduleCode} doit cibler un document membre.`);
+        assert.equal(Number(favorite.target_id), Number(document.id), `Le favori ${moduleCode} doit stocker l id document.`);
+        assert.equal(favorite.title, title, `Le favori ${moduleCode} doit stocker le titre du document.`);
+        assert.match(String(favorite.url || ''), new RegExp(`route=${memberRoute}`), `Le favori ${moduleCode} doit stocker l URL du module.`);
 
         const downloadUrl = routeUrl('member_document_preview', { module: moduleCode, id: document.id, download: '1' });
         assert.match(await fetchAuthenticatedText(driver, downloadUrl), new RegExp(fixtureText), `Le telechargement ${moduleCode} doit renvoyer le fichier uploade.`);
@@ -190,6 +256,7 @@ for (const moduleCode of ['pv', 'fichiers']) {
         await visit(driver, memberRoute, { q: title });
         text = await pagePlainText(driver);
         assert.doesNotMatch(text, new RegExp(title), `Le document ${moduleCode} supprime en admin ne doit plus etre visible cote membre.`);
+        assert.equal(memberDocumentByTitle(moduleCode, title), null, `Le document ${moduleCode} supprime doit etre retire de la DB.`);
       } finally {
         cleanupMemberDocumentFixture(moduleCode, token);
       }
@@ -227,6 +294,15 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
       await setFieldValue(driver, await subcategoryForm.findElement(By.css('select[name="subcategory_category"]')), category);
       await subcategoryForm.findElement(By.css('input[name="subcategory_label"]')).sendKeys(subcategory);
       await submitForm(driver, subcategoryForm);
+      let taxonomyState = memberDocumentTaxonomyState('presentations', category, subcategory);
+      assert.ok(taxonomyState.category, 'La thematique presentations doit etre creee en DB.');
+      assert.equal(taxonomyState.category.module_code, 'presentations', 'La thematique doit etre rattachee au module presentations.');
+      assert.equal(taxonomyState.category.code, category, 'Le code thematique doit etre persiste.');
+      assert.equal(taxonomyState.category.label, category, 'Le libelle thematique doit etre persiste.');
+      assert.ok(taxonomyState.subcategory, 'La sous-thematique presentations doit etre creee en DB.');
+      assert.equal(taxonomyState.subcategory.category_code, category, 'La sous-thematique doit etre rattachee a la thematique.');
+      assert.equal(taxonomyState.subcategory.code, subcategory, 'Le code sous-thematique doit etre persiste.');
+      assert.equal(taxonomyState.subcategory.label, subcategory, 'Le libelle sous-thematique doit etre persiste.');
 
       await visit(driver, 'presentations');
       assert.doesNotMatch(await taxonomyText(driver), new RegExp(category), 'Une thematique vide ne doit pas apparaitre cote membre.');
@@ -246,6 +322,15 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
 
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'Le document uploade doit apparaitre en admin.');
+      let document = memberDocumentByTitle('presentations', title);
+      assert.ok(document && Number(document.id) > 0, 'Le document presentations doit exister en DB apres upload.');
+      assert.equal(document.module_code, 'presentations', 'Le document presentations doit stocker son module.');
+      assert.equal(document.category, category, 'Le document presentations doit stocker sa thematique.');
+      assert.equal(document.subcategory, subcategory, 'Le document presentations doit stocker sa sous-thematique.');
+      assert.equal(document.description, 'Document Selenium module presentations.', 'La description presentations doit etre persistee.');
+      assert.equal(document.tags, 'selenium,documents', 'Les tags presentations doivent etre persistes.');
+      assert.match(String(document.file_path || ''), /^storage\/(?:private|uploads)\/member_modules\//, 'Le fichier presentations doit etre stocke dans member_modules.');
+      assert.match(String(document.extracted_text || ''), new RegExp(title), 'Le texte extrait presentations doit contenir le fichier uploade.');
 
       const subcategoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="subcategory_ref" and @value="${category}:${subcategory}"]]//button[@name="action" and @value="delete_subcategory"]`));
       assert.ok(await subcategoryDeleteButton.getAttribute('disabled'), 'Une sous-thematique avec document ne doit pas etre supprimable.');
@@ -258,6 +343,10 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
 
       const favoriteForm = await driver.findElement(By.xpath(`//article[contains(@class,"member-document-card")][.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="toggle_favorite_document"]]`));
       await submitForm(driver, favoriteForm);
+      let favorite = memberDocumentFavoriteRecord(Number(document.member_id), Number(document.id));
+      assert.ok(favorite && Number(favorite.id) > 0, 'Le favori presentations doit etre cree en DB.');
+      assert.equal(favorite.title, title, 'Le favori presentations doit stocker le titre du document.');
+      assert.match(String(favorite.url || ''), /route=presentations/, 'Le favori presentations doit stocker l URL du module.');
 
       await visit(driver, 'presentations', { q: title });
       const taxonomyItems = await driver.findElements(By.css('.member-document-taxonomy .module-taxonomy-list > a.module-taxonomy-item span'));
@@ -271,20 +360,32 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
 
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(updatedTitle), 'Le document modifie doit apparaitre cote membre.');
+      const updatedDocument = memberDocumentByTitle('presentations', updatedTitle);
+      assert.ok(updatedDocument && Number(updatedDocument.id) === Number(document.id), 'La modification presentations doit garder le meme document en DB.');
+      assert.equal(updatedDocument.category, category, 'La modification presentations doit conserver la thematique.');
+      assert.equal(updatedDocument.subcategory, subcategory, 'La modification presentations doit conserver la sous-thematique.');
+      assert.equal(updatedDocument.description, 'Document Selenium module presentations modifie.', 'La description modifiee presentations doit etre persistee.');
+      assert.equal(updatedDocument.tags, 'selenium,documents', 'Les tags presentations doivent rester inchanges si non modifies.');
 
       const deleteForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[.//input[@name="action" and @value="delete_document"]]`));
       await submitForm(driver, deleteForm);
       await driver.wait(async () => !(await pagePlainText(driver)).includes(updatedTitle), timeoutMs);
+      assert.equal(memberDocumentByTitle('presentations', updatedTitle), null, 'Le document presentations supprime doit etre retire de la DB.');
+      assert.equal(memberDocumentFavoriteRecord(Number(document.member_id), Number(document.id)), null, 'La suppression du document presentations doit supprimer le favori.');
 
       await visit(driver, 'admin_presentations', { category });
       const enabledSubcategoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="subcategory_ref" and @value="${category}:${subcategory}"]]//button[@name="action" and @value="delete_subcategory"]`));
       assert.equal(await enabledSubcategoryDeleteButton.getAttribute('disabled'), null, 'La sous-thematique vide doit redevenir supprimable.');
       await submitForm(driver, await enabledSubcategoryDeleteButton.findElement(By.xpath('./ancestor::form')), enabledSubcategoryDeleteButton);
+      taxonomyState = memberDocumentTaxonomyState('presentations', category, subcategory);
+      assert.equal(taxonomyState.subcategory, null, 'La sous-thematique supprimee doit etre retiree de la DB.');
 
       await visit(driver, 'admin_presentations');
       const enabledCategoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="category_code" and @value="${category}"]]//button[@name="action" and @value="delete_category"]`));
       assert.equal(await enabledCategoryDeleteButton.getAttribute('disabled'), null, 'La thematique sans sous-thematique doit redevenir supprimable.');
       await submitForm(driver, await enabledCategoryDeleteButton.findElement(By.xpath('./ancestor::form')), enabledCategoryDeleteButton);
+      taxonomyState = memberDocumentTaxonomyState('presentations', category, subcategory);
+      assert.equal(taxonomyState.category, null, 'La thematique supprimee doit etre retiree de la DB.');
 
       await visit(driver, 'admin_presentations');
       assert.equal((await driver.findElements(By.xpath(`//input[@name="category_code" and @value="${category}"]`))).length, 0, 'La thematique supprimee ne doit plus etre listee.');
@@ -326,9 +427,23 @@ for (const moduleCode of ['presentations', 'videos']) {
         await visit(driver, moduleCode, { q: title });
         let text = await pagePlainText(driver);
         assert.match(text, new RegExp(title), `Le document ${moduleCode} cree cote membre doit etre visible.`);
+        let document = memberDocumentByTitle(moduleCode, title);
+        assert.ok(document && Number(document.id) > 0, `Le document ${moduleCode} cree cote membre doit exister en DB.`);
+        assert.equal(document.module_code, moduleCode, `Le document ${moduleCode} cree cote membre doit stocker son module.`);
+        assert.ok(Number(document.member_id) > 0, `Le document ${moduleCode} cree cote membre doit etre rattache a un membre.`);
+        assert.equal(document.category, 'general', `Le document ${moduleCode} cree cote membre doit rester en categorie generale.`);
+        assert.equal(document.subcategory, '', `Le document ${moduleCode} cree cote membre ne doit pas creer de sous-categorie.`);
+        assert.equal(document.description, `Document ${moduleCode} propose par Selenium.`, `La description ${moduleCode} creee cote membre doit etre persistee.`);
+        assert.equal(document.tags, `selenium,${moduleCode}`, `Les tags ${moduleCode} crees cote membre doivent etre persistes.`);
+        assert.match(String(document.file_path || ''), /^storage\/(?:private|uploads)\/member_modules\//, `Le fichier ${moduleCode} cree cote membre doit etre stocke dans member_modules.`);
+        assert.match(String(document.extracted_text || ''), new RegExp(`Contenu Selenium membre ${moduleCode}`), `Le texte extrait ${moduleCode} cree cote membre doit contenir le fichier.`);
 
         const favoriteForm = await driver.findElement(By.xpath(`//article[contains(@class,"member-document-card")][.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="toggle_favorite_document"]]`));
         await submitForm(driver, favoriteForm);
+        let favorite = memberDocumentFavoriteRecord(Number(document.member_id), Number(document.id));
+        assert.ok(favorite && Number(favorite.id) > 0, `Le favori ${moduleCode} cree cote membre doit etre persiste.`);
+        assert.equal(favorite.title, title, `Le favori ${moduleCode} cree cote membre doit stocker le titre.`);
+        assert.match(String(favorite.url || ''), new RegExp(`route=${moduleCode}`), `Le favori ${moduleCode} cree cote membre doit stocker l URL du module.`);
 
         await visit(driver, moduleCode, { q: title });
         const editForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="update_document"]]`));
@@ -340,6 +455,12 @@ for (const moduleCode of ['presentations', 'videos']) {
         await visit(driver, moduleCode, { q: updatedTitle });
         text = await pagePlainText(driver);
         assert.match(text, new RegExp(updatedTitle), `Le document ${moduleCode} modifie cote membre doit etre visible.`);
+        const updatedDocument = memberDocumentByTitle(moduleCode, updatedTitle);
+        assert.ok(updatedDocument && Number(updatedDocument.id) === Number(document.id), `Le document ${moduleCode} modifie doit conserver son id DB.`);
+        assert.equal(updatedDocument.description, `Document ${moduleCode} modifie cote membre.`, `La description ${moduleCode} modifiee doit etre persistee.`);
+        assert.equal(updatedDocument.tags, `selenium,${moduleCode},updated`, `Les tags ${moduleCode} modifies doivent etre persistes.`);
+        assert.equal(updatedDocument.category, 'general', `La modification ${moduleCode} doit conserver la categorie.`);
+        assert.equal(updatedDocument.subcategory, '', `La modification ${moduleCode} doit conserver la sous-categorie vide.`);
 
         const deleteForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[.//input[@name="action" and @value="delete_document"]]`));
         await submitForm(driver, deleteForm);
@@ -347,6 +468,8 @@ for (const moduleCode of ['presentations', 'videos']) {
         await visit(driver, moduleCode, { q: updatedTitle });
         text = await pagePlainText(driver);
         assert.doesNotMatch(text, new RegExp(updatedTitle), `Le document ${moduleCode} supprime cote membre ne doit plus etre visible.`);
+        assert.equal(memberDocumentByTitle(moduleCode, updatedTitle), null, `Le document ${moduleCode} supprime cote membre doit etre retire de la DB.`);
+        assert.equal(memberDocumentFavoriteRecord(Number(document.member_id), Number(document.id)), null, `La suppression ${moduleCode} doit retirer le favori DB.`);
       } finally {
         cleanupMemberDocumentFixture(moduleCode, token);
       }
