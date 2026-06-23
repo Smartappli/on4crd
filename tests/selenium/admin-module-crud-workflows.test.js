@@ -78,7 +78,7 @@ async function replaceVisibleFieldText(driver, field, value) {
   const isDisplayed = await field.isDisplayed().catch(() => false);
   if (isDisplayed) {
     await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', field);
-    await field.click();
+    await driver.executeScript('arguments[0].focus();', field);
     await field.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.BACK_SPACE, value);
     return;
   }
@@ -90,7 +90,7 @@ async function replaceVisibleFieldText(driver, field, value) {
   `, field);
   if (editor) {
     await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', editor);
-    await editor.click();
+    await driver.executeScript('arguments[0].focus();', editor);
     await editor.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.BACK_SPACE, value);
     return;
   }
