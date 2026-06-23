@@ -20,19 +20,45 @@ function albumCreationState(title) {
   const output = runSeleniumPhp(`
 require_once 'app/bootstrap.php';
 $title = getenv('SELENIUM_ALBUM_TITLE') ?: '';
-$stmt = db()->prepare('SELECT id FROM albums WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, description, is_public, is_featured, publish_requested FROM albums WHERE title = ? ORDER BY id DESC LIMIT 1');
 $stmt->execute([$title]);
-$albumId = (int) ($stmt->fetchColumn() ?: 0);
+$album = $stmt->fetch();
+$albumId = is_array($album) ? (int) ($album['id'] ?? 0) : 0;
 $photoCount = 0;
+$photos = [];
 if ($albumId > 0) {
     $photoStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
     $photoStmt->execute([$albumId]);
     $photoCount = (int) ($photoStmt->fetchColumn() ?: 0);
+
+    $photosStmt = db()->prepare('SELECT id, sort_order, title, caption, file_path FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC');
+    $photosStmt->execute([$albumId]);
+    foreach ($photosStmt->fetchAll() ?: [] as $photo) {
+        $photos[] = [
+            'id' => (int) ($photo['id'] ?? 0),
+            'sort_order' => (int) ($photo['sort_order'] ?? 0),
+            'title' => (string) ($photo['title'] ?? ''),
+            'caption' => (string) ($photo['caption'] ?? ''),
+            'file_path' => (string) ($photo['file_path'] ?? ''),
+        ];
+    }
 }
-echo json_encode(['id' => $albumId, 'photo_count' => $photoCount], JSON_THROW_ON_ERROR);
+echo json_encode([
+    'id' => $albumId,
+    'member_id' => is_array($album) ? (int) ($album['member_id'] ?? 0) : 0,
+    'category' => is_array($album) ? (string) ($album['category'] ?? '') : '',
+    'subcategory' => is_array($album) ? (string) ($album['subcategory'] ?? '') : '',
+    'title' => is_array($album) ? (string) ($album['title'] ?? '') : '',
+    'description' => is_array($album) ? (string) ($album['description'] ?? '') : '',
+    'is_public' => is_array($album) ? (int) ($album['is_public'] ?? 0) : 0,
+    'is_featured' => is_array($album) ? (int) ($album['is_featured'] ?? 0) : 0,
+    'publish_requested' => is_array($album) ? (int) ($album['publish_requested'] ?? 0) : 0,
+    'photo_count' => $photoCount,
+    'photos' => $photos,
+], JSON_THROW_ON_ERROR);
 `, { SELENIUM_ALBUM_TITLE: title }).trim();
 
-  return JSON.parse(output || '{"id":0,"photo_count":0}');
+  return JSON.parse(output || '{"id":0,"photo_count":0,"photos":[]}');
 }
 
 function albumPhotoCount(albumId) {
@@ -146,6 +172,8 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
 
   await withSelenium(t, async (driver) => {
     const title = `selenium-album-${Date.now()}`;
+    const albumDescription = 'Album Selenium de regression upload.';
+    const expectedPublicAfterFinalize = process.env.SELENIUM_CREATE_PUBLIC_ALBUM === '1' ? 1 : 0;
     let created = false;
 
     try {
@@ -156,7 +184,7 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
       await wizardForm.findElement(By.css('input[name="title"]')).sendKeys(title);
       const descriptionTextarea = await wizardForm.findElement(By.css('textarea[name="description"]'));
       if (await descriptionTextarea.isDisplayed()) {
-        await descriptionTextarea.sendKeys('Album Selenium de regression upload.');
+        await descriptionTextarea.sendKeys(albumDescription);
       } else {
         const descriptionEditor = await wizardForm.findElement(By.css('.wysiwyg-editor[contenteditable="true"]'));
         await driver.executeScript(`
@@ -168,7 +196,7 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
           editor.dispatchEvent(new Event('input', { bubbles: true }));
           textarea.dispatchEvent(new Event('input', { bubbles: true }));
           textarea.dispatchEvent(new Event('change', { bubbles: true }));
-        `, descriptionEditor, descriptionTextarea, 'Album Selenium de regression upload.');
+        `, descriptionEditor, descriptionTextarea, albumDescription);
       }
       if (process.env.SELENIUM_CREATE_PUBLIC_ALBUM === '1') {
         const publicCheckbox = await wizardForm.findElement(By.css('input[name="is_public"]'));
@@ -179,6 +207,18 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
       await submitForm(driver, wizardForm);
       const createdState = albumCreationState(title);
       assert.ok(createdState.id > 0, 'L album cree par l assistant doit exister en base avant l upload.');
+      assert.equal(createdState.title, title, 'Le titre cree par l admin doit etre persiste en base.');
+      assert.match(createdState.description, /Album Selenium de regression upload/, 'La description creee par l admin doit etre persistee en base.');
+      assert.equal(createdState.category, 'general', 'La categorie par defaut du wizard doit etre persistee.');
+      assert.equal(createdState.subcategory, '', 'Aucune sous-categorie ne doit etre forcee par le wizard.');
+      assert.equal(createdState.is_public, 0, 'Un album cree dans le wizard reste prive avant finalisation.');
+      assert.equal(createdState.is_featured, 0, 'Le wizard ne doit pas marquer l album a la une par defaut.');
+      assert.equal(
+        createdState.publish_requested,
+        expectedPublicAfterFinalize,
+        'Le choix public du wizard doit etre stocke dans publish_requested avant finalisation.',
+      );
+      assert.equal(createdState.photo_count, 0, 'Aucune photo ne doit etre attachee avant l upload.');
       const albumId = createdState.id;
       created = true;
 
@@ -191,6 +231,17 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
         Math.max(timeoutMs, 30000),
         'Les photos televersees doivent etre enregistrees en base avant la preview.',
       );
+      const uploadedState = albumCreationState(title);
+      assert.equal(uploadedState.photo_count, 2, 'Les deux photos envoyees doivent etre enregistrees en base.');
+      assert.equal(uploadedState.photos.length, 2, 'Le detail DB doit contenir les deux photos uploadees.');
+      for (const [index, photo] of uploadedState.photos.entries()) {
+        assert.ok(photo.id > 0, 'Chaque photo uploadee doit avoir un identifiant DB.');
+        assert.equal(photo.sort_order, index + 1, 'Les photos uploadees doivent recevoir un ordre stable.');
+        assert.ok(photo.title.trim().length > 0, 'Chaque photo uploadee doit avoir un titre DB.');
+        assert.equal(photo.caption, 'Preview Selenium upload.', 'La legende saisie a l upload doit etre persistee.');
+        assert.match(photo.file_path, /^storage\/uploads\/albums\/.+\.png$/i, 'Le chemin de la photo doit pointer vers le stockage albums.');
+      }
+
       await driver.get(`${routeUrl('admin_albums', { album_wizard: albumId, step: 3, focus: 'album-wizard' })}#album-wizard`);
       await waitForDocumentReady(driver);
       await assertNoServerError(driver);
@@ -200,16 +251,32 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
 
       if (process.env.SELENIUM_SKIP_PREVIEW_DELETE !== '1') {
         const deleteForm = await driver.findElement(By.css('#album-wizard .gallery-item form'));
+        const deletedPhotoId = Number.parseInt(await deleteForm.findElement(By.css('input[name="photo_id"]')).getAttribute('value'), 10);
         await driver.executeScript('window.confirm = () => true;');
         await submitForm(driver, deleteForm);
         previewImages = await driver.findElements(By.css('#album-wizard .gallery-item img'));
         assert.ok(previewImages.length >= 1, 'La suppression en preview ne doit pas supprimer toutes les photos restantes.');
+        const afterDeleteState = albumCreationState(title);
+        assert.equal(afterDeleteState.photo_count, uploadedState.photo_count - 1, 'La suppression preview doit supprimer exactement une photo en base.');
+        assert.equal(
+          afterDeleteState.photos.some((photo) => photo.id === deletedPhotoId),
+          false,
+          'La photo supprimee en preview ne doit plus exister en base.',
+        );
       }
 
       const finalizeForm = await driver.findElement(By.xpath('//section[@id="album-wizard"]//form[.//input[@name="action" and @value="finalize_album_creation"]]'));
       await submitForm(driver, finalizeForm);
       await driver.wait(until.urlContains('route=admin_albums'), timeoutMs);
       await assertNoServerError(driver);
+      const finalizedState = albumCreationState(title);
+      assert.equal(finalizedState.is_public, expectedPublicAfterFinalize, 'La finalisation doit appliquer le choix public en base.');
+      assert.equal(finalizedState.publish_requested, 0, 'La finalisation doit vider publish_requested en base.');
+      assert.ok(finalizedState.photo_count >= 1, 'L album finalise doit conserver au moins une photo en base.');
+      for (const photo of finalizedState.photos) {
+        assert.equal(photo.caption, 'Preview Selenium upload.', 'La finalisation ne doit pas perdre les legendes des photos.');
+        assert.match(photo.file_path, /^storage\/uploads\/albums\/.+\.png$/i, 'La finalisation ne doit pas modifier les chemins des photos.');
+      }
 
       const detailLink = await driver.findElement(By.xpath(`//article[contains(@class,"article-item")][.//input[@name="title" and @value="${title}"]]//a[contains(@href,"route=album")]`));
       await driver.get(await detailLink.getAttribute('href'));

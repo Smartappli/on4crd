@@ -294,7 +294,7 @@ if ($id <= 0 || !table_exists('albums')) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, title, description, is_public, is_featured FROM albums WHERE id = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, description, is_public, is_featured, publish_requested FROM albums WHERE id = ? LIMIT 1');
 $stmt->execute([$id]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_ALBUM_ID: String(albumId) });
@@ -308,7 +308,7 @@ if ($title === '' || !table_exists('albums')) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, title, description, is_public, is_featured FROM albums WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, description, is_public, is_featured, publish_requested FROM albums WHERE title = ? ORDER BY id DESC LIMIT 1');
 $stmt->execute([$title]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_ALBUM_TITLE: title });
@@ -339,7 +339,7 @@ if ($id <= 0 || !table_exists('member_webotheque_links')) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, title, url, description, tags FROM member_webotheque_links WHERE id = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, url, description, tags FROM member_webotheque_links WHERE id = ? LIMIT 1');
 $stmt->execute([$id]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_LINK_ID: String(linkId) });
@@ -353,7 +353,7 @@ if ($title === '' || !table_exists('member_webotheque_links')) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, title, url, description, tags FROM member_webotheque_links WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, url, description, tags FROM member_webotheque_links WHERE title = ? ORDER BY id DESC LIMIT 1');
 $stmt->execute([$title]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_LINK_TITLE: title });
@@ -395,7 +395,7 @@ if ($id <= 0 || $module === '' || !table_exists('member_module_documents')) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, module_code, title, description, tags FROM member_module_documents WHERE id = ? AND module_code = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, module_code, category, subcategory, title, description, tags, file_path FROM member_module_documents WHERE id = ? AND module_code = ? LIMIT 1');
 $stmt->execute([$id, $module]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_MODULE: module, SELENIUM_DOCUMENT_ID: String(documentId) });
@@ -410,7 +410,7 @@ if ($module === '' || $title === '' || !table_exists('member_module_documents'))
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, module_code, title, description, tags FROM member_module_documents WHERE title = ? AND module_code = ? ORDER BY id DESC LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, module_code, category, subcategory, title, description, tags, file_path FROM member_module_documents WHERE title = ? AND module_code = ? ORDER BY id DESC LIMIT 1');
 $stmt->execute([$title, $module]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_MODULE: module, SELENIUM_DOCUMENT_TITLE: title });
@@ -450,7 +450,7 @@ if ($id <= 0 || !table_exists('member_library_documents')) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, title, description, tags FROM member_library_documents WHERE id = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, description, tags, file_path FROM member_library_documents WHERE id = ? LIMIT 1');
 $stmt->execute([$id]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_DOCUMENT_ID: String(documentId) });
@@ -464,7 +464,7 @@ if ($title === '' || !table_exists('member_library_documents')) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, title, description, tags FROM member_library_documents WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, description, tags, file_path FROM member_library_documents WHERE title = ? ORDER BY id DESC LIMIT 1');
 $stmt->execute([$title]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_DOCUMENT_TITLE: title });
@@ -639,6 +639,14 @@ async function createAlbumFromAdminRoute(driver, token) {
 
   const album = albumRecordByTitle(title);
   assert.ok(album && Number(album.id) > 0, 'L album doit etre cree depuis admin_albums.');
+  assert.ok(Number(album.member_id) > 0, 'L album admin doit etre rattache a un membre.');
+  assert.equal(album.title, title, 'Le titre album cree depuis admin_albums doit etre persiste.');
+  assert.equal(album.description, `Album admin Selenium ${token}`, 'La description album creee depuis admin_albums doit etre persistee.');
+  assert.equal(album.category, 'general', 'La categorie album creee depuis admin_albums doit etre persistee.');
+  assert.equal(album.subcategory, '', 'La sous-categorie album creee depuis admin_albums doit rester vide par defaut.');
+  assert.equal(Number(album.is_public), 0, 'L album cree depuis admin_albums doit rester prive avant publication explicite.');
+  assert.equal(Number(album.is_featured), 0, 'L album cree depuis admin_albums ne doit pas etre a la une par defaut.');
+  assert.equal(Number(album.publish_requested), 0, 'L album cree depuis admin_albums ne doit pas demander une publication publique par defaut.');
 
   return {
     id: Number(album.id),
@@ -660,6 +668,14 @@ async function createWebothequeFromAdminRoute(driver, token) {
 
   const link = webothequeRecordByTitle(title);
   assert.ok(link && Number(link.id) > 0, 'Le lien doit etre cree depuis admin_webotheque.');
+  assert.ok(Number(link.member_id) > 0, 'Le lien webotheque doit etre rattache a un membre.');
+  assert.equal(link.title, title, 'Le titre webotheque cree depuis admin_webotheque doit etre persiste.');
+  assert.equal(link.url, url, 'L URL webotheque creee depuis admin_webotheque doit etre persistee.');
+  assert.equal(link.description, `Lien webotheque admin Selenium ${token}`, 'La description webotheque creee doit etre persistee.');
+  assert.equal(link.category, 'general', 'La categorie webotheque creee doit etre persistee.');
+  assert.equal(link.subcategory, '', 'La sous-categorie webotheque creee doit rester vide par defaut.');
+  assert.match(link.tags, /selenium/i, 'Les tags webotheque crees doivent contenir selenium.');
+  assert.match(link.tags, /admin/i, 'Les tags webotheque crees doivent contenir admin.');
 
   return {
     id: Number(link.id),
@@ -682,6 +698,16 @@ async function createModuleDocumentFromAdminRoute(driver, module, token) {
 
   const document = moduleDocumentRecordByTitle(module, title);
   assert.ok(document && Number(document.id) > 0, `Le document ${module} doit etre cree depuis admin_${module}.`);
+  assert.ok(Number(document.member_id) > 0, `Le document ${module} doit etre rattache a un membre.`);
+  assert.equal(document.module_code, module, `Le module ${module} doit etre persiste sur le document cree.`);
+  assert.equal(document.category, 'general', `La categorie ${module} creee doit etre persistee.`);
+  assert.equal(document.subcategory, '', `La sous-categorie ${module} creee doit rester vide par defaut.`);
+  assert.equal(document.title, title, `Le titre ${module} cree doit etre persiste.`);
+  assert.equal(document.description, `Document admin Selenium ${module} ${token}`, `La description ${module} creee doit etre persistee.`);
+  assert.match(document.tags, /selenium/i, `Les tags ${module} crees doivent contenir selenium.`);
+  assert.match(document.tags, /admin/i, `Les tags ${module} crees doivent contenir admin.`);
+  assert.match(document.tags, new RegExp(escapeRegExp(module), 'i'), `Les tags ${module} crees doivent contenir le module.`);
+  assert.match(document.file_path, new RegExp(`^storage/private/member_modules/${escapeRegExp(module)}/.+\\.txt$`, 'i'), `Le fichier ${module} doit etre stocke dans le dossier prive du module.`);
 
   return {
     id: Number(document.id),
@@ -701,8 +727,10 @@ async function updateAndDeleteAlbum(driver, fixture, token) {
   await setFieldValue(driver, await editForm.findElement(By.css('textarea[name="description"]')), updatedDescription);
   await setCheckbox(driver, await editForm.findElement(By.css('input[type="checkbox"][name="is_public"]')), true);
   const featuredCheckboxes = await editForm.findElements(By.css('input[type="checkbox"][name="album_is_featured"]'));
+  let expectedFeatured = Number(albumRecord(fixture.id)?.is_featured || 0);
   if (featuredCheckboxes.length > 0) {
     await setCheckbox(driver, featuredCheckboxes[0], true);
+    expectedFeatured = 1;
   }
   const saveButton = await editForm.findElement(By.css('[data-admin-album-save]'));
   await driver.executeScript(`
@@ -727,6 +755,7 @@ async function updateAndDeleteAlbum(driver, fixture, token) {
   assert.equal(updated.title, updatedTitle, 'Le titre album doit etre mis a jour depuis admin_albums.');
   assert.equal(updated.description, updatedDescription, 'La description album doit etre mise a jour depuis admin_albums.');
   assert.equal(Number(updated.is_public), 1, 'La visibilite publique de l album doit etre persistee.');
+  assert.equal(Number(updated.is_featured), expectedFeatured, 'Le statut album a la une doit etre persiste.');
 
   await visit(driver, 'admin_albums');
   const deleteForm = await driver.findElement(By.xpath(`//article[contains(@class,"article-item")][.//input[@name="album_id" and @value="${fixture.id}"]]//form[.//input[@name="action" and @value="delete_album"]]`));
@@ -753,6 +782,9 @@ async function updateAndDeleteWebotheque(driver, fixture, token) {
   assert.equal(updated.title, updatedTitle, 'Le titre webotheque doit etre mis a jour depuis admin_webotheque.');
   assert.equal(updated.url, updatedUrl, 'L URL webotheque doit etre mise a jour depuis admin_webotheque.');
   assert.equal(updated.description, updatedDescription, 'La description webotheque doit etre mise a jour depuis admin_webotheque.');
+  assert.match(updated.tags, /selenium/i, 'Les tags webotheque modifies doivent contenir selenium.');
+  assert.match(updated.tags, /admin/i, 'Les tags webotheque modifies doivent contenir admin.');
+  assert.match(updated.tags, new RegExp(escapeRegExp(token), 'i'), 'Les tags webotheque modifies doivent contenir le token de regression.');
 
   await visit(driver, 'admin_webotheque', { q: updatedTitle });
   const deleteForm = await driver.findElement(By.xpath(`//dialog[.//input[@name="id" and @value="${fixture.id}"]]//form[.//input[@name="action" and @value="delete_link"]]`));
@@ -848,6 +880,15 @@ async function createLibraryDocumentFromAdminRoute(driver, token) {
 
   const document = libraryDocumentRecordByTitle(title);
   assert.ok(document && Number(document.id) > 0, 'Le document member_library doit etre cree depuis admin_library.');
+  assert.ok(Number(document.member_id) > 0, 'Le document member_library doit etre rattache a un membre.');
+  assert.equal(document.category, 'general', 'La categorie member_library creee depuis admin_library doit etre persistee.');
+  assert.equal(document.subcategory, '', 'La sous-categorie member_library creee depuis admin_library doit rester vide par defaut.');
+  assert.equal(document.title, title, 'Le titre member_library cree depuis admin_library doit etre persiste.');
+  assert.equal(document.description, `Document member_library admin Selenium ${token}`, 'La description member_library creee doit etre persistee.');
+  assert.match(document.tags, /selenium/i, 'Les tags member_library crees doivent contenir selenium.');
+  assert.match(document.tags, /admin/i, 'Les tags member_library crees doivent contenir admin.');
+  assert.match(document.tags, new RegExp(escapeRegExp(token), 'i'), 'Les tags member_library crees doivent contenir le token de regression.');
+  assert.match(document.file_path, /^storage\/private\/library\/.+\.txt$/i, 'Le fichier member_library doit etre stocke dans la bibliotheque privee.');
 
   return {
     id: Number(document.id),
