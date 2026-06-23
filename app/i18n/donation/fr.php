@@ -20,7 +20,7 @@ return array (
   'contact_intro' => 'Expliquez simplement que vous souhaitez faire un don au CRD. Le message sera transmis au comité.',
   'security_note' => 'N’envoyez pas de données bancaires sensibles dans ce formulaire. Le comité vous communiquera les instructions adaptées par retour de contact.',
   'contact_name' => 'Nom',
-  'contact_email' => 'Email',
+  'contact_email' => 'E-mail',
   'contact_message' => 'Message',
   'contact_send' => 'Envoyer ma demande',
 );

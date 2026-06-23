@@ -20,7 +20,7 @@ return array (
   'administer_members' => 'Administrer',
   'results' => 'Résultats',
   'licence' => 'Licence',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'phone' => 'Téléphone',
   'grid' => 'Grid',
   'qrz' => 'QRZ',

@@ -120,7 +120,7 @@ return array (
   'choose_saved_bg' => 'Choisissez un fond enregistré pour cette QSL.',
   'front_preview' => 'Aperçu recto',
   'back_preview' => 'Aperçu verso',
-  'front_details_on_back' => 'Recto - détails au verso',
+  'front_details_on_back' => 'Recto – détails au verso',
   'create_my_qsl' => 'Créer ma QSL',
   'fast_adif_import' => 'Import ADIF rapide',
   'adif_drop_here' => 'Glissez-déposez vos fichiers ADIF ici',

@@ -7,7 +7,7 @@ return [
     'how_title' => 'Comment devient-on membre du CRD ?',
     'how_text' => 'Introduisez une demande par courriel (crdurnal@gmail.com) au CM (président du club) de la section CRD.',
     'postal_title' => 'Demande par courrier postal',
-    'contact_item_1' => 'Radio Club Durnal - Bocq Arena',
+    'contact_item_1' => 'Radio Club Durnal – Bocq Arena',
     'contact_item_2' => 'Rue des Écoles, 5530 Purnode',
     'required_title' => 'Informations obligatoires dans votre demande',
     'required_item_1' => 'Indicatif (si attribué) et date de votre première licence.',

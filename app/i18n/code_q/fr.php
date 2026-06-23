@@ -70,7 +70,7 @@ return array (
     'QTM' => 'Vitesse indiquée',
     'QTN' => 'Départ à …',
     'QTO' => 'Sortie de port à …',
-    'QTP' => 'Entrée de port à ...',
+    'QTP' => 'Entrée de port à …',
     'QTQ' => 'Communiquer via le code international',
     'QTR' => 'Heure exacte',
     'QTS' => 'Conserver l’écoute sur …',
