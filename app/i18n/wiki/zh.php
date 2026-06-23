@@ -44,4 +44,8 @@ return array (
   'subcategory_field' => '副标题',
   'no_subcategory' => '无副主题',
   'favorites' => '收藏夹',
+  'favorite_added' => 'Favorite added',
+  'favorite_removed' => 'Favorite removed',
+  'favorite_added_msg' => 'Page added to favorites.',
+  'favorite_removed_msg' => 'Page removed from favorites.',
 );

@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Размер документа превышает разрешенный лимит в 25 МБ.',
   'err_upload' => 'Загрузка документа не удалась.',
   'ok_added' => 'Документ добавлен в библиотеку участников.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Библиотека временно недоступна.',
   'meta_desc' => 'Администрирование библиотеки-члена ON4CRD.',
   'documents' => 'Документы',

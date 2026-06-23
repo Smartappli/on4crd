@@ -27,4 +27,8 @@ return array (
   'no_subcategory' => '无副主题',
   'all_categories' => '所有主题',
   'favorites' => '收藏夹',
+  'favorite_added' => 'Favorite added',
+  'favorite_removed' => 'Favorite removed',
+  'favorite_added_msg' => 'Album added to favorites.',
+  'favorite_removed_msg' => 'Album removed from favorites.',
 );

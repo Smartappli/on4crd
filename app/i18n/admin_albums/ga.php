@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Albam neamhbhailí.',
   'uploaded_count' => 'grianghraf(í) curtha leis.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Níor iompórtáladh aon ghrianghraif.',
   'created_thumbs' => 'mionsamhail(í) ginte.',
   'manage_title' => 'Bainistíocht albam',

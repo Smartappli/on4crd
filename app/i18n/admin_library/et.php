@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Dokument ületab lubatud piirmäära 25 MB.',
   'err_upload' => 'Dokumendi üleslaadimine ebaõnnestus.',
   'ok_added' => 'Dokument lisati liikmete kogusse.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Raamatukogu ei ole ajutiselt saadaval.',
   'meta_desc' => 'ON4CRD liikmete raamatukogu haldamine.',
   'documents' => 'Dokumendid',

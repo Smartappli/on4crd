@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $pageTitle = (string) ($pageRow['title'] ?? '');
                     $pageUrl = route_url('wiki_view', ['slug' => (string) ($pageRow['slug'] ?? '')]);
                     $saved = favorite_toggle((int) $user['id'], 'wiki_page', (int) $pageRow['id'], $pageTitle, $pageUrl);
-                    notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', $pageTitle, $pageUrl);
-                    set_flash('success', $saved ? 'Page ajoutée aux favoris.' : 'Page retirée des favoris.');
+                    notify_member((int) $user['id'], 'favorite', $saved ? $tr('favorite_added', 'Favorite added') : $tr('favorite_removed', 'Favorite removed'), $pageTitle, $pageUrl);
+                    set_flash('success', $saved ? $tr('favorite_added_msg', 'Page ajoutée aux favoris.') : $tr('favorite_removed_msg', 'Page retirée des favoris.'));
                 }
             }
             redirect_url(route_url_clean('wiki', [

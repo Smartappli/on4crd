@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Album mhux validu.',
   'uploaded_count' => 'ritratt(i) miżjud.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Ebda ritratti importati.',
   'created_thumbs' => 'thumbnail iġġenerat(i).',
   'manage_title' => 'Ġestjoni tal-album',

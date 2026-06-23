@@ -25,6 +25,7 @@ return array (
   'err_size' => 'Le document dépasse la limite autorisée de 25 Mo.',
   'err_upload' => 'Le téléversement du document a échoué.',
   'ok_added' => 'Document ajouté à la bibliothèque membres.',
+  'notification_import_completed_title' => 'Import bibliothèque terminé',
   'storage_unavailable' => 'La bibliothèque est temporairement indisponible.',
   'meta_desc' => 'Administration de la bibliothèque membres ON4CRD.',
   'documents' => 'Documents',

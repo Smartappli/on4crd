@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => '相册无效。',
   'uploaded_count' => '添加了照片。',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => '没有导入照片。',
   'created_thumbs' => '生成缩略图。',
   'manage_title' => '相册管理',

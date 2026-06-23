@@ -87,8 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             (string) ($album['title'] ?? ''),
             route_url('album', ['id' => (int) $album['id']])
         );
-        notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', (string) ($album['title'] ?? ''), route_url('album', ['id' => (int) $album['id']]));
-        set_flash('success', $saved ? 'Album added to favorites.' : 'Album removed from favorites.');
+        notify_member((int) $user['id'], 'favorite', $saved ? $albumText('favorite_added', 'Favori ajouté', 'Favorite added') : $albumText('favorite_removed', 'Favori retiré', 'Favorite removed'), (string) ($album['title'] ?? ''), route_url('album', ['id' => (int) $album['id']]));
+        set_flash('success', $saved ? $albumText('favorite_added_msg', 'Album ajouté aux favoris.', 'Album added to favorites.') : $albumText('favorite_removed_msg', 'Album retiré des favoris.', 'Album removed from favorites.'));
         redirect_url(route_url_clean('album', ['id' => (int) $album['id'], 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
     }
 
@@ -108,7 +108,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 (string) ($user['callsign'] ?? 'album'),
                 $albumText('photo', 'Photo', 'Photo')
             );
-            notify_member((int) $user['id'], 'import', 'Album import completed', (int) $uploadResult['count'] . ' photo(s) imported.', route_url('album', ['id' => (int) $album['id']]));
+            notify_member(
+                (int) $user['id'],
+                'import',
+                $albumText('notification_import_completed_title', 'Import d’album terminé', 'Album import completed'),
+                sprintf($albumText('notification_import_completed_body', '%d photo(s) importée(s).', '%d photo(s) imported.'), (int) $uploadResult['count']),
+                route_url('album', ['id' => (int) $album['id']])
+            );
             $totalStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
             $totalStmt->execute([(int) $album['id']]);
             $targetPage = max(1, (int) ceil(((int) $totalStmt->fetchColumn()) / 24));

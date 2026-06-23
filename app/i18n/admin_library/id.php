@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Dokumen tersebut melebihi batas yang diizinkan yaitu 25 MB.',
   'err_upload' => 'Pengunggahan dokumen gagal.',
   'ok_added' => 'Dokumen ditambahkan ke perpustakaan anggota.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Perpustakaan untuk sementara tidak tersedia.',
   'meta_desc' => 'Administrasi perpustakaan anggota ON4CRD.',
   'documents' => 'Dokumen',

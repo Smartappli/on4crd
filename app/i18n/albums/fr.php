@@ -27,4 +27,8 @@ return array (
   'no_subcategory' => 'Sans sous-thématique',
   'all_categories' => 'Toutes les thématiques',
   'favorites' => 'Favoris',
+  'favorite_added' => 'Favori ajouté',
+  'favorite_removed' => 'Favori retiré',
+  'favorite_added_msg' => 'Album ajouté aux favoris.',
+  'favorite_removed_msg' => 'Album retiré des favoris.',
 );

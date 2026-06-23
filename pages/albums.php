@@ -56,8 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $favTitle = trim((string) ($favRow['title'] ?? 'Album'));
                 $favUrl = route_url('album', ['id' => (int) $favRow['id']]);
                 $saved = favorite_toggle((int) $user['id'], 'album', (int) $favRow['id'], $favTitle, $favUrl);
-                notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', $favTitle, $favUrl);
-                set_flash('success', $saved ? 'Album added to favorites.' : 'Album removed from favorites.');
+                notify_member((int) $user['id'], 'favorite', $saved ? $albumText('favorite_added', 'Favori ajouté', 'Favorite added') : $albumText('favorite_removed', 'Favori retiré', 'Favorite removed'), $favTitle, $favUrl);
+                set_flash('success', $saved ? $albumText('favorite_added_msg', 'Album ajouté aux favoris.', 'Album added to favorites.') : $albumText('favorite_removed_msg', 'Album retiré des favoris.', 'Album removed from favorites.'));
             }
         }
         redirect_url(route_url_clean('albums', [

@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Dokument překračuje povolený limit 25 MB.',
   'err_upload' => 'Nahrání dokumentu se nezdařilo.',
   'ok_added' => 'Dokument přidán do knihovny členů.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Knihovna je dočasně nedostupná.',
   'meta_desc' => 'Správa knihovny členů ON4CRD.',
   'documents' => 'Dokumenty',

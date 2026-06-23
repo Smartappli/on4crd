@@ -22,6 +22,7 @@ return array (
   'err_size' => 'ドキュメントは許容制限の 25 MB を超えています。',
   'err_upload' => 'ドキュメントのアップロードに失敗しました。',
   'ok_added' => 'ドキュメントがメンバー ライブラリに追加されました。',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => '図書館は一時的に利用できません。',
   'meta_desc' => 'ON4CRD メンバー ライブラリの管理。',
   'documents' => '文書',

@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Dokuments pārsniedz atļauto 25 MB ierobežojumu.',
   'err_upload' => 'Dokumenta augšupielāde neizdevās.',
   'ok_added' => 'Dokuments pievienots dalībnieku bibliotēkai.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Bibliotēka īslaicīgi nav pieejama.',
   'meta_desc' => 'ON4CRD dalībnieku bibliotēkas administrēšana.',
   'documents' => 'Dokumenti',

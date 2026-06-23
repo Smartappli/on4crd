@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Ogiltigt album.',
   'uploaded_count' => 'foto(n) har lagts till.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Inga foton importerade.',
   'created_thumbs' => 'genererade miniatyrbilder.',
   'manage_title' => 'Albumhantering',

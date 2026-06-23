@@ -22,6 +22,7 @@ return array (
   'err_size' => 'নথিটি 25 MB এর অনুমোদিত সীমা অতিক্রম করেছে৷',
   'err_upload' => 'দস্তাবেজ আপলোড ব্যর্থ হয়েছে.',
   'ok_added' => 'সদস্য লাইব্রেরিতে নথি যোগ করা হয়েছে।',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'গ্রন্থাগারটি সাময়িকভাবে অনুপলব্ধ৷',
   'meta_desc' => 'ON4CRD সদস্য গ্রন্থাগারের প্রশাসন।',
   'documents' => 'নথি',

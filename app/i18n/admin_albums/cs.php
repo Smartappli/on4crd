@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Neplatné album.',
   'uploaded_count' => 'fotografie přidány.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Nebyly importovány žádné fotografie.',
   'created_thumbs' => 'vygenerované miniatury.',
   'manage_title' => 'Správa alb',

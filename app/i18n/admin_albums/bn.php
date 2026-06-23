@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'অবৈধ অ্যালবাম।',
   'uploaded_count' => 'ছবি(গুলি) যোগ করা হয়েছে।',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'কোনো ছবি আমদানি করা হয়নি।',
   'created_thumbs' => 'থাম্বনেইল(গুলি) তৈরি হয়েছে।',
   'manage_title' => 'অ্যালবাম ব্যবস্থাপনা',

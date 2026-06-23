@@ -27,4 +27,8 @@ return array (
   'no_subcategory' => 'কোন সাবটপিক নেই',
   'all_categories' => 'সব বিষয়',
   'favorites' => 'প্রিয়',
+  'favorite_added' => 'Favorite added',
+  'favorite_removed' => 'Favorite removed',
+  'favorite_added_msg' => 'Album added to favorites.',
+  'favorite_removed_msg' => 'Album removed from favorites.',
 );

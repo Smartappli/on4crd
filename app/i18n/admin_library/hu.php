@@ -22,6 +22,7 @@ return array (
   'err_size' => 'A dokumentum meghaladja a megengedett 25 MB korlátot.',
   'err_upload' => 'A dokumentum feltöltése nem sikerült.',
   'ok_added' => 'A dokumentum hozzáadva a tagok könyvtárához.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'A könyvtár átmenetileg nem elérhető.',
   'meta_desc' => 'A ON4CRD tagkönyvtár adminisztrációja.',
   'documents' => 'Dokumentumok',

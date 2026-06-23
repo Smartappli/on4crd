@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Das Dokument überschreitet die zulässige Grenze von 25 MB.',
   'err_upload' => 'Das Hochladen des Dokuments ist fehlgeschlagen.',
   'ok_added' => 'Dokument zur Mitgliedsbibliothek hinzugefügt.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Die Bibliothek ist vorübergehend nicht verfügbar.',
   'meta_desc' => 'Verwaltung der ON4CRD-Mitgliedsbibliothek.',
   'documents' => 'Dokumente',

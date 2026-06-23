@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Неверный альбом.',
   'uploaded_count' => 'добавлены фотографии.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Ни одна фотография не была импортирована.',
   'created_thumbs' => 'Созданы миниатюры.',
   'manage_title' => 'Управление альбомами',

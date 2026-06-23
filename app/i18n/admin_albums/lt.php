@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Netinkamas albumas.',
   'uploaded_count' => 'pridėta (-os) nuotrauka (-os).',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Neimportuota jokių nuotraukų.',
   'created_thumbs' => 'sugeneruota (-os) miniatiūra (-os).',
   'manage_title' => 'Albumo tvarkymas',

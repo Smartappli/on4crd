@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Μη έγκυρο άλμπουμ.',
   'uploaded_count' => 'προστέθηκαν φωτογραφίες.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Δεν έγινε εισαγωγή φωτογραφιών.',
   'created_thumbs' => 'δημιουργήθηκαν μικρογραφίες.',
   'manage_title' => 'Διαχείριση άλμπουμ',

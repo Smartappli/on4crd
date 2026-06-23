@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Neveljaven album.',
   'uploaded_count' => 'dodanih fotografij.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Ni uvoženih fotografij.',
   'created_thumbs' => 'ustvarjenih sličic.',
   'manage_title' => 'Upravljanje albuma',

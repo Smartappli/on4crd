@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Asiakirja ylittää sallitun 25 Mt:n rajan.',
   'err_upload' => 'Asiakirjan lataus epäonnistui.',
   'ok_added' => 'Asiakirja lisätty jäsenkirjastoon.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Kirjasto on tilapäisesti poissa käytöstä.',
   'meta_desc' => 'ON4CRD-jäsenkirjaston hallinto.',
   'documents' => 'Asiakirjat',

@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Dokumentet överskrider den tillåtna gränsen på 25 MB.',
   'err_upload' => 'Dokumentuppladdningen misslyckades.',
   'ok_added' => 'Dokument har lagts till i medlemsbiblioteket.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Biblioteket är tillfälligt otillgängligt.',
   'meta_desc' => 'Administration av ON4CRD medlemsbibliotek.',
   'documents' => 'Dokument',

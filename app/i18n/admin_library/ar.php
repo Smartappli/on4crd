@@ -22,6 +22,7 @@ return array (
   'err_size' => 'يتجاوز المستند الحد المسموح به وهو 25 ميجابايت.',
   'err_upload' => 'فشل تحميل المستند.',
   'ok_added' => 'تمت إضافة المستند إلى مكتبة الأعضاء.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'المكتبة غير متاحة مؤقتا.',
   'meta_desc' => 'إدارة مكتبة أعضاء ON4CRD.',
   'documents' => 'المستندات',

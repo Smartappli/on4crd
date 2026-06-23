@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Album invalide.',
   'uploaded_count' => 'photo(s) ajoutée(s).',
+  'notification_import_completed_title' => 'Import d’album terminé',
+  'notification_import_completed_body' => '%d photo(s) importée(s).',
   'no_photo_imported' => 'Aucune photo importée.',
   'created_thumbs' => 'miniature(s) générée(s).',
   'manage_title' => 'Gestion des albums',

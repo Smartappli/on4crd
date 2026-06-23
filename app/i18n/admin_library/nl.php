@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Het document overschrijdt de toegestane limiet van 25 MB.',
   'err_upload' => 'Het uploaden van het document is mislukt.',
   'ok_added' => 'Document toegevoegd aan de ledenbibliotheek.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'De bibliotheek is tijdelijk niet beschikbaar.',
   'meta_desc' => 'Beheer van de ledenbibliotheek van ON4CRD.',
   'documents' => 'Documenten',

@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 return array (
   'ok_saved' => '文章已保存。',
+  'notification_article_published' => 'Article published',
+  'notification_article_scheduled' => 'Article scheduled',
+  'notification_article_rejected' => 'Article rejected',
+  'warning_translation_sync_bulk' => 'Some articles were saved, but their automatic translations will need to be relaunched.',
+  'warning_translation_sync_single' => 'Article saved, but automatic translations will need to be relaunched.',
+  'warning_translation_sync_revision' => 'Version restored, but automatic translations will need to be relaunched.',
   'err_invalid_category' => '类别无效。',
   'ok_category_updated' => '类别已更新。',
   'err_delete_category' => '无法删除该类别。',

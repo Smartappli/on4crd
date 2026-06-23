@@ -69,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     (string) ($row['title'] ?? ''),
                     route_url('wiki_view', ['slug' => (string) $row['slug']])
                 );
-                notify_member((int) $actingUser['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', (string) ($row['title'] ?? ''), route_url('wiki_view', ['slug' => (string) $row['slug']]));
-                set_flash('success', $saved ? 'Page ajoutée aux favoris.' : 'Page retirée des favoris.');
+                notify_member((int) $actingUser['id'], 'favorite', $saved ? $wikiViewText('favorite_added', 'Favori ajouté', 'Favorite added') : $wikiViewText('favorite_removed', 'Favori retiré', 'Favorite removed'), (string) ($row['title'] ?? ''), route_url('wiki_view', ['slug' => (string) $row['slug']]));
+                set_flash('success', $saved ? $wikiViewText('favorite_added_msg', 'Page ajoutée aux favoris.', 'Page added to favorites.') : $wikiViewText('favorite_removed_msg', 'Page retirée des favoris.', 'Page removed from favorites.'));
             }
             redirect_url(route_url('wiki_view', ['slug' => (string) $row['slug']]));
         }

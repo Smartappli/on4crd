@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Documentul depășește limita permisă de 25 MB.',
   'err_upload' => 'Încărcarea documentului a eșuat.',
   'ok_added' => 'Document adăugat în biblioteca membrilor.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Biblioteca este temporar indisponibilă.',
   'meta_desc' => 'Administrarea bibliotecii membrilor ON4CRD.',
   'documents' => 'Documente',

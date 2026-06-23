@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Album tidak valid.',
   'uploaded_count' => 'foto ditambahkan.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Tidak ada foto yang diimpor.',
   'created_thumbs' => 'thumbnail dibuat.',
   'manage_title' => 'Manajemen album',

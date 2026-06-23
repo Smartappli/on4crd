@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'الألبوم غير صالح.',
   'uploaded_count' => 'تمت إضافة الصورة (الصور).',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'لم يتم استيراد أي صورة.',
   'created_thumbs' => 'تم إنشاء الصورة المصغرة (الصور المصغرة).',
   'manage_title' => 'إدارة الألبومات',

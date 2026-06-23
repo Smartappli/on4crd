@@ -396,7 +396,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'message' => $throwable->getMessage(),
             ]);
         }
-        notify_member((int) ($user['id'] ?? 0), 'import', 'Library import completed', $title, route_url($adminLibraryRoute));
+        notify_member((int) ($user['id'] ?? 0), 'import', (string) ($t['notification_import_completed_title'] ?? 'Library import completed'), $title, route_url($adminLibraryRoute));
         set_flash('success', (string) $t['ok_added']);
         redirect($adminLibraryRoute);
     } catch (Throwable $throwable) {

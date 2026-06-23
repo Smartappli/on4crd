@@ -22,6 +22,7 @@ return array (
   'err_size' => 'El documento supera el límite permitido de 25 MB.',
   'err_upload' => 'La carga del documento falló.',
   'ok_added' => 'Documento agregado a la biblioteca miembro.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'La biblioteca no está disponible temporalmente.',
   'meta_desc' => 'Administración de la biblioteca miembro de ON4CRD.',
   'documents' => 'Documentos',

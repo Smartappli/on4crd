@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Dokumentas viršija leistiną 25 MB limitą.',
   'err_upload' => 'Nepavyko įkelti dokumento.',
   'ok_added' => 'Dokumentas įtrauktas į narių biblioteką.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Biblioteka laikinai nepasiekiama.',
   'meta_desc' => 'ON4CRD narių bibliotekos administravimas.',
   'documents' => 'Dokumentai',

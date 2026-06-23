@@ -22,6 +22,7 @@ return array (
   'err_size' => 'दस्तावेज़ 25 एमबी की अनुमत सीमा से अधिक है।',
   'err_upload' => 'दस्तावेज़ अपलोड विफल रहा.',
   'ok_added' => 'दस्तावेज़ को सदस्य लाइब्रेरी में जोड़ा गया.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'लाइब्रेरी अस्थायी रूप से अनुपलब्ध है.',
   'meta_desc' => 'ON4CRD सदस्य पुस्तकालय का प्रशासन।',
   'documents' => 'दस्तावेज',

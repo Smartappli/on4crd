@@ -44,4 +44,8 @@ return array (
   'subcategory_field' => 'Podtemat',
   'no_subcategory' => 'Brak podtematu',
   'favorites' => 'Ulubione',
+  'favorite_added' => 'Favorite added',
+  'favorite_removed' => 'Favorite removed',
+  'favorite_added_msg' => 'Page added to favorites.',
+  'favorite_removed_msg' => 'Page removed from favorites.',
 );

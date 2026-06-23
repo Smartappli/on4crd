@@ -22,6 +22,7 @@ return array (
   'err_size' => '该文档超出了 25 MB 的允许限制。',
   'err_upload' => '文档上传失败。',
   'ok_added' => '文档已添加至成员库。',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => '图书馆暂时无法使用。',
   'meta_desc' => 'ON4CRD 成员库的管理。',
   'documents' => '文档',

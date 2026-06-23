@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Id-dokument jaqbeż il-limitu permess ta\' 25 MB.',
   'err_upload' => 'It-tlugħ tad-dokument falla.',
   'ok_added' => 'Dokument miżjud mal-librerija tal-membri.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Il-librerija hija temporanjament mhux disponibbli.',
   'meta_desc' => 'Amministrazzjoni tal-librerija tal-membri ON4CRD.',
   'documents' => 'Dokumenti',

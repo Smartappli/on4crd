@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Sáraíonn an doiciméad an teorainn cheadaithe de 25 MB.',
   'err_upload' => 'Theip ar uaslódáil an doiciméid.',
   'ok_added' => 'Doiciméad curtha le leabharlann na mball.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Níl an leabharlann ar fáil go sealadach.',
   'meta_desc' => 'Leabharlann na mball ON4CRD a riaradh.',
   'documents' => 'Doiciméid',

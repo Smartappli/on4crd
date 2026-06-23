@@ -44,4 +44,8 @@ return array (
   'subcategory_field' => 'Sous-thématique',
   'no_subcategory' => 'Sans sous-thématique',
   'favorites' => 'Favoris',
+  'favorite_added' => 'Favori ajouté',
+  'favorite_removed' => 'Favori retiré',
+  'favorite_added_msg' => 'Page ajoutée aux favoris.',
+  'favorite_removed_msg' => 'Page retirée des favoris.',
 );

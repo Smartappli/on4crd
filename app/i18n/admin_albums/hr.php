@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Nevažeći album.',
   'uploaded_count' => 'fotografija(e) dodano.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Nema uvezenih fotografija.',
   'created_thumbs' => 'generirane sličice.',
   'manage_title' => 'Upravljanje albumom',

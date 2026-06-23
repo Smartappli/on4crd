@@ -274,15 +274,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $articleTitle = (string) ($bulkRow['title'] ?? '');
                     $articleSlug = (string) ($bulkRow['slug'] ?? '');
                     if ($bulkOp === 'published') {
-                        notify_member($authorId, 'publication', 'Article publié', $articleTitle, route_url('article', ['slug' => $articleSlug]));
+                        notify_member($authorId, 'publication', $t('notification_article_published', 'Article publié'), $articleTitle, route_url('article', ['slug' => $articleSlug]));
                     } elseif ($bulkOp === 'scheduled') {
-                        notify_member($authorId, 'publication', 'Article planifié', $articleTitle, route_url('my_requests'));
+                        notify_member($authorId, 'publication', $t('notification_article_scheduled', 'Article planifié'), $articleTitle, route_url('my_requests'));
                     } elseif ($bulkOp === 'rejected') {
-                        notify_member($authorId, 'moderation', 'Article refusé', $moderationNote, route_url('my_requests'));
+                        notify_member($authorId, 'moderation', $t('notification_article_rejected', 'Article refusé'), $moderationNote, route_url('my_requests'));
                     }
                 }
                 if ($translationSyncFailed) {
-                    set_flash('warning', 'Certains articles sont enregistres, mais leurs traductions automatiques devront etre relancees.');
+                    set_flash('warning', $t('warning_translation_sync_bulk', 'Certains articles sont enregistrés, mais leurs traductions automatiques devront être relancées.'));
                 }
                 set_flash('success', $t('ok_saved'));
             }
@@ -555,18 +555,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         article_translations_sync_all($id);
                     } catch (Throwable) {
-                        set_flash('warning', 'Article enregistré, mais les traductions automatiques devront être relancées.');
+                        set_flash('warning', $t('warning_translation_sync_single', 'Article enregistré, mais les traductions automatiques devront être relancées.'));
                     }
                 }
 
                 $currentUserId = (int) current_user()['id'];
                 if ($authorId > 0 && $authorId !== $currentUserId) {
                     if ($notifyStatus === 'published') {
-                        notify_member($authorId, 'publication', 'Article publié', $title, route_url('article', ['slug' => $slug]));
+                        notify_member($authorId, 'publication', $t('notification_article_published', 'Article publié'), $title, route_url('article', ['slug' => $slug]));
                     } elseif ($notifyStatus === 'scheduled') {
-                        notify_member($authorId, 'publication', 'Article planifié', $title, route_url('my_requests'));
+                        notify_member($authorId, 'publication', $t('notification_article_scheduled', 'Article planifié'), $title, route_url('my_requests'));
                     } elseif ($notifyStatus === 'rejected') {
-                        notify_member($authorId, 'moderation', 'Article refusé', $moderationNoteValue ?? $title, route_url('my_requests'));
+                        notify_member($authorId, 'moderation', $t('notification_article_rejected', 'Article refusé'), $moderationNoteValue ?? $title, route_url('my_requests'));
                     }
                 }
 
@@ -620,7 +620,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 try {
                     article_translations_sync_all($articleId);
                 } catch (Throwable) {
-                    set_flash('warning', 'Version restauree, mais les traductions automatiques devront etre relancees.');
+                    set_flash('warning', $t('warning_translation_sync_revision', 'Version restaurée, mais les traductions automatiques devront être relancées.'));
                 }
             }
             set_flash('success', $t('ok_revision_restored', 'Version restaurée.'));

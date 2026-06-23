@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Nederīgs albums.',
   'uploaded_count' => 'pievienots(-i) fotoattēls(-i).',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Nav importētu fotoattēlu.',
   'created_thumbs' => 'ģenerēts(-i) sīktēls(-i).',
   'manage_title' => 'Albuma pārvaldība',

@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Album nevalid.',
   'uploaded_count' => 'fotografii adăugate.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Nu au fost importate fotografii.',
   'created_thumbs' => 'miniatură(e) generată(e).',
   'manage_title' => 'Gestionarea albumelor',

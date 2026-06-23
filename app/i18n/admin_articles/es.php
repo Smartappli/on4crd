@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 return array (
   'ok_saved' => 'Artículo guardado.',
+  'notification_article_published' => 'Article published',
+  'notification_article_scheduled' => 'Article scheduled',
+  'notification_article_rejected' => 'Article rejected',
+  'warning_translation_sync_bulk' => 'Some articles were saved, but their automatic translations will need to be relaunched.',
+  'warning_translation_sync_single' => 'Article saved, but automatic translations will need to be relaunched.',
+  'warning_translation_sync_revision' => 'Version restored, but automatic translations will need to be relaunched.',
   'err_invalid_category' => 'Categoría no válida.',
   'ok_category_updated' => 'Categoría actualizada.',
   'err_delete_category' => 'No se puede eliminar esta categoría.',

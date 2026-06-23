@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'अमान्य एल्बम.',
   'uploaded_count' => 'फ़ोटो जोड़ी गईं.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'कोई फोटो आयात नहीं किया गया.',
   'created_thumbs' => 'थंबनेल उत्पन्न हुआ।',
   'manage_title' => 'एल्बम प्रबंधन',

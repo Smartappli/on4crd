@@ -4,6 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Kehtetu album.',
   'uploaded_count' => 'foto(d) lisatud.',
+  'notification_import_completed_title' => 'Album import completed',
+  'notification_import_completed_body' => '%d photo(s) imported.',
   'no_photo_imported' => 'Fotosid ei imporditud.',
   'created_thumbs' => 'loodud pisipilt(id).',
   'manage_title' => 'Albumi haldamine',

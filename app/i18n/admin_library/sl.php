@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Dokument presega dovoljeno omejitev 25 MB.',
   'err_upload' => 'Nalaganje dokumenta ni uspelo.',
   'ok_added' => 'Dokument dodan v knjižnico članov.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Knjižnica trenutno ni na voljo.',
   'meta_desc' => 'Upravljanje knjižnice članov ON4CRD.',
   'documents' => 'Dokumenti',

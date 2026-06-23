@@ -22,6 +22,7 @@ return array (
   'err_size' => 'Το έγγραφο υπερβαίνει το επιτρεπόμενο όριο των 25 MB.',
   'err_upload' => 'Η μεταφόρτωση του εγγράφου απέτυχε.',
   'ok_added' => 'Έγγραφο προστέθηκε στη βιβλιοθήκη μελών.',
+  'notification_import_completed_title' => 'Library import completed',
   'storage_unavailable' => 'Η βιβλιοθήκη δεν είναι προσωρινά διαθέσιμη.',
   'meta_desc' => 'Διαχείριση της βιβλιοθήκης μελών ON4CRD.',
   'documents' => 'Έγγραφα',
