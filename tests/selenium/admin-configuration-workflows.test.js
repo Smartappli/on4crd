@@ -285,6 +285,43 @@ if (is_array($state) && (int) ($state['id'] ?? 0) > 0) {
 `, { SELENIUM_FEED_STATE: JSON.stringify(state) });
 }
 
+function pressContactState(fullName) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$fullName = (string) getenv('SELENIUM_PRESS_CONTACT');
+$stmt = db()->prepare('SELECT full_name, role_label, email, phone, notes, is_active FROM press_contacts WHERE full_name = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$fullName]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_PRESS_CONTACT: fullName });
+}
+
+function pressReleaseState(title) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$title = (string) getenv('SELENIUM_PRESS_RELEASE');
+$stmt = db()->prepare('SELECT title, summary, published_on, file_path, is_published FROM press_releases WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$title]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_PRESS_RELEASE: title });
+}
+
+function dinnerReservationState(reservedBy) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$reservedBy = (string) getenv('SELENIUM_DINNER_RESERVED_BY');
+$stmt = db()->prepare('SELECT id, reserved_by, total_cents, notes FROM dinner_reservations WHERE reserved_by = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$reservedBy]);
+$reservation = $stmt->fetch() ?: null;
+$line = null;
+if ($reservation) {
+    $lineStmt = db()->prepare('SELECT starter_code, meal_code, dessert_code, starter_enabled, meal_enabled, dessert_enabled, quantity, line_total_cents FROM dinner_reservation_lines WHERE reservation_id = ? ORDER BY id ASC LIMIT 1');
+    $lineStmt->execute([(int) $reservation['id']]);
+    $line = $lineStmt->fetch() ?: null;
+}
+echo json_encode(['reservation' => $reservation, 'line' => $line], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_DINNER_RESERVED_BY: reservedBy });
+}
+
 test('Selenium admin configuration: modules, membres et roles restent modifiables', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
@@ -423,6 +460,13 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
       await contactForm.findElement(By.css('input[name="phone"]')).sendKeys('+320000000');
       await setFieldValue(driver, await contactForm.findElement(By.css('textarea[name="notes"]')), `Notes ${token}`);
       await submitForm(driver, contactForm);
+      const contactAfter = pressContactState(contactName);
+      assert.ok(contactAfter, 'Le contact presse doit etre cree en DB.');
+      assert.equal(contactAfter.role_label, 'Relation presse Selenium', 'Le role du contact presse doit etre persiste.');
+      assert.equal(contactAfter.email, `press-${suffix}@example.test`, 'L email du contact presse doit etre persiste.');
+      assert.equal(contactAfter.phone, '+320000000', 'Le telephone du contact presse doit etre persiste.');
+      assert.equal(contactAfter.notes, `Notes ${token}`, 'Les notes du contact presse doivent etre persistees.');
+      assert.equal(Number(contactAfter.is_active), 1, 'Le contact presse cree doit etre actif.');
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(contactName), 'Le contact presse doit apparaitre dans la liste admin.');
 
@@ -432,6 +476,12 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
       await setFieldValue(driver, await releaseForm.findElement(By.css('textarea[name="summary"]')), `Resume ${token}`);
       await setFieldValue(driver, await releaseForm.findElement(By.css('input[name="published_on"]')), '2026-06-18');
       await submitForm(driver, releaseForm);
+      const releaseAfter = pressReleaseState(releaseTitle);
+      assert.ok(releaseAfter, 'Le communique presse doit etre cree en DB.');
+      assert.equal(releaseAfter.summary, `Resume ${token}`, 'Le resume du communique presse doit etre persiste.');
+      assert.equal(releaseAfter.published_on, '2026-06-18', 'La date de publication du communique doit etre persistee.');
+      assert.equal(releaseAfter.file_path, null, 'Sans upload, aucun fichier PDF ne doit etre associe.');
+      assert.equal(Number(releaseAfter.is_published), 1, 'Le communique cree doit etre publie.');
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(releaseTitle), 'Le communique presse doit apparaitre dans la liste admin.');
 
@@ -445,6 +495,18 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
       await setFieldValue(driver, await dinnerForm.findElement(By.css('.quantity-input')), '2');
       await setFieldValue(driver, await dinnerForm.findElement(By.css('textarea[name="notes"]')), `Notes ${token}`);
       await submitForm(driver, dinnerForm);
+      const dinnerAfter = dinnerReservationState(dinnerName);
+      assert.ok(dinnerAfter.reservation, 'La reservation diner doit etre creee en DB.');
+      assert.equal(dinnerAfter.reservation.notes, `Notes ${token}`, 'Les notes diner doivent etre persistees.');
+      assert.equal(Number(dinnerAfter.reservation.total_cents), 4800, 'Le total diner doit etre calcule et persiste.');
+      assert.ok(dinnerAfter.line, 'La reservation diner doit creer une ligne en DB.');
+      assert.equal(Number(dinnerAfter.line.starter_enabled), 0, 'L entree doit rester desactivee par defaut.');
+      assert.equal(Number(dinnerAfter.line.meal_enabled), 1, 'Le plat doit etre active par defaut.');
+      assert.equal(Number(dinnerAfter.line.dessert_enabled), 1, 'Le dessert doit etre active par defaut.');
+      assert.equal(dinnerAfter.line.meal_code, 'vol_au_vent', 'Le plat par defaut doit etre persiste.');
+      assert.equal(dinnerAfter.line.dessert_code, 'tiramisu', 'Le dessert par defaut doit etre persiste.');
+      assert.equal(Number(dinnerAfter.line.quantity), 2, 'La quantite diner doit etre persistee.');
+      assert.equal(Number(dinnerAfter.line.line_total_cents), 4800, 'Le total de ligne diner doit etre persiste.');
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(dinnerName), 'La reservation diner doit apparaitre dans l historique.');
       assert.match(text, /2/, 'La quantite diner doit etre rendue dans l historique.');

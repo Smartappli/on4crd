@@ -109,6 +109,30 @@ if ($slug !== '') {
 `, { SELENIUM_CONTENT_SLUG: slug });
 }
 
+function newsPostBySlug(slug) {
+  const output = runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$slug = trim((string) (getenv('SELENIUM_CONTENT_SLUG') ?: ''));
+$stmt = db()->prepare('SELECT slug, title, excerpt, content, status, published_at FROM news_posts WHERE slug = ? LIMIT 1');
+$stmt->execute([$slug]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_CONTENT_SLUG: slug });
+
+  return JSON.parse(output || 'null');
+}
+
+function eventBySlug(slug) {
+  const output = runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$slug = trim((string) (getenv('SELENIUM_CONTENT_SLUG') ?: ''));
+$stmt = db()->prepare('SELECT slug, title, summary, description, kind, start_at, end_at, location, external_url, status FROM events WHERE slug = ? LIMIT 1');
+$stmt->execute([$slug]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_CONTENT_SLUG: slug });
+
+  return JSON.parse(output || 'null');
+}
+
 test('Selenium admin actualites: creer, modifier, rechercher et consulter publiquement', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
@@ -141,6 +165,13 @@ test('Selenium admin actualites: creer, modifier, rechercher et consulter publiq
       }
       await submitForm(driver, createForm);
 
+      let newsPost = newsPostBySlug(slug);
+      assert.ok(newsPost, 'L actualite creee doit etre presente en DB.');
+      assert.equal(newsPost.title, title, 'Le titre initial de l actualite doit etre persiste.');
+      assert.equal(newsPost.excerpt, 'Resume Selenium actualite.', 'Le resume initial de l actualite doit etre persiste.');
+      assert.match(newsPost.content, /Contenu public Selenium actualite\./, 'Le contenu initial de l actualite doit etre persiste.');
+      assert.equal(newsPost.status, 'published', 'L actualite creee doit etre publiee en DB.');
+
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'L actualite creee doit apparaitre en admin.');
 
@@ -158,6 +189,12 @@ test('Selenium admin actualites: creer, modifier, rechercher et consulter publiq
         await selectValue(driver, editStatusSelects[0], 'published');
       }
       await submitForm(driver, editForm);
+
+      newsPost = newsPostBySlug(slug);
+      assert.equal(newsPost.title, updatedTitle, 'Le titre modifie de l actualite doit etre persiste en DB.');
+      assert.equal(newsPost.excerpt, 'Resume Selenium actualite modifie.', 'Le resume modifie de l actualite doit etre persiste.');
+      assert.match(newsPost.content, /Contenu public Selenium actualite modifie/, 'Le contenu modifie de l actualite doit etre persiste.');
+      assert.equal(newsPost.status, 'published', 'L actualite modifiee doit rester publiee en DB.');
 
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(updatedTitle), 'L actualite modifiee doit rester visible en admin.');
@@ -209,6 +246,16 @@ test('Selenium admin evenements: creer, modifier, flux public et export ICS', as
       await selectValue(driver, await createForm.findElement(By.css('select[name="status"]')), 'published');
       await submitForm(driver, createForm);
 
+      let event = eventBySlug(slug);
+      assert.ok(event, 'L evenement cree doit etre present en DB.');
+      assert.equal(event.title, title, 'Le titre initial de l evenement doit etre persiste.');
+      assert.equal(event.summary, 'Resume Selenium evenement.', 'Le resume initial de l evenement doit etre persiste.');
+      assert.match(event.description, /Description publique Selenium evenement\./, 'La description initiale doit etre persistee.');
+      assert.equal(event.kind, 'club', 'Le type evenement doit etre persiste.');
+      assert.equal(event.location, 'Durnal Selenium', 'Le lieu initial doit etre persiste.');
+      assert.equal(event.external_url, 'https://example.org/selenium-event', 'L URL externe initiale doit etre persistee.');
+      assert.equal(event.status, 'published', 'L evenement cree doit etre publie en DB.');
+
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'L evenement cree doit apparaitre en admin.');
 
@@ -224,6 +271,13 @@ test('Selenium admin evenements: creer, modifier, flux public et export ICS', as
       await setFieldValue(driver, await editForm.findElement(By.css('input[name="location"]')), 'Durnal Selenium modifie');
       await selectValue(driver, await editForm.findElement(By.css('select[name="status"]')), 'published');
       await submitForm(driver, editForm);
+
+      event = eventBySlug(slug);
+      assert.equal(event.title, updatedTitle, 'Le titre modifie de l evenement doit etre persiste en DB.');
+      assert.equal(event.summary, 'Resume Selenium evenement modifie.', 'Le resume modifie de l evenement doit etre persiste.');
+      assert.match(event.description, /Description publique Selenium evenement modifie/, 'La description modifiee doit etre persistee.');
+      assert.equal(event.location, 'Durnal Selenium modifie', 'Le lieu modifie doit etre persiste en DB.');
+      assert.equal(event.status, 'published', 'L evenement modifie doit rester publie en DB.');
 
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(updatedTitle), 'L evenement modifie doit rester visible en admin.');

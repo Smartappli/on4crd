@@ -53,6 +53,36 @@ async function selectValue(driver, select, value) {
   `, select, value);
 }
 
+function auctionLotBySlug(slug) {
+  const output = runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$slug = trim((string) (getenv('SELENIUM_AUCTION_SLUG') ?: ''));
+$stmt = db()->prepare('SELECT id, slug, title, summary, description, starting_price_cents, min_increment_cents, current_price_cents, starts_at, ends_at, status, winner_member_id FROM auction_lots WHERE slug = ? LIMIT 1');
+$stmt->execute([$slug]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_AUCTION_SLUG: slug });
+
+  return JSON.parse(output || 'null');
+}
+
+function auctionBidState(lotId) {
+  const output = runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$lotId = (int) (getenv('SELENIUM_AUCTION_LOT_ID') ?: 0);
+$stmt = db()->prepare(
+    'SELECT b.amount_cents, m.callsign
+     FROM auction_bids b
+     INNER JOIN members m ON m.id = b.member_id
+     WHERE b.lot_id = ?
+     ORDER BY b.amount_cents DESC, b.id DESC'
+);
+$stmt->execute([$lotId]);
+echo json_encode($stmt->fetchAll() ?: [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_AUCTION_LOT_ID: String(lotId) });
+
+  return JSON.parse(output || '[]');
+}
+
 function cleanupAuctionRows(slug) {
   runSeleniumPhp(`
 require_once 'app/bootstrap.php';
@@ -114,6 +144,15 @@ test('Selenium admin encheres: creer, modifier, publier et enchérir sur un lot'
       await selectValue(driver, await createForm.findElement(By.css('select[name="status"]')), 'active');
       await submitForm(driver, createForm);
 
+      let lot = auctionLotBySlug(slug);
+      assert.ok(lot && Number(lot.id) > 0, 'Le lot cree doit etre present en DB.');
+      assert.equal(lot.title, title, 'Le titre initial du lot doit etre persiste.');
+      assert.equal(lot.summary, 'Resume Selenium enchere.', 'Le resume initial du lot doit etre persiste.');
+      assert.match(lot.description, /Description Selenium enchere\./, 'La description initiale du lot doit etre persistee.');
+      assert.equal(Number(lot.starting_price_cents), 1000, 'Le prix de depart doit etre persiste en cents.');
+      assert.equal(Number(lot.min_increment_cents), 200, 'L increment minimum doit etre persiste en cents.');
+      assert.equal(lot.status, 'active', 'Le lot cree doit etre actif en DB.');
+
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'Le lot cree doit apparaitre en admin.');
 
@@ -129,6 +168,12 @@ test('Selenium admin encheres: creer, modifier, publier et enchérir sur un lot'
       await selectValue(driver, await editForm.findElement(By.css('select[name="status"]')), 'active');
       await submitForm(driver, editForm);
 
+      lot = auctionLotBySlug(slug);
+      assert.equal(lot.title, updatedTitle, 'Le titre modifie du lot doit etre persiste en DB.');
+      assert.equal(lot.summary, 'Resume Selenium enchere modifie.', 'Le resume modifie du lot doit etre persiste.');
+      assert.match(lot.description, /Description Selenium enchere modifiee/, 'La description modifiee du lot doit etre persistee.');
+      assert.equal(lot.status, 'active', 'Le lot modifie doit rester actif en DB.');
+
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(updatedTitle), 'Le lot modifie doit rester visible en admin.');
 
@@ -142,6 +187,13 @@ test('Selenium admin encheres: creer, modifier, publier et enchérir sur un lot'
       const bidForm = await driver.findElement(By.css('form[action*="route=auction_bid"]'));
       await setFieldValue(driver, await bidForm.findElement(By.css('input[name="amount"]')), '12,00');
       await submitForm(driver, bidForm);
+
+      lot = auctionLotBySlug(slug);
+      assert.equal(Number(lot.current_price_cents), 1200, 'Le prix courant du lot doit refleter l enchere en DB.');
+      const bids = auctionBidState(lot.id);
+      assert.ok(bids.length >= 1, 'L enchere doit creer une ligne auction_bids.');
+      assert.equal(Number(bids[0].amount_cents), 1200, 'Le montant de l enchere doit etre persiste en cents.');
+      assert.equal(bids[0].callsign, credentials.username.toUpperCase(), 'L enchere doit etre reliee au membre connecte.');
 
       text = await pagePlainText(driver);
       assert.match(text, /ench[eè]re|bid/i, 'Le retour apres enchere doit rester sur le contexte enchere.');
