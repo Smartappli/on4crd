@@ -120,17 +120,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
         $category = wiki_category_from_input((string) ($_POST['category'] ?? 'general'), $wikiCategories);
         $subcategory = wiki_subcategory_code((string) ($row['subcategory'] ?? ''));
-        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-        if ($subcategoryRef !== '') {
-            $subcategoryParts = wiki_subcategory_ref_parts($subcategoryRef);
-            if ($subcategoryParts['subcategory'] !== '') {
-                $subcategory = $subcategoryParts['subcategory'];
-                if ($subcategoryParts['category'] !== '') {
-                    $category = wiki_category_from_input($subcategoryParts['category'], $wikiCategories);
-                }
-            }
-        } elseif (array_key_exists('subcategory_ref', $_POST)) {
-            $subcategory = '';
+        if (array_key_exists('subcategory_ref', $_POST)) {
+            [$category, $subcategory] = wiki_taxonomy_from_input(
+                (string) ($_POST['category'] ?? 'general'),
+                trim((string) ($_POST['subcategory_ref'] ?? '')),
+                $wikiCategories,
+                (string) ($row['category'] ?? 'general')
+            );
         }
         if ($title === '' || trim(strip_tags($content)) === '') {
             throw new RuntimeException($wikiViewText('title_content_required', 'Le titre et le contenu sont obligatoires.', 'Title and content are required.'));

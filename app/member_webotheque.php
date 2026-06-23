@@ -609,18 +609,11 @@ function webotheque_link_form_values(array $input, array $categories): array
     $url = webotheque_normalize_url((string) ($input['url'] ?? ''));
     $description = content_proposal_clean_multiline((string) ($input['description'] ?? ''), 5000);
     $tags = content_proposal_clean_single_line((string) ($input['tags'] ?? ''), 255);
-    $category = webotheque_category_from_input((string) ($input['category'] ?? ''), $categories);
-    $subcategory = '';
-    $subcategoryRef = trim((string) ($input['subcategory_ref'] ?? ''));
-    if ($subcategoryRef !== '') {
-        $subcategoryParts = webotheque_subcategory_ref_parts($subcategoryRef);
-        if ($subcategoryParts['subcategory'] !== '') {
-            $subcategory = $subcategoryParts['subcategory'];
-            if ($subcategoryParts['category'] !== '') {
-                $category = webotheque_category_from_input($subcategoryParts['category'], $categories);
-            }
-        }
-    }
+    [$category, $subcategory] = webotheque_taxonomy_from_input(
+        (string) ($input['category'] ?? ''),
+        trim((string) ($input['subcategory_ref'] ?? '')),
+        $categories
+    );
 
     return [
         'title' => $title,
@@ -1415,17 +1408,13 @@ function render_webotheque_page(): void
                 $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? $link['tags'] ?? ''), 255);
                 $category = webotheque_category_from_input((string) ($_POST['category'] ?? $link['category'] ?? 'general'), $categories);
                 $subcategory = webotheque_subcategory_code((string) ($link['subcategory'] ?? ''));
-                $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-                if ($subcategoryRef !== '') {
-                    $subcategoryParts = webotheque_subcategory_ref_parts($subcategoryRef);
-                    if ($subcategoryParts['subcategory'] !== '') {
-                        $subcategory = $subcategoryParts['subcategory'];
-                        if ($subcategoryParts['category'] !== '') {
-                            $category = webotheque_category_from_input($subcategoryParts['category'], $categories);
-                        }
-                    }
-                } elseif (array_key_exists('subcategory_ref', $_POST)) {
-                    $subcategory = '';
+                if (array_key_exists('subcategory_ref', $_POST)) {
+                    [$category, $subcategory] = webotheque_taxonomy_from_input(
+                        (string) ($_POST['category'] ?? $link['category'] ?? 'general'),
+                        trim((string) ($_POST['subcategory_ref'] ?? '')),
+                        $categories,
+                        (string) ($link['category'] ?? 'general')
+                    );
                 }
                 if ($title === '' || $url === '') {
                     throw new RuntimeException($url === '' ? 'err_url' : 'err_required');

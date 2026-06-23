@@ -88,16 +88,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = content_proposal_clean_single_line((string) ($_POST['document_title'] ?? $document['title'] ?? ''), 190);
             $documentCategory = member_library_category_slug((string) ($_POST['document_category'] ?? $document['category'] ?? 'general'));
             $documentSubcategory = member_library_subcategory_slug((string) ($document['subcategory'] ?? ''));
-            $documentSubcategoryRef = trim((string) ($_POST['document_subcategory_ref'] ?? ''));
-            if ($documentSubcategoryRef !== '') {
-                $documentSubcategoryParts = member_library_subcategory_ref_parts($documentSubcategoryRef);
-                if ($documentSubcategoryParts['subcategory'] !== '' && ($documentSubcategoryParts['category'] === '' || $documentSubcategoryParts['category'] === $documentCategory)) {
-                    $documentSubcategory = $documentSubcategoryParts['subcategory'];
-                } else {
-                    $documentSubcategory = '';
-                }
-            } elseif (array_key_exists('document_subcategory_ref', $_POST)) {
-                $documentSubcategory = '';
+            if (array_key_exists('document_subcategory_ref', $_POST)) {
+                [$documentCategory, $documentSubcategory] = member_library_taxonomy_from_input(
+                    (string) ($_POST['document_category'] ?? $document['category'] ?? 'general'),
+                    trim((string) ($_POST['document_subcategory_ref'] ?? '')),
+                    (string) ($document['category'] ?? 'general')
+                );
             }
             $documentTags = member_library_clean_tags((string) ($_POST['document_tags'] ?? $document['tags'] ?? ''));
             $description = content_proposal_clean_multiline((string) ($_POST['document_description'] ?? $document['description'] ?? ''), 1800);
@@ -280,18 +276,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($proposalTitle === '') {
                 throw new RuntimeException((string) $t['invalid']);
             }
-            $proposalCategory = member_library_category_slug((string) ($_POST['proposal_category'] ?? 'general'));
-            $proposalSubcategory = '';
-            $proposalSubcategoryRef = trim((string) ($_POST['proposal_subcategory_ref'] ?? ''));
-            if ($proposalSubcategoryRef !== '') {
-                $proposalSubcategoryParts = member_library_subcategory_ref_parts($proposalSubcategoryRef);
-                if ($proposalSubcategoryParts['subcategory'] !== '') {
-                    $proposalSubcategory = $proposalSubcategoryParts['subcategory'];
-                    if ($proposalSubcategoryParts['category'] !== '') {
-                        $proposalCategory = $proposalSubcategoryParts['category'];
-                    }
-                }
-            }
+            [$proposalCategory, $proposalSubcategory] = member_library_taxonomy_from_input(
+                (string) ($_POST['proposal_category'] ?? 'general'),
+                trim((string) ($_POST['proposal_subcategory_ref'] ?? ''))
+            );
             $proposalTags = content_proposal_clean_single_line((string) ($_POST['proposal_tags'] ?? ''), 255);
             $proposalContact = (string) ($_POST['proposal_contact'] ?? $proposalContactDefault);
             if (trim($proposalContact) === '') {

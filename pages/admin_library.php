@@ -335,18 +335,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect($adminLibraryRoute);
         }
 
-        $category = library_category_slug((string) ($_POST['category'] ?? 'general'));
-        $subcategory = '';
-        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-        if ($subcategoryRef !== '' && function_exists('member_library_subcategory_ref_parts')) {
-            $subcategoryParts = member_library_subcategory_ref_parts($subcategoryRef);
-            if ($subcategoryParts['subcategory'] !== '') {
-                $subcategory = $subcategoryParts['subcategory'];
-                if ($subcategoryParts['category'] !== '') {
-                    $category = $subcategoryParts['category'];
-                }
-            }
-        }
+        [$category, $subcategory] = member_library_taxonomy_from_input(
+            (string) ($_POST['category'] ?? 'general'),
+            trim((string) ($_POST['subcategory_ref'] ?? ''))
+        );
         $title = trim((string) ($_POST['title'] ?? ''));
         $description = trim((string) ($_POST['description'] ?? ''));
         $templateKey = trim((string) ($_POST['template'] ?? ''));

@@ -63,6 +63,7 @@ return array (
   'ok_deleted' => 'Lien supprimé.',
   'err_required' => 'Titre et URL requis.',
   'err_category' => 'Thématique invalide.',
+  'err_subcategory_category_mismatch' => 'La sous-thématique sélectionnée ne correspond pas à la thématique choisie.',
   'err_category_required' => 'Nom de thématique requis.',
   'err_subcategory_required' => 'Nom de sous-thématique requis.',
   'invalid' => 'Requête invalide.',

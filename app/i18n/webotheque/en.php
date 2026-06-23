@@ -64,6 +64,7 @@ return array (
   'err_required' => 'Title and URL are required.',
   'err_url' => 'Invalid URL.',
   'err_category' => 'Invalid topic.',
+  'err_subcategory_category_mismatch' => 'The selected subtopic does not belong to the selected topic.',
   'err_category_required' => 'Topic name is required.',
   'err_subcategory_required' => 'Subtopic name is required.',
   'invalid' => 'Invalid request.',

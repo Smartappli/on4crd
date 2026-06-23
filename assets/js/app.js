@@ -42,6 +42,7 @@
   const linkedTaxonomyPairs = [
     ['category', 'subcategory_ref'],
     ['proposal_category', 'proposal_subcategory_ref'],
+    ['proposal_theme', 'proposal_subcategory_ref'],
     ['document_category', 'document_subcategory_ref'],
   ];
   const taxonomyParentFromOption = (option) => {

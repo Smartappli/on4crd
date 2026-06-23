@@ -67,18 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $title = trim((string) ($_POST['title'] ?? ''));
         $slugInput = trim((string) ($_POST['slug'] ?? ''));
         $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
-        $category = wiki_category_from_input((string) ($_POST['category'] ?? 'general'), $wikiCategories);
-        $subcategory = '';
-        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-        if ($subcategoryRef !== '') {
-            $subcategoryParts = wiki_subcategory_ref_parts($subcategoryRef);
-            if ($subcategoryParts['subcategory'] !== '') {
-                $subcategory = $subcategoryParts['subcategory'];
-                if ($subcategoryParts['category'] !== '') {
-                    $category = wiki_category_from_input($subcategoryParts['category'], $wikiCategories);
-                }
-            }
-        }
+        [$category, $subcategory] = wiki_taxonomy_from_input(
+            (string) ($_POST['category'] ?? 'general'),
+            trim((string) ($_POST['subcategory_ref'] ?? '')),
+            $wikiCategories
+        );
         $postedSourcePage = null;
 
         if ($postedModification) {
