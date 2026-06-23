@@ -31,7 +31,7 @@ return array (
   'admin_live_feeds_title' => 'Flux live',
   'admin_live_feeds_desc' => 'Pilotage fin des flux radioamateur, TTL, URLs et activation.',
   'admin_newsletters_title' => 'Newsletter',
-  'admin_newsletters_desc' => 'Abonnés, import CSV et campagnes email.',
+  'admin_newsletters_desc' => 'Abonnés, import CSV et campagnes e-mail.',
   'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Pages collaboratives et révisions.',
   'admin_albums_title' => 'Albums',
