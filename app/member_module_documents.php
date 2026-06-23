@@ -56,6 +56,7 @@ function member_document_module_definitions(): array
                     'propose_content_recorded' => 'Proposition enregistrée dans vos contenus.',
                     'content_validated_direct' => 'Vidéo proposée et validée directement.',
                     'proposal_file_field' => 'Fichier vidéo ou ressource',
+                    'administration' => 'Administrer',
                 ],
                 'en' => [
                     'propose_content' => 'Propose a video',
@@ -81,6 +82,10 @@ function member_document_module_definitions(): array
                     'documents' => 'Fichiers',
                     'view_content' => 'Mes fichiers',
                     'administration' => 'Mes partages',
+                    'manage_menu' => 'Gérer',
+                    'manage_my_files' => 'Mes fichiers',
+                    'manage_my_shares' => 'Mes partages',
+                    'administer' => 'Administer',
                     'search_ph' => 'Rechercher dans mes fichiers',
                     'empty' => 'Aucun fichier trouvé.',
                     'upload_title' => 'Partager un fichier',
@@ -96,6 +101,14 @@ function member_document_module_definitions(): array
                     'admin_eyebrow' => 'Fichiers',
                     'admin_page_title' => 'Mes partages',
                     'admin_intro' => 'Gérez les fichiers que vous partagez avec les membres.',
+                ],
+                'en' => [
+                    'view_content' => 'My files',
+                    'administration' => 'My shares',
+                    'manage_menu' => 'Manage',
+                    'manage_my_files' => 'My files',
+                    'manage_my_shares' => 'My shares',
+                    'administer' => 'Administer',
                 ],
             ],
         ],
@@ -150,15 +163,15 @@ function member_document_labels(string $locale): array
             'view_content' => 'Voir les contenus',
             'propose_menu' => 'Proposer',
             'propose_category_item' => 'Une thématique',
-            'propose_subcategory_item' => 'Une sous thématique',
+            'propose_subcategory_item' => 'Une sous-thématique',
             'propose_presentation_item' => 'Un contenu',
             'propose_content' => 'Proposer un contenu',
             'propose_content_title' => 'Proposer un contenu',
-            'propose_content_intro' => 'Votre proposition sera enregistree dans Mes contenus et attendra la validation d\'un administrateur.',
-            'propose_content_intro_admin' => 'Votre proposition sera validee directement.',
-            'propose_content_subject' => 'Proposition de contenu a valider',
-            'propose_content_recorded' => 'Proposition enregistree dans vos contenus.',
-            'content_validated_direct' => 'Contenu propose et valide directement.',
+            'propose_content_intro' => 'Votre proposition sera enregistrée dans Mes contenus et attendra la validation d\'un administrateur.',
+            'propose_content_intro_admin' => 'Votre proposition sera validée directement.',
+            'propose_content_subject' => 'Proposition de contenu à valider',
+            'propose_content_recorded' => 'Proposition enregistrée dans vos contenus.',
+            'content_validated_direct' => 'Contenu proposé et validé directement.',
             'propose_category' => 'Proposer une thématique',
             'propose_category_title' => 'Proposer une thématique',
             'propose_category_intro' => 'Votre proposition sera enregistrée dans Mes contenus et attendra la validation d\'un administrateur.',
@@ -166,24 +179,24 @@ function member_document_labels(string $locale): array
             'propose_category_subject' => 'Proposition de thématique à valider',
             'propose_category_name' => 'Nom de la thématique',
             'propose_category_reason' => 'Raison ou contexte',
-            'propose_subcategory' => 'Proposer une sous thématique',
-            'propose_subcategory_title' => 'Proposer une sous thématique',
+            'propose_subcategory' => 'Proposer une sous-thématique',
+            'propose_subcategory_title' => 'Proposer une sous-thématique',
             'propose_subcategory_intro' => 'Votre proposition sera enregistrée dans Mes contenus et attendra la validation d\'un administrateur.',
             'propose_subcategory_intro_admin' => 'Votre proposition sera validée directement.',
             'propose_subcategory_subject' => 'Proposition de sous-thématique à valider',
             'propose_subcategory_parent' => 'Thématique parente',
-            'propose_subcategory_name' => 'Nom de la sous thématique',
+            'propose_subcategory_name' => 'Nom de la sous-thématique',
             'propose_subcategory_reason' => 'Raison ou contexte',
             'proposal_recorded' => 'Proposition enregistrée dans vos contenus.',
             'category_created_direct' => 'Thématique proposée et validée directement.',
             'subcategory_created_direct' => 'Sous-thématique proposée et validée directement.',
             'proposal_file_field' => 'Fichier',
             'proposal_contact' => 'Contact',
-            'administration' => 'Administration',
-            'search_ph' => 'Rechercher par titre, resume ou contenu indexe',
+            'administration' => 'Administrer',
+            'search_ph' => 'Rechercher par titre, résumé ou contenu indexé',
             'search' => 'Rechercher',
-            'reset' => 'Reinitialiser',
-            'empty' => 'Aucun contenu trouve.',
+            'reset' => 'Réinitialiser',
+            'empty' => 'Aucun contenu trouvé.',
             'for_filters' => ' pour ces filtres',
             'category_field' => 'Thématique',
             'subcategory_field' => 'Sous-thématique',
@@ -216,8 +229,9 @@ function member_document_labels(string $locale): array
             'err_category_required' => 'Nom de thématique requis.',
             'err_subcategory_required' => 'Nom de sous-thématique requis.',
             'err_category' => 'Thématique invalide.',
+            'err_subcategory_category_mismatch' => 'La sous-thématique sélectionnée ne correspond pas à la thématique choisie.',
             'err_category_has_documents' => 'Cette thématique contient encore des contenus.',
-            'err_category_has_subcategories' => 'Supprimez d abord toutes les sous-thématiques de cette thématique.',
+            'err_category_has_subcategories' => 'Supprimez d\'abord toutes les sous-thématiques de cette thématique.',
             'err_subcategory_has_documents' => 'Cette sous-thématique contient encore des contenus.',
             'admin_title_prefix' => 'Administration',
             'content_list' => 'Contenus',
@@ -309,6 +323,7 @@ function member_document_labels(string $locale): array
             'err_category_required' => 'Topic name is required.',
             'err_subcategory_required' => 'Subtopic name is required.',
             'err_category' => 'Invalid topic.',
+            'err_subcategory_category_mismatch' => 'The selected subtopic does not belong to the selected topic.',
             'err_category_has_documents' => 'This topic still contains content.',
             'err_category_has_subcategories' => 'Delete all subtopics in this topic first.',
             'err_subcategory_has_documents' => 'This subtopic still contains content.',
@@ -600,6 +615,49 @@ function member_document_subcategory_ref_parts(string $value): array
     }
 
     return ['category' => '', 'subcategory' => member_document_subcategory_code($value)];
+}
+}
+
+if (!function_exists('member_document_taxonomy_from_input')) {
+/**
+ * @param array<string, string> $categories
+ * @return array{category:string,subcategory:string}
+ */
+function member_document_taxonomy_from_input(string $moduleCode, string $categoryInput, string $subcategoryRef, array $categories, string $fallbackCategory = 'general', string $fallbackSubcategory = ''): array
+{
+    $category = member_document_category_from_input($categoryInput !== '' ? $categoryInput : $fallbackCategory, $categories);
+    $subcategory = member_document_subcategory_code($fallbackSubcategory);
+    $subcategoryRef = trim($subcategoryRef);
+    if ($subcategoryRef === '') {
+        return [$category, ''];
+    }
+
+    $parts = member_document_subcategory_ref_parts($subcategoryRef);
+    if ($parts['subcategory'] === '') {
+        return [$category, ''];
+    }
+
+    $refCategory = $parts['category'] !== ''
+        ? member_document_category_from_input($parts['category'], $categories)
+        : $category;
+    if ($refCategory !== $category) {
+        throw new RuntimeException('err_subcategory_category_mismatch');
+    }
+
+    $subcategories = member_document_subcategories_by_category($moduleCode);
+    $knownSubcategories = (array) ($subcategories[$category] ?? []);
+    $subcategoryExists = false;
+    foreach ($knownSubcategories as $knownSubcategory) {
+        if (member_document_subcategory_code((string) ($knownSubcategory['code'] ?? '')) === $parts['subcategory']) {
+            $subcategoryExists = true;
+            break;
+        }
+    }
+    if (!$subcategoryExists) {
+        throw new RuntimeException('err_subcategory_category_mismatch');
+    }
+
+    return [$category, $parts['subcategory']];
 }
 }
 
@@ -1927,18 +1985,13 @@ function render_member_document_module_page(string $module): void
                 $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_title'] ?? ''), 255);
                 $proposalDescription = content_proposal_clean_multiline((string) ($_POST['proposal_description'] ?? ''), 5000);
                 $proposalTags = content_proposal_clean_single_line((string) ($_POST['proposal_tags'] ?? ''), 255);
-                $proposalCategory = member_document_category_from_input((string) ($_POST['category'] ?? 'general'), $categories);
-                $proposalSubcategory = '';
                 $proposalSubcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-                if ($proposalSubcategoryRef !== '') {
-                    $proposalSubcategoryParts = member_document_subcategory_ref_parts($proposalSubcategoryRef);
-                    if ($proposalSubcategoryParts['subcategory'] !== '') {
-                        $proposalSubcategory = $proposalSubcategoryParts['subcategory'];
-                        if ($proposalSubcategoryParts['category'] !== '') {
-                            $proposalCategory = member_document_category_from_input($proposalSubcategoryParts['category'], $categories);
-                        }
-                    }
-                }
+                [$proposalCategory, $proposalSubcategory] = member_document_taxonomy_from_input(
+                    $moduleCode,
+                    (string) ($_POST['category'] ?? 'general'),
+                    $proposalSubcategoryRef,
+                    $categories
+                );
                 $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? ($user['email'] ?? '')), 220);
                 if ($proposalContact === '') {
                     $proposalContact = content_proposal_clean_single_line((string) ($user['callsign'] ?? ''), 220);
@@ -2015,17 +2068,14 @@ function render_member_document_module_page(string $module): void
             $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? $document['tags'] ?? ''), 255);
             $category = member_document_category_from_input((string) ($_POST['category'] ?? $document['category'] ?? 'general'), $categories);
             $subcategory = member_document_subcategory_code((string) ($document['subcategory'] ?? ''));
-            $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-            if ($subcategoryRef !== '') {
-                $subcategoryParts = member_document_subcategory_ref_parts($subcategoryRef);
-                if ($subcategoryParts['subcategory'] !== '') {
-                    $subcategory = $subcategoryParts['subcategory'];
-                    if ($subcategoryParts['category'] !== '') {
-                        $category = member_document_category_from_input($subcategoryParts['category'], $categories);
-                    }
-                }
-            } elseif (array_key_exists('subcategory_ref', $_POST)) {
-                $subcategory = '';
+            if (array_key_exists('subcategory_ref', $_POST)) {
+                [$category, $subcategory] = member_document_taxonomy_from_input(
+                    $moduleCode,
+                    (string) ($_POST['category'] ?? $document['category'] ?? 'general'),
+                    trim((string) ($_POST['subcategory_ref'] ?? '')),
+                    $categories,
+                    (string) ($document['category'] ?? 'general')
+                );
             }
             if ($titleInput === '') {
                 throw new RuntimeException((string) $labels['err_required']);
@@ -2149,9 +2199,19 @@ function render_member_document_module_page(string $module): void
             <div class="member-document-hero-side">
                 <?= render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats) ?>
                 <div class="actions member-document-hero-actions">
-                    <?php if ($canProposeTaxonomy): ?>
+                    <?php if ($moduleCode === 'fichiers'): ?>
+                        <details class="member-document-propose-menu member-document-manage-menu">
+                            <summary class="button" aria-haspopup="menu"><?= e((string) ($labels['manage_menu'] ?? 'Gérer')) ?></summary>
+                            <div class="member-document-propose-menu-panel" role="menu">
+                                <a class="member-document-propose-menu-item" role="menuitem" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e((string) ($labels['manage_my_files'] ?? $labels['view_content'])) ?></a>
+                                <?php if ($canManageDocuments): ?>
+                                    <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) ($labels['manage_my_shares'] ?? $labels['administration'])) ?></a>
+                                <?php endif; ?>
+                            </div>
+                        </details>
+                    <?php elseif ($canProposeTaxonomy): ?>
                         <details class="member-document-propose-menu">
-                            <summary class="button secondary" aria-haspopup="menu"><?= e((string) $labels['propose_menu']) ?></summary>
+                            <summary class="button" aria-haspopup="menu"><?= e((string) $labels['propose_menu']) ?></summary>
                             <div class="member-document-propose-menu-panel" role="menu">
                                 <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_category' => '1'])) ?>" data-member-document-modal-open="member-document-category-dialog" aria-haspopup="dialog" aria-controls="member-document-category-dialog"><?= e((string) $labels['propose_category_item']) ?></a>
                                 <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_subcategory' => '1'])) ?>" data-member-document-modal-open="member-document-subcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subcategory-dialog"><?= e((string) $labels['propose_subcategory_item']) ?></a>
@@ -2159,10 +2219,10 @@ function render_member_document_module_page(string $module): void
                             </div>
                         </details>
                     <?php else: ?>
-                        <a class="button secondary" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e($primaryActionLabel) ?></a>
+                        <a class="button" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e($primaryActionLabel) ?></a>
                     <?php endif; ?>
                     <?php if ($canManageDocuments): ?>
-                        <a class="button" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) $labels['administration']) ?></a>
+                        <a class="button secondary" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) ($moduleCode === 'fichiers' ? ($labels['administer'] ?? 'Administer') : $labels['administration'])) ?></a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -2501,18 +2561,13 @@ function render_admin_member_document_module_page(string $module): void
             $uploadTitle = trim((string) ($_POST['title'] ?? ''));
             $description = trim((string) ($_POST['description'] ?? ''));
             $tags = mb_safe_substr(trim((string) ($_POST['tags'] ?? '')), 0, 255);
-            $category = member_document_category_from_input((string) ($_POST['category'] ?? 'general'), $categories);
-            $subcategory = '';
             $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-            if ($subcategoryRef !== '') {
-                $subcategoryParts = member_document_subcategory_ref_parts($subcategoryRef);
-                if ($subcategoryParts['subcategory'] !== '') {
-                    $subcategory = $subcategoryParts['subcategory'];
-                    if ($subcategoryParts['category'] !== '') {
-                        $category = member_document_category_from_input($subcategoryParts['category'], $categories);
-                    }
-                }
-            }
+            [$category, $subcategory] = member_document_taxonomy_from_input(
+                $moduleCode,
+                (string) ($_POST['category'] ?? 'general'),
+                $subcategoryRef,
+                $categories
+            );
             $file = $_FILES['document'] ?? null;
             if ($uploadTitle === '' || !is_array($file)) {
                 throw new RuntimeException('err_required');

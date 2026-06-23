@@ -39,6 +39,64 @@
     });
   }
 
+  const linkedTaxonomyPairs = [
+    ['category', 'subcategory_ref'],
+    ['proposal_category', 'proposal_subcategory_ref'],
+    ['document_category', 'document_subcategory_ref'],
+  ];
+  const taxonomyParentFromOption = (option) => {
+    const explicitParent = option.getAttribute('data-parent-category')
+      || option.closest('optgroup')?.getAttribute('data-parent-category')
+      || '';
+    if (explicitParent !== '') {
+      return explicitParent;
+    }
+    const separatorIndex = option.value.indexOf(':');
+    return separatorIndex > -1 ? option.value.slice(0, separatorIndex) : '';
+  };
+  const syncLinkedTaxonomySelects = (categorySelect, subcategorySelect) => {
+    const selectedCategory = categorySelect.value || '';
+    let currentSubcategoryAllowed = subcategorySelect.value === '';
+
+    subcategorySelect.querySelectorAll('option').forEach((option) => {
+      if (option.value === '') {
+        option.hidden = false;
+        option.disabled = false;
+        return;
+      }
+
+      const parentCategory = taxonomyParentFromOption(option);
+      const allowed = selectedCategory === '' || parentCategory === '' || parentCategory === selectedCategory;
+      option.hidden = !allowed;
+      option.disabled = !allowed;
+      if (option.selected && allowed) {
+        currentSubcategoryAllowed = true;
+      }
+    });
+
+    subcategorySelect.querySelectorAll('optgroup').forEach((optgroup) => {
+      const hasAllowedOption = Array.from(optgroup.querySelectorAll('option')).some((option) => !option.disabled);
+      optgroup.hidden = !hasAllowedOption;
+      optgroup.disabled = !hasAllowedOption;
+    });
+
+    if (!currentSubcategoryAllowed) {
+      subcategorySelect.value = '';
+    }
+  };
+  document.querySelectorAll('form').forEach((form) => {
+    linkedTaxonomyPairs.forEach(([categoryName, subcategoryName]) => {
+      const categorySelect = form.querySelector(`select[name="${categoryName}"]`);
+      const subcategorySelect = form.querySelector(`select[name="${subcategoryName}"]`);
+      if (!(categorySelect instanceof HTMLSelectElement) || !(subcategorySelect instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      syncLinkedTaxonomySelects(categorySelect, subcategorySelect);
+      categorySelect.addEventListener('change', () => syncLinkedTaxonomySelects(categorySelect, subcategorySelect), true);
+    });
+  });
+
   document.querySelectorAll('select.js-auto-submit').forEach((select) => {
     select.addEventListener('change', () => {
       if (select.form) {

@@ -583,6 +583,37 @@ function album_category_from_input(string $value, array $categories): string
 }
 
 /**
+ * @param array<string, string> $categories
+ * @return array{category:string,subcategory:string}
+ */
+function album_taxonomy_from_input(string $categoryInput, string $subcategoryRef, array $categories, string $fallbackCategory = 'general'): array
+{
+    $category = album_category_from_input($categoryInput !== '' ? $categoryInput : $fallbackCategory, $categories);
+    $subcategoryRef = trim($subcategoryRef);
+    if ($subcategoryRef === '') {
+        return [$category, ''];
+    }
+
+    $parts = album_subcategory_ref_parts($subcategoryRef);
+    if ($parts['subcategory'] === '') {
+        return [$category, ''];
+    }
+
+    $refCategory = $parts['category'] !== '' ? album_category_from_input($parts['category'], $categories) : $category;
+    if ($refCategory !== $category) {
+        throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+    }
+
+    foreach ((array) (album_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
+        if (album_subcategory_code((string) ($knownSubcategory['code'] ?? '')) === $parts['subcategory']) {
+            return [$category, $parts['subcategory']];
+        }
+    }
+
+    throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+}
+
+/**
  * @return list<array{category_code:string,code:string,label:string}>
  */
 function album_subcategory_options(): array

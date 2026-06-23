@@ -569,6 +569,39 @@ function wiki_category_from_input(string $value, array $categories): string
 }
 }
 
+if (!function_exists('wiki_taxonomy_from_input')) {
+/**
+ * @param array<string, string> $categories
+ * @return array{category:string,subcategory:string}
+ */
+function wiki_taxonomy_from_input(string $categoryInput, string $subcategoryRef, array $categories, string $fallbackCategory = 'general'): array
+{
+    $category = wiki_category_from_input($categoryInput !== '' ? $categoryInput : $fallbackCategory, $categories);
+    $subcategoryRef = trim($subcategoryRef);
+    if ($subcategoryRef === '') {
+        return [$category, ''];
+    }
+
+    $parts = wiki_subcategory_ref_parts($subcategoryRef);
+    if ($parts['subcategory'] === '') {
+        return [$category, ''];
+    }
+
+    $refCategory = $parts['category'] !== '' ? wiki_category_from_input($parts['category'], $categories) : $category;
+    if ($refCategory !== $category) {
+        throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+    }
+
+    foreach ((array) (wiki_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
+        if (wiki_subcategory_code((string) ($knownSubcategory['code'] ?? '')) === $parts['subcategory']) {
+            return [$category, $parts['subcategory']];
+        }
+    }
+
+    throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+}
+}
+
 if (!function_exists('wiki_subcategory_options')) {
 /**
  * @return list<array{category_code:string,code:string,label:string}>

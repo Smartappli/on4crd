@@ -125,6 +125,39 @@ function member_library_subcategory_ref_parts(string $value): array
 }
 }
 
+if (!function_exists('member_library_taxonomy_from_input')) {
+/**
+ * @return array{category:string,subcategory:string}
+ */
+function member_library_taxonomy_from_input(string $categoryInput, string $subcategoryRef, string $fallbackCategory = 'general'): array
+{
+    $category = member_library_category_slug($categoryInput !== '' ? $categoryInput : $fallbackCategory);
+    if ($category === '') {
+        $category = 'general';
+    }
+    $subcategoryRef = trim($subcategoryRef);
+    if ($subcategoryRef === '') {
+        return [$category, ''];
+    }
+
+    $parts = member_library_subcategory_ref_parts($subcategoryRef);
+    if ($parts['subcategory'] === '') {
+        return [$category, ''];
+    }
+    if ($parts['category'] !== '' && $parts['category'] !== $category) {
+        throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+    }
+
+    foreach ((array) (member_library_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
+        if (member_library_subcategory_slug((string) ($knownSubcategory['code'] ?? '')) === $parts['subcategory']) {
+            return [$category, $parts['subcategory']];
+        }
+    }
+
+    throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+}
+}
+
 if (!function_exists('member_library_document_upload_extensions')) {
 /**
  * @return list<string>

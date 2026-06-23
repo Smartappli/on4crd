@@ -539,6 +539,39 @@ function webotheque_category_from_input(string $value, array $categories): strin
 }
 }
 
+if (!function_exists('webotheque_taxonomy_from_input')) {
+/**
+ * @param array<string, string> $categories
+ * @return array{category:string,subcategory:string}
+ */
+function webotheque_taxonomy_from_input(string $categoryInput, string $subcategoryRef, array $categories, string $fallbackCategory = 'general'): array
+{
+    $category = webotheque_category_from_input($categoryInput !== '' ? $categoryInput : $fallbackCategory, $categories);
+    $subcategoryRef = trim($subcategoryRef);
+    if ($subcategoryRef === '') {
+        return [$category, ''];
+    }
+
+    $parts = webotheque_subcategory_ref_parts($subcategoryRef);
+    if ($parts['subcategory'] === '') {
+        return [$category, ''];
+    }
+
+    $refCategory = $parts['category'] !== '' ? webotheque_category_from_input($parts['category'], $categories) : $category;
+    if ($refCategory !== $category) {
+        throw new RuntimeException('err_subcategory_category_mismatch');
+    }
+
+    foreach ((array) (webotheque_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
+        if (webotheque_subcategory_code((string) ($knownSubcategory['code'] ?? '')) === $parts['subcategory']) {
+            return [$category, $parts['subcategory']];
+        }
+    }
+
+    throw new RuntimeException('err_subcategory_category_mismatch');
+}
+}
+
 if (!function_exists('webotheque_upsert_subcategory')) {
 /**
  * @param array<string, string> $categories

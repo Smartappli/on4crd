@@ -419,17 +419,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!isset($knownCategories[$category])) {
                 throw new RuntimeException($t('err_invalid_category'));
             }
-            $subcategory = '';
-            $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-            if ($subcategoryRef !== '') {
-                $subcategoryParts = article_subcategory_ref_parts($subcategoryRef);
-                if ($subcategoryParts['subcategory'] !== '') {
-                    $subcategory = $subcategoryParts['subcategory'];
-                    if ($subcategoryParts['category'] !== '') {
-                        $category = article_category_from_input($subcategoryParts['category'], $knownCategories);
-                    }
-                }
-            }
+            [$category, $subcategory] = article_taxonomy_from_input(
+                $category,
+                trim((string) ($_POST['subcategory_ref'] ?? '')),
+                $knownCategories
+            );
             if ($title === '' || !isset($articleStatusChoices[$status])) {
                 throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
             }

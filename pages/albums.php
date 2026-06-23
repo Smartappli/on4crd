@@ -89,17 +89,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $albumCategoriesForPost = album_categories();
         $category = album_category_from_input((string) ($_POST['category'] ?? $album['category'] ?? 'general'), $albumCategoriesForPost);
         $subcategory = album_subcategory_code((string) ($album['subcategory'] ?? ''));
-        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-        if ($subcategoryRef !== '') {
-            $subcategoryParts = album_subcategory_ref_parts($subcategoryRef);
-            if ($subcategoryParts['subcategory'] !== '') {
-                $subcategory = $subcategoryParts['subcategory'];
-                if ($subcategoryParts['category'] !== '') {
-                    $category = album_category_from_input($subcategoryParts['category'], $albumCategoriesForPost);
-                }
-            }
-        } elseif (array_key_exists('subcategory_ref', $_POST)) {
-            $subcategory = '';
+        if (array_key_exists('subcategory_ref', $_POST)) {
+            [$category, $subcategory] = album_taxonomy_from_input(
+                (string) ($_POST['category'] ?? $album['category'] ?? 'general'),
+                trim((string) ($_POST['subcategory_ref'] ?? '')),
+                $albumCategoriesForPost,
+                (string) ($album['category'] ?? 'general')
+            );
         }
         if ($title === '') {
             throw new RuntimeException($albumText('title_required', 'Titre requis.', 'Title is required.'));
@@ -182,18 +178,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $proposalDescription = (string) ($_POST['proposal_description'] ?? '');
         $proposalTheme = (string) ($_POST['proposal_theme'] ?? 'general');
         $albumCategoriesForPost = album_categories();
-        $proposalCategory = album_category_from_input($proposalTheme, $albumCategoriesForPost);
-        $proposalSubcategory = '';
-        $proposalSubcategoryRef = trim((string) ($_POST['proposal_subcategory_ref'] ?? ''));
-        if ($proposalSubcategoryRef !== '') {
-            $proposalSubcategoryParts = album_subcategory_ref_parts($proposalSubcategoryRef);
-            if ($proposalSubcategoryParts['subcategory'] !== '') {
-                $proposalSubcategory = $proposalSubcategoryParts['subcategory'];
-                if ($proposalSubcategoryParts['category'] !== '') {
-                    $proposalCategory = album_category_from_input($proposalSubcategoryParts['category'], $albumCategoriesForPost);
-                }
-            }
-        }
+        [$proposalCategory, $proposalSubcategory] = album_taxonomy_from_input(
+            $proposalTheme,
+            trim((string) ($_POST['proposal_subcategory_ref'] ?? '')),
+            $albumCategoriesForPost
+        );
         $proposalKeywords = (string) ($_POST['proposal_keywords'] ?? '');
         $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
         $title = content_proposal_clean_single_line($proposalTitle, 190);

@@ -300,18 +300,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $description = trim((string) ($_POST['description'] ?? ''));
             $isPublic = albums_admin_post_checkbox('is_public');
             $isFeatured = albums_admin_post_form_checkbox('album_is_featured', 'album_is_featured_present', null, 'is_featured');
-            $category = album_category_from_input((string) ($_POST['category'] ?? 'general'), $albumCategories);
-            $subcategory = '';
-            $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-            if ($subcategoryRef !== '') {
-                $subcategoryParts = album_subcategory_ref_parts($subcategoryRef);
-                if ($subcategoryParts['subcategory'] !== '') {
-                    $subcategory = $subcategoryParts['subcategory'];
-                    if ($subcategoryParts['category'] !== '') {
-                        $category = album_category_from_input($subcategoryParts['category'], $albumCategories);
-                    }
-                }
-            }
+            [$category, $subcategory] = album_taxonomy_from_input(
+                (string) ($_POST['category'] ?? 'general'),
+                trim((string) ($_POST['subcategory_ref'] ?? '')),
+                $albumCategories
+            );
             albums_admin_validate_text_lengths($title, $description);
             if ($title === '') {
                 throw new RuntimeException((string) $t['title_required']);
@@ -330,18 +323,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $description = trim((string) ($_POST['description'] ?? ''));
             $isPublic = albums_admin_post_checkbox('is_public');
             $isFeatured = albums_admin_post_form_checkbox('album_is_featured', 'album_is_featured_present', null, 'is_featured');
-            $category = album_category_from_input((string) ($_POST['category'] ?? 'general'), $albumCategories);
-            $subcategory = '';
-            $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-            if ($subcategoryRef !== '') {
-                $subcategoryParts = album_subcategory_ref_parts($subcategoryRef);
-                if ($subcategoryParts['subcategory'] !== '') {
-                    $subcategory = $subcategoryParts['subcategory'];
-                    if ($subcategoryParts['category'] !== '') {
-                        $category = album_category_from_input($subcategoryParts['category'], $albumCategories);
-                    }
-                }
-            }
+            [$category, $subcategory] = album_taxonomy_from_input(
+                (string) ($_POST['category'] ?? 'general'),
+                trim((string) ($_POST['subcategory_ref'] ?? '')),
+                $albumCategories
+            );
             albums_admin_validate_text_lengths($title, $description);
             if ($albumId <= 0 || $title === '') {
                 throw new RuntimeException((string) $t['invalid_album']);

@@ -394,6 +394,37 @@ function article_category_from_input(string $value, array $categories): string
 }
 
 /**
+ * @param array<string,string> $categories
+ * @return array{category:string,subcategory:string}
+ */
+function article_taxonomy_from_input(string $categoryInput, string $subcategoryRef, array $categories, string $fallbackCategory = 'autres'): array
+{
+    $category = article_category_from_input($categoryInput !== '' ? $categoryInput : $fallbackCategory, $categories);
+    $subcategoryRef = trim($subcategoryRef);
+    if ($subcategoryRef === '') {
+        return [$category, ''];
+    }
+
+    $parts = article_subcategory_ref_parts($subcategoryRef);
+    if ($parts['subcategory'] === '') {
+        return [$category, ''];
+    }
+
+    $refCategory = $parts['category'] !== '' ? article_category_from_input($parts['category'], $categories) : $category;
+    if ($refCategory !== $category) {
+        throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+    }
+
+    foreach ((array) (article_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
+        if (article_subcategory_code((string) ($knownSubcategory['code'] ?? '')) === $parts['subcategory']) {
+            return [$category, $parts['subcategory']];
+        }
+    }
+
+    throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+}
+
+/**
  * @return list<array{category_code:string,code:string,label:string}>
  */
 function article_subcategory_options(): array

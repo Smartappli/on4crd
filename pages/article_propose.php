@@ -66,24 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $articleTitle = trim((string) ($_POST['title'] ?? ''));
         $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
         $rawContent = trim((string) ($_POST['content'] ?? ''));
-        $category = article_category_code((string) ($_POST['category'] ?? 'autres'));
-        if ($category === '' || !isset($categories[$category])) {
-            $category = 'autres';
-        }
-        $subcategory = '';
-        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-        if ($subcategoryRef !== '') {
-            $subcategoryParts = article_subcategory_ref_parts($subcategoryRef);
-            if ($subcategoryParts['subcategory'] !== '') {
-                $subcategory = $subcategoryParts['subcategory'];
-                if ($subcategoryParts['category'] !== '') {
-                    $candidateCategory = article_category_code($subcategoryParts['category']);
-                    if (isset($categories[$candidateCategory])) {
-                        $category = $candidateCategory;
-                    }
-                }
-            }
-        }
+        [$category, $subcategory] = article_taxonomy_from_input(
+            (string) ($_POST['category'] ?? 'autres'),
+            trim((string) ($_POST['subcategory_ref'] ?? '')),
+            $categories
+        );
         if (mb_strlen($articleTitle) > 190 || mb_strlen($excerpt) > 2000 || mb_strlen($rawContent) > 50000) {
             throw new RuntimeException($label('error_field_too_long', 'Un des champs dépasse la longueur autorisée.'));
         }
