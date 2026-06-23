@@ -77,7 +77,7 @@ test('Selenium admin: contrats des actions hors propositions', () => {
     {
       label: 'wiki taxonomy and status',
       file: 'tests/selenium/admin-articles-wiki-workflow.test.js',
-      snippets: ['admin_wiki', 'update_page_status', 'delete_subcategory', 'delete_category'],
+      snippets: ['admin_wiki', 'pageStatusForm', 'delete_subcategory', 'delete_category'],
     },
     {
       label: 'album maintenance and photos',
