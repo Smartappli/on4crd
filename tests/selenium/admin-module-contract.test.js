@@ -92,22 +92,28 @@ const dashboardExpectedRoutes = [
 ];
 
 const moduleCodesToEnable = [
-  'news',
-  'articles',
-  'committee',
-  'press',
-  'events',
-  'auctions',
   'dashboard',
-  'wiki',
-  'albums',
+  'members',
   'webotheque',
   'presentations',
   'videos',
   'pv',
   'fichiers',
+  'news',
+  'articles',
+  'wiki',
+  'albums',
+  'tools',
+  'events',
+  'auctions',
+  'qsl',
+  'chatbot',
   'advertising',
   'classifieds',
+  'press',
+  'education',
+  'committee',
+  'directory',
 ];
 
 const routesWithoutForms = new Set([
