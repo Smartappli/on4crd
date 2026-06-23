@@ -94,6 +94,30 @@ final class AdminActionCoverageTest extends TestCase
                 'selenium' => 'tests/selenium/admin-configuration-workflows.test.js',
                 'selenium_snippets' => ['assign_role', 'remove_role'],
             ],
+            'admin press publication actions' => [
+                'page' => 'pages/admin_press.php',
+                'controller_snippets' => ["'contact'", "'release'"],
+                'selenium' => 'tests/selenium/admin-configuration-workflows.test.js',
+                'selenium_snippets' => ['admin_press', 'contact', 'release'],
+            ],
+            'admin live feed update actions' => [
+                'page' => 'pages/admin_live_feeds.php',
+                'controller_snippets' => ['validate_remote_feed_url(', 'UPDATE live_feeds SET'],
+                'selenium' => 'tests/selenium/admin-configuration-workflows.test.js',
+                'selenium_snippets' => ['admin_live_feeds', 'feeds[', 'notes'],
+            ],
+            'admin dinner reservation actions' => [
+                'page' => 'pages/admin_dinner_reservations.php',
+                'controller_snippets' => ['dinner_reservations', 'dinner_reservation_lines', 'INSERT INTO dinner_reservations'],
+                'selenium' => 'tests/selenium/admin-configuration-workflows.test.js',
+                'selenium_snippets' => ['admin_dinner_reservations', 'reserved_by', 'quantity-input'],
+            ],
+            'admin committee membership actions' => [
+                'page' => 'pages/admin_committee.php',
+                'controller_snippets' => ['committee_move', 'committee_role', 'committee_bio'],
+                'selenium' => 'tests/selenium/admin-committee-workflow.test.js',
+                'selenium_snippets' => ['admin_committee', 'committee_role', 'committee_bio'],
+            ],
         ];
     }
 
