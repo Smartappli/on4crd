@@ -122,7 +122,7 @@ final class AdminActionCoverageTest extends TestCase
                 'page' => 'pages/admin_wiki.php',
                 'controller_snippets' => ["'update_page_status'", "'delete_category'", "'delete_subcategory'", 'wiki_revisions'],
                 'selenium' => 'tests/selenium/admin-articles-wiki-workflow.test.js',
-                'selenium_snippets' => ['admin_wiki', 'update_page_status', 'delete_subcategory', 'delete_category'],
+                'selenium_snippets' => ['admin_wiki', 'pageStatusForm', 'delete_subcategory', 'delete_category'],
             ],
             'admin album maintenance and photo actions' => [
                 'page' => 'pages/admin_albums.php',
