@@ -46,6 +46,12 @@ final class AdminActionCoverageTest extends TestCase
                 'selenium' => 'tests/selenium/admin-maintenance-coverage.test.js',
                 'selenium_snippets' => ['bulk_update_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
             ],
+            'admin article editor actions' => [
+                'page' => 'pages/admin_articles.php',
+                'controller_snippets' => ["'save_article'", "'preview_article'", "'delete_article'", "'restore_revision'"],
+                'selenium' => 'tests/selenium/admin-articles-wiki-workflow.test.js',
+                'selenium_snippets' => ['save_article', 'preview_article', 'restore_revision', 'delete_article'],
+            ],
             'admin news moderation actions' => [
                 'page' => 'pages/admin_news.php',
                 'controller_snippets' => ["'moderate_post'", "'assign_section_manager'"],
@@ -105,6 +111,36 @@ final class AdminActionCoverageTest extends TestCase
                 'controller_snippets' => ['seed_modules();', 'UPDATE modules SET is_enabled = ?, visibility = ?', '$allowedVisibility'],
                 'selenium' => 'tests/selenium/admin-configuration-workflows.test.js',
                 'selenium_snippets' => ['admin_modules', 'visibility_', "moduleState('press'"],
+            ],
+            'admin event save actions' => [
+                'page' => 'pages/admin_events.php',
+                'controller_snippets' => ['admin_event_unique_slug(', 'INSERT INTO events', 'UPDATE events SET'],
+                'selenium' => 'tests/selenium/admin-content-workflows.test.js',
+                'selenium_snippets' => ['admin_events', 'event_view', 'events_feed', "format: 'ics'"],
+            ],
+            'admin wiki taxonomy and status actions' => [
+                'page' => 'pages/admin_wiki.php',
+                'controller_snippets' => ["'update_page_status'", "'delete_category'", "'delete_subcategory'", 'wiki_revisions'],
+                'selenium' => 'tests/selenium/admin-articles-wiki-workflow.test.js',
+                'selenium_snippets' => ['admin_wiki', 'update_page_status', 'delete_subcategory', 'delete_category'],
+            ],
+            'admin album maintenance and photo actions' => [
+                'page' => 'pages/admin_albums.php',
+                'controller_snippets' => ["'rebuild_thumbnails'", "'update_photo'", "'delete_photo'", "'reorder_photo'", "'finalize_album_creation'"],
+                'selenium' => 'tests/selenium/admin-maintenance-coverage.test.js',
+                'selenium_snippets' => ['rebuild_thumbnails', 'update_photo', 'delete_photo', 'reorder_photo'],
+            ],
+            'admin auction lot actions' => [
+                'page' => 'pages/admin_auctions.php',
+                'controller_snippets' => ['auction_unique_slug(', 'INSERT INTO auction_lots', 'UPDATE auction_lots SET'],
+                'selenium' => 'tests/selenium/admin-auctions-workflow.test.js',
+                'selenium_snippets' => ['admin_auctions', 'auction_view', 'auction_bid'],
+            ],
+            'admin editorial content actions' => [
+                'page' => 'pages/admin_editorial.php',
+                'controller_snippets' => ['save_editorial_content(', "'committee.title'", "'press.contact'"],
+                'selenium' => 'tests/selenium/admin-editorial-translation-workflow.test.js',
+                'selenium_snippets' => ['admin_editorial', 'content[committee_title][fr]', 'editorial_contents'],
             ],
             'admin press publication actions' => [
                 'page' => 'pages/admin_press.php',

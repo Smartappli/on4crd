@@ -65,6 +65,21 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       snippets: ['admin_modules', 'visibility_', "moduleState('press'"],
     },
     {
+      label: 'event create update and feeds',
+      file: 'tests/selenium/admin-content-workflows.test.js',
+      snippets: ['admin_events', 'event_view', 'events_feed', "format: 'ics'"],
+    },
+    {
+      label: 'auction lot create update and bid',
+      file: 'tests/selenium/admin-auctions-workflow.test.js',
+      snippets: ['admin_auctions', 'auction_view', 'auction_bid'],
+    },
+    {
+      label: 'editorial content saves',
+      file: 'tests/selenium/admin-editorial-translation-workflow.test.js',
+      snippets: ['admin_editorial', 'content[committee_title][fr]', 'editorial_contents'],
+    },
+    {
       label: 'press contacts and releases',
       file: 'tests/selenium/admin-configuration-workflows.test.js',
       snippets: ['admin_press', 'contact', 'release'],
