@@ -55,6 +55,16 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       snippets: ['assign_role', 'remove_role'],
     },
     {
+      label: 'member account forms',
+      file: 'tests/selenium/admin-module-contract.test.js',
+      snippets: ["admin_members: ['update_member', 'create_member']"],
+    },
+    {
+      label: 'module visibility updates',
+      file: 'tests/selenium/admin-configuration-workflows.test.js',
+      snippets: ['admin_modules', 'visibility_', "moduleState('press'"],
+    },
+    {
       label: 'press contacts and releases',
       file: 'tests/selenium/admin-configuration-workflows.test.js',
       snippets: ['admin_press', 'contact', 'release'],

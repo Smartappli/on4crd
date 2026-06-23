@@ -94,6 +94,18 @@ final class AdminActionCoverageTest extends TestCase
                 'selenium' => 'tests/selenium/admin-configuration-workflows.test.js',
                 'selenium_snippets' => ['assign_role', 'remove_role'],
             ],
+            'admin member account actions' => [
+                'page' => 'pages/admin_members.php',
+                'controller_snippets' => ["'create_member'", "'update_member'", 'member_cleanup_registration_auth_orphan(', 'member_delete_unlinked_auth_user('],
+                'selenium' => 'tests/selenium/admin-module-contract.test.js',
+                'selenium_snippets' => ["admin_members: ['update_member', 'create_member']"],
+            ],
+            'admin module visibility actions' => [
+                'page' => 'pages/admin_modules.php',
+                'controller_snippets' => ['seed_modules();', 'UPDATE modules SET is_enabled = ?, visibility = ?', '$allowedVisibility'],
+                'selenium' => 'tests/selenium/admin-configuration-workflows.test.js',
+                'selenium_snippets' => ['admin_modules', 'visibility_', "moduleState('press'"],
+            ],
             'admin press publication actions' => [
                 'page' => 'pages/admin_press.php',
                 'controller_snippets' => ["'contact'", "'release'"],
