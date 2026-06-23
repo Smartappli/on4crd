@@ -103,6 +103,21 @@ final class AlbumHelpersTest extends TestCase
         album_category_from_input('Unknown', $categories);
     }
 
+    public function testTaxonomyInputRejectsSubcategoryFromAnotherAlbumCategory(): void
+    {
+        $categories = [
+            'general' => 'General',
+            'radio' => 'Radio',
+            'events' => 'Events',
+        ];
+
+        self::assertSame(['radio', ''], album_taxonomy_from_input('radio', '', $categories));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+        album_taxonomy_from_input('radio', 'events:field-day', $categories);
+    }
+
     public function testVisibleTaxonomyHidesEmptyCategoriesAndSubcategories(): void
     {
         self::assertSame(

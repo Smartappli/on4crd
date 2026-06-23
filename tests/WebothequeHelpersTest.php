@@ -66,6 +66,21 @@ final class WebothequeHelpersTest extends TestCase
         self::assertSame(['category' => '', 'subcategory' => 'logiciels'], webotheque_subcategory_ref_parts('Logiciels'));
     }
 
+    public function testTaxonomyInputRejectsSubcategoryFromAnotherWebothequeCategory(): void
+    {
+        $categories = [
+            'general' => 'General',
+            'modes' => 'Modes',
+            'antennes' => 'Antennes',
+        ];
+
+        self::assertSame(['modes', ''], webotheque_taxonomy_from_input('modes', '', $categories));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('err_subcategory_category_mismatch');
+        webotheque_taxonomy_from_input('modes', 'antennes:yagi', $categories);
+    }
+
     public function testCardsEscapeContentAndExposeSafeExternalLinks(): void
     {
         $html = render_webotheque_cards([
