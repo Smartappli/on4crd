@@ -77,6 +77,7 @@ async function setFieldValue(driver, field, value) {
 async function replaceVisibleFieldText(driver, field, value) {
   const isDisplayed = await field.isDisplayed().catch(() => false);
   if (isDisplayed) {
+    await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', field);
     await field.click();
     await field.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.BACK_SPACE, value);
     return;
@@ -88,6 +89,7 @@ async function replaceVisibleFieldText(driver, field, value) {
     return label ? label.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
   `, field);
   if (editor) {
+    await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', editor);
     await editor.click();
     await editor.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.BACK_SPACE, value);
     return;
