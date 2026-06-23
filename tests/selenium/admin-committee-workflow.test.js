@@ -58,6 +58,18 @@ echo json_encode($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
   return state;
 }
 
+function captureSecondaryCommitteeState(excludedMemberId) {
+  const output = runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$excludedMemberId = (int) (getenv('SELENIUM_EXCLUDED_MEMBER_ID') ?: 0);
+$stmt = db()->prepare('SELECT id, callsign, is_committee, committee_role, committee_bio, committee_sort_order FROM members WHERE id <> ? AND is_active = 1 ORDER BY id ASC LIMIT 1');
+$stmt->execute([$excludedMemberId]);
+$row = $stmt->fetch() ?: null;
+echo json_encode($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_EXCLUDED_MEMBER_ID: String(excludedMemberId) });
+  return JSON.parse(output || 'null');
+}
+
 function restoreCommitteeState(state) {
   runSeleniumPhp(`
 require_once 'app/bootstrap.php';
@@ -75,6 +87,22 @@ if (is_array($state) && (int) ($state['id'] ?? 0) > 0) {
 `, { SELENIUM_COMMITTEE_STATE: JSON.stringify(state) });
 }
 
+function prepareCommitteeMoveFixture(primaryId, secondaryId) {
+  runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$primaryId = (int) (getenv('SELENIUM_PRIMARY_MEMBER_ID') ?: 0);
+$secondaryId = (int) (getenv('SELENIUM_SECONDARY_MEMBER_ID') ?: 0);
+if ($primaryId > 0 && $secondaryId > 0) {
+    db()->prepare('UPDATE members SET is_committee = 1, committee_sort_order = 10 WHERE id = ?')->execute([$primaryId]);
+    db()->prepare('UPDATE members SET is_committee = 1, committee_role = ?, committee_bio = ?, committee_sort_order = 20 WHERE id = ?')
+        ->execute(['Role Selenium comite second', 'Bio Selenium comite second', $secondaryId]);
+}
+`, {
+    SELENIUM_PRIMARY_MEMBER_ID: String(primaryId),
+    SELENIUM_SECONDARY_MEMBER_ID: String(secondaryId),
+  });
+}
+
 test('Selenium admin comite: modifier un membre et verifier l affichage public', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
@@ -86,6 +114,11 @@ test('Selenium admin comite: modifier un membre et verifier l affichage public',
     return;
   }
   const originalState = captureCommitteeState(callsign);
+  const secondaryState = captureSecondaryCommitteeState(originalState.id);
+  if (!secondaryState || Number(secondaryState.id) <= 0) {
+    t.skip('Aucun second membre actif disponible pour tester le deplacement du comite.');
+    return;
+  }
   const role = `Role Selenium comite ${Date.now()}`;
   const bio = `Bio Selenium comite ${Date.now()}`;
 
@@ -114,6 +147,32 @@ test('Selenium admin comite: modifier un membre et verifier l affichage public',
       assert.match(text, new RegExp(role), 'Le role comite doit apparaitre dans le recapitulatif admin.');
       assert.match(text, new RegExp(callsign, 'i'), 'Le membre modifie doit rester visible en admin.');
 
+      prepareCommitteeMoveFixture(originalState.id, secondaryState.id);
+      await visit(driver, 'admin_committee', { member_id: originalState.id });
+      const moveDownButton = await driver.findElement(By.css(`button[name="committee_move"][value="down:${originalState.id}"]`));
+      await driver.executeScript(`
+        const button = arguments[0];
+        const form = document.getElementById(button.getAttribute('form'));
+        if (form && typeof form.requestSubmit === 'function') {
+          form.requestSubmit(button);
+        } else if (form) {
+          const hidden = document.createElement('input');
+          hidden.type = 'hidden';
+          hidden.name = button.name;
+          hidden.value = button.value;
+          form.appendChild(hidden);
+          form.submit();
+        }
+      `, moveDownButton);
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
+      const movedPrimary = captureCommitteeState(callsign);
+      const movedSecondary = captureCommitteeState(secondaryState.callsign);
+      assert.ok(
+        Number(movedPrimary.committee_sort_order) > Number(movedSecondary.committee_sort_order),
+        'Le bouton committee_move doit deplacer le membre vers le bas dans l ordre du comite.',
+      );
+
       await visit(driver, 'committee');
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(callsign, 'i'), 'La page publique comite doit afficher le membre Selenium.');
@@ -121,6 +180,7 @@ test('Selenium admin comite: modifier un membre et verifier l affichage public',
       assert.match(text, new RegExp(bio), 'La page publique comite doit afficher la bio mise a jour.');
     } finally {
       restoreCommitteeState(originalState);
+      restoreCommitteeState(secondaryState);
     }
   });
 });

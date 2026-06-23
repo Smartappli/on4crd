@@ -262,7 +262,7 @@ final class AdminActionCoverageTest extends TestCase
                 'page' => 'pages/admin_committee.php',
                 'controller_snippets' => ['committee_move', 'committee_role', 'committee_bio'],
                 'selenium' => 'tests/selenium/admin-committee-workflow.test.js',
-                'selenium_snippets' => ['admin_committee', 'committee_role', 'committee_bio'],
+                'selenium_snippets' => ['admin_committee', 'committee_role', 'committee_bio', 'committee_move', 'moveDownButton'],
             ],
         ];
     }

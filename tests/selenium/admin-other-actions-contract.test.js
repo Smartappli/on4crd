@@ -167,7 +167,7 @@ test('Selenium admin: contrats des actions hors propositions', () => {
     {
       label: 'committee membership updates',
       file: 'tests/selenium/admin-committee-workflow.test.js',
-      snippets: ['admin_committee', 'committee_role', 'committee_bio'],
+      snippets: ['admin_committee', 'committee_role', 'committee_bio', 'committee_move', 'moveDownButton'],
     },
   ];
 
