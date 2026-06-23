@@ -224,10 +224,24 @@ function articleRecordBySlug(slug) {
   return phpJson(`
 require_once 'app/bootstrap.php';
 $slug = (string) (getenv('SELENIUM_SLUG') ?: '');
-$stmt = db()->prepare('SELECT id, title, slug, excerpt, content, status, category, subcategory FROM articles WHERE slug = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, author_id, title, slug, excerpt, content, status, category, subcategory FROM articles WHERE slug = ? LIMIT 1');
 $stmt->execute([$slug]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_THROW_ON_ERROR);
 `, { SELENIUM_SLUG: slug });
+}
+
+function articleRevisionCount(articleId) {
+  return Number(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$id = (int) (getenv('SELENIUM_ARTICLE_ID') ?: 0);
+if ($id <= 0 || !table_exists('article_revisions')) {
+    echo '0';
+    return;
+}
+$stmt = db()->prepare('SELECT COUNT(*) FROM article_revisions WHERE article_id = ?');
+$stmt->execute([$id]);
+echo (string) (int) ($stmt->fetchColumn() ?: 0);
+`, { SELENIUM_ARTICLE_ID: String(articleId) }).trim() || '0');
 }
 
 function createContentProposal(area, title, summary) {
@@ -258,7 +272,7 @@ require_once 'app/bootstrap.php';
 require_once 'app/content_helpers.php';
 ensure_content_proposals_table();
 $id = (int) (getenv('SELENIUM_PROPOSAL_ID') ?: 0);
-$stmt = db()->prepare('SELECT id, area, title, status, moderation_note FROM content_proposals WHERE id = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, area, proposal_type, title, summary, status, moderation_note FROM content_proposals WHERE id = ? LIMIT 1');
 $stmt->execute([$id]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_THROW_ON_ERROR);
 `, { SELENIUM_PROPOSAL_ID: String(id) });
@@ -373,7 +387,7 @@ require_once 'app/bootstrap.php';
 require_once 'app/content_helpers.php';
 ensure_wiki_tables();
 $slug = (string) (getenv('SELENIUM_SLUG') ?: '');
-$stmt = db()->prepare('SELECT id, title, slug, content, status, category, subcategory FROM wiki_pages WHERE slug = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, author_id, title, slug, content, status, category, subcategory, proposal_kind FROM wiki_pages WHERE slug = ? LIMIT 1');
 $stmt->execute([$slug]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_THROW_ON_ERROR);
 `, { SELENIUM_SLUG: slug });
@@ -428,6 +442,7 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
 
       let taxonomy = articleTaxonomyByLabels(categoryLabel, subcategoryLabel);
       assert.ok(taxonomy.category && taxonomy.category.code, 'La thematique article doit etre creee.');
+      assert.equal(taxonomy.category.label, categoryLabel, 'Le libelle de thematique article doit etre persiste.');
 
       const subcategoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_subcategory"]]'));
       await selectValue(driver, await subcategoryForm.findElement(By.css('select[name="subcategory_category"]')), taxonomy.category.code);
@@ -439,6 +454,8 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
       const categoryCode = taxonomy.category.code;
       const subcategoryCode = taxonomy.subcategory.code;
       const subcategoryRef = `${categoryCode}:${subcategoryCode}`;
+      assert.equal(taxonomy.subcategory.category_code, categoryCode, 'La sous-thematique article doit etre rattachee a la thematique creee.');
+      assert.equal(taxonomy.subcategory.label, subcategoryLabel, 'Le libelle de sous-thematique article doit etre persiste.');
 
       const createForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save_article"]]'));
       await setFieldValue(driver, await createForm.findElement(By.css('input[name="title"]')), title);
@@ -460,6 +477,11 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
 
       let article = articleRecordBySlug(slug);
       assert.ok(article && Number(article.id) > 0, 'L article doit etre enregistre.');
+      assert.ok(Number(article.author_id) > 0, 'L article enregistre doit etre rattache a un auteur.');
+      assert.equal(article.title, title, 'Le titre article doit etre persiste.');
+      assert.equal(article.slug, slug, 'Le slug article doit etre persiste.');
+      assert.equal(article.excerpt, `Extrait article ${token}`, 'L extrait article doit etre persiste.');
+      assert.match(article.content, new RegExp(`Contenu initial article ${token}`), 'Le contenu article initial doit etre persiste.');
       assert.equal(article.status, 'draft');
       assert.equal(article.category, categoryCode);
       assert.equal(article.subcategory, subcategoryCode);
@@ -477,6 +499,7 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
       article = articleRecordBySlug(slug);
       assert.equal(article.title, updatedTitle);
       assert.match(article.content, /Contenu modifie article/);
+      assert.ok(articleRevisionCount(article.id) > 0, 'La modification article doit creer au moins une revision en base.');
 
       await visit(driver, 'admin_articles', { id: article.id });
       const revisionForms = await driver.findElements(By.xpath('//form[.//input[@name="action" and @value="restore_revision"]]'));
@@ -490,6 +513,10 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
       await visit(driver, 'admin_articles', { status: 'pending' });
       await submitProposalStatus(driver, proposalTitle, 'rejected', proposalNote);
       const moderatedProposal = proposalRecord(proposal.id);
+      assert.equal(moderatedProposal.area, 'articles');
+      assert.equal(moderatedProposal.proposal_type, 'content');
+      assert.equal(moderatedProposal.title, proposalTitle);
+      assert.match(moderatedProposal.summary, new RegExp(token), 'La proposition article doit conserver son resume en base.');
       assert.equal(moderatedProposal.status, 'rejected');
       assert.equal(moderatedProposal.moderation_note, proposalNote);
 
@@ -543,6 +570,7 @@ test('Selenium admin wiki: taxonomie, statut de page et proposition', async (t) 
 
       let taxonomy = wikiTaxonomyByLabels(categoryLabel, subcategoryLabel);
       assert.ok(taxonomy.category && taxonomy.category.code, 'La thematique wiki doit etre creee.');
+      assert.equal(taxonomy.category.label, categoryLabel, 'Le libelle de thematique wiki doit etre persiste.');
 
       const subcategoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_subcategory"]]'));
       await selectValue(driver, await subcategoryForm.findElement(By.css('select[name="subcategory_category"]')), taxonomy.category.code);
@@ -554,6 +582,8 @@ test('Selenium admin wiki: taxonomie, statut de page et proposition', async (t) 
       const categoryCode = taxonomy.category.code;
       const subcategoryCode = taxonomy.subcategory.code;
       const subcategoryRef = `${categoryCode}:${subcategoryCode}`;
+      assert.equal(taxonomy.subcategory.category_code, categoryCode, 'La sous-thematique wiki doit etre rattachee a la thematique creee.');
+      assert.equal(taxonomy.subcategory.label, subcategoryLabel, 'Le libelle de sous-thematique wiki doit etre persiste.');
 
       setWikiPageTaxonomy(pageSlug, categoryCode, subcategoryCode);
       await visit(driver, 'admin_wiki');
@@ -567,8 +597,15 @@ test('Selenium admin wiki: taxonomie, statut de page et proposition', async (t) 
       await submitForm(driver, pageStatusForm);
 
       let wikiPage = wikiRecordBySlug(pageSlug);
+      assert.ok(Number(wikiPage.author_id) > 0, 'La page wiki doit etre rattachee a un auteur.');
+      assert.equal(wikiPage.title, pageTitle, 'Le titre wiki doit etre conserve en base.');
+      assert.equal(wikiPage.slug, pageSlug, 'Le slug wiki doit etre conserve en base.');
+      assert.match(wikiPage.content, /Contenu wiki Selenium initial/, 'Le contenu wiki initial doit etre conserve en base.');
       assert.equal(wikiPage.status, 'published');
       assert.equal(Number(wikiPage.id), Number(fixture.pageId));
+      assert.equal(wikiPage.category, categoryCode, 'La thematique wiki appliquee doit etre persistee.');
+      assert.equal(wikiPage.subcategory, subcategoryCode, 'La sous-thematique wiki appliquee doit etre persistee.');
+      assert.equal(wikiPage.proposal_kind, 'page', 'Le type de proposition wiki doit rester page.');
 
       setWikiPageTaxonomy(pageSlug, 'general', '');
       await visit(driver, 'admin_wiki');
@@ -583,6 +620,10 @@ test('Selenium admin wiki: taxonomie, statut de page et proposition', async (t) 
       await visit(driver, 'admin_wiki', { status: 'pending' });
       await submitProposalStatus(driver, proposalTitle, 'reviewed', proposalNote);
       const moderatedProposal = proposalRecord(fixture.proposalId);
+      assert.equal(moderatedProposal.area, 'wiki');
+      assert.equal(moderatedProposal.proposal_type, 'content');
+      assert.equal(moderatedProposal.title, proposalTitle);
+      assert.match(moderatedProposal.summary, new RegExp(token), 'La proposition wiki doit conserver son resume en base.');
       assert.equal(moderatedProposal.status, 'reviewed');
       assert.equal(moderatedProposal.moderation_note, proposalNote);
 

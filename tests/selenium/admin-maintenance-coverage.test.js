@@ -302,7 +302,7 @@ $album = $albumStmt->fetch() ?: null;
 $photos = [];
 if ($photoIds !== []) {
     $placeholders = implode(',', array_fill(0, count($photoIds), '?'));
-    $stmt = db()->prepare('SELECT id, title, caption, sort_order FROM album_photos WHERE id IN (' . $placeholders . ') ORDER BY id ASC');
+    $stmt = db()->prepare('SELECT id, title, caption, sort_order, file_path FROM album_photos WHERE id IN (' . $placeholders . ') ORDER BY id ASC');
     $stmt->execute($photoIds);
     foreach ($stmt->fetchAll() ?: [] as $row) {
         $photos[(int) $row['id']] = $row;
@@ -353,7 +353,7 @@ if ($ids === []) {
     return;
 }
 $placeholders = implode(',', array_fill(0, count($ids), '?'));
-$stmt = db()->prepare('SELECT id, status, category, scheduled_at, published_at FROM articles WHERE id IN (' . $placeholders . ') ORDER BY id ASC');
+$stmt = db()->prepare('SELECT id, title, status, category, scheduled_at, published_at FROM articles WHERE id IN (' . $placeholders . ') ORDER BY id ASC');
 $stmt->execute($ids);
 $rows = [];
 foreach ($stmt->fetchAll() ?: [] as $row) {
@@ -436,7 +436,7 @@ if ($ids === [] || !table_exists('member_library_documents')) {
     return;
 }
 $placeholders = implode(',', array_fill(0, count($ids), '?'));
-$stmt = db()->prepare('SELECT id, tags FROM member_library_documents WHERE id IN (' . $placeholders . ') ORDER BY id ASC');
+$stmt = db()->prepare('SELECT id, title, tags, file_path FROM member_library_documents WHERE id IN (' . $placeholders . ') ORDER BY id ASC');
 $stmt->execute($ids);
 $rows = [];
 foreach ($stmt->fetchAll() ?: [] as $row) {
@@ -620,6 +620,7 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
       assert.equal(state.album.description, `Admin album updated description ${token}`, 'La description album admin doit etre mise a jour.');
       assert.equal(state.album.category, fixture.category, 'La thematique album admin doit etre mise a jour.');
       assert.equal(state.album.subcategory, fixture.subcategory, 'La sous-thematique album admin doit etre mise a jour.');
+      assert.equal(Number(state.album.is_public), 1, 'La mise a jour admin ne doit pas rendre prive un album public.');
       assert.equal(Number(state.album.is_featured), 1, 'Un admin doit pouvoir epingler un album.');
       await visit(driver, 'admin_albums');
       const repinnedForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_album"] and .//input[@name="album_id" and @value="${fixture.album_id}"]]`));
@@ -680,6 +681,8 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
       await submitForm(driver, photoForm);
       state = albumState(fixture.album_id, fixture.photo_ids);
       assert.equal(state.photos[firstPhotoId].title, `Photo updated ${token}`, 'Le titre photo doit etre mis a jour.');
+      assert.equal(state.photos[firstPhotoId].caption, `Caption updated ${token}`, 'La legende photo doit etre mise a jour.');
+      assert.match(state.photos[firstPhotoId].file_path, /^storage\/uploads\/albums\/selenium\/.+\.png$/i, 'La mise a jour photo ne doit pas perdre le chemin fichier.');
 
       await visit(driver, 'admin_albums');
       const reorderForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="reorder_photo"] and .//input[@name="photo_id" and @value="${secondPhotoId}"]]`));
@@ -838,6 +841,7 @@ test('Selenium admin articles: taxonomie, bulk update et relance programmee', as
       rows = articleRows(fixture.ids);
       for (const row of Object.values(rows)) {
         assert.equal(row.status, 'published', 'Le bulk update article doit publier les articles selectionnes.');
+        assert.ok(String(row.published_at || '') !== '', 'Le bulk update article doit renseigner published_at.');
       }
 
       await visit(driver, 'admin_articles');
@@ -845,6 +849,7 @@ test('Selenium admin articles: taxonomie, bulk update et relance programmee', as
       await submitForm(driver, retryForm);
       rows = articleRows([fixture.scheduled_ids[0]]);
       assert.ok(rows[fixture.scheduled_ids[0]].scheduled_at, 'La relance individuelle doit renseigner une date de publication.');
+      assert.equal(rows[fixture.scheduled_ids[0]].category, fixture.renamed_category, 'La relance individuelle doit conserver la categorie propagee.');
 
       await visit(driver, 'admin_articles');
       csrf = await firstCsrfToken(driver);
@@ -855,6 +860,7 @@ test('Selenium admin articles: taxonomie, bulk update et relance programmee', as
       });
       assert.equal(response.ok, true, response.body);
       rows = articleRows([fixture.scheduled_ids[1]]);
+      assert.equal(rows[fixture.scheduled_ids[1]].category, fixture.renamed_category, 'La relance groupee doit conserver la categorie propagee.');
       assert.ok(rows[fixture.scheduled_ids[1]].scheduled_at, 'La relance groupée doit renseigner une date de publication.');
     } finally {
       cleanupAdminRows(token);
@@ -887,6 +893,7 @@ test('Selenium admin news: moderation et attribution de responsable de rubrique'
       await submitForm(driver, moderationForm);
       let state = newsState(fixture.post_id, fixture.section_id, Number(member.id));
       assert.equal(state.post.status, 'published', 'La moderation news doit publier le post.');
+      assert.equal(state.post.moderation_note, `Moderation ${token}`, 'La moderation news doit persister la note admin.');
 
       await visit(driver, 'admin_news');
       const managerForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="assign_section_manager"]]'));
@@ -928,8 +935,10 @@ test('Selenium admin bibliotheque et petites annonces: fusion tags, modification
       let docs = libraryDocs(library.ids);
       assert.equal(Object.keys(docs).length, library.ids.length, 'Les documents bibliotheque doivent exister apres fusion de tags.');
       for (const row of Object.values(docs)) {
+        assert.match(row.title, new RegExp(token), 'Le document bibliotheque fusionne doit conserver son titre.');
         assert.match(row.tags.toLowerCase(), new RegExp(library.to_tag.toLowerCase()), 'La fusion de tags doit ajouter le tag cible.');
         assert.doesNotMatch(row.tags.toLowerCase(), new RegExp(library.from_tag.toLowerCase()), 'La fusion de tags doit retirer le tag source.');
+        assert.match(row.file_path, /^storage\/uploads\/library\/selenium\/.+\.txt$/i, 'La fusion de tags ne doit pas modifier le fichier bibliotheque.');
       }
 
       await visit(driver, 'admin_library', { q: token });
@@ -965,6 +974,7 @@ test('Selenium admin bibliotheque et petites annonces: fusion tags, modification
       await submitForm(driver, classifiedEditForm);
       let rows = classifiedRows(classifieds.ids);
       assert.equal(rows[singleClassifiedId].title, singleTitle, 'La modification unitaire admin_classifieds doit persister le titre.');
+      assert.equal(rows[singleClassifiedId].description, `Classified single description ${token}`, 'La modification unitaire admin_classifieds doit persister la description.');
       assert.equal(rows[singleClassifiedId].status, 'sold', 'La modification unitaire admin_classifieds doit persister le statut.');
 
       await visit(driver, 'admin_classifieds', { edit: singleClassifiedId });

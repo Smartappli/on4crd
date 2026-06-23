@@ -869,11 +869,12 @@ async function deleteMemberModuleDocumentFromAdminRoute(driver, fixture) {
 async function createLibraryDocumentFromAdminRoute(driver, token) {
   const title = `selenium-admin-member-library-${token}`;
   const fixture = writeTextFixture(title, token, 'member-library');
+  const tags = 'formation,procedure,club';
   await visit(driver, 'admin_library');
 
   const form = await driver.findElement(By.css('form.admin-library-upload-form'));
   await setFieldValue(driver, await form.findElement(By.css('input[name="title"]')), title);
-  await setFieldValue(driver, await form.findElement(By.css('input[name="tags"]')), `selenium,admin,${token}`);
+  await setFieldValue(driver, await form.findElement(By.css('input[name="tags"]')), tags);
   await setFieldValue(driver, await form.findElement(By.css('textarea[name="description"]')), `Document member_library admin Selenium ${token}`);
   await form.findElement(By.css('input[type="file"][name="document"]')).sendKeys(path.resolve(fixture));
   await submitForm(driver, form);
@@ -885,9 +886,7 @@ async function createLibraryDocumentFromAdminRoute(driver, token) {
   assert.equal(document.subcategory, '', 'La sous-categorie member_library creee depuis admin_library doit rester vide par defaut.');
   assert.equal(document.title, title, 'Le titre member_library cree depuis admin_library doit etre persiste.');
   assert.equal(document.description, `Document member_library admin Selenium ${token}`, 'La description member_library creee doit etre persistee.');
-  assert.match(document.tags, /selenium/i, 'Les tags member_library crees doivent contenir selenium.');
-  assert.match(document.tags, /admin/i, 'Les tags member_library crees doivent contenir admin.');
-  assert.match(document.tags, new RegExp(escapeRegExp(token), 'i'), 'Les tags member_library crees doivent contenir le token de regression.');
+  assert.equal(document.tags, tags, 'Les tags member_library crees doivent etre filtres et persistes selon le vocabulaire controle.');
   assert.match(document.file_path, /^storage\/private\/library\/.+\.txt$/i, 'Le fichier member_library doit etre stocke dans la bibliotheque privee.');
 
   return {

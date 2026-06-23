@@ -295,7 +295,7 @@ require_once 'app/bootstrap.php';
 require_once 'app/content_helpers.php';
 ensure_content_proposals_table();
 $id = (int) (getenv('SELENIUM_PROPOSAL_ID') ?: 0);
-$stmt = db()->prepare('SELECT id, title, status, moderation_note FROM content_proposals WHERE id = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, area, proposal_type, title, source_ref, status, moderation_note FROM content_proposals WHERE id = ? LIMIT 1');
 $stmt->execute([$id]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_PROPOSAL_ID: String(id) });
@@ -311,7 +311,7 @@ if ($id <= 0 || !ensure_webotheque_table()) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, title, url, description, tags FROM member_webotheque_links WHERE id = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, url, description, tags FROM member_webotheque_links WHERE id = ? LIMIT 1');
 $stmt->execute([$id]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_LINK_ID: String(id) });
@@ -327,7 +327,7 @@ if ($url === '' || !ensure_webotheque_table()) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, title, url, description, tags FROM member_webotheque_links WHERE url = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, url, description, tags FROM member_webotheque_links WHERE url = ? LIMIT 1');
 $stmt->execute([$url]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_LINK_URL: url });
@@ -429,12 +429,17 @@ test('Selenium admin propositions: relire, refuser, accepter creation, modificat
 
       await updateDashboardProposal(driver, fixture.titles.review, 'reviewed', notes.review);
       let record = proposalRecord(fixture.ids.review);
+      assert.equal(record.area, 'webotheque', 'La proposition relue doit rester rattachee au module webotheque.');
+      assert.equal(record.proposal_type, 'content', 'La proposition relue doit rester de type content.');
       assert.equal(record.status, 'reviewed', 'La proposition relue doit passer au statut reviewed.');
       assert.equal(record.moderation_note, notes.review, 'La note de relecture doit etre conservee.');
       await assertDashboardDoesNotList(driver, fixture.titles.review);
 
       await updateDashboardProposal(driver, fixture.titles.reject, 'rejected', notes.reject);
       record = proposalRecord(fixture.ids.reject);
+      assert.equal(record.area, 'webotheque', 'La proposition refusee doit rester rattachee au module webotheque.');
+      assert.equal(record.proposal_type, 'content', 'La proposition refusee doit rester de type content.');
+      assert.equal(record.source_ref, fixture.urls.reject, 'La proposition refusee doit conserver sa reference source.');
       assert.equal(record.status, 'rejected', 'La proposition refusee doit passer au statut rejected.');
       assert.equal(record.moderation_note, notes.reject, 'La note de refus doit etre conservee.');
       assert.equal(webothequeLinkByUrl(fixture.urls.reject), null, 'Un refus ne doit pas creer de lien webotheque.');
@@ -442,12 +447,21 @@ test('Selenium admin propositions: relire, refuser, accepter creation, modificat
 
       await updateDashboardProposal(driver, fixture.titles.create, 'accepted', notes.create);
       record = proposalRecord(fixture.ids.create);
+      assert.equal(record.area, 'webotheque', 'La proposition de creation doit rester rattachee au module webotheque.');
+      assert.equal(record.proposal_type, 'content', 'La proposition de creation doit rester de type content.');
+      assert.equal(record.source_ref, fixture.urls.create, 'La proposition de creation doit conserver son URL source.');
       assert.equal(record.status, 'accepted', 'La creation acceptee doit passer au statut accepted.');
       assert.equal(record.moderation_note, notes.create, 'La note de validation creation doit etre conservee.');
       const createdLink = webothequeLinkByUrl(fixture.urls.create);
       assert.ok(createdLink && Number(createdLink.id) > 0, 'La proposition acceptee doit creer un lien webotheque.');
+      assert.ok(Number(createdLink.member_id) > 0, 'Le lien cree par proposition doit etre rattache a un membre.');
+      assert.equal(createdLink.category, 'general', 'Le lien cree par proposition doit persister la categorie proposee.');
+      assert.equal(createdLink.subcategory, '', 'Le lien cree par proposition ne doit pas forcer de sous-categorie.');
       assert.equal(createdLink.title, fixture.titles.create, 'Le lien cree doit reprendre le titre propose.');
+      assert.equal(createdLink.url, fixture.urls.create, 'Le lien cree doit reprendre l URL proposee.');
       assert.match(createdLink.description, new RegExp(escapeRegExp(token)), 'Le lien cree doit reprendre la description proposee.');
+      assert.match(createdLink.tags, /selenium/i, 'Le lien cree doit reprendre les tags proposes.');
+      assert.match(createdLink.tags, /admin-proposal/i, 'Le lien cree doit reprendre le tag admin-proposal.');
 
       await visit(driver, 'webotheque', { q: fixture.titles.create });
       text = await pagePlainText(driver);
@@ -455,16 +469,25 @@ test('Selenium admin propositions: relire, refuser, accepter creation, modificat
 
       await updateDashboardProposal(driver, fixture.titles.update, 'accepted', notes.update);
       record = proposalRecord(fixture.ids.update);
+      assert.equal(record.area, 'webotheque', 'La proposition de modification doit rester rattachee au module webotheque.');
+      assert.equal(record.proposal_type, 'content', 'La proposition de modification doit rester de type content.');
+      assert.equal(record.source_ref, fixture.urls.update, 'La proposition de modification doit conserver son URL source.');
       assert.equal(record.status, 'accepted', 'La modification acceptee doit passer au statut accepted.');
       assert.equal(record.moderation_note, notes.update, 'La note de validation modification doit etre conservee.');
       const updatedLink = webothequeLinkById(fixture.links.update);
       assert.ok(updatedLink, 'Le lien a modifier doit exister apres validation.');
+      assert.ok(Number(updatedLink.member_id) > 0, 'Le lien modifie par proposition doit rester rattache a un membre.');
+      assert.equal(updatedLink.category, 'general', 'Le lien modifie par proposition doit conserver sa categorie.');
       assert.equal(updatedLink.title, fixture.titles.update, 'La proposition acceptee doit modifier le titre du lien.');
       assert.equal(updatedLink.url, fixture.urls.update, 'La proposition acceptee doit modifier l URL du lien.');
       assert.match(updatedLink.description, /Lien modifie depuis une proposition admin/i, 'La proposition acceptee doit modifier la description du lien.');
+      assert.match(updatedLink.tags, /updated/i, 'La proposition acceptee doit modifier les tags du lien.');
 
       await updateDashboardProposal(driver, fixture.titles.delete, 'accepted', notes.delete);
       record = proposalRecord(fixture.ids.delete);
+      assert.equal(record.area, 'webotheque', 'La proposition de suppression doit rester rattachee au module webotheque.');
+      assert.equal(record.proposal_type, 'content', 'La proposition de suppression doit rester de type content.');
+      assert.equal(record.source_ref, fixture.urls.delete, 'La proposition de suppression doit conserver sa reference source.');
       assert.equal(record.status, 'accepted', 'La suppression acceptee doit passer au statut accepted.');
       assert.equal(record.moderation_note, notes.delete, 'La note de validation suppression doit etre conservee.');
       assert.equal(webothequeLinkById(fixture.links.delete), null, 'La proposition acceptee doit supprimer le lien cible.');
@@ -501,10 +524,13 @@ test('Selenium admin propositions: validation depuis admin_library et admin_webo
       assert.match(text, new RegExp(escapeRegExp(fixture.titles.library_category)), 'La proposition bibliotheque doit apparaitre dans admin_library.');
       await updateModuleProposal(driver, 'admin_library', fixture.titles.library_category, 'accepted', notes.libraryCategory);
       let record = proposalRecord(fixture.ids.library_category);
+      assert.equal(record.area, 'members_library', 'La proposition categorie bibliotheque doit rester rattachee au module membres_library.');
+      assert.equal(record.proposal_type, 'category', 'La proposition categorie bibliotheque doit rester de type category.');
       assert.equal(record.status, 'accepted', 'La proposition categorie bibliotheque doit passer au statut accepted.');
       assert.equal(record.moderation_note, notes.libraryCategory, 'La note de validation bibliotheque doit etre conservee.');
       const category = libraryCategoryByLabel(fixture.titles.library_category);
       assert.ok(category && category.code, 'La validation admin_library doit creer la thematique bibliotheque.');
+      assert.equal(category.label, fixture.titles.library_category, 'La thematique bibliotheque creee doit reprendre le libelle propose.');
 
       await visit(driver, 'admin_library');
       text = await pagePlainText(driver);
@@ -515,11 +541,19 @@ test('Selenium admin propositions: validation depuis admin_library et admin_webo
       assert.match(text, new RegExp(escapeRegExp(fixture.titles.webotheque_content)), 'La proposition webotheque doit apparaitre dans admin_webotheque.');
       await updateModuleProposal(driver, 'admin_webotheque', fixture.titles.webotheque_content, 'accepted', notes.webothequeContent, 'general');
       record = proposalRecord(fixture.ids.webotheque_content);
+      assert.equal(record.area, 'webotheque', 'La proposition lien webotheque doit rester rattachee au module webotheque.');
+      assert.equal(record.proposal_type, 'content', 'La proposition lien webotheque doit rester de type content.');
+      assert.equal(record.source_ref, fixture.urls.webotheque_content, 'La proposition lien webotheque doit conserver son URL source.');
       assert.equal(record.status, 'accepted', 'La proposition lien webotheque doit passer au statut accepted.');
       assert.equal(record.moderation_note, notes.webothequeContent, 'La note de validation webotheque doit etre conservee.');
       const link = webothequeLinkByUrl(fixture.urls.webotheque_content);
       assert.ok(link && Number(link.id) > 0, 'La validation admin_webotheque doit creer le lien webotheque.');
+      assert.ok(Number(link.member_id) > 0, 'Le lien cree depuis admin_webotheque doit etre rattache a un membre.');
+      assert.equal(link.category, 'general', 'Le lien cree depuis admin_webotheque doit persister la categorie choisie.');
+      assert.equal(link.subcategory, '', 'Le lien cree depuis admin_webotheque ne doit pas forcer de sous-categorie.');
       assert.equal(link.title, fixture.titles.webotheque_content, 'Le lien webotheque cree doit reprendre le titre propose.');
+      assert.match(link.description, new RegExp(escapeRegExp(token)), 'Le lien webotheque cree doit reprendre la description proposee.');
+      assert.match(link.tags, /selenium/i, 'Le lien webotheque cree doit reprendre les tags proposes.');
 
       await visit(driver, 'webotheque', { q: fixture.titles.webotheque_content });
       text = await pagePlainText(driver);

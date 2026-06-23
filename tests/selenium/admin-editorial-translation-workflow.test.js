@@ -101,6 +101,16 @@ if (is_array($rows)) {
   });
 }
 
+function editorialRowMap(rows) {
+  return Object.fromEntries(
+    rows.map((row) => [row.content_key || row.slot, row]),
+  );
+}
+
+function editorialLocaleValue(row, locale) {
+  return row?.[`${locale}_text`] ?? row?.[locale] ?? '';
+}
+
 function prepareTranslationReviewRows(memberId, token) {
   return seleniumJson(`
 require_once 'app/bootstrap.php';
@@ -190,9 +200,9 @@ echo (int) ($stmt->fetchColumn() ?: 0);
 function translationState(newsTranslationId, articleTranslationId) {
   return seleniumJson(`
 require_once 'app/bootstrap.php';
-$newsStmt = db()->prepare('SELECT status, title, excerpt, content, reviewed_by, reviewed_at FROM news_translations WHERE id = ? LIMIT 1');
+$newsStmt = db()->prepare('SELECT locale, source_hash, status, title, excerpt, content, reviewed_by, reviewed_at FROM news_translations WHERE id = ? LIMIT 1');
 $newsStmt->execute([(int) getenv('SELENIUM_NEWS_TRANSLATION_ID')]);
-$articleStmt = db()->prepare('SELECT status, title, excerpt, content, reviewed_by, reviewed_at FROM article_translations WHERE id = ? LIMIT 1');
+$articleStmt = db()->prepare('SELECT locale, source_hash, status, title, excerpt, content, reviewed_by, reviewed_at FROM article_translations WHERE id = ? LIMIT 1');
 $articleStmt->execute([(int) getenv('SELENIUM_ARTICLE_TRANSLATION_ID')]);
 echo json_encode([
     'news' => $newsStmt->fetch() ?: null,
@@ -231,18 +241,23 @@ test('Selenium admin editorial: les contenus multilingues sont sauvegardes', asy
       await setFieldValue(driver, await form.findElement(By.css('textarea[name="content[committee_title][en]"]')), `Title EN ${token}`);
       await setFieldValue(driver, await form.findElement(By.css('textarea[name="content[committee_title][de]"]')), `Titel DE ${token}`);
       await setFieldValue(driver, await form.findElement(By.css('textarea[name="content[committee_title][nl]"]')), `Titel NL ${token}`);
+      await setFieldValue(driver, await form.findElement(By.css('textarea[name="content[press_contact][fr]"]')), `Contact FR ${token}`);
+      await setFieldValue(driver, await form.findElement(By.css('textarea[name="content[press_contact][en]"]')), `Contact EN ${token}`);
+      await setFieldValue(driver, await form.findElement(By.css('textarea[name="content[press_contact][de]"]')), `Kontakt DE ${token}`);
+      await setFieldValue(driver, await form.findElement(By.css('textarea[name="content[press_contact][nl]"]')), `Contact NL ${token}`);
       await submitForm(driver, form);
 
-      const row = seleniumJson(`
-require_once 'app/bootstrap.php';
-$stmt = db()->prepare('SELECT fr_text, en_text, de_text, nl_text FROM editorial_contents WHERE content_key = "committee.title" LIMIT 1');
-$stmt->execute();
-echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-`);
-      assert.equal(row.fr_text, `Titre FR ${token}`, 'Le contenu editorial FR doit etre persiste.');
-      assert.equal(row.en_text, `Title EN ${token}`, 'Le contenu editorial EN doit etre persiste.');
-      assert.equal(row.de_text, `Titel DE ${token}`, 'Le contenu editorial DE doit etre persiste.');
-      assert.equal(row.nl_text, `Titel NL ${token}`, 'Le contenu editorial NL doit etre persiste.');
+      const rowsByKey = editorialRowMap(captureEditorialRows(['committee.title', 'press.contact']));
+      const committeeTitle = rowsByKey['committee.title'];
+      assert.equal(editorialLocaleValue(committeeTitle, 'fr'), `Titre FR ${token}`, 'Le titre comite FR doit etre persiste.');
+      assert.equal(editorialLocaleValue(committeeTitle, 'en'), `Title EN ${token}`, 'Le titre comite EN doit etre persiste.');
+      assert.equal(editorialLocaleValue(committeeTitle, 'de'), `Titel DE ${token}`, 'Le titre comite DE doit etre persiste.');
+      assert.equal(editorialLocaleValue(committeeTitle, 'nl'), `Titel NL ${token}`, 'Le titre comite NL doit etre persiste.');
+      const pressContact = rowsByKey['press.contact'];
+      assert.equal(editorialLocaleValue(pressContact, 'fr'), `Contact FR ${token}`, 'Le contact presse FR doit etre persiste.');
+      assert.equal(editorialLocaleValue(pressContact, 'en'), `Contact EN ${token}`, 'Le contact presse EN doit etre persiste.');
+      assert.equal(editorialLocaleValue(pressContact, 'de'), `Kontakt DE ${token}`, 'Le contact presse DE doit etre persiste.');
+      assert.equal(editorialLocaleValue(pressContact, 'nl'), `Contact NL ${token}`, 'Le contact presse NL doit etre persiste.');
       const text = await pagePlainText(driver);
       assert.match(text, new RegExp(token), 'Le contenu sauvegarde doit etre rendu apres redirection.');
     } finally {
@@ -293,15 +308,21 @@ test('Selenium admin traductions: news et articles passent en reviewed', async (
       await submitForm(driver, articleForm);
 
       const state = translationState(rows.news_translation_id, rows.article_translation_id);
+      assert.equal(state.news.locale, 'en', 'La traduction news relue doit conserver sa locale.');
+      assert.match(String(state.news.source_hash || ''), /^[a-f0-9]{40}$/i, 'La traduction news relue doit conserver son hash source.');
       assert.equal(state.news.status, 'reviewed', 'La traduction news doit passer en reviewed.');
       assert.equal(state.news.title, `Reviewed news ${token}`, 'Le titre news relu doit etre persiste.');
+      assert.equal(state.news.excerpt, `Reviewed news excerpt ${token}`, 'L extrait news relu doit etre persiste.');
       assert.match(String(state.news.content || ''), new RegExp(`Reviewed news content ${token}`), 'Le contenu news relu doit etre persiste.');
-      assert.ok(Number(state.news.reviewed_by) > 0, 'La traduction news doit enregistrer le relecteur.');
+      assert.equal(Number(state.news.reviewed_by), memberId, 'La traduction news doit enregistrer le relecteur exact.');
       assert.ok(String(state.news.reviewed_at || '') !== '', 'La traduction news doit enregistrer une date de relecture.');
+      assert.equal(state.article.locale, 'en', 'La traduction article relue doit conserver sa locale.');
+      assert.match(String(state.article.source_hash || ''), /^[a-f0-9]{40}$/i, 'La traduction article relue doit conserver son hash source.');
       assert.equal(state.article.status, 'reviewed', 'La traduction article doit passer en reviewed.');
       assert.equal(state.article.title, `Reviewed article ${token}`, 'Le titre article relu doit etre persiste.');
+      assert.equal(state.article.excerpt, `Reviewed article excerpt ${token}`, 'L extrait article relu doit etre persiste.');
       assert.match(String(state.article.content || ''), new RegExp(`Reviewed article content ${token}`), 'Le contenu article relu doit etre persiste.');
-      assert.ok(Number(state.article.reviewed_by) > 0, 'La traduction article doit enregistrer le relecteur.');
+      assert.equal(Number(state.article.reviewed_by), memberId, 'La traduction article doit enregistrer le relecteur exact.');
       assert.ok(String(state.article.reviewed_at || '') !== '', 'La traduction article doit enregistrer une date de relecture.');
 
       await visit(driver, 'admin_translation_reviews');
