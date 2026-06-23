@@ -705,7 +705,19 @@ async function updateAndDeleteAlbum(driver, fixture, token) {
     await setCheckbox(driver, featuredCheckboxes[0], true);
   }
   const saveButton = await editForm.findElement(By.css('[data-admin-album-save]'));
-  await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', saveButton);
+  await driver.executeScript(`
+    const button = arguments[0];
+    const rect = button.getBoundingClientRect();
+    window.scrollTo(0, rect.top + window.scrollY - Math.round(window.innerHeight / 2));
+  `, saveButton);
+  await driver.wait(async () => {
+    const rect = await driver.executeScript(`
+      const box = arguments[0].getBoundingClientRect();
+      return { top: box.top, bottom: box.bottom, height: window.innerHeight };
+    `, saveButton);
+
+    return rect.top >= 0 && rect.bottom <= rect.height;
+  }, timeoutMs);
   await saveButton.click();
   await waitForDocumentReady(driver);
   await assertNoServerError(driver);
