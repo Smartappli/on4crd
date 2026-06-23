@@ -115,15 +115,13 @@ const moduleContracts = {
   directory: {
     routes: ['directory'],
     proofs: [
-      ['tests/selenium/public-routes.test.js', ['directory']],
-      ['tests/selenium/public-layout-contract.test.js', ['route=directory']],
+      ['tests/selenium/public-reference-modules.test.js', ['SELENDIR', 'directory-search-panel', 'directory-empty']],
     ],
   },
   education: {
-    routes: ['schools', 'relais'],
+    routes: ['schools', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec'],
     proofs: [
-      ['tests/selenium/public-routes.test.js', ['schools', 'relais']],
-      ['tests/selenium/public-layout-contract.test.js', ['schools', 'relais']],
+      ['tests/selenium/public-reference-modules.test.js', ['schools', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec']],
     ],
   },
   events: {

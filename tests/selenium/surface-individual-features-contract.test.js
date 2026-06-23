@@ -110,6 +110,7 @@ const memberDocumentFile = 'tests/selenium/member-document-modules.test.js';
 const memberAccountFile = 'tests/selenium/member-account-dashboard-workflow.test.js';
 const memberPrivacyFile = 'tests/selenium/member-privacy-notifications.test.js';
 const memberQslFile = 'tests/selenium/member-qsl-workflow.test.js';
+const publicReferenceFile = 'tests/selenium/public-reference-modules.test.js';
 
 const publicPageProof = (route) => proof(publicRoutesFile, [route]);
 const discoveryProof = (route) => proof(publicRoutesFile, [route]);
@@ -158,6 +159,41 @@ for (const route of [
 ]) {
   routeContracts[route] = { actions: {}, features: [publicPageProof(route)] };
 }
+
+Object.assign(routeContracts, {
+  directory: {
+    actions: {},
+    features: [proof(publicReferenceFile, ['SELENDIR', 'directory-search-panel', 'directory-empty'])],
+  },
+  schools: {
+    actions: {},
+    features: [proof(publicReferenceFile, ['schools', 'feature-card'])],
+  },
+  relais: {
+    actions: {},
+    features: [proof(publicReferenceFile, ['relais', '145,575', 'JO20LI'])],
+  },
+  code_q: {
+    actions: {},
+    features: [proof(publicReferenceFile, ['code_q', 'QTH', 'QRZ'])],
+  },
+  code_cw: {
+    actions: {},
+    features: [proof(publicReferenceFile, ['code_cw', 'code-cw-chart', 'AR .-.-.'])],
+  },
+  bandplan_on3: {
+    actions: {},
+    features: [proof(publicReferenceFile, ['bandplan_on3', '3.500-3.600', '10 W PEP'])],
+  },
+  bandplan_on2: {
+    actions: {},
+    features: [proof(publicReferenceFile, ['bandplan_on2', '100 W PEP', '50 W PEP'])],
+  },
+  bandplan_harec: {
+    actions: {},
+    features: [proof(publicReferenceFile, ['bandplan_harec', '5.3515-5.3665', '1500 W PEP'])],
+  },
+});
 
 for (const route of ['sitemap.xml', 'robots.txt', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'events_feed']) {
   routeContracts[route] = { actions: {}, features: [discoveryProof(route)] };
