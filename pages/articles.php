@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
                 'source_ref' => 'content_proposals#' . $proposalId,
             ]);
-            set_flash('success', (string) ($t['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            set_flash('success', (string) $t['proposal_recorded']);
             redirect('my_requests');
         }
 
@@ -107,11 +107,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
                 'source_ref' => 'content_proposals#' . $proposalId,
             ]);
-            set_flash('success', (string) ($t['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            set_flash('success', (string) $t['proposal_recorded']);
             redirect('my_requests');
         }
 
-        throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+        throw new RuntimeException((string) $t['invalid']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect_url(route_url('articles'));

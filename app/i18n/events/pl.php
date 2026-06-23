@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Anuluj',
   'propose_event_close' => 'Zamknij',
   'proposal_recorded' => 'Propozycja została zapisana w Twoich treściach.',
+  'invalid' => 'Nieprawidłowe żądanie.',
+  'event_published_direct' => 'Propozycja została zapisana w Twoich treściach.',
 );

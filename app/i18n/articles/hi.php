@@ -102,4 +102,5 @@ return array (
   'subcategory_field' => 'उपविषय',
   'no_subcategory' => 'कोई उपविषय नहीं',
   'favorites' => 'पसंदीदा',
+  'invalid' => 'अमान्य अनुरोध।',
 );

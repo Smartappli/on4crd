@@ -47,6 +47,7 @@ return array (
   'tags' => 'Keywords',
   'open' => 'Open',
   'storage_unavailable' => 'The web library is temporarily unavailable.',
+  'forbidden' => 'You cannot edit this link.',
   'admin_title' => 'Administration - Web library',
   'add_link' => 'Add a link',
   'add_link_help' => 'The link will be visible only in the member web library.',
@@ -58,6 +59,7 @@ return array (
   'delete' => 'Delete',
   'confirm_delete' => 'Delete this link?',
   'ok_added' => 'Link added.',
+  'ok_updated' => 'Link updated.',
   'ok_category_added' => 'Topic proposed and approved directly.',
   'ok_subcategory_added' => 'Subtopic proposed and approved directly.',
   'ok_deleted' => 'Link deleted.',
@@ -95,4 +97,5 @@ return array (
   'category_deleted' => 'Topic deleted.',
   'err_category_has_documents' => 'This topic still contains links.',
   'err_category_has_subcategories' => 'This topic still contains subtopics.',
+  'administer' => 'Administer',
 );

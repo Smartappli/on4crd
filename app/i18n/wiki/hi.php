@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'सदस्य क्षेत्र',
   'unavailable' => 'पेज इनिशियलाइज़ेशन के बाद विकी उपलब्ध होगी।',
+  'invalid' => 'अमान्य अनुरोध।',
   'new_pages' => 'नए पृष्ठ',
   'updated_pages' => 'अपडेट किए गए पृष्ठ',
   'most_read' => 'सबसे अधिक पढ़े गए',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'उपविषय',
   'no_subcategory' => 'कोई उपविषय नहीं',
   'favorites' => 'पसंदीदा',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'पसंदीदा में जोड़ा गया',
+  'favorite_removed' => 'पसंदीदा से हटाया गया',
+  'favorite_added_msg' => 'पृष्ठ पसंदीदा में जोड़ा गया।',
+  'favorite_removed_msg' => 'पृष्ठ पसंदीदा से हटाया गया।',
 );

@@ -102,4 +102,5 @@ Kontaktas:',
   'subcategory_field' => 'Potemė',
   'no_subcategory' => 'Nėra potemės',
   'favorites' => 'Mėgstamiausi',
+  'invalid' => 'Netinkama užklausa.',
 );

@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Anulează',
   'propose_event_close' => 'Închide',
   'proposal_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
+  'invalid' => 'Cerere invalidă.',
+  'event_published_direct' => 'Propunerea a fost salvată în conținutul dvs.',
 );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Ledengedeelte',
   'unavailable' => 'De Wiki is beschikbaar na initialisatie van de pagina\'s.',
+  'invalid' => 'Ongeldig verzoek.',
   'new_pages' => 'Nieuwe pagina\'s',
   'updated_pages' => 'Bijgewerkte pagina\'s',
   'most_read' => 'Meest gelezen',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'Subonderwerp',
   'no_subcategory' => 'Geen subonderwerp',
   'favorites' => 'Favorieten',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Toegevoegd aan favorieten',
+  'favorite_removed' => 'Verwijderd uit favorieten',
+  'favorite_added_msg' => 'Pagina toegevoegd aan favorieten.',
+  'favorite_removed_msg' => 'Pagina verwijderd uit favorieten.',
 );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Strefa członkowska',
   'unavailable' => 'Wiki będzie dostępna po zainicjowaniu stron.',
+  'invalid' => 'Nieprawidłowe żądanie.',
   'new_pages' => 'Nowe strony',
   'updated_pages' => 'Zmodyfikowane strony',
   'most_read' => 'Najczęściej czytane',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'Podtemat',
   'no_subcategory' => 'Brak podtematu',
   'favorites' => 'Ulubione',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Dodano do ulubionych',
+  'favorite_removed' => 'Usunięto z ulubionych',
+  'favorite_added_msg' => 'Strona dodana do ulubionych.',
+  'favorite_removed_msg' => 'Strona usunięta z ulubionych.',
 );

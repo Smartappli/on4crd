@@ -12,6 +12,7 @@ return array (
   'add_category' => 'Add category',
   'add_subcategory' => 'Add subtopic',
   'delete' => 'Delete',
+  'save' => 'Save',
   'title_ph' => 'Title',
   'desc_ph' => 'Summary or keywords',
   'upload' => 'Upload document',

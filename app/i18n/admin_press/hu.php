@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Sajtóközlemények',
   'full_name' => 'Teljes név',
   'role' => 'Szerep',
-  'email' => 'E-mail',
+  'email' => 'E-mail-cím',
   'phone' => 'Telefon',
   'notes' => 'Megjegyzések',
   'order' => 'Rendeljen',

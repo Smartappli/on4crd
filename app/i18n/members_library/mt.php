@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Is-sottotemi kollha',
   'no_subcategory' => 'L-ebda sottotema',
   'propose_document_subcategory' => 'Sottotema mixtieqa',
+  'administer' => 'Amministra',
 );

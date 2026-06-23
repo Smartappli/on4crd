@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Peruuta',
   'propose_event_close' => 'Sulje',
   'proposal_recorded' => 'Ehdotus tallennettiin sisältöihisi.',
+  'invalid' => 'Virheellinen pyyntö.',
+  'event_published_direct' => 'Ehdotus tallennettiin sisältöihisi.',
 );

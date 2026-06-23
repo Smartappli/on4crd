@@ -102,4 +102,5 @@ Contact:',
   'subcategory_field' => 'Subiect',
   'no_subcategory' => 'Fără subiecte secundare',
   'favorites' => 'Favorite',
+  'invalid' => 'Cerere invalidă.',
 );

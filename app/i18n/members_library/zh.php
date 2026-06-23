@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => '所有子主题',
   'no_subcategory' => '无子主题',
   'propose_document_subcategory' => '所需子主题',
+  'administer' => '管理',
 );

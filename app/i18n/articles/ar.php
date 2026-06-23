@@ -102,4 +102,5 @@ return array (
   'subcategory_field' => 'موضوع فرعي',
   'no_subcategory' => 'لا يوجد موضوع فرعي',
   'favorites' => 'المفضلة',
+  'invalid' => 'طلب غير صالح.',
 );

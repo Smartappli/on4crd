@@ -102,4 +102,5 @@ ON4CRD の技術記事を提案したいです。
   'subcategory_field' => 'サブトピック',
   'no_subcategory' => 'サブトピックなし',
   'favorites' => 'お気に入り',
+  'invalid' => '無効なリクエストです。',
 );

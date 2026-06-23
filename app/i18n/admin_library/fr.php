@@ -12,6 +12,7 @@ return array (
   'add_category' => 'Ajouter une catégorie',
   'add_subcategory' => 'Ajouter une sous-thématique',
   'delete' => 'Supprimer',
+  'save' => 'Enregistrer',
   'title_ph' => 'Titre',
   'desc_ph' => 'Résumé ou mots-clés',
   'upload' => 'Téléverser le document',

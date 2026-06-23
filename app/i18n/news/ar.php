@@ -61,4 +61,13 @@ return array (
   'search' => 'بحث',
   'news_count_label' => 'عدد الأخبار',
   'proposal_recorded' => 'تم حفظ الاقتراح في محتواك.',
+  'invalid' => 'طلب غير صالح.',
+  'publish' => 'نشر',
+  'create' => 'إنشاء',
+  'published' => 'تم حفظ الخبر.',
+  'category_created_direct' => 'تم اقتراح الموضوع والموافقة عليه مباشرة.',
+  'create_news' => 'إنشاء - الأخبار',
+  'create_category' => 'إنشاء - القسم',
+  'news_direct_help' => 'تم حفظ الخبر.',
+  'category_direct_help' => 'سيتم اعتماد الموضوع مباشرة.',
 );

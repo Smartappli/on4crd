@@ -9,7 +9,7 @@ return array (
   'members' => 'Membros',
   'th_callsign' => 'Indicativo',
   'th_name' => 'Nome',
-  'th_email' => 'E-mail',
+  'th_email' => 'Endereço de e-mail',
   'th_locator' => 'Localizador',
   'th_active' => 'Ativo',
   'th_committee' => 'Comissão',

@@ -102,4 +102,5 @@ Kontak:',
   'subcategory_field' => 'Subtopik',
   'no_subcategory' => 'Tidak ada subtopik',
   'favorites' => 'Favorit',
+  'invalid' => 'Permintaan tidak valid.',
 );

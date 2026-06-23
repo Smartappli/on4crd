@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Annuller',
   'propose_event_close' => 'Luk',
   'proposal_recorded' => 'Forslaget er gemt i dit indhold.',
+  'invalid' => 'Ugyldig anmodning.',
+  'event_published_direct' => 'Forslaget er gemt i dit indhold.',
 );

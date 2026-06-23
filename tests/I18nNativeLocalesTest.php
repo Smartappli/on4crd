@@ -151,6 +151,113 @@ final class I18nNativeLocalesTest extends TestCase
         }
     }
 
+    public function testModulePageTranslationKeysResolveInCatalogs(): void
+    {
+        $contracts = [
+            'pages/admin.php' => [
+                'domains' => ['admin'],
+                'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+            'pages/admin_albums.php' => [
+                'domains' => ['admin_albums'],
+                'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+            'pages/admin_library.php' => [
+                'domains' => ['admin_library'],
+                'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+            'pages/admin_articles.php' => [
+                'domains' => ['admin_articles'],
+                'patterns' => ['/\$t\([\'"]([^\'"]+)[\'"]/'],
+            ],
+            'pages/album.php' => [
+                'domains' => ['album', 'albums', 'admin_albums', 'idea'],
+                'patterns' => [
+                    '/\$albumText\([\'"]([^\'"]+)[\'"]/',
+                    '/\$t\[[\'"]([^\'"]+)[\'"]\]/',
+                    '/\$uploadT\[[\'"]([^\'"]+)[\'"]\]/',
+                ],
+            ],
+            'pages/articles.php' => [
+                'domains' => ['articles'],
+                'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+            'pages/albums.php' => [
+                'domains' => ['albums'],
+                'patterns' => [
+                    '/\$albumText\([\'"]([^\'"]+)[\'"]/',
+                    '/\$t\[[\'"]([^\'"]+)[\'"]\]/',
+                ],
+            ],
+            'pages/auctions.php' => [
+                'domains' => ['auctions'],
+                'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+            'pages/events.php' => [
+                'domains' => ['events'],
+                'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+            'pages/members_library.php' => [
+                'domains' => ['members_library'],
+                'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+            'pages/news.php' => [
+                'domains' => ['news'],
+                'patterns' => ['/\$newsT\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+            'pages/wiki.php' => [
+                'domains' => ['wiki'],
+                'patterns' => [
+                    '/\$tr\([\'"]([^\'"]+)[\'"]/',
+                    '/\$t\[[\'"]([^\'"]+)[\'"]\]/',
+                ],
+            ],
+            'pages/wiki_view.php' => [
+                'domains' => ['wiki_view'],
+                'patterns' => [
+                    '/\$t\([\'"]([^\'"]+)[\'"]/',
+                    '/\$wikiViewText\([\'"]([^\'"]+)[\'"]/',
+                ],
+            ],
+            'app/member_webotheque.php' => [
+                'domains' => ['webotheque'],
+                'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+        ];
+
+        foreach ($contracts as $relativePath => $contract) {
+            $source = file_get_contents(__DIR__ . '/../' . $relativePath);
+            self::assertIsString($source);
+
+            $usedKeys = [];
+            foreach ($contract['patterns'] as $pattern) {
+                preg_match_all($pattern, $source, $matches);
+                foreach ($matches[1] ?? [] as $key) {
+                    $usedKeys[$key] = true;
+                }
+            }
+
+            self::assertNotSame([], $usedKeys, sprintf('%s must expose literal i18n keys to verify.', $relativePath));
+
+            $availableKeys = [];
+            foreach ($contract['domains'] as $domain) {
+                $messages = $this->loadLocaleFile(__DIR__ . '/../app/i18n/' . $domain . '/fr.php');
+                foreach (array_keys($messages) as $key) {
+                    $availableKeys[$key] = true;
+                }
+            }
+
+            $missing = array_values(array_diff(array_keys($usedKeys), array_keys($availableKeys)));
+            sort($missing);
+
+            self::assertSame(
+                [],
+                $missing,
+                sprintf('%s uses i18n keys missing from its module catalogs.', $relativePath)
+            );
+        }
+    }
+
     public function testHomeDonationLinkTargetsDedicatedDonationRoute(): void
     {
         $homePage = file_get_contents(__DIR__ . '/../pages/home.php');
@@ -787,11 +894,12 @@ final class I18nNativeLocalesTest extends TestCase
 
     public function testRequestedFrenchModuleLabelsStayAccented(): void
     {
-        $auctions = file_get_contents(__DIR__ . '/../pages/auctions.php');
-        self::assertIsString($auctions);
-        self::assertStringContainsString('Créer un lot', $auctions);
-        self::assertStringNotContainsString('Creer un lot', $auctions);
-        self::assertStringNotContainsString('Creer un lot0', $auctions);
+        $auctions = $this->loadLocaleFile(__DIR__ . '/../app/i18n/auctions/fr.php');
+        self::assertSame('Créer un lot', $auctions['create_lot']);
+        $auctionsSource = file_get_contents(__DIR__ . '/../app/i18n/auctions/fr.php');
+        self::assertIsString($auctionsSource);
+        self::assertStringNotContainsString('Creer un lot', $auctionsSource);
+        self::assertStringNotContainsString('Creer un lot0', $auctionsSource);
 
         $classifieds = file_get_contents(__DIR__ . '/../pages/classifieds.php');
         self::assertIsString($classifieds);

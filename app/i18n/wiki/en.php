@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Member Area',
   'unavailable' => 'The wiki will be available after page initialization.',
+  'invalid' => 'Invalid request.',
   'new_pages' => 'New pages',
   'updated_pages' => 'Updated pages',
   'most_read' => 'Most read',

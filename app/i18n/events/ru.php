@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Отмена',
   'propose_event_close' => 'Закрыть',
   'proposal_recorded' => 'Предложение сохранено в ваших материалах.',
+  'invalid' => 'Недопустимый запрос.',
+  'event_published_direct' => 'Предложение сохранено в ваших материалах.',
 );

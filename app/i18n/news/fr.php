@@ -61,4 +61,13 @@ return array (
   'search' => 'Rechercher',
   'news_count_label' => 'Nombre d’actualités',
   'proposal_recorded' => 'Proposition enregistrée dans vos contenus.',
+  'invalid' => 'Demande invalide.',
+  'publish' => 'Publier',
+  'create' => 'Créer',
+  'published' => 'Actualité publiée.',
+  'category_created_direct' => 'Rubrique créée et validée directement.',
+  'create_news' => 'Créer une actualité',
+  'create_category' => 'Créer une rubrique',
+  'news_direct_help' => 'Votre actualité sera publiée directement.',
+  'category_direct_help' => 'La rubrique sera validée directement.',
 );

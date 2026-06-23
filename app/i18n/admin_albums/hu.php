@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Érvénytelen album.',
   'uploaded_count' => 'fotó(k) hozzáadva.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Albumimport befejezve',
+  'notification_import_completed_body' => '%d fénykép importálva.',
   'no_photo_imported' => 'Nincsenek importált fényképek.',
   'created_thumbs' => 'generált miniatűr(ek).',
   'manage_title' => 'Albumkezelés',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Cím',
   'description' => 'Leírás',
   'public_album' => 'Nyilvános album',
+  'featured_album' => 'Kiemelt album',
   'photo_title' => 'Fénykép címe',
   'caption' => 'Legenda',
   'files_dropzone' => 'Képfájlok',

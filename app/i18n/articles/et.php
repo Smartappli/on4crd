@@ -102,4 +102,5 @@ Kontakt:',
   'subcategory_field' => 'Alateema',
   'no_subcategory' => 'Alateema puudub',
   'favorites' => 'Lemmikud',
+  'invalid' => 'Vigane päring.',
 );

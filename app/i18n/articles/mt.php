@@ -102,4 +102,5 @@ Kuntatt:',
   'subcategory_field' => 'Subtema',
   'no_subcategory' => 'L-ebda subsuġġett',
   'favorites' => 'Favoriti',
+  'invalid' => 'Talba invalida.',
 );

@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Comunicate de presă',
   'full_name' => 'Numele complet',
   'role' => 'Rol',
-  'email' => 'E-mail',
+  'email' => 'Adresă e-mail',
   'phone' => 'Telefon',
   'notes' => 'Note',
   'order' => 'Comanda',

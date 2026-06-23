@@ -77,11 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $descriptionText = content_proposal_clean_multiline((string) ($_POST['proposal_description'] ?? ''), 1600);
                 $startTs = $dateRaw !== '' ? strtotime($dateRaw) : false;
                 if ($title === '' || $startTs === false) {
-                    throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+                    throw new RuntimeException((string) $t['invalid']);
                 }
                 $slug = events_public_unique_slug($title);
                 event_publish_club_event($slug, $title, $startTs, $descriptionText, $location);
-                set_flash('success', 'Événement publié directement.');
+                set_flash('success', (string) $t['event_published_direct']);
                 redirect_url(route_url('event_view', ['slug' => $slug]));
             }
             $proposalId = content_proposal_create((int) $user['id'], 'events', 'content', $proposalTitle, $proposalSummary, $proposalContact);
@@ -93,11 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
                 'source_ref' => 'content_proposals#' . $proposalId,
             ]);
-            set_flash('success', (string) ($t['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            set_flash('success', (string) $t['proposal_recorded']);
             redirect('my_requests');
         }
 
-        throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+        throw new RuntimeException((string) $t['invalid']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect_url(route_url('events'));

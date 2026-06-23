@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Зона для участников',
   'unavailable' => 'Вики станет доступна после инициализации страниц.',
+  'invalid' => 'Недопустимый запрос.',
   'new_pages' => 'Новые страницы',
   'updated_pages' => 'Обновлённые страницы',
   'most_read' => 'Самые читаемые',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'Подтема',
   'no_subcategory' => 'Нет подтемы',
   'favorites' => 'Избранное',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Добавлено в избранное',
+  'favorite_removed' => 'Удалено из избранного',
+  'favorite_added_msg' => 'Страница добавлена в избранное.',
+  'favorite_removed_msg' => 'Страница удалена из избранного.',
 );

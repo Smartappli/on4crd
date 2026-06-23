@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Kõik alateemad',
   'no_subcategory' => 'Alateemata',
   'propose_document_subcategory' => 'Soovitud alateema',
+  'administer' => 'Halda',
 );

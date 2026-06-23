@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Album non valido.',
   'uploaded_count' => 'foto aggiunte.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Importazione album completata',
+  'notification_import_completed_body' => '%d foto importate.',
   'no_photo_imported' => 'Nessuna foto è stata importata.',
   'created_thumbs' => 'miniature generate.',
   'manage_title' => 'Gestione album',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Titolo',
   'description' => 'Descrizione',
   'public_album' => 'Album pubblico',
+  'featured_album' => 'Album in evidenza',
   'photo_title' => 'Titolo della foto',
   'caption' => 'Didascalia',
   'files_dropzone' => 'File di immagini',

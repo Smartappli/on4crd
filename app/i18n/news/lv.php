@@ -61,4 +61,13 @@ return array (
   'search' => 'Meklēt',
   'news_count_label' => 'Ziņu skaits',
   'proposal_recorded' => 'Priekšlikums saglabāts jūsu saturā.',
+  'invalid' => 'Nederīgs pieprasījums.',
+  'publish' => 'Publicēt',
+  'create' => 'Izveidot',
+  'published' => 'Ziņas ierakstītas.',
+  'category_created_direct' => 'Temats ierosināts un apstiprināts tieši.',
+  'create_news' => 'Izveidot - Jaunumi',
+  'create_category' => 'Izveidot - Rubrika',
+  'news_direct_help' => 'Ziņas ierakstītas.',
+  'category_direct_help' => 'Temats tiks apstiprināts tieši.',
 );

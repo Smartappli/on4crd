@@ -102,4 +102,5 @@ Contact:',
   'subcategory_field' => 'Subonderwerp',
   'no_subcategory' => 'Geen subonderwerp',
   'favorites' => 'Favorieten',
+  'invalid' => 'Ongeldig verzoek.',
 );

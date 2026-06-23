@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Člansko područje',
   'unavailable' => 'Wiki će biti dostupan nakon pokretanja stranica.',
+  'invalid' => 'Neispravan zahtjev.',
   'new_pages' => 'Nove stranice',
   'updated_pages' => 'Izmijenjene stranice',
   'most_read' => 'Najčitanije',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'Podtema',
   'no_subcategory' => 'Nema podteme',
   'favorites' => 'Favoriti',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Dodano u favorite',
+  'favorite_removed' => 'Uklonjeno iz favorita',
+  'favorite_added_msg' => 'Stranica dodana u favorite.',
+  'favorite_removed_msg' => 'Stranica uklonjena iz favorita.',
 );

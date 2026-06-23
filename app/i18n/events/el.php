@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Ακύρωση',
   'propose_event_close' => 'Κλείσιμο',
   'proposal_recorded' => 'Η πρόταση αποθηκεύτηκε στο περιεχόμενό σας.',
+  'invalid' => 'Μη έγκυρο αίτημα.',
+  'event_published_direct' => 'Η πρόταση αποθηκεύτηκε στο περιεχόμενό σας.',
 );

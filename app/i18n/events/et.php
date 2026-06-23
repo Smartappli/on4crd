@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Tühista',
   'propose_event_close' => 'Sulge',
   'proposal_recorded' => 'Ettepanek salvestati teie sisusse.',
+  'invalid' => 'Vigane päring.',
+  'event_published_direct' => 'Ettepanek salvestati teie sisusse.',
 );

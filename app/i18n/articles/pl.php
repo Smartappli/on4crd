@@ -102,4 +102,5 @@ Kontakt:',
   'subcategory_field' => 'Podtemat',
   'no_subcategory' => 'Brak podtematu',
   'favorites' => 'Ulubione',
+  'invalid' => 'Nieprawidłowe żądanie.',
 );

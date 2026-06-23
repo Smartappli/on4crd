@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 set_flash('success', $tr('category_accepted', 'Catégorie wiki créée.'));
                 redirect_url(route_url_clean('wiki', ['theme' => wiki_category_code($proposalTitle)]));
             }
-            set_flash('success', $tr('proposal_recorded', $locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.'));
+            set_flash('success', $tr('proposal_recorded', $locale === 'fr' ? 'Proposition enregistrée dans vos contenus.' : 'Proposal saved in your content area.'));
             redirect('my_requests');
         }
 

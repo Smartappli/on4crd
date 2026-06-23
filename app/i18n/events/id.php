@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Batal',
   'propose_event_close' => 'Tutup',
   'proposal_recorded' => 'Usulan disimpan di konten Anda.',
+  'invalid' => 'Permintaan tidak valid.',
+  'event_published_direct' => 'Usulan disimpan di konten Anda.',
 );

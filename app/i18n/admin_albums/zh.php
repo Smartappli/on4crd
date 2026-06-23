@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => '相册无效。',
   'uploaded_count' => '添加了照片。',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => '相册导入完成',
+  'notification_import_completed_body' => '已导入 %d 张照片。',
   'no_photo_imported' => '没有导入照片。',
   'created_thumbs' => '生成缩略图。',
   'manage_title' => '相册管理',
@@ -20,6 +20,7 @@ return array (
   'title' => '标题',
   'description' => '描述',
   'public_album' => '公开相册',
+  'featured_album' => '精选相册',
   'photo_title' => '照片标题',
   'caption' => '说明',
   'files_dropzone' => '图像文件',

@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'সব উপবিষয়',
   'no_subcategory' => 'কোনও উপবিষয় নেই',
   'propose_document_subcategory' => 'পছন্দের উপবিষয়',
+  'administer' => 'প্রশাসন',
 );

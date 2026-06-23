@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Ikkanċella',
   'propose_event_close' => 'Agħlaq',
   'proposal_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
+  'invalid' => 'Talba invalida.',
+  'event_published_direct' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
 );

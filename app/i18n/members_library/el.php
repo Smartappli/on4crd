@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Όλα τα υποθέματα',
   'no_subcategory' => 'Χωρίς υποθέμα',
   'propose_document_subcategory' => 'Επιθυμητό υποθέμα',
+  'administer' => 'Διαχείριση',
 );

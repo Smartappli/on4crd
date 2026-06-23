@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Alle underemner',
   'no_subcategory' => 'Intet underemne',
   'propose_document_subcategory' => 'Ønsket underemne',
+  'administer' => 'Forvalte',
 );

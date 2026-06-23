@@ -102,4 +102,5 @@ return array (
   'subcategory_field' => 'Подтема',
   'no_subcategory' => 'Няма подтема',
   'favorites' => 'Любими',
+  'invalid' => 'Невалидна заявка.',
 );

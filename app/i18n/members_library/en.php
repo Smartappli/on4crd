@@ -88,4 +88,5 @@ return array (
   'propose_tag_reason' => 'Why add this keyword?',
   'tag_direct_help' => 'The keyword will be approved directly.',
   'tag_created_direct' => 'Keyword proposed and approved directly.',
+  'administer' => 'Administer',
 );

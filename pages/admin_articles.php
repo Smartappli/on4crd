@@ -184,7 +184,7 @@ $articleStatusChoices = [
     'pending' => $t('pending', 'En validation'),
     'scheduled' => $t('scheduled', 'Programme'),
     'published' => $t('published', 'Publie'),
-    'rejected' => $t('rejected', 'Refuse'),
+    'rejected' => $t('rejected', 'Refusé'),
 ];
 $articleStatusLabel = static fn(string $status): string => $articleStatusChoices[$status] ?? $status;
 $pendingProposalUrl = route_url_clean('admin_articles', ['status' => 'pending']) . '#pending-proposals';
@@ -252,7 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $bulkRowsStmt->execute($ids);
                 $bulkRows = $bulkRowsStmt->fetchAll() ?: [];
                 $scheduledAt = $bulkOp === 'scheduled' ? date('Y-m-d H:i:s', time() + 3600) : null;
-                $moderationNote = $bulkOp === 'rejected' ? 'Refuse par moderation.' : null;
+                $moderationNote = $bulkOp === 'rejected' ? $t('moderation_note_rejected_default', 'Refusé par modération.') : null;
                 $publishedAtSql = $bulkOp === 'published' ? 'COALESCE(published_at, NOW())' : 'NULL';
                 db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = ' . $publishedAtSql . ', moderation_note = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
                     ->execute(array_merge([$bulkOp, $scheduledAt, $moderationNote], $ids));
@@ -450,7 +450,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $moderationNoteValue = null;
             if ($status === 'rejected') {
-                $moderationNoteValue = $moderationNote !== '' ? $moderationNote : 'Refuse par moderation.';
+                $moderationNoteValue = $moderationNote !== '' ? $moderationNote : $t('moderation_note_rejected_default', 'Refusé par modération.');
             }
             $imported = import_article_document($_FILES['article_document'] ?? [], $action !== 'preview_article');
             if ($imported['content'] !== '') {
@@ -832,7 +832,7 @@ ob_start();
                 </select>
             </label>
             <label><?= e($t('scheduled_at', 'Date de publication')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
-            <label><?= e($t('moderation_note', 'Note de moderation')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help', 'Visible par le proposant si l article est refuse.')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
+            <label><?= e($t('moderation_note', 'Note de modération')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help', 'Visible par le proposant si l’article est refusé.')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
             <button class="button"><?= e($t('save')) ?></button>
             <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview', 'Prévisualiser')) ?></button>
         </form>
@@ -1065,9 +1065,9 @@ ob_start();
         </div>
         <?php if ($totalPages > 1): ?>
             <nav class="actions mt-3">
-                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page - 1])) ?>">&larr; Prev</a><?php endif; ?>
+                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page - 1])) ?>">&larr; <?= e($t('previous', 'Précédent')) ?></a><?php endif; ?>
                 <span class="badge muted"><?= $page ?> / <?= $totalPages ?></span>
-                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page + 1])) ?>">Next &rarr;</a><?php endif; ?>
+                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page + 1])) ?>"><?= e($t('next', 'Suivant')) ?> &rarr;</a><?php endif; ?>
             </nav>
         <?php endif; ?>
     </section>

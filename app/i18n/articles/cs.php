@@ -102,4 +102,5 @@ Kontakt:',
   'subcategory_field' => 'Podtéma',
   'no_subcategory' => 'Žádné podtéma',
   'favorites' => 'Oblíbené',
+  'invalid' => 'Neplatný požadavek.',
 );

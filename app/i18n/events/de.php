@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Abbrechen',
   'propose_event_close' => 'Schließen',
   'proposal_recorded' => 'Vorschlag in Ihren Inhalten gespeichert.',
+  'invalid' => 'Ungültige Anfrage.',
+  'event_published_direct' => 'Vorschlag in Ihren Inhalten gespeichert.',
 );

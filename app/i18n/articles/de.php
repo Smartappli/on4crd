@@ -102,4 +102,5 @@ Kontakt:',
   'subcategory_field' => 'Unterthema',
   'no_subcategory' => 'Kein Unterthema',
   'favorites' => 'Favoriten',
+  'invalid' => 'Ungültige Anfrage.',
 );

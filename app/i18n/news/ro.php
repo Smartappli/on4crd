@@ -61,4 +61,13 @@ return array (
   'search' => 'Caută',
   'news_count_label' => 'Numărul de știri',
   'proposal_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
+  'invalid' => 'Cerere invalidă.',
+  'publish' => 'Publica',
+  'create' => 'Crea',
+  'published' => 'Știri înregistrate.',
+  'category_created_direct' => 'Tematică propusă și aprobată direct.',
+  'create_news' => 'Crea - Ştiri',
+  'create_category' => 'Crea - Rubrica',
+  'news_direct_help' => 'Știri înregistrate.',
+  'category_direct_help' => 'Tematica va fi aprobată direct.',
 );

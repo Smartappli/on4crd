@@ -102,4 +102,5 @@ Teagmháil:',
   'subcategory_field' => 'Fothopaic',
   'no_subcategory' => 'Gan fothopaic',
   'favorites' => 'Ceanáin',
+  'invalid' => 'Iarratas neamhbhailí.',
 );

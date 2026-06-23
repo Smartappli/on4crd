@@ -39,7 +39,7 @@ return array (
   'sent_results' => '%d mibgħuta / %d fallimenti',
   'send' => 'Ibgħat',
   'already_sent' => 'Diġà mibgħuta',
-  'email' => 'E-mail',
+  'email' => 'Indirizz elettroniku',
   'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Ebda abbonati.',
   'no_campaigns' => 'L-ebda kampanja.',

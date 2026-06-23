@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'メンバーエリア',
   'unavailable' => 'ページ初期化後にウィキが利用可能になります。',
+  'invalid' => '無効なリクエストです。',
   'new_pages' => '新しいページ',
   'updated_pages' => '更新されたページ',
   'most_read' => 'よく読まれているページ',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'サブトピック',
   'no_subcategory' => 'サブトピックなし',
   'favorites' => 'お気に入り',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'お気に入りに追加しました',
+  'favorite_removed' => 'お気に入りから削除しました',
+  'favorite_added_msg' => 'ページをお気に入りに追加しました。',
+  'favorite_removed_msg' => 'ページをお気に入りから削除しました。',
 );

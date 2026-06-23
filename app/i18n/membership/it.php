@@ -9,7 +9,7 @@ return array (
   'how_title' => 'Come si diventa membri del CRD?',
   'how_text' => 'Per prima cosa, invia una richiesta via e-mail (crdurnal@gmail.com) al CM (presidente del club) della sezione CRD.',
   'postal_title' => 'Richiesta per posta',
-  'contact_item_1' => 'Radio Club Durnal – Bocq Arena',
+  'contact_item_1' => 'Sede: Radio Club Durnal – Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',
   'required_title' => 'Informazioni obbligatorie nella richiesta',
   'required_item_1' => 'Nominativo (se assegnato) e data della prima licenza.',

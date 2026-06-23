@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Jäsenalue',
   'unavailable' => 'Wiki on käytettävissä sivujen alustamisen jälkeen.',
+  'invalid' => 'Virheellinen pyyntö.',
   'new_pages' => 'Uudet sivut',
   'updated_pages' => 'Muokatut sivut',
   'most_read' => 'Useimmat luetut',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'Ala-aihe',
   'no_subcategory' => 'Ei ala-aihetta',
   'favorites' => 'Suosikit',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Lisätty suosikkeihin',
+  'favorite_removed' => 'Poistettu suosikeista',
+  'favorite_added_msg' => 'Sivu lisätty suosikkeihin.',
+  'favorite_removed_msg' => 'Sivu poistettu suosikeista.',
 );

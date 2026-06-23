@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Espace Membre',
   'unavailable' => 'Le wiki sera disponible après initialisation des pages.',
+  'invalid' => 'Requête invalide.',
   'new_pages' => 'Nouvelles pages',
   'updated_pages' => 'Pages modifiées',
   'most_read' => 'Les plus lues',

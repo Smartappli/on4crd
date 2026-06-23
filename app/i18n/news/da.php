@@ -61,4 +61,13 @@ return array (
   'search' => 'Søg',
   'news_count_label' => 'Antal nyheder',
   'proposal_recorded' => 'Forslaget er gemt i dit indhold.',
+  'invalid' => 'Ugyldig anmodning.',
+  'publish' => 'Udgiv',
+  'create' => 'Opret',
+  'published' => 'Nyheder optaget.',
+  'category_created_direct' => 'Tema foreslået og godkendt direkte.',
+  'create_news' => 'Opret - Nyheder',
+  'create_category' => 'Opret - Rubrik',
+  'news_direct_help' => 'Nyheder optaget.',
+  'category_direct_help' => 'Temaet godkendes direkte.',
 );

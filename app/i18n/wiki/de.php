@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Mitgliederbereich',
   'unavailable' => 'Das Wiki ist nach der Initialisierung der Seiten verfügbar.',
+  'invalid' => 'Ungültige Anfrage.',
   'new_pages' => 'Neue Seiten',
   'updated_pages' => 'Aktualisierte Seiten',
   'most_read' => 'Am meisten gelesen',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'Unterthema',
   'no_subcategory' => 'Kein Unterthema',
   'favorites' => 'Favoriten',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Zu Favoriten hinzugefügt',
+  'favorite_removed' => 'Aus Favoriten entfernt',
+  'favorite_added_msg' => 'Seite zu Favoriten hinzugefügt.',
+  'favorite_removed_msg' => 'Seite aus Favoriten entfernt.',
 );

@@ -102,4 +102,5 @@ Contatto:',
   'subcategory_field' => 'Sottoargomento',
   'no_subcategory' => 'Nessun sottoargomento',
   'favorites' => 'Preferiti',
+  'invalid' => 'Richiesta non valida.',
 );

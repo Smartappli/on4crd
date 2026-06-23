@@ -47,6 +47,7 @@ return array (
   'tags' => 'Mots-clés',
   'open' => 'Ouvrir',
   'storage_unavailable' => 'La webothèque est temporairement indisponible.',
+  'forbidden' => 'Vous ne pouvez pas modifier ce lien.',
   'admin_title' => 'Administration – Webothèque',
   'add_link' => 'Ajouter un lien',
   'add_link_help' => 'Le lien sera visible uniquement dans la webothèque membre.',
@@ -60,6 +61,7 @@ return array (
   'ok_category_added' => 'Thématique proposée et validée directement.',
   'ok_subcategory_added' => 'Sous-thématique proposée et validée directement.',
   'ok_added' => 'Lien ajouté.',
+  'ok_updated' => 'Lien mis à jour.',
   'ok_deleted' => 'Lien supprimé.',
   'err_required' => 'Titre et URL requis.',
   'err_category' => 'Thématique invalide.',
@@ -95,4 +97,5 @@ return array (
   'category_deleted' => 'Thématique supprimée.',
   'err_category_has_documents' => 'Cette thématique contient encore des liens.',
   'err_category_has_subcategories' => 'Cette thématique contient encore des sous-thématiques.',
+  'administer' => 'Administrer',
 );

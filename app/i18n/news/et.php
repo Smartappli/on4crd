@@ -61,4 +61,13 @@ return array (
   'search' => 'Otsi',
   'news_count_label' => 'Uudiste arv',
   'proposal_recorded' => 'Ettepanek salvestati teie sisusse.',
+  'invalid' => 'Vigane päring.',
+  'publish' => 'Avalda',
+  'create' => 'Loo',
+  'published' => 'Uudised salvestatud.',
+  'category_created_direct' => 'Teema pakuti välja ja kinnitati otse.',
+  'create_news' => 'Loo - Uudised',
+  'create_category' => 'Loo - Rubriik',
+  'news_direct_help' => 'Uudised salvestatud.',
+  'category_direct_help' => 'Teema kinnitatakse otse.',
 );

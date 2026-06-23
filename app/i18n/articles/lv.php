@@ -102,4 +102,5 @@ Kontaktinformācija:',
   'subcategory_field' => 'Apakštēma',
   'no_subcategory' => 'Nav apakštēmas',
   'favorites' => 'Izlase',
+  'invalid' => 'Nederīgs pieprasījums.',
 );

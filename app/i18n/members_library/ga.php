@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Gach fo-théama',
   'no_subcategory' => 'Gan fo-théama',
   'propose_document_subcategory' => 'Fo-théama inmhianaithe',
+  'administer' => 'Riar',
 );

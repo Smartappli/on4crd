@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Visas apakštēmas',
   'no_subcategory' => 'Bez apakštēmas',
   'propose_document_subcategory' => 'Vēlamā apakštēma',
+  'administer' => 'Administrēt',
 );

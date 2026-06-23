@@ -20,6 +20,7 @@ return array (
   'title' => 'Titre',
   'description' => 'Description',
   'public_album' => 'Album public',
+  'featured_album' => 'Album à la une',
   'photo_title' => 'Titre photo',
   'caption' => 'Légende',
   'files_dropzone' => 'Fichiers image',

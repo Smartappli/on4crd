@@ -102,4 +102,5 @@ return array (
   'subcategory_field' => '副标题',
   'no_subcategory' => '无副主题',
   'favorites' => '收藏夹',
+  'invalid' => '无效请求。',
 );

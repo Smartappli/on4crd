@@ -61,4 +61,13 @@ return array (
   'search' => 'Hledat',
   'news_count_label' => 'Počet novinek',
   'proposal_recorded' => 'Návrh byl uložen do vašeho obsahu.',
+  'invalid' => 'Neplatný požadavek.',
+  'publish' => 'Publikovat',
+  'create' => 'Vytvořit',
+  'published' => 'Zprávy zaznamenány.',
+  'category_created_direct' => 'Téma bylo navrženo a přímo schváleno.',
+  'create_news' => 'Vytvořit - Novinky',
+  'create_category' => 'Vytvořit - Rubrika',
+  'news_direct_help' => 'Zprávy zaznamenány.',
+  'category_direct_help' => 'Téma bude schváleno přímo.',
 );

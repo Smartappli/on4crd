@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'delete_page') {
             if ($canModerateWiki) {
                 wiki_delete_page_record((int) $row['id']);
-                set_flash('success', $wikiViewText('delete_success', 'Page wiki supprimee.', 'Wiki page deleted.'));
+                set_flash('success', $wikiViewText('delete_success', 'Page wiki supprimée.', 'Wiki page deleted.'));
                 redirect_url(route_url('wiki'));
             }
 
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sourceRef,
                 'pending'
             );
-            content_proposal_notify_site($wikiViewText('delete_subject', 'Suppression wiki a valider', 'Wiki deletion pending review'), [
+            content_proposal_notify_site($wikiViewText('delete_subject', 'Suppression wiki à valider', 'Wiki deletion pending review'), [
                 'area' => 'wiki',
                 'proposal_type' => 'content',
                 'title' => (string) $row['title'],
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => (string) ($actingUser['email'] ?? ''),
                 'source_ref' => 'content_proposals#' . $proposalId . ' ' . $sourceRef,
             ]);
-            set_flash('success', $wikiViewText('change_recorded', 'Modification enregistree dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+            set_flash('success', $wikiViewText('change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
             redirect('my_requests');
         }
 
@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($wikiViewText('title_content_required', 'Le titre et le contenu sont obligatoires.', 'Title and content are required.'));
         }
         if (mb_strlen($title) > 190 || mb_strlen($slugInput) > 190 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($content) > 50000) {
-            throw new RuntimeException($wikiViewText('field_too_long', 'Un des champs depasse la longueur autorisee.', 'One field is too long.'));
+            throw new RuntimeException($wikiViewText('field_too_long', 'Un des champs dépasse la longueur autorisée.', 'One field is too long.'));
         }
 
         $targetSlugInput = $slugInput !== '' ? $slugInput : (string) $row['slug'];
@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw $throwable;
             }
 
-            set_flash('success', $wikiViewText('update_success', 'Page wiki mise a jour.', 'Wiki page updated.'));
+            set_flash('success', $wikiViewText('update_success', 'Page wiki mise à jour.', 'Wiki page updated.'));
             redirect_url(route_url('wiki_view', ['slug' => $slug]));
         }
 
@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, author_id, status, proposal_kind, source_page_id, target_slug) VALUES (?, ?, ?, ?, ?, ?, "pending", "modification", ?, ?)')
             ->execute([$title, $proposalSlug, $content, $category, $subcategory, (int) $actingUser['id'], (int) $row['id'], $targetSlug]);
 
-        set_flash('success', $wikiViewText('change_recorded', 'Modification enregistree dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+        set_flash('success', $wikiViewText('change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
         redirect('my_requests');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -326,8 +326,8 @@ ob_start();
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="delete_page">
                     <p class="help"><?= e($canModerateWiki
-                        ? $wikiViewText('delete_page_warning_admin', 'La suppression de cette page est definitive.', 'Deleting this page is permanent.')
-                        : $wikiViewText('delete_page_warning', 'La suppression de cette page sera appliquee apres validation.', 'Deleting this page will be applied after review.')) ?></p>
+                        ? $wikiViewText('delete_page_warning_admin', 'La suppression de cette page est définitive.', 'Deleting this page is permanent.')
+                        : $wikiViewText('delete_page_warning', 'La suppression de cette page sera appliquée après validation.', 'Deleting this page will be applied after review.')) ?></p>
                     <button class="button secondary wiki-page-danger" type="submit"><?= e($wikiViewText('delete_page', 'Supprimer la page', 'Delete page')) ?></button>
                 </form>
             </div>

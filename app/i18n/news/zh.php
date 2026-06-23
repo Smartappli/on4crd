@@ -61,4 +61,13 @@ return array (
   'search' => '去研究',
   'news_count_label' => '新闻数量',
   'proposal_recorded' => '建议已保存到你的内容中。',
+  'invalid' => '无效请求。',
+  'publish' => '发布',
+  'create' => '创造',
+  'published' => '新闻项目已保存。',
+  'category_created_direct' => '主题已提出并直接批准。',
+  'create_news' => '创造 - 新闻',
+  'create_category' => '创造 - 栏目',
+  'news_direct_help' => '新闻项目已保存。',
+  'category_direct_help' => '该主题将直接批准。',
 );

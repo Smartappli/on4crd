@@ -61,4 +61,13 @@ return array (
   'search' => 'Szukaj',
   'news_count_label' => 'Ilość nowości',
   'proposal_recorded' => 'Propozycja została zapisana w Twoich treściach.',
+  'invalid' => 'Nieprawidłowe żądanie.',
+  'publish' => 'Publikuj',
+  'create' => 'Utwórz',
+  'published' => 'Wiadomości nagrane.',
+  'category_created_direct' => 'Temat zaproponowany i zatwierdzony bezpośrednio.',
+  'create_news' => 'Utwórz - Wiadomości',
+  'create_category' => 'Utwórz - Rubryka',
+  'news_direct_help' => 'Wiadomości nagrane.',
+  'category_direct_help' => 'Temat zostanie zatwierdzony bezpośrednio.',
 );

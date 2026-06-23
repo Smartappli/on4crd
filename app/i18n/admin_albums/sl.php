@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Neveljaven album.',
   'uploaded_count' => 'dodanih fotografij.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Uvoz albuma končan',
+  'notification_import_completed_body' => 'Uvoženih %d fotografij.',
   'no_photo_imported' => 'Ni uvoženih fotografij.',
   'created_thumbs' => 'ustvarjenih sličic.',
   'manage_title' => 'Upravljanje albuma',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Naslov',
   'description' => 'Opis',
   'public_album' => 'Javni album',
+  'featured_album' => 'Izpostavljen album',
   'photo_title' => 'Naslov fotografije',
   'caption' => 'Legenda',
   'files_dropzone' => 'Slikovne datoteke',

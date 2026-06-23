@@ -61,4 +61,13 @@ return array (
   'search' => '検索',
   'news_count_label' => 'ニュース数',
   'proposal_recorded' => '提案はあなたのコンテンツに保存されました。',
+  'invalid' => '無効なリクエストです。',
+  'publish' => '公開',
+  'create' => '作成する',
+  'published' => 'ニュース項目が保存されました。',
+  'category_created_direct' => 'テーマが提案され、直接承認されました。',
+  'create_news' => '作成する - ニュース',
+  'create_category' => '作成する - カテゴリ',
+  'news_direct_help' => 'ニュース項目が保存されました。',
+  'category_direct_help' => 'テーマは直接承認されます。',
 );

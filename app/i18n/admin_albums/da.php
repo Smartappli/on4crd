@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Ugyldigt album.',
   'uploaded_count' => 'foto(r) tilføjet.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Albumimport fuldført',
+  'notification_import_completed_body' => '%d foto(s) importeret.',
   'no_photo_imported' => 'Ingen billeder importeret.',
   'created_thumbs' => 'genererede miniaturebilleder.',
   'manage_title' => 'Albumhåndtering',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Titel',
   'description' => 'Beskrivelse',
   'public_album' => 'Offentligt album',
+  'featured_album' => 'Fremhævet album',
   'photo_title' => 'Foto titel',
   'caption' => 'Legende',
   'files_dropzone' => 'Billedfiler',

@@ -1260,7 +1260,7 @@ function render_webotheque_cards(array $links, array $t, array $categories = [],
                 . '<input type="hidden" name="return_subcategory" value="' . e($returnSubcategory) . '">'
                 . '<input type="hidden" name="return_favorites" value="' . e($returnFavorites) . '">'
                 . '<input type="hidden" name="return_q" value="' . e($returnSearch) . '">'
-                . '<p class="help">' . e($text('delete_link_warning', 'La suppression du lien est definitive.')) . '</p>'
+                . '<p class="help">' . e($text('delete_link_warning', 'La suppression du lien est définitive.')) . '</p>'
                 . '<button class="button secondary webotheque-danger" type="submit">' . e($text('delete_link', $text('delete', 'Supprimer le lien'))) . '</button>'
                 . '</form></div></dialog>';
         }
@@ -1379,7 +1379,7 @@ function render_webotheque_page(): void
                             'subcategory' => (string) ($link['subcategory'] ?? ''),
                         ]);
                         $saved = favorite_toggle((int) $user['id'], 'webotheque_link', (int) $link['id'], $linkTitle, $favoriteUrl);
-                        notify_member((int) $user['id'], 'favorite', $saved ? (string) ($t['favorite_added'] ?? 'Favorite added') : (string) ($t['favorite_removed'] ?? 'Favorite removed'), $linkTitle, $favoriteUrl);
+                        notify_member((int) $user['id'], 'favorite', $saved ? (string) $t['favorite_added'] : (string) $t['favorite_removed'], $linkTitle, $favoriteUrl);
                         set_flash('success', $saved ? (string) ($t['favorite_added_msg'] ?? 'Link added to favorites.') : (string) ($t['favorite_removed_msg'] ?? 'Link removed from favorites.'));
                     }
                 }
@@ -1444,13 +1444,13 @@ function render_webotheque_page(): void
                         'contact' => $proposalContact,
                         'source_ref' => 'content_proposals#' . $proposalId . ' ' . (string) ($link['url'] ?? ''),
                     ]);
-                    set_flash('success', (string) ($t['proposal_recorded'] ?? 'Modification enregistree dans vos contenus en attente de validation.'));
+                    set_flash('success', (string) ($t['proposal_recorded'] ?? 'Modification enregistrée dans vos contenus en attente de validation.'));
                     redirect('my_requests');
                 }
 
                 if ($canAutoValidate) {
                     webotheque_update_link_record($linkId, $category, $title, $url, $description, $tags, $subcategory);
-                    set_flash('success', (string) ($t['ok_updated'] ?? 'Lien mis a jour.'));
+                    set_flash('success', (string) ($t['ok_updated'] ?? 'Lien mis à jour.'));
                     redirect_url($webothequeReturnUrl());
                 }
 
@@ -1471,7 +1471,7 @@ function render_webotheque_page(): void
                     'contact' => $proposalContact,
                     'source_ref' => 'content_proposals#' . $proposalId . ' ' . $url,
                 ]);
-                set_flash('success', (string) ($t['proposal_recorded'] ?? 'Modification enregistree dans vos contenus en attente de validation.'));
+                set_flash('success', (string) ($t['proposal_recorded'] ?? 'Modification enregistrée dans vos contenus en attente de validation.'));
                 redirect('my_requests');
             }
 
@@ -1627,7 +1627,7 @@ function render_webotheque_page(): void
     $showTagProposalForm = (string) ($_GET['propose_tag'] ?? '') === '1';
     $links = webotheque_fetch_links($search, $categoryFilter, 80, $subcategoryFilter, $favoritesOnly ? $favoriteLinkIds : []);
     $pendingWebothequeAdminUrl = route_url_clean('admin_webotheque', ['status' => 'pending']) . '#pending-proposals';
-    $pendingWebothequeAdminLabel = $locale === 'fr' ? 'Administrer' : 'Manage';
+    $pendingWebothequeAdminLabel = (string) $t['administer'];
 
     ob_start();
     ?>
@@ -1998,7 +1998,7 @@ function render_admin_webotheque_page(): void
                 }
 
                 webotheque_update_link_record($linkId, $category, $title, $url, $description, $tags, $subcategory);
-                set_flash('success', (string) ($t['ok_updated'] ?? 'Lien mis a jour.'));
+                set_flash('success', (string) ($t['ok_updated'] ?? 'Lien mis à jour.'));
                 redirect_url($webothequeAdminReturnUrl());
             }
             if ($action === 'update_proposal_status') {

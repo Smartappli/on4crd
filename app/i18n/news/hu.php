@@ -61,4 +61,13 @@ return array (
   'search' => 'Keresés',
   'news_count_label' => 'Hírek száma',
   'proposal_recorded' => 'A javaslat mentve lett a tartalmai közé.',
+  'invalid' => 'Érvénytelen kérés.',
+  'publish' => 'Közzététel',
+  'create' => 'Létrehozása',
+  'published' => 'Felvett hírek.',
+  'category_created_direct' => 'A téma javasolva és közvetlenül jóváhagyva.',
+  'create_news' => 'Létrehozása - Hírek',
+  'create_category' => 'Létrehozása - Rubrika',
+  'news_direct_help' => 'Felvett hírek.',
+  'category_direct_help' => 'A téma közvetlenül jóvá lesz hagyva.',
 );

@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'すべてのサブトピック',
   'no_subcategory' => 'サブトピックなし',
   'propose_document_subcategory' => '希望するサブトピック',
+  'administer' => '管理',
 );

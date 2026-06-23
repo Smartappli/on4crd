@@ -102,4 +102,5 @@ Kapcsolat:',
   'subcategory_field' => 'Altéma',
   'no_subcategory' => 'Nincs altéma',
   'favorites' => 'Kedvencek',
+  'invalid' => 'Érvénytelen kérés.',
 );

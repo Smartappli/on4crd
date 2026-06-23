@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'كل الموضوعات الفرعية',
   'no_subcategory' => 'بدون موضوع فرعي',
   'propose_document_subcategory' => 'الموضوع الفرعي المطلوب',
+  'administer' => 'إدارة',
 );

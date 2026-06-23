@@ -61,4 +61,13 @@ return array (
   'search' => 'Ieškoti',
   'news_count_label' => 'Naujienų skaičius',
   'proposal_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
+  'invalid' => 'Netinkama užklausa.',
+  'publish' => 'Paskelbti',
+  'create' => 'Sukurti',
+  'published' => 'Naujienos įrašytos.',
+  'category_created_direct' => 'Tema pasiūlyta ir patvirtinta tiesiogiai.',
+  'create_news' => 'Sukurti - Naujienos',
+  'create_category' => 'Sukurti - Rubrika',
+  'news_direct_help' => 'Naujienos įrašytos.',
+  'category_direct_help' => 'Tema bus patvirtinta tiesiogiai.',
 );

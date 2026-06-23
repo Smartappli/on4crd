@@ -9,7 +9,7 @@ return array (
   'members' => 'članovi',
   'th_callsign' => 'Indikativno',
   'th_name' => 'Ime',
-  'th_email' => 'E-mail',
+  'th_email' => 'E-adresa',
   'th_locator' => 'Lokator',
   'th_active' => 'Aktivno',
   'th_committee' => 'Povjerenstvo',

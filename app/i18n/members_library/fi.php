@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Kaikki alateemat',
   'no_subcategory' => 'Ei alateemaa',
   'propose_document_subcategory' => 'Toivottu alateema',
+  'administer' => 'Hallinnoi',
 );

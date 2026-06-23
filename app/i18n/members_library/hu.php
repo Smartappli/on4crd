@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Minden altéma',
   'no_subcategory' => 'Nincs altéma',
   'propose_document_subcategory' => 'Kívánt altéma',
+  'administer' => 'Adminisztrálás',
 );

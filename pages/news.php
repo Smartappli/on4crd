@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $summaryText = content_proposal_clean_multiline($proposalSummaryRaw, 1800);
                 $sourceText = content_proposal_clean_single_line($proposalSource, 500);
                 if ($title === '' || $summaryText === '') {
-                    throw new RuntimeException((string) ($newsT['invalid'] ?? 'Invalid request.'));
+                    throw new RuntimeException((string) $newsT['invalid']);
                 }
                 $sectionId = news_default_section_id();
                 if ($sectionId <= 0) {
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 cache_forget('news_categories_v2');
                 cache_forget('news_archives_v1');
                 cache_forget('home_latest_news_v1');
-                set_flash('success', (string) ($newsT['published'] ?? 'Actualité publiée.'));
+                set_flash('success', (string) $newsT['published']);
                 redirect_url(route_url('news_view', ['slug' => $slug]));
             }
             $proposalId = content_proposal_create((int) $user['id'], 'news', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalSource);
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
                 'source_ref' => 'content_proposals#' . $proposalId,
             ]);
-            set_flash('success', (string) ($newsT['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            set_flash('success', (string) $newsT['proposal_recorded']);
             redirect('my_requests');
         }
 
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($autoAccept) {
                 $categoryName = content_proposal_clean_single_line($proposalTitle, 160);
                 if ($categoryName === '') {
-                    throw new RuntimeException((string) ($newsT['invalid'] ?? 'Invalid request.'));
+                    throw new RuntimeException((string) $newsT['invalid']);
                 }
                 $slug = news_slug_base($categoryName, 100);
                 db()->prepare(
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                      ON DUPLICATE KEY UPDATE name = VALUES(name)'
                 )->execute([$slug, $categoryName]);
                 cache_forget('news_categories_v2');
-                set_flash('success', 'Categorie creee et validee directement.');
+                set_flash('success', (string) $newsT['category_created_direct']);
                 redirect_url(route_url_clean('news', ['category' => $slug]));
             }
             $proposalId = content_proposal_create((int) $user['id'], 'news', 'category', $proposalTitle, $proposalSummary, $proposalContact);
@@ -115,11 +115,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
                 'source_ref' => 'content_proposals#' . $proposalId,
             ]);
-            set_flash('success', (string) ($newsT['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            set_flash('success', (string) $newsT['proposal_recorded']);
             redirect('my_requests');
         }
 
-        throw new RuntimeException((string) ($newsT['invalid'] ?? 'Invalid request.'));
+        throw new RuntimeException((string) $newsT['invalid']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect_url(route_url('news'));
@@ -273,8 +273,8 @@ ob_start();
             </article>
         </div>
         <div class="news-hero-actions" aria-label="<?= e((string) $newsT['news_actions']) ?>">
-            <a class="button" href="<?= e($newsProposalUrl) ?>" data-news-proposal-open="news-proposal-dialog" aria-haspopup="dialog" aria-controls="news-proposal-dialog"><?= e($canModerateNews ? 'Créer une actualité' : (string) $newsT['propose_news']) ?></a>
-            <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-news-proposal-open="news-category-proposal-dialog" aria-haspopup="dialog" aria-controls="news-category-proposal-dialog"><?= e($canModerateNews ? 'Créer une rubrique' : (string) $newsT['propose_category']) ?></a>
+            <a class="button" href="<?= e($newsProposalUrl) ?>" data-news-proposal-open="news-proposal-dialog" aria-haspopup="dialog" aria-controls="news-proposal-dialog"><?= e($canModerateNews ? (string) $newsT['create_news'] : (string) $newsT['propose_news']) ?></a>
+            <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-news-proposal-open="news-category-proposal-dialog" aria-haspopup="dialog" aria-controls="news-category-proposal-dialog"><?= e($canModerateNews ? (string) $newsT['create_category'] : (string) $newsT['propose_category']) ?></a>
         </div>
     </div>
 </section>
@@ -284,8 +284,8 @@ ob_start();
         <div class="news-proposal-dialog-header module-dialog-header">
             <div>
                 <p class="news-hero-title module-dialog-eyebrow"><?= e((string) $newsT['latest_news']) ?></p>
-                <h2 id="news-proposal-title"><?= e($canModerateNews ? 'Créer une actualité' : (string) $newsT['propose_news']) ?></h2>
-                <p class="help"><?= e($canModerateNews ? 'Votre actualité sera publiée directement.' : (string) $newsT['propose_news_intro']) ?></p>
+                <h2 id="news-proposal-title"><?= e($canModerateNews ? (string) $newsT['create_news'] : (string) $newsT['propose_news']) ?></h2>
+                <p class="help"><?= e($canModerateNews ? (string) $newsT['news_direct_help'] : (string) $newsT['propose_news_intro']) ?></p>
             </div>
             <button class="news-proposal-dialog-close module-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
         </div>
@@ -313,7 +313,7 @@ ob_start();
                 </label>
             </div>
             <div class="news-proposal-dialog-actions module-dialog-actions">
-                <button class="button" type="submit"><?= e($canModerateNews ? 'Publier' : (string) $newsT['proposal_submit']) ?></button>
+                <button class="button" type="submit"><?= e($canModerateNews ? (string) $newsT['publish'] : (string) $newsT['proposal_submit']) ?></button>
                 <button class="button secondary" type="button" data-news-proposal-close><?= e((string) $newsT['proposal_cancel']) ?></button>
             </div>
         </form>
@@ -325,8 +325,8 @@ ob_start();
         <div class="news-proposal-dialog-header module-dialog-header">
             <div>
                 <p class="news-hero-title module-dialog-eyebrow"><?= e((string) $newsT['category']) ?></p>
-                <h2 id="news-category-proposal-title"><?= e($canModerateNews ? 'Créer une rubrique' : (string) $newsT['propose_category']) ?></h2>
-                <p class="help"><?= e($canModerateNews ? 'La rubrique sera validee directement.' : (string) $newsT['propose_category_intro']) ?></p>
+                <h2 id="news-category-proposal-title"><?= e($canModerateNews ? (string) $newsT['create_category'] : (string) $newsT['propose_category']) ?></h2>
+                <p class="help"><?= e($canModerateNews ? (string) $newsT['category_direct_help'] : (string) $newsT['propose_category_intro']) ?></p>
             </div>
             <button class="news-proposal-dialog-close module-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
         </div>
@@ -348,7 +348,7 @@ ob_start();
                 <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
             </label>
             <div class="news-proposal-dialog-actions module-dialog-actions">
-                <button class="button" type="submit"><?= e($canModerateNews ? 'Créer' : (string) $newsT['proposal_submit']) ?></button>
+                <button class="button" type="submit"><?= e($canModerateNews ? (string) $newsT['create'] : (string) $newsT['proposal_submit']) ?></button>
                 <button class="button secondary" type="button" data-news-proposal-close><?= e((string) $newsT['proposal_cancel']) ?></button>
             </div>
         </form>

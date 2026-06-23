@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Atšaukti',
   'propose_event_close' => 'Uždaryti',
   'proposal_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
+  'invalid' => 'Netinkama užklausa.',
+  'event_published_direct' => 'Pasiūlymas išsaugotas jūsų turinyje.',
 );

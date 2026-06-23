@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => '会员专区',
   'unavailable' => '页面初始化后 维基 将可用。',
+  'invalid' => '请求无效。',
   'new_pages' => '新页面',
   'updated_pages' => '已更新页面',
   'most_read' => '阅读最多',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => '副标题',
   'no_subcategory' => '无副主题',
   'favorites' => '收藏夹',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => '已加入收藏',
+  'favorite_removed' => '已从收藏移除',
+  'favorite_added_msg' => '页面已加入收藏。',
+  'favorite_removed_msg' => '页面已从收藏移除。',
 );

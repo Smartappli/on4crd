@@ -20,6 +20,7 @@ return array (
   'title' => 'Title',
   'description' => 'Description',
   'public_album' => 'Public album',
+  'featured_album' => 'Featured album',
   'photo_title' => 'Photo title',
   'caption' => 'Caption',
   'files_dropzone' => 'Image files',

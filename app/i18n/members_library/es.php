@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Todos los subtemas',
   'no_subcategory' => 'Sin subtema',
   'propose_document_subcategory' => 'Subtema deseado',
+  'administer' => 'Administrar',
 );

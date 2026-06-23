@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Annuleren',
   'propose_event_close' => 'Sluiten',
   'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
+  'invalid' => 'Ongeldig verzoek.',
+  'event_published_direct' => 'Voorstel opgeslagen in uw inhoud.',
 );

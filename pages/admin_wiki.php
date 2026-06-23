@@ -191,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "wiki"')
                 ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
-            set_flash('success', $tr('proposal_status_saved', 'Proposition wiki mise a jour.'));
+            set_flash('success', $tr('proposal_status_saved', 'Proposition wiki mise à jour.'));
             redirect_url($pendingProposalUrl);
         }
 
@@ -462,7 +462,7 @@ ob_start();
                     <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
                 </p>
                 <h3><?= e((string) ($proposal['title'] ?? $tr('proposal_default_title', 'Proposition'))) ?></h3>
-                <p class="help"><?= e($tr('proposal_author', 'Propose par')) ?>: <?= e($memberLabel) ?></p>
+                <p class="help"><?= e($tr('proposal_author', 'Proposé par')) ?>: <?= e($memberLabel) ?></p>
                 <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
                     <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
                 <?php endif; ?>
@@ -482,7 +482,7 @@ ob_start();
                                 <?php endforeach; ?>
                             </select>
                         </label>
-                        <label><?= e($tr('proposal_moderation_note', 'Note de moderation')) ?>
+                        <label><?= e($tr('proposal_moderation_note', 'Note de modération')) ?>
                             <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
                         </label>
                     </div>

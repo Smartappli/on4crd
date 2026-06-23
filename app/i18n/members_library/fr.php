@@ -88,4 +88,5 @@ return array (
   'propose_tag_reason' => 'Pourquoi ajouter ce mot-clé ?',
   'tag_direct_help' => 'Le mot-clé sera validé directement.',
   'tag_created_direct' => 'Mot-clé proposé et validé directement.',
+  'administer' => 'Administrer',
 );

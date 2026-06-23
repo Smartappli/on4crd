@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Alla underämnen',
   'no_subcategory' => 'Inget underämne',
   'propose_document_subcategory' => 'Önskat underämne',
+  'administer' => 'Administrera',
 );

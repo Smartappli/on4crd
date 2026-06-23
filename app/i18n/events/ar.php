@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'إلغاء',
   'propose_event_close' => 'إغلاق',
   'proposal_recorded' => 'تم حفظ الاقتراح في محتواك.',
+  'invalid' => 'طلب غير صالح.',
+  'event_published_direct' => 'تم حفظ الاقتراح في محتواك.',
 );

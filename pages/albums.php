@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => (string) ($user['email'] ?? ''),
                 'source_ref' => 'content_proposals#' . $proposalId . ' ' . $sourceRef,
             ]);
-            set_flash('success', $albumText('album_change_recorded', 'Modification enregistree dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+            set_flash('success', $albumText('album_change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
             redirect('my_requests');
         }
 
@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ? albums_page_post_checkbox('album_is_featured', 0)
                 : albums_page_post_checkbox('album_is_featured', null, 'is_featured');
             album_update_record($albumId, $title, $description, null, $category, $subcategory, $isFeatured);
-            set_flash('success', $albumText('album_updated_ok', 'Album mis a jour.', 'Album updated.'));
+            set_flash('success', $albumText('album_updated_ok', 'Album mis à jour.', 'Album updated.'));
             redirect_url($returnUrl);
         }
 
@@ -163,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'contact' => (string) ($user['email'] ?? ''),
             'source_ref' => 'content_proposals#' . $proposalId . ' ' . $sourceRef,
         ]);
-        set_flash('success', $albumText('album_change_recorded', 'Modification enregistree dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+        set_flash('success', $albumText('album_change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
         redirect('my_requests');
     }
 
@@ -249,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'contact' => $contact,
             'source_ref' => 'content_proposals#' . $proposalId . ' ' . $sourceRef,
         ]);
-        set_flash('success', 'Proposition enregistree dans vos contenus. Ajoutez maintenant vos photos.');
+        set_flash('success', $albumText('proposal_album_recorded_continue', 'Proposition enregistrée dans vos contenus. Ajoutez maintenant vos photos.', 'Proposal saved in your content area. Add your photos now.'));
         redirect_url($sourceRef . '#album-upload');
     }
 
@@ -285,7 +285,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'contact' => $proposalContact,
             'source_ref' => 'content_proposals#' . $proposalId,
         ]);
-        set_flash('success', 'Proposition enregistree dans vos contenus.');
+        set_flash('success', $albumText('proposal_recorded', 'Proposition enregistrée dans vos contenus.', 'Proposal saved in your content area.'));
         redirect('my_requests');
     }
 
@@ -325,7 +325,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'contact' => $proposalContact,
             'source_ref' => 'content_proposals#' . $proposalId,
         ]);
-        set_flash('success', 'Proposition enregistree dans vos contenus.');
+        set_flash('success', $albumText('proposal_recorded', 'Proposition enregistrée dans vos contenus.', 'Proposal saved in your content area.'));
         redirect('my_requests');
     }
 
@@ -561,15 +561,15 @@ ob_start();
             </div>
             <div class="actions albums-hero-actions">
                 <details class="albums-propose-menu">
-                    <summary class="button" aria-haspopup="menu">Proposer</summary>
+                    <summary class="button" aria-haspopup="menu"><?= e($albumText('propose_menu', 'Proposer', 'Propose')) ?></summary>
                     <div class="albums-propose-menu-panel" role="menu">
-                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumProposalUrl) ?>">Un album</a>
-                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumCategoryProposalUrl) ?>">Une thématique</a>
-                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumSubcategoryProposalUrl) ?>">Une sous thématique</a>
+                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumProposalUrl) ?>"><?= e($albumText('propose_album_item', 'Un album', 'An album')) ?></a>
+                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumCategoryProposalUrl) ?>"><?= e($albumText('propose_category_item', 'Une thématique', 'A topic')) ?></a>
+                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumSubcategoryProposalUrl) ?>"><?= e($albumText('propose_subcategory_item', 'Une sous-thématique', 'A subtopic')) ?></a>
                     </div>
                 </details>
                 <?php if ($canManageAlbums): ?>
-                    <a class="button secondary" href="<?= e(route_url('admin_albums')) ?>">Administrer</a>
+                    <a class="button secondary" href="<?= e(route_url('admin_albums')) ?>"><?= e($albumText('administer', 'Administrer', 'Administer')) ?></a>
                 <?php endif; ?>
             </div>
         </div>
@@ -577,12 +577,12 @@ ob_start();
 
     <?php if ($showAlbumProposalForm): ?>
     <section class="card">
-        <h2>Proposer un album</h2>
-        <p class="help"><?= e($canManageAlbums ? 'L album sera public directement.' : 'Votre proposition sera envoyee en validation et visible dans Mes contenus.') ?></p>
+        <h2><?= e($albumText('propose_album_title', 'Proposer un album', 'Suggest an album')) ?></h2>
+        <p class="help"><?= e($canManageAlbums ? $albumText('proposal_direct_help', 'L’album sera public directement.', 'The album will be public immediately.') : $albumText('proposal_pending_help', 'Votre proposition sera envoyée en validation et visible dans Mes contenus.', 'Your proposal will be sent for review and visible in My content.')) ?></p>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="propose_album">
-            <label><span>Titre</span><input type="text" name="proposal_title" maxlength="190" required></label>
+            <label><span><?= e($albumText('title_label', 'Titre', 'Title')) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
             <label><span><?= e((string) ($t['category_field'] ?? 'Thématique')) ?></span>
                 <select name="proposal_theme">
                     <?php foreach ($albumCategories as $albumThemeCode => $albumThemeLabel): ?>
@@ -604,12 +604,12 @@ ob_start();
                     <?php endforeach; ?>
                 </select>
             </label>
-            <label><span>Mots clés</span><input type="text" name="proposal_keywords" maxlength="255"></label>
-            <label><span>Description</span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
-            <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+            <label><span><?= e($albumText('keywords_label', 'Mots-clés', 'Keywords')) ?></span><input type="text" name="proposal_keywords" maxlength="255"></label>
+            <label><span><?= e($albumText('description_label', 'Description', 'Description')) ?></span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
+            <label><span><?= e($albumText('contact_label', 'Contact', 'Contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">
-                <button class="button" type="submit"><?= e($canManageAlbums ? 'Créer' : 'Envoyer la proposition') ?></button>
-                <a class="button secondary" href="<?= e(route_url('albums')) ?>">Annuler</a>
+                <button class="button" type="submit"><?= e($canManageAlbums ? $albumText('create_album_submit', 'Créer', 'Create') : $albumText('proposal_submit', 'Envoyer la proposition', 'Submit proposal')) ?></button>
+                <a class="button secondary" href="<?= e(route_url('albums')) ?>"><?= e($albumText('cancel', 'Annuler', 'Cancel')) ?></a>
             </p>
         </form>
     </section>
@@ -617,17 +617,17 @@ ob_start();
 
     <?php if ($showAlbumCategoryProposalForm): ?>
     <section class="card" id="album-category-proposal">
-        <h2>Proposer une thématique</h2>
-        <p class="help"><?= e($canManageAlbums ? 'La thématique sera validée directement.' : 'Votre proposition sera envoyée en validation et visible dans Mes contenus.') ?></p>
+        <h2><?= e($albumText('propose_category_title', 'Proposer une thématique', 'Suggest a topic')) ?></h2>
+        <p class="help"><?= e($canManageAlbums ? $albumText('category_direct_help', 'La thématique sera validée directement.', 'The topic will be validated immediately.') : $albumText('category_pending_help', 'Votre proposition sera envoyée en validation et visible dans Mes contenus.', 'Your proposal will be sent for review and visible in My content.')) ?></p>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="propose_category">
-            <label><span>Nom de la thématique</span><input type="text" name="proposal_category_name" maxlength="160" required></label>
-            <label><span>Description</span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
-            <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+            <label><span><?= e($albumText('proposal_category_name_label', 'Nom de la thématique', 'Topic name')) ?></span><input type="text" name="proposal_category_name" maxlength="160" required></label>
+            <label><span><?= e($albumText('description_label', 'Description', 'Description')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
+            <label><span><?= e($albumText('contact_label', 'Contact', 'Contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">
-                <button class="button" type="submit"><?= e($canManageAlbums ? 'Créer' : 'Envoyer la proposition') ?></button>
-                <a class="button secondary" href="<?= e(route_url('albums')) ?>">Annuler</a>
+                <button class="button" type="submit"><?= e($canManageAlbums ? $albumText('create_category_submit', 'Créer', 'Create') : $albumText('proposal_submit', 'Envoyer la proposition', 'Submit proposal')) ?></button>
+                <a class="button secondary" href="<?= e(route_url('albums')) ?>"><?= e($albumText('cancel', 'Annuler', 'Cancel')) ?></a>
             </p>
         </form>
     </section>
@@ -635,24 +635,24 @@ ob_start();
 
     <?php if ($showAlbumSubcategoryProposalForm): ?>
     <section class="card" id="album-subcategory-proposal">
-        <h2>Proposer une sous thématique</h2>
-        <p class="help"><?= e($canManageAlbums ? 'La sous thématique sera validée directement.' : 'Votre proposition sera envoyée en validation et visible dans Mes contenus.') ?></p>
+        <h2><?= e($albumText('propose_subcategory_title', 'Proposer une sous-thématique', 'Suggest a subtopic')) ?></h2>
+        <p class="help"><?= e($canManageAlbums ? $albumText('subcategory_direct_help', 'La sous-thématique sera validée directement.', 'The subtopic will be validated immediately.') : $albumText('subcategory_pending_help', 'Votre proposition sera envoyée en validation et visible dans Mes contenus.', 'Your proposal will be sent for review and visible in My content.')) ?></p>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="propose_subcategory">
-            <label><span>Thématique parente</span>
+            <label><span><?= e($albumText('parent_category_label', 'Thématique parente', 'Parent topic')) ?></span>
                 <select name="proposal_parent_category" required>
                     <?php foreach ($albumCategories as $albumThemeCode => $albumThemeLabel): ?>
                         <option value="<?= e((string) $albumThemeCode) ?>"><?= e((string) $albumThemeLabel) ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
-            <label><span>Nom de la sous thématique</span><input type="text" name="proposal_subcategory_name" maxlength="160" required></label>
-            <label><span>Description</span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
-            <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+            <label><span><?= e($albumText('proposal_subcategory_name_label', 'Nom de la sous-thématique', 'Subtopic name')) ?></span><input type="text" name="proposal_subcategory_name" maxlength="160" required></label>
+            <label><span><?= e($albumText('description_label', 'Description', 'Description')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
+            <label><span><?= e($albumText('contact_label', 'Contact', 'Contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">
-                <button class="button" type="submit"><?= e($canManageAlbums ? 'Créer' : 'Envoyer la proposition') ?></button>
-                <a class="button secondary" href="<?= e(route_url('albums')) ?>">Annuler</a>
+                <button class="button" type="submit"><?= e($canManageAlbums ? $albumText('create_subcategory_submit', 'Créer', 'Create') : $albumText('proposal_submit', 'Envoyer la proposition', 'Submit proposal')) ?></button>
+                <a class="button secondary" href="<?= e(route_url('albums')) ?>"><?= e($albumText('cancel', 'Annuler', 'Cancel')) ?></a>
             </p>
         </form>
     </section>
@@ -822,7 +822,7 @@ ob_start();
                                 <div class="album-dialog-header module-dialog-header">
                                     <div>
                                         <p class="module-dialog-eyebrow"><?= e((string) $t['albums']) ?></p>
-                                        <h2 id="<?= e($editDialogId) ?>-title"><?= e($albumText('edit_album_title', 'Modifier l album', 'Edit album')) ?></h2>
+                                        <h2 id="<?= e($editDialogId) ?>-title"><?= e($albumText('edit_album_title', 'Modifier l’album', 'Edit album')) ?></h2>
                                         <p class="help"><?= e($albumTitle) ?></p>
                                     </div>
                                     <button class="album-dialog-close module-dialog-close" type="button" data-album-modal-close aria-label="<?= e($albumText('close', 'Fermer', 'Close')) ?>">&times;</button>
@@ -858,9 +858,9 @@ ob_start();
                                     <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                     <input type="hidden" name="return_p" value="<?= $page ?>">
                                     <p class="help"><?= e($canManageAlbums
-                                        ? $albumText('delete_album_warning_admin', 'La suppression de cet album et de ses photos est definitive.', 'Deleting this album and its photos is permanent.')
-                                        : $albumText('delete_album_warning', 'La suppression de cet album sera appliquee apres validation.', 'Deleting this album will be applied after review.')) ?></p>
-                                    <button class="button secondary album-danger" type="submit"><?= e($albumText('delete_album', 'Supprimer l album', 'Delete album')) ?></button>
+                                        ? $albumText('delete_album_warning_admin', 'La suppression de cet album et de ses photos est définitive.', 'Deleting this album and its photos is permanent.')
+                                        : $albumText('delete_album_warning', 'La suppression de cet album sera appliquée après validation.', 'Deleting this album will be applied after review.')) ?></p>
+                                    <button class="button secondary album-danger" type="submit"><?= e($albumText('delete_album', 'Supprimer l’album', 'Delete album')) ?></button>
                                 </form>
                             </div>
                         </dialog>

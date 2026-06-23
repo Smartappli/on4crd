@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Зона за членове',
   'unavailable' => 'Уикита ще бъде достъпно след инициализиране на страниците.',
+  'invalid' => 'Невалидна заявка.',
   'new_pages' => 'Нови страници',
   'updated_pages' => 'Модифицирани страници',
   'most_read' => 'Най-четени',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'Подтема',
   'no_subcategory' => 'Няма подтема',
   'favorites' => 'Любими',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Добавено в любими',
+  'favorite_removed' => 'Премахнато от любими',
+  'favorite_added_msg' => 'Страницата е добавена в любими.',
+  'favorite_removed_msg' => 'Страницата е премахната от любими.',
 );

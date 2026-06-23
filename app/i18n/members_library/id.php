@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Semua subtopik',
   'no_subcategory' => 'Tanpa subtopik',
   'propose_document_subcategory' => 'Subtopik yang diinginkan',
+  'administer' => 'Kelola',
 );

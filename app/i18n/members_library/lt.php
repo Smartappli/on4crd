@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Visos potemės',
   'no_subcategory' => 'Be potemės',
   'propose_document_subcategory' => 'Pageidaujama potemė',
+  'administer' => 'Administruoti',
 );

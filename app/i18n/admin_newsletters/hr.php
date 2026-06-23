@@ -39,7 +39,7 @@ return array (
   'sent_results' => '%d poslano / %d kvarovi',
   'send' => 'poslati',
   'already_sent' => 'Već poslano',
-  'email' => 'E-mail',
+  'email' => 'E-adresa',
   'csv_ph' => 'e-pošta \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Nema pretplatnika.',
   'no_campaigns' => 'Nema kampanje.',

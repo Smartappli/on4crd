@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Persberichten',
   'full_name' => 'Volledige naam',
   'role' => 'Rol',
-  'email' => 'E-mail',
+  'email' => 'E-mailadres',
   'phone' => 'Telefoon',
   'notes' => 'Notities',
   'order' => 'Volgorde',

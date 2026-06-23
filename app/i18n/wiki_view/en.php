@@ -1,4 +1,33 @@
 <?php
 declare(strict_types=1);
 
-return ['not_found' => 'Wiki page not found.', 'edit' => 'Edit', 'layout' => 'Wiki', 'meta_desc' => 'View a wiki page.', 'history' => 'History', 'no_revisions' => 'No previous revisions.', 'favorite_added' => 'Favorite added', 'favorite_removed' => 'Favorite removed', 'favorite_added_msg' => 'Page added to favorites.', 'favorite_removed_msg' => 'Page removed from favorites.'];
+return array (
+  'not_found' => 'Wiki page not found.',
+  'edit' => 'Edit',
+  'layout' => 'Wiki',
+  'meta_desc' => 'View a wiki page.',
+  'history' => 'History',
+  'no_revisions' => 'No previous revisions.',
+  'favorite_added' => 'Favorite added',
+  'favorite_removed' => 'Favorite removed',
+  'favorite_added_msg' => 'Page added to favorites.',
+  'favorite_removed_msg' => 'Page removed from favorites.',
+  'forbidden' => 'You cannot edit this page.',
+  'delete_success' => 'Wiki page deleted.',
+  'delete_subject' => 'Wiki deletion pending review',
+  'change_recorded' => 'Proposal saved in your content area.',
+  'title_content_required' => 'Title and content are required.',
+  'field_too_long' => 'One of the fields exceeds the allowed length.',
+  'update_success' => 'Wiki page saved.',
+  'edit_page' => 'Edit / Delete',
+  'edit_page_title' => 'Edit wiki',
+  'close' => 'Close',
+  'title_label' => 'Title',
+  'slug_label' => 'Slug',
+  'content_label' => 'Content (simple HTML)',
+  'save_page' => 'Save',
+  'cancel' => 'Cancel',
+  'delete_page_warning' => 'Deleting this page will be applied after review.',
+  'delete_page_warning_admin' => 'Deleting this page is permanent.',
+  'delete_page' => 'Delete page',
+);

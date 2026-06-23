@@ -9,7 +9,7 @@ return array (
   'members' => 'tagok',
   'th_callsign' => 'Tájékoztató',
   'th_name' => 'Név',
-  'th_email' => 'E-mail',
+  'th_email' => 'E-mail-cím',
   'th_locator' => 'Kereső',
   'th_active' => 'Aktív',
   'th_committee' => 'bizottság',

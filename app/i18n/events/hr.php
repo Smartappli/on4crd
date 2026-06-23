@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -38,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Odustani',
   'propose_event_close' => 'Zatvori',
   'proposal_recorded' => 'Prijedlog je spremljen u vašim sadržajima.',
+  'invalid' => 'Nevažeći zahtjev.',
+  'event_published_direct' => 'Prijedlog je spremljen u vašim sadržajima.',
 );

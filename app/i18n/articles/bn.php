@@ -102,4 +102,5 @@ return array (
   'subcategory_field' => 'সাবটপিক',
   'no_subcategory' => 'কোন সাবটপিক নেই',
   'favorites' => 'প্রিয়',
+  'invalid' => 'অবৈধ অনুরোধ।',
 );

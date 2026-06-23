@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Avbryt',
   'propose_event_close' => 'Stäng',
   'proposal_recorded' => 'Förslaget har sparats i ditt innehåll.',
+  'invalid' => 'Ogiltig begäran.',
+  'event_published_direct' => 'Förslaget har sparats i ditt innehåll.',
 );

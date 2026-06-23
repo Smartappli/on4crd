@@ -102,4 +102,5 @@ Kontakt:',
   'subcategory_field' => 'Podtema',
   'no_subcategory' => 'Nema podteme',
   'favorites' => 'Favoriti',
+  'invalid' => 'Nevažeći zahtjev.',
 );

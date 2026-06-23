@@ -102,4 +102,5 @@ Kontakt:',
   'subcategory_field' => 'Underemne',
   'no_subcategory' => 'Intet underemne',
   'favorites' => 'Favoritter',
+  'invalid' => 'Ugyldig anmodning.',
 );

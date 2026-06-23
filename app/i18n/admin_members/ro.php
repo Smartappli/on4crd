@@ -9,7 +9,7 @@ return array (
   'members' => 'Membrii',
   'th_callsign' => 'Indicativ',
   'th_name' => 'Nume',
-  'th_email' => 'E-mail',
+  'th_email' => 'Adresă e-mail',
   'th_locator' => 'Localizator',
   'th_active' => 'Activ',
   'th_committee' => 'Comitet',

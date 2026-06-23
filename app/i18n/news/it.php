@@ -61,4 +61,13 @@ return array (
   'search' => 'Fare ricerca',
   'news_count_label' => 'Numero di notizie',
   'proposal_recorded' => 'Proposta salvata nei tuoi contenuti.',
+  'invalid' => 'Richiesta non valida.',
+  'publish' => 'Pubblica',
+  'create' => 'Crea',
+  'published' => 'Notizia salvata.',
+  'category_created_direct' => 'Tematica proposta e approvata direttamente.',
+  'create_news' => 'Crea - Notizie',
+  'create_category' => 'Crea - Rubrica',
+  'news_direct_help' => 'Notizia salvata.',
+  'category_direct_help' => 'La tematica sarà approvata direttamente.',
 );

@@ -39,7 +39,7 @@ return array (
   'sent_results' => 'Wysłano %d / awarie %d',
   'send' => 'Wyślij',
   'already_sent' => 'Już wysłane',
-  'email' => 'E-mail',
+  'email' => 'Adres e-mail',
   'csv_ph' => 'e-mail\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Brak subskrybentów.',
   'no_campaigns' => 'Brak kampanii.',

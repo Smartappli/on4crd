@@ -102,4 +102,5 @@ Contacto:',
   'subcategory_field' => 'Subtópico',
   'no_subcategory' => 'Nenhum subtópico',
   'favorites' => 'Favoritos',
+  'invalid' => 'Pedido inválido.',
 );

@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Δελτία τύπου',
   'full_name' => 'Πλήρες όνομα',
   'role' => 'Ρόλος',
-  'email' => 'E-mail',
+  'email' => 'Διεύθυνση e-mail',
   'phone' => 'Τηλέφωνο',
   'notes' => 'Σημειώσεις',
   'order' => 'Παραγγελία',

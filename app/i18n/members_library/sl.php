@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'Vse podteme',
   'no_subcategory' => 'Brez podteme',
   'propose_document_subcategory' => 'Želena podtema',
+  'administer' => 'Upravljaj',
 );

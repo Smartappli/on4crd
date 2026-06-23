@@ -39,7 +39,7 @@ return array (
   'sent_results' => '%d elküldve / %d hibák',
   'send' => 'Küldés',
   'already_sent' => 'Már elküldve',
-  'email' => 'E-mail',
+  'email' => 'E-mail-cím',
   'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Nincsenek előfizetők.',
   'no_campaigns' => 'Nincs kampány.',

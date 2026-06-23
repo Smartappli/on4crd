@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'キャンセル',
   'propose_event_close' => '閉じる',
   'proposal_recorded' => '提案はあなたのコンテンツに保存されました。',
+  'invalid' => '無効なリクエストです。',
+  'event_published_direct' => '提案はあなたのコンテンツに保存されました。',
 );

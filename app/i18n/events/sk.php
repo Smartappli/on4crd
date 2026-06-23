@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'Zrušiť',
   'propose_event_close' => 'Zavrieť',
   'proposal_recorded' => 'Návrh bol uložený vo vašom obsahu.',
+  'invalid' => 'Neplatná požiadavka.',
+  'event_published_direct' => 'Návrh bol uložený vo vašom obsahu.',
 );

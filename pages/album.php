@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         verify_csrf();
         try {
             if (!$canUploadAlbumPhotos) {
-                throw new RuntimeException($albumText('album_forbidden', 'Vous ne pouvez pas ajouter de photos a cet album.', 'You cannot add photos to this album.'));
+                throw new RuntimeException($albumText('album_forbidden', 'Vous ne pouvez pas ajouter de photos à cet album.', 'You cannot add photos to this album.'));
             }
 
             $uploadResult = album_store_uploaded_photos(
@@ -286,8 +286,8 @@ ob_start();
     <?php if ($canUploadAlbumPhotos): ?>
     <section class="card album-upload-panel" id="album-upload">
         <div>
-            <h2><?= e($albumText('upload_photos_title', 'Ajouter des photos a l album', 'Add photos to the album')) ?></h2>
-            <p class="help"><?= e($albumText('upload_photos_help', 'Votre album reste prive jusqu a validation. Vous pouvez ajouter plusieurs images avant l examen.', 'The album stays private until review. You can add several images before approval.')) ?></p>
+            <h2><?= e($albumText('upload_photos_title', 'Ajouter des photos à l’album', 'Add photos to the album')) ?></h2>
+            <p class="help"><?= e($albumText('upload_photos_help', 'Votre album reste privé jusqu’à validation. Vous pouvez ajouter plusieurs images avant l’examen.', 'The album stays private until review. You can add several images before approval.')) ?></p>
         </div>
         <form method="post" enctype="multipart/form-data" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">

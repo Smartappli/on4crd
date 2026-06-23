@@ -102,4 +102,5 @@ Kontakt:',
   'subcategory_field' => 'Underämne',
   'no_subcategory' => 'Inget underämne',
   'favorites' => 'Favoriter',
+  'invalid' => 'Ogiltig begäran.',
 );

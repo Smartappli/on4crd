@@ -102,4 +102,5 @@ Kontakt:',
   'subcategory_field' => 'Podtema',
   'no_subcategory' => 'Ni podteme',
   'favorites' => 'Priljubljene',
+  'invalid' => 'Neveljavna zahteva.',
 );

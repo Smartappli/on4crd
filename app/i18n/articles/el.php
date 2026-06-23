@@ -102,4 +102,5 @@ return array (
   'subcategory_field' => 'Υποθέμα',
   'no_subcategory' => 'Χωρίς υποθέμα',
   'favorites' => 'Αγαπημένα',
+  'invalid' => 'Μη έγκυρο αίτημα.',
 );

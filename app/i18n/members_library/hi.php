@@ -88,4 +88,5 @@ return array (
   'all_subcategories' => 'सभी उपविषय',
   'no_subcategory' => 'कोई उपविषय नहीं',
   'propose_document_subcategory' => 'वांछित उपविषय',
+  'administer' => 'प्रशासित करें',
 );

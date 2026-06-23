@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Virheellinen albumi.',
   'uploaded_count' => 'valokuva(t) lisätty.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Albumin tuonti valmis',
+  'notification_import_completed_body' => '%d kuvaa tuotu.',
   'no_photo_imported' => 'Kuvia ei tuotu.',
   'created_thumbs' => 'luodut pikkukuvat.',
   'manage_title' => 'Albumin hallinta',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Otsikko',
   'description' => 'Kuvaus',
   'public_album' => 'Julkinen albumi',
+  'featured_album' => 'Nostettu albumi',
   'photo_title' => 'Valokuvan otsikko',
   'caption' => 'Legenda',
   'files_dropzone' => 'Kuvatiedostot',

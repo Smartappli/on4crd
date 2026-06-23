@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Netinkamas albumas.',
   'uploaded_count' => 'pridėta (-os) nuotrauka (-os).',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Albumo importavimas baigtas',
+  'notification_import_completed_body' => 'Importuota %d nuotraukų.',
   'no_photo_imported' => 'Neimportuota jokių nuotraukų.',
   'created_thumbs' => 'sugeneruota (-os) miniatiūra (-os).',
   'manage_title' => 'Albumo tvarkymas',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Pavadinimas',
   'description' => 'Aprašymas',
   'public_album' => 'Viešas albumas',
+  'featured_album' => 'Išskirtinis albumas',
   'photo_title' => 'Nuotraukos pavadinimas',
   'caption' => 'Legenda',
   'files_dropzone' => 'Vaizdo failai',

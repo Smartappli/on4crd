@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Členská sekce',
   'unavailable' => 'Wiki bude k dispozici po inicializaci stránek.',
+  'invalid' => 'Neplatný požadavek.',
   'new_pages' => 'Nové stránky',
   'updated_pages' => 'Upravené stránky',
   'most_read' => 'Nejčtenější',
@@ -44,8 +45,8 @@ return array (
   'subcategory_field' => 'Podtéma',
   'no_subcategory' => 'Žádné podtéma',
   'favorites' => 'Oblíbené',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Přidáno do oblíbených',
+  'favorite_removed' => 'Odebráno z oblíbených',
+  'favorite_added_msg' => 'Stránka přidána do oblíbených.',
+  'favorite_removed_msg' => 'Stránka odebrána z oblíbených.',
 );

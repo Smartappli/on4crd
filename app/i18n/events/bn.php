@@ -37,4 +37,6 @@ return array (
   'propose_event_cancel' => 'বাতিল',
   'propose_event_close' => 'বন্ধ করুন',
   'proposal_recorded' => 'প্রস্তাবটি আপনার কনটেন্টে সংরক্ষিত হয়েছে।',
+  'invalid' => 'অবৈধ অনুরোধ।',
+  'event_published_direct' => 'প্রস্তাবটি আপনার কনটেন্টে সংরক্ষিত হয়েছে।',
 );
