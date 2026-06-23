@@ -12,6 +12,7 @@ const {
   loginAsAdmin,
   requireAdminCredentials,
   ensureSeleniumRunnable,
+  writeTinyPngFixture,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -262,7 +263,7 @@ $webTitle = 'Selenium webotheque ' . $token;
 $webId = webotheque_insert_link($memberId, 'general', $webTitle, 'https://example.org/' . strtolower($token), 'Web ' . $token, 'selenium,' . $token, '');
 
 echo json_encode([
-    'article' => ['id' => $articleId, 'title' => $articleTitle],
+    'article' => ['id' => $articleId, 'slug' => $articleSlug, 'title' => $articleTitle],
     'wiki' => ['id' => $wikiId, 'title' => $wikiTitle],
     'album' => ['id' => $albumId, 'title' => $albumTitle],
     'webotheque' => ['id' => $webId, 'title' => $webTitle],
@@ -289,6 +290,20 @@ async function submitFavorite(driver, route, query, action, idName, targetId) {
   await visit(driver, route, query);
   const form = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="${action}"] and .//input[@name="${idName}" and @value="${targetId}"]]`));
   await submitForm(driver, form);
+}
+
+function albumPhotoCount(albumId) {
+  return Number(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$albumId = (int) getenv('SELENIUM_ALBUM_ID');
+if ($albumId <= 0 || !table_exists('album_photos')) {
+    echo 0;
+    return;
+}
+$stmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
+$stmt->execute([$albumId]);
+echo (int) ($stmt->fetchColumn() ?: 0);
+`, { SELENIUM_ALBUM_ID: String(albumId) }).trim());
 }
 
 async function submitProposal(driver, route, query, action, fields) {
@@ -410,6 +425,48 @@ test('Selenium membre/public: favoris articles, wiki, albums et webotheque', asy
         await submitFavorite(driver, route, { favorites: '1' }, action, idName, targetId);
         assert.equal(favoriteSaved(Number(member.id), type, Number(targetId)), false, `${type} doit etre retire des favoris.`);
       }
+    } finally {
+      cleanupCoverageRows(token);
+    }
+  });
+});
+
+test('Selenium membre/public: detail article et album couvrent favoris et upload photos', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  const token = `SELENIUMDETAIL${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+  const member = memberByCallsign(credentials.username.toUpperCase());
+  cleanupCoverageRows(token);
+  const fixtures = prepareFavoriteFixtures(token, Number(member.id));
+  const photoFixture = writeTinyPngFixture(`${token.toLowerCase()}-album-detail.png`);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+
+      await visit(driver, 'article', { slug: fixtures.article.slug });
+      const articleFavoriteForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="toggle_favorite"]]'));
+      await submitForm(driver, articleFavoriteForm);
+      assert.equal(favoriteSaved(Number(member.id), 'article', Number(fixtures.article.id)), true, 'Le detail article doit ajouter le favori.');
+
+      await visit(driver, 'album', { id: fixtures.album.id });
+      const albumFavoriteForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="toggle_favorite"]]'));
+      await submitForm(driver, albumFavoriteForm);
+      assert.equal(favoriteSaved(Number(member.id), 'album', Number(fixtures.album.id)), true, 'Le detail album doit ajouter le favori.');
+
+      const beforePhotos = albumPhotoCount(fixtures.album.id);
+      await visit(driver, 'album', { id: fixtures.album.id });
+      const uploadForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="upload_album_photos"]]'));
+      await setFieldValue(driver, await uploadForm.findElement(By.css('textarea[name="caption"]')), `Photo detail ${token}`);
+      await uploadForm.findElement(By.css('input[type="file"][name="photos[]"]')).sendKeys(photoFixture);
+      await submitForm(driver, uploadForm);
+      assert.equal(albumPhotoCount(fixtures.album.id), beforePhotos + 1, 'Le detail album doit accepter l upload de photo.');
     } finally {
       cleanupCoverageRows(token);
     }
