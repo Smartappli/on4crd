@@ -15,6 +15,11 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       snippets: ['bulk_update_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
     },
     {
+      label: 'article editor preview restore and delete',
+      file: 'tests/selenium/admin-articles-wiki-workflow.test.js',
+      snippets: ['save_article', 'preview_article', 'restore_revision', 'delete_article'],
+    },
+    {
       label: 'news moderation and managers',
       file: 'tests/selenium/admin-maintenance-coverage.test.js',
       snippets: ['moderate_post', 'assign_section_manager'],
@@ -68,6 +73,16 @@ test('Selenium admin: contrats des actions hors propositions', () => {
       label: 'event create update and feeds',
       file: 'tests/selenium/admin-content-workflows.test.js',
       snippets: ['admin_events', 'event_view', 'events_feed', "format: 'ics'"],
+    },
+    {
+      label: 'wiki taxonomy and status',
+      file: 'tests/selenium/admin-articles-wiki-workflow.test.js',
+      snippets: ['admin_wiki', 'update_page_status', 'delete_subcategory', 'delete_category'],
+    },
+    {
+      label: 'album maintenance and photos',
+      file: 'tests/selenium/admin-maintenance-coverage.test.js',
+      snippets: ['rebuild_thumbnails', 'update_photo', 'delete_photo', 'reorder_photo'],
     },
     {
       label: 'auction lot create update and bid',
