@@ -751,7 +751,7 @@ async function updateAndDeleteAlbum(driver, fixture, token) {
   await replaceVisibleFieldText(driver, await editForm.findElement(By.css('input[name="title"]')), updatedTitle);
   await replaceVisibleFieldText(driver, await editForm.findElement(By.css('textarea[name="description"]')), updatedDescription);
   await setCheckbox(driver, await editForm.findElement(By.css('input[type="checkbox"][name="is_public"]')), true);
-  const featuredCheckboxes = await editForm.findElements(By.css('input[type="checkbox"][name="album_is_featured"]'));
+  const featuredCheckboxes = await editForm.findElements(By.css('input[type="checkbox"][name^="album_is_featured"]'));
   let expectedFeatured = Number(albumRecord(fixture.id)?.is_featured || 0);
   if (featuredCheckboxes.length > 0) {
     await setCheckbox(driver, featuredCheckboxes[0], true);

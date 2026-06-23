@@ -199,11 +199,19 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
         `, descriptionEditor, descriptionTextarea, albumDescription);
       }
       if (process.env.SELENIUM_CREATE_PUBLIC_ALBUM === '1') {
-        const publicCheckbox = await wizardForm.findElement(By.css('input[name="is_public"]'));
+        const publicCheckbox = await wizardForm.findElement(By.css('input[type="checkbox"][name="is_public"]'));
         if (!(await publicCheckbox.isSelected())) {
           await publicCheckbox.click();
         }
       }
+      const featuredCheckbox = await wizardForm.findElement(By.css('input[type="checkbox"][name^="album_is_featured"]'));
+      assert.equal(await featuredCheckbox.isSelected(), false, 'Le wizard ne doit pas cocher l album a la une par defaut.');
+      await driver.executeScript(`
+        const checkbox = arguments[0];
+        checkbox.checked = true;
+        checkbox.dispatchEvent(new Event('input', { bubbles: true }));
+        checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+      `, featuredCheckbox);
       await submitForm(driver, wizardForm);
       const createdState = albumCreationState(title);
       assert.ok(createdState.id > 0, 'L album cree par l assistant doit exister en base avant l upload.');
@@ -212,7 +220,7 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
       assert.equal(createdState.category, 'general', 'La categorie par defaut du wizard doit etre persistee.');
       assert.equal(createdState.subcategory, '', 'Aucune sous-categorie ne doit etre forcee par le wizard.');
       assert.equal(createdState.is_public, 0, 'Un album cree dans le wizard reste prive avant finalisation.');
-      assert.equal(createdState.is_featured, 0, 'Le wizard ne doit pas marquer l album a la une par defaut.');
+      assert.equal(createdState.is_featured, 1, 'Le choix album a la une du wizard doit etre persiste en base.');
       assert.equal(
         createdState.publish_requested,
         expectedPublicAfterFinalize,
