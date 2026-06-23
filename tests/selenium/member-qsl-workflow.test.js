@@ -420,6 +420,25 @@ test('Selenium membre QSL: import ADIF, generation groupee et fonds avances', as
       await activateQslPanel(driver, 'manage');
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(qsoCall, 'i'), 'La carte generee depuis ADIF doit etre visible dans la gestion QSL.');
+
+      await visit(driver, 'qsl', { qso_search: qsoCall });
+      await activateQslPanel(driver, 'manage');
+      const deleteQsoButton = await driver.findElement(By.xpath(`//tr[.//*[contains(translate(normalize-space(.), "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"), "${qsoCall.toUpperCase()}")]]//button[@name="delete_qso_id"]`));
+      const deleteQsoForm = await deleteQsoButton.findElement(By.xpath('ancestor::form[1]'));
+      await driver.executeScript(`
+        const form = arguments[0];
+        const button = arguments[1];
+        if (typeof form.requestSubmit === 'function') {
+          form.requestSubmit(button);
+        } else {
+          button.click();
+        }
+      `, deleteQsoForm, deleteQsoButton);
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
+
+      state = qslState(qsoCall, token);
+      assert.equal(state.qsos.length, 0, 'La suppression QSO doit retirer le QSO importe.');
     } finally {
       cleanupQslToken(qsoCall, token);
     }

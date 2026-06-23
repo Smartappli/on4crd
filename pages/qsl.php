@@ -193,6 +193,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 set_flash('error', $qt('err_qso_none'));
             }
+        } elseif ($action === 'delete_qso' || isset($_POST['delete_qso_id'])) {
+            $qsoId = (int) ($_POST['delete_qso_id'] ?? ($_POST['qso_id'] ?? 0));
+            $stmt = db()->prepare('DELETE FROM qso_logs WHERE id = ? AND member_id = ? LIMIT 1');
+            $stmt->execute([$qsoId, $memberId]);
+            set_flash('success', $qt('ok_qso_deleted'));
         } elseif ($action === 'generate_batch') {
             $ids = array_map('intval', $_POST['qso_ids'] ?? []);
             $templateName = ((string) ($_POST['qsl_template_name'] ?? 'classic')) === 'classic_duplex' ? 'classic_duplex' : 'classic';
@@ -251,11 +256,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $svg,
             ]);
             set_flash('success', $qt('ok_qsl_created'));
-        } elseif ($action === 'delete_qso' || isset($_POST['delete_qso_id'])) {
-            $qsoId = (int) ($_POST['delete_qso_id'] ?? ($_POST['qso_id'] ?? 0));
-            $stmt = db()->prepare('DELETE FROM qso_logs WHERE id = ? AND member_id = ? LIMIT 1');
-            $stmt->execute([$qsoId, $memberId]);
-            set_flash('success', $qt('ok_qso_deleted'));
         } elseif ($action === 'delete_qsl') {
             $stmt = db()->prepare('DELETE FROM qsl_cards WHERE id = ? AND member_id = ? LIMIT 1');
             $stmt->execute([(int) ($_POST['qsl_id'] ?? 0), $memberId]);

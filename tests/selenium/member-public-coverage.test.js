@@ -172,6 +172,12 @@ if ($albumIds !== []) {
     }
     $deleteByIds('albums', 'id', $albumIds);
 }
+if (table_exists('album_subcategories')) {
+    db()->prepare('DELETE FROM album_subcategories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+if (table_exists('album_categories')) {
+    db()->prepare('DELETE FROM album_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
 
 $webIds = $idsFor('member_webotheque_links', 'title LIKE ? OR url LIKE ? OR description LIKE ? OR tags LIKE ?', [$like, $like, $like, $like]);
 if ($webIds !== []) {
@@ -180,6 +186,12 @@ if ($webIds !== []) {
         db()->prepare('DELETE FROM member_favorites WHERE target_type = "webotheque_link" AND target_id IN (' . $placeholders . ')')->execute($webIds);
     }
     $deleteByIds('member_webotheque_links', 'id', $webIds);
+}
+if (table_exists('member_webotheque_subcategories')) {
+    db()->prepare('DELETE FROM member_webotheque_subcategories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+if (table_exists('member_webotheque_categories')) {
+    db()->prepare('DELETE FROM member_webotheque_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
 }
 
 if (table_exists('member_module_subcategories')) {
@@ -508,6 +520,10 @@ test('Selenium membre/public: detail wiki couvre modification et suppression adm
       await loginAsAdmin(driver, credentials.username, credentials.password);
 
       await visit(driver, 'wiki_view', { slug: fixtures.wiki.slug });
+      const favoriteForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="toggle_favorite"]]'));
+      await submitForm(driver, favoriteForm);
+      assert.equal(favoriteSaved(Number(member.id), 'wiki_page', Number(fixtures.wiki.id)), true, 'Le detail wiki doit ajouter le favori.');
+
       const updateForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="update_page"]]'));
       await setFieldValue(driver, await updateForm.findElement(By.css('input[name="title"]')), updatedTitle);
       await setFieldValue(driver, await updateForm.findElement(By.css('input[name="slug"]')), updatedSlug);
@@ -599,9 +615,36 @@ test('Selenium membre/public: propositions et auto-publications des modules publ
         proposal_description: `Album proposal description ${token}`,
         proposal_contact: contact,
       });
+      await submitProposal(driver, 'albums', { propose_category: '1' }, 'propose_category', {
+        proposal_category_name: `Album category ${token}`,
+        proposal_reason: `Album category reason ${token}`,
+        proposal_contact: contact,
+      });
+      await submitProposal(driver, 'albums', { propose_subcategory: '1' }, 'propose_subcategory', {
+        proposal_parent_category: 'general',
+        proposal_subcategory_name: `Album subcategory ${token}`,
+        proposal_reason: `Album subcategory reason ${token}`,
+        proposal_contact: contact,
+      });
       await submitProposal(driver, 'webotheque', { propose_domain: '1' }, 'propose_domain', {
         proposal_domain: `Web domain ${token}`,
         proposal_details: `Web domain details ${token}`,
+        proposal_contact: contact,
+      });
+      await visit(driver, 'webotheque');
+      const webothequeCsrf = await firstCsrfToken(driver);
+      const webothequeCategoryResponse = await postBrowserForm(driver, routeUrl('webotheque'), {
+        _csrf: webothequeCsrf,
+        action: 'propose_category',
+        proposal_category: `Web category alias ${token}`,
+        proposal_details: `Web category alias details ${token}`,
+        proposal_contact: contact,
+      });
+      assert.equal(webothequeCategoryResponse.ok, true, `La proposition webotheque propose_category doit repondre: ${webothequeCategoryResponse.status}`);
+      await submitProposal(driver, 'webotheque', { propose_subcategory: '1' }, 'propose_subcategory', {
+        proposal_parent_category: 'general',
+        proposal_subcategory: `Web subcategory ${token}`,
+        proposal_details: `Web subcategory details ${token}`,
         proposal_contact: contact,
       });
       await submitProposal(driver, 'webotheque', { propose_tag: '1' }, 'propose_tag', {

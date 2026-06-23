@@ -444,6 +444,63 @@ echo json_encode($stmt->fetchColumn() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNE
   });
 });
 
+test('Selenium membre newsletter: abonnement et desabonnement depuis la page dediee', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const member = memberByCallsign(credentials.username.toUpperCase());
+  const newsletterBefore = captureNewsletterRows(member.id);
+  const token = `selenium-newsletter-${Date.now()}`;
+  const email = `${token}@example.test`;
+
+  await withSelenium(t, async (driver) => {
+    try {
+      restoreNewsletterRows(member.id, [], token);
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      await visit(driver, 'newsletter');
+
+      const subscribeAction = await driver.findElement(By.css('input[name="action"][value="subscribe"]'));
+      const subscribeForm = await subscribeAction.findElement(By.xpath('ancestor::form[1]'));
+      await setFieldValue(driver, await subscribeForm.findElement(By.css('input[name="email"]')), email);
+      await setCheckbox(driver, await subscribeForm.findElement(By.css('input[name="newsletter_consent"]')), true);
+      await submitForm(driver, subscribeForm);
+
+      let newsletterStatus = seleniumJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/newsletter.php';
+newsletter_ensure_tables();
+$stmt = db()->prepare('SELECT email, status, source FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
+$stmt->execute([(int) getenv('SELENIUM_MEMBER_ID'), (string) getenv('SELENIUM_EMAIL')]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_MEMBER_ID: String(member.id), SELENIUM_EMAIL: email });
+      assert.ok(newsletterStatus, 'La page newsletter doit creer un abonnement membre.');
+      assert.equal(newsletterStatus.status, 'active', 'La page newsletter doit activer l abonnement.');
+      assert.equal(newsletterStatus.source, 'member', 'La source de l abonnement doit etre la page newsletter membre.');
+
+      await visit(driver, 'newsletter');
+      const unsubscribeAction = await driver.findElement(By.css('input[name="action"][value="unsubscribe"]'));
+      await submitForm(driver, await unsubscribeAction.findElement(By.xpath('ancestor::form[1]')));
+
+      newsletterStatus = seleniumJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/newsletter.php';
+newsletter_ensure_tables();
+$stmt = db()->prepare('SELECT status FROM newsletter_subscribers WHERE member_id = ? AND email = ? LIMIT 1');
+$stmt->execute([(int) getenv('SELENIUM_MEMBER_ID'), (string) getenv('SELENIUM_EMAIL')]);
+echo json_encode($stmt->fetchColumn() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_MEMBER_ID: String(member.id), SELENIUM_EMAIL: email });
+      assert.equal(newsletterStatus, 'unsubscribed', 'La page newsletter doit permettre le desabonnement.');
+    } finally {
+      restoreNewsletterRows(member.id, newsletterBefore, token);
+    }
+  });
+});
+
 test('Selenium membre dashboard: widgets, rendu AJAX, sauvegarde et retour au catalogue', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {

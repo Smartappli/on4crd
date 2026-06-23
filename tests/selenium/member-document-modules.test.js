@@ -171,6 +171,9 @@ for (const moduleCode of ['pv', 'fichiers']) {
         text = await pagePlainText(driver);
         assert.match(text, new RegExp(title), `Le document ${moduleCode} doit etre consultable cote membre.`);
 
+        const favoriteForm = await driver.findElement(By.xpath(`//article[contains(@class,"member-document-card")][.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="toggle_favorite_document"]]`));
+        await submitForm(driver, favoriteForm);
+
         const downloadUrl = routeUrl('member_document_preview', { module: moduleCode, id: document.id, download: '1' });
         assert.match(await fetchAuthenticatedText(driver, downloadUrl), new RegExp(fixtureText), `Le telechargement ${moduleCode} doit renvoyer le fichier uploade.`);
 
@@ -324,6 +327,10 @@ for (const moduleCode of ['presentations', 'videos']) {
         let text = await pagePlainText(driver);
         assert.match(text, new RegExp(title), `Le document ${moduleCode} cree cote membre doit etre visible.`);
 
+        const favoriteForm = await driver.findElement(By.xpath(`//article[contains(@class,"member-document-card")][.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="toggle_favorite_document"]]`));
+        await submitForm(driver, favoriteForm);
+
+        await visit(driver, moduleCode, { q: title });
         const editForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="update_document"]]`));
         await setFieldValue(driver, await editForm.findElement(By.css('input[name="title"]')), updatedTitle);
         await setFieldValue(driver, await editForm.findElement(By.css('textarea[name="description"]')), `Document ${moduleCode} modifie cote membre.`);

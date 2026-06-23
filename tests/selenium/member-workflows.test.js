@@ -280,7 +280,40 @@ test('Selenium membre: creer, modifier et vendre une petite annonce', async (t) 
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(updatedTitle), 'Le titre modifie doit apparaitre dans Mes annonces.');
 
-      const statusForm = await driver.findElement(By.xpath(`//article[contains(@class,"classifieds-my-card")][.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[contains(@class,"classifieds-status-form")]`));
+      let statusForm = await driver.findElement(By.xpath(`//article[contains(@class,"classifieds-my-card")][.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[contains(@class,"classifieds-status-form")]`));
+      await driver.executeScript(`
+        const form = arguments[0];
+        const button = form.querySelector('button[name="status"][value="active"]');
+        if (typeof form.requestSubmit === 'function') {
+          form.requestSubmit(button);
+        } else {
+          button.click();
+        }
+      `, statusForm);
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
+
+      text = await pagePlainText(driver);
+      assert.match(text, /actif|active|en ligne/i, 'Le statut actif doit etre visible apres reactualisation.');
+
+      statusForm = await driver.findElement(By.xpath(`//article[contains(@class,"classifieds-my-card")][.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[contains(@class,"classifieds-status-form")]`));
+      const renewButton = await statusForm.findElement(By.css('button[name="action"][value="renew"]'));
+      await driver.executeScript(`
+        const form = arguments[0];
+        const button = arguments[1];
+        if (typeof form.requestSubmit === 'function') {
+          form.requestSubmit(button);
+        } else {
+          button.click();
+        }
+      `, statusForm, renewButton);
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
+
+      text = await pagePlainText(driver);
+      assert.match(text, /renouvel|renew|actif|active|en ligne/i, 'Le renouvellement doit rester visible apres action renew.');
+
+      statusForm = await driver.findElement(By.xpath(`//article[contains(@class,"classifieds-my-card")][.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[contains(@class,"classifieds-status-form")]`));
       await driver.executeScript(`
         const form = arguments[0];
         const button = form.querySelector('button[name="status"][value="sold"]');

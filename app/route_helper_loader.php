@@ -22,7 +22,7 @@ function app_route_helper_map(): array
         'member_module_documents.php' => ['my_requests', 'presentations', 'videos', 'pv', 'fichiers', 'telechargements', 'member_document_preview', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_fichiers', 'admin_telechargements'],
         'member_webotheque.php' => ['webotheque', 'admin_webotheque'],
         'knowledge_helpers.php' => ['chatbot'],
-        'member_favorites.php' => ['dashboard', 'members_library', 'webotheque', 'presentations', 'wiki', 'wiki_view', 'articles', 'article', 'albums', 'album', 'classifieds'],
+        'member_favorites.php' => ['dashboard', 'members_library', 'webotheque', 'presentations', 'videos', 'pv', 'fichiers', 'telechargements', 'wiki', 'wiki_view', 'articles', 'article', 'albums', 'album', 'classifieds'],
         'member_preferences.php' => ['dashboard', 'settings'],
         'member_recommendations.php' => ['settings'],
         'notifications.php' => ['dashboard', 'notifications', 'articles', 'article', 'albums', 'album', 'classifieds', 'members_library', 'admin_articles', 'admin_albums', 'admin_classifieds', 'admin_library', 'admin_news'],
