@@ -349,6 +349,15 @@ function member_area_eyebrow_label(?string $locale = null): string
 }
 }
 
+if (!function_exists('i18n_error_text')) {
+function i18n_error_text(string $key, string $fallback = ''): string
+{
+    $messages = i18n_domain_locale('errors', current_locale());
+
+    return (string) ($messages[$key] ?? ($fallback !== '' ? $fallback : $key));
+}
+}
+
 if (!function_exists('module_hero_latest_stat_text')) {
 function module_hero_latest_stat_text(string $key, ?string $locale = null): string
 {

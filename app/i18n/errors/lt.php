@@ -22,4 +22,13 @@ return array (
   'tools_link' => 'Radijo įrankiai',
   'tools_hint' => 'Atverkite praktinius radijo mėgėjų įrankius.',
   'module_unavailable' => 'Modulis nepasiekiamas.',
+  'slug_article_unique_failed' => 'Unable to generate a unique article slug.',
+  'slug_wiki_unique_failed' => 'Unable to generate a unique wiki slug.',
+  'slug_news_unique_failed' => 'Unable to generate a unique news slug.',
+  'slug_event_unique_failed' => 'Unable to generate a unique event slug.',
+  'storage_path_invalid' => 'Invalid storage path.',
+  'storage_path_forbidden' => 'Storage path is not allowed.',
+  'remote_url_private' => 'The remote URL points to a private or reserved network.',
+  'remote_url_private_resolved' => 'The remote URL resolves to a private or reserved IP address.',
+  'field_too_long' => 'Vienas iš laukų viršija leistiną ilgį.',
 );
