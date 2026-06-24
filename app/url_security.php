@@ -89,7 +89,7 @@ function validate_remote_feed_url(string $url): ?string
 
     $host = strtolower((string) parse_url($normalized, PHP_URL_HOST));
     if ($host === '' || host_resolves_to_private_network($host)) {
-        throw new RuntimeException("L'URL distante pointe vers un réseau privé ou réservé.");
+        throw new RuntimeException(i18n_error_text('remote_url_private', 'The remote URL points to a private or reserved network.'));
     }
 
     $dnsRecords = @dns_get_record($host, DNS_A + DNS_AAAA);
@@ -97,7 +97,7 @@ function validate_remote_feed_url(string $url): ?string
         foreach ($dnsRecords as $record) {
             $ip = (string) ($record['ip'] ?? $record['ipv6'] ?? '');
             if ($ip !== '' && is_private_or_reserved_ip($ip)) {
-                throw new RuntimeException("L'URL distante résout vers une IP privée/réservée.");
+                throw new RuntimeException(i18n_error_text('remote_url_private_resolved', 'The remote URL resolves to a private or reserved IP address.'));
             }
         }
     }

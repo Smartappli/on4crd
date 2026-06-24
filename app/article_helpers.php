@@ -640,7 +640,7 @@ function article_unique_slug(string $value, int $ignoreId = 0, int $maxLength = 
         $suffix++;
     } while ($suffix < 10000);
 
-    throw new RuntimeException('Impossible de générer un slug article unique.');
+    throw new RuntimeException(i18n_error_text('slug_article_unique_failed', 'Unable to generate a unique article slug.'));
 }
 
 /**

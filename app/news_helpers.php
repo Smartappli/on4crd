@@ -86,7 +86,7 @@ function news_unique_slug(string $value, int $ignoreId = 0, int $maxLength = 190
         $suffix++;
     } while ($suffix < 10000);
 
-    throw new RuntimeException('Impossible de générer un slug actualité unique.');
+    throw new RuntimeException(i18n_error_text('slug_news_unique_failed', 'Unable to generate a unique news slug.'));
 }
 
 function news_default_section_id(): int

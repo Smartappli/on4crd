@@ -49,7 +49,7 @@ function events_public_unique_slug(string $title, int $ignoreId = 0, int $maxLen
         $suffix++;
     } while ($suffix < 10000);
 
-    throw new RuntimeException('Impossible de générer un slug événement unique.');
+    throw new RuntimeException(i18n_error_text('slug_event_unique_failed', 'Unable to generate a unique event slug.'));
 }
 }
 

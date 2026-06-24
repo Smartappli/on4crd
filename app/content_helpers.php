@@ -336,7 +336,7 @@ function wiki_unique_slug(string $title, string $slugInput = '', int $ignoreId =
         $suffix++;
     } while ($suffix < 10000);
 
-    throw new RuntimeException('Impossible de générer un slug wiki unique.');
+    throw new RuntimeException(i18n_error_text('slug_wiki_unique_failed', 'Unable to generate a unique wiki slug.'));
 }
 }
 

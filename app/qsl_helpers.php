@@ -6,7 +6,7 @@ function safe_storage_public_path(string $path, array $allowedPrefixes = ['stora
 {
     $normalized = ltrim(str_replace('\\', '/', trim($path)), '/');
     if ($normalized === '' || str_contains($normalized, "\0") || str_contains($normalized, '..')) {
-        throw new RuntimeException('Chemin de stockage invalide.');
+        throw new RuntimeException(i18n_error_text('storage_path_invalid', 'Invalid storage path.'));
     }
 
     foreach ($allowedPrefixes as $prefix) {
@@ -16,7 +16,7 @@ function safe_storage_public_path(string $path, array $allowedPrefixes = ['stora
         }
     }
 
-    throw new RuntimeException('Chemin de stockage non autorisé.');
+    throw new RuntimeException(i18n_error_text('storage_path_forbidden', 'Storage path is not allowed.'));
 }
 
 }

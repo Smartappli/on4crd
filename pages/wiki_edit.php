@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('content_label'));
         }
         if (mb_strlen($title) > 190 || mb_strlen($slug) > 190 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($content) > 50000) {
-            throw new RuntimeException('Un des champs dépasse la longueur autorisée.');
+            throw new RuntimeException(i18n_error_text('field_too_long', 'One of the fields exceeds the allowed length.'));
         }
 
         $slugStmt = db()->prepare('SELECT id FROM wiki_pages WHERE slug = ? AND id <> ? LIMIT 1');
