@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -40,4 +39,33 @@ return array (
   'empty_visible_info' => 'Keine sichtbaren Informationen.',
   'profile_data_title' => 'Profildaten',
   'profile_data_help' => 'Dieser Bereich übernimmt die nicht leeren Felder Ihres Profils und verwendet dieselben Sichtbarkeitseinstellungen wie das Verzeichnis. Der JSON-Export enthält auch die in der Datenbank gespeicherten Profildaten.',
+  'privacy_short_register' => 'Die Kontodaten werden zur Erstellung des Profils, zur Sicherung des Zugriffs und zur Anzeige nur der von Ihnen sichtbar gemachten Informationen verwendet. Die externe postalische Geokodierung ist optional.',
+  'privacy_short_profile' => 'Die Profilinformationen bleiben durch Ihre Sichtbarkeitseinstellungen gesteuert. Eine externe postalische Geokodierung wird nur auf Anfrage versendet.',
+  'privacy_short_newsletter' => 'Der Newsletter bedarf einer ausdrücklichen Einwilligung. Der Einwilligungsnachweis und die technischen Daten werden pseudonymisiert gespeichert.',
+  'privacy_short_geocode' => 'Wenn Sie die automatische Geokodierung aktivieren, wird die eingegebene Postanschrift an Nominatim gesendet und das Ergebnis 30 Tage lang zwischengespeichert.',
+  'privacy_short_default' => 'Personenbezogene Daten sind auf die Nutzung der Website beschränkt, wobei Export-, Widerspruchs- und Löschanträge möglich sind.',
+  'privacy_notice_link' => 'Sehen Sie sich den GDPR-Hinweis an',
+  'privacy_dpo_label' => 'Dedizierter Datenschutzbeauftragter/Ansprechpartner',
+  'privacy_tracking_matomo_configured' => 'Die Matomo-Zielgruppenmessung darf nur entsprechend der Einwilligungskonfiguration geladen werden, wobei Anonymisierung und Cookies bei der Konfiguration deaktiviert sind.',
+  'privacy_tracking_matomo_unconfigured' => 'Standardmäßig wird keine externe Zielgruppenmessung geladen; Matomo bleibt deaktiviert, bis eine Instanz konfiguriert ist.',
+  'privacy_section_controller_title' => 'Datenverantwortlicher',
+  'privacy_section_controller_body' => '{controller_name} ist der Datencontroller. Öffentlicher Kontakt: {controller_email}. Adresse: {controller_postal_address}.{dpo}',
+  'privacy_section_purposes_title' => 'Zwecke',
+  'privacy_section_purposes_body' => 'Accountverwaltung, Amateurfunkverzeichnis, Veröffentlichung von Inhalten, Artikelvorschläge, Moderation, Sicherheit, interne technische Statistiken, Newsletter, Shop/Events und GDPR-Anfragen.',
+  'privacy_section_legal_bases_title' => 'Rechtsgrundlagen',
+  'privacy_section_legal_bases_body' => 'Durchführung des Mitgliedskontodienstes, berechtigtes Interesse an Sicherheit und Moderation, rechtliche Verpflichtungen für bestimmte Protokolle/Transaktionen, Einwilligung in den Newsletter, nicht notwendiges Tracking und externe postalische Geokodierung.',
+  'privacy_section_processed_data_title' => 'Verarbeitete Daten',
+  'privacy_section_processed_data_body' => 'Amateurfunkidentität, E-Mail, Profil, Sichtbarkeitseinstellungen, veröffentlichte Inhalte, hochgeladene Dokumente, Präferenzen, Abonnements, pseudonymisierte technische Historien, GDPR-Anfragen, Sicherheitsprotokolle und Einwilligungsaufzeichnungen.',
+  'privacy_section_recipients_title' => 'Empfänger',
+  'privacy_section_recipients_body' => 'Autorisierte Administratoren, Mitglieder gemäß Ihren Sichtbarkeitseinstellungen, Besucher für öffentliche Inhalte, der Website-Host, unbedingt erforderliche E-Mail-Anbieter, Google Maps, wenn Sie die eingebettete Karte anzeigen und Nominatim nur, wenn Sie die Geokodierung aktivieren. Die wichtigsten Front-End-Bibliotheken werden lokal bereitgestellt, ohne ein öffentliches CDN.',
+  'privacy_section_retention_title' => 'Aufbewahrung',
+  'privacy_section_retention_body' => 'Das Konto bleibt bestehen, solange es aktiv ist. Technische Protokolle: {technical_logs_months} Monate. Chatbot: {chatbot_days} Tage. Newsletter-Versand: {newsletter_deliveries_months} Monate. Benachrichtigungen lesen: {read_notifications_months} Monate. Behobene GDPR-Anfragen: {privacy_requests_years} Jahre. Passwort-Reset: {password_reset_log_days} Tage. Geokodierungs-Cache: {geocode_cache_days} Tage.',
+  'privacy_section_rights_title' => 'Rechte',
+  'privacy_section_rights_body' => 'Sie können Zugriff, Export, Berichtigung, Einschränkung, Widerspruch, Übertragbarkeit und Löschung beantragen. Der JSON-Export ist auf dieser Seite für angemeldete Mitglieder verfügbar. Erasure startet eine kontrollierte Anonymisierung mit einem Aktionsprotokoll.',
+  'privacy_section_cookies_title' => 'Cookies und Messung',
+  'privacy_section_cookies_body' => 'Wesentliche Cookies werden für die Sitzungs-, Sicherheits- und Sprach-/Themeneinstellungen verwendet. {tracking_text}',
+  'privacy_section_security_title' => 'Sicherheit',
+  'privacy_section_security_body' => 'Anwendungs-IPs und Benutzeragenten werden von HMAC mit einem dauerhaften lokalen Geheimnis pseudonymisiert. Administrative GDPR-Aktionen werden mit Administrator-ID, Status und Zeitstempel protokolliert.',
+  'privacy_section_contact_title' => 'Kontakt und Beschwerde',
+  'privacy_section_contact_body' => 'Für Anfragen zu personenbezogenen Daten: {controller_email}. Angemeldete Mitglieder können auch das Formular auf dieser Seite verwenden. Aufsichtsbehörde: {supervisory_authority}.',
 );
