@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Féach ar na gníomhaíochtaí atá le teacht.',
   'tools_link' => 'Uirlisí raidió',
   'tools_hint' => 'Oscail na huirlisí praiticiúla do raidióamaitéirí.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Níl an modúl ar fáil.',
 );

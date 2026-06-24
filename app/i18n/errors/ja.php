@@ -21,5 +21,5 @@ return array (
   'events_hint' => '今後の活動を確認する。',
   'tools_link' => '無線ツール',
   'tools_hint' => '実用的なアマチュア無線ツールを開く。',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'モジュールが利用できません。',
 );

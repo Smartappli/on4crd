@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Вижте предстоящите дейности.',
   'tools_link' => 'Радиоинструменти',
   'tools_hint' => 'Отворете практическите инструменти за радиолюбители.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Модулът не е наличен.',
 );

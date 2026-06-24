@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Vaata tulevasi tegevusi.',
   'tools_link' => 'Raadiotööriistad',
   'tools_hint' => 'Ava praktilised raadioamatööri tööriistad.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Moodul pole saadaval.',
 );

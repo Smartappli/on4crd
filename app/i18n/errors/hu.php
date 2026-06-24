@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Nézze meg a közelgő tevékenységeket.',
   'tools_link' => 'Rádiós eszközök',
   'tools_hint' => 'Nyissa meg a gyakorlati rádióamatőr eszközöket.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'A modul nem elérhető.',
 );

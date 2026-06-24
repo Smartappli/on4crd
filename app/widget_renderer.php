@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/hamqsl_widgets.php';
 require_once __DIR__ . '/ham_weather_advice.php';
+require_once __DIR__ . '/widget_i18n.php';
 require_once __DIR__ . '/widget_radio_helpers.php';
 
 if (!function_exists('render_widget')) {
@@ -18,21 +19,22 @@ function render_widget(string $slug, array $user = []): string
 
     switch ($safeSlug) {
         case 'welcome':
-            return '<p>Bonjour <strong>' . e($callsign) . '</strong>, bienvenue dans votre espace membre.</p>'
-                . '<p class="help">Personnalisez ce tableau de bord en ajoutant, supprimant et déplaçant vos widgets.</p>';
+            $welcomeGreeting = str_replace('{callsign}', '<strong>' . e($callsign) . '</strong>', e(dashboard_widget_text('widget_welcome_greeting', $locale)));
+            return '<p>' . $welcomeGreeting . '</p>'
+                . '<p class="help">' . e(dashboard_widget_text('widget_welcome_help', $locale)) . '</p>';
         case 'chatbot':
-            return '<p class="help">Posez vos questions à Raymond sur la radio, le club et les procédures.</p>'
-                . '<p><a class="button small" href="' . e(route_url('chatbot')) . '">Ouvrir Raymond</a></p>';
+            return '<p class="help">' . e(dashboard_widget_text('widget_chatbot_help', $locale)) . '</p>'
+                . '<p><a class="button small" href="' . e(route_url('chatbot')) . '">' . e(dashboard_widget_text('widget_chatbot_open', $locale)) . '</a></p>';
         case 'ham_weather_advice':
             return render_ham_weather_advice($user);
 
         case 'radio_clocks':
             $todayUtc = gmdate('d/m/Y');
             $todayLocal = (new DateTimeImmutable('now'))->format('d/m/Y');
-            $clockLabels = match ($locale) {
-                'en' => ['utc' => 'UTC date/time', 'local' => 'Local date/time'],
-                default => ['utc' => 'Date/heure UTC', 'local' => 'Date/heure locale'],
-            };
+            $clockLabels = [
+                'utc' => dashboard_widget_text('widget_clock_utc', $locale),
+                'local' => dashboard_widget_text('widget_clock_local', $locale),
+            ];
 
             return '<div class="grid-2">'
                 . '<article class="inner-card">'
@@ -122,11 +124,7 @@ function render_widget(string $slug, array $user = []): string
             }
 
             if (!is_array($current)) {
-                $weatherUnavailable = match ($locale) {
-                    'en' => 'Weather data is currently unavailable.',
-                    default => 'Données météo indisponibles pour le moment.',
-                };
-                return '<p class="help">' . e($weatherUnavailable) . '</p>';
+                return '<p class="help">' . e(dashboard_widget_text('widget_weather_unavailable', $locale)) . '</p>';
             }
 
             $temperature = is_numeric($current['temperature_2m'] ?? null) ? (float) $current['temperature_2m'] : null;
@@ -135,44 +133,24 @@ function render_widget(string $slug, array $user = []): string
             $precipitation = is_numeric($current['precipitation'] ?? null) ? (float) $current['precipitation'] : null;
             $weatherCode = is_numeric($current['weather_code'] ?? null) ? (int) $current['weather_code'] : null;
 
-            $labels = match ($locale) {
-                'en' => [
-                    'weather' => 'Weather',
-                    'source' => 'Source',
-                    'temperature' => 'Temperature',
-                    'humidity' => 'Humidity',
-                    'wind' => 'Wind',
-                    'rain' => 'Rain',
-                    'dry' => 'Dry local conditions',
-                    'rainy' => 'Rain observed',
-                    'windy' => 'Sustained wind',
-                    'humid' => 'Humid air',
-                    'variable' => 'Variable conditions',
-                    'clear' => 'Clear sky',
-                    'cloudy' => 'Cloudy',
-                    'fog' => 'Fog',
-                    'snow' => 'Snow',
-                    'storm' => 'Storm',
-                ],
-                default => [
-                    'weather' => 'Meteo',
-                    'source' => 'Source',
-                    'temperature' => 'Temperature',
-                    'humidity' => 'Humidite',
-                    'wind' => 'Vent',
-                    'rain' => 'Pluie',
-                    'dry' => 'Conditions locales seches',
-                    'rainy' => 'Pluie observee',
-                    'windy' => 'Vent soutenu',
-                    'humid' => 'Air humide',
-                    'variable' => 'Conditions variables',
-                    'clear' => 'Ciel degage',
-                    'cloudy' => 'Nuageux',
-                    'fog' => 'Brouillard',
-                    'snow' => 'Neige',
-                    'storm' => 'Orage',
-                ],
-            };
+            $labels = [
+                'weather' => dashboard_widget_text('widget_weather_label', $locale),
+                'source' => dashboard_widget_text('widget_weather_source', $locale),
+                'temperature' => dashboard_widget_text('widget_weather_temperature', $locale),
+                'humidity' => dashboard_widget_text('widget_weather_humidity', $locale),
+                'wind' => dashboard_widget_text('widget_weather_wind', $locale),
+                'rain' => dashboard_widget_text('widget_weather_rain', $locale),
+                'dry' => dashboard_widget_text('widget_weather_dry', $locale),
+                'rainy' => dashboard_widget_text('widget_weather_rainy', $locale),
+                'windy' => dashboard_widget_text('widget_weather_windy', $locale),
+                'humid' => dashboard_widget_text('widget_weather_humid', $locale),
+                'variable' => dashboard_widget_text('widget_weather_variable', $locale),
+                'clear' => dashboard_widget_text('widget_weather_clear', $locale),
+                'cloudy' => dashboard_widget_text('widget_weather_cloudy', $locale),
+                'fog' => dashboard_widget_text('widget_weather_fog', $locale),
+                'snow' => dashboard_widget_text('widget_weather_snow', $locale),
+                'storm' => dashboard_widget_text('widget_weather_storm', $locale),
+            ];
 
             $summary = match ($weatherCode) {
                 0 => $labels['clear'],
@@ -211,23 +189,7 @@ function render_widget(string $slug, array $user = []): string
 
             return '<div class="dashboard-weather-grid">' . implode('', $items) . '</div>';
         default:
-            $widgetUnavailable = match ($locale) {
-                'en' => 'Widget unavailable.',
-                'de' => 'Widget nicht verfügbar.',
-                'nl' => 'Widget niet beschikbaar.',
-                'es' => 'Widget no disponible.',
-                'it' => 'Widget non disponibile.',
-                'pt' => 'Widget indisponível.',
-                'ar' => 'الأداة غير متاحة.',
-                'hi' => 'विजेट उपलब्ध नहीं है।',
-                'ja' => 'ウィジェットは利用できません。',
-                'zh' => '小组件不可用。',
-                'bn' => 'উইজেটটি উপলভ্য নয়।',
-                'ru' => 'Виджет недоступен.',
-                'id' => 'Widget tidak tersedia.',
-                default => 'Widget indisponible.',
-            };
-            return '<p class="help">' . e($widgetUnavailable) . '</p>';
+            return '<p class="help">' . e(dashboard_widget_text('widget_unavailable', $locale)) . '</p>';
     }
 }
 }

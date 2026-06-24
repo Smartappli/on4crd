@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Verificați activitățile viitoare.',
   'tools_link' => 'Instrumente radio',
   'tools_hint' => 'Deschideți instrumentele practice pentru radioamatori.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Modul indisponibil.',
 );

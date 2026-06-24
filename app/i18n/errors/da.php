@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Se kommende aktiviteter.',
   'tools_link' => 'Radioværktøjer',
   'tools_hint' => 'Åbn de praktiske radioamatørværktøjer.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Modulet er ikke tilgængeligt.',
 );

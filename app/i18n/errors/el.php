@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Δείτε τις επερχόμενες δραστηριότητες.',
   'tools_link' => 'Ραδιοερασιτεχνικά εργαλεία',
   'tools_hint' => 'Ανοίξτε τα πρακτικά εργαλεία για ραδιοερασιτέχνες.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Η ενότητα δεν είναι διαθέσιμη.',
 );

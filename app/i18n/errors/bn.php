@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'আসন্ন কার্যক্রম দেখুন।',
   'tools_link' => 'রেডিও সরঞ্জাম',
   'tools_hint' => 'ব্যবহারিক অ্যামেচার রেডিও সরঞ্জাম খুলুন।',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'মডিউল অনুপলব্ধ.',
 );

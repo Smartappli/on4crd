@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Tarkista tulevat aktiviteetit.',
   'tools_link' => 'Radiotyökalut',
   'tools_hint' => 'Avaa käytännölliset radioamatöörityökalut.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Moduuli ei ole käytettävissä.',
 );

@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'اطّلع على الأنشطة القادمة.',
   'tools_link' => 'أدوات الراديو',
   'tools_hint' => 'افتح الأدوات العملية لهواة الراديو.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'الوحدة غير متوفرة.',
 );

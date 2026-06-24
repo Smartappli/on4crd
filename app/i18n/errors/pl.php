@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Sprawdź nadchodzące aktywności.',
   'tools_link' => 'Narzędzia radiowe',
   'tools_hint' => 'Otwórz praktyczne narzędzia krótkofalarskie.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Moduł niedostępny.',
 );

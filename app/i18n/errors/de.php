@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Sehen Sie sich die kommenden Aktivitäten an.',
   'tools_link' => 'Funkwerkzeuge',
   'tools_hint' => 'Öffnen Sie die praktischen Funkamateur-Werkzeuge.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Modul nicht verfügbar.',
 );

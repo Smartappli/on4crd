@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Zkontrolujte nadcházející aktivity.',
   'tools_link' => 'Radioamatérské nástroje',
   'tools_hint' => 'Otevřete praktické radioamatérské nástroje.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Modul není k dispozici.',
 );

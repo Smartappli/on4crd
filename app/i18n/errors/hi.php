@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'आगामी गतिविधियां देखें.',
   'tools_link' => 'रेडियो उपकरण',
   'tools_hint' => 'व्यावहारिक रेडियो एमेच्योर उपकरण खोलें.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'मॉड्यूल अनुपलब्ध.',
 );

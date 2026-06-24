@@ -21,5 +21,5 @@ return array (
   'events_hint' => '查看即将举行的活动。',
   'tools_link' => '无线电工具',
   'tools_hint' => '打开实用的业余无线电工具。',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => '模块不可用。',
 );

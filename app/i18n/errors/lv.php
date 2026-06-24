@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Apskatiet gaidāmās aktivitātes.',
   'tools_link' => 'Radio rīki',
   'tools_hint' => 'Atveriet praktiskos radioamatieru rīkus.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Modulis nav pieejams.',
 );

@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Periksa aktivitas mendatang.',
   'tools_link' => 'Alat radio',
   'tools_hint' => 'Buka alat praktis untuk amatir radio.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Modul tidak tersedia.',
 );

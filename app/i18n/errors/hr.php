@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Pregledajte nadolazeće aktivnosti.',
   'tools_link' => 'Radio alati',
   'tools_hint' => 'Otvorite praktične radioamaterske alate.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Modul nedostupan.',
 );

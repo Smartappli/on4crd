@@ -21,5 +21,5 @@ return array (
   'events_hint' => 'Consulta le prossime attività.',
   'tools_link' => 'Strumenti radio',
   'tools_hint' => 'Apri gli strumenti pratici per radioamatori.',
-  'module_unavailable' => 'Module unavailable.',
+  'module_unavailable' => 'Modulo non disponibile.',
 );
