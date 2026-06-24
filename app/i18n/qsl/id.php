@@ -160,7 +160,7 @@ return array (
   'svg_label_date' => 'Tanggal',
   'svg_label_utc' => 'UTC',
   'svg_label_band' => 'Pita',
-  'svg_label_mode' => 'Mode',
+  'svg_label_mode' => 'Modus',
   'svg_label_rst_sr' => 'RST S/R',
   'svg_label_operator' => 'Operator radio',
   'svg_label_qth' => 'QTH',
