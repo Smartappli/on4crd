@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'هذا الموضوع الفرعي لا يزال يحتوي على المقالات.',
   'previous' => 'السابق',
   'next' => 'التالي',
+  'error_field_too_long' => 'يتجاوز أحد الحقول الطول المسموح به.',
 );

@@ -15,4 +15,10 @@ return array (
   'no_article' => 'Brak oczekujących tłumaczeń artykułów.',
   'layout' => 'Korekta językowa',
   'meta_desc' => 'Walidacja automatycznych tłumaczeń treści.',
+  'assistant_title' => 'Asystent admina: kontrola tłumaczeń i taksonomii',
+  'assistant_help' => 'Użyj tego panelu, aby zatwierdzać tłumaczenia chatbota i wykrywać duplikaty taksonomii lub tagów przed moderacją.',
+  'chatbot_i18n_title' => 'Jakość tłumaczeń chatbota',
+  'chatbot_i18n_ok' => 'Wszystkie pliki językowe chatbota są kompletne i spójne.',
+  'taxonomy_title' => 'Sugestie taksonomii i tagów',
+  'taxonomy_empty' => 'Nie wykryto zduplikowanych wariantów.',
 );

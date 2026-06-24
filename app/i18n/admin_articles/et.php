@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'See alateema sisaldab endiselt artikleid.',
   'previous' => 'Eelmine',
   'next' => 'Edasi',
+  'error_field_too_long' => 'Üks väljadest ületab lubatud pikkuse.',
 );

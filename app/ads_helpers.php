@@ -6,31 +6,45 @@ require_once __DIR__ . '/privacy_helpers.php';
 /**
  * @return array<string, array{label:string,width:int,height:int}>
  */
-function ad_format_catalog(): array
+function ad_format_catalog(?string $locale = null): array
 {
+    $t = ad_i18n_messages($locale);
+
     return [
-        'square' => ['label' => 'Carré (1080×1080)', 'width' => 1080, 'height' => 1080],
-        'landscape' => ['label' => 'Paysage (1200×628)', 'width' => 1200, 'height' => 628],
-        'portrait' => ['label' => 'Portrait (1080×1350)', 'width' => 1080, 'height' => 1350],
+        'square' => ['label' => ad_i18n_text($t, 'format_square'), 'width' => 1080, 'height' => 1080],
+        'landscape' => ['label' => ad_i18n_text($t, 'format_landscape'), 'width' => 1200, 'height' => 628],
+        'portrait' => ['label' => ad_i18n_text($t, 'format_portrait'), 'width' => 1080, 'height' => 1350],
     ];
 }
 
-function ad_format_label(string $formatCode): string
+/**
+ * @return array<string, string>
+ */
+function ad_i18n_messages(?string $locale = null): array
 {
-    $catalog = ad_format_catalog();
+    return i18n_domain_locale('ads', $locale ?? current_locale());
+}
+
+/**
+ * @param array<string, string> $messages
+ */
+function ad_i18n_text(array $messages, string $key): string
+{
+    return (string) $messages[$key];
+}
+
+function ad_format_label(string $formatCode, ?string $locale = null): string
+{
+    $catalog = ad_format_catalog($locale);
     return (string) ($catalog[$formatCode]['label'] ?? $formatCode);
 }
 
-function ad_status_label(string $status): string
+function ad_status_label(string $status, ?string $locale = null): string
 {
-    return match ($status) {
-        'pending' => 'En attente',
-        'active' => 'Active',
-        'paused' => 'En pause',
-        'expired' => 'Expirée',
-        'rejected' => 'Refusée',
-        default => ucfirst($status),
-    };
+    $messages = ad_i18n_messages($locale);
+    $key = 'status_' . $status . '_label';
+
+    return (string) ($messages[$key] ?? ucfirst($status));
 }
 
 /**
@@ -52,7 +66,7 @@ function ad_runtime_status(array $ad): string
 /**
  * @return array<int, array{code:string,label:string}>
  */
-function available_ad_placements(): array
+function available_ad_placements(?string $locale = null): array
 {
     if (table_exists('ad_placements')) {
         try {
@@ -77,11 +91,26 @@ function available_ad_placements(): array
         }
     }
 
-    return [
-        ['id' => 0, 'code' => 'homepage_top', 'name' => 'Accueil (haut)', 'label' => 'Accueil (haut)', 'description' => 'Banniere en haut de la page d accueil', 'sort_order' => 10, 'is_active' => 1],
-        ['id' => 0, 'code' => 'sidebar', 'name' => 'Barre laterale', 'label' => 'Barre laterale', 'description' => 'Emplacement encart lateral', 'sort_order' => 20, 'is_active' => 1],
-        ['id' => 0, 'code' => 'article_inline', 'name' => 'Article (inline)', 'label' => 'Article (inline)', 'description' => 'Annonce dans le contenu des articles', 'sort_order' => 30, 'is_active' => 1],
+    $t = ad_i18n_messages($locale);
+    $placements = [
+        ['code' => 'homepage_top', 'name_key' => 'placement_homepage_top_name', 'description_key' => 'placement_homepage_top_description', 'sort_order' => 10],
+        ['code' => 'sidebar', 'name_key' => 'placement_sidebar_name', 'description_key' => 'placement_sidebar_description', 'sort_order' => 20],
+        ['code' => 'article_inline', 'name_key' => 'placement_article_inline_name', 'description_key' => 'placement_article_inline_description', 'sort_order' => 30],
     ];
+
+    return array_map(static function (array $placement) use ($t): array {
+        $name = ad_i18n_text($t, (string) $placement['name_key']);
+
+        return [
+            'id' => 0,
+            'code' => (string) $placement['code'],
+            'name' => $name,
+            'label' => $name,
+            'description' => ad_i18n_text($t, (string) $placement['description_key']),
+            'sort_order' => (int) $placement['sort_order'],
+            'is_active' => 1,
+        ];
+    }, $placements);
 }
 
 /**

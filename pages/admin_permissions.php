@@ -67,7 +67,7 @@ ob_start();
             <p><button class="button"><?= e((string) $t['assign']) ?></button></p>
         </form>
 
-        <h3><?= e((string) ($t['assignments'] ?? 'Attributions')) ?></h3>
+        <h3><?= e((string) $t['assignments']) ?></h3>
         <?php foreach ($members as $member): ?>
             <?php $currentRoles = $rolesByMember[(int) $member['id']] ?? []; if ($currentRoles === []) { continue; } ?>
             <div style="margin:.6rem 0;">

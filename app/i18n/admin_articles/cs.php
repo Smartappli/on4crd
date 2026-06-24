@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Toto podtéma stále obsahuje články.',
   'previous' => 'Předchozí',
   'next' => 'Další',
+  'error_field_too_long' => 'Jedno z polí přesahuje povolenou délku.',
 );

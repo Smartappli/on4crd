@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Ten podtemat nadal zawiera artykuły.',
   'previous' => 'Poprzedni',
   'next' => 'Następny',
+  'error_field_too_long' => 'Jedno z pól przekracza dozwoloną długość.',
 );

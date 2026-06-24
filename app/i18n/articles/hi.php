@@ -103,4 +103,6 @@ return array (
   'no_subcategory' => 'कोई उपविषय नहीं',
   'favorites' => 'पसंदीदा',
   'invalid' => 'अमान्य अनुरोध।',
+  'err_invalid_category' => 'अमान्य श्रेणी.',
+  'err_subcategory_category_mismatch' => 'चुना गया उप-विषय चुने गए विषय से संबंधित नहीं है।',
 );

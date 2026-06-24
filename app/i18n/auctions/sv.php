@@ -38,4 +38,10 @@ return array (
   'create' => 'Skapa',
   'proposal_submit' => 'Skicka förslag',
   'cancel' => 'Avbryt',
+  'status_draft' => 'Utkast',
+  'status_scheduled' => 'Schemalagt',
+  'status_active' => 'Aktiv',
+  'status_closed' => 'Stängd',
+  'status_cancelled' => 'Avbruten',
+  'contact_prefix' => 'Kontakt:',
 );

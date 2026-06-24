@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => 'Agħlaq',
   'proposal_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
   'invalid' => 'Talba invalida.',
-  'event_published_direct' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
+  'event_published_direct' => 'L-avveniment ġie ppubblikat direttament.',
+  'propose_event_direct_help' => 'L-avveniment se jiġi ppubblikat direttament.',
+  'publish_event' => 'Ippubblika',
+  'next_event_title' => 'Avvenimenti li ġejjin',
 );

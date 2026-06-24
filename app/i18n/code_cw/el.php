@@ -11,4 +11,5 @@ return array (
   'prosign_sk' => 'Τέλος επαφής',
   'prosign_bt' => 'Διαχωριστής',
   'prosign_as' => 'Περίμενε',
+  'code' => 'Code',
 );

@@ -81,7 +81,7 @@ set_page_meta([
     'canonical' => $eventUrl,
     'schema_type' => 'Event',
     'modified_time' => !empty($event['updated_at']) ? date('c', strtotime((string) $event['updated_at'])) : $startAt->format(DATE_ATOM),
-    'section' => (string) ($t['title'] ?? 'Événement'),
+    'section' => (string) $t['title'],
     'tags' => ['ON4CRD', 'Radio Club Durnal', 'événement radioamateur'],
     'keywords' => ['ON4CRD', 'Radio Club Durnal', 'événement radioamateur', 'agenda radioamateur', 'Namur'],
     'citation_author' => 'Radio Club Durnal ON4CRD',

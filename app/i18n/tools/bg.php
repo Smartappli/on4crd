@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'Отразена мощност (W)',
   'swr_result' => 'Изчислен КСВ',
   'dbw_calc' => 'Преобразуване dBm <-> dBW',
+  'cq_zone' => 'CQ зона',
+  'itu_zone' => 'ITU зона',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Предварителната настройка е запазена.',
+  'preset_deleted' => 'Предварителната настройка е изтрита.',
+  'tools_stat_available' => 'Налични инструменти',
+  'tools_stat_categories' => 'Категории',
 );

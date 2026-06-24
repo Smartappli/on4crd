@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Acest subtipic conține încă articole.',
   'previous' => 'Anterior',
   'next' => 'Urmând',
+  'error_field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
 );

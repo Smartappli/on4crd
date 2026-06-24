@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Globalno iskanje',
   'search_placeholder' => 'Iskanje ...',
   'search_submit' => 'Iskanje',
+  'membership_good_standing' => 'Članarina urejena',
 );

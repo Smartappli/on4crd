@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Albumi vahvistettu, mutta sosiaalinen synkronointi epäonnistui.',
   'batch_max_files' => 'Enintään 100 kuvaa tuontia kohden.',
   'batch_max_size' => 'Valokuvaerä ylittää 512 Mt.',
+  'error_field_too_long' => 'Yksi kentistä ylittää sallitun pituuden.',
 );

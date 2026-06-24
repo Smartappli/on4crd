@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Šioje potemėje vis dar yra straipsnių.',
   'previous' => 'Ankstesnis',
   'next' => 'Kitas',
+  'error_field_too_long' => 'Vienas iš laukų viršija leistiną ilgį.',
 );

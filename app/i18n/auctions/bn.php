@@ -38,4 +38,10 @@ return array (
   'create' => 'তৈরি করুন',
   'proposal_submit' => 'প্রস্তাব পাঠান',
   'cancel' => 'বাতিল',
+  'status_draft' => 'খসড়া',
+  'status_scheduled' => 'নির্ধারিত',
+  'status_active' => 'সক্রিয়',
+  'status_closed' => 'বন্ধ',
+  'status_cancelled' => 'বাতিল',
+  'contact_prefix' => 'যোগাযোগ:',
 );

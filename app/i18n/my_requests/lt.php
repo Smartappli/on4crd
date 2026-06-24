@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Žymos pasiūlymas',
   'proposal_type_subcategory' => 'Potemės pasiūlymas',
   'webotheque_title' => 'Žiniatinklio biblioteka',
+  'albums_title' => 'Albumai',
+  'auctions_title' => 'Aukcionai',
+  'files_title' => 'Failai',
+  'presentations_title' => 'Pristatymai',
+  'minutes_title' => 'Protokolai',
+  'videos_title' => 'Vaizdo įrašai',
+  'library_document_default_title' => 'dokumentas',
+  'document_default_title' => 'dokumentas',
 );

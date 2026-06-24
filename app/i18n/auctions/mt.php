@@ -38,4 +38,10 @@ return array (
   'create' => 'Oħloq',
   'proposal_submit' => 'Ibgħat il-proposta',
   'cancel' => 'Ikkanċella',
+  'status_draft' => 'Abbozz',
+  'status_scheduled' => 'Skedati',
+  'status_active' => 'Attiva',
+  'status_closed' => 'Magħluqa',
+  'status_cancelled' => 'Ikkanċellata',
+  'contact_prefix' => 'Kuntatt:',
 );

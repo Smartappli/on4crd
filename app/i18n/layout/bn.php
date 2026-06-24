@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -52,4 +51,5 @@ return array (
   'search_label' => 'সাইট অনুসন্ধান',
   'search_placeholder' => 'অনুসন্ধান…',
   'search_submit' => 'অনুসন্ধান',
+  'membership_good_standing' => 'সদস্যপদ হালনাগাদ',
 );

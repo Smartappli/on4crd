@@ -347,12 +347,27 @@ function wiki_category_code(string $value): string
 }
 }
 
+if (!function_exists('wiki_i18n_text')) {
+function wiki_i18n_text(string $key): string
+{
+    static $cache = [];
+
+    $locale = function_exists('current_locale') ? current_locale() : null;
+    $cacheKey = $locale ?? '__default__';
+    if (!array_key_exists($cacheKey, $cache)) {
+        $cache[$cacheKey] = function_exists('i18n_domain_locale') ? i18n_domain_locale('wiki', $locale) : [];
+    }
+
+    return (string) ($cache[$cacheKey][$key] ?? $key);
+}
+}
+
 if (!function_exists('wiki_category_label_from_code')) {
 function wiki_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', wiki_category_code($code)));
     if ($label === '') {
-        return 'Général';
+        return wiki_i18n_text('category_general');
     }
 
     return ucwords($label);
@@ -471,7 +486,7 @@ function wiki_categories(array $messages = []): array
     }
 
     if (!isset($deletedCategories['general'])) {
-        $categories['general'] = (string) ($messages['category_general'] ?? 'Général');
+        $categories['general'] = (string) ($messages['category_general'] ?? wiki_i18n_text('category_general'));
     }
 
     if (function_exists('member_library_default_categories')) {
@@ -589,7 +604,7 @@ function wiki_taxonomy_from_input(string $categoryInput, string $subcategoryRef,
 
     $refCategory = $parts['category'] !== '' ? wiki_category_from_input($parts['category'], $categories) : $category;
     if ($refCategory !== $category) {
-        throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+        throw new RuntimeException(wiki_i18n_text('err_subcategory_category_mismatch'));
     }
 
     foreach ((array) (wiki_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
@@ -598,7 +613,7 @@ function wiki_taxonomy_from_input(string $categoryInput, string $subcategoryRef,
         }
     }
 
-    throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+    throw new RuntimeException(wiki_i18n_text('err_subcategory_category_mismatch'));
 }
 }
 
@@ -750,10 +765,10 @@ function render_wiki_taxonomy_fields(array $categories, array $messages, string 
     $selectedCategory = wiki_category_code($selectedCategory !== '' ? $selectedCategory : 'general');
     $selectedSubcategory = wiki_subcategory_code($selectedSubcategory);
     $subcategoriesByCategory = wiki_subcategories_by_category();
-    $subcategoryLabel = (string) ($messages['subcategory_field'] ?? 'Sous-thématique');
-    $noSubcategory = (string) ($messages['no_subcategory'] ?? 'Sans sous-thématique');
+    $subcategoryLabel = (string) ($messages['subcategory_field'] ?? wiki_i18n_text('subcategory_field'));
+    $noSubcategory = (string) ($messages['no_subcategory'] ?? wiki_i18n_text('no_subcategory'));
 
-    $html = '<label>' . e((string) ($messages['themes'] ?? 'Themes')) . '<select name="category">';
+    $html = '<label>' . e((string) ($messages['themes'] ?? wiki_i18n_text('themes'))) . '<select name="category">';
     foreach ($categories as $categoryCode => $categoryLabel) {
         $html .= '<option value="' . e((string) $categoryCode) . '"' . ($selectedCategory === (string) $categoryCode ? ' selected' : '') . '>' . e((string) $categoryLabel) . '</option>';
     }

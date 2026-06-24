@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'इस उपविषय में अभी भी लेख शामिल हैं।',
   'previous' => 'पिछला',
   'next' => 'अगला',
+  'error_field_too_long' => 'फ़ील्ड में से एक की लंबाई अनुमत लंबाई से अधिक है.',
 );

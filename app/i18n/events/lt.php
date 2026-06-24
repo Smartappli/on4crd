@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => 'Uždaryti',
   'proposal_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
   'invalid' => 'Netinkama užklausa.',
-  'event_published_direct' => 'Pasiūlymas išsaugotas jūsų turinyje.',
+  'event_published_direct' => 'Renginys paskelbtas tiesiogiai.',
+  'propose_event_direct_help' => 'Renginys bus paskelbtas tiesiogiai.',
+  'publish_event' => 'Paskelbti',
+  'next_event_title' => 'Artimiausi renginiai',
 );

@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Putere reflectată (W)',
   'swr_result' => 'SWR calculat',
   'dbw_calc' => 'Conversie dBm <-> dBW',
+  'cq_zone' => 'Zona CQ',
+  'itu_zone' => 'Zona ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Presetare salvată.',
+  'preset_deleted' => 'Presetare ștearsă.',
+  'tools_stat_available' => 'Instrumente disponibile',
+  'tools_stat_categories' => 'Categorii',
 );

@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'ট্যাগ প্রস্তাব',
   'proposal_type_subcategory' => 'উপবিষয় প্রস্তাব',
   'webotheque_title' => 'ওয়েব লাইব্রেরি',
+  'albums_title' => 'অ্যালবাম',
+  'auctions_title' => 'নিলাম',
+  'files_title' => 'ফাইল',
+  'presentations_title' => 'উপস্থাপনা',
+  'minutes_title' => 'কার্যবিবরণী',
+  'videos_title' => 'ভিডিও',
+  'library_document_default_title' => 'নথি',
+  'document_default_title' => 'নথি',
 );

@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Παγκόσμια αναζήτηση',
   'search_placeholder' => 'Αναζήτηση…',
   'search_submit' => 'Αναζήτηση',
+  'membership_good_standing' => 'Συνδρομή ενήμερη',
 );

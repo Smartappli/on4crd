@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Fjernet fra favoritter',
   'favorite_added_msg' => 'Side føjet til favoritter.',
   'favorite_removed_msg' => 'Side fjernet fra favoritter.',
+  'err_subcategory_category_mismatch' => 'Det valgte underemne hører ikke til det valgte emne.',
+  'category_general' => 'Generelt',
 );

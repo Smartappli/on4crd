@@ -5,7 +5,7 @@ $locale = current_locale();
 $i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/membership.php');
 $i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
-$tr = static fn(string $key): string => (string) ($t[$key] ?? ($i18n['fr'][$key] ?? $key));
+$tr = static fn(string $key): string => (string) $t[$key];
 
 $contactItems = [$tr('contact_item_1'), $tr('contact_item_2')];
 $requiredItems = [$tr('required_item_1'), $tr('required_item_2'), $tr('required_item_3'), $tr('required_item_4'), $tr('required_item_5'), $tr('required_item_6')];

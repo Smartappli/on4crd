@@ -11,4 +11,5 @@ return array (
   'prosign_sk' => 'Kapcsolat vége',
   'prosign_bt' => 'Elválasztó',
   'prosign_as' => 'Várj',
+  'code' => 'Code',
 );

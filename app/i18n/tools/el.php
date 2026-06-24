@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'Ανακλώμενη ισχύς (W)',
   'swr_result' => 'Υπολογισμένο SWR',
   'dbw_calc' => 'Μετατροπή dBm <-> dBW',
+  'cq_zone' => 'Ζώνη CQ',
+  'itu_zone' => 'Ζώνη ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Η προεπιλογή αποθηκεύτηκε.',
+  'preset_deleted' => 'Η προεπιλογή διαγράφηκε.',
+  'tools_stat_available' => 'Διαθέσιμα εργαλεία',
+  'tools_stat_categories' => 'Κατηγορίες',
 );

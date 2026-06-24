@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Aus Favoriten entfernt',
   'favorite_added_msg' => 'Seite zu Favoriten hinzugefügt.',
   'favorite_removed_msg' => 'Seite aus Favoriten entfernt.',
+  'err_subcategory_category_mismatch' => 'Das ausgewählte Unterthema gehört nicht zum gewählten Thema.',
+  'category_general' => 'Allgemein',
 );

@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Labelvoorstel',
   'proposal_type_subcategory' => 'Subonderwerpvoorstel',
   'webotheque_title' => 'Webbibliotheek',
+  'albums_title' => 'Albums',
+  'auctions_title' => 'Veilingen',
+  'files_title' => 'Bestanden',
+  'presentations_title' => 'Presentaties',
+  'minutes_title' => 'Verslagen',
+  'videos_title' => 'Video\'s',
+  'library_document_default_title' => 'Document',
+  'document_default_title' => 'Document',
 );

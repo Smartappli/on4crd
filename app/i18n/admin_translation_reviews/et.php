@@ -15,4 +15,10 @@ return array (
   'no_article' => 'Ootel artiklite tõlkeid pole.',
   'layout' => 'Keeleline korrektuur',
   'meta_desc' => 'Sisu automaatsete tõlgete valideerimine.',
+  'assistant_title' => 'Admini assistent: tõlgete ja taksonoomia kontroll',
+  'assistant_help' => 'Kasuta seda paneeli vestlusroboti tõlgete kinnitamiseks ning taksonoomia ja siltide duplikaatide leidmiseks enne modereerimist.',
+  'chatbot_i18n_title' => 'Vestlusroboti tõlgete kvaliteet',
+  'chatbot_i18n_ok' => 'Kõik vestlusroboti keelefailid on täielikud ja kooskõlas.',
+  'taxonomy_title' => 'Taksonoomia ja siltide soovitused',
+  'taxonomy_empty' => 'Duplikaatvariante ei leitud.',
 );

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -52,4 +51,5 @@ return array (
   'search_label' => 'Поиск по сайту',
   'search_placeholder' => 'Поиск…',
   'search_submit' => 'Поиск',
+  'membership_good_standing' => 'Членство актуально',
 );

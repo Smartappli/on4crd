@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'このサブトピックにはまだ記事が含まれています。',
   'previous' => '前へ',
   'next' => '次へ',
+  'error_field_too_long' => 'フィールドの 1 つが許可された長さを超えています。',
 );

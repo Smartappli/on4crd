@@ -11,4 +11,5 @@ return array (
   'prosign_sk' => 'Sfârșitul contactului',
   'prosign_bt' => 'Separator',
   'prosign_as' => 'Așteaptă',
+  'code' => 'Code',
 );

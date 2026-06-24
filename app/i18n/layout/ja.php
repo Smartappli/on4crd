@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -52,4 +51,5 @@ return array (
   'search_label' => 'サイト内検索',
   'search_placeholder' => '検索…',
   'search_submit' => '検索',
+  'membership_good_standing' => '会費は有効です',
 );

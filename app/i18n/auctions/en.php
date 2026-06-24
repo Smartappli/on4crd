@@ -38,4 +38,10 @@ return array (
   'create' => 'Create',
   'proposal_submit' => 'Send proposal',
   'cancel' => 'Cancel',
+  'status_draft' => 'Draft',
+  'status_scheduled' => 'Scheduled',
+  'status_active' => 'Active',
+  'status_closed' => 'Closed',
+  'status_cancelled' => 'Cancelled',
+  'contact_prefix' => 'Contact:',
 );

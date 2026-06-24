@@ -245,19 +245,15 @@ function render_layout_impl(string $content, string $title = ''): string
     }
     $layoutI18n = i18n_domain_locale('layout', $currentLocale);
     $ideaI18n = i18n_domain_locale('idea', $currentLocale);
-    $ideaText = static function (string $key, string $fallback) use ($ideaI18n): string {
-        $value = trim((string) ($ideaI18n[$key] ?? ''));
-
-        return $value !== '' ? $value : $fallback;
-    };
+    $ideaText = static fn(string $key): string => (string) ($ideaI18n[$key] ?? $key);
     $currentAccent = strtolower((string) ($_SESSION['accent'] ?? 'blue'));
     $accentPalette = [
-        'blue' => ['color' => '#2f6fed', 'strong' => '#1f59cf', 'label' => 'Bleu'],
-        'emerald' => ['color' => '#059669', 'strong' => '#047857', 'label' => 'Émeraude'],
-        'violet' => ['color' => '#7c3aed', 'strong' => '#6d28d9', 'label' => 'Violet'],
-        'red' => ['color' => '#dc2626', 'strong' => '#b91c1c', 'label' => 'Rouge'],
-        'amber' => ['color' => '#d97706', 'strong' => '#b45309', 'label' => 'Ambre'],
-        'orange' => ['color' => '#ea580c', 'strong' => '#c2410c', 'label' => 'Orange'],
+        'blue' => ['color' => '#2f6fed', 'strong' => '#1f59cf'],
+        'emerald' => ['color' => '#059669', 'strong' => '#047857'],
+        'violet' => ['color' => '#7c3aed', 'strong' => '#6d28d9'],
+        'red' => ['color' => '#dc2626', 'strong' => '#b91c1c'],
+        'amber' => ['color' => '#d97706', 'strong' => '#b45309'],
+        'orange' => ['color' => '#ea580c', 'strong' => '#c2410c'],
     ];
     if ($currentAccent === 'rose') {
         $currentAccent = 'red';
@@ -282,7 +278,7 @@ function render_layout_impl(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
         ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],
-        ['label' => (string) ($layoutI18n['nav_idea'] ?? 'Idée'), 'dialog' => 'idea-dialog', 'module' => ''],
+        ['label' => (string) $layoutI18n['nav_idea'], 'dialog' => 'idea-dialog', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_directory'], 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
@@ -296,12 +292,12 @@ function render_layout_impl(string $content, string $title = ''): string
     ];
     $navMemberLibraryItems = [
         ['label' => (string) $layoutI18n['nav_library'], 'route' => 'members_library', 'module' => ''],
-        ['label' => (string) ($layoutI18n['nav_webotheque'] ?? 'Webothèque'), 'route' => 'webotheque', 'module' => 'webotheque'],
-        ['label' => (string) ($layoutI18n['nav_presentations'] ?? 'Présentations'), 'route' => 'presentations', 'module' => 'presentations'],
-        ['label' => (string) ($layoutI18n['nav_gallery'] ?? 'Photos'), 'route' => 'albums', 'module' => 'albums'],
-        ['label' => (string) ($layoutI18n['nav_videos'] ?? 'Vidéos'), 'route' => 'videos', 'module' => 'videos'],
-        ['label' => (string) ($layoutI18n['nav_files'] ?? 'Fichiers'), 'route' => 'fichiers', 'module' => 'fichiers'],
-        ['label' => (string) ($layoutI18n['nav_minutes'] ?? 'Procès verbaux'), 'route' => 'pv', 'module' => 'pv'],
+        ['label' => (string) $layoutI18n['nav_webotheque'], 'route' => 'webotheque', 'module' => 'webotheque'],
+        ['label' => (string) $layoutI18n['nav_presentations'], 'route' => 'presentations', 'module' => 'presentations'],
+        ['label' => (string) $layoutI18n['nav_gallery'], 'route' => 'albums', 'module' => 'albums'],
+        ['label' => (string) $layoutI18n['nav_videos'], 'route' => 'videos', 'module' => 'videos'],
+        ['label' => (string) $layoutI18n['nav_files'], 'route' => 'fichiers', 'module' => 'fichiers'],
+        ['label' => (string) $layoutI18n['nav_minutes'], 'route' => 'pv', 'module' => 'pv'],
     ];
 
     $buildNavLinks = static function (array $items, string $currentRoute): string {
@@ -361,9 +357,9 @@ function render_layout_impl(string $content, string $title = ''): string
     $membershipBadgeHtml = '';
     if ($user !== null) {
         $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : (string) $layoutI18n['account_space'];
-        $membershipBadgeLabel = (string) ($layoutI18n['membership_good_standing'] ?? 'En ordre de cotisation');
+        $membershipBadgeLabel = (string) $layoutI18n['membership_good_standing'];
         $membershipBadgeHtml = '<span class="membership-status-badge">' . e($membershipBadgeLabel) . '</span>';
-        $accountPrivacyLabel = (string) ($layoutI18n['account_privacy'] ?? 'Vie privée');
+        $accountPrivacyLabel = (string) $layoutI18n['account_privacy'];
         $adminMenuLink = '';
         if (has_permission('admin.access')) {
             $adminMenuLink = '<hr class="account-menu-separator">'
@@ -375,7 +371,7 @@ function render_layout_impl(string $content, string $title = ''): string
             . '<div class="account-menu-panel">'
             . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_profile']) . '</a>'
             . '<a class="account-menu-link" href="' . e(route_url('gdpr')) . '">' . e($accountPrivacyLabel) . '</a>'
-            . '<a class="account-menu-link" href="' . e(route_url('my_requests')) . '">' . e((string) ($layoutI18n['account_requests'] ?? 'Mes demandes')) . '</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('my_requests')) . '">' . e((string) $layoutI18n['account_requests']) . '</a>'
             . '<a class="account-menu-link" href="' . e(route_url('settings')) . '">' . e((string) $layoutI18n['account_settings']) . '</a>'
             . $adminMenuLink
             . '<hr class="account-menu-separator">'
@@ -597,7 +593,7 @@ function render_layout_impl(string $content, string $title = ''): string
         $accentCode = strtolower((string) $accentCode);
         $isActive = $accentCode === $currentAccent;
         $accentIcon = (string) ($accentIcons[$accentCode] ?? '🎨');
-        $accentLabel = (string) ($layoutI18n['accent_' . $accentCode] ?? $accentConfig['label']);
+        $accentLabel = (string) $layoutI18n['accent_' . $accentCode];
         $accentDotColor = (string) $accentConfig['color'];
         $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . ' style="color:' . e($accentDotColor) . ';">'
             . e(trim($accentIcon . ' ' . $accentLabel))
@@ -634,13 +630,13 @@ function render_layout_impl(string $content, string $title = ''): string
     $returnRoute = preg_match('/^[a-z0-9_]+$/', $currentRoute) === 1 ? $currentRoute : 'home';
     $currentReturnUrl = route_url_clean($returnRoute, $returnQuery);
     $ideaCategoryOptions = [
-        'general' => 'Général',
-        'activity' => 'Activité club',
-        'training' => 'Formation',
-        'technical' => 'Technique',
-        'website' => 'Site web',
-        'equipment' => 'Matériel',
-        'event' => 'Événement',
+        'general' => $ideaText('category_general'),
+        'activity' => $ideaText('category_activity'),
+        'training' => $ideaText('category_training'),
+        'technical' => $ideaText('category_technical'),
+        'website' => $ideaText('category_website'),
+        'equipment' => $ideaText('category_equipment'),
+        'event' => $ideaText('category_event'),
     ];
     $ideaCategoryOptionHtml = '';
     foreach ($ideaCategoryOptions as $ideaCategoryCode => $ideaCategoryLabel) {
@@ -649,25 +645,25 @@ function render_layout_impl(string $content, string $title = ''): string
     $ideaDialogHtml = '<dialog id="idea-dialog" class="idea-dialog" aria-labelledby="idea-dialog-title" aria-describedby="idea-dialog-intro">'
         . '<div class="idea-dialog-card">'
         . '<div class="idea-dialog-header"><div>'
-        . '<p class="idea-dialog-eyebrow">' . e((string) ($layoutI18n['nav_idea'] ?? 'Idée')) . '</p>'
-        . '<h2 id="idea-dialog-title">' . e($ideaText('title', 'Faire part d’une idée')) . '</h2>'
-        . '<p id="idea-dialog-intro">' . e($ideaText('intro', 'Envoyez une idée, une suggestion ou une amélioration au comité.')) . '</p>'
-        . '</div><button type="button" class="idea-dialog-close" data-idea-modal-close aria-label="' . e($ideaText('close', 'Fermer')) . '">&times;</button></div>'
+        . '<p class="idea-dialog-eyebrow">' . e((string) $layoutI18n['nav_idea']) . '</p>'
+        . '<h2 id="idea-dialog-title">' . e($ideaText('title')) . '</h2>'
+        . '<p id="idea-dialog-intro">' . e($ideaText('intro')) . '</p>'
+        . '</div><button type="button" class="idea-dialog-close" data-idea-modal-close aria-label="' . e($ideaText('close')) . '">&times;</button></div>'
         . '<form class="idea-form" method="post" action="' . e(route_url('idea_submit')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_url" value="' . e($currentReturnUrl) . '">'
         . '<input type="text" name="idea_website" value="" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden">'
         . '<div class="idea-form-grid">'
-        . '<label for="idea-category"><span>' . e($ideaText('category_label', 'Thématique')) . '</span><select id="idea-category" name="idea_category">' . $ideaCategoryOptionHtml . '</select></label>'
-        . '<label for="idea-keywords"><span>' . e($ideaText('keywords_label', 'Mots clés')) . '</span><input id="idea-keywords" type="text" name="idea_keywords" maxlength="255" placeholder="' . e($ideaText('keywords_placeholder', 'ex: antennes, formation')) . '"></label>'
+        . '<label for="idea-category"><span>' . e($ideaText('category_label')) . '</span><select id="idea-category" name="idea_category">' . $ideaCategoryOptionHtml . '</select></label>'
+        . '<label for="idea-keywords"><span>' . e($ideaText('keywords_label')) . '</span><input id="idea-keywords" type="text" name="idea_keywords" maxlength="255" placeholder="' . e($ideaText('keywords_placeholder')) . '"></label>'
         . '</div>'
         . '<div class="idea-form-grid">'
-        . '<label for="idea-name"><span>' . e($ideaText('name_label', 'Votre nom')) . '</span><input id="idea-name" type="text" name="idea_name" maxlength="160" autocomplete="name" required placeholder="' . e($ideaText('name_placeholder', 'Nom et indicatif, si applicable')) . '"></label>'
-        . '<label for="idea-email"><span>' . e($ideaText('email_label', 'Votre e-mail')) . '</span><input id="idea-email" type="email" name="idea_email" maxlength="190" autocomplete="email" required placeholder="' . e($ideaText('email_placeholder', 'vous@example.com')) . '"></label>'
+        . '<label for="idea-name"><span>' . e($ideaText('name_label')) . '</span><input id="idea-name" type="text" name="idea_name" maxlength="160" autocomplete="name" required placeholder="' . e($ideaText('name_placeholder')) . '"></label>'
+        . '<label for="idea-email"><span>' . e($ideaText('email_label')) . '</span><input id="idea-email" type="email" name="idea_email" maxlength="190" autocomplete="email" required placeholder="' . e($ideaText('email_placeholder')) . '"></label>'
         . '</div>'
-        . '<label for="idea-title"><span>' . e($ideaText('idea_title_label', 'Titre de l’idée')) . '</span><input id="idea-title" type="text" name="idea_title" maxlength="190" required placeholder="' . e($ideaText('idea_title_placeholder', 'Résumez votre idée')) . '"></label>'
-        . '<label for="idea-message"><span>' . e($ideaText('message_label', 'Votre idée')) . '</span><textarea id="idea-message" name="idea_message" rows="6" maxlength="4000" required placeholder="' . e($ideaText('message_placeholder', 'Décrivez votre idée, le besoin et l’intérêt pour le club.')) . '"></textarea></label>'
-        . '<div class="idea-dialog-actions"><button type="button" class="button secondary" data-idea-modal-close>' . e($ideaText('cancel', 'Annuler')) . '</button><button type="submit" class="button">' . e($ideaText('submit', 'Envoyer l’idée')) . '</button></div>'
+        . '<label for="idea-title"><span>' . e($ideaText('idea_title_label')) . '</span><input id="idea-title" type="text" name="idea_title" maxlength="190" required placeholder="' . e($ideaText('idea_title_placeholder')) . '"></label>'
+        . '<label for="idea-message"><span>' . e($ideaText('message_label')) . '</span><textarea id="idea-message" name="idea_message" rows="6" maxlength="4000" required placeholder="' . e($ideaText('message_placeholder')) . '"></textarea></label>'
+        . '<div class="idea-dialog-actions"><button type="button" class="button secondary" data-idea-modal-close>' . e($ideaText('cancel')) . '</button><button type="submit" class="button">' . e($ideaText('submit')) . '</button></div>'
         . '</form>'
         . '</div>'
         . '</dialog>';
@@ -718,12 +714,12 @@ function render_layout_impl(string $content, string $title = ''): string
         . $moduleCssHtml
         . '<link rel="stylesheet" href="' . e(asset_url('assets/css/tailwind-local.css')) . '">'
         . '</head><body data-route="' . e($currentRoute) . '" data-sw-url="' . e(base_url('sw.js')) . '">'
-        . '<a class="skip-link" href="#main-content">' . e((string) ($layoutI18n['skip_to_content'] ?? 'Skip to content')) . '</a>'
+        . '<a class="skip-link" href="#main-content">' . e((string) $layoutI18n['skip_to_content']) . '</a>'
         . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<button class="menu-toggle button secondary" type="button" aria-controls="main-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span class="menu-label">Menu</span></button>'
-        . '<button class="nav-backdrop" type="button" aria-label="' . e((string) ($layoutI18n['close_menu'] ?? 'Close menu')) . '" hidden></button>'
-        . '<nav id="main-nav" class="nav" aria-label="' . e((string) ($layoutI18n['main_navigation'] ?? 'Main navigation')) . '">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'
+        . '<button class="nav-backdrop" type="button" aria-label="' . e((string) $layoutI18n['close_menu']) . '" hidden></button>'
+        . '<nav id="main-nav" class="nav" aria-label="' . e((string) $layoutI18n['main_navigation']) . '">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
         . $ideaDialogHtml
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'

@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Odstránené z obľúbených',
   'favorite_added_msg' => 'Stránka pridaná medzi obľúbené.',
   'favorite_removed_msg' => 'Stránka odstránená z obľúbených.',
+  'err_subcategory_category_mismatch' => 'Vybraná podtéma nepatrí k vybranej téme.',
+  'category_general' => 'Všeobecné',
 );

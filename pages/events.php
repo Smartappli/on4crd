@@ -271,14 +271,14 @@ if ($user !== null) {
         $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
     }
 }
-$eventProposalLabel = (string) ($t['propose_event'] ?? 'Proposer un événement');
+$eventProposalLabel = (string) $t['propose_event'];
 
 ob_start();
 ?>
 <section class="page-hero">
     <div>
-        <p class="eyebrow events-hero-title"><?= e((string) ($t['module_public'] ?? 'Module public')) ?></p>
-        <h1><?= e('Agenda ON4CRD') ?></h1>
+        <p class="eyebrow events-hero-title"><?= e((string) $t['module_public']) ?></p>
+        <h1><?= e((string) $t['calendar_name']) ?></h1>
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>
     <div class="events-hero-actions">
@@ -296,7 +296,7 @@ ob_start();
             <div>
                 <p class="events-hero-title"><?= e($t['calendar_name']) ?></p>
                 <h2 id="events-proposal-title"><?= e($eventProposalLabel) ?></h2>
-                <p class="help"><?= e($canManageEvents ? 'Votre événement sera publié directement.' : $t['propose_event_intro']) ?></p>
+                <p class="help"><?= e($canManageEvents ? $t['propose_event_direct_help'] : $t['propose_event_intro']) ?></p>
             </div>
             <button class="events-proposal-dialog-close module-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
         </div>
@@ -328,7 +328,7 @@ ob_start();
                 <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
             </label>
             <div class="events-proposal-dialog-actions module-dialog-actions">
-                <button class="button" type="submit"><?= e($canManageEvents ? 'Publier' : $t['propose_event_submit']) ?></button>
+                <button class="button" type="submit"><?= e($canManageEvents ? $t['publish_event'] : $t['propose_event_submit']) ?></button>
                 <button class="button secondary" type="button" data-event-proposal-close><?= e($t['propose_event_cancel']) ?></button>
             </div>
         </form>
@@ -348,7 +348,7 @@ ob_start();
 
     <aside class="card events-side-card">
         <section class="events-next-card" id="events-next-event">
-            <h2>Prochain événement</h2>
+            <h2><?= e((string) $t['next_event_title']) ?></h2>
             <?php if (is_array($nextEvent)): ?>
                 <?php if ($nextEvent['imageUrl'] !== ''): ?>
                     <figure class="events-preview-image">

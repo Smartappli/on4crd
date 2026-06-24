@@ -9,32 +9,33 @@ $i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };
-$tr = static function (string $key, string $fallback) use ($t): string {
+$tr = static function (string $key) use ($t): string {
     $value = trim($t($key));
 
-    return $value !== '' && $value !== $key ? $value : $fallback;
+    return $value !== '' && $value !== $key ? $value : $key;
 };
 $wikiMessages = i18n_domain_locale('wiki', $locale);
 $wikiCategories = wiki_categories($wikiMessages);
 $wikiSubcategoriesByCategory = wiki_subcategories_by_category();
-$wikiThemeLabel = (string) ($wikiMessages['themes'] ?? 'Themes');
+$wikiThemeLabel = (string) $wikiMessages['themes'];
+$wikiSubcategoryLabel = (string) $wikiMessages['subcategory_field'];
 
 $statusLabels = [
-    'pending' => $tr('status_pending', 'En validation'),
-    'published' => $tr('status_published', 'Publie'),
-    'rejected' => $tr('status_rejected', 'Refuse'),
+    'pending' => $tr('status_pending'),
+    'published' => $tr('status_published'),
+    'rejected' => $tr('status_rejected'),
 ];
 $proposalStatusLabels = [
-    'pending' => $tr('proposal_status_pending', 'En attente'),
-    'reviewed' => $tr('proposal_status_reviewed', 'Relue'),
-    'accepted' => $tr('proposal_status_accepted', 'Acceptee'),
-    'rejected' => $tr('proposal_status_rejected', 'Refusee'),
+    'pending' => $tr('proposal_status_pending'),
+    'reviewed' => $tr('proposal_status_reviewed'),
+    'accepted' => $tr('proposal_status_accepted'),
+    'rejected' => $tr('proposal_status_rejected'),
 ];
 $proposalTypeLabels = [
-    'category' => $tr('proposal_type_category', 'Thématique'),
-    'content' => $tr('proposal_type_content', 'Contenu'),
-    'domain' => $tr('proposal_type_domain', 'Domaine'),
-    'tag' => $tr('proposal_type_tag', 'Mot cle'),
+    'category' => $tr('proposal_type_category'),
+    'content' => $tr('proposal_type_content'),
+    'domain' => $tr('proposal_type_domain'),
+    'tag' => $tr('proposal_type_tag'),
 ];
 $statusFilter = trim((string) ($_GET['status'] ?? ''));
 if (!isset($statusLabels[$statusFilter])) {
@@ -65,104 +66,104 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'add_category') {
             if (!wiki_ensure_categories_table()) {
-                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+                throw new RuntimeException($tr('storage_unavailable'));
             }
             $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
             $code = wiki_category_code((string) ($_POST['category_code'] ?? $label));
             if ($label === '' || $code === '') {
-                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+                throw new RuntimeException($tr('invalid_page'));
             }
             db()->prepare('INSERT INTO wiki_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
                 ->execute([$code, $label]);
-            set_flash('success', $tr('category_saved', 'Thématique wiki enregistrée.'));
+            set_flash('success', $tr('category_saved'));
             redirect_url(route_url_clean('admin_wiki'));
         }
 
         if ($action === 'update_category') {
             if (!wiki_ensure_categories_table()) {
-                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+                throw new RuntimeException($tr('storage_unavailable'));
             }
             $category = wiki_category_from_input((string) ($_POST['category_code'] ?? ''), $wikiCategories);
             $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
             if ($label === '') {
-                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+                throw new RuntimeException($tr('invalid_page'));
             }
             db()->prepare('INSERT INTO wiki_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
                 ->execute([$category, $label]);
-            set_flash('success', $tr('category_saved', 'Thématique wiki enregistrée.'));
+            set_flash('success', $tr('category_saved'));
             redirect_url(route_url_clean('admin_wiki'));
         }
 
         if ($action === 'delete_category') {
             if (!wiki_ensure_categories_table()) {
-                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+                throw new RuntimeException($tr('storage_unavailable'));
             }
             $category = wiki_category_from_input((string) ($_POST['category_code'] ?? ''), $wikiCategories);
             if ($category === 'general') {
-                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+                throw new RuntimeException($tr('invalid_page'));
             }
             $subCountStmt = db()->prepare('SELECT COUNT(*) FROM wiki_subcategories WHERE category_code = ?');
             $subCountStmt->execute([$category]);
             if ((int) $subCountStmt->fetchColumn() > 0) {
-                throw new RuntimeException($tr('err_category_has_subcategories', 'Supprimez d abord toutes les sous-thématiques.'));
+                throw new RuntimeException($tr('err_category_has_subcategories'));
             }
             db()->prepare('UPDATE wiki_pages SET category = "general", subcategory = "" WHERE category = ?')->execute([$category]);
             db()->prepare('INSERT INTO wiki_categories (code, label, deleted_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE deleted_at = NOW()')
                 ->execute([$category, (string) ($wikiCategories[$category] ?? wiki_category_label_from_code($category))]);
-            set_flash('success', $tr('category_deleted', 'Thématique wiki supprimée.'));
+            set_flash('success', $tr('category_deleted'));
             redirect_url(route_url_clean('admin_wiki'));
         }
 
         if ($action === 'add_subcategory') {
             if (!wiki_ensure_subcategories_table()) {
-                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+                throw new RuntimeException($tr('storage_unavailable'));
             }
             $category = wiki_category_from_input((string) ($_POST['subcategory_category'] ?? 'general'), $wikiCategories);
             $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
             $code = wiki_subcategory_code((string) ($_POST['subcategory_code'] ?? $label));
             if ($label === '' || $code === '') {
-                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+                throw new RuntimeException($tr('invalid_page'));
             }
             db()->prepare('INSERT INTO wiki_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                 ->execute([$category, $code, $label]);
-            set_flash('success', $tr('subcategory_saved', 'Sous-thématique wiki enregistrée.'));
+            set_flash('success', $tr('subcategory_saved'));
             redirect_url(route_url_clean('admin_wiki'));
         }
 
         if ($action === 'update_subcategory') {
             if (!wiki_ensure_subcategories_table()) {
-                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+                throw new RuntimeException($tr('storage_unavailable'));
             }
             $parts = wiki_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
             $category = wiki_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'general'), $wikiCategories);
             $subcategory = wiki_subcategory_code($parts['subcategory']);
             $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
             if ($subcategory === '' || $label === '') {
-                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+                throw new RuntimeException($tr('invalid_page'));
             }
             db()->prepare('INSERT INTO wiki_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                 ->execute([$category, $subcategory, $label]);
-            set_flash('success', $tr('subcategory_saved', 'Sous-thématique wiki enregistrée.'));
+            set_flash('success', $tr('subcategory_saved'));
             redirect_url(route_url_clean('admin_wiki'));
         }
 
         if ($action === 'delete_subcategory') {
             if (!wiki_ensure_subcategories_table()) {
-                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+                throw new RuntimeException($tr('storage_unavailable'));
             }
             $parts = wiki_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
             $category = wiki_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'general'), $wikiCategories);
             $subcategory = wiki_subcategory_code($parts['subcategory']);
             if ($subcategory === '') {
-                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+                throw new RuntimeException($tr('invalid_page'));
             }
             $countStmt = db()->prepare('SELECT COUNT(*) FROM wiki_pages WHERE category = ? AND subcategory = ?');
             $countStmt->execute([$category, $subcategory]);
             if ((int) $countStmt->fetchColumn() > 0) {
-                throw new RuntimeException($tr('err_subcategory_has_documents', 'Cette sous-thématique contient encore des pages.'));
+                throw new RuntimeException($tr('err_subcategory_has_documents'));
             }
             db()->prepare('DELETE FROM wiki_subcategories WHERE category_code = ? AND code = ?')->execute([$category, $subcategory]);
-            set_flash('success', $tr('subcategory_deleted', 'Sous-thématique wiki supprimée.'));
+            set_flash('success', $tr('subcategory_deleted'));
             redirect_url(route_url_clean('admin_wiki'));
         }
 
@@ -171,10 +172,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proposalStatus = (string) ($_POST['proposal_status'] ?? 'pending');
             $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
             if ($proposalId <= 0 || !isset($proposalStatusLabels[$proposalStatus])) {
-                throw new RuntimeException($tr('invalid_proposal', 'Proposition wiki invalide.'));
+                throw new RuntimeException($tr('invalid_proposal'));
             }
             if (!ensure_content_proposals_table()) {
-                throw new RuntimeException($tr('proposal_storage_unavailable', 'Stockage des propositions indisponible.'));
+                throw new RuntimeException($tr('proposal_storage_unavailable'));
             }
 
             if ($proposalStatus === 'accepted') {
@@ -182,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $proposalStmt->execute([$proposalId]);
                 $proposal = $proposalStmt->fetch() ?: null;
                 if (!is_array($proposal)) {
-                    throw new RuntimeException($tr('invalid_proposal', 'Proposition wiki invalide.'));
+                    throw new RuntimeException($tr('invalid_proposal'));
                 }
                 if (wiki_content_proposal_action((string) ($proposal['summary'] ?? '')) === 'delete_page') {
                     wiki_delete_page_record(wiki_content_proposal_page_id((string) ($proposal['summary'] ?? '')));
@@ -191,21 +192,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "wiki"')
                 ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
-            set_flash('success', $tr('proposal_status_saved', 'Proposition wiki mise à jour.'));
+            set_flash('success', $tr('proposal_status_saved'));
             redirect_url($pendingProposalUrl);
         }
 
         $id = (int) ($_POST['id'] ?? 0);
         $status = (string) ($_POST['status'] ?? '');
         if ($id <= 0 || !isset($statusLabels[$status])) {
-            throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+            throw new RuntimeException($tr('invalid_page'));
         }
 
         $pageStmt = db()->prepare('SELECT id, title, slug, content, category, subcategory, author_id, status, proposal_kind, source_page_id, target_slug FROM wiki_pages WHERE id = ? LIMIT 1');
         $pageStmt->execute([$id]);
         $page = $pageStmt->fetch();
         if (!is_array($page)) {
-            throw new RuntimeException($tr('page_not_found', 'Page wiki introuvable.'));
+            throw new RuntimeException($tr('page_not_found'));
         }
 
         if ($status === 'published' && (string) ($page['proposal_kind'] ?? 'page') === 'modification') {
@@ -214,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sourceStmt->execute([$sourceId]);
             $sourcePage = $sourceStmt->fetch();
             if (!is_array($sourcePage)) {
-                throw new RuntimeException($tr('source_page_not_found', 'Page source introuvable.'));
+                throw new RuntimeException($tr('source_page_not_found'));
             }
 
             $targetSlug = wiki_unique_slug((string) $page['title'], (string) ($page['target_slug'] ?: $sourcePage['slug']), $sourceId);
@@ -241,10 +242,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw $throwable;
             }
 
-            set_flash('success', $tr('modification_applied', 'Modification wiki appliquee.'));
+            set_flash('success', $tr('modification_applied'));
         } else {
             db()->prepare('UPDATE wiki_pages SET status = ?, updated_at = NOW() WHERE id = ?')->execute([$status, $id]);
-            set_flash('success', $tr('status_saved', 'Statut wiki enregistre.'));
+            set_flash('success', $tr('status_saved'));
         }
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -307,15 +308,15 @@ ob_start();
     </div>
     <form method="get" class="inline-form" style="margin:.75rem 0 1rem;">
         <input type="hidden" name="route" value="admin_wiki">
-        <select name="status" aria-label="<?= e($tr('status_filter', 'Filtrer par statut')) ?>">
-            <option value=""><?= e($tr('all_statuses', 'Tous les statuts')) ?></option>
+        <select name="status" aria-label="<?= e($tr('status_filter')) ?>">
+            <option value=""><?= e($tr('all_statuses')) ?></option>
             <?php foreach ($statusLabels as $statusCode => $statusLabel): ?>
                 <option value="<?= e($statusCode) ?>" <?= $statusFilter === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
             <?php endforeach; ?>
         </select>
-        <button class="button secondary small" type="submit"><?= e($tr('filter', 'Filtrer')) ?></button>
+        <button class="button secondary small" type="submit"><?= e($tr('filter')) ?></button>
         <?php if ($statusFilter !== ''): ?>
-            <a class="button secondary small" href="<?= e(route_url_clean('admin_wiki')) ?>"><?= e($tr('clear_filter', 'Tout afficher')) ?></a>
+            <a class="button secondary small" href="<?= e(route_url_clean('admin_wiki')) ?>"><?= e($tr('clear_filter')) ?></a>
         <?php endif; ?>
     </form>
     <section class="admin-wiki-taxonomy">
@@ -325,7 +326,7 @@ ob_start();
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_category">
                 <label><span><?= e($wikiThemeLabel) ?></span><input type="text" name="category_label" maxlength="160" required></label>
-                <button class="button" type="submit"><?= e($tr('add_category', 'Ajouter')) ?></button>
+                <button class="button" type="submit"><?= e($tr('add_category')) ?></button>
             </form>
             <form method="post" class="stack">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -337,8 +338,8 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><span><?= e((string) ($wikiMessages['subcategory_field'] ?? 'Sous-thématique')) ?></span><input type="text" name="subcategory_label" maxlength="160" required></label>
-                <button class="button" type="submit"><?= e($tr('add_subcategory', 'Ajouter')) ?></button>
+                <label><span><?= e($wikiSubcategoryLabel) ?></span><input type="text" name="subcategory_label" maxlength="160" required></label>
+                <button class="button" type="submit"><?= e($tr('add_subcategory')) ?></button>
             </form>
         </div>
         <div class="tags-cloud">
@@ -352,8 +353,8 @@ ob_start();
                     <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
                     <span class="pill"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
                     <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
-                    <button class="button small" type="submit"><?= e($tr('save', 'Enregistrer')) ?></button>
-                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
+                    <button class="button small" type="submit"><?= e($tr('save')) ?></button>
+                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($tr('delete')) ?></button>
                 </form>
             <?php endforeach; ?>
             <?php foreach ($wikiSubcategoriesByCategory as $parentCode => $subcategories): ?>
@@ -367,8 +368,8 @@ ob_start();
                         <input type="hidden" name="subcategory_ref" value="<?= e(wiki_subcategory_ref((string) $parentCode, $subCode)) ?>">
                         <span class="pill"><?= e((string) ($wikiCategories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
                         <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
-                        <button class="button small" type="submit"><?= e($tr('save', 'Enregistrer')) ?></button>
-                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
+                        <button class="button small" type="submit"><?= e($tr('save')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($tr('delete')) ?></button>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>
@@ -376,7 +377,7 @@ ob_start();
     </section>
     <div class="table-wrap">
         <table>
-            <thead><tr><th><?= e($t('th_title')) ?></th><th><?= e($t('th_slug')) ?></th><th><?= e($wikiThemeLabel) ?></th><th><?= e($tr('th_status', 'Statut')) ?></th><th><?= e($t('th_updated')) ?></th><th><?= e($t('th_action')) ?></th></tr></thead>
+            <thead><tr><th><?= e($t('th_title')) ?></th><th><?= e($t('th_slug')) ?></th><th><?= e($wikiThemeLabel) ?></th><th><?= e($tr('th_status')) ?></th><th><?= e($t('th_updated')) ?></th><th><?= e($t('th_action')) ?></th></tr></thead>
             <tbody>
             <?php foreach ($pages as $page):
                 $pageStatus = (string) ($page['status'] ?? 'published');
@@ -395,8 +396,8 @@ ob_start();
                         <?= e((string) $page['title']) ?>
                         <?php if ($isModificationProposal): ?>
                             <div class="help">
-                                <span class="badge muted"><?= e($tr('type_modification', 'Modification')) ?></span>
-                                <?php if ($sourceLabel !== ''): ?> <?= e($tr('source_page', 'Source')) ?>: <?= e($sourceLabel) ?><?php endif; ?>
+                                <span class="badge muted"><?= e($tr('type_modification')) ?></span>
+                                <?php if ($sourceLabel !== ''): ?> <?= e($tr('source_page')) ?>: <?= e($sourceLabel) ?><?php endif; ?>
                             </div>
                         <?php endif; ?>
                     </td>
@@ -406,7 +407,7 @@ ob_start();
                     <td><?= e((string) $page['updated_at']) ?></td>
                     <td>
                         <?php if ($isModificationProposal): ?>
-                            <a href="<?= e(route_url('wiki_view', ['slug' => (string) $page['slug']])) ?>"><?= e($tr('view', 'Voir')) ?></a>
+                            <a href="<?= e(route_url('wiki_view', ['slug' => (string) $page['slug']])) ?>"><?= e($tr('view')) ?></a>
                         <?php else: ?>
                             <a href="<?= e(route_url('wiki_edit', ['id' => (int) $page['id']])) ?>"><?= e($t('edit')) ?></a>
                         <?php endif; ?>
@@ -432,11 +433,11 @@ ob_start();
 <?php if ($showPendingProposals): ?>
 <section class="card" id="pending-proposals" aria-labelledby="pending-proposals-title">
     <div class="row-between">
-        <h2 id="pending-proposals-title"><?= e($tr('pending_proposals_title', 'Contenus wiki en attente de validation')) ?></h2>
-        <a class="button secondary small" href="<?= e(route_url_clean('admin_wiki')) ?>"><?= e($tr('clear_filter', 'Tout afficher')) ?></a>
+        <h2 id="pending-proposals-title"><?= e($tr('pending_proposals_title')) ?></h2>
+        <a class="button secondary small" href="<?= e(route_url_clean('admin_wiki')) ?>"><?= e($tr('clear_filter')) ?></a>
     </div>
     <?php if ($pendingProposals === []): ?>
-        <p class="help"><?= e($tr('pending_proposals_empty', 'Aucune proposition wiki en attente de validation.')) ?></p>
+        <p class="help"><?= e($tr('pending_proposals_empty')) ?></p>
     <?php endif; ?>
     <div class="stack">
         <?php foreach ($pendingProposals as $proposal): ?>
@@ -461,13 +462,13 @@ ob_start();
                     <span class="badge muted"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
                     <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
                 </p>
-                <h3><?= e((string) ($proposal['title'] ?? $tr('proposal_default_title', 'Proposition'))) ?></h3>
-                <p class="help"><?= e($tr('proposal_author', 'Proposé par')) ?>: <?= e($memberLabel) ?></p>
+                <h3><?= e((string) ($proposal['title'] ?? $tr('proposal_default_title'))) ?></h3>
+                <p class="help"><?= e($tr('proposal_author')) ?>: <?= e($memberLabel) ?></p>
                 <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
                     <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
                 <?php endif; ?>
                 <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
-                    <p class="help"><?= e($tr('proposal_contact', 'Contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
+                    <p class="help"><?= e($tr('proposal_contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
                 <?php endif; ?>
                 <form method="post" class="stack">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -475,18 +476,18 @@ ob_start();
                     <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
                     <input type="hidden" name="return_status" value="pending">
                     <div class="grid-2">
-                        <label><?= e($tr('proposal_status_label', 'Statut')) ?>
+                        <label><?= e($tr('proposal_status_label')) ?>
                             <select name="proposal_status">
                                 <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
                                     <option value="<?= e($statusCode) ?>" <?= $proposalStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </label>
-                        <label><?= e($tr('proposal_moderation_note', 'Note de modération')) ?>
+                        <label><?= e($tr('proposal_moderation_note')) ?>
                             <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
                         </label>
                     </div>
-                    <p><button class="button small" type="submit"><?= e($tr('proposal_save_status', 'Enregistrer le statut')) ?></button></p>
+                    <p><button class="button small" type="submit"><?= e($tr('proposal_save_status')) ?></button></p>
                 </form>
             </article>
         <?php endforeach; ?>

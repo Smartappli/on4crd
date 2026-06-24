@@ -248,13 +248,13 @@ ob_start();
                     <option value="pending"><?= e($t('back_to_pending')) ?></option>
                     <option value="draft"><?= e($t('draft')) ?></option>
                   </select>
-                  <button class="ghost">OK</button>
+                  <button class="ghost"><?= e($t('ok')) ?></button>
                 </form>
               </td>
             </tr>
           <?php endforeach; ?>
           <?php if ($ads === []): ?>
-            <tr><td colspan="7">Aucune publicité enregistrée.</td></tr>
+            <tr><td colspan="7"><?= e($t('none_ads')) ?></td></tr>
           <?php endif; ?>
         </tbody>
       </table>
@@ -269,10 +269,10 @@ ob_start();
     <span class="badge muted"><?= e(ad_status_label((string) ad_runtime_status($statsAd))) ?></span>
   </div>
   <div class="stats-grid">
-    <div class="stat-card"><strong><?= (int) $statsAd['summary']['impressions'] ?></strong><span>Affichages</span></div>
-    <div class="stat-card"><strong><?= (int) $statsAd['summary']['clicks'] ?></strong><span>Clics</span></div>
+    <div class="stat-card"><strong><?= (int) $statsAd['summary']['impressions'] ?></strong><span><?= e($t('impressions')) ?></span></div>
+    <div class="stat-card"><strong><?= (int) $statsAd['summary']['clicks'] ?></strong><span><?= e($t('clicks')) ?></span></div>
     <div class="stat-card"><strong><?= e((string) $statsAd['summary']['ctr']) ?>%</strong><span>CTR</span></div>
-    <div class="stat-card"><strong><?= (int) $statsAd['summary']['unique_viewers'] ?></strong><span>Visiteurs uniques approx.</span></div>
+    <div class="stat-card"><strong><?= (int) $statsAd['summary']['unique_viewers'] ?></strong><span><?= e($t('unique_visitors')) ?></span></div>
   </div>
   <div class="table-wrap">
     <table>

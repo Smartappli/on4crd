@@ -67,7 +67,7 @@ $currentNewsletter = newsletter_subscriber_for_member($userId);
 $newsletterSubscribed = $currentNewsletter !== null && (string) ($currentNewsletter['status'] ?? '') === 'active';
 $newsletterEmail = newsletter_normalize_email((string) ($currentNewsletter['email'] ?? $memberEmail));
 
-$pageTitle = (string) ($t['title'] ?? 'Account settings');
+$pageTitle = (string) $t['title'];
 ob_start();
 ?>
 <div class="settings-page stack">
@@ -75,7 +75,7 @@ ob_start();
   <div>
     <p class="eyebrow"><?= e(member_area_eyebrow_label($locale)) ?></p>
     <h1><?= e($pageTitle) ?></h1>
-    <p class="help"><?= e((string) ($t['intro'] ?? 'Manage your account preferences and interface options here.')) ?></p>
+    <p class="help"><?= e((string) $t['intro']) ?></p>
   </div>
 </section>
 <section class="card settings-module settings-preferences">

@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Global sökning',
   'search_placeholder' => 'Sök...',
   'search_submit' => 'Sök',
+  'membership_good_standing' => 'Medlemskap i ordning',
 );

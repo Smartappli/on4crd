@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => '分类广告审核',
   'notification_removed_body' => '广告已通过审核删除：{title}',
   'notification_status_body' => '状态更新为 {status}：{title}',
+  'propose_category_direct_help' => '该类别将直接通过审核。',
+  'propose_category_created_direct' => '类别已创建并直接通过审核。',
 );

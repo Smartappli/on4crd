@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => 'Tutup',
   'proposal_recorded' => 'Usulan disimpan di konten Anda.',
   'invalid' => 'Permintaan tidak valid.',
-  'event_published_direct' => 'Usulan disimpan di konten Anda.',
+  'event_published_direct' => 'Acara langsung diterbitkan.',
+  'propose_event_direct_help' => 'Acara akan langsung diterbitkan.',
+  'publish_event' => 'Menerbitkan',
+  'next_event_title' => 'Acara mendatang',
 );

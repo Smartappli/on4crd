@@ -38,4 +38,10 @@ return array (
   'create' => 'Създавайте',
   'proposal_submit' => 'Изпрати предложението',
   'cancel' => 'Отказ',
+  'status_draft' => 'Чернова',
+  'status_scheduled' => 'Планирано',
+  'status_active' => 'Активен',
+  'status_closed' => 'Приключила',
+  'status_cancelled' => 'Отменена',
+  'contact_prefix' => 'Контакт:',
 );

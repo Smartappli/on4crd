@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Tá ailt fós sa bhfothopaic seo.',
   'previous' => 'Roimhe Seo',
   'next' => 'Ar aghaidh',
+  'error_field_too_long' => 'Tá ceann de na réimsí níos mó ná an fad ceadaithe.',
 );

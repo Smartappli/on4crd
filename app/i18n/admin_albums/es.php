@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Álbum validado, pero falló la sincronización social.',
   'batch_max_files' => 'Máximo 100 fotos por importación.',
   'batch_max_size' => 'El lote de fotografías supera los 512 MB.',
+  'error_field_too_long' => 'Uno de los campos excede la longitud permitida.',
 );

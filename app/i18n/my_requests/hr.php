@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Prijedlog oznake',
   'proposal_type_subcategory' => 'Prijedlog podteme',
   'webotheque_title' => 'Web knjižnica',
+  'albums_title' => 'Albumi',
+  'auctions_title' => 'Aukcije',
+  'files_title' => 'Datoteke',
+  'presentations_title' => 'Prezentacije',
+  'minutes_title' => 'Zapisnici',
+  'videos_title' => 'Videozapisi',
+  'library_document_default_title' => 'dokument',
+  'document_default_title' => 'dokument',
 );

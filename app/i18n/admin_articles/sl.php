@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Ta podtema še vedno vsebuje članke.',
   'previous' => 'Prejšnja',
   'next' => 'Naprej',
+  'error_field_too_long' => 'Eno od polj presega dovoljeno dolžino.',
 );

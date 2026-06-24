@@ -3,18 +3,24 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $messages = i18n_domain_locale('idea', $locale);
-$t = static function (string $key, string $fallback) use ($messages): string {
-    $value = trim((string) ($messages[$key] ?? ''));
+$t = static fn(string $key): string => (string) ($messages[$key] ?? $key);
 
-    return $value !== '' ? $value : $fallback;
-};
+$ideaCategoryTranslationKeys = [
+    'general' => 'category_general',
+    'activity' => 'category_activity',
+    'training' => 'category_training',
+    'technical' => 'category_technical',
+    'website' => 'category_website',
+    'equipment' => 'category_equipment',
+    'event' => 'category_event',
+];
 
 $returnUrl = trim((string) ($_POST['return_url'] ?? ''));
 $redirectUrl = safe_login_next_url($returnUrl) ?? route_url('home');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    exit($t('method_not_allowed', 'Method not allowed.'));
+    exit($t('method_not_allowed'));
 }
 
 $cleanLine = static function (string $value, int $maxLength): string {
@@ -42,7 +48,7 @@ try {
     public_form_rate_limit('idea_submit', 5, 900);
 
     if (public_form_honeypot_triggered('idea_website')) {
-        set_flash('success', $t('sent', 'Thank you, your idea has been sent to the committee.'));
+        set_flash('success', $t('sent'));
         redirect_url($redirectUrl);
     }
 
@@ -56,15 +62,19 @@ try {
     if ($name === '' || $title === '' || $message === '' || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
         throw new RuntimeException('invalid');
     }
+    if (!isset($ideaCategoryTranslationKeys[$category])) {
+        throw new RuntimeException('invalid');
+    }
+    $categoryLabel = $t($ideaCategoryTranslationKeys[$category]);
 
-    $subject = $cleanLine($t('email_subject', 'New idea for the ON4CRD committee'), 190);
-    $body = $t('email_intro', 'New idea sent from the ON4CRD website:') . "\n\n"
-        . $t('name_label', 'Your name') . ': ' . $name . "\n"
-        . $t('email_label', 'Your email') . ': ' . $email . "\n"
-        . $t('category_label', 'Topic') . ': ' . $category . "\n"
-        . $t('keywords_label', 'Keywords') . ': ' . $keywords . "\n"
-        . $t('idea_title_label', 'Idea title') . ': ' . $title . "\n\n"
-        . $t('message_label', 'Your idea') . ":\n" . $message . "\n";
+    $subject = $cleanLine($t('email_subject'), 190);
+    $body = $t('email_intro') . "\n\n"
+        . $t('name_label') . ': ' . $name . "\n"
+        . $t('email_label') . ': ' . $email . "\n"
+        . $t('category_label') . ': ' . $categoryLabel . "\n"
+        . $t('keywords_label') . ': ' . $keywords . "\n"
+        . $t('idea_title_label') . ': ' . $title . "\n\n"
+        . $t('message_label') . ":\n" . $message . "\n";
     $headers = 'From: ON4CRD Website <no-reply@on4crd.be>' . "\r\n"
         . 'Reply-To: ' . $email . "\r\n"
         . 'Content-Type: text/plain; charset=UTF-8';
@@ -73,15 +83,15 @@ try {
         throw new RuntimeException('send');
     }
 
-    set_flash('success', $t('sent', 'Thank you, your idea has been sent to the committee.'));
+    set_flash('success', $t('sent'));
 } catch (Throwable $throwable) {
     $rawMessage = $throwable->getMessage();
     if ($rawMessage === 'send') {
-        set_flash('error', $t('send_error', 'The idea could not be sent. Please try again later.'));
+        set_flash('error', $t('send_error'));
     } elseif ($rawMessage === 'too_many_requests') {
-        set_flash('error', $t('too_many_requests', 'Too many requests. Please try again later.'));
+        set_flash('error', $t('too_many_requests'));
     } elseif ($rawMessage === 'invalid' || $rawMessage === '') {
-        set_flash('error', $t('invalid', 'Please complete the idea form correctly.'));
+        set_flash('error', $t('invalid'));
     } else {
         set_flash('error', $rawMessage);
     }

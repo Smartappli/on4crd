@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Tag-Vorschlag',
   'proposal_type_subcategory' => 'Unterthemenvorschlag',
   'webotheque_title' => 'Webbibliothek',
+  'albums_title' => 'Alben',
+  'auctions_title' => 'Auktionen',
+  'files_title' => 'Dateien',
+  'presentations_title' => 'Präsentationen',
+  'minutes_title' => 'Protokolle',
+  'videos_title' => 'Videothek',
+  'library_document_default_title' => 'Dokument',
+  'document_default_title' => 'Dokument',
 );

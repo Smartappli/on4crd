@@ -6,20 +6,20 @@ $locale = current_locale();
 $wikiMessages = i18n_domain_locale('wiki', $locale);
 $t = i18n_domain_translator('wiki_edit', $locale);
 $autoPublish = has_permission('wiki.moderate');
-$tr = static function (string $key, string $fallback) use ($t): string {
+$tr = static function (string $key) use ($t): string {
     $value = trim($t($key));
 
-    return $value !== '' && $value !== $key ? $value : $fallback;
+    return $value !== '' && $value !== $key ? $value : $key;
 };
 
 $requestedMode = (string) ($_SERVER['REQUEST_METHOD'] === 'POST' ? ($_POST['proposal_mode'] ?? '') : ($_GET['mode'] ?? ''));
 $isModification = $requestedMode === 'modify';
 $pageTitle = $isModification
-    ? $tr('propose_modification_title', 'Proposer une modification wiki')
-    : $tr('propose_title', 'Proposer une page wiki');
+    ? $tr('propose_modification_title')
+    : $tr('propose_title');
 $pageDescription = $isModification
-    ? $tr('propose_modification_meta_desc', 'Proposer une modification pour une page wiki existante.')
-    : $tr('propose_meta_desc', 'Créer une nouvelle page wiki depuis l’espace membre.');
+    ? $tr('propose_modification_meta_desc')
+    : $tr('propose_meta_desc');
 
 set_page_meta([
     'title' => $pageTitle,
@@ -28,12 +28,11 @@ set_page_meta([
 ]);
 
 if (!ensure_wiki_tables()) {
-    echo render_layout('<div class="card"><h1>' . e($pageTitle) . '</h1><p>' . e($tr('meta_desc', 'Créer ou modifier une page wiki.')) . '</p></div>', $pageTitle);
+    echo render_layout('<div class="card"><h1>' . e($pageTitle) . '</h1><p>' . e($tr('meta_desc')) . '</p></div>', $pageTitle);
     return;
 }
 
 $wikiCategories = wiki_categories($wikiMessages);
-$wikiThemeLabel = (string) ($wikiMessages['themes'] ?? 'Themes');
 $sourceId = (int) ($_SERVER['REQUEST_METHOD'] === 'POST' ? ($_POST['source_id'] ?? 0) : ($_GET['source_id'] ?? 0));
 $sourcePages = [];
 $sourcePage = null;
@@ -76,19 +75,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($postedModification) {
             if ($postedSourceId <= 0) {
-                throw new RuntimeException($tr('source_page_required', 'Sélectionnez la page à modifier.'));
+                throw new RuntimeException($tr('source_page_required'));
             }
             $postedSourcePage = $loadSourcePage($postedSourceId);
             if ($postedSourcePage === null) {
-                throw new RuntimeException($tr('source_page_not_found', 'La page à modifier est introuvable.'));
+                throw new RuntimeException($tr('source_page_not_found'));
             }
         }
 
         if ($title === '' || trim(strip_tags($content)) === '') {
-            throw new RuntimeException($tr('error_title_content_required', 'Le titre et le contenu sont obligatoires.'));
+            throw new RuntimeException($tr('error_title_content_required'));
         }
         if (mb_strlen($title) > 190 || mb_strlen($slugInput) > 190 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($content) > 50000) {
-            throw new RuntimeException($tr('error_field_too_long', 'Un des champs dépasse la longueur autorisée.'));
+            throw new RuntimeException($tr('error_field_too_long'));
         }
 
         if ($postedModification && $postedSourcePage !== null) {
@@ -110,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     throw $throwable;
                 }
 
-                set_flash('success', $tr('propose_modification_success_published', 'Modification wiki publiée automatiquement.'));
+                set_flash('success', $tr('propose_modification_success_published'));
                 redirect_url(route_url('wiki_view', ['slug' => $slug]));
             }
 
@@ -119,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, author_id, status, proposal_kind, source_page_id, target_slug) VALUES (?, ?, ?, ?, ?, ?, "pending", "modification", ?, ?)')
                 ->execute([$title, $proposalSlug, $content, $category, $subcategory, (int) $user['id'], (int) $postedSourcePage['id'], $targetSlug]);
 
-            set_flash('success', $tr('propose_modification_success', 'Modification wiki proposée. Elle sera publiée après validation.'));
+            set_flash('success', $tr('propose_modification_success'));
             redirect('my_requests');
         }
 
@@ -129,11 +128,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([$title, $slug, $content, $category, $subcategory, (int) $user['id'], $status]);
 
         if ($autoPublish) {
-            set_flash('success', $tr('propose_success_published', 'Page wiki publiée automatiquement.'));
+            set_flash('success', $tr('propose_success_published'));
             redirect_url(route_url('wiki_view', ['slug' => $slug]));
         }
 
-        set_flash('success', $tr('propose_success', 'Page wiki proposée. Elle sera publiée après validation.'));
+        set_flash('success', $tr('propose_success'));
         redirect('my_requests');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -155,31 +154,31 @@ $initialCategory = wiki_category_code($sourcePage !== null ? (string) ($sourcePa
 $initialSubcategory = wiki_subcategory_code($sourcePage !== null ? (string) ($sourcePage['subcategory'] ?? '') : '');
 $helpText = $isModification
     ? ($autoPublish
-        ? $tr('propose_modification_help_auto_publish', 'Avec vos droits de modération, la modification sera publiée automatiquement.')
-        : $tr('propose_modification_help', 'Choisissez une page existante, ajustez son contenu, puis envoyez la modification pour validation.'))
+        ? $tr('propose_modification_help_auto_publish')
+        : $tr('propose_modification_help'))
     : ($autoPublish
-        ? $tr('propose_help_auto_publish', 'Avec vos droits de modération, la page sera publiée automatiquement.')
-        : $tr('propose_help', 'Rédigez une nouvelle page avec du HTML simple. Elle sera relue avant publication.'));
+        ? $tr('propose_help_auto_publish')
+        : $tr('propose_help'));
 
 ob_start();
 ?>
 <div class="wiki-edit-page">
     <section class="wiki-edit-hero">
         <div>
-            <p class="eyebrow"><?= e($tr('wiki_label', 'Wiki')) ?></p>
+            <p class="eyebrow"><?= e($tr('wiki_label')) ?></p>
             <h1><?= e($pageTitle) ?></h1>
             <p class="help"><?= e($helpText) ?></p>
         </div>
-        <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e($tr('wiki_label', 'Wiki')) ?></a>
+        <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e($tr('wiki_label')) ?></a>
     </section>
 
     <?php if ($isModification): ?>
         <form method="get" class="wiki-edit-form wiki-source-picker">
             <input type="hidden" name="route" value="wiki_propose">
             <input type="hidden" name="mode" value="modify">
-            <label><?= e($tr('source_page_label', 'Page à modifier')) ?>
+            <label><?= e($tr('source_page_label')) ?>
                 <select name="source_id" required>
-                    <option value=""><?= e($tr('source_page_placeholder', 'Sélectionner une page')) ?></option>
+                    <option value=""><?= e($tr('source_page_placeholder')) ?></option>
                     <?php foreach ($sourcePages as $candidate): ?>
                         <option value="<?= (int) $candidate['id'] ?>" <?= (int) $candidate['id'] === $sourceId ? 'selected' : '' ?>>
                             <?= e((string) $candidate['title']) ?> (/<?= e((string) $candidate['slug']) ?>)
@@ -188,7 +187,7 @@ ob_start();
                 </select>
             </label>
             <div class="actions">
-                <button class="button" type="submit"><?= e($tr('source_page_load', 'Charger')) ?></button>
+                <button class="button" type="submit"><?= e($tr('source_page_load')) ?></button>
             </div>
         </form>
     <?php endif; ?>
@@ -210,14 +209,14 @@ ob_start();
             </label>
             <div class="actions">
                 <button class="button" type="submit"><?= e($isModification
-                    ? ($autoPublish ? $tr('propose_modification_submit_publish', 'Publier la modification') : $tr('propose_modification_submit', 'Proposer la modification'))
-                    : ($autoPublish ? $tr('propose_submit_publish', 'Publier la page') : $tr('propose_submit', 'Proposer la page'))) ?></button>
-                <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e($tr('cancel', 'Annuler')) ?></a>
+                    ? ($autoPublish ? $tr('propose_modification_submit_publish') : $tr('propose_modification_submit'))
+                    : ($autoPublish ? $tr('propose_submit_publish') : $tr('propose_submit'))) ?></button>
+                <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e($tr('cancel')) ?></a>
             </div>
         </form>
     <?php elseif ($isModification): ?>
         <div class="wiki-edit-form">
-            <p class="help"><?= e($tr('source_page_select_help', 'Sélectionnez une page existante pour charger son contenu avant de proposer une modification.')) ?></p>
+            <p class="help"><?= e($tr('source_page_select_help')) ?></p>
         </div>
     <?php endif; ?>
 </div>

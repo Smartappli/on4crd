@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Ad klassifikat moderat',
   'notification_removed_body' => 'Reklam imneħħi b\'moderazzjoni: {title}',
   'notification_status_body' => 'Status aġġornat għal {status}: {title}',
+  'propose_category_direct_help' => 'Il-kategorija se tiġi approvata direttament.',
+  'propose_category_created_direct' => 'Il-kategorija nħolqot u ġiet approvata direttament.',
 );

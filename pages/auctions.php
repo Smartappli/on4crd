@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $startingPrice = max(0, parse_price_to_cents($proposalPrice));
             $descriptionHtml = $descriptionText !== '' ? '<p>' . nl2br(e($descriptionText), false) . '</p>' : '';
             if ($contact !== '') {
-                $descriptionHtml .= '<p><strong>Contact:</strong> ' . e($contact) . '</p>';
+                $descriptionHtml .= '<p><strong>' . e((string) $t['contact_prefix']) . '</strong> ' . e($contact) . '</p>';
             }
             $startsAt = time();
             $endsAt = strtotime('+7 days', $startsAt);
@@ -159,7 +159,7 @@ ob_start();
             </div>
             <p class="actions">
                 <a class="button" href="<?= e($lotProposalUrl) ?>"><?= e($canManageAuctions ? (string) $t['create_lot'] : (string) $t['propose_lot']) ?></a>
-                <a class="button secondary auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) ($t['subscribe_auctions'] ?? "M'abonner aux enchères")) ?></a>
+                <a class="button secondary auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) $t['subscribe_auctions']) ?></a>
             </p>
         </div>
     </header>

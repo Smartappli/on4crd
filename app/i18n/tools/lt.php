@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'Atspindi galia (W)',
   'swr_result' => 'Apskaičiuotas SWR',
   'dbw_calc' => 'dBm <-> dBW konvertavimas',
+  'cq_zone' => 'CQ zona',
+  'itu_zone' => 'ITU zona',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Išankstinė nuostata išsaugota.',
+  'preset_deleted' => 'Išankstinė nuostata ištrinta.',
+  'tools_stat_available' => 'Pasiekiami įrankiai',
+  'tools_stat_categories' => 'Kategorijos',
 );

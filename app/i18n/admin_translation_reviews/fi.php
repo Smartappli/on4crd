@@ -15,4 +15,10 @@ return array (
   'no_article' => 'Ei odottavia artikkelikäännöksiä.',
   'layout' => 'Kielellinen oikoluku',
   'meta_desc' => 'Sisällön automaattisten käännösten validointi.',
+  'assistant_title' => 'Ylläpitoavustaja: käännösten ja taksonomian tarkistus',
+  'assistant_help' => 'Tällä paneelilla voit hyväksyä chatbotin käännökset ja löytää taksonomian tai tagien kaksoiskappaleet ennen moderointia.',
+  'chatbot_i18n_title' => 'Chatbot-käännösten laatu',
+  'chatbot_i18n_ok' => 'Kaikki chatbotin kielitiedostot ovat täydellisiä ja yhdenmukaisia.',
+  'taxonomy_title' => 'Taksonomia- ja tagiehdotukset',
+  'taxonomy_empty' => 'Päällekkäisiä muunnelmia ei löytynyt.',
 );

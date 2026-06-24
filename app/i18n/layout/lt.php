@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Pasaulinė paieška',
   'search_placeholder' => 'Ieškoti…',
   'search_submit' => 'Ieškoti',
+  'membership_good_standing' => 'Narystė tvarkinga',
 );

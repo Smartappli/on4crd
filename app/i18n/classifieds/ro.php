@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Anunț clasificat moderat',
   'notification_removed_body' => 'Anunț eliminat prin moderare: {title}',
   'notification_status_body' => 'Stare actualizată la {status}: {title}',
+  'propose_category_direct_help' => 'Categoria va fi aprobată direct.',
+  'propose_category_created_direct' => 'Categoria a fost creată și aprobată direct.',
 );

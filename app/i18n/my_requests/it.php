@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Proposta di etichetta',
   'proposal_type_subcategory' => 'Proposta di sottoargomento',
   'webotheque_title' => 'Biblioteca web',
+  'albums_title' => 'Album',
+  'auctions_title' => 'Aste',
+  'files_title' => 'File',
+  'presentations_title' => 'Presentazioni',
+  'minutes_title' => 'Verbali',
+  'videos_title' => 'Video',
+  'library_document_default_title' => 'Documento',
+  'document_default_title' => 'Documento',
 );

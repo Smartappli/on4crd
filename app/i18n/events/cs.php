@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => 'Zavřít',
   'proposal_recorded' => 'Návrh byl uložen do vašeho obsahu.',
   'invalid' => 'Neplatný požadavek.',
-  'event_published_direct' => 'Návrh byl uložen do vašeho obsahu.',
+  'event_published_direct' => 'Událost byla publikována přímo.',
+  'propose_event_direct_help' => 'Událost bude publikována přímo.',
+  'publish_event' => 'Publikovat',
+  'next_event_title' => 'Nadcházející události',
 );

@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Usulan tag',
   'proposal_type_subcategory' => 'Usulan subtopik',
   'webotheque_title' => 'Perpustakaan web',
+  'albums_title' => 'Album',
+  'auctions_title' => 'Lelang',
+  'files_title' => 'Berkas',
+  'presentations_title' => 'Presentasi',
+  'minutes_title' => 'Notulen',
+  'videos_title' => 'Video',
+  'library_document_default_title' => 'Dokumen',
+  'document_default_title' => 'Dokumen',
 );

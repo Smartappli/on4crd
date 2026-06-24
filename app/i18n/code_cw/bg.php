@@ -11,4 +11,5 @@ return array (
   'prosign_sk' => 'Край на контакта',
   'prosign_bt' => 'Разделител',
   'prosign_as' => 'чакай',
+  'code' => 'Code',
 );

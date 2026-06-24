@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Global search',
   'search_placeholder' => 'Search…',
   'search_submit' => 'Search',
+  'membership_good_standing' => 'Membership up to date',
 );

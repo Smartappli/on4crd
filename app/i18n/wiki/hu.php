@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Eltávolítva a kedvencekből',
   'favorite_added_msg' => 'Oldal hozzáadva a kedvencekhez.',
   'favorite_removed_msg' => 'Oldal eltávolítva a kedvencekből.',
+  'err_subcategory_category_mismatch' => 'A kiválasztott altéma nem tartozik a kiválasztott témához.',
+  'category_general' => 'Általános',
 );

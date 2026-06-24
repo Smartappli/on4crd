@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Fógra rangaithe modhnaithe',
   'notification_removed_body' => 'Baineadh an fógra le modhnóireacht: {title}',
   'notification_status_body' => 'Stádas nuashonraithe go {status}: {title}',
+  'propose_category_direct_help' => 'Faomhfar an chatagóir go díreach.',
+  'propose_category_created_direct' => 'Cruthaíodh agus faomhadh an chatagóir go díreach.',
 );

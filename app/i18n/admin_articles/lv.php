@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Šajā apakštēmā joprojām ir raksti.',
   'previous' => 'Iepriekšējais',
   'next' => 'Tālāk',
+  'error_field_too_long' => 'Viens no laukiem pārsniedz atļauto garumu.',
 );

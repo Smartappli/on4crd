@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Globaali haku',
   'search_placeholder' => 'Hae…',
   'search_submit' => 'Etsi',
+  'membership_good_standing' => 'Jäsenmaksu kunnossa',
 );

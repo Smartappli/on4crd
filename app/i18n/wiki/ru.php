@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Удалено из избранного',
   'favorite_added_msg' => 'Страница добавлена в избранное.',
   'favorite_removed_msg' => 'Страница удалена из избранного.',
+  'err_subcategory_category_mismatch' => 'Выбранная подтема не относится к выбранной теме.',
+  'category_general' => 'Общее',
 );

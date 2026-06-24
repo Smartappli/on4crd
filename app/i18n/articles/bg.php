@@ -103,4 +103,6 @@ return array (
   'no_subcategory' => 'Няма подтема',
   'favorites' => 'Любими',
   'invalid' => 'Невалидна заявка.',
+  'err_invalid_category' => 'Невалидна категория.',
+  'err_subcategory_category_mismatch' => 'Избраната подтема не принадлежи към избраната тема.',
 );

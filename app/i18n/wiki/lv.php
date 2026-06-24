@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Noņemts no izlases',
   'favorite_added_msg' => 'Lapa pievienota izlasei.',
   'favorite_removed_msg' => 'Lapa noņemta no izlases.',
+  'err_subcategory_category_mismatch' => 'Izvēlētā apakštēma nepieder izvēlētajai tēmai.',
+  'category_general' => 'Vispārīgi',
 );

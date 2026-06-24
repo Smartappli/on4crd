@@ -103,4 +103,6 @@ Kapcsolat:',
   'no_subcategory' => 'Nincs altéma',
   'favorites' => 'Kedvencek',
   'invalid' => 'Érvénytelen kérés.',
+  'err_invalid_category' => 'Érvénytelen kategória.',
+  'err_subcategory_category_mismatch' => 'A kiválasztott altéma nem tartozik a kiválasztott témához.',
 );

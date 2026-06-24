@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Предложение за етикет',
   'proposal_type_subcategory' => 'Предложение за подтема',
   'webotheque_title' => 'Уеб библиотека',
+  'albums_title' => 'Албуми',
+  'auctions_title' => 'Търгове',
+  'files_title' => 'Файлове',
+  'presentations_title' => 'Презентации',
+  'minutes_title' => 'Протоколи',
+  'videos_title' => 'Видеа',
+  'library_document_default_title' => 'Документ',
+  'document_default_title' => 'Документ',
 );

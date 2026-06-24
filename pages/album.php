@@ -3,28 +3,12 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $t = i18n_domain_locale('album', $locale);
-$uploadT = i18n_domain_locale('admin_albums', $locale);
-$albumText = static function (string $key, string $fr, string $en) use ($t, $uploadT, $locale): string {
-    $value = trim((string) ($t[$key] ?? $uploadT[$key] ?? ''));
-    if ($value !== '') {
-        return $value;
-    }
-
-    return $locale === 'fr' ? $fr : $en;
+$albumText = static function (string $key) use ($t): string {
+    return trim((string) $t[$key]);
 };
-$viewerLabels = i18n_domain_locale('idea', $locale);
-$viewerCloseLabel = trim((string) ($viewerLabels['close'] ?? ''));
-if ($viewerCloseLabel === '') {
-    $viewerCloseLabel = $locale === 'fr' ? 'Fermer' : 'Close';
-}
-$viewerPreviousLabel = trim((string) ($t['previous'] ?? ''));
-if ($viewerPreviousLabel === '') {
-    $viewerPreviousLabel = $locale === 'fr' ? 'Précédent' : 'Previous';
-}
-$viewerNextLabel = trim((string) ($t['next'] ?? ''));
-if ($viewerNextLabel === '') {
-    $viewerNextLabel = $locale === 'fr' ? 'Suivant' : 'Next';
-}
+$viewerCloseLabel = (string) $t['close'];
+$viewerPreviousLabel = (string) $t['previous'];
+$viewerNextLabel = (string) $t['next'];
 
 if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['title']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['title']);
@@ -74,7 +58,7 @@ $albumCategoryCode = album_category_code((string) ($album['category'] ?? 'genera
 $albumSubcategoryCode = album_subcategory_code((string) ($album['subcategory'] ?? ''));
 $albumCategoryLabel = (string) ($albumCategories[$albumCategoryCode] ?? album_category_label_from_code($albumCategoryCode));
 $albumSubcategoryLabel = $albumSubcategoryCode !== '' ? album_category_label_from_code($albumSubcategoryCode) : '';
-$albumSubcategoryDisplay = $albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) (i18n_domain_locale('albums', $locale)['no_subcategory'] ?? 'Sans sous-thématique');
+$albumSubcategoryDisplay = $albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) $t['no_subcategory'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = (string) ($_POST['action'] ?? '');
     if ($action === 'toggle_favorite') {
@@ -87,8 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             (string) ($album['title'] ?? ''),
             route_url('album', ['id' => (int) $album['id']])
         );
-        notify_member((int) $user['id'], 'favorite', $saved ? $albumText('favorite_added', 'Favori ajouté', 'Favorite added') : $albumText('favorite_removed', 'Favori retiré', 'Favorite removed'), (string) ($album['title'] ?? ''), route_url('album', ['id' => (int) $album['id']]));
-        set_flash('success', $saved ? $albumText('favorite_added_msg', 'Album ajouté aux favoris.', 'Album added to favorites.') : $albumText('favorite_removed_msg', 'Album retiré des favoris.', 'Album removed from favorites.'));
+        notify_member((int) $user['id'], 'favorite', $saved ? $albumText('favorite_added') : $albumText('favorite_removed'), (string) ($album['title'] ?? ''), route_url('album', ['id' => (int) $album['id']]));
+        set_flash('success', $saved ? $albumText('favorite_added_msg') : $albumText('favorite_removed_msg'));
         redirect_url(route_url_clean('album', ['id' => (int) $album['id'], 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
     }
 
@@ -97,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         verify_csrf();
         try {
             if (!$canUploadAlbumPhotos) {
-                throw new RuntimeException($albumText('album_forbidden', 'Vous ne pouvez pas ajouter de photos à cet album.', 'You cannot add photos to this album.'));
+                throw new RuntimeException($albumText('album_forbidden'));
             }
 
             $uploadResult = album_store_uploaded_photos(
@@ -106,19 +90,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 '',
                 (string) ($_POST['caption'] ?? ''),
                 (string) ($user['callsign'] ?? 'album'),
-                $albumText('photo', 'Photo', 'Photo')
+                $albumText('photo')
             );
             notify_member(
                 (int) $user['id'],
                 'import',
-                $albumText('notification_import_completed_title', 'Import d’album terminé', 'Album import completed'),
-                sprintf($albumText('notification_import_completed_body', '%d photo(s) importée(s).', '%d photo(s) imported.'), (int) $uploadResult['count']),
+                $albumText('notification_import_completed_title'),
+                sprintf($albumText('notification_import_completed_body'), (int) $uploadResult['count']),
                 route_url('album', ['id' => (int) $album['id']])
             );
             $totalStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
             $totalStmt->execute([(int) $album['id']]);
             $targetPage = max(1, (int) ceil(((int) $totalStmt->fetchColumn()) / 24));
-            set_flash('success', (int) $uploadResult['count'] . ' ' . $albumText('uploaded_count', 'photo(s) ajoutee(s).', 'photo(s) added.'));
+            set_flash('success', (int) $uploadResult['count'] . ' ' . $albumText('uploaded_count'));
             redirect_url(route_url_clean('album', ['id' => (int) $album['id'], 'p' => $targetPage]) . '#album-upload');
         } catch (Throwable $throwable) {
             set_flash('error', $throwable->getMessage());
@@ -274,11 +258,11 @@ ob_start();
                 <form method="post" class="album-favorite-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="toggle_favorite">
-                    <button class="button secondary album-favorite-button" type="submit"><span>Favoris</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
+                    <button class="button secondary album-favorite-button" type="submit"><span><?= e((string) $t['favorites']) ?></span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
                 </form>
             <?php endif; ?>
             <?php if ($canUploadAlbumPhotos): ?>
-                <p class="actions"><a class="button" href="#album-upload"><?= e($albumText('upload_photos_cta', 'Ajouter des photos', 'Add photos')) ?></a></p>
+                <p class="actions"><a class="button" href="#album-upload"><?= e($albumText('upload_photos_cta')) ?></a></p>
             <?php endif; ?>
         </div>
     </section>
@@ -286,23 +270,23 @@ ob_start();
     <?php if ($canUploadAlbumPhotos): ?>
     <section class="card album-upload-panel" id="album-upload">
         <div>
-            <h2><?= e($albumText('upload_photos_title', 'Ajouter des photos à l’album', 'Add photos to the album')) ?></h2>
-            <p class="help"><?= e($albumText('upload_photos_help', 'Votre album reste privé jusqu’à validation. Vous pouvez ajouter plusieurs images avant l’examen.', 'The album stays private until review. You can add several images before approval.')) ?></p>
+            <h2><?= e($albumText('upload_photos_title')) ?></h2>
+            <p class="help"><?= e($albumText('upload_photos_help')) ?></p>
         </div>
         <form method="post" enctype="multipart/form-data" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="upload_album_photos">
-            <label><span><?= e($albumText('caption', 'Legende commune', 'Shared caption')) ?></span>
+            <label><span><?= e($albumText('caption')) ?></span>
                 <textarea name="caption" rows="3" maxlength="5000"></textarea>
             </label>
-            <label><span><?= e($albumText('files_dropzone', 'Fichiers image', 'Image files')) ?></span>
-                <div class="album-dropzone" data-album-upload-dropzone data-ready-files="<?= e($albumText('ready_files', 'fichier(s) pret(s) a etre importe(s).', 'file(s) ready to import.')) ?>" role="button" tabindex="0">
-                    <?= e($albumText('dropzone_hint', 'Glissez-deposez vos photos ici ou cliquez pour selectionner.', 'Drop photos here or click to select them.')) ?>
+            <label><span><?= e($albumText('files_dropzone')) ?></span>
+                <div class="album-dropzone" data-album-upload-dropzone data-ready-files="<?= e($albumText('ready_files')) ?>" role="button" tabindex="0">
+                    <?= e($albumText('dropzone_hint')) ?>
                 </div>
                 <input type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required data-album-upload-input>
             </label>
-            <p class="help"><?= e($albumText('upload_help', 'Formats acceptes : JPG, PNG et WEBP. Taille maximale : 8 Mo par image.', 'Accepted formats: JPG, PNG and WEBP. Maximum size: 8 MB per image.')) ?></p>
-            <p class="actions"><button class="button" type="submit"><?= e($albumText('upload', 'Televerser', 'Upload')) ?></button></p>
+            <p class="help"><?= e($albumText('upload_help')) ?></p>
+            <p class="actions"><button class="button" type="submit"><?= e($albumText('upload')) ?></button></p>
         </form>
     </section>
     <?php endif; ?>

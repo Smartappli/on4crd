@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -52,4 +51,5 @@ return array (
   'search_label' => '全站搜索',
   'search_placeholder' => '搜索…',
   'search_submit' => '搜索',
+  'membership_good_standing' => '会籍有效',
 );

@@ -180,10 +180,10 @@ ob_start();
       <?php foreach ($activeAds as $ad): ?>
         <tr>
           <td><?= e((string) $ad['title']) ?></td>
-          <td><?= e((string) ($ad['owner_callsign'] ?: ($t['unknown_owner'] ?? '—'))) ?></td>
+          <td><?= e((string) ($ad['owner_callsign'] ?: $t['unknown_owner'])) ?></td>
           <td><?= e((string) $ad['placement_name']) ?></td>
           <td><?= e(ad_status_label((string) ad_runtime_status($ad))) ?></td>
-          <td><a href="<?= e(route_url('ad_click', ['id' => (int) $ad['id']])) ?>" target="_blank" rel="noopener" aria-label="<?= e((string) ($t['tracked_click_aria'] ?? $t['tracked_click'])) ?>"><?= e((string) $t['tracked_click']) ?></a></td>
+          <td><a href="<?= e(route_url('ad_click', ['id' => (int) $ad['id']])) ?>" target="_blank" rel="noopener" aria-label="<?= e((string) $t['tracked_click_aria']) ?>"><?= e((string) $t['tracked_click']) ?></a></td>
         </tr>
       <?php endforeach; ?>
       <?php if ($activeAds === []): ?>

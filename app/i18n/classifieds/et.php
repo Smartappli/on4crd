@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Kuulutus modereeritud',
   'notification_removed_body' => 'Reklaam eemaldati modereerimisega: {title}',
   'notification_status_body' => 'Olek värskendatud versioonile {status}: {title}',
+  'propose_category_direct_help' => 'Kategooria kinnitatakse otse.',
+  'propose_category_created_direct' => 'Kategooria loodi ja kinnitati otse.',
 );

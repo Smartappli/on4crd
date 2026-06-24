@@ -27,7 +27,7 @@ function article_card_excerpt(array $row): string
 
 function article_category_logo(string $label): string
 {
-    $safeLabel = trim($label) !== '' ? $label : ((string) ($GLOBALS['articles_i18n']['default_category'] ?? 'Category'));
+    $safeLabel = trim($label) !== '' ? $label : (string) ($GLOBALS['articles_i18n']['default_category'] ?? (function_exists('article_i18n_text') ? article_i18n_text('default_category') : 'default_category'));
     $initial = strtoupper((string) mb_substr($safeLabel, 0, 1, 'UTF-8'));
     $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="' . htmlspecialchars($safeLabel, ENT_QUOTES, 'UTF-8') . '"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1d4ed8"/><stop offset="100%" stop-color="#0f172a"/></linearGradient></defs><rect width="96" height="96" rx="18" fill="url(#g)"/><text x="48" y="56" text-anchor="middle" font-size="38" font-family="Arial, sans-serif" fill="#fff">' . htmlspecialchars($initial, ENT_QUOTES, 'UTF-8') . '</text></svg>';
 
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $favStmt->execute([$articleId]);
                 $favRow = $favStmt->fetch() ?: null;
                 if ($favRow !== null) {
-                    $favTitle = trim((string) ($favRow['title'] ?? (string) ($t['default_article_title'] ?? 'Article')));
+                    $favTitle = trim((string) ($favRow['title'] ?? (string) $t['default_article_title']));
                     $favUrl = route_url('article', ['slug' => (string) ($favRow['slug'] ?? '')]);
                     $saved = favorite_toggle((int) $user['id'], 'article', (int) $favRow['id'], $favTitle, $favUrl);
                     notify_member((int) $user['id'], 'favorite', $saved ? (string) $t['favorite_added'] : (string) $t['favorite_removed'], $favTitle, $favUrl);
@@ -76,10 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proposalTitle = (string) ($_POST['proposal_category'] ?? '');
             $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
             $proposalSummary = content_proposal_details_text([
-                (string) ($t['propose_category_reason_label'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+                (string) $t['propose_category_reason_label'] => (string) ($_POST['proposal_reason'] ?? ''),
             ]);
             $proposalId = content_proposal_create((int) $user['id'], 'articles', 'category', $proposalTitle, $proposalSummary, $proposalContact);
-            content_proposal_notify_site((string) ($t['propose_category_subject'] ?? 'Category proposal'), [
+            content_proposal_notify_site((string) $t['propose_category_subject'], [
                 'area' => 'articles',
                 'proposal_type' => 'category',
                 'title' => content_proposal_clean_single_line($proposalTitle, 190),
@@ -96,10 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proposalTitle = (string) ($_POST['proposal_tag'] ?? '');
             $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
             $proposalSummary = content_proposal_details_text([
-                (string) ($t['propose_tag_reason_label'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+                (string) $t['propose_tag_reason_label'] => (string) ($_POST['proposal_reason'] ?? ''),
             ]);
             $proposalId = content_proposal_create((int) $user['id'], 'articles', 'tag', $proposalTitle, $proposalSummary, $proposalContact);
-            content_proposal_notify_site((string) ($t['propose_tag_subject'] ?? 'Keyword proposal'), [
+            content_proposal_notify_site((string) $t['propose_tag_subject'], [
                 'area' => 'articles',
                 'proposal_type' => 'tag',
                 'title' => content_proposal_clean_single_line($proposalTitle, 190),
@@ -298,11 +298,11 @@ if ($user !== null) {
 }
 $canAdminArticles = $user !== null && has_permission('admin.access');
 $articlesAdminUrl = route_url_clean('admin_articles', ['status' => 'pending']) . '#pending-proposals';
-$articlesProposeLabel = (string) ($t['propose_menu'] ?? 'Proposer');
-$articlesProposeCategoryLabel = (string) ($t['propose_category_item'] ?? $t['theme_default'] ?? 'Une thématique');
-$articlesProposeTagLabel = (string) ($t['propose_tag_item'] ?? 'Un mot clé');
-$articlesProposeArticleLabel = (string) ($t['propose_article_item'] ?? $t['propose_article'] ?? 'Un article');
-$articlesAdminLabel = (string) ($t['administer'] ?? ($locale === 'fr' ? 'Administrer' : 'Administer'));
+$articlesProposeLabel = (string) $t['propose_menu'];
+$articlesProposeCategoryLabel = (string) $t['propose_category_item'];
+$articlesProposeTagLabel = (string) $t['propose_tag_item'];
+$articlesProposeArticleLabel = (string) $t['propose_article_item'];
+$articlesAdminLabel = (string) $t['administer'];
 
 ob_start();
 ?>
@@ -383,32 +383,32 @@ ob_start();
         <div class="articles-category-dialog-card">
             <div class="articles-category-dialog-header module-dialog-header">
                 <div>
-                    <p class="articles-category-dialog-eyebrow module-dialog-eyebrow"><?= e((string) ($t['propose_tag_eyebrow'] ?? $t['theme_default'])) ?></p>
-                    <h2 id="articles-tag-title"><?= e((string) ($t['propose_tag'] ?? 'Proposer un mot clé')) ?></h2>
-                    <p class="help"><?= e((string) ($t['propose_tag_intro'] ?? 'Indiquez le mot clé à ajouter aux articles.')) ?></p>
+                    <p class="articles-category-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['propose_tag_eyebrow']) ?></p>
+                    <h2 id="articles-tag-title"><?= e((string) $t['propose_tag']) ?></h2>
+                    <p class="help"><?= e((string) $t['propose_tag_intro']) ?></p>
                 </div>
-                <button class="articles-category-dialog-close module-dialog-close" type="button" data-articles-dialog-close aria-label="<?= e((string) ($t['propose_tag_close'] ?? $t['propose_category_close'])) ?>">&times;</button>
+                <button class="articles-category-dialog-close module-dialog-close" type="button" data-articles-dialog-close aria-label="<?= e((string) $t['propose_tag_close']) ?>">&times;</button>
             </div>
-            <form class="articles-category-form module-dialog-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-articles-proposal-form data-articles-proposal-recipient="<?= e($contactEmail) ?>" data-articles-proposal-subject="<?= e((string) ($t['propose_tag_subject'] ?? 'Proposition de mot clé article ON4CRD')) ?>" data-articles-proposal-intro="<?= e((string) ($t['propose_tag_body_intro'] ?? 'Bonjour, je souhaite proposer un nouveau mot clé d’article.')) ?>">
+            <form class="articles-category-form module-dialog-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-articles-proposal-form data-articles-proposal-recipient="<?= e($contactEmail) ?>" data-articles-proposal-subject="<?= e((string) $t['propose_tag_subject']) ?>" data-articles-proposal-intro="<?= e((string) $t['propose_tag_body_intro']) ?>">
                 <?php if ($user !== null): ?>
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="propose_tag">
                 <?php endif; ?>
                 <label>
-                    <span><?= e((string) ($t['propose_tag_name_label'] ?? 'Mot clé')) ?></span>
+                    <span><?= e((string) $t['propose_tag_name_label']) ?></span>
                     <input type="text" name="proposal_tag" maxlength="160" required>
                 </label>
                 <label>
-                    <span><?= e((string) ($t['propose_tag_reason_label'] ?? 'Motivation')) ?></span>
+                    <span><?= e((string) $t['propose_tag_reason_label']) ?></span>
                     <textarea name="proposal_reason" rows="5" maxlength="1600"></textarea>
                 </label>
                 <label>
-                    <span><?= e((string) ($t['propose_tag_contact_label'] ?? $t['propose_category_contact_label'])) ?></span>
+                    <span><?= e((string) $t['propose_tag_contact_label']) ?></span>
                     <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
                 </label>
                 <div class="articles-category-dialog-actions module-dialog-actions">
-                    <button class="button" type="submit"><?= e((string) ($t['propose_tag_submit'] ?? $t['propose_category_submit'])) ?></button>
-                    <button class="button secondary" type="button" data-articles-dialog-close><?= e((string) ($t['propose_tag_cancel'] ?? $t['propose_category_cancel'])) ?></button>
+                    <button class="button" type="submit"><?= e((string) $t['propose_tag_submit']) ?></button>
+                    <button class="button secondary" type="button" data-articles-dialog-close><?= e((string) $t['propose_tag_cancel']) ?></button>
                 </div>
             </form>
         </div>
@@ -448,7 +448,7 @@ ob_start();
                 </a>
                 <?php endif; ?>
                 <a class="articles-category-item module-taxonomy-item<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
-                    <span><?= e((string) ($t['all_categories'] ?? 'Toutes les thématiques')) ?></span>
+                    <span><?= e((string) $t['all_categories']) ?></span>
                     <strong><?= (int) array_sum($themeCounts) ?></strong>
                 </a>
             <?php foreach ($visibleArticleCategories as $themeCode => $themeLabel): ?>

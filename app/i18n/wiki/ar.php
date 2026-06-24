@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'تمت الإزالة من المفضلة',
   'favorite_added_msg' => 'تمت إضافة الصفحة إلى المفضلة.',
   'favorite_removed_msg' => 'تمت إزالة الصفحة من المفضلة.',
+  'err_subcategory_category_mismatch' => 'الموضوع الفرعي المحدد لا ينتمي إلى الموضوع المختار.',
+  'category_general' => 'عام',
 );

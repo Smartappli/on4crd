@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'Potência refletida (W)',
   'swr_result' => 'ROE calculado',
   'dbw_calc' => 'Conversão dBm <-> dBW',
+  'cq_zone' => 'Zona CQ',
+  'itu_zone' => 'Zona ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Predefinição guardada.',
+  'preset_deleted' => 'Predefinição eliminada.',
+  'tools_stat_available' => 'Ferramentas disponíveis',
+  'tools_stat_categories' => 'Categorias',
 );

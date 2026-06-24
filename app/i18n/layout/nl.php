@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Zoeken op de site',
   'search_placeholder' => 'Zoeken…',
   'search_submit' => 'Zoeken',
+  'membership_good_standing' => 'Lidmaatschap in orde',
 );

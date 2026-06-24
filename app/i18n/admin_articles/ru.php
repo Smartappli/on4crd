@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'В этой подтеме еще есть статьи.',
   'previous' => 'Назад',
   'next' => 'Вперед',
+  'error_field_too_long' => 'Одно из полей превышает допустимую длину.',
 );

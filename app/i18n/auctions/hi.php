@@ -38,4 +38,10 @@ return array (
   'create' => 'बनाएं',
   'proposal_submit' => 'प्रस्ताव भेजें',
   'cancel' => 'रद्द करें',
+  'status_draft' => 'ड्राफ्ट',
+  'status_scheduled' => 'अनुसूचित',
+  'status_active' => 'सक्रिय',
+  'status_closed' => 'बंद',
+  'status_cancelled' => 'रद्द',
+  'contact_prefix' => 'संपर्क:',
 );

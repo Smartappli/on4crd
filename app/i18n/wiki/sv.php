@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Borttagen från favoriter',
   'favorite_added_msg' => 'Sida tillagd i favoriter.',
   'favorite_removed_msg' => 'Sida borttagen från favoriter.',
+  'err_subcategory_category_mismatch' => 'Det valda undertemat hör inte till det valda temat.',
+  'category_general' => 'Allmänt',
 );

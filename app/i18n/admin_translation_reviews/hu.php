@@ -15,4 +15,10 @@ return array (
   'no_article' => 'Nincsenek függőben lévő cikkfordítások.',
   'layout' => 'Nyelvi lektorálás',
   'meta_desc' => 'Tartalom automatikus fordításának ellenőrzése.',
+  'assistant_title' => 'Admin asszisztens: fordítási és taxonómiai ellenőrzés',
+  'assistant_help' => 'Ezzel a panellel jóváhagyhatja a chatbot fordításait, és moderálás előtt kiszűrheti a taxonómia- vagy címkedublikátumokat.',
+  'chatbot_i18n_title' => 'Chatbot fordítási minőség',
+  'chatbot_i18n_ok' => 'A chatbot összes nyelvi fájlja teljes és következetes.',
+  'taxonomy_title' => 'Taxonómia- és címkejavaslatok',
+  'taxonomy_empty' => 'Nem található ismétlődő változat.',
 );

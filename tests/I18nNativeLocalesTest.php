@@ -166,6 +166,13 @@ final class I18nNativeLocalesTest extends TestCase
                 'domains' => ['admin_library'],
                 'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
             ],
+            'pages/admin_wiki.php' => [
+                'domains' => ['admin_wiki'],
+                'patterns' => [
+                    '/\$t\([\'"]([^\'"]+)[\'"]\)/',
+                    '/\$tr\([\'"]([^\'"]+)[\'"]\)/',
+                ],
+            ],
             'pages/admin_articles.php' => [
                 'domains' => ['admin_articles'],
                 'patterns' => ['/\$t\([\'"]([^\'"]+)[\'"]/'],
@@ -182,6 +189,13 @@ final class I18nNativeLocalesTest extends TestCase
                 'domains' => ['articles'],
                 'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
             ],
+            'pages/article_propose.php' => [
+                'domains' => ['articles'],
+                'patterns' => [
+                    '/\$label\([\'"]([^\'"]+)[\'"]\)/',
+                    '/article_propose_t\([\'"]([^\'"]+)[\'"]\)/',
+                ],
+            ],
             'pages/albums.php' => [
                 'domains' => ['albums'],
                 'patterns' => [
@@ -192,6 +206,10 @@ final class I18nNativeLocalesTest extends TestCase
             'pages/auctions.php' => [
                 'domains' => ['auctions'],
                 'patterns' => ['/\$t\[[\'"]([^\'"]+)[\'"]\]/'],
+            ],
+            'pages/classifieds.php' => [
+                'domains' => ['classifieds'],
+                'patterns' => ['/\$t\([\'"]([^\'"]+)[\'"]\)/'],
             ],
             'pages/events.php' => [
                 'domains' => ['events'],
@@ -210,6 +228,13 @@ final class I18nNativeLocalesTest extends TestCase
                 'patterns' => [
                     '/\$tr\([\'"]([^\'"]+)[\'"]/',
                     '/\$t\[[\'"]([^\'"]+)[\'"]\]/',
+                ],
+            ],
+            'pages/wiki_propose.php' => [
+                'domains' => ['wiki_edit'],
+                'patterns' => [
+                    '/\$tr\([\'"]([^\'"]+)[\'"]\)/',
+                    '/\$t\([\'"]([^\'"]+)[\'"]\)/',
                 ],
             ],
             'pages/wiki_view.php' => [
@@ -901,12 +926,14 @@ final class I18nNativeLocalesTest extends TestCase
         self::assertStringNotContainsString('Creer un lot', $auctionsSource);
         self::assertStringNotContainsString('Creer un lot0', $auctionsSource);
 
-        $classifieds = file_get_contents(__DIR__ . '/../pages/classifieds.php');
-        self::assertIsString($classifieds);
-        self::assertStringContainsString('Proposer une catégorie', $classifieds);
-        self::assertStringContainsString('La catégorie sera validée directement.', $classifieds);
-        self::assertStringNotContainsString('Creer une categorie', $classifieds);
-        self::assertStringNotContainsString('La categorie sera validee directement.', $classifieds);
+        $classifieds = $this->loadLocaleFile(__DIR__ . '/../app/i18n/classifieds/fr.php');
+        self::assertSame('Proposer une catégorie', $classifieds['propose_category']);
+        self::assertSame('La catégorie sera validée directement.', $classifieds['propose_category_direct_help']);
+        self::assertSame('Catégorie créée et validée directement.', $classifieds['propose_category_created_direct']);
+        $classifiedsSource = file_get_contents(__DIR__ . '/../app/i18n/classifieds/fr.php');
+        self::assertIsString($classifiedsSource);
+        self::assertStringNotContainsString('Creer une categorie', $classifiedsSource);
+        self::assertStringNotContainsString('La categorie sera validee directement.', $classifiedsSource);
 
         $articles = $this->loadLocaleFile(__DIR__ . '/../app/i18n/articles/fr.php');
         self::assertSame('Proposer une thématique', $articles['propose_category']);
@@ -918,17 +945,16 @@ final class I18nNativeLocalesTest extends TestCase
         self::assertIsString($articlesSource);
         self::assertStringNotContainsString('Proposer une cagégorie', $articlesSource);
 
-        $wiki = file_get_contents(__DIR__ . '/../pages/wiki.php');
-        self::assertIsString($wiki);
-        self::assertStringContainsString('Proposer une thématique', $wiki);
-        self::assertStringContainsString('Indiquez la thématique à ajouter', $wiki);
-        self::assertStringNotContainsString('Créer une thématique', $wiki);
-        self::assertStringNotContainsString('Créer la thématique', $wiki);
-        self::assertStringNotContainsString('Proposer une thematique', $wiki);
-        self::assertStringNotContainsString('Indiquez la thematique a ajouter', $wiki);
-
         $wikiMessages = $this->loadLocaleFile(__DIR__ . '/../app/i18n/wiki/fr.php');
+        self::assertSame('Proposer une thématique', $wikiMessages['propose_theme']);
+        self::assertStringContainsString('Indiquez la thématique à ajouter', (string) $wikiMessages['propose_theme_intro']);
         self::assertSame('Proposer une thématique', $wikiMessages['create_theme']);
         self::assertSame('Proposer la thématique', $wikiMessages['create_theme_submit']);
+        $wikiSource = file_get_contents(__DIR__ . '/../app/i18n/wiki/fr.php');
+        self::assertIsString($wikiSource);
+        self::assertStringNotContainsString('Créer une thématique', $wikiSource);
+        self::assertStringNotContainsString('Créer la thématique', $wikiSource);
+        self::assertStringNotContainsString('Proposer une thematique', $wikiSource);
+        self::assertStringNotContainsString('Indiquez la thematique a ajouter', $wikiSource);
     }
 }

@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Globální vyhledávání',
   'search_placeholder' => 'Hledat…',
   'search_submit' => 'Hledat',
+  'membership_good_standing' => 'Členství v pořádku',
 );

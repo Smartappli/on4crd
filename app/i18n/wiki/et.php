@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Eemaldatud lemmikutest',
   'favorite_added_msg' => 'Leht lisatud lemmikutesse.',
   'favorite_removed_msg' => 'Leht eemaldatud lemmikutest.',
+  'err_subcategory_category_mismatch' => 'Valitud alateema ei kuulu valitud teema alla.',
+  'category_general' => 'Üldine',
 );

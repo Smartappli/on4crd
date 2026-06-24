@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => '关闭',
   'proposal_recorded' => '建议已保存到你的内容中。',
   'invalid' => '无效请求。',
-  'event_published_direct' => '建议已保存到你的内容中。',
+  'event_published_direct' => '活动已直接发布。',
+  'propose_event_direct_help' => '活动将直接发布。',
+  'publish_event' => '发布',
+  'next_event_title' => '即将举行的活动',
 );

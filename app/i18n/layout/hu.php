@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Globális keresés',
   'search_placeholder' => 'Keresés…',
   'search_submit' => 'Keresés',
+  'membership_good_standing' => 'Tagság rendezett',
 );

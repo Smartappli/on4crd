@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Subtopik ini masih berisi artikel.',
   'previous' => 'Sebelumnya',
   'next' => 'Berikutnya',
+  'error_field_too_long' => 'Salah satu bidang melebihi panjang yang diizinkan.',
 );

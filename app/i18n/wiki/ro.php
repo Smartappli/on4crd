@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Eliminat din favorite',
   'favorite_added_msg' => 'Pagină adăugată la favorite.',
   'favorite_removed_msg' => 'Pagină eliminată din favorite.',
+  'err_subcategory_category_mismatch' => 'Subtema selectată nu aparține temei alese.',
+  'category_general' => 'Generală',
 );

@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Tämä ala-aihe sisältää edelleen artikkeleita.',
   'previous' => 'Edellinen',
   'next' => 'Seuraavaksi',
+  'error_field_too_long' => 'Yksi kentistä ylittää sallitun pituuden.',
 );

@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Baintha de cheanáin',
   'favorite_added_msg' => 'Leathanach curtha le ceanáin.',
   'favorite_removed_msg' => 'Leathanach bainte de cheanáin.',
+  'err_subcategory_category_mismatch' => 'Ní bhaineann an fofhothéama roghnaithe leis an téama roghnaithe.',
+  'category_general' => 'Ginearálta',
 );

@@ -62,4 +62,12 @@ return array (
   'proposal_type_domain' => 'Proposition de domaine',
   'proposal_type_tag' => 'Proposition d’étiquette',
   'proposal_type_subcategory' => 'Proposition de sous-thématique',
+  'albums_title' => 'Albums',
+  'auctions_title' => 'Enchères',
+  'files_title' => 'Mes fichiers',
+  'presentations_title' => 'Présentations',
+  'minutes_title' => 'Procès verbaux',
+  'videos_title' => 'Vidéos',
+  'library_document_default_title' => 'Document',
+  'document_default_title' => 'Document',
 );

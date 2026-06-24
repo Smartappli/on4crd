@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Cette sous-thématique contient encore des articles.',
   'previous' => 'Précédent',
   'next' => 'Suivant',
+  'error_field_too_long' => 'Un des champs dépasse la longueur autorisée.',
 );

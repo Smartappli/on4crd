@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Az album érvényesítése megtörtént, de a közösségi szinkronizálás nem sikerült.',
   'batch_max_files' => 'Importálásonként legfeljebb 100 fotó.',
   'batch_max_size' => 'A fotóköteg meghaladja az 512 MB-ot.',
+  'error_field_too_long' => 'Az egyik mező túllépi a megengedett hosszt.',
 );

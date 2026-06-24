@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'الطاقة المنعكسة (ث)',
   'swr_result' => 'SWR المحسوبة',
   'dbw_calc' => 'تحويل dBm <-> dBW',
+  'cq_zone' => 'منطقة CQ',
+  'itu_zone' => 'منطقة ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'تم حفظ الإعداد المسبق.',
+  'preset_deleted' => 'تم حذف الإعداد المسبق.',
+  'tools_stat_available' => 'الأدوات المتاحة',
+  'tools_stat_categories' => 'الفئات',
 );

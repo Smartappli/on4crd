@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Albumet har validerats, men social synkronisering misslyckades.',
   'batch_max_files' => 'Max 100 bilder per import.',
   'batch_max_size' => 'Fotobatchen överstiger 512 MB.',
+  'error_field_too_long' => 'Ett av fälten överskrider den tillåtna längden.',
 );

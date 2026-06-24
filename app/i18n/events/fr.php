@@ -39,4 +39,7 @@ return array (
   'proposal_recorded' => 'Proposition enregistrée dans vos contenus.',
   'invalid' => 'Demande invalide.',
   'event_published_direct' => 'Événement publié directement.',
+  'propose_event_direct_help' => 'Votre événement sera publié directement.',
+  'publish_event' => 'Publier',
+  'next_event_title' => 'Prochain événement',
 );

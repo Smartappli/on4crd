@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Dit subonderwerp bevat nog steeds artikelen.',
   'previous' => 'Vorige',
   'next' => 'Volgende',
+  'error_field_too_long' => 'Eén van de velden overschrijdt de toegestane lengte.',
 );

@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => '该子主题仍然包含文章。',
   'previous' => '上一页',
   'next' => '下一页',
+  'error_field_too_long' => '其中一个字段超出了允许的长度。',
 );

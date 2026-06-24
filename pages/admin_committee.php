@@ -9,10 +9,8 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, $key);
 }
-$tr = static function (string $key, string $fallback) use ($t): string {
-    $value = trim((string) ($t[$key] ?? ''));
-
-    return $value !== '' ? $value : $fallback;
+$tr = static function (string $key) use ($t): string {
+    return trim((string) $t[$key]);
 };
 
 set_page_meta([
@@ -28,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $committeeMove = trim((string) ($_POST['committee_move'] ?? ''));
         if ($committeeMove !== '') {
             if (preg_match('/\A(up|down):(\d+)\z/', $committeeMove, $matches) !== 1) {
-                throw new RuntimeException($tr('invalid_member', 'Membre invalide.'));
+                throw new RuntimeException($tr('invalid_member'));
             }
 
             $direction = (string) $matches[1];
@@ -41,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $currentIndex = array_search($moveMemberId, $orderedIds, true);
             if ($currentIndex === false) {
-                throw new RuntimeException($tr('invalid_member', 'Membre invalide.'));
+                throw new RuntimeException($tr('invalid_member'));
             }
 
             $targetIndex = $direction === 'up' ? $currentIndex - 1 : $currentIndex + 1;
@@ -53,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $orderUpdate->execute([($position + 1) * 10, $orderedId]);
                 }
                 db()->commit();
-                set_flash('success', $tr('order_updated', 'Ordre d affichage mis a jour.'));
+                set_flash('success', $tr('order_updated'));
             }
 
             redirect_url(route_url('admin_committee', ['member_id' => $moveMemberId]));
@@ -63,13 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $memberStmt = db()->prepare('SELECT id FROM members WHERE id = ? AND is_active = 1 LIMIT 1');
         $memberStmt->execute([$memberId]);
         if (!$memberStmt->fetchColumn()) {
-            throw new RuntimeException($tr('invalid_member', 'Membre invalide.'));
+            throw new RuntimeException($tr('invalid_member'));
         }
 
         $role = trim((string) ($_POST['committee_role'] ?? ''));
         $bio = trim((string) ($_POST['committee_bio'] ?? ''));
         if (mb_strlen($role) > 190 || mb_strlen($bio) > 5000) {
-            throw new RuntimeException($tr('invalid_member', 'Membre invalide.'));
+            throw new RuntimeException($tr('invalid_member'));
         }
 
         db()->prepare('UPDATE members SET is_committee = ?, committee_role = ?, committee_bio = ?, committee_sort_order = ? WHERE id = ?')
@@ -115,12 +113,12 @@ ob_start();
         <h1><?= e((string) $t['title']) ?></h1>
         <p><?= e((string) $t['intro']) ?></p>
         <?php if ($selectedMember === null): ?>
-            <p class="help"><?= e($tr('no_active_members', 'Aucun membre actif disponible.')) ?></p>
+            <p class="help"><?= e($tr('no_active_members')) ?></p>
         <?php else: ?>
         <form method="post" class="stack" id="admin-committee-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <div class="form-grid">
-                <label><?= e($tr('member', 'Membre')) ?>
+                <label><?= e($tr('member')) ?>
                     <select name="member_id" required>
                         <?php foreach ($rows as $row): ?>
                             <option value="<?= (int) $row['id'] ?>" <?= (int) $row['id'] === (int) $selectedMember['id'] ? 'selected' : '' ?>>
@@ -150,20 +148,20 @@ ob_start();
 
     <section class="card">
         <div class="row-between">
-            <h2><?= e($tr('summary_title', 'Tableau de synthese')) ?></h2>
-            <span class="badge muted"><?= count($committeeRows) ?> <?= e($tr('committee_members', 'membre(s)')) ?></span>
+            <h2><?= e($tr('summary_title')) ?></h2>
+            <span class="badge muted"><?= count($committeeRows) ?> <?= e($tr('committee_members')) ?></span>
         </div>
         <?php if ($committeeRows === []): ?>
-            <p class="help"><?= e($tr('empty_summary', 'Aucun membre n’est affiché sur la page comité.')) ?></p>
+            <p class="help"><?= e($tr('empty_summary')) ?></p>
         <?php else: ?>
             <div class="table-wrap">
                 <table>
                     <thead>
                         <tr>
-                            <th><?= e($tr('member', 'Membre')) ?></th>
+                            <th><?= e($tr('member')) ?></th>
                             <th><?= e((string) $t['role']) ?></th>
                             <th><?= e((string) $t['sort_order']) ?></th>
-                            <th><?= e($tr('action', 'Action')) ?></th>
+                            <th><?= e($tr('action')) ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -171,7 +169,7 @@ ob_start();
                             <tr>
                                 <td>
                                     <div class="admin-committee-member">
-                                        <img class="admin-committee-avatar" src="<?= e(member_avatar_src($row)) ?>" alt="<?= e($tr('avatar_alt', 'Avatar du membre')) ?> <?= e((string) $row['callsign']) ?>" loading="lazy" decoding="async">
+                                        <img class="admin-committee-avatar" src="<?= e(member_avatar_src($row)) ?>" alt="<?= e($tr('avatar_alt')) ?> <?= e((string) $row['callsign']) ?>" loading="lazy" decoding="async">
                                         <span>
                                             <strong><?= e((string) $row['callsign']) ?></strong>
                                             <span class="help"><?= e((string) $row['full_name']) ?></span>
@@ -182,10 +180,10 @@ ob_start();
                                 <td><?= (int) ($row['committee_sort_order'] ?? 100) ?></td>
                                 <td>
                                     <div class="admin-committee-actions">
-                                        <a href="<?= e(route_url('admin_committee', ['member_id' => (int) $row['id']])) ?>"><?= e($tr('edit', 'Modifier')) ?></a>
-                                        <span class="admin-committee-move-buttons" aria-label="<?= e($tr('move_member', 'Deplacer le membre')) ?>">
-                                            <button class="button small secondary admin-committee-arrow" type="submit" form="admin-committee-form" name="committee_move" value="up:<?= (int) $row['id'] ?>" aria-label="<?= e($tr('move_up', 'Monter')) ?> <?= e((string) $row['callsign']) ?>" title="<?= e($tr('move_up', 'Monter')) ?>" <?= $rowIndex === 0 ? 'disabled' : '' ?>>&uarr;</button>
-                                            <button class="button small secondary admin-committee-arrow" type="submit" form="admin-committee-form" name="committee_move" value="down:<?= (int) $row['id'] ?>" aria-label="<?= e($tr('move_down', 'Descendre')) ?> <?= e((string) $row['callsign']) ?>" title="<?= e($tr('move_down', 'Descendre')) ?>" <?= $rowIndex === count($committeeRows) - 1 ? 'disabled' : '' ?>>&darr;</button>
+                                        <a href="<?= e(route_url('admin_committee', ['member_id' => (int) $row['id']])) ?>"><?= e($tr('edit')) ?></a>
+                                        <span class="admin-committee-move-buttons" aria-label="<?= e($tr('move_member')) ?>">
+                                            <button class="button small secondary admin-committee-arrow" type="submit" form="admin-committee-form" name="committee_move" value="up:<?= (int) $row['id'] ?>" aria-label="<?= e($tr('move_up')) ?> <?= e((string) $row['callsign']) ?>" title="<?= e($tr('move_up')) ?>" <?= $rowIndex === 0 ? 'disabled' : '' ?>>&uarr;</button>
+                                            <button class="button small secondary admin-committee-arrow" type="submit" form="admin-committee-form" name="committee_move" value="down:<?= (int) $row['id'] ?>" aria-label="<?= e($tr('move_down')) ?> <?= e((string) $row['callsign']) ?>" title="<?= e($tr('move_down')) ?>" <?= $rowIndex === count($committeeRows) - 1 ? 'disabled' : '' ?>>&darr;</button>
                                         </span>
                                     </div>
                                 </td>

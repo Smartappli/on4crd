@@ -4,16 +4,15 @@ declare(strict_types=1);
 $user = require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('my_requests', $locale);
-$text = static fn (string $key, ?string $fallback = null): string => (string) ($t[$key] ?? $fallback ?? $key);
+$text = static fn (string $key): string => (string) $t[$key];
 $memberAreaLabel = member_area_eyebrow_label($locale);
-$isFrench = $locale === 'fr';
 
 $title = $text('title');
 $intro = $text('intro');
 
 set_page_meta([
     'title' => $title,
-    'description' => (string) ($t['meta_desc'] ?? $intro),
+    'description' => (string) $t['meta_desc'],
     'robots' => 'noindex,nofollow',
     'schema_type' => 'ProfilePage',
 ]);
@@ -73,40 +72,40 @@ $timestampFor = static function (mixed $value): int {
 };
 
 $statusLabels = [
-    'draft' => $text('article_status_draft', 'Draft'),
-    'pending' => $text('article_status_pending', 'Pending review'),
-    'scheduled' => $text('article_status_scheduled', 'Scheduled'),
-    'published' => $text('article_status_published', 'Published'),
-    'active' => $text('classified_status_active', 'Active'),
-    'sold' => $text('classified_status_sold', $isFrench ? 'Vendue' : 'Sold'),
-    'archived' => $text('classified_status_archived', $isFrench ? 'Archivee' : 'Archived'),
-    'expired' => $text('classified_status_expired', $isFrench ? 'Expiree' : 'Expired'),
-    'rejected' => $text('article_status_rejected', 'Rejected'),
-    'reviewed' => $text('proposal_status_reviewed', $isFrench ? 'Relue' : 'Reviewed'),
-    'accepted' => $text('proposal_status_accepted', $isFrench ? 'Acceptee' : 'Accepted'),
+    'draft' => $text('article_status_draft'),
+    'pending' => $text('article_status_pending'),
+    'scheduled' => $text('article_status_scheduled'),
+    'published' => $text('article_status_published'),
+    'active' => $text('classified_status_active'),
+    'sold' => $text('classified_status_sold'),
+    'archived' => $text('classified_status_archived'),
+    'expired' => $text('classified_status_expired'),
+    'rejected' => $text('article_status_rejected'),
+    'reviewed' => $text('proposal_status_reviewed'),
+    'accepted' => $text('proposal_status_accepted'),
 ];
 
 $proposalAreaLabels = [
-    'articles' => $text('articles_title', 'Articles'),
-    'albums' => $text('albums_title', 'Albums'),
-    'auctions' => $text('auctions_title', $isFrench ? 'Encheres' : 'Auctions'),
-    'classifieds' => $text('classifieds_title', 'Classifieds'),
-    'events' => $text('events_title', 'Events'),
-    'members_library' => $text('library_title', $isFrench ? 'Bibliothèque membres' : 'Member library'),
-    'news' => $text('news_title', $isFrench ? 'Actualités' : 'News'),
-    'fichiers' => $text('files_title', $isFrench ? 'Fichiers' : 'Files'),
-    'presentations' => $text('presentations_title', $isFrench ? 'Presentations' : 'Presentations'),
-    'pv' => $text('minutes_title', $isFrench ? 'Proces verbaux' : 'Minutes'),
-    'videos' => $text('videos_title', $isFrench ? 'Videos' : 'Videos'),
-    'webotheque' => $text('webotheque_title', $isFrench ? 'Webothèque' : 'Web library'),
-    'wiki' => $text('wiki_title', 'Wiki'),
+    'articles' => $text('articles_title'),
+    'albums' => $text('albums_title'),
+    'auctions' => $text('auctions_title'),
+    'classifieds' => $text('classifieds_title'),
+    'events' => $text('events_title'),
+    'members_library' => $text('library_title'),
+    'news' => $text('news_title'),
+    'fichiers' => $text('files_title'),
+    'presentations' => $text('presentations_title'),
+    'pv' => $text('minutes_title'),
+    'videos' => $text('videos_title'),
+    'webotheque' => $text('webotheque_title'),
+    'wiki' => $text('wiki_title'),
 ];
 $proposalTypeLabels = [
-    'category' => $text('proposal_type_category', $isFrench ? 'Proposition de categorie' : 'Category proposal'),
-    'content' => $text('proposal_type_content', $isFrench ? 'Proposition de contenu' : 'Content proposal'),
-    'domain' => $text('proposal_type_domain', $isFrench ? 'Proposition de domaine' : 'Domain proposal'),
-    'tag' => $text('proposal_type_tag', $isFrench ? 'Proposition d etiquette' : 'Tag proposal'),
-    'subcategory' => $text('proposal_type_subcategory', $isFrench ? 'Proposition de sous-thematique' : 'Subtopic proposal'),
+    'category' => $text('proposal_type_category'),
+    'content' => $text('proposal_type_content'),
+    'domain' => $text('proposal_type_domain'),
+    'tag' => $text('proposal_type_tag'),
+    'subcategory' => $text('proposal_type_subcategory'),
 ];
 $proposalAreaRoutes = [
     'articles' => 'articles',
@@ -170,7 +169,7 @@ if (table_exists('articles') && table_has_column('articles', 'author_id')) {
             $articleStatus = (string) ($article['status'] ?? 'draft');
             $articleTitle = trim((string) ($article['title'] ?? ''));
             if ($articleTitle === '') {
-                $articleTitle = $text('article_default_title', 'Article');
+                $articleTitle = $text('article_default_title');
             }
             $articleUrl = $articleStatus === 'published' && trim((string) ($article['slug'] ?? '')) !== ''
                 ? route_url('article', ['slug' => (string) $article['slug']])
@@ -180,11 +179,11 @@ if (table_exists('articles') && table_has_column('articles', 'author_id')) {
                 'timestamp' => $timestampFor($updatedAt),
                 'status' => (string) ($statusLabels[$articleStatus] ?? $articleStatus),
                 'title' => $articleTitle,
-                'meta' => $text('articles_title') . ' / ' . (string) ($article['category'] ?? $text('category_default', 'Other')),
+                'meta' => $text('articles_title') . ' / ' . (string) ($article['category'] ?? $text('category_default')),
                 'date' => $formatRequestDate($updatedAt),
-                'note' => trim((string) ($article['moderation_note'] ?? '')) !== '' ? $text('moderation_note', 'Moderation note') . ': ' . (string) $article['moderation_note'] : '',
+                'note' => trim((string) ($article['moderation_note'] ?? '')) !== '' ? $text('moderation_note') . ': ' . (string) $article['moderation_note'] : '',
                 'url' => $articleUrl,
-                'cta' => $text('article_open', 'Open'),
+                'cta' => $text('article_open'),
             ];
         }
     } catch (Throwable $throwable) {
@@ -202,12 +201,12 @@ if (table_exists('wiki_pages') && table_has_column('wiki_pages', 'author_id')) {
             $cards[] = [
                 'timestamp' => $timestampFor($updatedAt),
                 'status' => (string) ($statusLabels[$wikiStatus] ?? $wikiStatus),
-                'title' => trim((string) ($wikiPage['title'] ?? '')) !== '' ? (string) $wikiPage['title'] : $text('wiki_default_title', $isFrench ? 'Page wiki' : 'Wiki page'),
-                'meta' => $text('wiki_title', 'Wiki'),
+                'title' => trim((string) ($wikiPage['title'] ?? '')) !== '' ? (string) $wikiPage['title'] : $text('wiki_default_title'),
+                'meta' => $text('wiki_title'),
                 'date' => $formatRequestDate($updatedAt),
                 'note' => '',
                 'url' => $wikiStatus === 'published' && trim((string) ($wikiPage['slug'] ?? '')) !== '' ? route_url('wiki_view', ['slug' => (string) $wikiPage['slug']]) : route_url('wiki'),
-                'cta' => $text('content_open', $isFrench ? 'Ouvrir' : 'Open'),
+                'cta' => $text('content_open'),
             ];
         }
     } catch (Throwable $throwable) {
@@ -223,19 +222,19 @@ if (table_exists('classified_ads') && table_has_column('classified_ads', 'owner_
             $adStatus = (string) ($ad['status'] ?? 'draft');
             $updatedAt = (string) ($ad['updated_at'] ?? $ad['created_at'] ?? 'now');
             $price = function_exists('format_price_eur') ? format_price_eur((int) ($ad['price_cents'] ?? 0)) : '';
-            $meta = $text('classifieds_title') . ' / ' . (string) ($ad['category_code'] ?? $text('category_default', 'Other'));
+            $meta = $text('classifieds_title') . ' / ' . (string) ($ad['category_code'] ?? $text('category_default'));
             if ($price !== '') {
                 $meta .= ' / ' . $price;
             }
             $cards[] = [
                 'timestamp' => $timestampFor($updatedAt),
                 'status' => (string) ($statusLabels[$adStatus] ?? $adStatus),
-                'title' => trim((string) ($ad['title'] ?? '')) !== '' ? (string) $ad['title'] : $text('classified_default_title', $isFrench ? 'Annonce' : 'Classified ad'),
+                'title' => trim((string) ($ad['title'] ?? '')) !== '' ? (string) $ad['title'] : $text('classified_default_title'),
                 'meta' => $meta,
                 'date' => $formatRequestDate($updatedAt),
-                'note' => trim((string) ($ad['expires_at'] ?? '')) !== '' ? $text('expires_on', $isFrench ? 'Expire le' : 'Expires on') . ': ' . $formatRequestDate((string) $ad['expires_at']) : '',
+                'note' => trim((string) ($ad['expires_at'] ?? '')) !== '' ? $text('expires_on') . ': ' . $formatRequestDate((string) $ad['expires_at']) : '',
                 'url' => route_url('classifieds_manage', ['edit' => (int) ($ad['id'] ?? 0)]),
-                'cta' => $text('content_manage', $isFrench ? 'Gerer' : 'Manage'),
+                'cta' => $text('content_manage'),
             ];
         }
     } catch (Throwable $throwable) {
@@ -250,7 +249,7 @@ if (table_exists('member_library_documents')) {
         foreach (($stmt->fetchAll() ?: []) as $document) {
             $titleValue = trim((string) ($document['title'] ?? ''));
             if ($titleValue === '') {
-                $titleValue = $text('library_document_default_title', $isFrench ? 'Document' : 'Document');
+                $titleValue = $text('library_document_default_title');
             }
             $uploadedAt = (string) ($document['uploaded_at'] ?? 'now');
             $categoryValue = trim((string) ($document['category'] ?? ''));
@@ -266,7 +265,7 @@ if (table_exists('member_library_documents')) {
             if ($subcategoryValue !== '') {
                 $urlQuery['subcategory'] = $subcategoryValue;
             }
-            $metaParts = [$text('library_title', $isFrench ? 'Bibliothèque membres' : 'Member library')];
+            $metaParts = [$text('library_title')];
             if ($categoryValue !== '') {
                 $metaParts[] = $categoryValue;
             }
@@ -275,13 +274,13 @@ if (table_exists('member_library_documents')) {
             }
             $cards[] = [
                 'timestamp' => $timestampFor($uploadedAt),
-                'status' => (string) ($statusLabels['published'] ?? ($isFrench ? 'Publie' : 'Published')),
+                'status' => (string) $statusLabels['published'],
                 'title' => $titleValue,
                 'meta' => implode(' / ', $metaParts),
                 'date' => $formatRequestDate($uploadedAt),
                 'note' => trim((string) ($document['description'] ?? '')),
                 'url' => route_url_clean('members_library', $urlQuery),
-                'cta' => $text('content_open', $isFrench ? 'Ouvrir' : 'Open'),
+                'cta' => $text('content_open'),
             ];
         }
     } catch (Throwable $throwable) {
@@ -300,7 +299,7 @@ if (table_exists('member_module_documents')) {
             }
             $titleValue = trim((string) ($document['title'] ?? ''));
             if ($titleValue === '') {
-                $titleValue = $text('document_default_title', $isFrench ? 'Document' : 'Document');
+                $titleValue = $text('document_default_title');
             }
             $uploadedAt = (string) ($document['uploaded_at'] ?? 'now');
             $categoryValue = trim((string) ($document['category'] ?? ''));
@@ -326,13 +325,13 @@ if (table_exists('member_module_documents')) {
             }
             $cards[] = [
                 'timestamp' => $timestampFor($uploadedAt),
-                'status' => (string) ($statusLabels['published'] ?? ($isFrench ? 'Publie' : 'Published')),
+                'status' => (string) $statusLabels['published'],
                 'title' => $titleValue,
                 'meta' => implode(' / ', $metaParts),
                 'date' => $formatRequestDate($uploadedAt),
                 'note' => trim((string) ($document['description'] ?? '')),
                 'url' => route_url_clean($route, $urlQuery),
-                'cta' => $text('content_open', $isFrench ? 'Ouvrir' : 'Open'),
+                'cta' => $text('content_open'),
             ];
         }
     } catch (Throwable $throwable) {
@@ -348,9 +347,9 @@ if (ensure_content_proposals_table()) {
             $area = (string) ($proposal['area'] ?? '');
             $proposalType = (string) ($proposal['proposal_type'] ?? 'content');
             $proposalStatus = (string) ($proposal['status'] ?? 'pending');
-            $proposalTitle = trim((string) ($proposal['title'] ?? $text('proposal_default_title', $isFrench ? 'Proposition' : 'Proposal')));
+            $proposalTitle = trim((string) ($proposal['title'] ?? $text('proposal_default_title')));
             if ($proposalTitle === '') {
-                $proposalTitle = $text('proposal_default_title', $isFrench ? 'Proposition' : 'Proposal');
+                $proposalTitle = $text('proposal_default_title');
             }
             $proposalSourceRef = trim((string) ($proposal['source_ref'] ?? ''));
             $proposalSourceKey = $normalizeDocumentSourceRef($proposalSourceRef);
@@ -392,7 +391,7 @@ if (ensure_content_proposals_table()) {
                 $noteParts[] = trim((string) $proposal['summary']);
             }
             if (trim((string) ($proposal['moderation_note'] ?? '')) !== '') {
-                $noteParts[] = $text('moderation_note', 'Moderation note') . ': ' . trim((string) $proposal['moderation_note']);
+                $noteParts[] = $text('moderation_note') . ': ' . trim((string) $proposal['moderation_note']);
             }
             $cards[] = [
                 'timestamp' => $timestampFor($updatedAt),
@@ -402,7 +401,7 @@ if (ensure_content_proposals_table()) {
                 'date' => $formatRequestDate($updatedAt),
                 'note' => implode("\n", $noteParts),
                 'url' => $proposalUrl,
-                'cta' => $text('content_open', $isFrench ? 'Ouvrir' : 'Open'),
+                'cta' => $text('content_open'),
             ];
         }
     } catch (Throwable $throwable) {
@@ -453,7 +452,7 @@ ob_start();
                             <p class="help"><?= nl2br(e((string) $card['note'])) ?></p>
                         <?php endif; ?>
                         <?php if (trim((string) ($card['url'] ?? '')) !== ''): ?>
-                            <a class="button secondary small" href="<?= e((string) $card['url']) ?>"><?= e((string) ($card['cta'] ?? $text('content_open', $isFrench ? 'Ouvrir' : 'Open'))) ?></a>
+                            <a class="button secondary small" href="<?= e((string) $card['url']) ?>"><?= e((string) ($card['cta'] ?? $text('content_open'))) ?></a>
                         <?php endif; ?>
                     </article>
                 <?php endforeach; ?>

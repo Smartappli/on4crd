@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'Odražený výkon (W)',
   'swr_result' => 'Vypočtené SWR',
   'dbw_calc' => 'Převod dBm <-> dBW',
+  'cq_zone' => 'zóna CQ',
+  'itu_zone' => 'zóna ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Předvolba uložena.',
+  'preset_deleted' => 'Předvolba odstraněna.',
+  'tools_stat_available' => 'Dostupné nástroje',
+  'tools_stat_categories' => 'Kategorie',
 );

@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Luokiteltu mainos moderoitu',
   'notification_removed_body' => 'Mainos poistettu valvonnasta: {title}',
   'notification_status_body' => 'Tila päivitetty {status}:ksi: {title}',
+  'propose_category_direct_help' => 'Kategoria hyväksytään suoraan.',
+  'propose_category_created_direct' => 'Kategoria luotiin ja hyväksyttiin suoraan.',
 );

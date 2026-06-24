@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'এই উপ-বিষয়টিতে এখনও নিবন্ধ রয়েছে।',
   'previous' => 'আগের',
   'next' => 'পরের',
+  'error_field_too_long' => 'ক্ষেত্রগুলির একটি অনুমোদিত দৈর্ঘ্য অতিক্রম করেছে৷',
 );

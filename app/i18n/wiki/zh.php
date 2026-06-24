@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => '已从收藏移除',
   'favorite_added_msg' => '页面已加入收藏。',
   'favorite_removed_msg' => '页面已从收藏移除。',
+  'err_subcategory_category_mismatch' => '所选子主题不属于所选主题。',
+  'category_general' => '常规',
 );

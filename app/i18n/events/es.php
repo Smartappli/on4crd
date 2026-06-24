@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => 'Cerrar',
   'proposal_recorded' => 'Propuesta guardada en tus contenidos.',
   'invalid' => 'Solicitud no válida.',
-  'event_published_direct' => 'Propuesta guardada en tus contenidos.',
+  'event_published_direct' => 'Evento publicado directamente.',
+  'propose_event_direct_help' => 'El evento se publicará directamente.',
+  'publish_event' => 'Publicar',
+  'next_event_title' => 'Próximos eventos',
 );

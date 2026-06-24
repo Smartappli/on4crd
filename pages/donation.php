@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $t = i18n_domain_locale('donation', $locale);
-$tr = static fn(string $key): string => (string) ($t[$key] ?? $key);
+$tr = static fn(string $key): string => (string) $t[$key];
 $donationUrl = route_url_with_locale('donation', $locale);
 
 set_page_meta([

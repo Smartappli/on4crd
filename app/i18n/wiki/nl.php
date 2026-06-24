@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Verwijderd uit favorieten',
   'favorite_added_msg' => 'Pagina toegevoegd aan favorieten.',
   'favorite_removed_msg' => 'Pagina verwijderd uit favorieten.',
+  'err_subcategory_category_mismatch' => 'Het gekozen subthema hoort niet bij het gekozen thema.',
+  'category_general' => 'Algemeen',
 );

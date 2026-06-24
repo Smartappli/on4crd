@@ -125,6 +125,21 @@ function member_library_subcategory_ref_parts(string $value): array
 }
 }
 
+if (!function_exists('member_library_i18n_text')) {
+function member_library_i18n_text(string $key): string
+{
+    static $cache = [];
+
+    $locale = function_exists('current_locale') ? current_locale() : null;
+    $cacheKey = $locale ?? '__default__';
+    if (!array_key_exists($cacheKey, $cache)) {
+        $cache[$cacheKey] = function_exists('i18n_domain_locale') ? i18n_domain_locale('members_library', $locale) : [];
+    }
+
+    return (string) ($cache[$cacheKey][$key] ?? $key);
+}
+}
+
 if (!function_exists('member_library_taxonomy_from_input')) {
 /**
  * @return array{category:string,subcategory:string}
@@ -145,7 +160,7 @@ function member_library_taxonomy_from_input(string $categoryInput, string $subca
         return [$category, ''];
     }
     if ($parts['category'] !== '' && $parts['category'] !== $category) {
-        throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+        throw new RuntimeException(member_library_i18n_text('err_subcategory_category_mismatch'));
     }
 
     foreach ((array) (member_library_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
@@ -154,7 +169,7 @@ function member_library_taxonomy_from_input(string $categoryInput, string $subca
         }
     }
 
-    throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+    throw new RuntimeException(member_library_i18n_text('err_subcategory_category_mismatch'));
 }
 }
 

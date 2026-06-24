@@ -38,4 +38,10 @@ return array (
   'create' => 'Luo',
   'proposal_submit' => 'Lähetä ehdotus',
   'cancel' => 'Peruuta',
+  'status_draft' => 'Luonnos',
+  'status_scheduled' => 'Aikataulutettu',
+  'status_active' => 'Aktiivinen',
+  'status_closed' => 'Suljettu',
+  'status_cancelled' => 'Peruttu',
+  'contact_prefix' => 'Yhteyshenkilö:',
 );

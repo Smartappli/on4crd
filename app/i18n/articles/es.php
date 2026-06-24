@@ -103,4 +103,6 @@ Contacto:',
   'no_subcategory' => 'Sin subtema',
   'favorites' => 'Favoritos',
   'invalid' => 'Solicitud no válida.',
+  'err_invalid_category' => 'Categoría no válida.',
+  'err_subcategory_category_mismatch' => 'La subtemática seleccionada no pertenece a la temática elegida.',
 );

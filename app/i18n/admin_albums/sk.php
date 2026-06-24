@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album bol overený, ale synchronizácia na sociálnych sieťach zlyhala.',
   'batch_max_files' => 'Maximálne 100 fotografií na import.',
   'batch_max_size' => 'Dávka fotografií presahuje 512 MB.',
+  'error_field_too_long' => 'Jedno z polí prekračuje povolenú dĺžku.',
 );

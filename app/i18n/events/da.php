@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => 'Luk',
   'proposal_recorded' => 'Forslaget er gemt i dit indhold.',
   'invalid' => 'Ugyldig anmodning.',
-  'event_published_direct' => 'Forslaget er gemt i dit indhold.',
+  'event_published_direct' => 'Begivenheden er offentliggjort direkte.',
+  'propose_event_direct_help' => 'Begivenheden bliver offentliggjort direkte.',
+  'publish_event' => 'Udgiv',
+  'next_event_title' => 'Kommende begivenheder',
 );

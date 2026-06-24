@@ -38,4 +38,10 @@ return array (
   'create' => 'Vytvořit',
   'proposal_submit' => 'Odeslat návrh',
   'cancel' => 'Zrušit',
+  'status_draft' => 'Koncept',
+  'status_scheduled' => 'Naplánováno',
+  'status_active' => 'Aktivní',
+  'status_closed' => 'Ukončená',
+  'status_cancelled' => 'Zrušená',
+  'contact_prefix' => 'Kontakt:',
 );

@@ -38,4 +38,10 @@ return array (
   'create' => '创造',
   'proposal_submit' => '提交建议',
   'cancel' => '取消',
+  'status_draft' => '草稿',
+  'status_scheduled' => '预定',
+  'status_active' => '有效',
+  'status_closed' => '已结束',
+  'status_cancelled' => '已取消',
+  'contact_prefix' => '联系人：',
 );

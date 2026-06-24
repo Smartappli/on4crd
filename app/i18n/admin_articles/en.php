@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'This subtopic still contains articles.',
   'previous' => 'Previous',
   'next' => 'Next',
+  'error_field_too_long' => 'One of the fields exceeds the allowed length.',
 );

@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Etiketforslag',
   'proposal_type_subcategory' => 'Forslag til underemne',
   'webotheque_title' => 'Webbibliotek',
+  'albums_title' => 'Albums',
+  'auctions_title' => 'Auktioner',
+  'files_title' => 'Filer',
+  'presentations_title' => 'Præsentationer',
+  'minutes_title' => 'Referater',
+  'videos_title' => 'Videoer',
+  'library_document_default_title' => 'Dokument',
+  'document_default_title' => 'Dokument',
 );

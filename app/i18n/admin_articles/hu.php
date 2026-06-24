@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Ez az altéma még mindig tartalmaz cikkeket.',
   'previous' => 'Előző',
   'next' => 'Következő',
+  'error_field_too_long' => 'Az egyik mező túllépi a megengedett hosszt.',
 );

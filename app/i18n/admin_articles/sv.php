@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Det här underämnet innehåller fortfarande artiklar.',
   'previous' => 'Föregående',
   'next' => 'Nästa',
+  'error_field_too_long' => 'Ett av fälten överskrider den tillåtna längden.',
 );

@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Albam bailíochtaithe, ach theip ar an sioncronú sóisialta.',
   'batch_max_files' => 'Uasmhéid 100 grianghraf in aghaidh an allmhairithe.',
   'batch_max_size' => 'Sáraíonn an bhaisc grianghraf 512 MB.',
+  'error_field_too_long' => 'Tá ceann de na réimsí níos mó ná an fad ceadaithe.',
 );

@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Модерирана малка обява',
   'notification_removed_body' => 'Рекламата е премахната чрез модериране: {title}',
   'notification_status_body' => 'Статусът е актуализиран до {status}: {title}',
+  'propose_category_direct_help' => 'Категорията ще бъде одобрена директно.',
+  'propose_category_created_direct' => 'Категорията е създадена и одобрена директно.',
 );

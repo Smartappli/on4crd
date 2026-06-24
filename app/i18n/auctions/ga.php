@@ -38,4 +38,10 @@ return array (
   'create' => 'Cruthaigh',
   'proposal_submit' => 'Seol an moladh',
   'cancel' => 'Cealaigh',
+  'status_draft' => 'Dréacht',
+  'status_scheduled' => 'Sceidealta',
+  'status_active' => 'Gníomhach',
+  'status_closed' => 'Dúnta',
+  'status_cancelled' => 'Cealaithe',
+  'contact_prefix' => 'Teagmháil:',
 );

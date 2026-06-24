@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album on kinnitatud, kuid suhtlusvõrgustiku sünkroonimine ebaõnnestus.',
   'batch_max_files' => 'Maksimaalselt 100 fotot impordi kohta.',
   'batch_max_size' => 'Fotopaki suurus ületab 512 MB.',
+  'error_field_too_long' => 'Üks väljadest ületab lubatud pikkuse.',
 );

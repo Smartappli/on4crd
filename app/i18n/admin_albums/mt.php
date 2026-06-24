@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album ivvalidat, iżda s-sinkronizzazzjoni soċjali falliet.',
   'batch_max_files' => 'Massimu 100 ritratt għal kull importazzjoni.',
   'batch_max_size' => 'Il-lott tar-ritratti jaqbeż il-512 MB.',
+  'error_field_too_long' => 'Wieħed mill-oqsma jaqbeż it-tul permess.',
 );

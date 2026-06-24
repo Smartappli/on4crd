@@ -38,4 +38,10 @@ return array (
   'create' => 'Izveidot',
   'proposal_submit' => 'Nosūtīt priekšlikumu',
   'cancel' => 'Atcelt',
+  'status_draft' => 'Melnraksts',
+  'status_scheduled' => 'Plānots',
+  'status_active' => 'Aktīvs',
+  'status_closed' => 'Slēgta',
+  'status_cancelled' => 'Atcelta',
+  'contact_prefix' => 'Kontaktpersona:',
 );

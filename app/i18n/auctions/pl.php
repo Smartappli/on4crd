@@ -38,4 +38,10 @@ return array (
   'create' => 'Utwórz',
   'proposal_submit' => 'Wyślij propozycję',
   'cancel' => 'Anuluj',
+  'status_draft' => 'Wersja robocza',
+  'status_scheduled' => 'Zaplanowane',
+  'status_active' => 'Aktywny',
+  'status_closed' => 'Zamknięta',
+  'status_cancelled' => 'Anulowana',
+  'contact_prefix' => 'Kontakt:',
 );

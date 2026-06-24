@@ -38,4 +38,10 @@ return array (
   'create' => 'Opret',
   'proposal_submit' => 'Send forslag',
   'cancel' => 'Annuller',
+  'status_draft' => 'Udkast',
+  'status_scheduled' => 'Planlagt',
+  'status_active' => 'Aktiv',
+  'status_closed' => 'Lukket',
+  'status_cancelled' => 'Annulleret',
+  'contact_prefix' => 'Kontakt:',
 );

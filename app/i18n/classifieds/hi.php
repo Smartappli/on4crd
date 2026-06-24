@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'वर्गीकृत विज्ञापन संचालित',
   'notification_removed_body' => 'मॉडरेशन द्वारा विज्ञापन हटा दिया गया: {title}',
   'notification_status_body' => 'स्थिति {status} में अपडेट की गई: {title}',
+  'propose_category_direct_help' => 'श्रेणी सीधे स्वीकृत की जाएगी।',
+  'propose_category_created_direct' => 'श्रेणी बनाई गई और सीधे स्वीकृत की गई।',
 );

@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => 'Закрыть',
   'proposal_recorded' => 'Предложение сохранено в ваших материалах.',
   'invalid' => 'Недопустимый запрос.',
-  'event_published_direct' => 'Предложение сохранено в ваших материалах.',
+  'event_published_direct' => 'Событие опубликовано напрямую.',
+  'propose_event_direct_help' => 'Событие будет опубликовано напрямую.',
+  'publish_event' => 'Публиковать',
+  'next_event_title' => 'Ближайшие события',
 );

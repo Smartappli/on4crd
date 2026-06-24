@@ -11,4 +11,5 @@ return array (
   'prosign_sk' => 'Slut på kontakt',
   'prosign_bt' => 'Separator',
   'prosign_as' => 'Vänta',
+  'code' => 'Code',
 );

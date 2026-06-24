@@ -103,4 +103,6 @@ Kontakt:',
   'no_subcategory' => 'Intet underemne',
   'favorites' => 'Favoritter',
   'invalid' => 'Ugyldig anmodning.',
+  'err_invalid_category' => 'Ugyldig kategori.',
+  'err_subcategory_category_mismatch' => 'Det valgte underemne hører ikke til det valgte emne.',
 );

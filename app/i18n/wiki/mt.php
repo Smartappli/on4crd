@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Imneħħi mill-favoriti',
   'favorite_added_msg' => 'Paġna miżjuda mal-favoriti.',
   'favorite_removed_msg' => 'Paġna mneħħija mill-favoriti.',
+  'err_subcategory_category_mismatch' => 'Is-sottotema magħżula ma tappartjenix għat-tema magħżula.',
+  'category_general' => 'Ġenerali',
 );

@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Skelbimas moderuojamas',
   'notification_removed_body' => 'Skelbimas pašalintas moderuojant: {title}',
   'notification_status_body' => 'Būsena atnaujinta į {status}: {title}',
+  'propose_category_direct_help' => 'Kategorija bus patvirtinta tiesiogiai.',
+  'propose_category_created_direct' => 'Kategorija sukurta ir patvirtinta tiesiogiai.',
 );

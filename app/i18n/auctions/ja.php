@@ -38,4 +38,10 @@ return array (
   'create' => '作成する',
   'proposal_submit' => '提案を送信',
   'cancel' => 'キャンセル',
+  'status_draft' => '草案',
+  'status_scheduled' => '予定されている',
+  'status_active' => '公開中',
+  'status_closed' => '終了',
+  'status_cancelled' => 'キャンセル済み',
+  'contact_prefix' => '連絡先:',
 );

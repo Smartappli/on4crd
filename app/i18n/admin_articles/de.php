@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Dieses Unterthema enthält noch Artikel.',
   'previous' => 'Zurück',
   'next' => 'Weiter',
+  'error_field_too_long' => 'Eines der Felder überschreitet die zulässige Länge.',
 );

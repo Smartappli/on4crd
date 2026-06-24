@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Reflected power (W)',
   'swr_result' => 'Calculated SWR',
   'dbw_calc' => 'dBm <-> dBW conversion',
+  'cq_zone' => 'CQ zone',
+  'itu_zone' => 'ITU zone',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Preset saved.',
+  'preset_deleted' => 'Preset deleted.',
+  'tools_stat_available' => 'Available tools',
+  'tools_stat_categories' => 'Categories',
 );

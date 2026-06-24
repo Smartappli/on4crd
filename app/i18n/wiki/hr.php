@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Uklonjeno iz favorita',
   'favorite_added_msg' => 'Stranica dodana u favorite.',
   'favorite_removed_msg' => 'Stranica uklonjena iz favorita.',
+  'err_subcategory_category_mismatch' => 'Odabrana podtema ne pripada odabranoj temi.',
+  'category_general' => 'Općenito',
 );

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -52,4 +51,5 @@ return array (
   'search_label' => 'वैश्विक खोज',
   'search_placeholder' => 'खोजें…',
   'search_submit' => 'खोजें',
+  'membership_good_standing' => 'सदस्यता अद्यतित',
 );

@@ -38,4 +38,10 @@ return array (
   'create' => 'يخلق',
   'proposal_submit' => 'إرسال الاقتراح',
   'cancel' => 'إلغاء',
+  'status_draft' => 'مسودة',
+  'status_scheduled' => 'المقرر',
+  'status_active' => 'نشط',
+  'status_closed' => 'مغلقة',
+  'status_cancelled' => 'ملغاة',
+  'contact_prefix' => 'جهة الاتصال:',
 );

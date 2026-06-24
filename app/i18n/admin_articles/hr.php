@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Ova podtema još uvijek sadrži članke.',
   'previous' => 'Prethodno',
   'next' => 'Dalje',
+  'error_field_too_long' => 'Jedno od polja premašuje dopuštenu duljinu.',
 );

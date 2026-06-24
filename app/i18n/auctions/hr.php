@@ -38,4 +38,10 @@ return array (
   'create' => 'Stvorite',
   'proposal_submit' => 'Pošalji prijedlog',
   'cancel' => 'Odustani',
+  'status_draft' => 'Nacrt',
+  'status_scheduled' => 'Zakazano',
+  'status_active' => 'Aktivno',
+  'status_closed' => 'Zatvorena',
+  'status_cancelled' => 'Otkazana',
+  'contact_prefix' => 'Kontakt:',
 );

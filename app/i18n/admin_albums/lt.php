@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Albumas patvirtintas, bet socialinis sinchronizavimas nepavyko.',
   'batch_max_files' => 'Ne daugiau kaip 100 nuotraukų importuojant.',
   'batch_max_size' => 'Nuotraukų paketas viršija 512 MB.',
+  'error_field_too_long' => 'Vienas iš laukų viršija leistiną ilgį.',
 );

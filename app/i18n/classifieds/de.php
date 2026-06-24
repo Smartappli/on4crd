@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Kleinanzeige moderiert',
   'notification_removed_body' => 'Anzeige durch Moderation entfernt: {title}',
   'notification_status_body' => 'Status aktualisiert auf {status}: {title}',
+  'propose_category_direct_help' => 'Die Kategorie wird direkt freigegeben.',
+  'propose_category_created_direct' => 'Die Kategorie wurde erstellt und direkt freigegeben.',
 );

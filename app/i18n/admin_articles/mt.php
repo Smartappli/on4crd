@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Dan is-subsuġġett għadu fih artikli.',
   'previous' => 'Preċedenti',
   'next' => 'Wara',
+  'error_field_too_long' => 'Wieħed mill-oqsma jaqbeż it-tul permess.',
 );

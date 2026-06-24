@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Αφαιρέθηκε από τα αγαπημένα',
   'favorite_added_msg' => 'Η σελίδα προστέθηκε στα αγαπημένα.',
   'favorite_removed_msg' => 'Η σελίδα αφαιρέθηκε από τα αγαπημένα.',
+  'err_subcategory_category_mismatch' => 'Το επιλεγμένο υποθέμα δεν ανήκει στο επιλεγμένο θέμα.',
+  'category_general' => 'Γενικά',
 );

@@ -103,4 +103,6 @@ return array (
   'no_subcategory' => 'Χωρίς υποθέμα',
   'favorites' => 'Αγαπημένα',
   'invalid' => 'Μη έγκυρο αίτημα.',
+  'err_invalid_category' => 'Μη έγκυρη κατηγορία.',
+  'err_subcategory_category_mismatch' => 'Το επιλεγμένο υποθέμα δεν ανήκει στο επιλεγμένο θέμα.',
 );

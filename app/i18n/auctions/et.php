@@ -38,4 +38,10 @@ return array (
   'create' => 'Loo',
   'proposal_submit' => 'Saada ettepanek',
   'cancel' => 'Tühista',
+  'status_draft' => 'Mustand',
+  'status_scheduled' => 'Planeeritud',
+  'status_active' => 'Aktiivne',
+  'status_closed' => 'Suletud',
+  'status_cancelled' => 'Tühistatud',
+  'contact_prefix' => 'Kontakt:',
 );

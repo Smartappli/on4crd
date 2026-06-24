@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Ogłoszenie drobne moderowane',
   'notification_removed_body' => 'Ogłoszenie usunięte przez moderację: {title}',
   'notification_status_body' => 'Stan zaktualizowany do {status}: {title}',
+  'propose_category_direct_help' => 'Kategoria zostanie zatwierdzona bezpośrednio.',
+  'propose_category_created_direct' => 'Kategoria została utworzona i zatwierdzona bezpośrednio.',
 );

@@ -195,7 +195,7 @@ ob_start();
         <label><?= e((string) $t['search']) ?>
             <input type="text" name="member_q" value="<?= e($memberSearch) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
         </label>
-        <input type="hidden" name="sort" value="<?= e($memberSort) ?>"><input type="hidden" name="dir" value="<?= e($memberDir) ?>"><button class="button secondary" type="submit"><?= e((string) ($t['search_btn'] ?? 'OK')) ?></button>
+        <input type="hidden" name="sort" value="<?= e($memberSort) ?>"><input type="hidden" name="dir" value="<?= e($memberDir) ?>"><button class="button secondary" type="submit"><?= e((string) $t['search_btn']) ?></button>
     </form>
     <div class="table-wrap"><table><thead><tr>
         <th><?= e((string) $t['th_callsign']) ?></th><th><?= e((string) $t['th_name']) ?></th><th><?= e((string) $t['th_email']) ?></th><th><?= e((string) $t['th_locator']) ?></th><th><?= e((string) $t['th_active']) ?></th><th><?= e((string) $t['th_committee']) ?></th><th><?= e((string) $t['th_password_reset']) ?></th><th><?= e((string) $t['th_actions']) ?></th>

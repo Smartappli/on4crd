@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'প্রিয় থেকে সরানো হয়েছে',
   'favorite_added_msg' => 'পৃষ্ঠা প্রিয়তে যোগ করা হয়েছে।',
   'favorite_removed_msg' => 'পৃষ্ঠা প্রিয় থেকে সরানো হয়েছে।',
+  'err_subcategory_category_mismatch' => 'নির্বাচিত উপ-বিষয়টি নির্বাচিত বিষয়ের অন্তর্গত নয়।',
+  'category_general' => 'সাধারণ',
 );

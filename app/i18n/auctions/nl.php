@@ -38,4 +38,10 @@ return array (
   'create' => 'Aanmaken',
   'proposal_submit' => 'Voorstel verzenden',
   'cancel' => 'Annuleren',
+  'status_draft' => 'Diepgang',
+  'status_scheduled' => 'Gepland',
+  'status_active' => 'Actief',
+  'status_closed' => 'Gesloten',
+  'status_cancelled' => 'Geannuleerd',
+  'contact_prefix' => 'Contactpersoon:',
 );

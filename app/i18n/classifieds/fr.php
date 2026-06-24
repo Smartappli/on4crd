@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Petite annonce modérée',
   'notification_removed_body' => 'Annonce supprimée par la modération : {title}',
   'notification_status_body' => 'Statut mis à jour vers {status} : {title}',
+  'propose_category_direct_help' => 'La catégorie sera validée directement.',
+  'propose_category_created_direct' => 'Catégorie créée et validée directement.',
 );

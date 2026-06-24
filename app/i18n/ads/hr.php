@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -52,4 +51,20 @@ return array (
   'unique_visitors' => 'Jedinstveni posjetitelji cca.',
   'date' => 'Datum',
   'none_stats' => 'Još nije zabilježena statistika.',
+  'format_square' => 'Kvadrat (1080×1080)',
+  'format_landscape' => 'Vodoravno (1200×628)',
+  'format_portrait' => 'Okomito (1080×1350)',
+  'placement_homepage_top_name' => 'Vrh početne stranice',
+  'placement_homepage_top_description' => 'Banner na vrhu početne stranice',
+  'placement_sidebar_name' => 'Bočna traka',
+  'placement_sidebar_description' => 'Bočni oglasni prostor',
+  'placement_article_inline_name' => 'Unutar članka',
+  'placement_article_inline_description' => 'Oglas umetnut u sadržaj članka',
+  'status_draft_label' => 'Nacrt',
+  'status_pending_label' => 'Čeka pregled',
+  'status_active_label' => 'Aktivno',
+  'status_paused_label' => 'Pauza',
+  'status_expired_label' => 'isteklo',
+  'status_rejected_label' => 'Odbijen',
+  'ok' => 'OK',
 );

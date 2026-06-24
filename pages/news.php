@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $sectionId = news_default_section_id();
                 if ($sectionId <= 0) {
-                    throw new RuntimeException((string) ($newsT['unavailable'] ?? 'News storage unavailable.'));
+                    throw new RuntimeException((string) $newsT['unavailable']);
                 }
                 $slug = news_unique_slug($title);
                 $content = news_content_html_from_summary($summaryText, $sourceText);
@@ -269,7 +269,7 @@ ob_start();
         <div class="news-hero-stats">
             <article class="news-hero-stat">
                 <strong><?= (int) $publishedNewsCount ?></strong>
-                <span><?= e((string) ($newsT['news_count_label'] ?? "Nombre d'actualit?s")) ?></span>
+                <span><?= e((string) $newsT['news_count_label']) ?></span>
             </article>
         </div>
         <div class="news-hero-actions" aria-label="<?= e((string) $newsT['news_actions']) ?>">
@@ -365,7 +365,7 @@ ob_start();
             <input type="hidden" name="ym" value="<?= e($monthFilter) ?>">
         <?php endif; ?>
         <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $newsT['keywords_placeholder']) ?>">
-        <button class="button" type="submit"><?= e((string) ($newsT['search'] ?? $newsT['apply_filters'])) ?></button>
+        <button class="button" type="submit"><?= e((string) $newsT['search']) ?></button>
         <?php if ($search !== '' || $monthFilter !== '' || $categoryFilter !== ''): ?>
             <a class="button secondary" href="<?= e(route_url('news')) ?>"><?= e((string) $newsT['reset']) ?></a>
         <?php endif; ?>
@@ -374,10 +374,10 @@ ob_start();
 
 <section class="news-layout mt-4">
     <aside class="news-categories card">
-        <p class="news-ui-heading"><?= e((string) ($newsT['categories'] ?? $newsT['default_section'])) ?></p>
-        <nav class="news-category-list" aria-label="<?= e((string) ($newsT['categories'] ?? $newsT['default_section'])) ?>">
+        <p class="news-ui-heading"><?= e((string) $newsT['categories']) ?></p>
+        <nav class="news-category-list" aria-label="<?= e((string) $newsT['categories']) ?>">
             <a class="news-category-item" href="<?= e(route_url_clean('news', ['q' => $search, 'ym' => $monthFilter])) ?>"<?= $categoryFilter === '' ? ' aria-current="page"' : '' ?>>
-                <span><?= e((string) ($newsT['all_categories'] ?? $newsT['default_section'])) ?></span>
+                <span><?= e((string) $newsT['all_categories']) ?></span>
                 <strong><?= (int) $publishedNewsCount ?></strong>
             </a>
             <?php foreach ($categories as $cat): ?>
@@ -389,7 +389,7 @@ ob_start();
             <?php endforeach; ?>
         </nav>
         <?php if ($categories === []): ?>
-            <p class="help"><?= e((string) ($newsT['no_news_yet'] ?? 'Aucune actualité.')) ?></p>
+            <p class="help"><?= e((string) $newsT['no_news_yet']) ?></p>
         <?php endif; ?>
     </aside>
 

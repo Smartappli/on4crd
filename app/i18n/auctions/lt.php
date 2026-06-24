@@ -38,4 +38,10 @@ return array (
   'create' => 'Sukurti',
   'proposal_submit' => 'Pateikti pasiūlymą',
   'cancel' => 'Atšaukti',
+  'status_draft' => 'Juodraštis',
+  'status_scheduled' => 'Suplanuota',
+  'status_active' => 'Aktyvus',
+  'status_closed' => 'Uždaryta',
+  'status_cancelled' => 'Atšaukta',
+  'contact_prefix' => 'Kontaktas:',
 );

@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album validiert, aber die soziale Synchronisierung ist fehlgeschlagen.',
   'batch_max_files' => 'Maximal 100 Fotos pro Import.',
   'batch_max_size' => 'Der Fotostapel überschreitet 512 MB.',
+  'error_field_too_long' => 'Eines der Felder überschreitet die zulässige Länge.',
 );

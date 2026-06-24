@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Dihapus dari favorit',
   'favorite_added_msg' => 'Halaman ditambahkan ke favorit.',
   'favorite_removed_msg' => 'Halaman dihapus dari favorit.',
+  'err_subcategory_category_mismatch' => 'Subtema yang dipilih bukan bagian dari tema yang dipilih.',
+  'category_general' => 'Umum',
 );

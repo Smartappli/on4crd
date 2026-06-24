@@ -103,4 +103,6 @@ Contact:',
   'no_subcategory' => 'Geen subonderwerp',
   'favorites' => 'Favorieten',
   'invalid' => 'Ongeldig verzoek.',
+  'err_invalid_category' => 'Ongeldige categorie.',
+  'err_subcategory_category_mismatch' => 'Het gekozen subthema hoort niet bij het gekozen thema.',
 );

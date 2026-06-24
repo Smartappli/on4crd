@@ -75,22 +75,22 @@ function admin_cards_for_dashboard(string $locale, int $userId, string $searchNe
 }
 
 /**
- * @return array<string, array{route:string,permission:string,label:array<string,string>}>
+ * @return array<string, array{route:string,permission:string,label_key:string}>
  */
 function admin_pending_content_areas(): array
 {
     return [
-        'articles' => ['route' => 'admin_articles', 'permission' => 'articles.manage', 'label' => ['fr' => 'Articles', 'en' => 'Articles']],
-        'albums' => ['route' => 'admin_albums', 'permission' => 'albums.manage', 'label' => ['fr' => 'Albums', 'en' => 'Albums']],
-        'auctions' => ['route' => 'admin_auctions', 'permission' => 'auctions.manage', 'label' => ['fr' => 'Encheres', 'en' => 'Auctions']],
-        'classifieds' => ['route' => 'admin_classifieds', 'permission' => 'classifieds.moderate', 'label' => ['fr' => 'Petites annonces', 'en' => 'Classifieds']],
-        'events' => ['route' => 'admin_events', 'permission' => 'events.manage', 'label' => ['fr' => 'Événements', 'en' => 'Events']],
-        'members_library' => ['route' => 'admin_library', 'permission' => 'admin.access', 'label' => ['fr' => 'Bibliothèque membres', 'en' => 'Member library']],
-        'news' => ['route' => 'admin_news', 'permission' => 'news.moderate', 'label' => ['fr' => 'Actualités', 'en' => 'News']],
-        'presentations' => ['route' => 'admin_presentations', 'permission' => 'admin.access', 'label' => ['fr' => 'Presentations', 'en' => 'Presentations']],
-        'videos' => ['route' => 'admin_videos', 'permission' => 'admin.access', 'label' => ['fr' => 'Videos', 'en' => 'Videos']],
-        'webotheque' => ['route' => 'admin_webotheque', 'permission' => 'admin.access', 'label' => ['fr' => 'Webothèque', 'en' => 'Web library']],
-        'wiki' => ['route' => 'admin_wiki', 'permission' => 'wiki.moderate', 'label' => ['fr' => 'Wiki', 'en' => 'Wiki']],
+        'articles' => ['route' => 'admin_articles', 'permission' => 'articles.manage', 'label_key' => 'pending_area_articles'],
+        'albums' => ['route' => 'admin_albums', 'permission' => 'albums.manage', 'label_key' => 'pending_area_albums'],
+        'auctions' => ['route' => 'admin_auctions', 'permission' => 'auctions.manage', 'label_key' => 'pending_area_auctions'],
+        'classifieds' => ['route' => 'admin_classifieds', 'permission' => 'classifieds.moderate', 'label_key' => 'pending_area_classifieds'],
+        'events' => ['route' => 'admin_events', 'permission' => 'events.manage', 'label_key' => 'pending_area_events'],
+        'members_library' => ['route' => 'admin_library', 'permission' => 'admin.access', 'label_key' => 'pending_area_members_library'],
+        'news' => ['route' => 'admin_news', 'permission' => 'news.moderate', 'label_key' => 'pending_area_news'],
+        'presentations' => ['route' => 'admin_presentations', 'permission' => 'admin.access', 'label_key' => 'pending_area_presentations'],
+        'videos' => ['route' => 'admin_videos', 'permission' => 'admin.access', 'label_key' => 'pending_area_videos'],
+        'webotheque' => ['route' => 'admin_webotheque', 'permission' => 'admin.access', 'label_key' => 'pending_area_webotheque'],
+        'wiki' => ['route' => 'admin_wiki', 'permission' => 'wiki.moderate', 'label_key' => 'pending_area_wiki'],
     ];
 }
 
@@ -111,7 +111,9 @@ function admin_pending_content_area_label(string $area, string $locale): string
         return $area;
     }
 
-    return i18n_localized_value($definition['label'], $locale, 'fr');
+    $messages = i18n_domain_locale('admin', $locale);
+
+    return (string) $messages[(string) $definition['label_key']];
 }
 
 function admin_pending_content_area_url(string $area): string
@@ -129,22 +131,14 @@ function admin_pending_content_area_url(string $area): string
  */
 function admin_pending_content_proposal_status_labels(string $locale): array
 {
-    $labels = [
-        'fr' => [
-            'pending' => 'En attente',
-            'reviewed' => 'Relue',
-            'accepted' => 'Acceptee',
-            'rejected' => 'Refusee',
-        ],
-        'en' => [
-            'pending' => 'Pending',
-            'reviewed' => 'Reviewed',
-            'accepted' => 'Accepted',
-            'rejected' => 'Rejected',
-        ],
-    ];
+    $messages = i18n_domain_locale('admin', $locale);
 
-    return $labels[$locale] ?? $labels['fr'];
+    return [
+        'pending' => (string) $messages['proposal_status_pending'],
+        'reviewed' => (string) $messages['proposal_status_reviewed'],
+        'accepted' => (string) $messages['proposal_status_accepted'],
+        'rejected' => (string) $messages['proposal_status_rejected'],
+    ];
 }
 
 function admin_pending_content_card_url(string $route, int $pendingCount): string
@@ -265,22 +259,23 @@ function admin_pending_content_proposals_for_dashboard(string $locale, int $limi
 function admin_update_content_proposal_status(int $proposalId, string $status, string $moderationNote, string $locale): void
 {
     $labels = admin_pending_content_proposal_status_labels($locale);
+    $messages = i18n_domain_locale('admin', $locale);
     if ($proposalId <= 0 || !isset($labels[$status])) {
-        throw new RuntimeException($locale === 'fr' ? 'Proposition invalide.' : 'Invalid proposal.');
+        throw new RuntimeException((string) $messages['err_invalid_proposal']);
     }
     if (!ensure_content_proposals_table()) {
-        throw new RuntimeException($locale === 'fr' ? 'Stockage des propositions indisponible.' : 'Proposal storage unavailable.');
+        throw new RuntimeException((string) $messages['proposal_storage_unavailable']);
     }
 
     $stmt = db()->prepare('SELECT id, member_id, area, proposal_type, title, summary, source_ref FROM content_proposals WHERE id = ? LIMIT 1');
     $stmt->execute([$proposalId]);
     $proposal = $stmt->fetch() ?: null;
     if (!is_array($proposal)) {
-        throw new RuntimeException($locale === 'fr' ? 'Proposition introuvable.' : 'Proposal not found.');
+        throw new RuntimeException((string) $messages['proposal_not_found']);
     }
     $area = (string) ($proposal['area'] ?? '');
     if (!admin_can_manage_pending_content_area($area)) {
-        throw new RuntimeException($locale === 'fr' ? 'Permission insuffisante.' : 'Insufficient permission.');
+        throw new RuntimeException((string) $messages['insufficient_permission']);
     }
 
     if ($status === 'accepted') {

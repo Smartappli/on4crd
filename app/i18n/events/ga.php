@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => 'Dún',
   'proposal_recorded' => 'Sábháladh an moladh i d’inneachar.',
   'invalid' => 'Iarratas neamhbhailí.',
-  'event_published_direct' => 'Sábháladh an moladh i d’inneachar.',
+  'event_published_direct' => 'Foilsíodh an t-imeacht go díreach.',
+  'propose_event_direct_help' => 'Foilseofar an t-imeacht go díreach.',
+  'publish_event' => 'Foilsigh',
+  'next_event_title' => 'Imeachtaí atá le teacht',
 );

@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album gevalideerd, maar sociale synchronisatie mislukt.',
   'batch_max_files' => 'Maximaal 100 foto\'s per import.',
   'batch_max_size' => 'De fotobatch is groter dan 512 MB.',
+  'error_field_too_long' => 'Eén van de velden overschrijdt de toegestane lengte.',
 );

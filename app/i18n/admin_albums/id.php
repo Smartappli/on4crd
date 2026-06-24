@@ -80,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album divalidasi, namun sinkronisasi sosial gagal.',
   'batch_max_files' => 'Maksimum 100 foto per impor.',
   'batch_max_size' => 'Kumpulan foto melebihi 512 MB.',
+  'error_field_too_long' => 'Salah satu bidang melebihi panjang yang diizinkan.',
 );

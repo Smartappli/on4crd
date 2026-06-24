@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'टैग प्रस्ताव',
   'proposal_type_subcategory' => 'उपविषय प्रस्ताव',
   'webotheque_title' => 'वेब लाइब्रेरी',
+  'albums_title' => 'एलबम',
+  'auctions_title' => 'नीलामियाँ',
+  'files_title' => 'फ़ाइलें',
+  'presentations_title' => 'प्रस्तुतियाँ',
+  'minutes_title' => 'कार्यवृत्त',
+  'videos_title' => 'वीडियो',
+  'library_document_default_title' => 'दस्तावेज़',
+  'document_default_title' => 'दस्तावेज़',
 );

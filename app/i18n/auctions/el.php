@@ -38,4 +38,10 @@ return array (
   'create' => 'Δημιουργία',
   'proposal_submit' => 'Αποστολή πρότασης',
   'cancel' => 'Ακύρωση',
+  'status_draft' => 'Σχέδιο',
+  'status_scheduled' => 'Προγραμματισμένο',
+  'status_active' => 'Ενεργός',
+  'status_closed' => 'Κλειστή',
+  'status_cancelled' => 'Ακυρώθηκε',
+  'contact_prefix' => 'Επικοινωνία:',
 );

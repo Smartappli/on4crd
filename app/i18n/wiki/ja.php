@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'お気に入りから削除しました',
   'favorite_added_msg' => 'ページをお気に入りに追加しました。',
   'favorite_removed_msg' => 'ページをお気に入りから削除しました。',
+  'err_subcategory_category_mismatch' => '選択したサブテーマは選択したテーマに属していません。',
+  'category_general' => '一般',
 );

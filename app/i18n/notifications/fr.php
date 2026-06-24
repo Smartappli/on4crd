@@ -6,8 +6,8 @@ return array (
   'meta_desc' => 'Centre de notifications membres.',
   'intro' => 'Suivez les publications, modérations et imports au même endroit.',
   'storage_unavailable' => 'Les notifications sont temporairement indisponibles.',
-  'all_marked_read' => 'Toutes les notifications sont marquees comme lues.',
-  'marked_read' => 'Notification marquee comme lue.',
+  'all_marked_read' => 'Toutes les notifications sont marquées comme lues.',
+  'marked_read' => 'Notification marquée comme lue.',
   'unread' => 'Non lue',
   'read' => 'Lue',
   'filter_all' => 'Toutes les notifications',
@@ -21,4 +21,3 @@ return array (
   'next' => 'Suivant',
   'page' => 'Page',
 );
-

@@ -53,13 +53,13 @@ $tokens = array_values(array_unique(array_filter($tokens, static fn(string $toke
 $tokens = array_slice($tokens, 0, 6);
 
 $sourceDefinitions = [
-    'all' => ['label' => (string) ($t['source_all'] ?? 'All')],
-    'news' => ['label' => (string) ($t['source_news'] ?? 'News')],
-    'articles' => ['label' => (string) ($t['source_articles'] ?? 'Articles')],
-    'wiki' => ['label' => (string) ($t['source_wiki'] ?? 'Wiki')],
-    'library' => ['label' => (string) ($t['source_library'] ?? 'Library')],
-    'classifieds' => ['label' => (string) ($t['source_classifieds'] ?? 'Classifieds')],
-    'albums' => ['label' => (string) ($t['source_albums'] ?? 'Albums')],
+    'all' => ['label' => (string) $t['source_all']],
+    'news' => ['label' => (string) $t['source_news']],
+    'articles' => ['label' => (string) $t['source_articles']],
+    'wiki' => ['label' => (string) $t['source_wiki']],
+    'library' => ['label' => (string) $t['source_library']],
+    'classifieds' => ['label' => (string) $t['source_classifieds']],
+    'albums' => ['label' => (string) $t['source_albums']],
 ];
 $classifiedsSearchVisible = module_enabled('classifieds') && module_visible_for_current_user('classifieds');
 if (!$classifiedsSearchVisible) {
@@ -364,18 +364,18 @@ ob_start();
 <section class="site-search-page">
     <header class="site-search-hero">
         <div class="site-search-copy">
-            <p class="directory-eyebrow"><?= e((string) ($t['eyebrow'] ?? $t['title'])) ?></p>
+            <p class="directory-eyebrow"><?= e((string) $t['eyebrow']) ?></p>
             <h1><?= e((string) $t['title']) ?></h1>
-            <p class="directory-lead"><?= e((string) ($t['lead'] ?? $t['meta_desc'])) ?></p>
+            <p class="directory-lead"><?= e((string) $t['lead']) ?></p>
         </div>
         <form method="get" class="site-search-box">
             <input type="hidden" name="route" value="search">
             <label>
-                <span><?= e((string) ($t['query_label'] ?? $t['title'])) ?></span>
+                <span><?= e((string) $t['query_label']) ?></span>
                 <input type="search" name="q" value="<?= e($q) ?>" placeholder="<?= e((string) $t['placeholder']) ?>" required>
             </label>
             <label>
-                <span><?= e((string) ($t['source_label'] ?? 'Source')) ?></span>
+                <span><?= e((string) $t['source_label']) ?></span>
                 <select name="source">
                     <?php foreach ($sourceDefinitions as $sourceKey => $definition): ?>
                         <option value="<?= e($sourceKey) ?>" <?= $source === $sourceKey ? 'selected' : '' ?>><?= e((string) $definition['label']) ?></option>
@@ -389,11 +389,11 @@ ob_start();
     <section class="site-search-results">
         <div class="site-search-summary">
             <div>
-                <h2><?= e((string) ($t['results_title'] ?? $t['title'])) ?></h2>
+                <h2><?= e((string) $t['results_title']) ?></h2>
                 <?php if ($hasQuery && $isQueryLongEnough): ?>
-                    <p class="help"><?= e(sprintf((string) ($t['results_for'] ?? '%d results for "%s"'), $totalResults, $q)) ?></p>
+                    <p class="help"><?= e(sprintf((string) $t['results_for'], $totalResults, $q)) ?></p>
                 <?php else: ?>
-                    <p class="help"><?= e((string) ($t['start_hint'] ?? $t['placeholder'])) ?></p>
+                    <p class="help"><?= e((string) $t['start_hint']) ?></p>
                 <?php endif; ?>
             </div>
             <?php if ($hasQuery && $isQueryLongEnough): ?>
@@ -402,7 +402,7 @@ ob_start();
         </div>
 
         <?php if ($hasQuery && $isQueryLongEnough): ?>
-            <nav class="site-search-source-tabs" aria-label="<?= e((string) ($t['source_label'] ?? 'Source')) ?>">
+            <nav class="site-search-source-tabs" aria-label="<?= e((string) $t['source_label']) ?>">
                 <?php foreach ($sourceDefinitions as $sourceKey => $definition): ?>
                     <a class="site-search-source-tab<?= $source === $sourceKey ? ' is-active' : '' ?>" href="<?= e(route_url_clean('search', ['q' => $q, 'source' => $sourceKey])) ?>">
                         <span><?= e((string) $definition['label']) ?></span>
@@ -419,12 +419,12 @@ ob_start();
         <?php elseif ($hasQuery && $isQueryLongEnough && $totalResults === 0): ?>
             <div class="site-search-empty">
                 <h3><?= e((string) $t['empty']) ?></h3>
-                <p><?= e((string) ($t['empty_help'] ?? '')) ?></p>
+                <p><?= e((string) $t['empty_help']) ?></p>
             </div>
         <?php elseif (!$hasQuery): ?>
             <div class="site-search-empty">
-                <h3><?= e((string) ($t['start_title'] ?? $t['title'])) ?></h3>
-                <p><?= e((string) ($t['start_hint'] ?? $t['placeholder'])) ?></p>
+                <h3><?= e((string) $t['start_title']) ?></h3>
+                <p><?= e((string) $t['start_hint']) ?></p>
             </div>
         <?php else: ?>
             <div class="site-search-list">
@@ -443,17 +443,17 @@ ob_start();
                                 <p><?= e((string) $item['summary']) ?></p>
                             <?php endif; ?>
                         </div>
-                        <a class="button secondary small" href="<?= e((string) $item['url']) ?>"><?= e((string) ($t['open_result'] ?? 'Open')) ?></a>
+                        <a class="button secondary small" href="<?= e((string) $item['url']) ?>"><?= e((string) $t['open_result']) ?></a>
                     </article>
                 <?php endforeach; ?>
             </div>
 
             <?php if ($totalResults > $perPage): ?>
-                <nav class="site-search-pagination" aria-label="<?= e((string) ($t['pagination'] ?? 'Pagination')) ?>">
+                <nav class="site-search-pagination" aria-label="<?= e((string) $t['pagination']) ?>">
                     <?php if ($hasPrev): ?>
                         <a class="button secondary" href="<?= e(route_url_clean('search', ['q' => $q, 'source' => $source, 'page' => ($page - 1)])) ?>"><?= e((string) $t['previous']) ?></a>
                     <?php endif; ?>
-                    <span class="pill"><?= e((string) ($t['page'] ?? 'Page')) ?> <?= (int) $page ?> / <?= (int) $totalPages ?></span>
+                    <span class="pill"><?= e((string) $t['page']) ?> <?= (int) $page ?> / <?= (int) $totalPages ?></span>
                     <?php if ($hasNext): ?>
                         <a class="button secondary" href="<?= e(route_url_clean('search', ['q' => $q, 'source' => $source, 'page' => ($page + 1)])) ?>"><?= e((string) $t['next']) ?></a>
                     <?php endif; ?>

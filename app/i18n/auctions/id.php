@@ -38,4 +38,10 @@ return array (
   'create' => 'Membuat',
   'proposal_submit' => 'Kirim usulan',
   'cancel' => 'Batal',
+  'status_draft' => 'Draf',
+  'status_scheduled' => 'Dijadwalkan',
+  'status_active' => 'Aktif',
+  'status_closed' => 'Ditutup',
+  'status_cancelled' => 'Dibatalkan',
+  'contact_prefix' => 'Kontak:',
 );

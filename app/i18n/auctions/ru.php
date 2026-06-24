@@ -38,4 +38,10 @@ return array (
   'create' => 'Создавать',
   'proposal_submit' => 'Отправить предложение',
   'cancel' => 'Отмена',
+  'status_draft' => 'Черновик',
+  'status_scheduled' => 'Запланировано',
+  'status_active' => 'Активно',
+  'status_closed' => 'Закрыта',
+  'status_cancelled' => 'Отменена',
+  'contact_prefix' => 'Контакт:',
 );

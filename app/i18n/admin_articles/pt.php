@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Este subtópico ainda contém artigos.',
   'previous' => 'Anterior',
   'next' => 'Seguinte',
+  'error_field_too_long' => 'Um dos campos excede o comprimento permitido.',
 );

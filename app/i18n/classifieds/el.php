@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Εποπτεία αγγελίας',
   'notification_removed_body' => 'Η διαφήμιση καταργήθηκε με εποπτεία: {title}',
   'notification_status_body' => 'Η κατάσταση ενημερώθηκε σε {status}: {title}',
+  'propose_category_direct_help' => 'Η κατηγορία θα εγκριθεί απευθείας.',
+  'propose_category_created_direct' => 'Η κατηγορία δημιουργήθηκε και εγκρίθηκε απευθείας.',
 );

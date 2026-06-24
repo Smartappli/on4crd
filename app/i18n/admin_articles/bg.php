@@ -111,4 +111,5 @@ return array (
   'err_subcategory_has_documents' => 'Тази подтема все още съдържа статии.',
   'previous' => 'Предишен',
   'next' => 'Следваща',
+  'error_field_too_long' => 'Едно от полетата надвишава разрешената дължина.',
 );

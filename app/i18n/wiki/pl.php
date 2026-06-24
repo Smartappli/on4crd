@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Usunięto z ulubionych',
   'favorite_added_msg' => 'Strona dodana do ulubionych.',
   'favorite_removed_msg' => 'Strona usunięta z ulubionych.',
+  'err_subcategory_category_mismatch' => 'Wybrany podtemat nie należy do wybranego tematu.',
+  'category_general' => 'Ogólne',
 );

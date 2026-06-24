@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'Cumhacht frithchaite (W)',
   'swr_result' => 'SWR ríofa',
   'dbw_calc' => 'Tiontú dBm <-> dBW',
+  'cq_zone' => 'Crios CQ',
+  'itu_zone' => 'Crios ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Sábháladh an réamhshocrú.',
+  'preset_deleted' => 'Scriosadh an réamhshocrú.',
+  'tools_stat_available' => 'Uirlisí ar fáil',
+  'tools_stat_categories' => 'Catagóirí',
 );

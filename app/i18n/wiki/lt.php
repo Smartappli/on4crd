@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Pašalinta iš mėgstamiausių',
   'favorite_added_msg' => 'Puslapis pridėtas prie mėgstamiausių.',
   'favorite_removed_msg' => 'Puslapis pašalintas iš mėgstamiausių.',
+  'err_subcategory_category_mismatch' => 'Pasirinkta potemė nepriklauso pasirinktai temai.',
+  'category_general' => 'Bendra',
 );

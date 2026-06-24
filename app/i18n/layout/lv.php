@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Globālā meklēšana',
   'search_placeholder' => 'Meklēt…',
   'search_submit' => 'Meklēt',
+  'membership_good_standing' => 'Dalība kārtībā',
 );

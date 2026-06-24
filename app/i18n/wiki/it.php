@@ -49,4 +49,6 @@ return array (
   'favorite_removed' => 'Rimosso dai preferiti',
   'favorite_added_msg' => 'Pagina aggiunta ai preferiti.',
   'favorite_removed_msg' => 'Pagina rimossa dai preferiti.',
+  'err_subcategory_category_mismatch' => 'Il sottotema selezionato non appartiene al tema scelto.',
+  'category_general' => 'Generale',
 );

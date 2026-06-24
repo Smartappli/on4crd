@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => '标签建议',
   'proposal_type_subcategory' => '子主题建议',
   'webotheque_title' => '网页资料库',
+  'albums_title' => '专辑',
+  'auctions_title' => '拍卖',
+  'files_title' => '文件',
+  'presentations_title' => '演示文稿',
+  'minutes_title' => '会议记录',
+  'videos_title' => '视频',
+  'library_document_default_title' => '文档',
+  'document_default_title' => '文档',
 );

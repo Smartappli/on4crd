@@ -5,9 +5,9 @@ require_permission('articles.manage');
 $locale = current_locale();
 $i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/admin_articles.php');
 $i18n = i18n_expand_supported_locales($i18n);
-$t = static function (string $key, string $fallback = '') use ($locale, $i18n): string {
+$t = static function (string $key) use ($locale, $i18n): string {
     $value = i18n_localized_value($i18n, $locale, $key);
-    return trim($value) !== '' && $value !== $key ? $value : $fallback;
+    return trim($value) !== '' && $value !== $key ? $value : $key;
 };
 set_page_meta([
     'title' => $t('layout'),
@@ -180,24 +180,24 @@ $knownCategories = article_categories($articleMessages);
 $articleSubcategoriesByCategory = article_subcategories_by_category();
 
 $articleStatusChoices = [
-    'draft' => $t('draft', 'Brouillon'),
-    'pending' => $t('pending', 'En validation'),
-    'scheduled' => $t('scheduled', 'Programme'),
-    'published' => $t('published', 'Publie'),
-    'rejected' => $t('rejected', 'Refusé'),
+    'draft' => $t('draft'),
+    'pending' => $t('pending'),
+    'scheduled' => $t('scheduled'),
+    'published' => $t('published'),
+    'rejected' => $t('rejected'),
 ];
 $articleStatusLabel = static fn(string $status): string => $articleStatusChoices[$status] ?? $status;
 $pendingProposalUrl = route_url_clean('admin_articles', ['status' => 'pending']) . '#pending-proposals';
 $proposalStatusLabels = [
-    'pending' => $t('proposal_status_pending', 'En attente'),
-    'reviewed' => $t('proposal_status_reviewed', 'Relue'),
-    'accepted' => $t('proposal_status_accepted', 'Acceptée'),
-    'rejected' => $t('proposal_status_rejected', 'Refusée'),
+    'pending' => $t('proposal_status_pending'),
+    'reviewed' => $t('proposal_status_reviewed'),
+    'accepted' => $t('proposal_status_accepted'),
+    'rejected' => $t('proposal_status_rejected'),
 ];
 $proposalTypeLabels = [
-    'category' => $t('proposal_type_category', 'Thématique'),
-    'content' => $t('proposal_type_content', 'Article'),
-    'tag' => $t('proposal_type_tag', 'Mot clé'),
+    'category' => $t('proposal_type_category'),
+    'content' => $t('proposal_type_content'),
+    'tag' => $t('proposal_type_tag'),
 ];
 $editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'subcategory' => '', 'scheduled_at' => null, 'moderation_note' => null];
 $editing = $editingDefault;
@@ -213,26 +213,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proposalStatus = (string) ($_POST['proposal_status'] ?? 'pending');
             $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
             if ($proposalId <= 0 || !isset($proposalStatusLabels[$proposalStatus])) {
-                throw new RuntimeException($t('err_invalid_proposal', 'Proposition invalide.'));
+                throw new RuntimeException($t('err_invalid_proposal'));
             }
             if (!ensure_content_proposals_table()) {
-                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+                throw new RuntimeException($t('module_unavailable'));
             }
             db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "articles"')
                 ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
-            set_flash('success', $t('proposal_status_saved', 'Proposition mise à jour.'));
+            set_flash('success', $t('proposal_status_saved'));
             redirect_url($pendingProposalUrl);
         }
 
         if ($action === 'bulk_update_articles') {
             $ids = array_values(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0));
             if ($ids === []) {
-                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                throw new RuntimeException($t('error_field_too_long'));
             }
             $bulkOp = (string) ($_POST['bulk_op'] ?? '');
             $allowedOps = array_merge(array_keys($articleStatusChoices), ['delete']);
             if (!in_array($bulkOp, $allowedOps, true)) {
-                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                throw new RuntimeException($t('err_invalid_article'));
             }
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
             if ($bulkOp === 'delete') {
@@ -246,13 +246,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')->execute(array_merge(['article'], $ids));
                 }
                 db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')')->execute($ids);
-                set_flash('success', $t('ok_deleted', 'Article supprimé.'));
+                set_flash('success', $t('ok_deleted'));
             } else {
                 $bulkRowsStmt = db()->prepare('SELECT id, title, slug, author_id FROM articles WHERE id IN (' . $placeholders . ')');
                 $bulkRowsStmt->execute($ids);
                 $bulkRows = $bulkRowsStmt->fetchAll() ?: [];
                 $scheduledAt = $bulkOp === 'scheduled' ? date('Y-m-d H:i:s', time() + 3600) : null;
-                $moderationNote = $bulkOp === 'rejected' ? $t('moderation_note_rejected_default', 'Refusé par modération.') : null;
+                $moderationNote = $bulkOp === 'rejected' ? $t('moderation_note_rejected_default') : null;
                 $publishedAtSql = $bulkOp === 'published' ? 'COALESCE(published_at, NOW())' : 'NULL';
                 db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = ' . $publishedAtSql . ', moderation_note = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
                     ->execute(array_merge([$bulkOp, $scheduledAt, $moderationNote], $ids));
@@ -274,15 +274,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $articleTitle = (string) ($bulkRow['title'] ?? '');
                     $articleSlug = (string) ($bulkRow['slug'] ?? '');
                     if ($bulkOp === 'published') {
-                        notify_member($authorId, 'publication', $t('notification_article_published', 'Article publié'), $articleTitle, route_url('article', ['slug' => $articleSlug]));
+                        notify_member($authorId, 'publication', $t('notification_article_published'), $articleTitle, route_url('article', ['slug' => $articleSlug]));
                     } elseif ($bulkOp === 'scheduled') {
-                        notify_member($authorId, 'publication', $t('notification_article_scheduled', 'Article planifié'), $articleTitle, route_url('my_requests'));
+                        notify_member($authorId, 'publication', $t('notification_article_scheduled'), $articleTitle, route_url('my_requests'));
                     } elseif ($bulkOp === 'rejected') {
-                        notify_member($authorId, 'moderation', $t('notification_article_rejected', 'Article refusé'), $moderationNote, route_url('my_requests'));
+                        notify_member($authorId, 'moderation', $t('notification_article_rejected'), $moderationNote, route_url('my_requests'));
                     }
                 }
                 if ($translationSyncFailed) {
-                    set_flash('warning', $t('warning_translation_sync_bulk', 'Certains articles sont enregistrés, mais leurs traductions automatiques devront être relancées.'));
+                    set_flash('warning', $t('warning_translation_sync_bulk'));
                 }
                 set_flash('success', $t('ok_saved'));
             }
@@ -291,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'add_category') {
             if (!article_ensure_categories_table($articleMessages)) {
-                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+                throw new RuntimeException($t('module_unavailable'));
             }
             $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
             $codeInput = trim((string) ($_POST['category_code'] ?? ''));
@@ -307,7 +307,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'update_category') {
             if (!article_ensure_categories_table($articleMessages)) {
-                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+                throw new RuntimeException($t('module_unavailable'));
             }
             $category = article_category_from_input((string) ($_POST['category_code'] ?? $_POST['code'] ?? ''), $knownCategories);
             $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
@@ -322,7 +322,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'delete_category') {
             if (!article_ensure_categories_table($articleMessages) || !article_ensure_subcategories_table()) {
-                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+                throw new RuntimeException($t('module_unavailable'));
             }
             $category = article_category_from_input((string) ($_POST['category_code'] ?? $_POST['code'] ?? ''), $knownCategories);
             if ($category === 'autres') {
@@ -331,7 +331,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $subCountStmt = db()->prepare('SELECT COUNT(*) FROM article_subcategories WHERE category_code = ?');
             $subCountStmt->execute([$category]);
             if ((int) ($subCountStmt->fetchColumn() ?: 0) > 0) {
-                throw new RuntimeException($t('err_category_has_subcategories', 'Supprimez d abord toutes les sous-thématiques de cette thématique.'));
+                throw new RuntimeException($t('err_category_has_subcategories'));
             }
             db()->prepare('UPDATE articles SET category = "autres", subcategory = "" WHERE category = ?')->execute([$category]);
             db()->prepare('INSERT INTO article_categories (code, label, deleted_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE deleted_at = NOW()')
@@ -342,7 +342,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'add_subcategory') {
             if (!article_ensure_subcategories_table()) {
-                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+                throw new RuntimeException($t('module_unavailable'));
             }
             $category = article_category_from_input((string) ($_POST['subcategory_category'] ?? 'autres'), $knownCategories);
             $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
@@ -353,13 +353,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('INSERT INTO article_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                 ->execute([$category, $code, $label]);
-            set_flash('success', $t('ok_subcategory_updated', 'Sous-thématique enregistrée.'));
+            set_flash('success', $t('ok_subcategory_updated'));
             redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $code]));
         }
 
         if ($action === 'update_subcategory') {
             if (!article_ensure_subcategories_table()) {
-                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+                throw new RuntimeException($t('module_unavailable'));
             }
             $parts = article_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
             $category = article_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'autres'), $knownCategories);
@@ -370,13 +370,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('INSERT INTO article_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                 ->execute([$category, $subcategory, $label]);
-            set_flash('success', $t('ok_subcategory_updated', 'Sous-thématique enregistrée.'));
+            set_flash('success', $t('ok_subcategory_updated'));
             redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $subcategory]));
         }
 
         if ($action === 'delete_subcategory') {
             if (!article_ensure_subcategories_table()) {
-                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+                throw new RuntimeException($t('module_unavailable'));
             }
             $parts = article_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
             $category = article_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'autres'), $knownCategories);
@@ -387,10 +387,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $countStmt = db()->prepare('SELECT COUNT(*) FROM articles WHERE category = ? AND subcategory = ?');
             $countStmt->execute([$category, $subcategory]);
             if ((int) ($countStmt->fetchColumn() ?: 0) > 0) {
-                throw new RuntimeException($t('err_subcategory_has_documents', 'Cette sous-thématique contient encore des articles.'));
+                throw new RuntimeException($t('err_subcategory_has_documents'));
             }
             db()->prepare('DELETE FROM article_subcategories WHERE category_code = ? AND code = ?')->execute([$category, $subcategory]);
-            set_flash('success', $t('ok_subcategory_deleted', 'Sous-thématique supprimée.'));
+            set_flash('success', $t('ok_subcategory_deleted'));
             redirect_url(route_url_clean('admin_articles', ['category' => $category]));
         }
 
@@ -425,7 +425,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $knownCategories
             );
             if ($title === '' || !isset($articleStatusChoices[$status])) {
-                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                throw new RuntimeException($t('err_invalid_article'));
             }
             $scheduledAtRaw = trim((string) ($_POST['scheduled_at'] ?? ''));
             $scheduledAtValue = null;
@@ -433,11 +433,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $publishNow = false;
             if ($status === 'scheduled') {
                 if ($scheduledAtRaw === '') {
-                    throw new RuntimeException($t('err_invalid_article', 'Date de planification requise.'));
+                    throw new RuntimeException($t('err_invalid_article'));
                 }
                 $scheduledTs = strtotime($scheduledAtRaw);
                 if ($scheduledTs === false) {
-                    throw new RuntimeException($t('err_invalid_article', 'Date de planification invalide.'));
+                    throw new RuntimeException($t('err_invalid_article'));
                 }
                 if ($scheduledTs <= time()) {
                     $status = 'published';
@@ -450,7 +450,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $moderationNoteValue = null;
             if ($status === 'rejected') {
-                $moderationNoteValue = $moderationNote !== '' ? $moderationNote : $t('moderation_note_rejected_default', 'Refusé par modération.');
+                $moderationNoteValue = $moderationNote !== '' ? $moderationNote : $t('moderation_note_rejected_default');
             }
             $imported = import_article_document($_FILES['article_document'] ?? [], $action !== 'preview_article');
             if ($imported['content'] !== '') {
@@ -467,7 +467,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 || mb_strlen($category) > 120
                 || mb_strlen($subcategory) > 120
             ) {
-                throw new RuntimeException($t('err_invalid_article', 'Un des champs dépasse la longueur autorisée.'));
+                throw new RuntimeException($t('err_invalid_article'));
             }
             if ($action === 'preview_article') {
                 $previewPayload = [
@@ -505,7 +505,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $previousStmt->execute([$id]);
                             $previous = $previousStmt->fetch() ?: null;
                             if (!is_array($previous)) {
-                                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                                throw new RuntimeException($t('err_invalid_article'));
                             }
                             $authorId = isset($previous['author_id']) ? (int) $previous['author_id'] : 0;
                             $existingPublishedAt = trim((string) ($previous['published_at'] ?? ''));
@@ -555,18 +555,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         article_translations_sync_all($id);
                     } catch (Throwable) {
-                        set_flash('warning', $t('warning_translation_sync_single', 'Article enregistré, mais les traductions automatiques devront être relancées.'));
+                        set_flash('warning', $t('warning_translation_sync_single'));
                     }
                 }
 
                 $currentUserId = (int) current_user()['id'];
                 if ($authorId > 0 && $authorId !== $currentUserId) {
                     if ($notifyStatus === 'published') {
-                        notify_member($authorId, 'publication', $t('notification_article_published', 'Article publié'), $title, route_url('article', ['slug' => $slug]));
+                        notify_member($authorId, 'publication', $t('notification_article_published'), $title, route_url('article', ['slug' => $slug]));
                     } elseif ($notifyStatus === 'scheduled') {
-                        notify_member($authorId, 'publication', $t('notification_article_scheduled', 'Article planifié'), $title, route_url('my_requests'));
+                        notify_member($authorId, 'publication', $t('notification_article_scheduled'), $title, route_url('my_requests'));
                     } elseif ($notifyStatus === 'rejected') {
-                        notify_member($authorId, 'moderation', $t('notification_article_rejected', 'Article refusé'), $moderationNoteValue ?? $title, route_url('my_requests'));
+                        notify_member($authorId, 'moderation', $t('notification_article_rejected'), $moderationNoteValue ?? $title, route_url('my_requests'));
                     }
                 }
 
@@ -576,7 +576,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($action === 'delete_article') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id <= 0) {
-                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                throw new RuntimeException($t('err_invalid_article'));
             }
             if (table_exists('article_translations')) {
                 db()->prepare('DELETE FROM article_translations WHERE article_id = ?')->execute([$id]);
@@ -588,19 +588,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['article', $id]);
             }
             db()->prepare('DELETE FROM articles WHERE id = ?')->execute([$id]);
-            set_flash('success', $t('ok_deleted', 'Article supprimé.'));
+            set_flash('success', $t('ok_deleted'));
             redirect('admin_articles');
         } elseif ($action === 'restore_revision') {
             $articleId = (int) ($_POST['article_id'] ?? 0);
             $revisionId = (int) ($_POST['revision_id'] ?? 0);
             if ($articleId <= 0 || $revisionId <= 0 || !table_exists('article_revisions')) {
-                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                throw new RuntimeException($t('err_invalid_article'));
             }
             $revStmt = db()->prepare('SELECT * FROM article_revisions WHERE id = ? AND article_id = ? LIMIT 1');
             $revStmt->execute([$revisionId, $articleId]);
             $revision = $revStmt->fetch() ?: null;
             if (!is_array($revision)) {
-                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                throw new RuntimeException($t('err_invalid_article'));
             }
             $restoredStatus = (string) ($revision['status'] ?? 'draft');
             db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, subcategory = ?, scheduled_at = ?, published_at = ?, moderation_note = NULL, updated_at = NOW() WHERE id = ?')
@@ -620,10 +620,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 try {
                     article_translations_sync_all($articleId);
                 } catch (Throwable) {
-                    set_flash('warning', $t('warning_translation_sync_revision', 'Version restaurée, mais les traductions automatiques devront être relancées.'));
+                    set_flash('warning', $t('warning_translation_sync_revision'));
                 }
             }
-            set_flash('success', $t('ok_revision_restored', 'Version restaurée.'));
+            set_flash('success', $t('ok_revision_restored'));
             redirect_url(route_url('admin_articles', ['id' => $articleId]));
         } elseif ($action === 'save_category') {
             $oldCode = article_category_code(trim((string) ($_POST['old_code'] ?? '')));
@@ -643,7 +643,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('retry_blocked_missing_fields'));
             }
             if ($result === 'invalid' || $result === 'missing') {
-                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                throw new RuntimeException($t('err_invalid_article'));
             }
             if ($result === 'published') {
                 set_flash('success', $t('retry_applied_published'));
@@ -656,7 +656,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($action === 'retry_scheduled_bulk') {
             $ids = array_values(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0));
             if ($ids === []) {
-                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                throw new RuntimeException($t('err_invalid_article'));
             }
             $counts = ['published' => 0, 'rescheduled' => 0, 'retried' => 0, 'blocked_missing_fields' => 0, 'missing' => 0, 'invalid' => 0];
             foreach ($ids as $id) {
@@ -784,7 +784,7 @@ ob_start();
             <input type="hidden" name="action" value="save_article">
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
             <label><?= e($t('title')) ?><input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
-            <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" placeholder="<?= e($t('slug_placeholder', 'genere-depuis-le-titre')) ?>"></label>
+            <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" placeholder="<?= e($t('slug_placeholder')) ?>"></label>
             <label><?= e($t('category')) ?>
                 <select name="category" id="article-category">
                     <?php $editingCategory = (string) ($editing['category'] ?? 'autres'); ?>
@@ -797,10 +797,10 @@ ob_start();
             <label id="article-category-custom" hidden><?= e($t('new_category_id')) ?>
                 <input type="text" name="category_custom" value="" placeholder="<?= e($t('custom_category_ph')) ?>">
             </label>
-            <label><?= e($t('subcategory_field', 'Sous-thématique')) ?>
+            <label><?= e($t('subcategory_field')) ?>
                 <select name="subcategory_ref">
                     <?php $editingSubcategory = article_subcategory_code((string) ($editing['subcategory'] ?? '')); ?>
-                    <option value=""><?= e($t('no_subcategory', 'Sans sous-thématique')) ?></option>
+                    <option value=""><?= e($t('no_subcategory')) ?></option>
                     <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
                         <?php if ($subcategories === []): ?>
                             <?php continue; ?>
@@ -831,22 +831,22 @@ ob_start();
                     <?php endforeach; ?>
                 </select>
             </label>
-            <label><?= e($t('scheduled_at', 'Date de publication')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
-            <label><?= e($t('moderation_note', 'Note de modération')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help', 'Visible par le proposant si l’article est refusé.')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
+            <label><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
+            <label><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
             <button class="button"><?= e($t('save')) ?></button>
-            <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview', 'Prévisualiser')) ?></button>
+            <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>
         </form>
         <?php if ((int) $editing['id'] > 0): ?>
-            <form method="post" style="margin-top:1rem;" onsubmit="return confirm('<?= e($t('confirm_delete', 'Supprimer cet article ?')) ?>');">
+            <form method="post" style="margin-top:1rem;" onsubmit="return confirm('<?= e($t('confirm_delete')) ?>');">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="delete_article">
                 <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
-                <button class="button secondary" type="submit"><?= e($t('delete_article', 'Supprimer l’article')) ?></button>
+                <button class="button secondary" type="submit"><?= e($t('delete_article')) ?></button>
             </form>
             <section style="margin-top:1rem;">
-                <h3><?= e($t('revisions', 'Historique des versions')) ?></h3>
+                <h3><?= e($t('revisions')) ?></h3>
                 <?php if ($revisions === []): ?>
-                    <p class="help"><?= e($t('no_revisions', 'Aucune révision enregistrée.')) ?></p>
+                    <p class="help"><?= e($t('no_revisions')) ?></p>
                 <?php else: ?>
                     <div class="stack">
                         <?php foreach ($revisions as $revision): ?>
@@ -855,8 +855,8 @@ ob_start();
                                 <input type="hidden" name="action" value="restore_revision">
                                 <input type="hidden" name="article_id" value="<?= (int) $editing['id'] ?>">
                                 <input type="hidden" name="revision_id" value="<?= (int) $revision['id'] ?>">
-                                <span class="help"><?= e($t('revision_saved_at', 'Version du')) ?> <?= e(date('d/m/Y H:i', strtotime((string) $revision['created_at']))) ?> · <?= e($articleStatusLabel((string) $revision['status'])) ?></span>
-                                <button class="button small secondary" type="submit" onclick="return confirm('<?= e($t('confirm_restore_revision', 'Restaurer cette version ?')) ?>');"><?= e($t('restore_revision', 'Restaurer')) ?></button>
+                                <span class="help"><?= e($t('revision_saved_at')) ?> <?= e(date('d/m/Y H:i', strtotime((string) $revision['created_at']))) ?> · <?= e($articleStatusLabel((string) $revision['status'])) ?></span>
+                                <button class="button small secondary" type="submit" onclick="return confirm('<?= e($t('confirm_restore_revision')) ?>');"><?= e($t('restore_revision')) ?></button>
                             </form>
                         <?php endforeach; ?>
                     </div>
@@ -865,10 +865,10 @@ ob_start();
         <?php endif; ?>
     </section>
     <section class="card">
-        <h2><?= e($t('preview', 'Prévisualiser')) ?></h2>
-        <p class="help"><?= e($t('preview_help', 'Vérifiez le rendu avant publication.')) ?></p>
+        <h2><?= e($t('preview')) ?></h2>
+        <p class="help"><?= e($t('preview_help')) ?></p>
         <?php if ($previewPayload === null): ?>
-            <p class="help"><?= e($t('preview_empty', 'La prévisualisation apparaît après avoir cliqué sur “Prévisualiser”.')) ?></p>
+            <p class="help"><?= e($t('preview_empty')) ?></p>
         <?php else: ?>
             <article class="feature-card" style="margin:0;">
                 <h3><?= e((string) ($previewPayload['title'] ?? '')) ?></h3>
@@ -881,15 +881,15 @@ ob_start();
         <?php endif; ?>
     </section>
     <section class="card">
-        <h2><?= e($t('editorial_queue', 'Editorial queue')) ?></h2>
-        <p class="help"><?= e($t('editorial_queue_help', 'Scheduled board with blocking reasons and one-click retry.')) ?></p>
+        <h2><?= e($t('editorial_queue')) ?></h2>
+        <p class="help"><?= e($t('editorial_queue_help')) ?></p>
         <?php if ($scheduledQueue === []): ?>
-            <p class="help"><?= e($t('editorial_queue_empty', 'No scheduled articles in queue.')) ?></p>
+            <p class="help"><?= e($t('editorial_queue_empty')) ?></p>
         <?php else: ?>
             <form method="post" style="margin:0 0 .8rem 0;">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="retry_scheduled_bulk">
-                <button class="button secondary small" type="submit"><?= e($t('retry_bulk', 'Retry selected')) ?></button>
+                <button class="button secondary small" type="submit"><?= e($t('retry_bulk')) ?></button>
             <div class="stack">
                 <?php foreach ($scheduledQueue as $queueItem): ?>
                     <?php $blockedReasons = editorial_blocked_reasons((array) $queueItem); ?>
@@ -904,7 +904,7 @@ ob_start();
                                 </p>
                                 <h3 style="margin:.1rem 0;"><?= e((string) (($queueItem['title'] ?? '') !== '' ? $queueItem['title'] : ('#' . (int) $queueItem['id']))) ?></h3>
                                 <p class="help" style="margin:0;">
-                                    <?= e($t('scheduled_at', 'Date de publication')) ?>:
+                                    <?= e($t('scheduled_at')) ?>:
                                     <?= e((string) (($queueItem['scheduled_at'] ?? '') !== '' ? date('d/m/Y H:i', strtotime((string) $queueItem['scheduled_at'])) : 'n/a')) ?>
                                 </p>
                                 <?php if ($blockedReasons !== []): ?>
@@ -919,7 +919,7 @@ ob_start();
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                     <input type="hidden" name="action" value="retry_scheduled_article">
                                     <input type="hidden" name="id" value="<?= (int) $queueItem['id'] ?>">
-                                    <button class="button small" type="submit"><?= e($t('retry', 'Retry')) ?></button>
+                                    <button class="button small" type="submit"><?= e($t('retry')) ?></button>
                                 </form>
                             </div>
                         </div>
@@ -932,11 +932,11 @@ ob_start();
     <?php if ($showPendingProposals): ?>
     <section class="card" id="pending-proposals" aria-labelledby="pending-proposals-title">
         <div class="row-between">
-            <h2 id="pending-proposals-title"><?= e($t('pending_proposals_title', 'Contenus en attente de validation')) ?></h2>
-            <a class="button secondary small" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter', 'Réinitialiser')) ?></a>
+            <h2 id="pending-proposals-title"><?= e($t('pending_proposals_title')) ?></h2>
+            <a class="button secondary small" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter')) ?></a>
         </div>
         <?php if ($pendingProposals === []): ?>
-            <p class="help"><?= e($t('pending_proposals_empty', 'Aucune proposition articles en attente de validation.')) ?></p>
+            <p class="help"><?= e($t('pending_proposals_empty')) ?></p>
         <?php endif; ?>
         <div class="stack">
             <?php foreach ($pendingProposals as $proposal): ?>
@@ -961,31 +961,31 @@ ob_start();
                         <span class="badge muted"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
                         <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
                     </p>
-                    <h3><?= e((string) ($proposal['title'] ?? $t('proposal_default_title', 'Proposition'))) ?></h3>
-                    <p class="help"><?= e($t('proposal_author', 'Proposé par')) ?>: <?= e($memberLabel) ?></p>
+                    <h3><?= e((string) ($proposal['title'] ?? $t('proposal_default_title'))) ?></h3>
+                    <p class="help"><?= e($t('proposal_author')) ?>: <?= e($memberLabel) ?></p>
                     <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
                         <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
-                        <p class="help"><?= e($t('proposal_contact', 'Contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
+                        <p class="help"><?= e($t('proposal_contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
                     <?php endif; ?>
                     <form method="post" class="stack">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="update_proposal_status">
                         <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
                         <div class="grid-2">
-                            <label><?= e($t('proposal_status_label', 'Statut')) ?>
+                            <label><?= e($t('proposal_status_label')) ?>
                                 <select name="proposal_status">
                                     <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
                                         <option value="<?= e($statusCode) ?>" <?= $proposalStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </label>
-                            <label><?= e($t('proposal_moderation_note', 'Note de modération')) ?>
+                            <label><?= e($t('proposal_moderation_note')) ?>
                                 <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
                             </label>
                         </div>
-                        <p><button class="button small" type="submit"><?= e($t('proposal_save_status', 'Enregistrer le statut')) ?></button></p>
+                        <p><button class="button small" type="submit"><?= e($t('proposal_save_status')) ?></button></p>
                     </form>
                 </article>
             <?php endforeach; ?>
@@ -1000,10 +1000,10 @@ ob_start();
         <form method="get" class="stack">
             <input type="hidden" name="route" value="admin_articles">
             <div class="grid-3">
-                <label><?= e($t('search', 'Recherche')) ?><input type="search" name="q" value="<?= e($adminSearch) ?>"></label>
+                <label><?= e($t('search')) ?><input type="search" name="q" value="<?= e($adminSearch) ?>"></label>
                 <label><?= e($t('status')) ?>
                     <select name="status">
-                        <option value=""><?= e($t('all_statuses', 'Tous les statuts')) ?></option>
+                        <option value=""><?= e($t('all_statuses')) ?></option>
                         <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
                             <option value="<?= e($statusCode) ?>" <?= $adminStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
                         <?php endforeach; ?>
@@ -1011,15 +1011,15 @@ ob_start();
                 </label>
                 <label><?= e($t('category')) ?>
                     <select name="category">
-                        <option value=""><?= e($t('all_categories', 'Toutes les catégories')) ?></option>
+                        <option value=""><?= e($t('all_categories')) ?></option>
                         <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
                             <option value="<?= e($categoryCode) ?>" <?= $adminCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><?= e($t('subcategory_field', 'Sous-thématique')) ?>
+                <label><?= e($t('subcategory_field')) ?>
                     <select name="subcategory">
-                        <option value=""><?= e($t('no_subcategory', 'Sans sous-thématique')) ?></option>
+                        <option value=""><?= e($t('no_subcategory')) ?></option>
                         <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
                             <?php if ($subcategories === []): ?>
                                 <?php continue; ?>
@@ -1039,7 +1039,7 @@ ob_start();
                     </select>
                 </label>
             </div>
-            <p><button class="button" type="submit"><?= e($t('filter', 'Filtrer')) ?></button> <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter', 'Réinitialiser')) ?></a></p>
+            <p><button class="button" type="submit"><?= e($t('filter')) ?></button> <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter')) ?></a></p>
         </form>
         <div class="stack">
             <?php foreach ($articles as $article): ?>
@@ -1065,9 +1065,9 @@ ob_start();
         </div>
         <?php if ($totalPages > 1): ?>
             <nav class="actions mt-3">
-                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page - 1])) ?>">&larr; <?= e($t('previous', 'Précédent')) ?></a><?php endif; ?>
+                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page - 1])) ?>">&larr; <?= e($t('previous')) ?></a><?php endif; ?>
                 <span class="badge muted"><?= $page ?> / <?= $totalPages ?></span>
-                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page + 1])) ?>"><?= e($t('next', 'Suivant')) ?> &rarr;</a><?php endif; ?>
+                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page + 1])) ?>"><?= e($t('next')) ?> &rarr;</a><?php endif; ?>
             </nav>
         <?php endif; ?>
     </section>
@@ -1081,7 +1081,7 @@ ob_start();
                     <input type="text" name="category_label" maxlength="160" required>
                 </label>
                 <input type="hidden" name="category_code" value="">
-                <button class="button" type="submit"><?= e($t('add_category', 'Ajouter une thématique')) ?></button>
+                <button class="button" type="submit"><?= e($t('add_category')) ?></button>
             </form>
             <form method="post" class="stack">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -1093,11 +1093,11 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><?= e($t('subcategory_field', 'Sous-thématique')) ?>
+                <label><?= e($t('subcategory_field')) ?>
                     <input type="text" name="subcategory_label" maxlength="160" required>
                 </label>
                 <input type="hidden" name="subcategory_code" value="">
-                <button class="button" type="submit"><?= e($t('add_subcategory', 'Ajouter une sous-thématique')) ?></button>
+                <button class="button" type="submit"><?= e($t('add_subcategory')) ?></button>
             </form>
         </div>
         <div class="tags-cloud">
@@ -1113,8 +1113,8 @@ ob_start();
                     <input type="hidden" name="category_code" value="<?= e((string) $categoryCode) ?>">
                     <span class="pill"><?= e((string) $categoryCode) ?> (<?= $categoryTotal ?>)</span>
                     <input type="text" name="category_label" value="<?= e((string) $categoryLabel) ?>" maxlength="160" required>
-                    <button class="button small" type="submit"><?= e($t('save', 'Enregistrer')) ?></button>
-                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
+                    <button class="button small" type="submit"><?= e($t('save')) ?></button>
+                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
                 </form>
             <?php endforeach; ?>
             <?php foreach ($articleSubcategoriesByCategory as $parentCode => $subcategories): ?>
@@ -1132,8 +1132,8 @@ ob_start();
                         <input type="hidden" name="subcategory_ref" value="<?= e(article_subcategory_ref((string) $parentCode, $subCode)) ?>">
                         <span class="pill"><?= e((string) ($knownCategories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
                         <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
-                        <button class="button small" type="submit"><?= e($t('save', 'Enregistrer')) ?></button>
-                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
+                        <button class="button small" type="submit"><?= e($t('save')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>

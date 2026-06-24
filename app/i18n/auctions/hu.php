@@ -38,4 +38,10 @@ return array (
   'create' => 'Létrehozása',
   'proposal_submit' => 'Javaslat küldése',
   'cancel' => 'Mégse',
+  'status_draft' => 'Piszkozat',
+  'status_scheduled' => 'Ütemezett',
+  'status_active' => 'Aktív',
+  'status_closed' => 'Lezárva',
+  'status_cancelled' => 'Törölve',
+  'contact_prefix' => 'Kapcsolat:',
 );

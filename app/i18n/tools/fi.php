@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Heijastunut teho (W)',
   'swr_result' => 'Laskettu SWR',
   'dbw_calc' => 'dBm <-> dBW -muunnos',
+  'cq_zone' => 'XPRTECT0X vyöhyke',
+  'itu_zone' => 'XPRTECT0X vyöhyke',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Esiasetus tallennettu.',
+  'preset_deleted' => 'Esiasetus poistettu.',
+  'tools_stat_available' => 'Käytettävissä olevat työkalut',
+  'tools_stat_categories' => 'Luokat',
 );

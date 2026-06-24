@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'Reflektierte Leistung (W)',
   'swr_result' => 'Berechnetes SWR',
   'dbw_calc' => 'dBm <-> dBW-Umrechnung',
+  'cq_zone' => 'CQ-Zone',
+  'itu_zone' => 'ITU-Zone',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Voreinstellung gespeichert.',
+  'preset_deleted' => 'Voreinstellung gelöscht.',
+  'tools_stat_available' => 'Verfügbare Werkzeuge',
+  'tools_stat_categories' => 'Kategorien',
 );

@@ -38,4 +38,10 @@ return array (
   'create' => 'Crea',
   'proposal_submit' => 'Trimite propunerea',
   'cancel' => 'Anulează',
+  'status_draft' => 'Ciornă',
+  'status_scheduled' => 'Programat',
+  'status_active' => 'Activ',
+  'status_closed' => 'Închisă',
+  'status_cancelled' => 'Anulată',
+  'contact_prefix' => 'Persoană de contact:',
 );

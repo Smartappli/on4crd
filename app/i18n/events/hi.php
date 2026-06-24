@@ -38,5 +38,8 @@ return array (
   'propose_event_close' => 'बंद करें',
   'proposal_recorded' => 'प्रस्ताव आपकी सामग्री में सहेज दिया गया है।',
   'invalid' => 'अमान्य अनुरोध।',
-  'event_published_direct' => 'प्रस्ताव आपकी सामग्री में सहेज दिया गया है।',
+  'event_published_direct' => 'कार्यक्रम सीधे प्रकाशित किया गया।',
+  'propose_event_direct_help' => 'कार्यक्रम सीधे प्रकाशित किया जाएगा।',
+  'publish_event' => 'प्रकाशित करना',
+  'next_event_title' => 'आगामी कार्यक्रम',
 );
