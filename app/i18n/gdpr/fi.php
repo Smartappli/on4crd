@@ -65,4 +65,7 @@ return array (
   'privacy_section_cookies_title' => 'Evästeet ja mittaus',
   'privacy_section_cookies_body' => 'Tärkeitä evästeitä käytetään istunnon, turvallisuuden ja kieli-/teeman asetuksiin. {tracking_text}',
   'privacy_section_security_title' => 'Turvallisuus',
-  'privacy_section_security_body' => 'Sovellusten IP-osoitteet ja käyttäjäagentit on pseudonyymisoinut HMAC:lla pysyvällä paikallisella salaisuudella. Hallinnolliset GDPR-toiminnot kirjataan järjestelmänvalvojan tunnuksella, tilalla ja aikaleimall
+  'privacy_section_security_body' => 'Sovellusten IP-osoitteet ja käyttäjäagentit on pseudonyymisoinut HMAC:lla pysyvällä paikallisella salaisuudella. Hallinnolliset GDPR-toiminnot kirjataan järjestelmänvalvojan tunnuksella, tilalla ja aikaleimalla.',
+  'privacy_section_contact_title' => 'Yhteydenotto ja valitus',
+  'privacy_section_contact_body' => 'Henkilötietoja koskevat pyynnöt: {controller_email}. Kirjautuneet jäsenet voivat myös käyttää tällä sivulla olevaa lomaketta. Valvontaviranomainen: {supervisory_authority}.',
+);
