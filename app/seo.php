@@ -100,6 +100,74 @@ function seo_build_hreflang_alternates(string $route): array
     return $alternates;
 }
 
+function seo_i18n_route_key(string $route): string
+{
+    $route = trim($route);
+    if ($route === '') {
+        return 'home';
+    }
+
+    return preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
+}
+
+function seo_default_robots_for_route(string $route): string
+{
+    $routeKey = seo_i18n_route_key($route);
+    $noindexFollowRoutes = array_fill_keys([
+        'aiindexjson',
+        'knowledgegraphjsonld',
+        'llmstxt',
+        'members_library',
+        'webotheque',
+        'presentations',
+        'videos',
+        'pv',
+        'fichiers',
+        'telechargements',
+        'sitemapxml',
+    ], true);
+    if (isset($noindexFollowRoutes[$routeKey])) {
+        return 'noindex,follow';
+    }
+
+    if ($routeKey === 'admin' || str_starts_with($routeKey, 'admin_')) {
+        return 'noindex,nofollow';
+    }
+
+    $noindexNoFollowRoutes = array_fill_keys([
+        'ad_click',
+        'auction_bid',
+        'change_password',
+        'dashboard',
+        'dashboard_widget_card',
+        'events_feed',
+        'footer_contact',
+        'forgot_password',
+        'gdpr',
+        'installphp',
+        'login',
+        'logout',
+        'my_requests',
+        'newsletter',
+        'newsletter_unsubscribe',
+        'notifications',
+        'profile',
+        'qsl',
+        'qsl_export',
+        'qsl_preview',
+        'register',
+        'reset_password',
+        'robotstxt',
+        'save_dashboard',
+        'settings',
+        'tools_geocode',
+        'widget_render',
+        'wiki_edit',
+    ], true);
+
+    return isset($noindexNoFollowRoutes[$routeKey]) ? 'noindex,nofollow' : 'index,follow';
+}
+
 function seo_route_should_noindex(string $route): bool
 {
     $noindexRoutes = [
@@ -177,44 +245,18 @@ function seo_apply_defaults(string $route): void
         return;
     }
 
-    $routeMetaDefaults = [
-        'home' => ['title' => 'Accueil', 'description' => 'Portail du Radio Club Durnal ON4CRD : actualités, événements, activités et ressources radioamateur.'],
-        'news' => ['title' => 'Actualités', 'description' => 'Retrouvez les dernières nouvelles, annonces et comptes-rendus du club ON4CRD.'],
-        'news_view' => ['title' => 'Détail actualité', 'description' => 'Consultez une actualité du club ON4CRD avec son contenu complet.'],
-        'events' => ['title' => 'Événements', 'description' => 'Agenda des activités, réunions et sorties radioamateur du club ON4CRD.'],
-        'event_view' => ['title' => 'Détail événement', 'description' => 'Informations pratiques et programme d’un événement du club ON4CRD.'],
-        'articles' => ['title' => 'Articles techniques', 'description' => 'Tutoriels, retours d’expérience et documentation technique radioamateur.'],
-        'article' => ['title' => 'Article technique', 'description' => 'Consultez un article technique publié par le club ON4CRD.'],
-        'wiki' => ['title' => 'Wiki du club', 'description' => 'Base de connaissances du club : procédures, guides et fiches pratiques.'],
-        'wiki_view' => ['title' => 'Page wiki', 'description' => 'Consultez une page de la base de connaissances ON4CRD.'],
-        'albums' => ['title' => 'Galerie photo', 'description' => 'Albums photo des activités et événements du Radio Club Durnal.'],
-        'album' => ['title' => 'Album photo', 'description' => 'Parcourez un album photo publié par le club ON4CRD.'],
-        'auctions' => ['title' => 'Enchères radioamateur', 'description' => 'Découvrez les enchères de matériel radio proposées sur l’espace membres ON4CRD.'],
-        'auction_view' => ['title' => 'Détail enchère', 'description' => 'Consultez les détails d’une enchère et les informations du lot proposé.'],
-        'shop' => ['title' => 'Boutique du club', 'description' => 'Catalogue des produits du club ON4CRD : textile, accessoires et documentation.'],
-        'classifieds' => ['title' => 'Petites annonces', 'description' => 'Consultez les petites annonces radioamateur du club ON4CRD.'],
-        'directory' => ['title' => 'Annuaire', 'description' => 'Annuaire des membres et contacts utiles du Radio Club Durnal ON4CRD.'],
-        'committee' => ['title' => 'Comité', 'description' => 'Présentation du comité et de l’organisation du club ON4CRD.'],
-        'webotheque' => ['title' => 'Webothèque membres', 'description' => 'Liens et ressources web réservés aux membres ON4CRD.'],
-        'presentations' => ['title' => 'Présentations membres', 'description' => 'Supports et présentations réservés aux membres ON4CRD.'],
-        'videos' => ['title' => 'Vidéos membres', 'description' => 'Vidéos et ressources audiovisuelles réservées aux membres ON4CRD.'],
-        'pv' => ['title' => 'Procès-verbaux membres', 'description' => 'Procès-verbaux et comptes rendus réservés aux membres ON4CRD.'],
-        'fichiers' => ['title' => 'Fichiers membres', 'description' => 'Fichiers et ressources à télécharger réservés aux membres ON4CRD.'],
-        'telechargements' => ['title' => 'Fichiers membres', 'description' => 'Fichiers et ressources à télécharger réservés aux membres ON4CRD.'],
-        'press' => ['title' => 'Presse', 'description' => 'Communiqués, retombées presse et publications autour du club ON4CRD.'],
-        'schools' => ['title' => 'Écoles & sensibilisation', 'description' => 'Actions pédagogiques et interventions radioamateur auprès des écoles.'],
-        'membership' => ['title' => 'Adhésion', 'description' => 'Rejoignez le Radio Club Durnal ON4CRD et participez aux activités du club.'],
-        'sponsoring' => ['title' => 'Sponsoring', 'description' => 'Soutenez les projets du club ON4CRD via le sponsoring.'],
-        'mentions_legales' => ['title' => 'Mentions légales', 'description' => 'Informations légales et éditeur du site ON4CRD.'],
-        'conditions_utilisation' => ['title' => 'Conditions d’utilisation', 'description' => 'Conditions générales d’utilisation de la plateforme ON4CRD.'],
-        'llms.txt' => ['title' => 'LLMS ON4CRD', 'description' => 'Fichier de contexte public ON4CRD pour assistants et moteurs génératifs.'],
-        'ai-index.json' => ['title' => 'AI index ON4CRD', 'description' => 'Index JSON public des contenus ON4CRD pour moteurs génératifs.'],
-        'knowledge-graph.jsonld' => ['title' => 'Knowledge graph ON4CRD', 'description' => 'Graphe JSON-LD public du Radio Club Durnal ON4CRD.'],
-    ];
-
-    $routeSpecificMeta = $routeMetaDefaults[$route] ?? [];
-
+    $routeKey = function_exists('seo_i18n_route_key') ? seo_i18n_route_key($route) : (preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home');
     $locale = current_locale();
+    $seoMessages = function_exists('i18n_domain_locale') ? i18n_domain_locale('seo', $locale) : [];
+    $routeSpecificMeta = [];
+    $routeTitle = trim((string) ($seoMessages[$routeKey . '_title'] ?? ''));
+    $routeDescription = trim((string) ($seoMessages[$routeKey . '_description'] ?? ''));
+    if ($routeTitle !== '') {
+        $routeSpecificMeta['title'] = $routeTitle;
+    }
+    if ($routeDescription !== '') {
+        $routeSpecificMeta['description'] = $routeDescription;
+    }
     $localeMap = [
         'fr' => 'fr_BE', 'en' => 'en_GB', 'de' => 'de_DE', 'nl' => 'nl_BE', 'es' => 'es_ES', 'it' => 'it_IT', 'pt' => 'pt_PT',
         'ar' => 'ar_SA', 'hi' => 'hi_IN', 'ja' => 'ja_JP', 'zh' => 'zh_CN', 'bn' => 'bn_BD', 'ru' => 'ru_RU', 'id' => 'id_ID',

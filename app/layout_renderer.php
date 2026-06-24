@@ -393,7 +393,8 @@ function render_layout_impl(string $content, string $title = ''): string
     $pageTitle = $title !== '' ? $title : ($metaTitle !== '' ? $metaTitle : $siteName);
     $metaDescription = trim((string) ($pageMeta['description'] ?? ''));
     if ($metaDescription === '') {
-        $metaDescription = 'Radio Club Durnal ON4CRD : actualités, événements, formation, ressources et vie du club radioamateur.';
+        $seoI18n = i18n_domain_locale('seo', $currentLocale);
+        $metaDescription = (string) ($seoI18n['default_description'] ?? 'Radio Club Durnal ON4CRD');
     }
     $metaCanonical = trim((string) ($pageMeta['canonical'] ?? ''));
     $metaRobots = trim((string) ($pageMeta['robots'] ?? 'index,follow'));
