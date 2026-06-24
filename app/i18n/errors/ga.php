@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,5 @@ return array (
   'events_hint' => 'Féach ar na gníomhaíochtaí atá le teacht.',
   'tools_link' => 'Uirlisí raidió',
   'tools_hint' => 'Oscail na huirlisí praiticiúla do raidióamaitéirí.',
+  'module_unavailable' => 'Module unavailable.',
 );

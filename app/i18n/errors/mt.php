@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,5 @@ return array (
   'events_hint' => 'Iċċekkja l-attivitajiet li ġejjin.',
   'tools_link' => 'Għodod tar-radju',
   'tools_hint' => 'Iftaħ l-għodod prattiċi għad-dilettanti tar-radju.',
+  'module_unavailable' => 'Module unavailable.',
 );

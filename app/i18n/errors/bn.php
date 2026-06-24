@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,5 @@ return array (
   'events_hint' => 'আসন্ন কার্যক্রম দেখুন।',
   'tools_link' => 'রেডিও সরঞ্জাম',
   'tools_hint' => 'ব্যবহারিক অ্যামেচার রেডিও সরঞ্জাম খুলুন।',
+  'module_unavailable' => 'Module unavailable.',
 );

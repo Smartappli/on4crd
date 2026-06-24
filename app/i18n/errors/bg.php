@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,5 @@ return array (
   'events_hint' => 'Вижте предстоящите дейности.',
   'tools_link' => 'Радиоинструменти',
   'tools_hint' => 'Отворете практическите инструменти за радиолюбители.',
+  'module_unavailable' => 'Module unavailable.',
 );

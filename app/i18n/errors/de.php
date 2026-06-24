@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,5 @@ return array (
   'events_hint' => 'Sehen Sie sich die kommenden Aktivitäten an.',
   'tools_link' => 'Funkwerkzeuge',
   'tools_hint' => 'Öffnen Sie die praktischen Funkamateur-Werkzeuge.',
+  'module_unavailable' => 'Module unavailable.',
 );

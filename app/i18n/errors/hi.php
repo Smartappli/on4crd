@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,5 @@ return array (
   'events_hint' => 'आगामी गतिविधियां देखें.',
   'tools_link' => 'रेडियो उपकरण',
   'tools_hint' => 'व्यावहारिक रेडियो एमेच्योर उपकरण खोलें.',
+  'module_unavailable' => 'Module unavailable.',
 );

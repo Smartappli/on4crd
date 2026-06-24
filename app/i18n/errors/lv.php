@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,5 @@ return array (
   'events_hint' => 'Apskatiet gaidāmās aktivitātes.',
   'tools_link' => 'Radio rīki',
   'tools_hint' => 'Atveriet praktiskos radioamatieru rīkus.',
+  'module_unavailable' => 'Module unavailable.',
 );

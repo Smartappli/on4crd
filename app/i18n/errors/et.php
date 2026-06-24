@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,5 @@ return array (
   'events_hint' => 'Vaata tulevasi tegevusi.',
   'tools_link' => 'Raadiotööriistad',
   'tools_hint' => 'Ava praktilised raadioamatööri tööriistad.',
+  'module_unavailable' => 'Module unavailable.',
 );
