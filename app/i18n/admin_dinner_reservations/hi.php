@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return [
     'err_invalid_reservation' => 'कृपया एक नाम और कम से कम एक वैध आरक्षण लाइन प्रदान करें।',
     'ok_saved' => 'आरक्षण बचा लिया गया.',
@@ -42,4 +40,16 @@ return [
     'csv_line_total' => 'कुल पंक्ति',
     'csv_res_total' => 'आरक्षण कुल',
     'meta_desc' => 'वार्षिक रात्रिभोज आरक्षण और निर्यात का प्रबंधन करें।',
+    'starter_potage' => 'घर का बना सूप',
+    'starter_croquettes' => 'चीज़ क्रोकेट',
+    'starter_salade' => 'छोटी सलाद',
+    'meal_vol_au_vent' => 'Vol-au-vent',
+    'meal_boulettes' => 'टमाटर सॉस में मीटबॉल',
+    'meal_vegetarien' => 'शाकाहारी प्लेट',
+    'dessert_tiramisu' => 'तिरामिसू',
+    'dessert_mousse_choco' => 'चॉकलेट मूस',
+    'dessert_salade_fruits' => 'फलों का सलाद',
+    'line_enable_starter' => 'स्टार्टर सक्रिय करें',
+    'line_enable_meal' => 'मुख्य व्यंजन सक्रिय करें',
+    'line_enable_dessert' => 'मिठाई सक्रिय करें',
 ];

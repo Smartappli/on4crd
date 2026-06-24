@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return [
     'err_invalid_reservation' => '名前と少なくとも 1 つの有効な予約行を入力してください。',
     'ok_saved' => '予約が保存されました。',
@@ -42,4 +40,16 @@ return [
     'csv_line_total' => '行合計',
     'csv_res_total' => '予約合計',
     'meta_desc' => '年間ディナーの予約と輸出を管理します。',
+    'starter_potage' => '自家製スープ',
+    'starter_croquettes' => 'チーズコロッケ',
+    'starter_salade' => '小さなサラダ',
+    'meal_vol_au_vent' => 'Vol-au-vent',
+    'meal_boulettes' => 'トマトソースのミートボール',
+    'meal_vegetarien' => 'ベジタリアンプレート',
+    'dessert_tiramisu' => 'ティラミス',
+    'dessert_mousse_choco' => 'チョコレートムース',
+    'dessert_salade_fruits' => 'フルーツサラダ',
+    'line_enable_starter' => '前菜を有効にする',
+    'line_enable_meal' => 'メイン料理を有効にする',
+    'line_enable_dessert' => 'デザートを有効にする',
 ];

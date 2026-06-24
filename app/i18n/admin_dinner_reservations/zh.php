@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return [
     'err_invalid_reservation' => '请提供姓名和至少一条有效的预订线路。',
     'ok_saved' => '预订已保存。',
@@ -42,4 +40,16 @@ return [
     'csv_line_total' => '总行数',
     'csv_res_total' => '预订总数',
     'meta_desc' => '管理年度晚餐预订和出口。',
+    'starter_potage' => '家常汤',
+    'starter_croquettes' => '奶酪可乐饼',
+    'starter_salade' => '小份沙拉',
+    'meal_vol_au_vent' => 'Vol-au-vent',
+    'meal_boulettes' => '番茄酱肉丸',
+    'meal_vegetarien' => '素食拼盘',
+    'dessert_tiramisu' => '提拉米苏',
+    'dessert_mousse_choco' => '巧克力慕斯',
+    'dessert_salade_fruits' => '水果沙拉',
+    'line_enable_starter' => '启用前菜',
+    'line_enable_meal' => '启用主菜',
+    'line_enable_dessert' => '启用甜点',
 ];

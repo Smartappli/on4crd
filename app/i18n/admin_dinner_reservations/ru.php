@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return [
     'err_invalid_reservation' => 'Укажите имя и хотя бы одну действительную строку бронирования.',
     'ok_saved' => 'Бронирование сохранено.',
@@ -42,4 +40,16 @@ return [
     'csv_line_total' => 'Итого по строке',
     'csv_res_total' => 'Общая сумма бронирования',
     'meta_desc' => 'Управляйте ежегодным резервированием и экспортом ужинов.',
+    'starter_potage' => 'Домашний суп',
+    'starter_croquettes' => 'Сырные крокеты',
+    'starter_salade' => 'Небольшой салат',
+    'meal_vol_au_vent' => 'Vol-au-vent',
+    'meal_boulettes' => 'Фрикадельки в томатном соусе',
+    'meal_vegetarien' => 'Вегетарианское блюдо',
+    'dessert_tiramisu' => 'Тирамису',
+    'dessert_mousse_choco' => 'Шоколадный мусс',
+    'dessert_salade_fruits' => 'Фруктовый салат',
+    'line_enable_starter' => 'Включить закуску',
+    'line_enable_meal' => 'Включить основное блюдо',
+    'line_enable_dessert' => 'Включить десерт',
 ];
