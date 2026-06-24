@@ -19,4 +19,5 @@ return array (
   'no_member' => 'لست عضوًا بعد؟',
   'create_account' => 'إنشاء حساب',
   'membership_link' => 'كن عضوًا',
+  'login_required' => 'الرجاء تسجيل الدخول للمتابعة.',
 );

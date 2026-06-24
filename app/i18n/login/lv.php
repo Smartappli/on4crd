@@ -19,4 +19,5 @@ return array (
   'no_member' => 'Vēl neesi dalībnieks?',
   'create_account' => 'Izveidojiet kontu',
   'membership_link' => 'Kļūt par biedru',
+  'login_required' => 'Lūdzu, pierakstieties, lai turpinātu.',
 );

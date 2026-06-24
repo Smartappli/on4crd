@@ -19,4 +19,5 @@ return array (
   'no_member' => 'Még nem tag?',
   'create_account' => 'Hozzon létre egy fiókot',
   'membership_link' => 'Legyen tag',
+  'login_required' => 'Kérjük, jelentkezzen be a folytatáshoz.',
 );

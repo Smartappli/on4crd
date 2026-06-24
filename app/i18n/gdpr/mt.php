@@ -28,7 +28,7 @@ return array (
   'status_resolved' => 'Solvuti',
   'status_rejected' => 'Miċħuda',
   'table_request' => 'Talba',
-  'table_status' => 'Status',
+  'table_status' => 'Stat',
   'table_date' => 'Data',
   'table_processing' => 'Ipproċessar',
   'table_resolution' => 'Riżoluzzjoni',

@@ -12,24 +12,22 @@ function matomo_consent_text(?string $locale = null): array
         $locale = (string) explode('-', $locale, 2)[0];
     }
 
-    $texts = [
-        'fr' => [
-            'title' => 'Mesure d\'audience',
-            'body' => 'Aidez le club à comprendre l\'utilisation du site avec Matomo, sans cookies de suivi.',
-            'accept' => 'Accepter',
-            'reject' => 'Continuer sans statistiques',
-            'label' => 'Choix de mesure d\'audience',
-        ],
-        'en' => [
-            'title' => 'Audience measurement',
-            'body' => 'Help the club understand site usage with Matomo, without tracking cookies.',
-            'accept' => 'Accept',
-            'reject' => 'Continue without statistics',
-            'label' => 'Audience measurement choice',
-        ],
+    $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('matomo', $locale) : [];
+    $fallback = [
+        'title' => 'Audience measurement',
+        'body' => 'Help the club understand site usage with Matomo, without tracking cookies.',
+        'accept' => 'Accept',
+        'reject' => 'Continue without statistics',
+        'label' => 'Audience measurement choice',
     ];
 
-    return $texts[$locale] ?? $texts['en'];
+    return [
+        'title' => (string) ($messages['title'] ?? $fallback['title']),
+        'body' => (string) ($messages['body'] ?? $fallback['body']),
+        'accept' => (string) ($messages['accept'] ?? $fallback['accept']),
+        'reject' => (string) ($messages['reject'] ?? $fallback['reject']),
+        'label' => (string) ($messages['label'] ?? $fallback['label']),
+    ];
 }
 }
 

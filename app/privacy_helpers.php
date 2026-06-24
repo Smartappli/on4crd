@@ -1262,44 +1262,98 @@ if (!function_exists('privacy_purge_expired_data')) {
     }
 }
 
+if (!function_exists('privacy_i18n_messages')) {
+    /**
+     * @return array<string, mixed>
+     */
+    function privacy_i18n_messages(): array
+    {
+        if (!function_exists('i18n_domain_locale') || !function_exists('current_locale')) {
+            return [];
+        }
+
+        return i18n_domain_locale('gdpr', current_locale());
+    }
+}
+
+if (!function_exists('privacy_i18n_text')) {
+    /**
+     * @param array<string, string> $replace
+     */
+    function privacy_i18n_text(string $key, string $fallback, array $replace = []): string
+    {
+        $messages = privacy_i18n_messages();
+        $value = (string) ($messages[$key] ?? $fallback);
+
+        return $replace === [] ? $value : strtr($value, $replace);
+    }
+}
+
 if (!function_exists('privacy_notice_short_html')) {
     function privacy_notice_short_html(string $context = 'default'): string
     {
         $link = function_exists('route_url') ? route_url('gdpr') : 'index.php?route=gdpr';
-        $messages = [
-            'register' => 'Les données du compte servent à créer le profil, sécuriser les accès et afficher uniquement les informations que vous rendez visibles. Le géocodage postal externe est optionnel.',
-            'profile' => 'Les informations du profil restent contrôlées par vos réglages de visibilité. Le géocodage postal externe ne part que si vous le demandez.',
-            'newsletter' => 'La newsletter exige un consentement explicite. Une preuve de consentement et des données techniques pseudonymisées sont conservées.',
-            'geocode' => 'Si vous cochez le géocodage automatique, l\'adresse postale saisie est transmise à Nominatim et le résultat est gardé en cache 30 jours.',
-            'default' => 'Les données personnelles sont limitées aux usages du site, avec export, opposition et demande de suppression disponibles.',
+        $keys = [
+            'register' => 'privacy_short_register',
+            'profile' => 'privacy_short_profile',
+            'newsletter' => 'privacy_short_newsletter',
+            'geocode' => 'privacy_short_geocode',
+            'default' => 'privacy_short_default',
         ];
-        $message = $messages[$context] ?? $messages['default'];
+        $message = privacy_i18n_text(
+            $keys[$context] ?? $keys['default'],
+            'Personal data is limited to site uses, with export, objection and erasure requests available.'
+        );
+        $linkLabel = privacy_i18n_text('privacy_notice_link', 'View the GDPR notice');
 
-        return '<div class="privacy-inline-notice">' . e($message) . ' <a href="' . e($link) . '">Voir la notice RGPD</a>.</div>';
+        return '<div class="privacy-inline-notice">' . e($message) . ' <a href="' . e($link) . '">' . e($linkLabel) . '</a>.</div>';
     }
 }
 
 if (!function_exists('privacy_notice_sections')) {
+    /**
+     * @return array<string, string>
+     */
     function privacy_notice_sections(): array
     {
         $contact = privacy_contact_config();
         $matomoConfigured = trim((string) config('tracking.matomo_url', '')) !== '' && trim((string) config('tracking.matomo_site_id', '')) !== '';
-        $dpo = $contact['dpo_email'] !== '' ? ' DPO/contact dédié: ' . $contact['dpo_email'] . '.' : '';
-        $trackingText = $matomoConfigured
-            ? 'Une mesure d\'audience Matomo peut être chargée uniquement selon la configuration de consentement, avec anonymisation et cookies désactivés si configuré.'
-            : 'Aucune mesure d\'audience externe n\'est chargée par défaut; Matomo reste désactivé tant qu\'aucune instance n\'est configurée.';
+        $dpo = $contact['dpo_email'] !== ''
+            ? ' ' . privacy_i18n_text('privacy_dpo_label', 'Dedicated DPO/contact') . ': ' . $contact['dpo_email'] . '.'
+            : '';
+        $trackingText = privacy_i18n_text(
+            $matomoConfigured ? 'privacy_tracking_matomo_configured' : 'privacy_tracking_matomo_unconfigured',
+            $matomoConfigured
+                ? 'Matomo audience measurement may be loaded only according to the consent configuration, with anonymization and cookies disabled when configured.'
+                : 'No external audience measurement is loaded by default; Matomo remains disabled until an instance is configured.'
+        );
+        $replace = [
+            '{controller_name}' => $contact['controller_name'],
+            '{controller_email}' => $contact['controller_email'],
+            '{controller_postal_address}' => $contact['controller_postal_address'],
+            '{dpo}' => $dpo,
+            '{tracking_text}' => $trackingText,
+            '{supervisory_authority}' => $contact['supervisory_authority'],
+            '{technical_logs_months}' => (string) privacy_retention_value('technical_logs_months', 13),
+            '{chatbot_days}' => (string) privacy_retention_value('chatbot_days', 180),
+            '{newsletter_deliveries_months}' => (string) privacy_retention_value('newsletter_deliveries_months', 24),
+            '{read_notifications_months}' => (string) privacy_retention_value('read_notifications_months', 24),
+            '{privacy_requests_years}' => (string) privacy_retention_value('privacy_requests_years', 5),
+            '{password_reset_log_days}' => (string) privacy_retention_value('password_reset_log_days', 90),
+            '{geocode_cache_days}' => (string) privacy_retention_value('geocode_cache_days', 30),
+        ];
 
         return [
-            'Responsable du traitement' => $contact['controller_name'] . ' est responsable du traitement. Contact public: ' . $contact['controller_email'] . '. Adresse: ' . $contact['controller_postal_address'] . '.' . $dpo,
-            'Finalités' => 'Gestion des comptes, annuaire radioamateur, publication de contenus, proposition d\'articles, modération, sécurité, statistiques techniques internes, newsletter, boutique/événements et demandes RGPD.',
-            'Bases légales' => 'Exécution du service pour le compte membre, intérêt légitime pour la sécurité et la modération, obligations légales pour certains journaux/transactions, consentement pour la newsletter, le tracking non essentiel et le géocodage postal externe.',
-            'Données traitées' => 'Identité radioamateur, email, profil, visibilités, contenus publiés, documents téléversés, préférences, abonnements, historiques techniques pseudonymisés, demandes RGPD, logs de sécurité et traces de consentement.',
-            'Destinataires' => 'Administrateurs habilités, membres selon vos réglages de visibilité, visiteurs pour les contenus publics, hébergeur du site, prestataires email strictement nécessaires, Google Maps si vous affichez la carte intégrée et Nominatim uniquement si vous activez le géocodage. Les bibliothèques front principales sont servies localement, sans CDN public.',
-            'Conservation' => 'Compte conservé tant qu\'il est actif. Logs techniques: ' . privacy_retention_value('technical_logs_months', 13) . ' mois. Chatbot: ' . privacy_retention_value('chatbot_days', 180) . ' jours. Newsletter livraisons: ' . privacy_retention_value('newsletter_deliveries_months', 24) . ' mois. Notifications lues: ' . privacy_retention_value('read_notifications_months', 24) . ' mois. Demandes RGPD résolues: ' . privacy_retention_value('privacy_requests_years', 5) . ' ans. Reset password: ' . privacy_retention_value('password_reset_log_days', 90) . ' jours. Cache géocodage: ' . privacy_retention_value('geocode_cache_days', 30) . ' jours.',
-            'Droits' => 'Vous pouvez demander accès, export, rectification, limitation, opposition, portabilité et suppression. L\'export JSON est disponible depuis cette page pour les membres connectés; la suppression lance une anonymisation contrôlée avec journal d\'action.',
-            'Cookies et mesure' => 'Les cookies indispensables servent à la session, à la sécurité et aux préférences de langue/theme. ' . $trackingText,
-            'Sécurité' => 'Les IP et user-agents applicatifs sont pseudonymisés par HMAC avec un secret local persistant. Les actions RGPD administratives sont journalisées avec identifiant administrateur, statut et horodatage.',
-            'Contact et réclamation' => 'Pour toute demande relative aux données personnelles: ' . $contact['controller_email'] . '. Les membres connectés peuvent aussi utiliser le formulaire de cette page. Autorité de contrôle: ' . $contact['supervisory_authority'] . '.',
+            privacy_i18n_text('privacy_section_controller_title', 'Data controller') => privacy_i18n_text('privacy_section_controller_body', '{controller_name} is the data controller. Public contact: {controller_email}. Address: {controller_postal_address}.{dpo}', $replace),
+            privacy_i18n_text('privacy_section_purposes_title', 'Purposes') => privacy_i18n_text('privacy_section_purposes_body', 'Account management, amateur radio directory, content publication, article proposals, moderation, security, internal technical statistics, newsletter, shop/events and GDPR requests.', $replace),
+            privacy_i18n_text('privacy_section_legal_bases_title', 'Legal bases') => privacy_i18n_text('privacy_section_legal_bases_body', 'Performance of the member account service, legitimate interest for security and moderation, legal obligations for certain logs/transactions, consent for the newsletter, non-essential tracking and external postal geocoding.', $replace),
+            privacy_i18n_text('privacy_section_processed_data_title', 'Processed data') => privacy_i18n_text('privacy_section_processed_data_body', 'Amateur radio identity, email, profile, visibility settings, published content, uploaded documents, preferences, subscriptions, pseudonymized technical histories, GDPR requests, security logs and consent records.', $replace),
+            privacy_i18n_text('privacy_section_recipients_title', 'Recipients') => privacy_i18n_text('privacy_section_recipients_body', 'Authorized administrators, members according to your visibility settings, visitors for public content, the site host, strictly necessary email providers, Google Maps if you display the embedded map and Nominatim only if you enable geocoding. The main front-end libraries are served locally, without a public CDN.', $replace),
+            privacy_i18n_text('privacy_section_retention_title', 'Retention') => privacy_i18n_text('privacy_section_retention_body', 'The account is retained while it is active. Technical logs: {technical_logs_months} months. Chatbot: {chatbot_days} days. Newsletter deliveries: {newsletter_deliveries_months} months. Read notifications: {read_notifications_months} months. Resolved GDPR requests: {privacy_requests_years} years. Password reset: {password_reset_log_days} days. Geocoding cache: {geocode_cache_days} days.', $replace),
+            privacy_i18n_text('privacy_section_rights_title', 'Rights') => privacy_i18n_text('privacy_section_rights_body', 'You can request access, export, rectification, restriction, objection, portability and erasure. JSON export is available from this page for signed-in members; erasure starts a controlled anonymization with an action log.', $replace),
+            privacy_i18n_text('privacy_section_cookies_title', 'Cookies and measurement') => privacy_i18n_text('privacy_section_cookies_body', 'Essential cookies are used for the session, security and language/theme preferences. {tracking_text}', $replace),
+            privacy_i18n_text('privacy_section_security_title', 'Security') => privacy_i18n_text('privacy_section_security_body', 'Application IPs and user agents are pseudonymized by HMAC with a persistent local secret. Administrative GDPR actions are logged with administrator identifier, status and timestamp.', $replace),
+            privacy_i18n_text('privacy_section_contact_title', 'Contact and complaint') => privacy_i18n_text('privacy_section_contact_body', 'For any request about personal data: {controller_email}. Signed-in members can also use the form on this page. Supervisory authority: {supervisory_authority}.', $replace),
         ];
     }
 }

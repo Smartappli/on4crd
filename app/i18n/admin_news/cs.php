@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Žádná atribuce.',
   'layout' => 'Sekce novinek',
   'meta_desc' => 'Psaní, moderování a správa zpráv podle sekcí.',
+  'status_draft' => 'Koncept',
+  'status_pending' => 'Čeká na vyřízení',
+  'status_published' => 'Publikováno',
+  'status_rejected' => 'Odmítnuto',
+  'status_archived' => 'Archivováno',
 );

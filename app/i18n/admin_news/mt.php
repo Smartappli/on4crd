@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'L-ebda attribuzzjoni.',
   'layout' => 'Sezzjoni tal-aħbarijiet',
   'meta_desc' => 'Kitba, moderazzjoni u ġestjoni ta’ aħbarijiet skont it-taqsima.',
+  'status_draft' => 'Abbozz',
+  'status_pending' => 'Pendenti',
+  'status_published' => 'Ippubblikat',
+  'status_rejected' => 'Miċħuda',
+  'status_archived' => 'Arkivjat',
 );

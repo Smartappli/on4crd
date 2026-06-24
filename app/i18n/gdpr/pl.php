@@ -28,7 +28,7 @@ return array (
   'status_resolved' => 'Rozwiązany',
   'status_rejected' => 'Odrzucony',
   'table_request' => 'Żądanie',
-  'table_status' => 'Status',
+  'table_status' => 'Stan',
   'table_date' => 'Data',
   'table_processing' => 'Przetwarzanie',
   'table_resolution' => 'Rezolucja',

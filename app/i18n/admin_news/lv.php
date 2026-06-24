@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Nav attiecinājuma.',
   'layout' => 'Ziņu sadaļa',
   'meta_desc' => 'Ziņu rakstīšana, moderēšana un pārvaldība pa sadaļām.',
+  'status_draft' => 'Melnraksts',
+  'status_pending' => 'Gaida',
+  'status_published' => 'Publicēts',
+  'status_rejected' => 'Noraidīts',
+  'status_archived' => 'Arhivēts',
 );

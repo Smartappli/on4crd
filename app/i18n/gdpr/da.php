@@ -28,7 +28,7 @@ return array (
   'status_resolved' => 'Løst',
   'status_rejected' => 'Afvist',
   'table_request' => 'Anmodning',
-  'table_status' => 'Status',
+  'table_status' => 'Tilstand',
   'table_date' => 'Dato',
   'table_processing' => 'Behandling',
   'table_resolution' => 'Opløsning',

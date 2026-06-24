@@ -58,13 +58,14 @@ function editorial_text(string $slot, string $fallback = ''): string
         }
     }
 
+    $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('committee', current_locale()) : [];
     $defaults = [
-        'committee.title' => 'Comité',
-        'committee.intro' => 'Présentation du comité du radio club.',
-        'committee.mission' => 'Transparence',
-        'committee.onboarding' => 'Accueil des membres',
-        'committee.contact_title' => 'Contact',
-        'committee.contact_text' => 'Le comité est disponible pour vos questions.',
+        'committee.title' => (string) ($messages['editorial_title'] ?? 'Committee'),
+        'committee.intro' => (string) ($messages['editorial_intro'] ?? 'Introduction to the radio club committee.'),
+        'committee.mission' => (string) ($messages['editorial_mission'] ?? 'Transparency'),
+        'committee.onboarding' => (string) ($messages['editorial_onboarding'] ?? 'Member welcome'),
+        'committee.contact_title' => (string) ($messages['editorial_contact_title'] ?? 'Contact'),
+        'committee.contact_text' => (string) ($messages['editorial_contact_text'] ?? 'The committee is available for your questions.'),
     ];
 
     return (string) ($defaults[$slot] ?? $fallback);

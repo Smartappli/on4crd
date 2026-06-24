@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Bez uvedenia zdroja.',
   'layout' => 'Sekcia noviniek',
   'meta_desc' => 'Písanie, moderovanie a správa správ podľa sekcií.',
+  'status_draft' => 'Návrh',
+  'status_pending' => 'Čaká na spracovanie',
+  'status_published' => 'Zverejnené',
+  'status_rejected' => 'Odmietnuté',
+  'status_archived' => 'Archivované',
 );

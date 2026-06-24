@@ -19,4 +19,5 @@ return array (
   'no_member' => 'Għadu mhux membru?',
   'create_account' => 'Oħloq kont',
   'membership_link' => 'Issir membru',
+  'login_required' => 'Jekk jogħġbok idħol biex tkompli.',
 );

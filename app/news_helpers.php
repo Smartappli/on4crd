@@ -5,13 +5,10 @@ require_once __DIR__ . '/article_helpers.php';
 
 function news_status_label(string $status): string
 {
-    return match ($status) {
-        'draft' => 'Brouillon',
-        'pending' => 'En attente',
-        'published' => 'Publié',
-        'archived' => 'Archivé',
-        default => ucfirst($status),
-    };
+    $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('admin_news', current_locale()) : [];
+    $key = 'status_' . $status;
+
+    return (string) ($messages[$key] ?? ucfirst($status));
 }
 
 /**

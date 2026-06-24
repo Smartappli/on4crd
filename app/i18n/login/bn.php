@@ -19,4 +19,5 @@ return array (
   'no_member' => 'এখনও সদস্য নন?',
   'create_account' => 'অ্যাকাউন্ট তৈরি করুন',
   'membership_link' => 'সদস্য হোন',
+  'login_required' => 'চালিয়ে যেতে সাইন ইন করুন.',
 );

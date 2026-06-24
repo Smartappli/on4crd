@@ -19,4 +19,5 @@ return array (
   'no_member' => 'まだメンバーではありませんか？',
   'create_account' => 'アカウント作成',
   'membership_link' => '会員になる',
+  'login_required' => '続行するにはサインインしてください。',
 );

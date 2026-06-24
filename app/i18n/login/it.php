@@ -19,4 +19,5 @@ return array (
   'no_member' => 'Non sei ancora membro?',
   'create_account' => 'Crea un account',
   'membership_link' => 'Diventare membro',
+  'login_required' => 'Accedi per continuare.',
 );

@@ -19,4 +19,5 @@ return array (
   'no_member' => 'Pole veel liige?',
   'create_account' => 'Loo konto',
   'membership_link' => 'Hakka liikmeks',
+  'login_required' => 'Jätkamiseks logige sisse.',
 );

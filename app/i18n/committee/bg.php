@@ -9,4 +9,10 @@ return array (
   'manage_label' => 'Управлявайте комисията',
   'none' => 'В момента няма публикувани членове на комисията.',
   'portrait_of' => 'Портрет на',
+  'editorial_title' => 'комитет',
+  'editorial_intro' => 'Въведение в комисията на радиоклуба.',
+  'editorial_mission' => 'Прозрачност',
+  'editorial_onboarding' => 'Член добре дошъл',
+  'editorial_contact_title' => 'Контакт',
+  'editorial_contact_text' => 'Комисията е на разположение за вашите въпроси.',
 );

@@ -59,7 +59,7 @@ return array (
   'privacy_section_recipients_title' => 'Saajad',
   'privacy_section_recipients_body' => 'Volitatud administraatorid, liikmed vastavalt teie nähtavuse seadetele, avaliku sisu külastajad, saidi host, rangelt vajalikud meiliteenuse pakkujad, Google Maps, kui kuvate manustatud kaarti, ja Nominatim ainult siis, kui lubate geokodeeringu. Peamisi esiotsa teeke teenindatakse kohapeal, ilma avaliku CDN-ita.',
   'privacy_section_retention_title' => 'Säilitamine',
-  'privacy_section_retention_body' => 'The account is retained while it is active. Technical logs: {technical_logs_months} months. Chatbot: {chatbot_days} days. Newsletter deliveries: {newsletter_deliveries_months} months. Read notifications: {read_notifications_months} months. Resolved GDPR requests: {privacy_requests_years} years. Password reset: {password_reset_log_days} days. Geocoding cache: {geocode_cache_days} days.',
+  'privacy_section_retention_body' => 'Konto säilitatakse seni, kuni see on aktiivne. Tehnilised logid: {technical_logs_months} kuud. Chatbot: {chatbot_days} päeva. Uudiskirja edastused: {newsletter_deliveries_months} kuud. Loetud teavitused: {read_notifications_months} kuud. Lahendatud GDPR-i taotlused: {privacy_requests_years} aastat. Parooli lähtestamine: {password_reset_log_days} päeva. Geokodeerimise vahemälu: {geocode_cache_days} päeva.',
   'privacy_section_rights_title' => 'Õigused',
   'privacy_section_rights_body' => 'Saate taotleda juurdepääsu, eksporti, parandamist, piiramist, vastuväidet, teisaldatavust ja kustutamist. Sisselogitud liikmetele on sellel lehel saadaval JSON-i eksport; kustutamine alustab kontrollitud anonüümseks muutmist tegevuste logiga.',
   'privacy_section_cookies_title' => 'Küpsised ja mõõtmine',

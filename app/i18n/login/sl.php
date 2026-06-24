@@ -19,4 +19,5 @@ return array (
   'no_member' => 'Še niste član?',
   'create_account' => 'Ustvari račun',
   'membership_link' => 'Postanite član',
+  'login_required' => 'Za nadaljevanje se prijavite.',
 );

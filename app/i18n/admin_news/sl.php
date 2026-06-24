@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Brez pripisa.',
   'layout' => 'Novice',
   'meta_desc' => 'Pisanje, moderiranje in upravljanje novic po razdelkih.',
+  'status_draft' => 'Osnutek',
+  'status_pending' => 'V teku',
+  'status_published' => 'Objavljeno',
+  'status_rejected' => 'Zavrnjeno',
+  'status_archived' => 'Arhivirano',
 );

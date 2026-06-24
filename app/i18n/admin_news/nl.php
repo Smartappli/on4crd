@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Geen toewijzing.',
   'layout' => 'Sectienieuws',
   'meta_desc' => 'Schrijven, modereren en beheren van sectienieuws.',
+  'status_draft' => 'Diepgang',
+  'status_pending' => 'In behandeling',
+  'status_published' => 'Gepubliceerd',
+  'status_rejected' => 'Afgewezen',
+  'status_archived' => 'Gearchiveerd',
 );

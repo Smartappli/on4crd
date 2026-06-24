@@ -19,4 +19,5 @@ return array (
   'no_member' => '还不是会员？',
   'create_account' => '创建账号',
   'membership_link' => '成为会员',
+  'login_required' => '请登录以继续。',
 );

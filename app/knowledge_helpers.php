@@ -558,68 +558,21 @@ if (!function_exists('answer_question_from_knowledge')) {
 function answer_question_from_knowledge(string $question, array $preferredSourceTypes = []): array
 {
         $locale = current_locale();
-        $chatbotI18n = [
-            'fr' => [
-                'empty_question' => 'Je n’ai pas reçu de question exploitable.',
-                'no_precise_yet' => 'Je n’ai pas de réponse précise pour le moment.',
-                'article_found' => 'J’ai trouvé un article pertinent : ',
-                'summary' => 'Résumé : ',
-                'link' => 'Lien : ',
-                'articles_source' => 'Articles ON4CRD',
-                'knowledge_source' => 'Base de connaissances ON4CRD',
-                'article_label' => 'Article',
-                'no_answer' => 'Je n’ai pas de réponse précise pour cette question. Essayez de mentionner un mot-clé (QSL, antenne, propagation, licence) ou consultez le module Articles.',
-                'assistant_source' => 'Assistant Raymond',
-            ],
-            'en' => [
-                'empty_question' => 'I did not receive a usable question.',
-                'no_precise_yet' => 'I do not have a precise answer right now.',
-                'article_found' => 'I found a relevant article: ',
-                'summary' => 'Summary: ',
-                'link' => 'Link: ',
-                'articles_source' => 'ON4CRD articles',
-                'knowledge_source' => 'ON4CRD knowledge base',
-                'article_label' => 'Article',
-                'no_answer' => 'I do not have a precise answer for this question. Try adding a keyword (QSL, antenna, propagation, license) or browse the Articles module.',
-                'assistant_source' => 'Raymond assistant',
-            ],
-            'de' => [
-                'empty_question' => 'Ich habe keine verwertbare Frage erhalten.',
-                'no_precise_yet' => 'Ich habe im Moment keine genaue Antwort.',
-                'article_found' => 'Ich habe einen relevanten Artikel gefunden: ',
-                'summary' => 'Zusammenfassung: ',
-                'link' => 'Link: ',
-                'articles_source' => 'ON4CRD-Artikel',
-                'knowledge_source' => 'ON4CRD-Wissensdatenbank',
-                'article_label' => 'Artikel',
-                'no_answer' => 'Ich habe keine genaue Antwort auf diese Frage. Versuchen Sie ein Schlüsselwort (QSL, Antenne, Ausbreitung, Lizenz) oder nutzen Sie das Artikel-Modul.',
-                'assistant_source' => 'Assistent Raymond',
-            ],
-            'nl' => [
-                'empty_question' => 'Ik heb geen bruikbare vraag ontvangen.',
-                'no_precise_yet' => 'Ik heb momenteel geen exact antwoord.',
-                'article_found' => 'Ik heb een relevant artikel gevonden: ',
-                'summary' => 'Samenvatting: ',
-                'link' => 'Link: ',
-                'articles_source' => 'ON4CRD-artikels',
-                'knowledge_source' => 'ON4CRD-kennisbank',
-                'article_label' => 'Artikel',
-                'no_answer' => 'Ik heb geen exact antwoord op deze vraag. Probeer een trefwoord (QSL, antenne, propagatie, licentie) of bekijk de Artikels-module.',
-                'assistant_source' => 'Raymond-assistent',
-            ],
-        ];
-        $chatbotT = $chatbotI18n[$locale] ?? $chatbotI18n['fr'];
+        $chatbotT = function_exists('i18n_domain_locale') ? i18n_domain_locale('chatbot', $locale) : [];
+        $chatbotText = static function (string $key, string $fallback) use ($chatbotT): string {
+            return (string) ($chatbotT[$key] ?? $fallback);
+        };
         $normalized = mb_safe_strtolower(trim($question));
         $canUseMemberLibrary = current_user() !== null;
         if ($normalized === '') {
-            return ['answer' => (string) $chatbotT['empty_question'], 'source' => (string) $chatbotT['assistant_source']];
+            return ['answer' => $chatbotText('answer_empty_question', 'I did not receive a usable question.'), 'source' => $chatbotText('answer_assistant_source', 'Raymond assistant')];
         }
 
         $queryTokens = rag_tokens($normalized);
         if ($queryTokens === [] && mb_strlen($normalized) < 3) {
             return [
-                'answer' => (string) $chatbotT['no_answer'],
-                'source' => (string) $chatbotT['assistant_source'],
+                'answer' => $chatbotText('answer_no_answer', 'I do not have a precise answer for this question. Try adding a keyword (QSL, antenna, propagation, license) or browse the Articles module.'),
+                'source' => $chatbotText('answer_assistant_source', 'Raymond assistant'),
             ];
         }
 
@@ -893,7 +846,7 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                             }
                         }
                         $answer = $summary;
-                        if ($link !== '') { $answer .= "\n\n" . (string) $chatbotT['link'] . $link; }
+                        if ($link !== '') { $answer .= "\n\n" . $chatbotText('answer_link', 'Link: ') . $link; }
                         $sourceType = trim((string) ($best['source_type'] ?? 'source'));
                         $sourceTitle = trim((string) ($best['title'] ?? ''));
                         $source = 'RAG v2 agentic (LLPhant) · ' . $sourceType . ($sourceTitle !== '' ? (' · ' . $sourceTitle) : '');
@@ -964,8 +917,8 @@ function answer_question_from_knowledge(string $question, array $preferredSource
 
         if ($bestItem !== null && $bestScore > 0) {
             return [
-                'answer' => trim((string) ($bestItem['body'] ?? (string) $chatbotT['no_precise_yet'])),
-                'source' => trim((string) ($bestItem['source'] ?? (string) $chatbotT['knowledge_source'])),
+                'answer' => trim((string) ($bestItem['body'] ?? $chatbotText('answer_no_precise_yet', 'I do not have a precise answer right now.'))),
+                'source' => trim((string) ($bestItem['source'] ?? $chatbotText('answer_knowledge_source', 'ON4CRD knowledge base'))),
             ];
         }
 
@@ -1033,18 +986,18 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                     }
                 }
                 if (is_array($article) && $articleScore >= 2.0) {
-                    $title = trim((string) ($article['title'] ?? (string) $chatbotT['article_label']));
+                    $title = trim((string) ($article['title'] ?? $chatbotText('answer_article_label', 'Article')));
                     $excerpt = trim((string) ($article['excerpt'] ?? ''));
                     $slug = trim((string) ($article['slug'] ?? ''));
                     $url = $slug !== '' ? route_url('article', ['slug' => $slug]) : '';
-                    $answer = (string) $chatbotT['article_found'] . $title . '.';
+                    $answer = $chatbotText('answer_article_found', 'I found a relevant article: ') . $title . '.';
                     if ($excerpt !== '') {
-                        $answer .= "\n\n" . (string) $chatbotT['summary'] . $excerpt;
+                        $answer .= "\n\n" . $chatbotText('answer_summary', 'Summary: ') . $excerpt;
                     }
                     if ($url !== '') {
-                        $answer .= "\n\n" . (string) $chatbotT['link'] . $url;
+                        $answer .= "\n\n" . $chatbotText('answer_link', 'Link: ') . $url;
                     }
-                    return ['answer' => $answer, 'source' => (string) $chatbotT['articles_source']];
+                    return ['answer' => $answer, 'source' => $chatbotText('answer_articles_source', 'ON4CRD articles')];
                 }
             } catch (Throwable) {
                 // fallback below
@@ -1084,27 +1037,19 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                     }
                 }
                 if (is_array($doc) && $docScore >= 2.0) {
-                    $locale = current_locale();
-                    $chatbotDocI18n = [
-                        'fr' => ['doc_fallback' => 'Document PDF', 'prefix' => 'J’ai trouvé un document dans la bibliothèque membres : ', 'summary' => 'Résumé : ', 'open' => 'Consulter : ', 'source' => 'Bibliothèque membres'],
-                        'en' => ['doc_fallback' => 'PDF document', 'prefix' => 'I found a document in the members library: ', 'summary' => 'Summary: ', 'open' => 'Open: ', 'source' => 'Members library'],
-                        'de' => ['doc_fallback' => 'PDF-Dokument', 'prefix' => 'Ich habe ein Dokument in der Mitgliederbibliothek gefunden: ', 'summary' => 'Zusammenfassung: ', 'open' => 'Öffnen: ', 'source' => 'Mitgliederbibliothek'],
-                        'nl' => ['doc_fallback' => 'PDF-document', 'prefix' => 'Ik heb een document gevonden in de ledenbibliotheek: ', 'summary' => 'Samenvatting: ', 'open' => 'Openen: ', 'source' => 'Ledenbibliotheek'],
-                    ];
-                    $chatbotDocT = $chatbotDocI18n[$locale] ?? $chatbotDocI18n['fr'];
-                    $docTitle = trim((string) ($doc['title'] ?? (string) $chatbotDocT['doc_fallback']));
+                    $docTitle = trim((string) ($doc['title'] ?? $chatbotText('answer_doc_fallback', 'PDF document')));
                     $docDescription = trim((string) ($doc['description'] ?? ''));
                     $docId = (int) ($doc['id'] ?? 0);
                     $docUrl = trim((string) ($doc['file_path'] ?? ''));
                     $safeDocUrl = safe_storage_document_path_or_null($docUrl, ['storage/private/library/', 'storage/uploads/library/']);
-                    $answer = (string) $chatbotDocT['prefix'] . $docTitle . '.';
+                    $answer = $chatbotText('answer_doc_prefix', 'I found a document in the members library: ') . $docTitle . '.';
                     if ($docDescription !== '') {
-                        $answer .= "\n\n" . (string) $chatbotDocT['summary'] . $docDescription;
+                        $answer .= "\n\n" . $chatbotText('answer_summary', 'Summary: ') . $docDescription;
                     }
                     if (is_string($safeDocUrl) && $safeDocUrl !== '' && $docId > 0) {
-                        $answer .= "\n\n" . (string) $chatbotDocT['open'] . route_url('member_library_preview', ['id' => $docId, 'download' => '1']);
+                        $answer .= "\n\n" . $chatbotText('answer_doc_open', 'Open: ') . route_url('member_library_preview', ['id' => $docId, 'download' => '1']);
                     }
-                    return ['answer' => $answer, 'source' => (string) $chatbotDocT['source']];
+                    return ['answer' => $answer, 'source' => $chatbotText('answer_doc_source', 'Members library')];
                 }
             } catch (Throwable) {
                 // fallback below
@@ -1112,8 +1057,8 @@ function answer_question_from_knowledge(string $question, array $preferredSource
         }
 
         return [
-            'answer' => (string) $chatbotT['no_answer'],
-            'source' => (string) $chatbotT['assistant_source'],
+            'answer' => $chatbotText('answer_no_answer', 'I do not have a precise answer for this question. Try adding a keyword (QSL, antenna, propagation, license) or browse the Articles module.'),
+            'source' => $chatbotText('answer_assistant_source', 'Raymond assistant'),
         ];
     }
 }

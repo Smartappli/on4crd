@@ -19,4 +19,5 @@ return array (
   'no_member' => 'Gan ball fós?',
   'create_account' => 'Cruthaigh cuntas',
   'membership_link' => 'Bí i do bhall',
+  'login_required' => 'Sínigh isteach le leanúint ar aghaidh.',
 );

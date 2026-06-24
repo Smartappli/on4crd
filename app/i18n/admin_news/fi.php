@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Ei merkintää.',
   'layout' => 'Uutisosasto',
   'meta_desc' => 'Uutisten kirjoittaminen, moderointi ja hallinta osioittain.',
+  'status_draft' => 'Luonnos',
+  'status_pending' => 'Odottaa',
+  'status_published' => 'Julkaistu',
+  'status_rejected' => 'Hylätty',
+  'status_archived' => 'Arkistoitu',
 );

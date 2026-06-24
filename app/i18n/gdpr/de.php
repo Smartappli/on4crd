@@ -28,7 +28,7 @@ return array (
   'status_resolved' => 'Erledigt',
   'status_rejected' => 'Abgelehnt',
   'table_request' => 'Anfrage',
-  'table_status' => 'Status',
+  'table_status' => 'Bearbeitungsstand',
   'table_date' => 'Datum',
   'table_processing' => 'Bearbeitung',
   'table_resolution' => 'Abschluss',

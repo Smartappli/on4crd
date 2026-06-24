@@ -19,4 +19,5 @@ return array (
   'no_member' => 'अभी सदस्य नहीं हैं?',
   'create_account' => 'खाता बनाएँ',
   'membership_link' => 'सदस्य बनें',
+  'login_required' => 'कृपया जारी रखने के लिए साइन इन करें।',
 );

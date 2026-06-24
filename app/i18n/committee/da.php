@@ -9,4 +9,10 @@ return array (
   'manage_label' => 'Leder udvalget',
   'none' => 'Ingen udvalgsmedlemmer er offentliggjort på nuværende tidspunkt.',
   'portrait_of' => 'Portræt af',
+  'editorial_title' => 'udvalg',
+  'editorial_intro' => 'Introduktion til radioklubudvalget.',
+  'editorial_mission' => 'Gennemsigtighed',
+  'editorial_onboarding' => 'Medlem velkommen',
+  'editorial_contact_title' => 'Kontakt',
+  'editorial_contact_text' => 'Udvalget står til rådighed for dine spørgsmål.',
 );

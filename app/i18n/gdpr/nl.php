@@ -28,7 +28,7 @@ return array (
   'status_resolved' => 'Afgehandeld',
   'status_rejected' => 'Afgewezen',
   'table_request' => 'Aanvraag',
-  'table_status' => 'Status',
+  'table_status' => 'Toestand',
   'table_date' => 'Datum',
   'table_processing' => 'Behandeling',
   'table_resolution' => 'Afhandeling',

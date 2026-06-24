@@ -9,4 +9,10 @@ return array (
   'manage_label' => 'Upravljajte odborom',
   'none' => 'U ovom trenutku nema objavljenih članova odbora.',
   'portrait_of' => 'Portret od',
+  'editorial_title' => 'Povjerenstvo',
+  'editorial_intro' => 'Upoznavanje s povjerenstvom radiokluba.',
+  'editorial_mission' => 'Transparentnost',
+  'editorial_onboarding' => 'Član dobrodošao',
+  'editorial_contact_title' => 'Kontakt',
+  'editorial_contact_text' => 'Povjerenstvo stoji na raspolaganju za vaša pitanja.',
 );

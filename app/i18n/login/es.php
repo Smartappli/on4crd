@@ -19,4 +19,5 @@ return array (
   'no_member' => '¿Aún no es miembro?',
   'create_account' => 'Crear una cuenta',
   'membership_link' => 'Hacerse miembro',
+  'login_required' => 'Por favor inicia sesión para continuar.',
 );

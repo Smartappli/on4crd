@@ -9,4 +9,10 @@ return array (
   'manage_label' => 'Διαχειριστείτε την επιτροπή',
   'none' => 'Δεν έχουν δημοσιευτεί μέλη της επιτροπής αυτή τη στιγμή.',
   'portrait_of' => 'Πορτρέτο του',
+  'editorial_title' => 'Επιτροπή',
+  'editorial_intro' => 'Εισαγωγή στην επιτροπή του ραδιοφωνικού συλλόγου.',
+  'editorial_mission' => 'Διαφάνεια',
+  'editorial_onboarding' => 'Καλώς ορίσατε μέλος',
+  'editorial_contact_title' => 'Επικοινωνία',
+  'editorial_contact_text' => 'Η επιτροπή είναι διαθέσιμη για τις ερωτήσεις σας.',
 );

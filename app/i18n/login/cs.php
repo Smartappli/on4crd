@@ -19,4 +19,5 @@ return array (
   'no_member' => 'Ještě nejste členem?',
   'create_account' => 'Vytvořte si účet',
   'membership_link' => 'Stát se členem',
+  'login_required' => 'Chcete-li pokračovat, přihlaste se.',
 );

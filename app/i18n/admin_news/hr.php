@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Nema atribucije.',
   'layout' => 'Odjeljak vijesti',
   'meta_desc' => 'Pisanje, moderiranje i upravljanje vijestima po odjeljcima.',
+  'status_draft' => 'Nacrt',
+  'status_pending' => 'Na čekanju',
+  'status_published' => 'Objavljeno',
+  'status_rejected' => 'Odbijen',
+  'status_archived' => 'Arhivirano',
 );

@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Keine Zuordnung.',
   'layout' => 'Bereichsnachrichten',
   'meta_desc' => 'Nachrichten nach Bereichen schreiben, moderieren und verwalten.',
+  'status_draft' => 'Entwurf',
+  'status_pending' => 'Ausstehend',
+  'status_published' => 'Veröffentlicht',
+  'status_rejected' => 'Abgelehnt',
+  'status_archived' => 'Archiviert',
 );

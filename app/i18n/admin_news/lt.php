@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Jokio priskyrimo.',
   'layout' => 'Naujienų skiltis',
   'meta_desc' => 'Naujienų rašymas, moderavimas ir valdymas pagal skyrius.',
+  'status_draft' => 'Juodraštis',
+  'status_pending' => 'Laukiama',
+  'status_published' => 'Paskelbta',
+  'status_rejected' => 'Atmesta',
+  'status_archived' => 'Suarchyvuota',
 );

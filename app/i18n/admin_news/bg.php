@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Без приписване.',
   'layout' => 'Раздел Новини',
   'meta_desc' => 'Писане, модериране и управление на новини по секции.',
+  'status_draft' => 'Чернова',
+  'status_pending' => 'В очакване',
+  'status_published' => 'Публикувано',
+  'status_rejected' => 'Отхвърлено',
+  'status_archived' => 'Архивирано',
 );

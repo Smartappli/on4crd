@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Χωρίς απόδοση.',
   'layout' => 'Ενότητα ειδήσεων',
   'meta_desc' => 'Συγγραφή, συντονισμός και διαχείριση ειδήσεων ανά ενότητα.',
+  'status_draft' => 'Σχέδιο',
+  'status_pending' => 'Σε εκκρεμότητα',
+  'status_published' => 'Δημοσιεύθηκε',
+  'status_rejected' => 'Απορρίφθηκε',
+  'status_archived' => 'Αρχειοθετήθηκε',
 );
