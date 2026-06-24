@@ -74,9 +74,54 @@ const baseUrl = normalizeSeleniumBaseUrl(process.env.SELENIUM_BASE_URL)
   || 'http://127.0.0.1:8080/index.php';
 const timeoutMs = Number(process.env.SELENIUM_TIMEOUT_MS || 15000);
 const artifactsDir = process.env.SELENIUM_ARTIFACTS_DIR || path.join(process.cwd(), 'selenium-artifacts');
+const seleniumPhpTimeoutMs = Number(process.env.SELENIUM_PHP_TIMEOUT_MS || 30000);
+const seleniumDbProbeTimeoutMs = Number(process.env.SELENIUM_DB_TIMEOUT_MS || 3000);
+const seleniumDbProbeCacheMs = Number(process.env.SELENIUM_DB_CHECK_CACHE_MS || 10000);
 let seleniumFixturesSeeded = false;
 let seleniumAdminFixtureSeeded = false;
 let seleniumHttpTargetProbe = null;
+let seleniumDatabaseAvailabilityProbe = null;
+
+function isSeleniumDatabaseAvailable() {
+  if (process.env.SELENIUM_SKIP_DB_CHECK === '1') {
+    return true;
+  }
+
+  if (
+    seleniumDatabaseAvailabilityProbe !== null
+    && Date.now() - seleniumDatabaseAvailabilityProbe.checkedAt < seleniumDbProbeCacheMs
+  ) {
+    return seleniumDatabaseAvailabilityProbe.ok;
+  }
+
+  const probeCode = `
+require_once 'app/bootstrap.php';
+try {
+    $pdo = db();
+    if (!($pdo instanceof PDO)) {
+        throw new RuntimeException('Base de donnees indisponible.');
+    }
+    $pdo->query('SELECT 1');
+    echo 'ok';
+} catch (Throwable $error) {
+    fwrite(STDERR, (string) $error->getMessage());
+    exit(1);
+}
+`;
+
+  try {
+    runSeleniumPhp(probeCode, {}, { timeoutMs: seleniumDbProbeTimeoutMs });
+    seleniumDatabaseAvailabilityProbe = { ok: true, checkedAt: Date.now(), message: '' };
+  } catch (error) {
+    seleniumDatabaseAvailabilityProbe = {
+      ok: false,
+      checkedAt: Date.now(),
+      message: String(error && error.message ? error.message : error),
+    };
+  }
+
+  return seleniumDatabaseAvailabilityProbe.ok;
+}
 
 function routeUrl(route, query = {}) {
   const url = new URL(baseUrl);
@@ -607,8 +652,16 @@ function requireAdminCredentials(t) {
     t.skip('SELENIUM_ADMIN_USER/SELENIUM_ADMIN_PASSWORD non definis; test admin ignore.');
     return null;
   }
+  if (!isSeleniumDatabaseAvailable()) {
+    t.skip('Base de donnees ON4CRD indisponible; test admin ignore.');
+    return null;
+  }
 
   ensureSeleniumAdminFixture(username, password);
+  if (!seleniumAdminFixtureSeeded) {
+    t.skip('Fixture admin Selenium indisponible; test admin ignore.');
+    return null;
+  }
 
   return { username, password };
 }
@@ -631,7 +684,7 @@ function ensureSeleniumAdminFixture(username, password) {
         SELENIUM_ADMIN_PASSWORD: password,
       }),
       stdio: ['ignore', 'pipe', 'pipe'],
-      timeout: 30000,
+      timeout: seleniumPhpTimeoutMs,
     });
     seleniumAdminFixtureSeeded = true;
     return true;
@@ -675,7 +728,7 @@ function ensureSeleniumFixtures() {
       cwd: process.cwd(),
       env,
       stdio: ['ignore', 'pipe', 'pipe'],
-      timeout: 30000,
+      timeout: seleniumPhpTimeoutMs,
     });
     seleniumFixturesSeeded = true;
     return true;
@@ -696,14 +749,16 @@ function seleniumPhpEnv(extraEnv = {}) {
   return env;
 }
 
-function runSeleniumPhp(source, extraEnv = {}) {
+function runSeleniumPhp(source, extraEnv = {}, options = {}) {
   const phpSource = source.startsWith('<?php') ? source : `<?php\n${source}`;
+  const requestedTimeout = Number(options.timeoutMs || seleniumPhpTimeoutMs);
+
   return childProcess.execFileSync('php', ['-d', 'extension=pdo_mysql'], {
     cwd: process.cwd(),
     env: seleniumPhpEnv(extraEnv),
     input: phpSource,
     stdio: ['pipe', 'pipe', 'pipe'],
-    timeout: 30000,
+    timeout: Number.isFinite(requestedTimeout) && requestedTimeout > 0 ? requestedTimeout : seleniumPhpTimeoutMs,
   }).toString('utf8');
 }
 
