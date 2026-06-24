@@ -83,7 +83,7 @@ return array (
   'widget_weather_cloudy' => 'Molnigt',
   'widget_weather_fog' => 'Dimma',
   'widget_weather_snow' => 'Snö',
-  'widget_weather_storm' => 'Storm',
+  'widget_weather_storm' => 'Oväder',
   'widget_ham_weather_advice_title' => 'Skinka radioväder',
   'widget_ham_weather_advice_description' => 'QSO-poäng, band, lägen och rekommenderat fönster baserat på väder- och utbredningsdata.',
   'ham_weather_score_excellent' => 'Utmärkta förhållanden',

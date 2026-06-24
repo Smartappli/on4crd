@@ -72,7 +72,7 @@ return array (
   'widget_weather_source' => 'Quelle',
   'widget_weather_temperature' => 'Temperatur',
   'widget_weather_humidity' => 'Luftfeuchtigkeit',
-  'widget_weather_wind' => 'Wind',
+  'widget_weather_wind' => 'Windstärke',
   'widget_weather_rain' => 'Regen',
   'widget_weather_dry' => 'Trockene örtliche Bedingungen',
   'widget_weather_rainy' => 'Regen beobachtet',

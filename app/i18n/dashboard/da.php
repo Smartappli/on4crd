@@ -83,7 +83,7 @@ return array (
   'widget_weather_cloudy' => 'Overskyet',
   'widget_weather_fog' => 'Tåge',
   'widget_weather_snow' => 'Sne',
-  'widget_weather_storm' => 'Storm',
+  'widget_weather_storm' => 'Uvejr',
   'widget_ham_weather_advice_title' => 'Skinke radio vejr',
   'widget_ham_weather_advice_description' => 'QSO-score, bånd, tilstande og anbefalet vindue baseret på vejr- og udbredelsesdata.',
   'ham_weather_score_excellent' => 'Fremragende forhold',
