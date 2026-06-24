@@ -130,4 +130,10 @@ return array (
   'widget_hamqsl_source_caption' => 'Source: HAMQSL / N0NBH.',
   'widget_hamqsl_unavailable' => 'HAMQSL widget unavailable.',
   'widget_hamqsl_image_invalid' => 'HAMQSL image is not allowed.',
+  'ham_weather_propagation_label' => 'HF propagation:',
+  'ham_weather_state_quiet' => 'quiet',
+  'ham_weather_state_usable' => 'usable',
+  'ham_weather_state_disturbed' => 'disturbed',
+  'ham_weather_state_stormy' => 'stormy',
+  'ham_weather_state_unavailable' => 'unavailable',
 );

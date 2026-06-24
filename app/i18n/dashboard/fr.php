@@ -130,4 +130,10 @@ return array (
   'widget_hamqsl_source_caption' => 'Source : HAMQSL / N0NBH.',
   'widget_hamqsl_unavailable' => 'Widget HAMQSL indisponible.',
   'widget_hamqsl_image_invalid' => 'Image HAMQSL non autorisée.',
+  'ham_weather_propagation_label' => 'Propagation HF :',
+  'ham_weather_state_quiet' => 'calme',
+  'ham_weather_state_usable' => 'exploitable',
+  'ham_weather_state_disturbed' => 'perturbée',
+  'ham_weather_state_stormy' => 'orage magnétique',
+  'ham_weather_state_unavailable' => 'indisponible',
 );
