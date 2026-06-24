@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -151,4 +150,18 @@ return array (
   'manual_hint' => 'Roepteken-, band-, modus- en RST-velden worden tijdens het typen genormaliseerd naar hoofdletters.',
   'band_placeholder' => '20M',
   'mode_placeholder' => 'SSB',
+  'secure_unavailable' => 'Veilige QSL niet beschikbaar',
+  'svg_default_title' => 'QSL Card',
+  'svg_front_details_on_back' => 'QSL voorkant - details op achterkant',
+  'svg_back_title' => 'QSL-bevestiging (terug)',
+  'svg_thanks_contact' => 'Bedankt voor het contact — 73!',
+  'svg_label_from' => 'FROM',
+  'svg_label_to' => 'TO',
+  'svg_label_date' => 'Datum',
+  'svg_label_utc' => 'UTC',
+  'svg_label_band' => 'Band',
+  'svg_label_mode' => 'Modus',
+  'svg_label_rst_sr' => 'RST S/R',
+  'svg_label_operator' => 'Exploitant',
+  'svg_label_qth' => 'QTH',
 );

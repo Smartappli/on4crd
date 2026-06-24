@@ -84,9 +84,10 @@ function ensure_member_library_categories_table(): void
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )');
     $categoryInsert = db()->prepare('INSERT IGNORE INTO member_library_categories (code, label, sort_order) VALUES (?, ?, ?)');
+    $libraryMessages = function_exists('i18n_domain_locale') ? i18n_domain_locale('members_library', current_locale()) : [];
     $defaultCategories = function_exists('member_library_default_categories')
         ? member_library_default_categories()
-        : [['code' => 'general', 'label' => 'Général', 'sort_order' => 1]];
+        : [['code' => 'general', 'label' => (string) ($libraryMessages['category_general'] ?? 'General'), 'sort_order' => 1]];
     foreach ($defaultCategories as $category) {
         $categoryInsert->execute([
             (string) $category['code'],

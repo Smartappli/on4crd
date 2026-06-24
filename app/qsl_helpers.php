@@ -389,25 +389,16 @@ function qsl_template_supports_back(string $templateName): bool
     return strtolower(trim($templateName)) === 'classic_duplex';
 }
 
+function qsl_i18n_text(string $key, string $fallback = ''): string
+{
+    $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('qsl', current_locale()) : [];
+
+    return (string) ($messages[$key] ?? ($fallback !== '' ? $fallback : $key));
+}
+
 function sanitize_svg_document(string $svg): string
 {
-    $locale = current_locale();
-    $qslUnavailableLabel = match ($locale) {
-        'en' => 'Secure QSL unavailable',
-        'de' => 'Sichere QSL nicht verfügbar',
-        'nl' => 'Beveiligde QSL niet beschikbaar',
-        'es' => 'QSL segura no disponible',
-        'it' => 'QSL sicura non disponibile',
-        'pt' => 'QSL segura indisponível',
-        'ar' => 'QSL الآمنة غير متاحة',
-        'hi' => 'सुरक्षित QSL उपलब्ध नहीं है',
-        'ja' => '安全なQSLは利用できません',
-        'zh' => '安全QSL不可用',
-        'bn' => 'নিরাপদ QSL উপলভ্য নয়',
-        'ru' => 'Безопасная QSL недоступна',
-        'id' => 'QSL aman tidak tersedia',
-        default => 'QSL sécurisée indisponible',
-    };
+    $qslUnavailableLabel = qsl_i18n_text('secure_unavailable', 'Secure QSL unavailable');
     $safeFallbackSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">' . e($qslUnavailableLabel) . '</text></svg>';
 
     $normalized = strtolower($svg);
@@ -468,12 +459,19 @@ function qsl_svg_payload_text_values(array $payload): array
 function generate_qsl_svg(array $payload): string
 {
     [$ownCall, $qsoCall, $ownName, $ownQth, $date, $time, $band, $mode, $rstSent, $rstRecv, $comment] = qsl_svg_payload_text_values($payload);
-    $title = e(trim((string) ($payload['title'] ?? 'QSL Card')));
+    $title = e(trim((string) ($payload['title'] ?? qsl_i18n_text('svg_default_title', 'QSL Card'))));
     $backgroundPrimary = e(trim((string) ($payload['background_primary'] ?? '#0B1F3A')));
     $backgroundSecondary = e(trim((string) ($payload['background_secondary'] ?? '#1D4ED8')));
     $backgroundImage = trim((string) ($payload['background_image_data_uri'] ?? ''));
     $templateName = trim((string) ($payload['template_name'] ?? 'classic'));
     $isDuplex = qsl_template_supports_back($templateName);
+    $fromLabel = e(qsl_i18n_text('svg_label_from', 'FROM'));
+    $toLabel = e(qsl_i18n_text('svg_label_to', 'TO'));
+    $dateLabel = e(qsl_i18n_text('svg_label_date', 'Date'));
+    $utcLabel = e(qsl_i18n_text('svg_label_utc', 'UTC'));
+    $bandLabel = e(qsl_i18n_text('svg_label_band', 'Band'));
+    $modeLabel = e(qsl_i18n_text('svg_label_mode', 'Mode'));
+    $rstLabel = e(qsl_i18n_text('svg_label_rst_sr', 'RST S/R'));
     $backgroundLayer = '<rect width="900" height="500" fill="url(#qsl-bg-gradient)"/>';
     if ($backgroundImage !== '') {
         $safeBackground = e($backgroundImage);
@@ -488,15 +486,15 @@ function generate_qsl_svg(array $payload): string
         . '</linearGradient></defs>'
         . $backgroundLayer
         . '<text x="40" y="70" fill="#e2e8f0" font-size="42" font-family="Arial, sans-serif" font-weight="700">' . $title . '</text>'
-        . '<text x="40" y="130" fill="#f8fafc" font-size="30" font-family="Arial, sans-serif">DE: ' . $ownCall . '</text>'
+        . '<text x="40" y="130" fill="#f8fafc" font-size="30" font-family="Arial, sans-serif">' . $fromLabel . ': ' . $ownCall . '</text>'
         . '<text x="40" y="170" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">' . $ownName . ' • ' . $ownQth . '</text>'
-        . '<text x="40" y="250" fill="#f8fafc" font-size="34" font-family="Arial, sans-serif">TO: ' . $qsoCall . '</text>';
+        . '<text x="40" y="250" fill="#f8fafc" font-size="34" font-family="Arial, sans-serif">' . $toLabel . ': ' . $qsoCall . '</text>';
 
     if ($isDuplex) {
-        $svg .= '<text x="40" y="395" fill="#e2e8f0" font-size="20" font-family="Arial, sans-serif">QSL recto — détails au verso</text>';
+        $svg .= '<text x="40" y="395" fill="#e2e8f0" font-size="20" font-family="Arial, sans-serif">' . e(qsl_i18n_text('svg_front_details_on_back', 'QSL front — details on back')) . '</text>';
     } else {
-        $svg .= '<text x="40" y="305" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">DATE ' . $date . '  UTC ' . $time . '  BAND ' . $band . '  MODE ' . $mode . '</text>'
-            . '<text x="40" y="345" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">RST S/R: ' . $rstSent . ' / ' . $rstRecv . '</text>'
+        $svg .= '<text x="40" y="305" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">' . $dateLabel . ' ' . $date . '  ' . $utcLabel . ' ' . $time . '  ' . $bandLabel . ' ' . $band . '  ' . $modeLabel . ' ' . $mode . '</text>'
+            . '<text x="40" y="345" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">' . $rstLabel . ': ' . $rstSent . ' / ' . $rstRecv . '</text>'
             . '<text x="40" y="395" fill="#f8fafc" font-size="20" font-family="Arial, sans-serif">' . $comment . '</text>';
     }
 
@@ -508,19 +506,30 @@ function generate_qsl_svg(array $payload): string
 function generate_qsl_back_svg(array $payload): string
 {
     [$ownCall, $qsoCall, $ownName, $ownQth, $date, $time, $band, $mode, $rstSent, $rstRecv, $comment] = qsl_svg_payload_text_values($payload);
+    $backTitle = e(qsl_i18n_text('svg_back_title', 'QSL Confirmation (Back)'));
+    $thanksContact = e(qsl_i18n_text('svg_thanks_contact', 'Thanks for the contact — 73!'));
+    $fromLabel = e(qsl_i18n_text('svg_label_from', 'FROM'));
+    $toLabel = e(qsl_i18n_text('svg_label_to', 'TO'));
+    $operatorLabel = e(qsl_i18n_text('svg_label_operator', 'Operator'));
+    $qthLabel = e(qsl_i18n_text('svg_label_qth', 'QTH'));
+    $dateLabel = e(qsl_i18n_text('svg_label_date', 'Date'));
+    $utcLabel = e(qsl_i18n_text('svg_label_utc', 'UTC'));
+    $bandLabel = e(qsl_i18n_text('svg_label_band', 'Band'));
+    $modeLabel = e(qsl_i18n_text('svg_label_mode', 'Mode'));
+    $rstLabel = e(qsl_i18n_text('svg_label_rst_sr', 'RST S/R'));
 
     $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">'
         . '<rect width="900" height="500" fill="#f8fafc"/>'
         . '<rect x="18" y="18" width="864" height="464" fill="none" stroke="#1f2937" stroke-width="3"/>'
-        . '<text x="40" y="70" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">QSL Confirmation (Verso)</text>'
-        . '<text x="40" y="115" fill="#334155" font-size="20" font-family="Arial, sans-serif">DE: ' . $ownCall . ' • TO: ' . $qsoCall . '</text>'
-        . '<text x="40" y="165" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">Operator: ' . $ownName . '</text>'
-        . '<text x="40" y="200" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">QTH: ' . $ownQth . '</text>'
-        . '<text x="40" y="250" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">Date: ' . $date . '    UTC: ' . $time . '</text>'
-        . '<text x="40" y="285" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">Band: ' . $band . '    Mode: ' . $mode . '</text>'
-        . '<text x="40" y="320" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">RST S/R: ' . $rstSent . ' / ' . $rstRecv . '</text>'
+        . '<text x="40" y="70" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">' . $backTitle . '</text>'
+        . '<text x="40" y="115" fill="#334155" font-size="20" font-family="Arial, sans-serif">' . $fromLabel . ': ' . $ownCall . ' • ' . $toLabel . ': ' . $qsoCall . '</text>'
+        . '<text x="40" y="165" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">' . $operatorLabel . ': ' . $ownName . '</text>'
+        . '<text x="40" y="200" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">' . $qthLabel . ': ' . $ownQth . '</text>'
+        . '<text x="40" y="250" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">' . $dateLabel . ': ' . $date . '    ' . $utcLabel . ': ' . $time . '</text>'
+        . '<text x="40" y="285" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">' . $bandLabel . ': ' . $band . '    ' . $modeLabel . ': ' . $mode . '</text>'
+        . '<text x="40" y="320" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">' . $rstLabel . ': ' . $rstSent . ' / ' . $rstRecv . '</text>'
         . '<text x="40" y="370" fill="#334155" font-size="20" font-family="Arial, sans-serif">' . $comment . '</text>'
-        . '<text x="40" y="440" fill="#475569" font-size="18" font-family="Arial, sans-serif">Merci pour le contact — 73 !</text>'
+        . '<text x="40" y="440" fill="#475569" font-size="18" font-family="Arial, sans-serif">' . $thanksContact . '</text>'
         . '</svg>';
 
     return sanitize_svg_document($svg);

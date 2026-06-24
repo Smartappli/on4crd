@@ -373,7 +373,9 @@ function member_document_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', member_document_category_code($code)));
     if ($label === '') {
-        return 'Général';
+        $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('members_library', current_locale()) : [];
+
+        return (string) ($messages['category_general'] ?? 'General');
     }
 
     return mb_convert_case($label, MB_CASE_TITLE, 'UTF-8');
@@ -386,7 +388,8 @@ if (!function_exists('member_document_default_categories')) {
  */
 function member_document_default_categories(string $moduleCode = ''): array
 {
-    $defaults = [['code' => 'general', 'label' => 'Général', 'sort_order' => 1]];
+    $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('members_library', current_locale()) : [];
+    $defaults = [['code' => 'general', 'label' => (string) ($messages['category_general'] ?? 'General'), 'sort_order' => 1]];
     if (function_exists('member_library_default_categories')) {
         foreach (member_library_default_categories() as $category) {
             $code = member_document_category_code((string) ($category['code'] ?? ''));

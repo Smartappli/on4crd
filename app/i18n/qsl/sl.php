@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -151,4 +150,18 @@ return array (
   'manual_hint' => 'Polja za označevanje, pas, način in RST so med tipkanjem normalizirana na velike črke.',
   'band_placeholder' => '20M',
   'mode_placeholder' => 'SSB',
+  'secure_unavailable' => 'Secure QSL ni na voljo',
+  'svg_default_title' => 'QSL Card',
+  'svg_front_details_on_back' => 'QSL spredaj — podrobnosti na zadnji strani',
+  'svg_back_title' => 'Potrditev QSL (Nazaj)',
+  'svg_thanks_contact' => 'Hvala za kontakt — 73!',
+  'svg_label_from' => 'FROM',
+  'svg_label_to' => 'TO',
+  'svg_label_date' => 'Datum',
+  'svg_label_utc' => 'UTC',
+  'svg_label_band' => 'Band',
+  'svg_label_mode' => 'Način',
+  'svg_label_rst_sr' => 'RST S/R',
+  'svg_label_operator' => 'Operater',
+  'svg_label_qth' => 'QTH',
 );

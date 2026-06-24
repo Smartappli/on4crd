@@ -108,7 +108,9 @@ function webotheque_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', $code));
     if ($label === '') {
-        return 'Général';
+        $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('webotheque', current_locale()) : [];
+
+        return (string) ($messages['category_general'] ?? 'General');
     }
 
     return mb_convert_case($label, MB_CASE_TITLE, 'UTF-8');
