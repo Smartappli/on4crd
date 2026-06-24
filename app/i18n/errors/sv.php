@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Fjärrkontrollen URL pekar på ett privat eller reserverat nätverk.',
   'remote_url_private_resolved' => 'Fjärr-URL löser till en privat eller reserverad IP-adress.',
   'field_too_long' => 'Ett av fälten överskrider den tillåtna längden.',
+  'wiki_storage_unavailable' => 'Wiki-lagring är inte tillgänglig.',
+  'wiki_page_invalid' => 'Ogiltig wikisida.',
+  'wiki_page_not_found' => 'Wikisidan hittades inte.',
+  'newsletter_campaign_not_found' => 'Kampanjen hittades inte.',
+  'internal_error' => 'Ett internt fel uppstod.',
+  'error_reference' => 'Referens: {request_id}.',
+  'service_temporarily_unavailable' => 'Tjänsten är tillfälligt otillgänglig.',
 );

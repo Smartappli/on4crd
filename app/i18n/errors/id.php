@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'URL jarak jauh mengarah ke jaringan privat atau cadangan.',
   'remote_url_private_resolved' => 'URL jarak jauh mengarah ke alamat IP privat atau cadangan.',
   'field_too_long' => 'Salah satu kolom melebihi panjang yang diizinkan.',
+  'wiki_storage_unavailable' => 'Penyimpanan Wiki tidak tersedia.',
+  'wiki_page_invalid' => 'Halaman wiki tidak valid.',
+  'wiki_page_not_found' => 'Halaman Wiki tidak ditemukan.',
+  'newsletter_campaign_not_found' => 'Kampanye tidak ditemukan.',
+  'internal_error' => 'Terjadi kesalahan internal.',
+  'error_reference' => 'Referensi: {request_id}.',
+  'service_temporarily_unavailable' => 'Layanan untuk sementara tidak tersedia.',
 );

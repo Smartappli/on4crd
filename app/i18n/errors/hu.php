@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'A távoli URL privát vagy fenntartott hálózatra mutat.',
   'remote_url_private_resolved' => 'A távoli URL privát vagy fenntartott IP-címként oldódik fel.',
   'field_too_long' => 'Az egyik mező túllépi a megengedett hosszt.',
+  'wiki_storage_unavailable' => 'A Wiki-tárhely nem érhető el.',
+  'wiki_page_invalid' => 'Érvénytelen wiki oldal.',
+  'wiki_page_not_found' => 'Wiki oldal nem található.',
+  'newsletter_campaign_not_found' => 'A kampány nem található.',
+  'internal_error' => 'Belső hiba történt.',
+  'error_reference' => 'Hivatkozás: {request_id}.',
+  'service_temporarily_unavailable' => 'A szolgáltatás átmenetileg nem elérhető.',
 );

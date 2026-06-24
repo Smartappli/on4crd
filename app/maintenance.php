@@ -103,7 +103,9 @@ function maintenance_render_and_exit(): never
         readfile($offlineFile);
     } else {
         header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Service temporairement indisponible';
+        echo function_exists('i18n_error_text')
+            ? i18n_error_text('service_temporarily_unavailable', 'Service temporarily unavailable.')
+            : 'Service temporarily unavailable.';
     }
 
     exit;

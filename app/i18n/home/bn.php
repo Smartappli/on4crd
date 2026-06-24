@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'এই মুহূর্তে কোনো ট্রফি উপলভ্য নেই।',
   'home_trophies_title' => 'আমাদের ট্রফি',
   'spotlight_member_gallery_empty' => 'এই মুহূর্তে কোনো গ্যালারি ছবি উপলভ্য নেই।',
+  'widget_temporarily_unavailable' => 'উইজেট সাময়িকভাবে অনুপলব্ধ৷',
+  'ham_advice_temporarily_unavailable' => 'রেডিও পরামর্শ সাময়িকভাবে অনুপলব্ধ.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'সদস্যরা',
+  'visibility_private' => 'ব্যক্তিগত',
 );

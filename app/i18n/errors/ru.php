@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Удалённый URL указывает на частную или зарезервированную сеть.',
   'remote_url_private_resolved' => 'Удалённый URL разрешается в частный или зарезервированный IP-адрес.',
   'field_too_long' => 'Одно из полей превышает допустимую длину.',
+  'wiki_storage_unavailable' => 'Хранилище Wiki недоступно.',
+  'wiki_page_invalid' => 'Неверная вики-страница.',
+  'wiki_page_not_found' => 'Страница Wiki не найдена.',
+  'newsletter_campaign_not_found' => 'Кампания не найдена.',
+  'internal_error' => 'Произошла внутренняя ошибка.',
+  'error_reference' => 'Ссылка: {request_id}.',
+  'service_temporarily_unavailable' => 'Сервис временно недоступен.',
 );

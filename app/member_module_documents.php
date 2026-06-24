@@ -1552,7 +1552,7 @@ function render_member_document_module_page(string $module): void
     $definition = member_document_module_definition($moduleCode);
     if ($definition === null) {
         http_response_code(404);
-        echo render_layout('<div class="card"><h1>404</h1><p>Module indisponible.</p></div>', '404');
+        echo render_layout('<div class="card"><h1>404</h1><p>' . e(i18n_error_text('module_unavailable', 'Module unavailable.')) . '</p></div>', '404');
         return;
     }
 
@@ -2105,7 +2105,7 @@ function render_admin_member_document_module_page(string $module): void
     $definition = member_document_module_definition($moduleCode);
     if ($definition === null) {
         http_response_code(404);
-        echo render_layout('<div class="card"><h1>404</h1><p>Module indisponible.</p></div>', '404');
+        echo render_layout('<div class="card"><h1>404</h1><p>' . e(i18n_error_text('module_unavailable', 'Module unavailable.')) . '</p></div>', '404');
         return;
     }
 

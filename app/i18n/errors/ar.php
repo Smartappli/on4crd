@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'يشير URL البعيد إلى شبكة خاصة أو محجوزة.',
   'remote_url_private_resolved' => 'يتحول URL البعيد إلى عنوان IP خاص أو محجوز.',
   'field_too_long' => 'يتجاوز أحد الحقول الطول المسموح به.',
+  'wiki_storage_unavailable' => 'مساحة تخزين Wiki غير متوفرة.',
+  'wiki_page_invalid' => 'صفحة ويكي غير صالحة.',
+  'wiki_page_not_found' => 'لم يتم العثور على صفحة ويكي.',
+  'newsletter_campaign_not_found' => 'لم يتم العثور على الحملة.',
+  'internal_error' => 'حدث خطأ داخلي.',
+  'error_reference' => 'المرجع: {request_id}.',
+  'service_temporarily_unavailable' => 'الخدمة غير متاحة مؤقتا.',
 );

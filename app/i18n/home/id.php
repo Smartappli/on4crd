@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Saat ini belum ada trofi yang tersedia.',
   'home_trophies_title' => 'Trofi kami',
   'spotlight_member_gallery_empty' => 'Saat ini belum ada gambar galeri yang tersedia.',
+  'widget_temporarily_unavailable' => 'Widget untuk sementara tidak tersedia.',
+  'ham_advice_temporarily_unavailable' => 'Saran radio untuk sementara tidak tersedia.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'Anggota',
+  'visibility_private' => 'Pribadi',
 );

@@ -345,7 +345,7 @@ function newsletter_send_campaign(int $campaignId): array
     $campaignStmt->execute([$campaignId]);
     $campaign = $campaignStmt->fetch();
     if (!$campaign) {
-        throw new RuntimeException('Campagne introuvable.');
+        throw new RuntimeException(i18n_error_text('newsletter_campaign_not_found', 'Campaign not found.'));
     }
 
     $subscribers = db()->query('SELECT id, email, unsubscribe_token FROM newsletter_subscribers WHERE status = "active" ORDER BY id ASC')->fetchAll();
@@ -362,7 +362,9 @@ function newsletter_send_campaign(int $campaignId): array
             ? $baseUrl . '/index.php?route=newsletter_unsubscribe&token=' . urlencode((string) $subscriber['unsubscribe_token'])
             : 'index.php?route=newsletter_unsubscribe&token=' . urlencode((string) $subscriber['unsubscribe_token']);
 
-        $body = (string) $campaign['content'] . "\n\n---\nSe désabonner: " . $unsubscribeUrl;
+        $newsletterMessages = function_exists('i18n_domain_locale') ? i18n_domain_locale('newsletter', current_locale()) : [];
+        $unsubscribeLabel = trim((string) ($newsletterMessages['unsubscribe'] ?? 'Unsubscribe'));
+        $body = (string) $campaign['content'] . "\n\n---\n" . $unsubscribeLabel . ': ' . $unsubscribeUrl;
         $headers = 'From: ' . $from . " <no-reply@localhost>\r\n";
 
         $ok = @mail((string) $subscriber['email'], (string) $campaign['subject'], $body, $headers);

@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'दूरस्थ URL एक निजी या आरक्षित नेटवर्क की ओर इशारा करता है।',
   'remote_url_private_resolved' => 'दूरस्थ URL एक निजी या आरक्षित IP पते पर हल होता है।',
   'field_too_long' => 'फ़ील्ड में से एक की लंबाई अनुमत लंबाई से अधिक है.',
+  'wiki_storage_unavailable' => 'विकी संग्रहण अनुपलब्ध है.',
+  'wiki_page_invalid' => 'अमान्य विकि पृष्ठ.',
+  'wiki_page_not_found' => 'विकी पेज नहीं मिला.',
+  'newsletter_campaign_not_found' => 'अभियान नहीं मिला.',
+  'internal_error' => 'कोई आंतरिक त्रुटि उत्पन्न हुई.',
+  'error_reference' => 'संदर्भ: {request_id}.',
+  'service_temporarily_unavailable' => 'सेवा अस्थायी रूप से अनुपलब्ध है.',
 );

@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Kaug-URL osutab privaatsele või reserveeritud võrgule.',
   'remote_url_private_resolved' => 'Kaug-URL lahendab privaatse või reserveeritud IP-aadressi.',
   'field_too_long' => 'Üks väljadest ületab lubatud pikkuse.',
+  'wiki_storage_unavailable' => 'Wiki salvestusruum pole saadaval.',
+  'wiki_page_invalid' => 'Vigane leht.',
+  'wiki_page_not_found' => 'Wiki lehte ei leitud.',
+  'newsletter_campaign_not_found' => 'Kampaaniat ei leitud.',
+  'internal_error' => 'Ilmnes sisemine viga.',
+  'error_reference' => 'Viide: {request_id}.',
+  'service_temporarily_unavailable' => 'Teenus ei ole ajutiselt saadaval.',
 );

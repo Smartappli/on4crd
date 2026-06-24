@@ -20,18 +20,18 @@ $homeTodayDate = date('d/m/Y');
 $homeFallbackBox = static function (string $message): string {
     return '<p class="help">' . e($message) . '</p>';
 };
-$homeSafeWidget = static function (string $slug) use ($homeFallbackBox): string {
+$homeSafeWidget = static function (string $slug) use ($homeFallbackBox, $homeText): string {
     try {
         return render_widget($slug);
     } catch (Throwable) {
-        return $homeFallbackBox('Widget temporairement indisponible.');
+        return $homeFallbackBox($homeText('widget_temporarily_unavailable'));
     }
 };
-$homeSafeHamAdvice = static function () use ($homeFallbackBox): string {
+$homeSafeHamAdvice = static function () use ($homeFallbackBox, $homeText): string {
     try {
         return render_ham_weather_advice(current_user() ?? []);
     } catch (Throwable) {
-        return $homeFallbackBox('Conseil radio temporairement indisponible.');
+        return $homeFallbackBox($homeText('ham_advice_temporarily_unavailable'));
     }
 };
 
@@ -53,9 +53,9 @@ if (!is_array($moduleCatalog)) {
 
 
 $defaultVisibilityLabels = [
-    'public' => 'Public',
-    'members' => 'Membres',
-    'private' => 'Privé',
+    'public' => (string) ($homeI18n['visibility_public'] ?? 'Public'),
+    'members' => (string) ($homeI18n['visibility_members'] ?? ($homeI18n['member_audience'] ?? 'Members')),
+    'private' => (string) ($homeI18n['visibility_private'] ?? 'Private'),
 ];
 $moduleVisibilityLabels = $defaultVisibilityLabels;
 foreach ($defaultVisibilityLabels as $key => $label) {
@@ -99,7 +99,7 @@ foreach ($moduleCatalog as $module) {
     if ($configuredVisibility !== '') {
         $moduleAudience = (string) ($moduleVisibilityLabels[$configuredVisibility] ?? ucfirst($configuredVisibility));
     } elseif ($moduleAudience === '') {
-        $moduleAudience = (string) ($moduleVisibilityLabels['members'] ?? 'Membres');
+        $moduleAudience = (string) ($moduleVisibilityLabels['members'] ?? ($homeI18n['visibility_members'] ?? 'Members'));
     }
     $moduleIcon = is_array($module['icon'] ?? null) ? i18n_localized_value((array) $module['icon'], $homeLocale, '📦') : (string) ($module['icon'] ?? '📦');
 

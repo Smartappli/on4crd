@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Der er ingen trofæer tilgængelige i øjeblikket.',
   'home_trophies_title' => 'Vores trofæer',
   'spotlight_member_gallery_empty' => 'Der er intet galleribillede tilgængeligt i øjeblikket.',
+  'widget_temporarily_unavailable' => 'Widget er midlertidigt utilgængelig.',
+  'ham_advice_temporarily_unavailable' => 'Radiorådgivning er midlertidigt utilgængelig.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'Medlemmer',
+  'visibility_private' => 'Privat',
 );

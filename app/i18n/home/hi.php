@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'इस समय कोई ट्रॉफी उपलब्ध नहीं है।',
   'home_trophies_title' => 'हमारी ट्रॉफियाँ',
   'spotlight_member_gallery_empty' => 'इस समय कोई गैलरी छवि उपलब्ध नहीं है।',
+  'widget_temporarily_unavailable' => 'विजेट अस्थायी रूप से अनुपलब्ध है.',
+  'ham_advice_temporarily_unavailable' => 'रेडियो सलाह अस्थायी रूप से अनुपलब्ध है.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'सदस्य',
+  'visibility_private' => 'निजी',
 );

@@ -816,18 +816,18 @@ if (!function_exists('wiki_delete_page_record')) {
 function wiki_delete_page_record(int $pageId): void
 {
     if (!ensure_wiki_tables()) {
-        throw new RuntimeException('Stockage wiki indisponible.');
+        throw new RuntimeException(i18n_error_text('wiki_storage_unavailable', 'Wiki storage unavailable.'));
     }
 
     $pageId = max(0, $pageId);
     if ($pageId <= 0) {
-        throw new RuntimeException('Page wiki invalide.');
+        throw new RuntimeException(i18n_error_text('wiki_page_invalid', 'Invalid wiki page.'));
     }
 
     $stmt = db()->prepare('SELECT id FROM wiki_pages WHERE id = ? LIMIT 1');
     $stmt->execute([$pageId]);
     if ((int) ($stmt->fetchColumn() ?: 0) <= 0) {
-        throw new RuntimeException('Page wiki introuvable.');
+        throw new RuntimeException(i18n_error_text('wiki_page_not_found', 'Wiki page not found.'));
     }
 
     $pdo = db();

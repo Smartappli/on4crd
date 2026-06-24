@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'リモート URL は、プライベート ネットワークまたは予約済みネットワークを指します。',
   'remote_url_private_resolved' => 'リモート URL は、プライベートまたは予約された IP アドレスに解決されます。',
   'field_too_long' => 'フィールドの 1 つが許可された長さを超えています。',
+  'wiki_storage_unavailable' => 'Wiki ストレージが利用できません。',
+  'wiki_page_invalid' => '無効な Wiki ページです。',
+  'wiki_page_not_found' => 'Wiki ページが見つかりません。',
+  'newsletter_campaign_not_found' => 'キャンペーンが見つかりません。',
+  'internal_error' => '内部エラーが発生しました。',
+  'error_reference' => '参考：{request_id}。',
+  'service_temporarily_unavailable' => 'サービスが一時的に利用できなくなりました。',
 );

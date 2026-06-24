@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Momentálně není k dispozici žádná trofej.',
   'home_trophies_title' => 'Naše trofeje',
   'spotlight_member_gallery_empty' => 'Momentálně není k dispozici žádný obrázek galerie.',
+  'widget_temporarily_unavailable' => 'Widget je dočasně nedostupný.',
+  'ham_advice_temporarily_unavailable' => 'Rádiová rada je dočasně nedostupná.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'členové',
+  'visibility_private' => 'Soukromé',
 );

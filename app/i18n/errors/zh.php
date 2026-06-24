@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => '远程 URL 指向专用或保留网络。',
   'remote_url_private_resolved' => '远程 URL 解析为私有或保留的 IP 地址。',
   'field_too_long' => '其中一个字段超出了允许的长度。',
+  'wiki_storage_unavailable' => '维基存储不可用。',
+  'wiki_page_invalid' => '维基页面无效。',
+  'wiki_page_not_found' => '未找到维基页面。',
+  'newsletter_campaign_not_found' => '未找到营销活动。',
+  'internal_error' => '发生内部错误。',
+  'error_reference' => '参考：{request_id}。',
+  'service_temporarily_unavailable' => '服务暂时不可用。',
 );

@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Oddaljeni URL kaže na zasebno ali rezervirano omrežje.',
   'remote_url_private_resolved' => 'Oddaljeni URL se razreši na zasebni ali rezervirani naslov IP.',
   'field_too_long' => 'Eno od polj presega dovoljeno dolžino.',
+  'wiki_storage_unavailable' => 'Wiki shramba ni na voljo.',
+  'wiki_page_invalid' => 'Neveljavna wiki stran.',
+  'wiki_page_not_found' => 'Wiki strani ni mogoče najti.',
+  'newsletter_campaign_not_found' => 'Akcije ni bilo mogoče najti.',
+  'internal_error' => 'Prišlo je do notranje napake.',
+  'error_reference' => 'Sklic: {request_id}.',
+  'service_temporarily_unavailable' => 'Storitev začasno ni na voljo.',
 );

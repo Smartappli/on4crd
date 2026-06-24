@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'L\'URL remoto punta a una rete privata o riservata.',
   'remote_url_private_resolved' => 'L\'URL remoto si risolve in un indirizzo IP privato o riservato.',
   'field_too_long' => 'Uno dei campi supera la lunghezza consentita.',
+  'wiki_storage_unavailable' => 'Spazio di archiviazione Wiki non disponibile.',
+  'wiki_page_invalid' => 'Pagina wiki non valida.',
+  'wiki_page_not_found' => 'Pagina Wiki non trovata.',
+  'newsletter_campaign_not_found' => 'Campagna non trovata.',
+  'internal_error' => 'Si è verificato un errore interno.',
+  'error_reference' => 'Riferimento: {request_id}.',
+  'service_temporarily_unavailable' => 'Servizio momentaneamente non disponibile.',
 );

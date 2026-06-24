@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'L-URL remot jindika netwerk privat jew riservat.',
   'remote_url_private_resolved' => 'L-URL remot jirrisolvi għal indirizz IP privat jew riservat.',
   'field_too_long' => 'Wieħed mill-oqsma jaqbeż it-tul permess.',
+  'wiki_storage_unavailable' => 'Ħażna Wiki mhux disponibbli.',
+  'wiki_page_invalid' => 'Paġna tal-wiki mhux valida.',
+  'wiki_page_not_found' => 'Il-paġna Wiki ma nstabx.',
+  'newsletter_campaign_not_found' => 'Kampanja ma nstabitx.',
+  'internal_error' => 'Sar żball intern.',
+  'error_reference' => 'Referenza: {request_id}.',
+  'service_temporarily_unavailable' => 'Servizz temporanjament mhux disponibbli.',
 );

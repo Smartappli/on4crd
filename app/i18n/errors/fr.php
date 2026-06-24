@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'L’URL distante pointe vers un réseau privé ou réservé.',
   'remote_url_private_resolved' => 'L’URL distante résout vers une IP privée ou réservée.',
   'field_too_long' => 'Un des champs dépasse la longueur autorisée.',
+  'wiki_storage_unavailable' => 'Stockage wiki indisponible.',
+  'wiki_page_invalid' => 'Page wiki invalide.',
+  'wiki_page_not_found' => 'Page wiki introuvable.',
+  'newsletter_campaign_not_found' => 'Campagne introuvable.',
+  'internal_error' => 'Une erreur interne est survenue.',
+  'error_reference' => 'Référence : {request_id}.',
+  'service_temporarily_unavailable' => 'Service temporairement indisponible.',
 );

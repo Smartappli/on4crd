@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Vzdialený URL ukazuje na súkromnú alebo vyhradenú sieť.',
   'remote_url_private_resolved' => 'Vzdialený URL sa preloží na súkromnú alebo rezervovanú IP adresu.',
   'field_too_long' => 'Jedno z polí prekračuje povolenú dĺžku.',
+  'wiki_storage_unavailable' => 'Úložisko Wiki nie je k dispozícii.',
+  'wiki_page_invalid' => 'Neplatná stránka wiki.',
+  'wiki_page_not_found' => 'Wiki stránka sa nenašla.',
+  'newsletter_campaign_not_found' => 'Kampaň sa nenašla.',
+  'internal_error' => 'Vyskytla sa interná chyba.',
+  'error_reference' => 'Referenčné číslo: {request_id}.',
+  'service_temporarily_unavailable' => 'Služba je dočasne nedostupná.',
 );

@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Telecomanda URL indică o rețea privată sau rezervată.',
   'remote_url_private_resolved' => 'Telecomanda URL se rezolvă la o adresă IP privată sau rezervată.',
   'field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
+  'wiki_storage_unavailable' => 'Stocarea Wiki indisponibilă.',
+  'wiki_page_invalid' => 'Pagina wiki nevalidă.',
+  'wiki_page_not_found' => 'Pagina wiki nu a fost găsită.',
+  'newsletter_campaign_not_found' => 'Campania nu a fost găsită.',
+  'internal_error' => 'A apărut o eroare internă.',
+  'error_reference' => 'Referință: {request_id}.',
+  'service_temporarily_unavailable' => 'Serviciul este temporar indisponibil.',
 );

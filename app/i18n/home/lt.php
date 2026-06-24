@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Šiuo metu nėra jokio trofėjaus.',
   'home_trophies_title' => 'Mūsų trofėjai',
   'spotlight_member_gallery_empty' => 'Šiuo metu nėra jokio galerijos vaizdo.',
+  'widget_temporarily_unavailable' => 'Valdiklis laikinai nepasiekiamas.',
+  'ham_advice_temporarily_unavailable' => 'Radijo patarimai laikinai neprieinami.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'nariai',
+  'visibility_private' => 'Privatus',
 );

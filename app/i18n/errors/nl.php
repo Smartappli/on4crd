@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'De externe URL verwijst naar een particulier of gereserveerd netwerk.',
   'remote_url_private_resolved' => 'De externe URL wordt omgezet naar een privé- of gereserveerd XiPX-adres.',
   'field_too_long' => 'Eén van de velden overschrijdt de toegestane lengte.',
+  'wiki_storage_unavailable' => 'Wiki-opslag niet beschikbaar.',
+  'wiki_page_invalid' => 'Ongeldige wikipagina.',
+  'wiki_page_not_found' => 'Wiki-pagina niet gevonden.',
+  'newsletter_campaign_not_found' => 'Campagne niet gevonden.',
+  'internal_error' => 'Er is een interne fout opgetreden.',
+  'error_reference' => 'Referentie: {request_id}.',
+  'service_temporarily_unavailable' => 'Dienst tijdelijk niet beschikbaar.',
 );

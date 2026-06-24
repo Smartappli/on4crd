@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'The remote URL points to a private or reserved network.',
   'remote_url_private_resolved' => 'The remote URL resolves to a private or reserved IP address.',
   'field_too_long' => 'One of the fields exceeds the allowed length.',
+  'wiki_storage_unavailable' => 'Wiki storage unavailable.',
+  'wiki_page_invalid' => 'Invalid wiki page.',
+  'wiki_page_not_found' => 'Wiki page not found.',
+  'newsletter_campaign_not_found' => 'Campaign not found.',
+  'internal_error' => 'An internal error occurred.',
+  'error_reference' => 'Reference: {request_id}.',
+  'service_temporarily_unavailable' => 'Service temporarily unavailable.',
 );

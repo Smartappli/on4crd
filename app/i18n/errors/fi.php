@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Etä-URL osoittaa yksityiseen tai varattuun verkkoon.',
   'remote_url_private_resolved' => 'Etä-URL ratkaisee yksityisen tai varatun IP-osoitteen.',
   'field_too_long' => 'Yksi kentistä ylittää sallitun pituuden.',
+  'wiki_storage_unavailable' => 'Wiki-tallennustila ei ole käytettävissä.',
+  'wiki_page_invalid' => 'Virheellinen wikisivu.',
+  'wiki_page_not_found' => 'Wiki-sivua ei löydy.',
+  'newsletter_campaign_not_found' => 'Kampanjaa ei löydy.',
+  'internal_error' => 'Tapahtui sisäinen virhe.',
+  'error_reference' => 'Viite: {request_id}.',
+  'service_temporarily_unavailable' => 'Palvelu tilapäisesti poissa käytöstä.',
 );

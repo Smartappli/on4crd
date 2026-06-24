@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Отдалеченият URL сочи към частна или запазена мрежа.',
   'remote_url_private_resolved' => 'Отдалеченият URL преобразува в частен или запазен IP адрес.',
   'field_too_long' => 'Едно от полетата надвишава разрешената дължина.',
+  'wiki_storage_unavailable' => 'Wiki хранилището не е налично.',
+  'wiki_page_invalid' => 'Невалидна уики страница.',
+  'wiki_page_not_found' => 'Wiki страницата не е намерена.',
+  'newsletter_campaign_not_found' => 'Кампанията не е намерена.',
+  'internal_error' => 'Възникна вътрешна грешка.',
+  'error_reference' => 'Справка: {request_id}.',
+  'service_temporarily_unavailable' => 'Услугата е временно недостъпна.',
 );

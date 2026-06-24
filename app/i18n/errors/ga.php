@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Díríonn an cianda URL ar líonra príobháideach nó in áirithe.',
   'remote_url_private_resolved' => 'Réitíonn an cianda URL chuig seoladh IP príobháideach nó in áirithe.',
   'field_too_long' => 'Tá ceann de na réimsí níos mó ná an fad ceadaithe.',
+  'wiki_storage_unavailable' => 'Níl stóras Vicí ar fáil.',
+  'wiki_page_invalid' => 'Leathanach vicí neamhbhailí.',
+  'wiki_page_not_found' => 'Ní bhfuarthas leathanach Vicí.',
+  'newsletter_campaign_not_found' => 'Feachtas gan aimsiú.',
+  'internal_error' => 'Tharla earráid inmheánach.',
+  'error_reference' => 'Tagairt: {request_id}.',
+  'service_temporarily_unavailable' => 'Níl an tseirbhís ar fáil go sealadach.',
 );

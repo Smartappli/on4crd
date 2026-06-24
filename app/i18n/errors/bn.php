@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'দূরবর্তী URL একটি ব্যক্তিগত বা সংরক্ষিত নেটওয়ার্কের দিকে নির্দেশ করে।',
   'remote_url_private_resolved' => 'দূরবর্তী URL একটি ব্যক্তিগত বা সংরক্ষিত IP ঠিকানার সমাধান করে।',
   'field_too_long' => 'ক্ষেত্রগুলির একটি অনুমোদিত দৈর্ঘ্য অতিক্রম করেছে৷',
+  'wiki_storage_unavailable' => 'উইকি স্টোরেজ অনুপলব্ধ.',
+  'wiki_page_invalid' => 'অবৈধ উইকি পাতা।',
+  'wiki_page_not_found' => 'উইকি পাতা পাওয়া যায়নি.',
+  'newsletter_campaign_not_found' => 'প্রচারাভিযান পাওয়া যায়নি.',
+  'internal_error' => 'একটি অভ্যন্তরীণ ত্রুটি ঘটেছে৷',
+  'error_reference' => 'রেফারেন্স: {request_id}।',
+  'service_temporarily_unavailable' => 'পরিষেবা সাময়িকভাবে অনুপলব্ধ.',
 );

@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'لا توجد جائزة متاحة في الوقت الحالي.',
   'home_trophies_title' => 'جوائزنا',
   'spotlight_member_gallery_empty' => 'لا توجد صورة معرض متاحة في الوقت الحالي.',
+  'widget_temporarily_unavailable' => 'القطعة غير متاحة مؤقتا.',
+  'ham_advice_temporarily_unavailable' => 'نصائح الراديو غير متاحة مؤقتًا.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'الأعضاء',
+  'visibility_private' => 'خاص',
 );
