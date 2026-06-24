@@ -233,24 +233,14 @@ function render_ham_weather_advice(array $user = []): string
 {
     $locale = current_locale();
     $i18n = dashboard_widget_i18n_messages($locale);
-    $propagationLabel = match ($locale) {
-        'en' => 'HF propagation:',
-        'de' => 'HF-Ausbreitung:',
-        'nl' => 'HF-propagatie:',
-        'es' => 'Propagacion HF:',
-        'it' => 'Propagazione HF:',
-        'pt' => 'Propagacao HF:',
-        default => 'Propagation HF :',
-    };
-    $propagationStates = match ($locale) {
-        'en' => ['quiet' => 'quiet', 'usable' => 'usable', 'disturbed' => 'disturbed', 'stormy' => 'stormy', 'unavailable' => 'unavailable'],
-        'de' => ['quiet' => 'ruhig', 'usable' => 'nutzbar', 'disturbed' => 'gestoert', 'stormy' => 'stuermisch', 'unavailable' => 'nicht verfuegbar'],
-        'nl' => ['quiet' => 'rustig', 'usable' => 'bruikbaar', 'disturbed' => 'verstoord', 'stormy' => 'stormachtig', 'unavailable' => 'niet beschikbaar'],
-        'es' => ['quiet' => 'tranquila', 'usable' => 'utilizable', 'disturbed' => 'perturbada', 'stormy' => 'tormentosa', 'unavailable' => 'no disponible'],
-        'it' => ['quiet' => 'calma', 'usable' => 'utilizzabile', 'disturbed' => 'disturbata', 'stormy' => 'tempestosa', 'unavailable' => 'non disponibile'],
-        'pt' => ['quiet' => 'calma', 'usable' => 'utilizavel', 'disturbed' => 'perturbada', 'stormy' => 'tempestuosa', 'unavailable' => 'indisponivel'],
-        default => ['quiet' => 'calme', 'usable' => 'exploitable', 'disturbed' => 'perturbee', 'stormy' => 'orage magnetique', 'unavailable' => 'indisponible'],
-    };
+    $propagationLabel = (string) ($i18n['ham_weather_propagation_label'] ?? 'HF propagation:');
+    $propagationStates = [
+        'quiet' => (string) ($i18n['ham_weather_state_quiet'] ?? 'quiet'),
+        'usable' => (string) ($i18n['ham_weather_state_usable'] ?? 'usable'),
+        'disturbed' => (string) ($i18n['ham_weather_state_disturbed'] ?? 'disturbed'),
+        'stormy' => (string) ($i18n['ham_weather_state_stormy'] ?? 'stormy'),
+        'unavailable' => (string) ($i18n['ham_weather_state_unavailable'] ?? 'unavailable'),
+    ];
     $defaultLocator = 'JO20LI';
     $memberLocator = strtoupper(trim((string) ($user['locator'] ?? '')));
     if ($memberLocator === '' && isset($user['id']) && is_numeric($user['id']) && table_exists('members')) {

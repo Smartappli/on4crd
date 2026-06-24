@@ -96,22 +96,8 @@ function require_module_enabled(string $module, ?string $nextRoute = null): void
 
     http_response_code(404);
     $locale = current_locale();
-    $moduleUnavailable = match ($locale) {
-        'en' => 'Module unavailable.',
-        'de' => 'Modul nicht verfügbar.',
-        'nl' => 'Module niet beschikbaar.',
-        'es' => 'Módulo no disponible.',
-        'it' => 'Modulo non disponibile.',
-        'pt' => 'Módulo indisponível.',
-        'ar' => 'الوحدة غير متاحة.',
-        'hi' => 'मॉड्यूल उपलब्ध नहीं है।',
-        'ja' => 'モジュールは利用できません。',
-        'zh' => '模块不可用。',
-        'bn' => 'মডিউলটি উপলভ্য নয়।',
-        'ru' => 'Модуль недоступен.',
-        'id' => 'Modul tidak tersedia.',
-        default => 'Module indisponible.',
-    };
+    $errors = i18n_domain_locale('errors', $locale);
+    $moduleUnavailable = (string) ($errors['module_unavailable'] ?? 'Module unavailable.');
     echo render_layout('<div class="card"><h1>404</h1><p>' . e($moduleUnavailable) . '</p></div>', '404');
     exit;
 }

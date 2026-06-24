@@ -132,8 +132,8 @@ return array (
   'widget_hamqsl_image_invalid' => 'La imagen HAMQSL no está permitida.',
   'ham_weather_propagation_label' => 'Propagación de ondas decamétricas:',
   'ham_weather_state_quiet' => 'tranquilo',
-  'ham_weather_state_usable' => 'usable',
+  'ham_weather_state_usable' => 'utilizable',
   'ham_weather_state_disturbed' => 'perturbado',
   'ham_weather_state_stormy' => 'tempestuoso',
-  'ham_weather_state_unavailable' => 'indisponible',
+  'ham_weather_state_unavailable' => 'no disponible',
 );
