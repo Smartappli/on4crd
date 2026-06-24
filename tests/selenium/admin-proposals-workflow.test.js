@@ -298,8 +298,12 @@ if ($memberId <= 0) {
 
 $lowerToken = strtolower($token);
 $libraryCategoryTitle = 'selenium admin library category ' . $token;
+$libraryCategoryReviewedTitle = 'selenium admin library category reviewed ' . $token;
+$libraryCategoryRejectedTitle = 'selenium admin library category rejected ' . $token;
 $webothequeTitle = 'selenium admin webotheque module ' . $token;
 $webothequeUrl = 'https://example.org/selenium-admin-webotheque-module-' . $lowerToken;
+$webothequeReviewedUrl = 'https://example.org/selenium-admin-webotheque-module-reviewed-' . $lowerToken;
+$webothequeRejectedUrl = 'https://example.org/selenium-admin-webotheque-module-rejected-' . $lowerToken;
 $webothequeSummary = content_proposal_details_text([
     'Domain' => 'general',
     'Description' => 'Lien valide depuis admin_webotheque ' . $token,
@@ -317,6 +321,26 @@ $proposalIds = [
         '',
         'pending'
     ),
+    'library_category_reviewed' => content_proposal_create(
+        $memberId,
+        'members_library',
+        'category',
+        $libraryCategoryReviewedTitle,
+        'Relecture thematique bibliotheque ' . $token,
+        'selenium-admin-proposals@example.test',
+        '',
+        'pending'
+    ),
+    'library_category_rejected' => content_proposal_create(
+        $memberId,
+        'members_library',
+        'category',
+        $libraryCategoryRejectedTitle,
+        'Rejet thematique bibliotheque ' . $token,
+        'selenium-admin-proposals@example.test',
+        '',
+        'pending'
+    ),
     'webotheque_content' => content_proposal_create(
         $memberId,
         'webotheque',
@@ -327,16 +351,42 @@ $proposalIds = [
         $webothequeUrl,
         'pending'
     ),
+    'webotheque_content_reviewed' => content_proposal_create(
+        $memberId,
+        'webotheque',
+        'content',
+        'selenium admin webotheque module reviewed ' . $token,
+        $webothequeSummary,
+        'selenium-admin-proposals@example.test',
+        $webothequeReviewedUrl,
+        'pending'
+    ),
+    'webotheque_content_rejected' => content_proposal_create(
+        $memberId,
+        'webotheque',
+        'content',
+        'selenium admin webotheque module rejected ' . $token,
+        $webothequeSummary,
+        'selenium-admin-proposals@example.test',
+        $webothequeRejectedUrl,
+        'pending'
+    ),
 ];
 
 echo json_encode([
     'ids' => $proposalIds,
     'titles' => [
         'library_category' => $libraryCategoryTitle,
+        'library_category_reviewed' => $libraryCategoryReviewedTitle,
+        'library_category_rejected' => $libraryCategoryRejectedTitle,
         'webotheque_content' => $webothequeTitle,
+        'webotheque_content_reviewed' => 'selenium admin webotheque module reviewed ' . $token,
+        'webotheque_content_rejected' => 'selenium admin webotheque module rejected ' . $token,
     ],
     'urls' => [
         'webotheque_content' => $webothequeUrl,
+        'webotheque_content_reviewed' => $webothequeReviewedUrl,
+        'webotheque_content_rejected' => $webothequeRejectedUrl,
     ],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_ADMIN_PROPOSAL_TOKEN: token });
@@ -671,7 +721,11 @@ test('Selenium admin propositions: validation depuis admin_library et admin_webo
   const fixture = prepareAdminModuleProposalFixtures(token);
   const notes = {
     libraryCategory: `Note module bibliotheque ${token}`,
+    libraryCategoryReviewed: `Note relu module bibliotheque ${token}`,
+    libraryCategoryRejected: `Note refuse module bibliotheque ${token}`,
     webothequeContent: `Note module webotheque ${token}`,
+    webothequeContentReviewed: `Note relu module webotheque ${token}`,
+    webothequeContentRejected: `Note refuse module webotheque ${token}`,
   };
 
   await withSelenium(t, async (driver) => {
@@ -681,8 +735,27 @@ test('Selenium admin propositions: validation depuis admin_library et admin_webo
       await visit(driver, 'admin_library', { status: 'pending' });
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(escapeRegExp(fixture.titles.library_category)), 'La proposition bibliotheque doit apparaitre dans admin_library.');
+      assert.match(text, new RegExp(escapeRegExp(fixture.titles.library_category_reviewed)), 'La proposition revue bibliotheque doit apparaitre dans admin_library.');
+      assert.match(text, new RegExp(escapeRegExp(fixture.titles.library_category_rejected)), 'La proposition refusee bibliotheque doit apparaitre dans admin_library.');
+
+      await updateModuleProposal(driver, 'admin_library', fixture.titles.library_category_reviewed, 'reviewed', notes.libraryCategoryReviewed);
+      let record = proposalRecord(fixture.ids.library_category_reviewed);
+      assert.equal(record.area, 'members_library', 'La proposition de pre-lecture bibliotheque doit rester rattachee au module membres_library.');
+      assert.equal(record.proposal_type, 'category', 'La proposition de pre-lecture bibliotheque doit rester de type category.');
+      assert.equal(record.status, 'reviewed', 'La proposition bibliotheque doit passer au statut reviewed.');
+      assert.equal(record.moderation_note, notes.libraryCategoryReviewed, 'La note reviewed bibliotheque doit etre conservee.');
+      assert.equal(libraryCategoryByLabel(fixture.titles.library_category_reviewed), null, 'La proposition vue en reviewed ne doit pas créer de thematique bibliotheque.');
+
+      await updateModuleProposal(driver, 'admin_library', fixture.titles.library_category_rejected, 'rejected', notes.libraryCategoryRejected);
+      record = proposalRecord(fixture.ids.library_category_rejected);
+      assert.equal(record.area, 'members_library', 'La proposition refusee bibliotheque doit rester rattachee au module membres_library.');
+      assert.equal(record.proposal_type, 'category', 'La proposition refusee bibliotheque doit rester de type category.');
+      assert.equal(record.status, 'rejected', 'La proposition bibliotheque doit passer au statut rejected.');
+      assert.equal(record.moderation_note, notes.libraryCategoryRejected, 'La note refus bibliotheque doit etre conservee.');
+      assert.equal(libraryCategoryByLabel(fixture.titles.library_category_rejected), null, 'Une proposition bibliotheque refusee ne doit pas créer de thematique.');
+
       await updateModuleProposal(driver, 'admin_library', fixture.titles.library_category, 'accepted', notes.libraryCategory);
-      let record = proposalRecord(fixture.ids.library_category);
+      record = proposalRecord(fixture.ids.library_category);
       assert.equal(record.area, 'members_library', 'La proposition categorie bibliotheque doit rester rattachee au module membres_library.');
       assert.equal(record.proposal_type, 'category', 'La proposition categorie bibliotheque doit rester de type category.');
       assert.equal(record.status, 'accepted', 'La proposition categorie bibliotheque doit passer au statut accepted.');
@@ -698,6 +771,39 @@ test('Selenium admin propositions: validation depuis admin_library et admin_webo
       await visit(driver, 'admin_webotheque', { status: 'pending' });
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(escapeRegExp(fixture.titles.webotheque_content)), 'La proposition webotheque doit apparaitre dans admin_webotheque.');
+      assert.match(text, new RegExp(escapeRegExp(fixture.titles.webotheque_content_reviewed)), 'La proposition webotheque relue doit apparaitre dans admin_webotheque.');
+      assert.match(text, new RegExp(escapeRegExp(fixture.titles.webotheque_content_rejected)), 'La proposition webotheque refusee doit apparaitre dans admin_webotheque.');
+
+      await updateModuleProposal(
+        driver,
+        'admin_webotheque',
+        fixture.titles.webotheque_content_reviewed,
+        'reviewed',
+        notes.webothequeContentReviewed,
+        'general',
+      );
+      record = proposalRecord(fixture.ids.webotheque_content_reviewed);
+      assert.equal(record.area, 'webotheque', 'La proposition webotheque revue doit rester rattachee au module webotheque.');
+      assert.equal(record.proposal_type, 'content', 'La proposition webotheque revue doit rester de type content.');
+      assert.equal(record.status, 'reviewed', 'La proposition webotheque revue doit passer au statut reviewed.');
+      assert.equal(record.moderation_note, notes.webothequeContentReviewed, 'La note reviewed webotheque doit etre conservee.');
+      assert.equal(webothequeLinkByUrl(fixture.urls.webotheque_content_reviewed), null, 'Une proposition webotheque revue ne doit pas creer de lien.');
+
+      await updateModuleProposal(
+        driver,
+        'admin_webotheque',
+        fixture.titles.webotheque_content_rejected,
+        'rejected',
+        notes.webothequeContentRejected,
+        'general',
+      );
+      record = proposalRecord(fixture.ids.webotheque_content_rejected);
+      assert.equal(record.area, 'webotheque', 'La proposition webotheque refusee doit rester rattachee au module webotheque.');
+      assert.equal(record.proposal_type, 'content', 'La proposition webotheque refusee doit rester de type content.');
+      assert.equal(record.status, 'rejected', 'La proposition webotheque refusee doit passer au statut rejected.');
+      assert.equal(record.moderation_note, notes.webothequeContentRejected, 'La note refus webotheque doit etre conservee.');
+      assert.equal(webothequeLinkByUrl(fixture.urls.webotheque_content_rejected), null, 'Une proposition webotheque refusee ne doit pas creer de lien.');
+
       await updateModuleProposal(driver, 'admin_webotheque', fixture.titles.webotheque_content, 'accepted', notes.webothequeContent, 'general');
       record = proposalRecord(fixture.ids.webotheque_content);
       assert.equal(record.area, 'webotheque', 'La proposition lien webotheque doit rester rattachee au module webotheque.');
