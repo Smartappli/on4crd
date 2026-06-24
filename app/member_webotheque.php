@@ -1307,6 +1307,11 @@ if (!function_exists('render_webotheque_link_fields')) {
  */
 function render_webotheque_link_fields(array $t, array $categories, ?string $proposalContact = null, array $values = []): string
 {
+    $tr = static function (string $key, string $fallback = ''): string {
+        $value = $t[$key] ?? $fallback;
+        return is_string($value) ? $value : $fallback;
+    };
+
     $title = (string) ($values['title'] ?? '');
     $url = (string) ($values['url'] ?? '');
     $selectedCategory = webotheque_category_code((string) ($values['category'] ?? 'general'));
@@ -1315,9 +1320,9 @@ function render_webotheque_link_fields(array $t, array $categories, ?string $pro
     $tags = (string) ($values['tags'] ?? '');
     $subcategoriesByCategory = webotheque_subcategories_by_category();
 
-    $html = '<label><span>' . e((string) $t['title_field']) . '</span><input type="text" name="title" value="' . e($title) . '" maxlength="190" required></label>'
-        . '<label><span>' . e((string) $t['url_field']) . '</span><input type="url" name="url" value="' . e($url) . '" maxlength="500" placeholder="https://example.org" required></label>'
-        . '<label><span>' . e((string) $t['domain_field']) . '</span><select name="category">';
+    $html = '<label><span>' . e($tr('title_field', 'Title')) . '</span><input type="text" name="title" value="' . e($title) . '" maxlength="190" required></label>'
+        . '<label><span>' . e($tr('url_field', 'URL')) . '</span><input type="url" name="url" value="' . e($url) . '" maxlength="500" placeholder="https://example.org" required></label>'
+        . '<label><span>' . e($tr('domain_field', 'Topic')) . '</span><select name="category">';
 
     foreach ($categories as $code => $label) {
         $code = (string) $code;
@@ -1325,8 +1330,8 @@ function render_webotheque_link_fields(array $t, array $categories, ?string $pro
     }
 
     $html .= '</select></label>'
-        . '<label><span>' . e((string) $t['subcategory_field']) . '</span><select name="subcategory_ref">'
-        . '<option value="">' . e((string) $t['no_subcategory']) . '</option>';
+        . '<label><span>' . e($tr('subcategory_field', 'Subtopic')) . '</span><select name="subcategory_ref">'
+        . '<option value="">' . e($tr('no_subcategory', 'No subtopic')) . '</option>';
 
     foreach ($subcategoriesByCategory as $parentCode => $subcategories) {
         $html .= '<optgroup label="' . e((string) ($categories[$parentCode] ?? $parentCode)) . '">';
@@ -1343,11 +1348,11 @@ function render_webotheque_link_fields(array $t, array $categories, ?string $pro
     }
 
     $html .= '</select></label>'
-        . '<label><span>' . e((string) $t['description_field']) . '</span><textarea name="description" rows="4">' . e($description) . '</textarea></label>'
-        . '<label><span>' . e((string) $t['tags_field']) . '</span><input type="text" name="tags" value="' . e($tags) . '" maxlength="255"></label>';
+        . '<label><span>' . e($tr('description_field', 'Description')) . '</span><textarea name="description" rows="4">' . e($description) . '</textarea></label>'
+        . '<label><span>' . e($tr('tags_field', 'Keywords')) . '</span><input type="text" name="tags" value="' . e($tags) . '" maxlength="255"></label>';
 
     if ($proposalContact !== null) {
-        $html .= '<label><span>' . e((string) $t['contact_field']) . '</span><input type="email" name="proposal_contact" maxlength="220" value="' . e($proposalContact) . '"></label>';
+        $html .= '<label><span>' . e($tr('contact_field', 'Contact')) . '</span><input type="email" name="proposal_contact" maxlength="220" value="' . e($proposalContact) . '"></label>';
     }
 
     return $html;
