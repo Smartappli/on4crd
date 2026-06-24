@@ -122,6 +122,9 @@ if (table_exists('auction_lots')) {
 if (table_exists('news_posts')) {
     db()->prepare('DELETE FROM news_posts WHERE title LIKE ?')->execute([$like]);
 }
+if (table_exists('news_sections')) {
+    db()->prepare('DELETE FROM news_sections WHERE name LIKE ? OR slug LIKE ?')->execute([$like, $like]);
+}
 
 foreach (['webotheque_links_v2', 'webotheque_categories_v2'] as $cacheKey) {
     if (function_exists('cache_forget')) {
@@ -161,6 +164,7 @@ $deleteTitle = 'selenium admin proposal delete accepted ' . $token;
 $eventTitle = 'selenium admin proposal event ' . $token;
 $auctionTitle = 'selenium admin proposal auction ' . $token;
 $newsTitle = 'selenium admin proposal news ' . $token;
+$newsSectionTitle = 'selenium admin proposal news section ' . $token;
 
 $createUrl = 'https://example.org/selenium-admin-proposal-create-' . $lowerToken;
 $rejectUrl = 'https://example.org/selenium-admin-proposal-reject-' . $lowerToken;
@@ -229,6 +233,16 @@ $proposalIds = [
     'event' => content_proposal_create($memberId, 'events', 'content', $eventTitle, $eventSummary, 'selenium-admin-proposals@example.test', $eventSourceRef, 'pending'),
     'auction' => content_proposal_create($memberId, 'auctions', 'content', $auctionTitle, $auctionSummary, 'selenium-admin-proposals@example.test', $auctionSourceRef, 'pending'),
     'news' => content_proposal_create($memberId, 'news', 'content', $newsTitle, $newsSummary, 'selenium-admin-proposals@example.test', $newsSourceRef, 'pending'),
+    'news_category' => content_proposal_create(
+        $memberId,
+        'news',
+        'category',
+        $newsSectionTitle,
+        'Rubrique news par proposition ' . $token,
+        'selenium-admin-proposals@example.test',
+        '',
+        'pending'
+    ),
 ];
 
 echo json_encode([
@@ -242,6 +256,7 @@ echo json_encode([
         'event' => $eventTitle,
         'auction' => $auctionTitle,
         'news' => $newsTitle,
+        'news_category' => $newsSectionTitle,
     ],
     'urls' => [
         'create' => $createUrl,
@@ -381,6 +396,20 @@ echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE 
 `, { SELENIUM_NEWS_TITLE: title });
 }
 
+function newsSectionByName(name) {
+  return phpJson(`
+require_once 'app/bootstrap.php';
+if (!table_exists('news_sections')) {
+    echo 'null';
+    return;
+}
+$name = trim((string) (getenv('SELENIUM_NEWS_SECTION_NAME') ?: ''));
+$stmt = db()->prepare('SELECT id, name, slug FROM news_sections WHERE name = ? LIMIT 1');
+$stmt->execute([$name]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_NEWS_SECTION_NAME: name });
+}
+
 function webothequeLinkById(id) {
   return phpJson(`
 require_once 'app/bootstrap.php';
@@ -493,6 +522,7 @@ test('Selenium admin propositions: relire, refuser, accepter creation, modificat
     event: `Note evenement ${token}`,
     auction: `Note enchere ${token}`,
     news: `Note actualite ${token}`,
+    news_category: `Note rubrique actualite ${token}`,
   };
 
   await withSelenium(t, async (driver) => {
@@ -610,6 +640,17 @@ test('Selenium admin propositions: relire, refuser, accepter creation, modificat
       assert.equal(acceptedNews.title, fixture.titles.news, 'Le titre article doit reprendre le titre de la proposition.');
       assert.equal(acceptedNews.status, 'published', 'L article cree doit etre publie.');
       await assertDashboardDoesNotList(driver, fixture.titles.news);
+
+      await updateDashboardProposal(driver, fixture.titles.news_category, 'accepted', notes.news_category);
+      record = proposalRecord(fixture.ids.news_category);
+      assert.equal(record.area, 'news', 'La proposition de rubrique news doit rester rattachee au module news.');
+      assert.equal(record.proposal_type, 'category', 'La proposition de rubrique news doit rester de type category.');
+      assert.equal(record.status, 'accepted', 'L acceptance rubrique news doit passer au statut accepted.');
+      assert.equal(record.moderation_note, notes.news_category, 'La note rubrique news doit etre conservee.');
+      const acceptedNewsSection = newsSectionByName(fixture.titles.news_category);
+      assert.ok(acceptedNewsSection && Number(acceptedNewsSection.id) > 0, 'L acceptance rubrique news doit creer une section news.');
+      assert.equal(acceptedNewsSection.name, fixture.titles.news_category, 'Le nom de section doit reprendre le titre de la proposition.');
+      await assertDashboardDoesNotList(driver, fixture.titles.news_category);
     } finally {
       cleanupAdminProposalFixtures(token);
     }

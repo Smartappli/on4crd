@@ -34,6 +34,21 @@ test('Selenium admin: contrats des actions de propositions', () => {
       file: 'tests/selenium/admin-proposals-workflow.test.js',
       snippets: ['admin_webotheque', 'updateModuleProposal', 'webothequeLinkByUrl'],
     },
+    {
+      label: 'event proposal moderation',
+      file: 'tests/selenium/admin-proposals-workflow.test.js',
+      snippets: ['eventByTitle', "'events'", "'accepted'"],
+    },
+    {
+      label: 'auction proposal moderation',
+      file: 'tests/selenium/admin-proposals-workflow.test.js',
+      snippets: ['auctionLotByTitle', "'auctions'", "'accepted'"],
+    },
+    {
+      label: 'news proposal moderation',
+      file: 'tests/selenium/admin-proposals-workflow.test.js',
+      snippets: ['newsPostByTitle', 'newsSectionByName', "'news'", "'accepted'"],
+    },
   ];
 
   for (const contract of contracts) {
