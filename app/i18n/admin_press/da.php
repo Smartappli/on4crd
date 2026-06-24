@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Pressemeddelelser',
   'full_name' => 'Fulde navn',
   'role' => 'Rolle',
-  'email' => 'E-mail',
+  'email' => 'E-mailadresse',
   'phone' => 'Telefon',
   'notes' => 'Noter',
   'order' => 'Bestil',

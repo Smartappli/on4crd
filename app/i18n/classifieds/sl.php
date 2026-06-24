@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Mali oglas moderiran',
   'notification_removed_body' => 'Oglas odstranil moderator: {title}',
   'notification_status_body' => 'Status posodobljen na {status}: {title}',
+  'propose_category_direct_help' => 'Kategorija bo neposredno odobrena.',
+  'propose_category_created_direct' => 'Kategorija je bila ustvarjena in neposredno odobrena.',
 );

@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Nessun trofeo disponibile al momento.',
   'home_trophies_title' => 'I nostri trofei',
   'spotlight_member_gallery_empty' => 'Nessuna immagine della galleria disponibile al momento.',
+  'widget_temporarily_unavailable' => 'Widget temporaneamente non disponibile.',
+  'ham_advice_temporarily_unavailable' => 'I consigli radiofonici sono momentaneamente non disponibili.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'Membri',
+  'visibility_private' => 'Privato',
 );

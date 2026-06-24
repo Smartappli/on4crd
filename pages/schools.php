@@ -5,15 +5,15 @@ $locale = current_locale();
 $t = i18n_domain_locale('schools', $locale);
 
 set_page_meta([
-    'title' => (string) ($t['meta_title'] ?? 'Écoles radio'),
-    'description' => (string) ($t['meta_desc'] ?? ''),
+    'title' => (string) $t['meta_title'],
+    'description' => (string) $t['meta_desc'],
     'schema_type' => 'WebPage',
 ]);
 
 $resources = [
-    ['title' => (string) ($t['r1_t'] ?? ''), 'text' => (string) ($t['r1_x'] ?? '')],
-    ['title' => (string) ($t['r2_t'] ?? ''), 'text' => (string) ($t['r2_x'] ?? '')],
-    ['title' => (string) ($t['r3_t'] ?? ''), 'text' => (string) ($t['r3_x'] ?? '')],
+    ['title' => (string) $t['r1_t'], 'text' => (string) $t['r1_x']],
+    ['title' => (string) $t['r2_t'], 'text' => (string) $t['r2_x']],
+    ['title' => (string) $t['r3_t'], 'text' => (string) $t['r3_x']],
 ];
 
 ob_start();
@@ -48,4 +48,4 @@ ob_start();
     <?php endforeach; ?>
 </section>
 <?php
-echo render_layout((string) ob_get_clean(), (string) ($t['layout'] ?? 'Écoles radio'));
+echo render_layout((string) ob_get_clean(), (string) $t['layout']);

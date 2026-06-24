@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL valdytojas',
   'qsl_choice_no_qsl' => 'Be QSL',
   'qsl_choice_other' => 'Kita',
+  'registration_closed_title' => 'Nario registracija',
+  'registration_closed_message' => 'Vieša registracija uždaryta. Narių paskyras po patvirtinimo sukuria administracija.',
+  'membership_link' => 'Tapti nariu',
 );

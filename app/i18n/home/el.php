@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Δεν υπάρχει διαθέσιμο τρόπαιο αυτή τη στιγμή.',
   'home_trophies_title' => 'Τα τρόπαιά μας',
   'spotlight_member_gallery_empty' => 'Δεν υπάρχει διαθέσιμη εικόνα γκαλερί αυτή τη στιγμή.',
+  'widget_temporarily_unavailable' => 'Το widget δεν είναι διαθέσιμο προσωρινά.',
+  'ham_advice_temporarily_unavailable' => 'Οι συμβουλές ραδιοφώνου δεν είναι διαθέσιμες προσωρινά.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'Μέλη',
+  'visibility_private' => 'Ιδιωτικό',
 );

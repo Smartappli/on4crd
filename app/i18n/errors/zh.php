@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => '查看即将举行的活动。',
   'tools_link' => '无线电工具',
   'tools_hint' => '打开实用的业余无线电工具。',
+  'module_unavailable' => '模块不可用。',
+  'slug_article_unique_failed' => '无法生成唯一的文章段。',
+  'slug_wiki_unique_failed' => '无法生成唯一的 wiki slug。',
+  'slug_news_unique_failed' => '无法生成独特的新闻段。',
+  'slug_event_unique_failed' => '无法生成唯一的事件 slug。',
+  'storage_path_invalid' => '存储路径无效。',
+  'storage_path_forbidden' => '存储路径不允许。',
+  'remote_url_private' => '远程 URL 指向专用或保留网络。',
+  'remote_url_private_resolved' => '远程 URL 解析为私有或保留的 IP 地址。',
+  'field_too_long' => '其中一个字段超出了允许的长度。',
+  'wiki_storage_unavailable' => '维基存储不可用。',
+  'wiki_page_invalid' => '维基页面无效。',
+  'wiki_page_not_found' => '未找到维基页面。',
+  'newsletter_campaign_not_found' => '未找到营销活动。',
+  'internal_error' => '发生内部错误。',
+  'error_reference' => '参考：{request_id}。',
+  'service_temporarily_unavailable' => '服务暂时不可用。',
 );

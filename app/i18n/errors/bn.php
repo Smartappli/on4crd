@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'আসন্ন কার্যক্রম দেখুন।',
   'tools_link' => 'রেডিও সরঞ্জাম',
   'tools_hint' => 'ব্যবহারিক অ্যামেচার রেডিও সরঞ্জাম খুলুন।',
+  'module_unavailable' => 'মডিউল অনুপলব্ধ.',
+  'slug_article_unique_failed' => 'একটি অনন্য নিবন্ধ স্লাগ তৈরি করতে অক্ষম৷',
+  'slug_wiki_unique_failed' => 'একটি অনন্য উইকি স্লাগ তৈরি করতে অক্ষম।',
+  'slug_news_unique_failed' => 'একটি অনন্য সংবাদ স্লাগ তৈরি করতে অক্ষম৷',
+  'slug_event_unique_failed' => 'একটি অনন্য ইভেন্ট স্লাগ তৈরি করতে অক্ষম৷',
+  'storage_path_invalid' => 'অবৈধ স্টোরেজ পাথ।',
+  'storage_path_forbidden' => 'স্টোরেজ পাথ অনুমোদিত নয়।',
+  'remote_url_private' => 'দূরবর্তী URL একটি ব্যক্তিগত বা সংরক্ষিত নেটওয়ার্কের দিকে নির্দেশ করে।',
+  'remote_url_private_resolved' => 'দূরবর্তী URL একটি ব্যক্তিগত বা সংরক্ষিত IP ঠিকানার সমাধান করে।',
+  'field_too_long' => 'ক্ষেত্রগুলির একটি অনুমোদিত দৈর্ঘ্য অতিক্রম করেছে৷',
+  'wiki_storage_unavailable' => 'উইকি স্টোরেজ অনুপলব্ধ.',
+  'wiki_page_invalid' => 'অবৈধ উইকি পাতা।',
+  'wiki_page_not_found' => 'উইকি পাতা পাওয়া যায়নি.',
+  'newsletter_campaign_not_found' => 'প্রচারাভিযান পাওয়া যায়নি.',
+  'internal_error' => 'একটি অভ্যন্তরীণ ত্রুটি ঘটেছে৷',
+  'error_reference' => 'রেফারেন্স: {request_id}।',
+  'service_temporarily_unavailable' => 'পরিষেবা সাময়িকভাবে অনুপলব্ধ.',
 );

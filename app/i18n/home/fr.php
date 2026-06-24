@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'Citation du jour',
   'ham_weather' => 'Météo radioamateur',
   'ham_weather_desc' => 'Recommandations calculées automatiquement selon votre localisation, l\'heure, la météo et la propagation pour identifier les bandes et modes les plus propices aux QSO.',
@@ -177,4 +177,9 @@ return [
   'home_trophies_empty' => 'Aucun trophée disponible pour le moment.',
   'home_trophies_title' => 'Nos trophées',
   'spotlight_member_gallery_empty' => 'Aucune image de galerie disponible pour le moment.',
-];
+  'widget_temporarily_unavailable' => 'Widget temporairement indisponible.',
+  'ham_advice_temporarily_unavailable' => 'Conseil radio temporairement indisponible.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'Membres',
+  'visibility_private' => 'Privé',
+);

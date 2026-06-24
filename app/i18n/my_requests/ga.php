@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Moladh clibe',
   'proposal_type_subcategory' => 'Moladh fo-ábhair',
   'webotheque_title' => 'Leabharlann gréasáin',
+  'albums_title' => 'Albaim',
+  'auctions_title' => 'Ceantanna',
+  'files_title' => 'Comhaid',
+  'presentations_title' => 'Láithreoireachtaí',
+  'minutes_title' => 'Miontuairiscí',
+  'videos_title' => 'Físeáin',
+  'library_document_default_title' => 'Doiciméad',
+  'document_default_title' => 'Doiciméad',
 );

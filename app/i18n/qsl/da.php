@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -151,4 +150,18 @@ return array (
   'manual_hint' => 'Betegnelses-, bånd-, tilstands- og RST-felterne normaliseres til store bogstaver under indtastning.',
   'band_placeholder' => '20 mio',
   'mode_placeholder' => 'SSB',
+  'secure_unavailable' => 'Sikker QSL er ikke tilgængelig',
+  'svg_default_title' => 'QSL-kort',
+  'svg_front_details_on_back' => 'QSL-forside — detaljer på bagsiden',
+  'svg_back_title' => 'QSL-bekræftelse (bagside)',
+  'svg_thanks_contact' => 'Tak for kontakten — 73!',
+  'svg_label_from' => 'Fra',
+  'svg_label_to' => 'Til',
+  'svg_label_date' => 'Dato',
+  'svg_label_utc' => 'UTC',
+  'svg_label_band' => 'Bånd',
+  'svg_label_mode' => 'Tilstand',
+  'svg_label_rst_sr' => 'RST S/R',
+  'svg_label_operator' => 'Operatør',
+  'svg_label_qth' => 'QTH',
 );

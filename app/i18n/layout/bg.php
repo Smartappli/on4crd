@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Глобално търсене',
   'search_placeholder' => 'Търсене...',
   'search_submit' => 'Търсене',
+  'membership_good_standing' => 'Членството е изрядно',
 );

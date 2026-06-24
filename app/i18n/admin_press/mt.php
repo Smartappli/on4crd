@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Stqarrijiet għall-istampa',
   'full_name' => 'Isem sħiħ',
   'role' => 'Rwol',
-  'email' => 'E-mail',
+  'email' => 'Indirizz elettroniku',
   'phone' => 'Telefon',
   'notes' => 'Noti',
   'order' => 'Ordni',

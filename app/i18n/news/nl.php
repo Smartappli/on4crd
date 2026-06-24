@@ -61,4 +61,13 @@ return array (
   'search' => 'Zoeken',
   'news_count_label' => 'Aantal nieuws',
   'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
+  'invalid' => 'Ongeldig verzoek.',
+  'publish' => 'Publiceren',
+  'create' => 'Aanmaken',
+  'published' => 'Nieuwsbericht opgeslagen.',
+  'category_created_direct' => 'Thema voorgesteld en direct goedgekeurd.',
+  'create_news' => 'Aanmaken - Nieuws',
+  'create_category' => 'Aanmaken - Rubriek',
+  'news_direct_help' => 'Nieuwsbericht opgeslagen.',
+  'category_direct_help' => 'Het thema wordt direct goedgekeurd.',
 );

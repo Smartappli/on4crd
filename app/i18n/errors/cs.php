@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Zkontrolujte nadcházející aktivity.',
   'tools_link' => 'Radioamatérské nástroje',
   'tools_hint' => 'Otevřete praktické radioamatérské nástroje.',
+  'module_unavailable' => 'Modul není k dispozici.',
+  'slug_article_unique_failed' => 'Nelze vygenerovat jedinečný článek.',
+  'slug_wiki_unique_failed' => 'Nelze vygenerovat jedinečný wiki slimák.',
+  'slug_news_unique_failed' => 'Nelze vygenerovat jedinečný zpravodajský blok.',
+  'slug_event_unique_failed' => 'Nelze vygenerovat jedinečný záznam události.',
+  'storage_path_invalid' => 'Neplatná cesta úložiště.',
+  'storage_path_forbidden' => 'Cesta úložiště není povolena.',
+  'remote_url_private' => 'Vzdálený URL ukazuje na soukromou nebo vyhrazenou síť.',
+  'remote_url_private_resolved' => 'Vzdálená adresa URL se převede na soukromou nebo vyhrazenou adresu IP.',
+  'field_too_long' => 'Jedno z polí přesahuje povolenou délku.',
+  'wiki_storage_unavailable' => 'Úložiště wiki není k dispozici.',
+  'wiki_page_invalid' => 'Neplatná stránka wiki.',
+  'wiki_page_not_found' => 'Wiki stránka nebyla nalezena.',
+  'newsletter_campaign_not_found' => 'Kampaň nenalezena.',
+  'internal_error' => 'Došlo k vnitřní chybě.',
+  'error_reference' => 'Referenční kód: {request_id}.',
+  'service_temporarily_unavailable' => 'Služba dočasně nedostupná.',
 );

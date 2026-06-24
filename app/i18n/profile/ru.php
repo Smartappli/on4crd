@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL-менеджер',
   'qsl_choice_no_qsl' => 'Без QSL',
   'qsl_choice_other' => 'Другое',
+  'preview_public_title' => 'Публичный вид',
+  'preview_members_title' => 'Вид для участников',
+  'preview_private_title' => 'Вид комитета',
+  'required_field_help' => 'Обязательное поле.',
+  'preview_empty' => 'Нет видимой информации.',
 );

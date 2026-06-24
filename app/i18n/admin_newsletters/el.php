@@ -39,7 +39,7 @@ return array (
   'sent_results' => 'Αποστολή %d / Αποτυχίες %d',
   'send' => 'Αποστολή',
   'already_sent' => 'Έχει ήδη σταλεί',
-  'email' => 'E-mail',
+  'email' => 'Διεύθυνση e-mail',
   'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Δεν υπάρχουν συνδρομητές.',
   'no_campaigns' => 'Καμία καμπάνια.',

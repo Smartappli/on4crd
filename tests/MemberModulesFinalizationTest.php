@@ -31,8 +31,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('name="proposal_subcategory_ref"', $albums);
         self::assertStringContainsString('foreach ($albumCategories as $albumThemeCode => $albumThemeLabel)', $albums);
         self::assertStringContainsString('name="proposal_keywords"', $albums);
-        self::assertStringContainsString("'Mots clés' => \$keywords", $albums);
-        self::assertStringContainsString("'Sous-thématique' => \$proposalSubcategory", $albums);
+        self::assertStringContainsString("(string) \$t['keywords_label'] => \$keywords", $albums);
+        self::assertStringContainsString("(string) \$t['subcategory_field'] => \$proposalSubcategory", $albums);
         self::assertStringContainsString('$favoriteAlbumIds = $user !== null ? album_favorite_album_ids', $albums);
         self::assertStringContainsString('$visibleAlbumCategories = album_visible_categories($albumCategories, $albumCategoryCounts);', $albums);
         self::assertStringContainsString('$visibleAlbumSubcategoriesByCategory = album_visible_subcategories_by_category', $albums);
@@ -41,13 +41,13 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("route_url('admin_albums')", $albums);
         self::assertStringContainsString('$regularWhere = $where . \' AND a.is_featured = 0\';', $albums);
         self::assertStringContainsString('AND a.is_featured = 1', $albums);
-        self::assertStringContainsString('$featuredAlbumsTitle = $albumText(\'featured_albums\'', $albums);
+        self::assertStringContainsString('$featuredAlbumsTitle = (string) $t[\'featured_albums\'];', $albums);
         self::assertStringContainsString('$albumSections = album_listing_sections($featuredRows, $rows, $featuredAlbumsTitle, $otherAlbumsTitle);', $albums);
         self::assertStringContainsString('albums-featured-section', $albums);
         self::assertStringContainsString('album-featured-badge', $albums);
-        self::assertStringContainsString("\$albumText('first_page'", $albums);
+        self::assertStringContainsString("\$t['first_page']", $albums);
         self::assertStringContainsString("'p' => 1", $albums);
-        self::assertStringContainsString("\$albumText('last_page'", $albums);
+        self::assertStringContainsString("\$t['last_page']", $albums);
         self::assertStringContainsString("'p' => \$totalPages", $albums);
         self::assertStringContainsString("log_structured_event('album_tile_render_prepare_failed'", $albums);
         self::assertStringContainsString("\$albumTitle = trim((string) (\$row['title'] ?? ''));", $albums);
@@ -88,7 +88,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringNotContainsString('type="hidden" name="is_featured" value="0"', $adminAlbums);
         self::assertStringNotContainsString('type="hidden" name="album_is_featured" value="0"', $adminAlbums);
         self::assertStringContainsString('type="hidden" name="album_is_featured_present" value="1"', $adminAlbums);
-        self::assertStringContainsString('name="album_is_featured" value="1"', $adminAlbums);
+        self::assertStringContainsString('name="album_is_featured[]" value="1"', $adminAlbums);
         self::assertStringContainsString('$albumEditFormId = \'admin-album-edit-form-\' . $albumId;', $adminAlbums);
         self::assertStringContainsString('method="post" action="<?= e(route_url(\'admin_albums\')) ?>"', $adminAlbums);
         self::assertStringContainsString('type="submit" data-admin-album-save', $adminAlbums);
@@ -172,7 +172,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_module_documents', $schema);
         self::assertStringContainsString('idx_member_module_category_deleted', $schema);
         self::assertSame(
-            "Club fieldday\n\nThématique: radio\nMots clés: ft8",
+            "Club fieldday\n\nThématique: radio\nMots-clés: ft8",
             album_proposal_description_from_summary("Thematique: radio\nMots cles: ft8\nDescription: Club fieldday")
         );
     }
@@ -238,7 +238,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('foreach ($visibleCategories as $cat)', $library);
         self::assertStringContainsString('foreach ($visibleSubcategoriesByCategory[$catName] as $subcatInfo)', $library);
         self::assertStringContainsString("\$proposalTags = content_proposal_clean_single_line", $library);
-        self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
+        self::assertStringContainsString("(string) \$t['tags'] => \$proposalTags", $library);
         self::assertStringContainsString('accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"', $library);
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
         self::assertStringContainsString('member_library_create_document_record(', $library);
@@ -291,6 +291,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_create_document_record(', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_store_document_upload(?array $file, int $memberId, string $prefix = \'doc\'): array', $memberLibraryHelpers);
+        self::assertSame(100 * 1024 * 1024, member_library_upload_max_bytes());
         self::assertStringContainsString('ALTER TABLE member_library_documents ADD COLUMN extracted_text LONGTEXT NULL AFTER file_path', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_delete_document_file(string $publicPath): void', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_update_document_record(', $memberLibraryHelpers);
@@ -367,7 +368,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame('Proposer', $presentationLabels['propose_menu']);
         self::assertSame('Proposer une présentation', $presentationLabels['propose_content']);
         self::assertSame('Une présentation', $presentationLabels['propose_presentation_item']);
-        self::assertSame('Administration', $presentationLabels['administration']);
+        self::assertSame('Administrer', $presentationLabels['administration']);
 
         $pvDefinition = member_document_module_definition('pv');
         self::assertSame(['formats'], $pvDefinition['hidden_stats'] ?? null);
@@ -437,7 +438,9 @@ final class MemberModulesFinalizationTest extends TestCase
         $submit = $this->source('pages/idea_submit.php');
         self::assertStringContainsString("\$category = \$cleanLine((string) (\$_POST['idea_category'] ?? 'general'), 80);", $submit);
         self::assertStringContainsString("\$keywords = \$cleanLine((string) (\$_POST['idea_keywords'] ?? ''), 255);", $submit);
-        self::assertStringContainsString("\$t('category_label', 'Topic') . ': ' . \$category", $submit);
-        self::assertStringContainsString("\$t('keywords_label', 'Keywords') . ': ' . \$keywords", $submit);
+        self::assertStringContainsString("\$ideaCategoryTranslationKeys = [", $submit);
+        self::assertStringContainsString("\$categoryLabel = \$t(\$ideaCategoryTranslationKeys[\$category]);", $submit);
+        self::assertStringContainsString("\$t('category_label') . ': ' . \$categoryLabel", $submit);
+        self::assertStringContainsString("\$t('keywords_label') . ': ' . \$keywords", $submit);
     }
 }

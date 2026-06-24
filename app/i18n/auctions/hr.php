@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,27 @@ return array (
   'page' => 'Stranica',
   'previous' => 'Prethodno',
   'next' => 'Dalje',
+  'invalid' => 'Nevažeći zahtjev.',
+  'storage_unavailable' => 'Nema dražbi u tijeku.',
+  'lot_created_direct' => 'Dokument je predložen i izravno odobren. Po potrebi dodajte datoteku iz administracije knjižnice.',
+  'proposal_recorded' => 'Prijedlog je spremljen u vašim sadržajima.',
+  'propose_lot_subject' => 'Aukcije',
+  'propose_lot' => 'Predloži - puno',
+  'create_lot' => 'Stvorite - puno',
+  'lot_direct_help' => 'Prijedlog će biti izravno odobren; po potrebi dodajte datoteku iz administracije.',
+  'proposal_pending_help' => 'Prijedlog je spremljen u vašim sadržajima.',
+  'title_label' => 'Naslov',
+  'summary_label' => 'Sažetak',
+  'starting_price_label' => 'Početak',
+  'description_label' => 'Opis',
+  'contact_label' => 'Vaš kontakt',
+  'create' => 'Stvorite',
+  'proposal_submit' => 'Pošalji prijedlog',
+  'cancel' => 'Odustani',
+  'status_draft' => 'Nacrt',
+  'status_scheduled' => 'Zakazano',
+  'status_active' => 'Aktivno',
+  'status_closed' => 'Zatvorena',
+  'status_cancelled' => 'Otkazana',
+  'contact_prefix' => 'Kontakt:',
 );

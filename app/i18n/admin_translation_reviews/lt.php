@@ -15,4 +15,10 @@ return array (
   'no_article' => 'Nėra laukiančių straipsnių vertimų.',
   'layout' => 'Kalbinis korektūras',
   'meta_desc' => 'Automatinių turinio vertimų patvirtinimas.',
+  'assistant_title' => 'Administratoriaus asistentas: vertimų ir taksonomijos patikra',
+  'assistant_help' => 'Naudokite šį skydelį chatbot vertimams patvirtinti ir taksonomijos ar žymų dublikatams aptikti prieš moderavimą.',
+  'chatbot_i18n_title' => 'Chatbot vertimų kokybė',
+  'chatbot_i18n_ok' => 'Visi chatbot kalbų failai yra pilni ir nuoseklūs.',
+  'taxonomy_title' => 'Taksonomijos ir žymų pasiūlymai',
+  'taxonomy_empty' => 'Dublikatų variantų neaptikta.',
 );

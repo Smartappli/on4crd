@@ -102,4 +102,7 @@ Yhteystiedot:',
   'subcategory_field' => 'Ala-aihe',
   'no_subcategory' => 'Ei ala-aihetta',
   'favorites' => 'Suosikit',
+  'invalid' => 'Virheellinen pyyntö.',
+  'err_invalid_category' => 'Virheellinen luokka.',
+  'err_subcategory_category_mismatch' => 'Valittu alateema ei kuulu valittuun teemaan.',
 );

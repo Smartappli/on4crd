@@ -102,4 +102,7 @@ Kontakt:',
   'subcategory_field' => 'Alateema',
   'no_subcategory' => 'Alateema puudub',
   'favorites' => 'Lemmikud',
+  'invalid' => 'Vigane päring.',
+  'err_invalid_category' => 'Kehtetu kategooria.',
+  'err_subcategory_category_mismatch' => 'Valitud alateema ei kuulu valitud teema alla.',
 );

@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Propunere de etichetă',
   'proposal_type_subcategory' => 'Propunere de subtematică',
   'webotheque_title' => 'Bibliotecă web',
+  'albums_title' => 'Albume',
+  'auctions_title' => 'Licitaţie',
+  'files_title' => 'Fișiere',
+  'presentations_title' => 'Prezentări',
+  'minutes_title' => 'Procese-verbale',
+  'videos_title' => 'Videoclipuri',
+  'library_document_default_title' => 'Document',
+  'document_default_title' => 'Document',
 );

@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Album nevalid.',
   'uploaded_count' => 'fotografii adăugate.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Importul albumului s-a încheiat',
+  'notification_import_completed_body' => '%d fotografii importate.',
   'no_photo_imported' => 'Nu au fost importate fotografii.',
   'created_thumbs' => 'miniatură(e) generată(e).',
   'manage_title' => 'Gestionarea albumelor',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Titlu',
   'description' => 'Descriere',
   'public_album' => 'Album vizibil public',
+  'featured_album' => 'Album evidențiat',
   'photo_title' => 'Titlul fotografiei',
   'caption' => 'Legendă',
   'files_dropzone' => 'Fișiere imagine',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Albumul a fost validat, dar sincronizarea socială a eșuat.',
   'batch_max_files' => 'Maximum 100 de fotografii per import.',
   'batch_max_size' => 'Lotul de fotografii depășește 512 MB.',
+  'error_field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
 );

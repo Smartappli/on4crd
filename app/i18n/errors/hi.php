@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'आगामी गतिविधियां देखें.',
   'tools_link' => 'रेडियो उपकरण',
   'tools_hint' => 'व्यावहारिक रेडियो एमेच्योर उपकरण खोलें.',
+  'module_unavailable' => 'मॉड्यूल अनुपलब्ध.',
+  'slug_article_unique_failed' => 'एक अद्वितीय आलेख स्लग उत्पन्न करने में असमर्थ.',
+  'slug_wiki_unique_failed' => 'एक अद्वितीय विकि स्लग उत्पन्न करने में असमर्थ.',
+  'slug_news_unique_failed' => 'एक अद्वितीय समाचार स्लग उत्पन्न करने में असमर्थ.',
+  'slug_event_unique_failed' => 'एक अद्वितीय ईवेंट स्लग उत्पन्न करने में असमर्थ.',
+  'storage_path_invalid' => 'अमान्य भंडारण पथ.',
+  'storage_path_forbidden' => 'संग्रहण पथ की अनुमति नहीं है.',
+  'remote_url_private' => 'दूरस्थ URL एक निजी या आरक्षित नेटवर्क की ओर इशारा करता है।',
+  'remote_url_private_resolved' => 'दूरस्थ URL एक निजी या आरक्षित IP पते पर हल होता है।',
+  'field_too_long' => 'फ़ील्ड में से एक की लंबाई अनुमत लंबाई से अधिक है.',
+  'wiki_storage_unavailable' => 'विकी संग्रहण अनुपलब्ध है.',
+  'wiki_page_invalid' => 'अमान्य विकि पृष्ठ.',
+  'wiki_page_not_found' => 'विकी पेज नहीं मिला.',
+  'newsletter_campaign_not_found' => 'अभियान नहीं मिला.',
+  'internal_error' => 'कोई आंतरिक त्रुटि उत्पन्न हुई.',
+  'error_reference' => 'संदर्भ: {request_id}.',
+  'service_temporarily_unavailable' => 'सेवा अस्थायी रूप से अनुपलब्ध है.',
 );

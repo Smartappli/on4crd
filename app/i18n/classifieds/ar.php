@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'إعلان مبوب خاضع للإشراف',
   'notification_removed_body' => 'تمت إزالة الإعلان عن طريق الإشراف: {title}',
   'notification_status_body' => 'تم تحديث الحالة إلى {status}: {title}',
+  'propose_category_direct_help' => 'سيتم اعتماد الفئة مباشرة.',
+  'propose_category_created_direct' => 'تم إنشاء الفئة واعتمادها مباشرة.',
 );

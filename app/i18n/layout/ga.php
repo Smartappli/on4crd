@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Cuardach domhanda',
   'search_placeholder' => 'Cuardaigh…',
   'search_submit' => 'Cuardach',
+  'membership_good_standing' => 'Ballraíocht cothrom le dáta',
 );

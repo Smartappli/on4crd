@@ -7,7 +7,7 @@ $i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
 $nextUrl = safe_login_next_url((string) ($_POST['next'] ?? $_GET['next'] ?? ''));
 $defaultLoginRedirectUrl = route_url(module_enabled('dashboard') ? 'dashboard' : 'home');
-$membershipLabel = $locale === 'fr' ? 'Devenir membre' : 'Become a member';
+$membershipLabel = (string) ($t['membership_link'] ?? $t['create_account']);
 
 if (current_user() !== null) {
     redirect_url($nextUrl ?? $defaultLoginRedirectUrl);

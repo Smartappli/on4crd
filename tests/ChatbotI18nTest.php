@@ -56,7 +56,7 @@ final class ChatbotI18nTest extends TestCase
 
     public function testEmptyQuestionFallbackDefaultsToFrenchForUnknownLocale(): void
     {
-        $_SESSION['locale'] = 'it';
+        $_SESSION['locale'] = 'xx';
 
         $result = answer_question_from_knowledge('');
 

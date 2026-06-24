@@ -162,7 +162,20 @@ function article_subcategory_ref_parts(string $value): array
 function article_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', article_category_code($code)));
-    return $label !== '' ? mb_convert_case($label, MB_CASE_TITLE, 'UTF-8') : 'Autres';
+    return $label !== '' ? mb_convert_case($label, MB_CASE_TITLE, 'UTF-8') : article_i18n_text('theme_autres');
+}
+
+function article_i18n_text(string $key, ?string $localeOverride = null): string
+{
+    static $cache = [];
+
+    $locale = $localeOverride !== null && $localeOverride !== '' ? $localeOverride : (function_exists('current_locale') ? current_locale() : null);
+    $cacheKey = $locale ?? '__default__';
+    if (!array_key_exists($cacheKey, $cache)) {
+        $cache[$cacheKey] = function_exists('i18n_domain_locale') ? i18n_domain_locale('articles', $locale) : [];
+    }
+
+    return (string) ($cache[$cacheKey][$key] ?? $key);
 }
 
 /**
@@ -172,12 +185,12 @@ function article_category_label_from_code(string $code): string
 function article_default_categories(array $messages = []): array
 {
     return [
-        'antennes' => (string) ($messages['theme_antennes'] ?? 'Antennes'),
-        'trafic' => (string) ($messages['theme_trafic'] ?? 'Trafic & DX'),
-        'numerique' => (string) ($messages['theme_numerique'] ?? 'Modes numeriques'),
-        'materiel' => (string) ($messages['theme_materiel'] ?? 'Matériel & station'),
-        'formation' => (string) ($messages['theme_formation'] ?? 'Formation'),
-        'autres' => (string) ($messages['theme_autres'] ?? 'Autres'),
+        'antennes' => (string) ($messages['theme_antennes'] ?? article_i18n_text('theme_antennes')),
+        'trafic' => (string) ($messages['theme_trafic'] ?? article_i18n_text('theme_trafic')),
+        'numerique' => (string) ($messages['theme_numerique'] ?? article_i18n_text('theme_numerique')),
+        'materiel' => (string) ($messages['theme_materiel'] ?? article_i18n_text('theme_materiel')),
+        'formation' => (string) ($messages['theme_formation'] ?? article_i18n_text('theme_formation')),
+        'autres' => (string) ($messages['theme_autres'] ?? article_i18n_text('theme_autres')),
     ];
 }
 
@@ -387,7 +400,7 @@ function article_category_from_input(string $value, array $categories): string
         $code = 'autres';
     }
     if (!isset($categories[$code])) {
-        throw new RuntimeException('Invalid article category.');
+        throw new RuntimeException(article_i18n_text('err_invalid_category'));
     }
 
     return $code;
@@ -412,7 +425,7 @@ function article_taxonomy_from_input(string $categoryInput, string $subcategoryR
 
     $refCategory = $parts['category'] !== '' ? article_category_from_input($parts['category'], $categories) : $category;
     if ($refCategory !== $category) {
-        throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+        throw new RuntimeException(article_i18n_text('err_subcategory_category_mismatch'));
     }
 
     foreach ((array) (article_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
@@ -421,7 +434,7 @@ function article_taxonomy_from_input(string $categoryInput, string $subcategoryR
         }
     }
 
-    throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+    throw new RuntimeException(article_i18n_text('err_subcategory_category_mismatch'));
 }
 
 /**
@@ -515,12 +528,8 @@ function article_favorites_label(array $messages, string $locale = ''): string
     if ($label !== '') {
         return $label;
     }
-    if ($locale === 'fr') {
-        return 'Favoris';
-    }
 
-    $favorite = trim((string) ($messages['favorite_label'] ?? $messages['favorite'] ?? ''));
-    return $favorite !== '' && $favorite !== 'Favori' ? $favorite : 'Favorites';
+    return article_i18n_text('favorites', $locale);
 }
 
 /**
@@ -556,9 +565,9 @@ function render_article_taxonomy_fields(array $categories, array $labels = [], s
     $selectedCategory = article_category_code($selectedCategory !== '' ? $selectedCategory : 'autres');
     $selectedSubcategory = article_subcategory_code($selectedSubcategory);
     $subcategoriesByCategory = article_subcategories_by_category();
-    $categoryLabel = (string) ($labels['category_label'] ?? $labels['category'] ?? 'Catégorie');
-    $subcategoryLabel = (string) ($labels['subcategory_field'] ?? $labels['subcategory'] ?? 'Sous-thématique');
-    $noSubcategory = (string) ($labels['no_subcategory'] ?? 'Sans sous-thématique');
+    $categoryLabel = (string) ($labels['category_label'] ?? article_i18n_text('category_label'));
+    $subcategoryLabel = (string) ($labels['subcategory_field'] ?? article_i18n_text('subcategory_field'));
+    $noSubcategory = (string) ($labels['no_subcategory'] ?? article_i18n_text('no_subcategory'));
 
     $html = '<label><span>' . e($categoryLabel) . '</span><select name="category">';
     foreach ($categories as $code => $label) {
@@ -631,7 +640,7 @@ function article_unique_slug(string $value, int $ignoreId = 0, int $maxLength = 
         $suffix++;
     } while ($suffix < 10000);
 
-    throw new RuntimeException('Impossible de générer un slug article unique.');
+    throw new RuntimeException(i18n_error_text('slug_article_unique_failed', 'Unable to generate a unique article slug.'));
 }
 
 /**

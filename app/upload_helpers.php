@@ -14,7 +14,7 @@ function safe_storage_public_path(string $path, array $allowedPrefixes = ['stora
 {
     $normalized = ltrim(str_replace('\\', '/', trim($path)), '/');
     if ($normalized === '' || str_contains($normalized, "\0") || str_contains($normalized, '..')) {
-        throw new RuntimeException('Chemin de stockage invalide.');
+        throw new RuntimeException(i18n_error_text('storage_path_invalid', 'Invalid storage path.'));
     }
 
     foreach ($allowedPrefixes as $prefix) {
@@ -24,7 +24,7 @@ function safe_storage_public_path(string $path, array $allowedPrefixes = ['stora
         }
     }
 
-    throw new RuntimeException('Chemin de stockage non autorise.');
+    throw new RuntimeException(i18n_error_text('storage_path_forbidden', 'Storage path is not allowed.'));
 }
 }
 
@@ -163,6 +163,14 @@ function upload_i18n_message(string $key): string
     return (string) ($messages[$locale][$key] ?? $messages['en'][$key] ?? $messages['fr'][$key] ?? '');
 }
 
+function upload_error_message(int $errorCode): string
+{
+    return match ($errorCode) {
+        UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => upload_i18n_message('file_too_large_or_empty'),
+        default => upload_i18n_message('upload_failed'),
+    };
+}
+
 function assert_upload_file_is_valid_signature(string $tmpPath, array $allowedExtensions): void
 {
     $signature = @file_get_contents($tmpPath, false, null, 0, 16);
@@ -212,7 +220,7 @@ function secure_move_uploaded_file(
 ): string {
     $errorCode = (int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE);
     if ($errorCode !== UPLOAD_ERR_OK) {
-        throw new RuntimeException(upload_i18n_message('upload_failed'));
+        throw new RuntimeException(upload_error_message($errorCode));
     }
 
     $tmpPath = (string) ($upload['tmp_name'] ?? '');

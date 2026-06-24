@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Iklan baris dimoderasi',
   'notification_removed_body' => 'Iklan dihapus dengan moderasi: {title}',
   'notification_status_body' => 'Status diperbarui ke {status}: {title}',
+  'propose_category_direct_help' => 'Kategori akan langsung disetujui.',
+  'propose_category_created_direct' => 'Kategori dibuat dan langsung disetujui.',
 );

@@ -61,4 +61,13 @@ return array (
   'search' => 'Suchen',
   'news_count_label' => 'Anzahl der Nachrichten',
   'proposal_recorded' => 'Vorschlag in Ihren Inhalten gespeichert.',
+  'invalid' => 'Ungültige Anfrage.',
+  'publish' => 'Veröffentlichen',
+  'create' => 'Erstellen',
+  'published' => 'Nachricht gespeichert.',
+  'category_created_direct' => 'Thema vorgeschlagen und direkt genehmigt.',
+  'create_news' => 'Erstellen - Nachrichten',
+  'create_category' => 'Erstellen - Rubrik',
+  'news_direct_help' => 'Nachricht gespeichert.',
+  'category_direct_help' => 'Das Thema wird direkt genehmigt.',
 );

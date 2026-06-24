@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Globalne wyszukiwanie',
   'search_placeholder' => 'Szukaj…',
   'search_submit' => 'Szukaj',
+  'membership_good_standing' => 'Członkostwo aktualne',
 );

@@ -11,4 +11,5 @@ return array (
   'prosign_sk' => 'Kontakti lõpp',
   'prosign_bt' => 'Eraldaja',
   'prosign_as' => 'Oota',
+  'code' => 'Code',
 );

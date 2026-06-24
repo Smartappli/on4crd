@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Birkas priekšlikums',
   'proposal_type_subcategory' => 'Apakštēmas priekšlikums',
   'webotheque_title' => 'Tīmekļa bibliotēka',
+  'albums_title' => 'Albumi',
+  'auctions_title' => 'Izsoles',
+  'files_title' => 'Faili',
+  'presentations_title' => 'Prezentācijas',
+  'minutes_title' => 'Protokoli',
+  'videos_title' => 'Video',
+  'library_document_default_title' => 'Dokuments',
+  'document_default_title' => 'Dokuments',
 );

@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Návrh štítku',
   'proposal_type_subcategory' => 'Návrh podtémy',
   'webotheque_title' => 'Webová knižnica',
+  'albums_title' => 'Albumy',
+  'auctions_title' => 'Aukcie',
+  'files_title' => 'Súbory',
+  'presentations_title' => 'Prezentácie',
+  'minutes_title' => 'Zápisnice',
+  'videos_title' => 'Videá',
+  'library_document_default_title' => 'Dokument',
+  'document_default_title' => 'Dokument',
 );

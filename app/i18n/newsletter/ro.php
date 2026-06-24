@@ -14,7 +14,7 @@ return array (
   'subscribed' => 'abonat',
   'not_subscribed' => 'neabonat',
   'unsubscribe' => 'Dezabonați-vă',
-  'email_label' => 'E-mail de contact',
+  'email_label' => 'Adresă e-mail de contact',
   'subscribe' => 'Abonați-vă',
   'layout_title' => 'Buletin informativ',
   'consent_required' => 'Este necesar consimțământul pentru buletinul informativ.',

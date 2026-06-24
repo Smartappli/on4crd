@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Féach ar na gníomhaíochtaí atá le teacht.',
   'tools_link' => 'Uirlisí raidió',
   'tools_hint' => 'Oscail na huirlisí praiticiúla do raidióamaitéirí.',
+  'module_unavailable' => 'Níl an modúl ar fáil.',
+  'slug_article_unique_failed' => 'Ní féidir slug alt uathúil a ghiniúint.',
+  'slug_wiki_unique_failed' => 'Ní féidir seilide uathúil vicí a ghiniúint.',
+  'slug_news_unique_failed' => 'Ní féidir seilide nuachta ar leith a ghiniúint.',
+  'slug_event_unique_failed' => 'Ní féidir seilide ócáide uathúil a ghiniúint.',
+  'storage_path_invalid' => 'Conair stórála neamhbhailí.',
+  'storage_path_forbidden' => 'Ní cheadaítear cosán stórála.',
+  'remote_url_private' => 'Díríonn an cianda URL ar líonra príobháideach nó in áirithe.',
+  'remote_url_private_resolved' => 'Réitíonn an cianda URL chuig seoladh IP príobháideach nó in áirithe.',
+  'field_too_long' => 'Tá ceann de na réimsí níos mó ná an fad ceadaithe.',
+  'wiki_storage_unavailable' => 'Níl stóras Vicí ar fáil.',
+  'wiki_page_invalid' => 'Leathanach vicí neamhbhailí.',
+  'wiki_page_not_found' => 'Ní bhfuarthas leathanach Vicí.',
+  'newsletter_campaign_not_found' => 'Feachtas gan aimsiú.',
+  'internal_error' => 'Tharla earráid inmheánach.',
+  'error_reference' => 'Tagairt: {request_id}.',
+  'service_temporarily_unavailable' => 'Níl an tseirbhís ar fáil go sealadach.',
 );

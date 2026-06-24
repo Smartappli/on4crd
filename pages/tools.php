@@ -91,13 +91,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') !
                 $payload = json_encode(['input' => $inputValue, 'output' => $outputValue], JSON_UNESCAPED_UNICODE);
                 db()->prepare('INSERT INTO member_tool_presets (member_id, tool_id, label, payload_json) VALUES (?, ?, ?, ?)')
                     ->execute([$memberId, $toolId, $label, (string) $payload]);
-                set_flash('success', $tr('preset_saved', 'Preset saved.'));
+                set_flash('success', $tr('preset_saved'));
             }
         } elseif ($action === 'delete_tool_preset') {
             $presetId = (int) ($_POST['preset_id'] ?? 0);
             if ($presetId > 0) {
                 db()->prepare('DELETE FROM member_tool_presets WHERE id = ? AND member_id = ?')->execute([$presetId, $memberId]);
-                set_flash('success', $tr('preset_deleted', 'Preset deleted.'));
+                set_flash('success', $tr('preset_deleted'));
             }
         }
     }
@@ -111,15 +111,15 @@ if ($memberId > 0 && ensure_member_tools_tables()) {
     $toolPresets = $presetStmt->fetchAll() ?: [];
 }
 
-$labelCategoryAntenna = $tr('category_antenna', 'Antenna & propagation');
-$labelQuarterWaveCalc = $tr('quarter_wave_calc', 'Quarter-wave length');
-$labelErpCalc = $tr('erp_calc', 'Estimated ERP');
-$labelTxPowerW = $tr('tx_power_w', 'TX power (W)');
-$labelFeedlineLossDb = $tr('feedline_loss_db', 'Feedline loss (dB)');
-$labelAntennaGainDbd = $tr('antenna_gain_dbd', 'Antenna gain (dBd)');
-$labelErpResult = $tr('erp_result', 'Estimated ERP');
-$labelQuarterWaveResult = $tr('quarter_wave_result', 'Estimated length');
-$labelVelocityFactor = $tr('velocity_factor', 'Velocity factor (0-1)');
+$labelCategoryAntenna = $tr('category_antenna');
+$labelQuarterWaveCalc = $tr('quarter_wave_calc');
+$labelErpCalc = $tr('erp_calc');
+$labelTxPowerW = $tr('tx_power_w');
+$labelFeedlineLossDb = $tr('feedline_loss_db');
+$labelAntennaGainDbd = $tr('antenna_gain_dbd');
+$labelErpResult = $tr('erp_result');
+$labelQuarterWaveResult = $tr('quarter_wave_result');
+$labelVelocityFactor = $tr('velocity_factor');
 $toolCatalog = i18n_load_array_file_once(__DIR__ . '/../app/config/tools_catalog.php');
 $toolPanelMap = i18n_load_array_file_once(__DIR__ . '/../app/config/tools_panels.php');
 $toolGridFallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
@@ -204,15 +204,15 @@ foreach ($toolGroups as $toolGroup) {
     }
 }
 set_page_meta([
-    'title' => $tr('title', 'Outils radioamateur'),
-    'description' => $tr('grid_title', 'Maidenhead locator map and converter'),
+    'title' => $tr('title'),
+    'description' => $tr('grid_title'),
     'canonical' => $toolsUrl,
     'schema_type' => 'WebPage',
     'json_ld' => [
         '@context' => 'https://schema.org',
         '@type' => 'ItemList',
-        'name' => $tr('title', 'Outils radioamateur'),
-        'description' => $tr('choose_tool', 'Choisissez un outil radioamateur.'),
+        'name' => $tr('title'),
+        'description' => $tr('choose_tool'),
         'url' => $toolsUrl,
         'numberOfItems' => count($toolsListItems),
         'itemListElement' => $toolsListItems,
@@ -237,7 +237,7 @@ $jsI18n = [
     'meters_unit' => $tr('meters_unit'),
     'km_unit' => $tr('km_unit'),
     'watts_out_label' => $tr('watts_out_label'),
-    'dbuv_label' => $tr('dbuv_label', 'dBµV'),
+    'dbuv_label' => $tr('dbuv_label'),
 ];
 
 $renderFallbackToolGridPanel = static function (array $panelTranslations) use ($toolGridFallbackPath, $hasToolGridFallback): bool {
@@ -342,7 +342,7 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     if ($toolId === '' || preg_match('/^tool-[a-z0-9-]+$/', $toolId) !== 1) {
         http_response_code(400);
         header('Content-Type: text/plain; charset=UTF-8');
-        echo $tr('err_tool_load', 'Tool loading error');
+        echo $tr('err_tool_load');
         return;
     }
 
@@ -359,7 +359,7 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     if (!$canRenderToolId($toolId)) {
         http_response_code(404);
         header('Content-Type: text/plain; charset=UTF-8');
-        echo $tr('err_tool_load', 'Tool loading error');
+        echo $tr('err_tool_load');
         return;
     }
 
@@ -370,7 +370,7 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     if (!$rendered) {
         http_response_code(500);
         header('Content-Type: text/plain; charset=UTF-8');
-        echo $tr('err_tool_load', 'Tool loading error');
+        echo $tr('err_tool_load');
         return;
     }
 
@@ -385,17 +385,17 @@ ob_start();
 <section class="page-hero tools-hero">
     <div>
         <p class="eyebrow tools-hero-title"><?= e($tr('tool_index')) ?></p>
-        <h1><?= e($tr('title', 'Outils radioamateur')) ?></h1>
+        <h1><?= e($tr('title')) ?></h1>
         <p class="help"><?= e($tr('choose_tool')) ?></p>
     </div>
     <div class="tools-stats">
         <div class="tools-stat">
             <span><?= (int) $toolsTotalCount ?></span>
-            <p><?= e($tr('tools_stat_available', 'Outils disponibles')) ?></p>
+            <p><?= e($tr('tools_stat_available')) ?></p>
         </div>
         <div class="tools-stat">
             <span><?= (int) $toolsCategoryCount ?></span>
-            <p><?= e($tr('tools_stat_categories', 'Catégories')) ?></p>
+            <p><?= e($tr('tools_stat_categories')) ?></p>
         </div>
     </div>
 </section>
@@ -421,7 +421,7 @@ ob_start();
             </ul>
         </details>
         <details class="tools-index-group">
-            <summary><?= e($tr('category_antenna', 'Antenna & propagation')) ?></summary>
+            <summary><?= e($tr('category_antenna')) ?></summary>
             <ul>
                 <?php foreach ($antennaTools as $tool): ?>
                     <li><a href="#<?= e((string) $tool['id']) ?>" data-tool-target="<?= e((string) $tool['id']) ?>"><?= e((string) $tool['title']) ?></a></li>
@@ -477,4 +477,4 @@ ob_start();
 
 <script type="application/json" id="tools-i18n"><?= json_encode($jsI18n, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?: '{}' ?></script>
 <?php
-echo render_layout((string) ob_get_clean(), $tr('title', 'Outils radioamateur'));
+echo render_layout((string) ob_get_clean(), $tr('title'));

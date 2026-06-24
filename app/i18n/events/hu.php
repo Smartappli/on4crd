@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'Mégse',
   'propose_event_close' => 'Bezárás',
   'proposal_recorded' => 'A javaslat mentve lett a tartalmai közé.',
+  'invalid' => 'Érvénytelen kérés.',
+  'event_published_direct' => 'Az esemény közvetlenül közzé lett téve.',
+  'propose_event_direct_help' => 'Az esemény közvetlenül közzé lesz téve.',
+  'publish_event' => 'Közzététel',
+  'next_event_title' => 'Közelgő események',
 );

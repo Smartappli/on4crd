@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Iċċekkja l-attivitajiet li ġejjin.',
   'tools_link' => 'Għodod tar-radju',
   'tools_hint' => 'Iftaħ l-għodod prattiċi għad-dilettanti tar-radju.',
+  'module_unavailable' => 'Modulu mhux disponibbli.',
+  'slug_article_unique_failed' => 'Ma tistax tiġġenera oġġett uniku slug.',
+  'slug_wiki_unique_failed' => 'Ma tistax tiġġenera wiki slug unika.',
+  'slug_news_unique_failed' => 'Ma tistax tiġġenera slug ta\' aħbarijiet uniku.',
+  'slug_event_unique_failed' => 'Ma tistax tiġġenera slug ta\' avveniment uniku.',
+  'storage_path_invalid' => 'Mogħdija tal-ħażna invalida.',
+  'storage_path_forbidden' => 'Il-mogħdija tal-ħażna mhix permessa.',
+  'remote_url_private' => 'L-URL remot jindika netwerk privat jew riservat.',
+  'remote_url_private_resolved' => 'L-URL remot jirrisolvi għal indirizz IP privat jew riservat.',
+  'field_too_long' => 'Wieħed mill-oqsma jaqbeż it-tul permess.',
+  'wiki_storage_unavailable' => 'Ħażna Wiki mhux disponibbli.',
+  'wiki_page_invalid' => 'Paġna tal-wiki mhux valida.',
+  'wiki_page_not_found' => 'Il-paġna Wiki ma nstabx.',
+  'newsletter_campaign_not_found' => 'Kampanja ma nstabitx.',
+  'internal_error' => 'Sar żball intern.',
+  'error_reference' => 'Referenza: {request_id}.',
+  'service_temporarily_unavailable' => 'Servizz temporanjament mhux disponibbli.',
 );

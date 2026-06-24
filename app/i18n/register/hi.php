@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL प्रबंधक',
   'qsl_choice_no_qsl' => 'QSL नहीं',
   'qsl_choice_other' => 'अन्य',
+  'registration_closed_title' => 'सदस्य पंजीकरण',
+  'registration_closed_message' => 'सार्वजनिक पंजीकरण बंद है। सत्यापन के बाद प्रशासन सदस्य खाते बनाता है।',
+  'membership_link' => 'सदस्य बनें',
 );

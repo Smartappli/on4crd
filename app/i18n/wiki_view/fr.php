@@ -1,4 +1,33 @@
 <?php
 declare(strict_types=1);
 
-return ['not_found' => 'Page wiki introuvable.', 'edit' => 'Modifier', 'layout' => 'Wiki', 'meta_desc' => 'Consultation d\'une page wiki.', 'history' => 'Historique', 'no_revisions' => 'Aucune révision précédente.', 'favorite_added' => 'Favori ajouté', 'favorite_removed' => 'Favori retiré', 'favorite_added_msg' => 'Page ajoutée aux favoris.', 'favorite_removed_msg' => 'Page retirée des favoris.'];
+return array (
+  'not_found' => 'Page wiki introuvable.',
+  'edit' => 'Modifier',
+  'layout' => 'Wiki',
+  'meta_desc' => 'Consultation d\'une page wiki.',
+  'history' => 'Historique',
+  'no_revisions' => 'Aucune révision précédente.',
+  'favorite_added' => 'Favori ajouté',
+  'favorite_removed' => 'Favori retiré',
+  'favorite_added_msg' => 'Page ajoutée aux favoris.',
+  'favorite_removed_msg' => 'Page retirée des favoris.',
+  'forbidden' => 'Vous ne pouvez pas modifier cette page.',
+  'delete_success' => 'Page wiki supprimée.',
+  'delete_subject' => 'Suppression wiki à valider',
+  'change_recorded' => 'Proposition enregistrée dans vos contenus.',
+  'title_content_required' => 'Le titre et le contenu sont obligatoires.',
+  'field_too_long' => 'Un des champs dépasse la longueur autorisée.',
+  'update_success' => 'Page wiki enregistrée.',
+  'edit_page' => 'Modifier / Supprimer',
+  'edit_page_title' => 'Éditer wiki',
+  'close' => 'Fermer',
+  'title_label' => 'Titre',
+  'slug_label' => 'Slug',
+  'content_label' => 'Contenu (HTML simple)',
+  'save_page' => 'Enregistrer',
+  'cancel' => 'Annuler',
+  'delete_page_warning' => 'La suppression de cette page sera appliquée après validation.',
+  'delete_page_warning_admin' => 'La suppression de cette page est définitive.',
+  'delete_page' => 'Supprimer la page',
+);

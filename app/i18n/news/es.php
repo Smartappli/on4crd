@@ -61,4 +61,13 @@ return array (
   'search' => 'investigar',
   'news_count_label' => 'numero de noticias',
   'proposal_recorded' => 'Propuesta guardada en tus contenidos.',
+  'invalid' => 'Solicitud no válida.',
+  'publish' => 'Publicar',
+  'create' => 'Crear',
+  'published' => 'Noticia guardada.',
+  'category_created_direct' => 'Temática propuesta y aprobada directamente.',
+  'create_news' => 'Crear - Noticias',
+  'create_category' => 'Crear - Sección',
+  'news_direct_help' => 'Noticia guardada.',
+  'category_direct_help' => 'La temática se aprobará directamente.',
 );

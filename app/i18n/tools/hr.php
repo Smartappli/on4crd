@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Reflektirana snaga (W)',
   'swr_result' => 'Izračunati SWR',
   'dbw_calc' => 'Pretvorba dBm <-> dBW',
+  'cq_zone' => 'CQ zona',
+  'itu_zone' => 'ITU zona',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Predložak je spremljen.',
+  'preset_deleted' => 'Predložak je izbrisan.',
+  'tools_stat_available' => 'Dostupni alati',
+  'tools_stat_categories' => 'Kategorije',
 );

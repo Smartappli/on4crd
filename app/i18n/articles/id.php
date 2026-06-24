@@ -102,4 +102,7 @@ Kontak:',
   'subcategory_field' => 'Subtopik',
   'no_subcategory' => 'Tidak ada subtopik',
   'favorites' => 'Favorit',
+  'invalid' => 'Permintaan tidak valid.',
+  'err_invalid_category' => 'Kategori tidak valid.',
+  'err_subcategory_category_mismatch' => 'Subtema yang dipilih bukan bagian dari tema yang dipilih.',
 );

@@ -312,6 +312,24 @@ final class AdminActionCoverageTest extends TestCase
                 'selenium' => 'tests/selenium/admin-proposals-workflow.test.js',
                 'selenium_snippets' => ['admin_webotheque', 'updateModuleProposal', 'webothequeLinkByUrl'],
             ],
+            'admin events proposal moderation' => [
+                'page' => 'app/admin_helpers.php',
+                'controller_snippets' => ['admin_apply_accepted_event_proposal(', 'if ($area === \'events\')'],
+                'selenium' => 'tests/selenium/admin-proposals-workflow.test.js',
+                'selenium_snippets' => ['updateDashboardProposal', 'eventByTitle', "'events'"],
+            ],
+            'admin auctions proposal moderation' => [
+                'page' => 'app/admin_helpers.php',
+                'controller_snippets' => ['admin_apply_accepted_auction_proposal(', 'if ($area === \'auctions\')'],
+                'selenium' => 'tests/selenium/admin-proposals-workflow.test.js',
+                'selenium_snippets' => ['updateDashboardProposal', 'auctionLotByTitle', "'auctions'"],
+            ],
+            'admin news proposal moderation' => [
+                'page' => 'app/admin_helpers.php',
+                'controller_snippets' => ['admin_apply_accepted_news_proposal(', 'if ($area === \'news\')'],
+                'selenium' => 'tests/selenium/admin-proposals-workflow.test.js',
+                'selenium_snippets' => ['updateDashboardProposal', 'newsPostByTitle', 'newsSectionByName', "'news'"],
+            ],
         ];
     }
 

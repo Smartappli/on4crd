@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Consulta le prossime attività.',
   'tools_link' => 'Strumenti radio',
   'tools_hint' => 'Apri gli strumenti pratici per radioamatori.',
+  'module_unavailable' => 'Modulo non disponibile.',
+  'slug_article_unique_failed' => 'Impossibile generare uno slug di articolo univoco.',
+  'slug_wiki_unique_failed' => 'Impossibile generare uno slug wiki univoco.',
+  'slug_news_unique_failed' => 'Impossibile generare uno slug di notizie univoco.',
+  'slug_event_unique_failed' => 'Impossibile generare uno slug evento univoco.',
+  'storage_path_invalid' => 'Percorso di archiviazione non valido.',
+  'storage_path_forbidden' => 'Il percorso di archiviazione non è consentito.',
+  'remote_url_private' => 'L\'URL remoto punta a una rete privata o riservata.',
+  'remote_url_private_resolved' => 'L\'URL remoto si risolve in un indirizzo IP privato o riservato.',
+  'field_too_long' => 'Uno dei campi supera la lunghezza consentita.',
+  'wiki_storage_unavailable' => 'Spazio di archiviazione Wiki non disponibile.',
+  'wiki_page_invalid' => 'Pagina wiki non valida.',
+  'wiki_page_not_found' => 'Pagina Wiki non trovata.',
+  'newsletter_campaign_not_found' => 'Campagna non trovata.',
+  'internal_error' => 'Si è verificato un errore interno.',
+  'error_reference' => 'Riferimento: {request_id}.',
+  'service_temporarily_unavailable' => 'Servizio momentaneamente non disponibile.',
 );

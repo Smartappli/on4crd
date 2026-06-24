@@ -39,7 +39,7 @@ return array (
   'sent_results' => 'Odesláno %d / selhání %d',
   'send' => 'Odeslat',
   'already_sent' => 'Již odesláno',
-  'email' => 'E-mail',
+  'email' => 'E-mailová adresa',
   'csv_ph' => 'e-mail \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Žádní předplatitelé.',
   'no_campaigns' => 'Žádná kampaň.',

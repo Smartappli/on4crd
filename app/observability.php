@@ -61,9 +61,14 @@ function observability_build_safe_error_message(
     string $requestId = '',
     bool $displayErrorDetails = false
 ): string {
-    $safeMessage = 'Une erreur interne est survenue.';
+    $safeMessage = function_exists('i18n_error_text')
+        ? i18n_error_text('internal_error', 'An internal error occurred.')
+        : 'An internal error occurred.';
     if ($requestId !== '') {
-        $safeMessage .= ' Référence: ' . $requestId . '.';
+        $reference = function_exists('i18n_error_text')
+            ? i18n_error_text('error_reference', 'Reference: {request_id}.')
+            : 'Reference: {request_id}.';
+        $safeMessage .= ' ' . str_replace('{request_id}', $requestId, $reference);
     }
 
     if ($displayErrorDetails) {

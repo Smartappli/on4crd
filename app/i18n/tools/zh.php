@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => '反射功率（W）',
   'swr_result' => '计算的驻波比',
   'dbw_calc' => 'dBm <-> dBW 转换',
+  'cq_zone' => 'CQ 区域',
+  'itu_zone' => 'ITU 区域',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => '预设已保存。',
+  'preset_deleted' => '预设已删除。',
+  'tools_stat_available' => '可用工具',
+  'tools_stat_categories' => '类别',
 );

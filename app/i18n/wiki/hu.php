@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Tagi felület',
   'unavailable' => 'A Wiki az oldalak inicializálása után lesz elérhető.',
+  'invalid' => 'Érvénytelen kérés.',
   'new_pages' => 'Új oldalak',
   'updated_pages' => 'Módosított oldalak',
   'most_read' => 'A legtöbb olvasott',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Altéma',
   'no_subcategory' => 'Nincs altéma',
   'favorites' => 'Kedvencek',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Hozzáadva a kedvencekhez',
+  'favorite_removed' => 'Eltávolítva a kedvencekből',
+  'favorite_added_msg' => 'Oldal hozzáadva a kedvencekhez.',
+  'favorite_removed_msg' => 'Oldal eltávolítva a kedvencekből.',
+  'err_subcategory_category_mismatch' => 'A kiválasztott altéma nem tartozik a kiválasztott témához.',
+  'category_general' => 'Általános',
 );

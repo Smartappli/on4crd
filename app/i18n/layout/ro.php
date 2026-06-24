@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -52,4 +51,5 @@ return array (
   'search_label' => 'Căutare globală',
   'search_placeholder' => 'A cerceta…',
   'search_submit' => 'A cerceta',
+  'membership_good_standing' => 'Cotizație la zi',
 );

@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Annuncio moderato',
   'notification_removed_body' => 'Annuncio rimosso con moderazione: {title}',
   'notification_status_body' => 'Stato aggiornato a {status}: {title}',
+  'propose_category_direct_help' => 'La categoria sarà approvata direttamente.',
+  'propose_category_created_direct' => 'Categoria creata e approvata direttamente.',
 );

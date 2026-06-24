@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Rubrikannonce modereret',
   'notification_removed_body' => 'Annonce fjernet ved moderation: {title}',
   'notification_status_body' => 'Status opdateret til {status}: {title}',
+  'propose_category_direct_help' => 'Kategorien bliver godkendt direkte.',
+  'propose_category_created_direct' => 'Kategorien er oprettet og godkendt direkte.',
 );

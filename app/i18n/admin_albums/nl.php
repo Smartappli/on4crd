@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Ongeldig album.',
   'uploaded_count' => 'foto(\'s) toegevoegd.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Albumimport voltooid',
+  'notification_import_completed_body' => '%d foto’s geïmporteerd.',
   'no_photo_imported' => 'Er is geen foto geïmporteerd.',
   'created_thumbs' => 'miniatuur(s) gegenereerd.',
   'manage_title' => 'Albums beheren',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Titel',
   'description' => 'Beschrijving',
   'public_album' => 'Openbaar album',
+  'featured_album' => 'Uitgelicht album',
   'photo_title' => 'Titel van de foto',
   'caption' => 'Bijschrift',
   'files_dropzone' => 'Afbeeldingsbestanden',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album gevalideerd, maar sociale synchronisatie mislukt.',
   'batch_max_files' => 'Maximaal 100 foto\'s per import.',
   'batch_max_size' => 'De fotobatch is groter dan 512 MB.',
+  'error_field_too_long' => 'Eén van de velden overschrijdt de toegestane lengte.',
 );

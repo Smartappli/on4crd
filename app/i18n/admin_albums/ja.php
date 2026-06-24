@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => '無効なアルバムです。',
   'uploaded_count' => '写真を追加しました。',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'アルバムのインポートが完了しました',
+  'notification_import_completed_body' => '%d 枚の写真をインポートしました。',
   'no_photo_imported' => '写真がインポートされていませんでした。',
   'created_thumbs' => 'サムネイルが生成されました。',
   'manage_title' => 'アルバム管理',
@@ -20,6 +20,7 @@ return array (
   'title' => 'タイトル',
   'description' => '説明',
   'public_album' => '公開アルバム',
+  'featured_album' => '注目アルバム',
   'photo_title' => '写真のタイトル',
   'caption' => 'キャプション',
   'files_dropzone' => '画像ファイル',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'アルバムは検証されましたが、ソーシャル同期に失敗しました。',
   'batch_max_files' => 'インポートごとに最大 100 枚の写真。',
   'batch_max_size' => '写真バッチが 512 MB を超えています。',
+  'error_field_too_long' => 'フィールドの 1 つが許可された長さを超えています。',
 );

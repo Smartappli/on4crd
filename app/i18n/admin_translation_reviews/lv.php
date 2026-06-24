@@ -15,4 +15,10 @@ return array (
   'no_article' => 'Nav neapstiprinātu rakstu tulkojumu.',
   'layout' => 'Lingvistiskā korektūra',
   'meta_desc' => 'Satura automātisko tulkojumu validācija.',
+  'assistant_title' => 'Administratora asistents: tulkojumu un taksonomijas pārbaude',
+  'assistant_help' => 'Izmantojiet šo paneli, lai apstiprinātu chatbot tulkojumus un pirms moderēšanas atrastu taksonomijas vai birku dublikātus.',
+  'chatbot_i18n_title' => 'Chatbot tulkojumu kvalitāte',
+  'chatbot_i18n_ok' => 'Visi chatbot valodu faili ir pilnīgi un saskaņoti.',
+  'taxonomy_title' => 'Taksonomijas un birku ieteikumi',
+  'taxonomy_empty' => 'Dublikātu varianti nav atrasti.',
 );

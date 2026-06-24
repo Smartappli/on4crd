@@ -102,4 +102,7 @@ Teagmháil:',
   'subcategory_field' => 'Fothopaic',
   'no_subcategory' => 'Gan fothopaic',
   'favorites' => 'Ceanáin',
+  'invalid' => 'Iarratas neamhbhailí.',
+  'err_invalid_category' => 'Catagóir neamhbhailí.',
+  'err_subcategory_category_mismatch' => 'Ní bhaineann an fofhothéama roghnaithe leis an téama roghnaithe.',
 );

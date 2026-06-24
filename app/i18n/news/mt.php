@@ -61,4 +61,13 @@ return array (
   'search' => 'Fittex',
   'news_count_label' => 'Numru ta\' aħbarijiet',
   'proposal_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
+  'invalid' => 'Talba invalida.',
+  'publish' => 'Ippubblika',
+  'create' => 'Oħloq',
+  'published' => 'Aħbarijiet irrekordjati.',
+  'category_created_direct' => 'It-tema ġiet proposta u approvata direttament.',
+  'create_news' => 'Oħloq - Aħbarijiet',
+  'create_category' => 'Oħloq - Rubrika',
+  'news_direct_help' => 'Aħbarijiet irrekordjati.',
+  'category_direct_help' => 'It-tema tiġi approvata direttament.',
 );

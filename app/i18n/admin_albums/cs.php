@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Neplatné album.',
   'uploaded_count' => 'fotografie přidány.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Import alba dokončen',
+  'notification_import_completed_body' => 'Importováno %d fotografií.',
   'no_photo_imported' => 'Nebyly importovány žádné fotografie.',
   'created_thumbs' => 'vygenerované miniatury.',
   'manage_title' => 'Správa alb',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Název',
   'description' => 'Popis',
   'public_album' => 'Veřejné album',
+  'featured_album' => 'Doporučené album',
   'photo_title' => 'Název fotografie',
   'caption' => 'Legenda',
   'files_dropzone' => 'Soubory obrázků',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album bylo ověřeno, ale sociální synchronizace se nezdařila.',
   'batch_max_files' => 'Maximálně 100 fotografií na import.',
   'batch_max_size' => 'Dávka fotografií přesahuje 512 MB.',
+  'error_field_too_long' => 'Jedno z polí přesahuje povolenou délku.',
 );

@@ -9,4 +9,10 @@ return array (
   'manage_label' => 'Comité beheren',
   'none' => 'Er is momenteel geen commissielid gepubliceerd.',
   'portrait_of' => 'Portret van',
+  'editorial_title' => 'Commissie',
+  'editorial_intro' => 'Kennismaking met de radioclubcommissie.',
+  'editorial_mission' => 'Transparantie',
+  'editorial_onboarding' => 'Lid welkom',
+  'editorial_contact_title' => 'Contactpunt',
+  'editorial_contact_text' => 'De commissie is beschikbaar voor uw vragen.',
 );

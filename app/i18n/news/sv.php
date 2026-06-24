@@ -61,4 +61,13 @@ return array (
   'search' => 'Sök',
   'news_count_label' => 'Antal nyheter',
   'proposal_recorded' => 'Förslaget har sparats i ditt innehåll.',
+  'invalid' => 'Ogiltig begäran.',
+  'publish' => 'Publicera',
+  'create' => 'Skapa',
+  'published' => 'Nyheter inspelade.',
+  'category_created_direct' => 'Tema föreslaget och direkt godkänt.',
+  'create_news' => 'Skapa - Nyheter',
+  'create_category' => 'Skapa - Rubrik',
+  'news_direct_help' => 'Nyheter inspelade.',
+  'category_direct_help' => 'Temat godkänns direkt.',
 );

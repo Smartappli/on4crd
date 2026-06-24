@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Se kommande aktiviteter.',
   'tools_link' => 'Radioverktyg',
   'tools_hint' => 'Öppna de praktiska verktygen för radioamatörer.',
+  'module_unavailable' => 'Modulen är inte tillgänglig.',
+  'slug_article_unique_failed' => 'Det går inte att generera en unik artikelsnigel.',
+  'slug_wiki_unique_failed' => 'Det går inte att generera en unik wiki-snigel.',
+  'slug_news_unique_failed' => 'Det går inte att generera en unik nyhetsslug.',
+  'slug_event_unique_failed' => 'Det gick inte att generera en unik händelsesnigel.',
+  'storage_path_invalid' => 'Ogiltig lagringssökväg.',
+  'storage_path_forbidden' => 'Lagringsväg är inte tillåten.',
+  'remote_url_private' => 'Fjärrkontrollen URL pekar på ett privat eller reserverat nätverk.',
+  'remote_url_private_resolved' => 'Fjärr-URL löser till en privat eller reserverad IP-adress.',
+  'field_too_long' => 'Ett av fälten överskrider den tillåtna längden.',
+  'wiki_storage_unavailable' => 'Wiki-lagring är inte tillgänglig.',
+  'wiki_page_invalid' => 'Ogiltig wikisida.',
+  'wiki_page_not_found' => 'Wikisidan hittades inte.',
+  'newsletter_campaign_not_found' => 'Kampanjen hittades inte.',
+  'internal_error' => 'Ett internt fel uppstod.',
+  'error_reference' => 'Referens: {request_id}.',
+  'service_temporarily_unavailable' => 'Tjänsten är tillfälligt otillgänglig.',
 );

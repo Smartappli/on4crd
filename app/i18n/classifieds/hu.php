@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Apróhirdetés moderálva',
   'notification_removed_body' => 'A hirdetés moderálással eltávolítva: {title}',
   'notification_status_body' => 'Állapot frissítve {status}-re: {title}',
+  'propose_category_direct_help' => 'A kategória közvetlenül jóvá lesz hagyva.',
+  'propose_category_created_direct' => 'A kategória létrejött és közvetlenül jóvá lett hagyva.',
 );

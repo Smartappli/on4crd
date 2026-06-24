@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL-manageri',
   'qsl_choice_no_qsl' => 'Ei QSL:ää',
   'qsl_choice_other' => 'Muu',
+  'preview_public_title' => 'Julkinen näkymä',
+  'preview_members_title' => 'Jäsennäkymä',
+  'preview_private_title' => 'Toimikunnan näkymä',
+  'required_field_help' => 'Pakollinen kenttä.',
+  'preview_empty' => 'Ei näkyviä tietoja.',
 );

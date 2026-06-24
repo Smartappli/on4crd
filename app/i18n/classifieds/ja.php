@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => '広告のモデレート済み',
   'notification_removed_body' => 'モデレートにより広告が削除されました: {title}',
   'notification_status_body' => 'ステータスが {status} に更新されました: {title}',
+  'propose_category_direct_help' => 'カテゴリは直接承認されます。',
+  'propose_category_created_direct' => 'カテゴリが作成され、直接承認されました。',
 );

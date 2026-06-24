@@ -61,4 +61,13 @@ return array (
   'search' => 'Поиск',
   'news_count_label' => 'Количество новостей',
   'proposal_recorded' => 'Предложение сохранено в ваших материалах.',
+  'invalid' => 'Недопустимый запрос.',
+  'publish' => 'Публиковать',
+  'create' => 'Создавать',
+  'published' => 'Новость сохранена.',
+  'category_created_direct' => 'Тема предложена и сразу одобрена.',
+  'create_news' => 'Создавать - Новости',
+  'create_category' => 'Создавать - Раздел',
+  'news_direct_help' => 'Новость сохранена.',
+  'category_direct_help' => 'Тема будет одобрена сразу.',
 );

@@ -18,4 +18,6 @@ return array (
   'forgot_password' => 'Zabudli ste heslo?',
   'no_member' => 'Ešte nie ste členom?',
   'create_account' => 'Vytvorte si účet',
+  'membership_link' => 'Stať sa členom',
+  'login_required' => 'Ak chcete pokračovať, prihláste sa.',
 );

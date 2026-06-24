@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Medlemsområde',
   'unavailable' => 'Wikien vil være tilgængelig efter initialisering af siderne.',
+  'invalid' => 'Ugyldig anmodning.',
   'new_pages' => 'Nye sider',
   'updated_pages' => 'Ændrede sider',
   'most_read' => 'Mest læste',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Underemne',
   'no_subcategory' => 'Intet underemne',
   'favorites' => 'Favoritter',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Føjet til favoritter',
+  'favorite_removed' => 'Fjernet fra favoritter',
+  'favorite_added_msg' => 'Side føjet til favoritter.',
+  'favorite_removed_msg' => 'Side fjernet fra favoritter.',
+  'err_subcategory_category_mismatch' => 'Det valgte underemne hører ikke til det valgte emne.',
+  'category_general' => 'Generelt',
 );

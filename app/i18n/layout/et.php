@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Globaalne otsing',
   'search_placeholder' => 'Otsi…',
   'search_submit' => 'Otsi',
+  'membership_good_standing' => 'Liikmemaks korras',
 );

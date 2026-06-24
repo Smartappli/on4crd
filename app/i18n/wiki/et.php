@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Liikmete ala',
   'unavailable' => 'Wiki on saadaval pärast lehtede lähtestamist.',
+  'invalid' => 'Vigane päring.',
   'new_pages' => 'Uued lehed',
   'updated_pages' => 'Muudetud lehed',
   'most_read' => 'Enamus loetud',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Alateema',
   'no_subcategory' => 'Alateema puudub',
   'favorites' => 'Lemmikud',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Lisatud lemmikutesse',
+  'favorite_removed' => 'Eemaldatud lemmikutest',
+  'favorite_added_msg' => 'Leht lisatud lemmikutesse.',
+  'favorite_removed_msg' => 'Leht eemaldatud lemmikutest.',
+  'err_subcategory_category_mismatch' => 'Valitud alateema ei kuulu valitud teema alla.',
+  'category_general' => 'Üldine',
 );

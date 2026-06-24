@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Sildiettepanek',
   'proposal_type_subcategory' => 'Alateema ettepanek',
   'webotheque_title' => 'Veebikogu',
+  'albums_title' => 'Albumid',
+  'auctions_title' => 'Oksjonid',
+  'files_title' => 'Failid',
+  'presentations_title' => 'Esitlused',
+  'minutes_title' => 'Protokollid',
+  'videos_title' => 'Videod',
+  'library_document_default_title' => 'Dokument',
+  'document_default_title' => 'Dokument',
 );

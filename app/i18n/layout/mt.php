@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Tfittxija globali',
   'search_placeholder' => 'Biex tirriċerka...',
   'search_submit' => 'Għar-riċerka',
+  'membership_good_standing' => 'Sħubija aġġornata',
 );

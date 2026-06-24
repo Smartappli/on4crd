@@ -61,4 +61,13 @@ return array (
   'search' => 'Iskanje',
   'news_count_label' => 'Število novic',
   'proposal_recorded' => 'Predlog je shranjen med vašo vsebino.',
+  'invalid' => 'Neveljavna zahteva.',
+  'publish' => 'Objavi',
+  'create' => 'Ustvari',
+  'published' => 'Novica posneta.',
+  'category_created_direct' => 'Tematika je predlagana in neposredno odobrena.',
+  'create_news' => 'Ustvari - Novice',
+  'create_category' => 'Ustvari - Rubrika',
+  'news_direct_help' => 'Novica posneta.',
+  'category_direct_help' => 'Tematika bo neposredno odobrena.',
 );

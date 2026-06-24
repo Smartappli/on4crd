@@ -61,4 +61,13 @@ return array (
   'search' => 'Traži',
   'news_count_label' => 'Broj vijesti',
   'proposal_recorded' => 'Prijedlog je spremljen u vašim sadržajima.',
+  'invalid' => 'Nevažeći zahtjev.',
+  'publish' => 'Objavi',
+  'create' => 'Stvorite',
+  'published' => 'Vijesti snimljene.',
+  'category_created_direct' => 'Tema je predložena i izravno odobrena.',
+  'create_news' => 'Stvorite - Vijesti',
+  'create_category' => 'Stvorite - Rubrika',
+  'news_direct_help' => 'Vijesti snimljene.',
+  'category_direct_help' => 'Tema će biti izravno odobrena.',
 );

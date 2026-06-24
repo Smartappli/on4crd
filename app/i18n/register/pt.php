@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'Gestor QSL',
   'qsl_choice_no_qsl' => 'Sem QSL',
   'qsl_choice_other' => 'Outra',
+  'registration_closed_title' => 'Registo de membro',
+  'registration_closed_message' => 'O registo público está encerrado. As contas de membros são criadas pela administração após validação.',
+  'membership_link' => 'Tornar-se membro',
 );

@@ -9,4 +9,10 @@ return array (
   'manage_label' => 'Zarządzaj komisją',
   'none' => 'Na chwilę obecną nie są publikowane żadne informacje na temat członków komisji.',
   'portrait_of' => 'Portret',
+  'editorial_title' => 'Komitet',
+  'editorial_intro' => 'Wprowadzenie do komitetu klubu radiowego.',
+  'editorial_mission' => 'Przejrzystość',
+  'editorial_onboarding' => 'Witamy Państwa',
+  'editorial_contact_title' => 'Kontakt',
+  'editorial_contact_text' => 'Komisja jest do Państwa dyspozycji w razie pytań.',
 );

@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Μη έγκυρο άλμπουμ.',
   'uploaded_count' => 'προστέθηκαν φωτογραφίες.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Η εισαγωγή άλμπουμ ολοκληρώθηκε',
+  'notification_import_completed_body' => 'Εισήχθησαν %d φωτογραφίες.',
   'no_photo_imported' => 'Δεν έγινε εισαγωγή φωτογραφιών.',
   'created_thumbs' => 'δημιουργήθηκαν μικρογραφίες.',
   'manage_title' => 'Διαχείριση άλμπουμ',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Τίτλος',
   'description' => 'Περιγραφή',
   'public_album' => 'Δημόσιο άλμπουμ',
+  'featured_album' => 'Προτεινόμενο άλμπουμ',
   'photo_title' => 'Τίτλος φωτογραφίας',
   'caption' => 'Θρύλος',
   'files_dropzone' => 'Αρχεία εικόνας',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Το άλμπουμ επικυρώθηκε, αλλά ο συγχρονισμός κοινωνικής δικτύωσης απέτυχε.',
   'batch_max_files' => 'Έως 100 φωτογραφίες ανά εισαγωγή.',
   'batch_max_size' => 'Η δέσμη φωτογραφιών υπερβαίνει τα 512 MB.',
+  'error_field_too_long' => 'Ένα από τα πεδία υπερβαίνει το επιτρεπόμενο μήκος.',
 );

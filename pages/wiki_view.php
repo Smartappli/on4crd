@@ -46,13 +46,13 @@ $currentUser = current_user();
 $canManageWikiPage = $currentUser !== null
     && !$isModificationProposal
     && ($canModerateWiki || (int) ($row['author_id'] ?? 0) === (int) ($currentUser['id'] ?? 0));
-$wikiViewText = static function (string $key, string $fr, string $en) use ($locale, $t): string {
+$wikiViewText = static function (string $key) use ($t): string {
     $value = trim($t($key));
     if ($value !== '' && $value !== $key) {
         return $value;
     }
 
-    return $locale === 'fr' ? $fr : $en;
+    return $key;
 };
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -69,19 +69,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     (string) ($row['title'] ?? ''),
                     route_url('wiki_view', ['slug' => (string) $row['slug']])
                 );
-                notify_member((int) $actingUser['id'], 'favorite', $saved ? $wikiViewText('favorite_added', 'Favori ajouté', 'Favorite added') : $wikiViewText('favorite_removed', 'Favori retiré', 'Favorite removed'), (string) ($row['title'] ?? ''), route_url('wiki_view', ['slug' => (string) $row['slug']]));
-                set_flash('success', $saved ? $wikiViewText('favorite_added_msg', 'Page ajoutée aux favoris.', 'Page added to favorites.') : $wikiViewText('favorite_removed_msg', 'Page retirée des favoris.', 'Page removed from favorites.'));
+                notify_member((int) $actingUser['id'], 'favorite', $saved ? $wikiViewText('favorite_added') : $wikiViewText('favorite_removed'), (string) ($row['title'] ?? ''), route_url('wiki_view', ['slug' => (string) $row['slug']]));
+                set_flash('success', $saved ? $wikiViewText('favorite_added_msg') : $wikiViewText('favorite_removed_msg'));
             }
             redirect_url(route_url('wiki_view', ['slug' => (string) $row['slug']]));
         }
         if (($action !== 'update_page' && $action !== 'delete_page') || !$canManageWikiPage) {
-            throw new RuntimeException($wikiViewText('forbidden', 'Vous ne pouvez pas modifier cette page.', 'You cannot edit this page.'));
+            throw new RuntimeException($wikiViewText('forbidden'));
         }
 
         if ($action === 'delete_page') {
             if ($canModerateWiki) {
                 wiki_delete_page_record((int) $row['id']);
-                set_flash('success', $wikiViewText('delete_success', 'Page wiki supprimee.', 'Wiki page deleted.'));
+                set_flash('success', $wikiViewText('delete_success'));
                 redirect_url(route_url('wiki'));
             }
 
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sourceRef,
                 'pending'
             );
-            content_proposal_notify_site($wikiViewText('delete_subject', 'Suppression wiki a valider', 'Wiki deletion pending review'), [
+            content_proposal_notify_site($wikiViewText('delete_subject'), [
                 'area' => 'wiki',
                 'proposal_type' => 'content',
                 'title' => (string) $row['title'],
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => (string) ($actingUser['email'] ?? ''),
                 'source_ref' => 'content_proposals#' . $proposalId . ' ' . $sourceRef,
             ]);
-            set_flash('success', $wikiViewText('change_recorded', 'Modification enregistree dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+            set_flash('success', $wikiViewText('change_recorded'));
             redirect('my_requests');
         }
 
@@ -129,10 +129,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
         }
         if ($title === '' || trim(strip_tags($content)) === '') {
-            throw new RuntimeException($wikiViewText('title_content_required', 'Le titre et le contenu sont obligatoires.', 'Title and content are required.'));
+            throw new RuntimeException($wikiViewText('title_content_required'));
         }
         if (mb_strlen($title) > 190 || mb_strlen($slugInput) > 190 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($content) > 50000) {
-            throw new RuntimeException($wikiViewText('field_too_long', 'Un des champs depasse la longueur autorisee.', 'One field is too long.'));
+            throw new RuntimeException($wikiViewText('field_too_long'));
         }
 
         $targetSlugInput = $slugInput !== '' ? $slugInput : (string) $row['slug'];
@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw $throwable;
             }
 
-            set_flash('success', $wikiViewText('update_success', 'Page wiki mise a jour.', 'Wiki page updated.'));
+            set_flash('success', $wikiViewText('update_success'));
             redirect_url(route_url('wiki_view', ['slug' => $slug]));
         }
 
@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, author_id, status, proposal_kind, source_page_id, target_slug) VALUES (?, ?, ?, ?, ?, ?, "pending", "modification", ?, ?)')
             ->execute([$title, $proposalSlug, $content, $category, $subcategory, (int) $actingUser['id'], (int) $row['id'], $targetSlug]);
 
-        set_flash('success', $wikiViewText('change_recorded', 'Modification enregistree dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+        set_flash('success', $wikiViewText('change_recorded'));
         redirect('my_requests');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -292,7 +292,7 @@ ob_start();
                 </form>
             <?php endif; ?>
             <?php if ($canManageWikiPage): ?>
-                <button class="button" type="button" data-wiki-page-modal-open="wiki-page-edit-dialog" aria-haspopup="dialog" aria-controls="wiki-page-edit-dialog"><?= e($wikiViewText('edit_page', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
+                <button class="button" type="button" data-wiki-page-modal-open="wiki-page-edit-dialog" aria-haspopup="dialog" aria-controls="wiki-page-edit-dialog"><?= e($wikiViewText('edit_page')) ?></button>
             <?php endif; ?>
         </div>
     </section>
@@ -303,32 +303,32 @@ ob_start();
                 <div class="wiki-page-dialog-header module-dialog-header">
                     <div>
                         <p class="module-dialog-eyebrow"><?= e($t('layout')) ?></p>
-                        <h2 id="wiki-page-edit-dialog-title"><?= e($wikiViewText('edit_page_title', 'Modifier la page wiki', 'Edit wiki page')) ?></h2>
+                        <h2 id="wiki-page-edit-dialog-title"><?= e($wikiViewText('edit_page_title')) ?></h2>
                         <p class="help">/<?= e((string) $row['slug']) ?></p>
                     </div>
-                    <button class="wiki-page-dialog-close module-dialog-close" type="button" data-wiki-page-modal-close aria-label="<?= e($wikiViewText('close', 'Fermer', 'Close')) ?>">&times;</button>
+                    <button class="wiki-page-dialog-close module-dialog-close" type="button" data-wiki-page-modal-close aria-label="<?= e($wikiViewText('close')) ?>">&times;</button>
                 </div>
                 <form method="post" class="wiki-page-form module-dialog-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_page">
                     <div class="wiki-edit-grid">
-                        <label><span><?= e($wikiViewText('title_label', 'Titre', 'Title')) ?></span><input type="text" name="title" value="<?= e((string) $row['title']) ?>" maxlength="190" required></label>
-                        <label><span><?= e($wikiViewText('slug_label', 'Slug', 'Slug')) ?></span><input type="text" name="slug" value="<?= e((string) $row['slug']) ?>" maxlength="190"></label>
+                        <label><span><?= e($wikiViewText('title_label')) ?></span><input type="text" name="title" value="<?= e((string) $row['title']) ?>" maxlength="190" required></label>
+                        <label><span><?= e($wikiViewText('slug_label')) ?></span><input type="text" name="slug" value="<?= e((string) $row['slug']) ?>" maxlength="190"></label>
                         <?= render_wiki_taxonomy_fields($wikiCategories, $wikiMessages, $categoryCode, $subcategoryCode) ?>
                     </div>
-                    <label><span><?= e($wikiViewText('content_label', 'Contenu', 'Content')) ?></span><textarea name="content" rows="18" maxlength="50000" data-wysiwyg="full" required><?= e((string) $row['content']) ?></textarea></label>
+                    <label><span><?= e($wikiViewText('content_label')) ?></span><textarea name="content" rows="18" maxlength="50000" data-wysiwyg="full" required><?= e((string) $row['content']) ?></textarea></label>
                     <p class="wiki-page-dialog-actions module-dialog-actions">
-                        <button class="button" type="submit"><?= e($wikiViewText('save_page', 'Enregistrer', 'Save')) ?></button>
-                        <button class="button secondary" type="button" data-wiki-page-modal-close><?= e($wikiViewText('cancel', 'Annuler', 'Cancel')) ?></button>
+                        <button class="button" type="submit"><?= e($wikiViewText('save_page')) ?></button>
+                        <button class="button secondary" type="button" data-wiki-page-modal-close><?= e($wikiViewText('cancel')) ?></button>
                     </p>
                 </form>
                 <form method="post" class="wiki-page-delete-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="delete_page">
                     <p class="help"><?= e($canModerateWiki
-                        ? $wikiViewText('delete_page_warning_admin', 'La suppression de cette page est definitive.', 'Deleting this page is permanent.')
-                        : $wikiViewText('delete_page_warning', 'La suppression de cette page sera appliquee apres validation.', 'Deleting this page will be applied after review.')) ?></p>
-                    <button class="button secondary wiki-page-danger" type="submit"><?= e($wikiViewText('delete_page', 'Supprimer la page', 'Delete page')) ?></button>
+                        ? $wikiViewText('delete_page_warning_admin')
+                        : $wikiViewText('delete_page_warning')) ?></p>
+                    <button class="button secondary wiki-page-danger" type="submit"><?= e($wikiViewText('delete_page')) ?></button>
                 </form>
             </div>
         </dialog>

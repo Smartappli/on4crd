@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Gereflecteerd vermogen (W)',
   'swr_result' => 'Berekende SWR',
   'dbw_calc' => 'dBm <-> dBW-conversie',
+  'cq_zone' => 'CQ-zone',
+  'itu_zone' => 'ITU-zone',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Voorinstelling opgeslagen.',
+  'preset_deleted' => 'Voorinstelling verwijderd.',
+  'tools_stat_available' => 'Beschikbare tools',
+  'tools_stat_categories' => 'Categorieën',
 );

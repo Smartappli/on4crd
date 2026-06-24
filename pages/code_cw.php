@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $t = i18n_domain_locale('code_cw', $locale);
-$title = (string) ($t['title'] ?? 'CW code (Morse)');
+$title = (string) $t['title'];
 $rows = [
     ['A', '.-', 'N', '-.'], ['B', '-...', 'O', '---'], ['C', '-.-.', 'P', '.--.'],
     ['D', '-..', 'Q', '--.-'], ['E', '.', 'R', '.-.'], ['F', '..-.', 'S', '...'],
@@ -24,18 +24,18 @@ ob_start();
 ?>
 <section class="card code-cw-module">
   <h1><?= e($title) ?></h1>
-  <p class="help"><?= e((string) ($t['intro'] ?? 'Complete table with alphabet, digits and useful punctuation.')) ?></p>
+  <p class="help"><?= e((string) $t['intro']) ?></p>
   <div class="table-wrap mt-3">
     <table class="code-cw-chart">
-      <thead><tr><th><?= e((string) ($t['character'] ?? 'Character')) ?></th><th>Code</th><th><?= e((string) ($t['character'] ?? 'Character')) ?></th><th>Code</th></tr></thead>
+      <thead><tr><th><?= e((string) $t['character']) ?></th><th><?= e((string) $t['code']) ?></th><th><?= e((string) $t['character']) ?></th><th><?= e((string) $t['code']) ?></th></tr></thead>
       <tbody><?php foreach ($rows as $row): ?><tr><td class="code-cw-symbol"><?= e($row[0]) ?></td><td><span class="code-cw-sequence"><?= e($row[1]) ?></span></td><td class="code-cw-symbol"><?= e($row[2]) ?></td><td><span class="code-cw-sequence"><?= e($row[3]) ?></span></td></tr><?php endforeach; ?></tbody>
     </table>
   </div>
-  <h2 class="mt-4"><?= e((string) ($t['prosigns'] ?? 'Prosigns')) ?></h2>
+  <h2 class="mt-4"><?= e((string) $t['prosigns']) ?></h2>
   <div class="table-wrap mt-2">
     <table class="code-cw-prosigns">
-      <thead><tr><th>Prosign</th><th>Code</th><th><?= e((string) ($t['usage'] ?? 'Usage')) ?></th></tr></thead>
-      <tbody><?php foreach ($prosigns as $row): ?><tr><td class="code-cw-symbol"><?= e($row[0]) ?></td><td><span class="code-cw-sequence"><?= e($row[1]) ?></span></td><td><?= e((string) ($t[$row[2]] ?? $row[2])) ?></td></tr><?php endforeach; ?></tbody>
+      <thead><tr><th><?= e((string) $t['prosigns']) ?></th><th><?= e((string) $t['code']) ?></th><th><?= e((string) $t['usage']) ?></th></tr></thead>
+      <tbody><?php foreach ($prosigns as $row): ?><tr><td class="code-cw-symbol"><?= e($row[0]) ?></td><td><span class="code-cw-sequence"><?= e($row[1]) ?></span></td><td><?= e((string) $t[$row[2]]) ?></td></tr><?php endforeach; ?></tbody>
     </table>
   </div>
 </section>

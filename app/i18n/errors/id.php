@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Periksa aktivitas mendatang.',
   'tools_link' => 'Alat radio',
   'tools_hint' => 'Buka alat praktis untuk amatir radio.',
+  'module_unavailable' => 'Modul tidak tersedia.',
+  'slug_article_unique_failed' => 'Tidak dapat membuat slug artikel yang unik.',
+  'slug_wiki_unique_failed' => 'Tidak dapat membuat slug wiki yang unik.',
+  'slug_news_unique_failed' => 'Tidak dapat membuat slug berita yang unik.',
+  'slug_event_unique_failed' => 'Tidak dapat membuat slug acara yang unik.',
+  'storage_path_invalid' => 'Jalur penyimpanan tidak valid.',
+  'storage_path_forbidden' => 'Jalur penyimpanan tidak diizinkan.',
+  'remote_url_private' => 'URL jarak jauh mengarah ke jaringan privat atau cadangan.',
+  'remote_url_private_resolved' => 'URL jarak jauh mengarah ke alamat IP privat atau cadangan.',
+  'field_too_long' => 'Salah satu kolom melebihi panjang yang diizinkan.',
+  'wiki_storage_unavailable' => 'Penyimpanan Wiki tidak tersedia.',
+  'wiki_page_invalid' => 'Halaman wiki tidak valid.',
+  'wiki_page_not_found' => 'Halaman Wiki tidak ditemukan.',
+  'newsletter_campaign_not_found' => 'Kampanye tidak ditemukan.',
+  'internal_error' => 'Terjadi kesalahan internal.',
+  'error_reference' => 'Referensi: {request_id}.',
+  'service_temporarily_unavailable' => 'Layanan untuk sementara tidak tersedia.',
 );

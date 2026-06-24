@@ -6,22 +6,32 @@ $homeFullCalendarLocale = fullcalendar_locale_code($homeLocale);
 $homeFullCalendarLocaleAsset = fullcalendar_locale_asset_url($homeLocale);
 $homeI18n = i18n_domain_locale('home', $homeLocale);
 $homeEventsI18n = i18n_domain_locale('events', $homeLocale);
+$homeText = static function (string $key) use ($homeI18n): string {
+    $value = trim((string) ($homeI18n[$key] ?? ''));
+
+    return $value !== '' ? $value : $key;
+};
+$homeEventText = static function (string $key) use ($homeEventsI18n, $homeText): string {
+    $value = trim((string) ($homeEventsI18n[$key] ?? ''));
+
+    return $value !== '' ? $value : $homeText($key);
+};
 $homeTodayDate = date('d/m/Y');
 $homeFallbackBox = static function (string $message): string {
     return '<p class="help">' . e($message) . '</p>';
 };
-$homeSafeWidget = static function (string $slug) use ($homeFallbackBox): string {
+$homeSafeWidget = static function (string $slug) use ($homeFallbackBox, $homeText): string {
     try {
         return render_widget($slug);
     } catch (Throwable) {
-        return $homeFallbackBox('Widget temporairement indisponible.');
+        return $homeFallbackBox($homeText('widget_temporarily_unavailable'));
     }
 };
-$homeSafeHamAdvice = static function () use ($homeFallbackBox): string {
+$homeSafeHamAdvice = static function () use ($homeFallbackBox, $homeText): string {
     try {
         return render_ham_weather_advice(current_user() ?? []);
     } catch (Throwable) {
-        return $homeFallbackBox('Conseil radio temporairement indisponible.');
+        return $homeFallbackBox($homeText('ham_advice_temporarily_unavailable'));
     }
 };
 
@@ -43,9 +53,9 @@ if (!is_array($moduleCatalog)) {
 
 
 $defaultVisibilityLabels = [
-    'public' => 'Public',
-    'members' => 'Membres',
-    'private' => 'Privé',
+    'public' => (string) ($homeI18n['visibility_public'] ?? 'Public'),
+    'members' => (string) ($homeI18n['visibility_members'] ?? ($homeI18n['member_audience'] ?? 'Members')),
+    'private' => (string) ($homeI18n['visibility_private'] ?? 'Private'),
 ];
 $moduleVisibilityLabels = $defaultVisibilityLabels;
 foreach ($defaultVisibilityLabels as $key => $label) {
@@ -89,7 +99,7 @@ foreach ($moduleCatalog as $module) {
     if ($configuredVisibility !== '') {
         $moduleAudience = (string) ($moduleVisibilityLabels[$configuredVisibility] ?? ucfirst($configuredVisibility));
     } elseif ($moduleAudience === '') {
-        $moduleAudience = (string) ($moduleVisibilityLabels['members'] ?? 'Membres');
+        $moduleAudience = (string) ($moduleVisibilityLabels['members'] ?? ($homeI18n['visibility_members'] ?? 'Members'));
     }
     $moduleIcon = is_array($module['icon'] ?? null) ? i18n_localized_value((array) $module['icon'], $homeLocale, '📦') : (string) ($module['icon'] ?? '📦');
 
@@ -112,28 +122,27 @@ if ($moduleCards === '') {
 
 
 $memberModuleCards = '';
-$memberModulesJoinCta = (string) ($homeI18n['member_modules_join_cta'] ?? 'Devenir membre');
+$memberModulesJoinCta = $homeText('member_modules_join_cta');
 $memberModuleCodesRendered = [];
 $memberModuleDefinitions = [
-    'dashboard' => ['route' => 'dashboard', 'icon' => '▦', 'title_key' => 'member_module_dashboard_title', 'desc_key' => 'member_module_dashboard_desc', 'title_fallback' => 'Tableau de bord', 'desc_fallback' => 'Retrouvez vos widgets, raccourcis et informations personnelles dans un espace membre centralisé.'],
-    'members' => ['route' => 'profile', 'icon' => '☷', 'title_key' => 'member_module_members_title', 'desc_key' => 'member_module_members_desc', 'title_fallback' => 'Espace membre', 'desc_fallback' => 'Gérez votre profil, vos préférences et les informations liées à votre compte ON4CRD.'],
-    'qsl' => ['route' => 'qsl', 'icon' => '✉', 'title_key' => 'member_module_qsl_title', 'desc_key' => 'member_module_qsl_desc', 'title_fallback' => 'QSL', 'desc_fallback' => 'Préparez, visualisez et exportez vos cartes QSL depuis l’espace membre.'],
-    'library' => ['route' => 'members_library', 'icon' => '▤', 'title_key' => 'member_module_library_title', 'desc_key' => 'member_module_library_desc', 'title_fallback' => 'Bibliothèque', 'desc_fallback' => 'Accédez aux documents, supports techniques et ressources partagés avec les membres.'],
-    'webotheque' => ['route' => 'webotheque', 'icon' => 'W', 'title_key' => 'member_module_webotheque_title', 'desc_key' => 'member_module_webotheque_desc', 'title_fallback' => 'Webothèque', 'desc_fallback' => 'Retrouvez les liens web utiles partagés avec les membres.'],
-    'presentations' => ['route' => 'presentations', 'icon' => 'P', 'title_key' => 'member_module_presentations_title', 'desc_key' => 'member_module_presentations_desc', 'title_fallback' => 'Présentations', 'desc_fallback' => 'Retrouvez les supports de réunions et exposés partagés avec les membres.'],
-    'videos' => ['route' => 'videos', 'icon' => 'V', 'title_key' => 'member_module_videos_title', 'desc_key' => 'member_module_videos_desc', 'title_fallback' => 'Vidéos', 'desc_fallback' => 'Accédez aux vidéos et ressources audiovisuelles réservées aux membres.'],
-    'pv' => ['route' => 'pv', 'icon' => 'PV', 'title_key' => 'member_module_pv_title', 'desc_key' => 'member_module_pv_desc', 'title_fallback' => 'PV', 'desc_fallback' => 'Consultez les procès-verbaux et comptes rendus du club.'],
-    'fichiers' => ['route' => 'fichiers', 'icon' => 'FI', 'title_key' => 'member_module_fichiers_title', 'desc_key' => 'member_module_fichiers_desc', 'title_fallback' => 'Fichiers', 'desc_fallback' => 'Téléchargez les fichiers et ressources mis à disposition des membres.'],
-    'auctions' => ['route' => 'auctions', 'icon' => '⌁', 'title_key' => 'member_module_auctions_title', 'desc_key' => 'member_module_auctions_desc', 'title_fallback' => 'Enchères', 'desc_fallback' => 'Consultez les lots disponibles et participez aux ventes organisées par le club.'],
-    'classifieds' => ['route' => 'classifieds', 'icon' => '□', 'title_key' => 'member_module_classifieds_title', 'desc_key' => 'member_module_classifieds_desc', 'title_fallback' => 'Petites annonces', 'desc_fallback' => 'Publiez ou consultez les annonces radioamateurs proposées par la communauté.'],
-    'chatbot' => ['route' => 'chatbot', 'icon' => '?', 'title_key' => 'member_module_chatbot_title', 'desc_key' => 'member_module_chatbot_desc', 'title_fallback' => 'Assistant', 'desc_fallback' => 'Posez vos questions à l’assistant ON4CRD pour retrouver rapidement une information utile.'],
-    'newsletter' => ['route' => 'newsletter', 'icon' => '≋', 'title_key' => 'member_module_newsletter_title', 'desc_key' => 'member_module_newsletter_desc', 'title_fallback' => 'Newsletter', 'desc_fallback' => 'Suivez les communications du club et gérez votre inscription aux nouvelles ON4CRD.'],
+    'dashboard' => ['route' => 'dashboard', 'icon' => '▦', 'title_key' => 'member_module_dashboard_title', 'desc_key' => 'member_module_dashboard_desc'],
+    'members' => ['route' => 'profile', 'icon' => '☷', 'title_key' => 'member_module_members_title', 'desc_key' => 'member_module_members_desc'],
+    'qsl' => ['route' => 'qsl', 'icon' => '✉', 'title_key' => 'member_module_qsl_title', 'desc_key' => 'member_module_qsl_desc'],
+    'library' => ['route' => 'members_library', 'icon' => '▤', 'title_key' => 'member_module_library_title', 'desc_key' => 'member_module_library_desc'],
+    'webotheque' => ['route' => 'webotheque', 'icon' => 'W', 'title_key' => 'member_module_webotheque_title', 'desc_key' => 'member_module_webotheque_desc'],
+    'presentations' => ['route' => 'presentations', 'icon' => 'P', 'title_key' => 'member_module_presentations_title', 'desc_key' => 'member_module_presentations_desc'],
+    'videos' => ['route' => 'videos', 'icon' => 'V', 'title_key' => 'member_module_videos_title', 'desc_key' => 'member_module_videos_desc'],
+    'pv' => ['route' => 'pv', 'icon' => 'PV', 'title_key' => 'member_module_pv_title', 'desc_key' => 'member_module_pv_desc'],
+    'fichiers' => ['route' => 'fichiers', 'icon' => 'FI', 'title_key' => 'member_module_fichiers_title', 'desc_key' => 'member_module_fichiers_desc'],
+    'auctions' => ['route' => 'auctions', 'icon' => '⌁', 'title_key' => 'member_module_auctions_title', 'desc_key' => 'member_module_auctions_desc'],
+    'classifieds' => ['route' => 'classifieds', 'icon' => '□', 'title_key' => 'member_module_classifieds_title', 'desc_key' => 'member_module_classifieds_desc'],
+    'chatbot' => ['route' => 'chatbot', 'icon' => '?', 'title_key' => 'member_module_chatbot_title', 'desc_key' => 'member_module_chatbot_desc'],
+    'newsletter' => ['route' => 'newsletter', 'icon' => '≋', 'title_key' => 'member_module_newsletter_title', 'desc_key' => 'member_module_newsletter_desc'],
 ];
-$memberModuleText = static function (array $moduleMeta, string $field, string $fallback = '') use ($homeI18n): string {
+$memberModuleText = static function (array $moduleMeta, string $field, string $fallback = '') use ($homeText): string {
     $key = (string) ($moduleMeta[$field . '_key'] ?? '');
-    $value = $key !== '' ? trim((string) ($homeI18n[$key] ?? '')) : '';
 
-    return $value !== '' ? $value : (string) ($moduleMeta[$field . '_fallback'] ?? $fallback);
+    return $key !== '' ? $homeText($key) : $fallback;
 };
 $memberModuleIconPaths = [
     'dashboard' => '<rect width="7" height="9" x="3" y="3" rx="1.5"></rect><rect width="7" height="5" x="14" y="3" rx="1.5"></rect><rect width="7" height="9" x="14" y="12" rx="1.5"></rect><rect width="7" height="5" x="3" y="16" rx="1.5"></rect>',
@@ -268,13 +277,18 @@ if ($heroImageCandidates !== []) {
 }
 
 $homeSeo = i18n_domain_locale('seo', $homeLocale);
+$homeSeoText = static function (string $key) use ($homeSeo): string {
+    $value = trim((string) ($homeSeo[$key] ?? ''));
+
+    return $value !== '' ? $value : $key;
+};
 $homeUrl = route_url_with_locale('home', $homeLocale);
 $homeSearchUrl = route_url_with_locale('search', $homeLocale);
 $homeLogoUrl = asset_url('assets/logo/LOGO-CRD-HALO-2020.png');
 $homeSeoImageUrl = asset_url('assets/img/on4crd_hero.png');
-$homeSeoTitle = trim((string) ($homeSeo['home_title'] ?? 'ON4CRD Radio Club Durnal'));
-$homeSeoDescription = trim((string) ($homeSeo['home_description'] ?? 'Radio Club Durnal ON4CRD : actualités, événements, formation, outils radioamateurs et ressources locales à Durnal, Yvoir et Namur.'));
-$homeGeoPlace = trim((string) ($homeSeo['geo_placename'] ?? 'Durnal, Yvoir, Namur, Belgique'));
+$homeSeoTitle = $homeSeoText('home_title');
+$homeSeoDescription = $homeSeoText('home_description');
+$homeGeoPlace = $homeSeoText('geo_placename');
 
 set_page_meta([
     'title' => $homeSeoTitle,
@@ -282,7 +296,7 @@ set_page_meta([
     'og_type' => 'website',
     'schema_type' => 'WebPage',
     'image' => $homeSeoImageUrl,
-    'image_alt' => (string) ($homeI18n['alt_hero_illustration'] ?? 'Radio Club Durnal ON4CRD'),
+    'image_alt' => $homeText('alt_hero_illustration'),
     'geo_region' => 'BE-WNA',
     'geo_placename' => $homeGeoPlace,
     'geo_position' => '50.3150;4.9452',
@@ -431,8 +445,8 @@ if (is_array($latestNews) && !empty($latestNews['slug'])) {
 }
 
 $classifiedsHtml = '<a class="group block rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('classifieds')) . '">'
-    . '<p>' . e((string) ($homeI18n['spotlight_classifieds_empty'] ?? 'Aucune petite annonce active pour le moment.')) . '</p>'
-    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' →</span>'
+    . '<p>' . e($homeText('spotlight_classifieds_empty')) . '</p>'
+    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e($homeText('spotlight_classifieds_cta')) . ' →</span>'
     . '</a>';
 if (is_array($latestClassifiedAd) && !empty($latestClassifiedAd['title'])) {
     $classifiedDescription = mb_safe_strimwidth(trim(preg_replace('/\s+/u', ' ', strip_tags((string) ($latestClassifiedAd['description'] ?? ''))) ?? ''), 0, 130, '...');
@@ -443,28 +457,28 @@ if (is_array($latestClassifiedAd) && !empty($latestClassifiedAd['title'])) {
         . '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e($classifiedMeta) . '</p>'
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $latestClassifiedAd['title']) . '</h3>'
         . ($classifiedDescription !== '' ? '<p class="mt-2 text-sm text-slate-600">' . e($classifiedDescription) . '</p>' : '')
-        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' →</span>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e($homeText('spotlight_classifieds_cta')) . ' →</span>'
         . '</a>';
 }
 
 $latestWikiHtml = '<a class="group block rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('wiki')) . '">'
-    . '<p>' . e((string) ($homeI18n['spotlight_member_wiki_empty'] ?? 'Aucune page wiki disponible pour le moment.')) . '</p>'
-    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span>'
+    . '<p>' . e($homeText('spotlight_member_wiki_empty')) . '</p>'
+    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e($homeText('spotlight_member_open')) . ' →</span>'
     . '</a>';
 if (is_array($latestWikiPage) && !empty($latestWikiPage['slug'])) {
     $wikiExcerpt = mb_safe_strimwidth(trim((string) preg_replace('/\s+/u', ' ', strip_tags((string) ($latestWikiPage['content'] ?? '')))), 0, 130, '...');
     $wikiDate = !empty($latestWikiPage['updated_at']) ? date('d/m/Y', strtotime((string) $latestWikiPage['updated_at'])) : '';
     $latestWikiHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('wiki_view', ['slug' => (string) $latestWikiPage['slug']])) . '">'
-        . ($wikiDate !== '' ? '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e((string) ($homeI18n['spotlight_member_updated_on'] ?? 'Mis à jour le')) . ' ' . e($wikiDate) . '</p>' : '')
+        . ($wikiDate !== '' ? '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e($homeText('spotlight_member_updated_on')) . ' ' . e($wikiDate) . '</p>' : '')
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $latestWikiPage['title']) . '</h3>'
         . ($wikiExcerpt !== '' ? '<p class="mt-2 text-sm text-slate-600">' . e($wikiExcerpt) . '</p>' : '')
-        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e($homeText('spotlight_member_open')) . ' →</span>'
         . '</a>';
 }
 
 $latestArticleHtml = '<a class="group block rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('articles')) . '">'
-    . '<p>' . e((string) ($homeI18n['spotlight_member_article_empty'] ?? 'Aucun article publié pour le moment.')) . '</p>'
-    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span>'
+    . '<p>' . e($homeText('spotlight_member_article_empty')) . '</p>'
+    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e($homeText('spotlight_member_open')) . ' →</span>'
     . '</a>';
 if (is_array($latestArticle) && !empty($latestArticle['slug'])) {
     $latestArticle = localized_article_row($latestArticle);
@@ -475,10 +489,10 @@ if (is_array($latestArticle) && !empty($latestArticle['slug'])) {
     $articlePublished = article_publication_datetime($latestArticle);
     $articleDate = $articlePublished !== null ? date('d/m/Y', strtotime($articlePublished)) : '';
     $latestArticleHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('article', ['slug' => (string) $latestArticle['slug']])) . '">'
-        . ($articleDate !== '' ? '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e((string) ($homeI18n['spotlight_member_updated_on'] ?? 'Mis à jour le')) . ' ' . e($articleDate) . '</p>' : '')
+        . ($articleDate !== '' ? '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e($homeText('spotlight_member_updated_on')) . ' ' . e($articleDate) . '</p>' : '')
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) ($latestArticle['title_localized'] ?? $latestArticle['title'] ?? '')) . '</h3>'
         . ($articleExcerpt !== '' ? '<p class="mt-2 text-sm text-slate-600">' . e($articleExcerpt) . '</p>' : '')
-        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e($homeText('spotlight_member_open')) . ' →</span>'
         . '</a>';
 }
 
@@ -486,12 +500,12 @@ $homeEventsCalendarConfig = [
     'locale' => $homeFullCalendarLocale,
     'initialView' => 'dayGridMonth',
     'eventsUrl' => route_url('events_feed'),
-    'loadError' => (string) ($homeEventsI18n['calendar_load_error'] ?? $homeI18n['no_event']),
+    'loadError' => $homeEventText('calendar_load_error'),
     'buttonText' => [
-        'today' => (string) ($homeEventsI18n['today'] ?? 'Aujourd\'hui'),
-        'month' => (string) ($homeEventsI18n['month'] ?? 'Mois'),
-        'week' => (string) ($homeEventsI18n['week'] ?? 'Semaine'),
-        'list' => (string) ($homeEventsI18n['list'] ?? 'Planning'),
+        'today' => $homeEventText('today'),
+        'month' => $homeEventText('month'),
+        'week' => $homeEventText('week'),
+        'list' => $homeEventText('list'),
     ],
 ];
 $nextEventHtml = '<div class="home-events-planning rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">'
@@ -593,7 +607,7 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
             $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
             $photoTitle = trim((string) ($photo['title'] ?? ''));
             $albumTitle = trim((string) ($photo['album_title'] ?? ''));
-            $alt = $photoTitle !== '' ? $photoTitle : ($albumTitle !== '' ? $albumTitle : (string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie photos'));
+            $alt = $photoTitle !== '' ? $photoTitle : ($albumTitle !== '' ? $albumTitle : $homeText('spotlight_member_gallery'));
 
             $homeGalleryItems .= '<a class="home-media-slide home-gallery-slide" href="' . e(route_url('album', ['id' => (int) ($photo['album_id'] ?? 0)])) . '">'
                 . '<img src="' . e(base_url($imageSrc)) . '" alt="' . e($alt) . '" loading="lazy" decoding="async">'
@@ -601,7 +615,7 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
         }
 
         if ($homeGalleryItems !== '') {
-            $homeGalleryHtml = '<div class="home-media-carousel home-gallery-carousel" data-home-gallery-carousel aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie photos')) . '">'
+            $homeGalleryHtml = '<div class="home-media-carousel home-gallery-carousel" data-home-gallery-carousel aria-label="' . e($homeText('spotlight_member_gallery')) . '">'
                 . '<div class="home-media-track home-gallery-track">' . $homeGalleryItems . '</div>'
                 . '</div>';
         }
@@ -613,23 +627,23 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
 $memberSpotlightRowHtml = '';
 if ($isAuthenticated) {
     $homeGalleryArticleHtml = $homeGalleryHtml !== ''
-        ? '<article aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie photos')) . '"><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie photos')) . '</h3>' . $homeGalleryHtml . '</article>'
+        ? '<article aria-label="' . e($homeText('spotlight_member_gallery')) . '"><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('spotlight_member_gallery')) . '</h3>' . $homeGalleryHtml . '</article>'
         : '';
-    $memberSpotlightRowHtml = '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_latest_wiki'] ?? 'Dernière page wiki')) . '</h3>' . $latestWikiHtml . '</article>'
+    $memberSpotlightRowHtml = '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('spotlight_member_latest_wiki')) . '</h3>' . $latestWikiHtml . '</article>'
         . $homeGalleryArticleHtml
-        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_latest_article'] ?? 'Dernier article')) . '</h3>' . $latestArticleHtml . '</article>'
-        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_library'] ?? 'Bibliothèque')) . '</h3>'
+        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('spotlight_member_latest_article')) . '</h3>' . $latestArticleHtml . '</article>'
+        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('spotlight_member_library')) . '</h3>'
         . '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('members_library')) . '">'
-        . '<p class="text-sm font-semibold text-slate-900">' . e((string) ($homeI18n['spotlight_member_library'] ?? 'Bibliothèque')) . '</p>'
-        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span></a></article>'
-        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_auctions'] ?? 'Enchères')) . '</h3>'
+        . '<p class="text-sm font-semibold text-slate-900">' . e($homeText('spotlight_member_library')) . '</p>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e($homeText('spotlight_member_open')) . ' →</span></a></article>'
+        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('spotlight_member_auctions')) . '</h3>'
         . '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('auctions')) . '">'
-        . '<p class="text-sm font-semibold text-slate-900">' . e((string) ($homeI18n['spotlight_member_auctions'] ?? 'Enchères')) . '</p>'
-        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span></a></article>'
-        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_assistant'] ?? 'Assistant')) . '</h3>'
+        . '<p class="text-sm font-semibold text-slate-900">' . e($homeText('spotlight_member_auctions')) . '</p>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e($homeText('spotlight_member_open')) . ' →</span></a></article>'
+        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('spotlight_member_assistant')) . '</h3>'
         . '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('chatbot')) . '">'
-        . '<p class="text-sm font-semibold text-slate-900">' . e((string) ($homeI18n['spotlight_member_assistant'] ?? 'Assistant')) . '</p>'
-        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span></a></article>'
+        . '<p class="text-sm font-semibold text-slate-900">' . e($homeText('spotlight_member_assistant')) . '</p>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e($homeText('spotlight_member_open')) . ' →</span></a></article>'
         . '';
 }
 
@@ -648,7 +662,7 @@ try {
         $sponsorSlides[] = [
             'src' => asset_url($localAdPath),
             'alt' => (string) $homeI18n['alt_partner_ad'],
-            'label' => (string) ($homeI18n['partner_ad_title'] ?? 'Sponsor'),
+            'label' => $homeText('partner_ad_title'),
             'url' => '',
         ];
     }
@@ -683,7 +697,7 @@ try {
     }
 
     if ($sponsorSlideHtml !== '') {
-        $adSlotHtml = '<div class="home-media-carousel home-sponsor-carousel" data-home-sponsor-carousel aria-label="' . e((string) ($homeI18n['home_sponsors_title'] ?? 'Nos sponsors')) . '">'
+        $adSlotHtml = '<div class="home-media-carousel home-sponsor-carousel" data-home-sponsor-carousel aria-label="' . e($homeText('home_sponsors_title')) . '">'
             . '<div class="home-media-track">' . $sponsorSlideHtml . '</div>'
             . '</div>';
     }
@@ -691,7 +705,7 @@ try {
     // Keep the sponsor fallback when images cannot be loaded.
 }
 
-$trophySlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">' . e((string) ($homeI18n['home_trophies_empty'] ?? 'Les trophées du club seront affichés ici.')) . '</p></div>';
+$trophySlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">' . e($homeText('home_trophies_empty')) . '</p></div>';
 try {
     $localTrophyCandidates = cache_remember('home_local_trophy_candidates_v1', 300, static function (): array {
         return glob(__DIR__ . '/../assets/trophy/*.{png,jpg,jpeg,webp,gif,avif}', GLOB_BRACE) ?: [];
@@ -704,11 +718,11 @@ if ($localTrophyCandidates !== []) {
     foreach ($localTrophyCandidates as $localTrophyCandidate) {
         $localTrophyPath = 'assets/trophy/' . basename((string) $localTrophyCandidate);
         $trophySlideHtml .= '<div class="home-media-slide">'
-            . '<img src="' . e(asset_url($localTrophyPath)) . '" alt="' . e((string) ($homeI18n['alt_trophy_image'] ?? 'Trophée du club')) . '" loading="lazy" decoding="async">'
+            . '<img src="' . e(asset_url($localTrophyPath)) . '" alt="' . e($homeText('alt_trophy_image')) . '" loading="lazy" decoding="async">'
             . '</div>';
     }
 
-    $trophySlotHtml = '<div class="home-media-carousel home-trophy-carousel" data-home-trophy-carousel aria-label="' . e((string) ($homeI18n['home_trophies_title'] ?? 'Nos trophées')) . '">'
+    $trophySlotHtml = '<div class="home-media-carousel home-trophy-carousel" data-home-trophy-carousel aria-label="' . e($homeText('home_trophies_title')) . '">'
         . '<div class="home-media-track">' . $trophySlideHtml . '</div>'
         . '</div>';
 }
@@ -726,7 +740,7 @@ $homeRadioInfoHtml = '<div class="grid gap-4">'
     . '<h4 class="text-xs font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['ham_info_title']) . '</h4>'
     . '<ul class="mt-2 list-clean">'
     . '<li><strong>' . e((string) $homeI18n['vhf_voice_label']) . '</strong> ' . e((string) $homeI18n['vhf_voice_value']) . '</li>'
-    . '<li><strong>' . e((string) ($homeI18n['cw_qrp_label'] ?? 'QRG CW QRP :')) . '</strong> ' . e((string) ($homeI18n['cw_qrp_value'] ?? '7.030 MHz • 14.060 MHz')) . '</li>'
+    . '<li><strong>' . e($homeText('cw_qrp_label')) . '</strong> ' . e($homeText('cw_qrp_value')) . '</li>'
     . '<li><strong>' . e((string) $homeI18n['good_practice_label']) . '</strong> ' . e((string) $homeI18n['good_practice_value']) . '</li>'
     . '</ul>'
     . '</section>'
@@ -773,25 +787,25 @@ if (is_array($homeQuote)) {
 $homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols-3">'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="flex items-start justify-between gap-4">'
-    . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_sponsors_title'] ?? 'Nos sponsors')) . '</h2>'
-    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_sponsors_desc'] ?? 'Des partenaires locaux et radioamateurs soutiennent les activités, les projets et la visibilité du CRD.')) . '</p></div>'
+    . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e($homeText('home_sponsors_title')) . '</h2>'
+    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e($homeText('home_sponsors_desc')) . '</p></div>'
     . '<span class="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">CRD</span>'
     . '</div>'
     . '<div class="mt-4">' . $adSlotHtml . '</div>'
-    . '<div class="mt-4 flex"><a class="inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('sponsoring')) . '">' . e((string) ($homeI18n['home_sponsors_cta'] ?? 'Devenir sponsor')) . '</a></div>'
+    . '<div class="mt-4 flex"><a class="inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('sponsoring')) . '">' . e($homeText('home_sponsors_cta')) . '</a></div>'
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="flex items-start justify-between gap-4">'
-    . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_trophies_title'] ?? 'Nos trophées')) . '</h2>'
-    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_trophies_desc'] ?? 'Les activités du club valorisent la technique, la participation aux concours et les réalisations collectives.')) . '</p></div>'
+    . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e($homeText('home_trophies_title')) . '</h2>'
+    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e($homeText('home_trophies_desc')) . '</p></div>'
     . '<span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-700">CRD</span>'
     . '</div>'
     . '<div class="mt-4">' . $trophySlotHtml . '</div>'
-    . '<a class="mt-4 inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('events')) . '">' . e((string) ($homeI18n['home_trophies_cta'] ?? 'Voir les prochains événements')) . '</a>'
+    . '<a class="mt-4 inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('events')) . '">' . e($homeText('home_trophies_cta')) . '</a>'
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_other_sections_title'] ?? 'Nouvelles des autres radioclubs')) . '</h2>'
-    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_other_sections_desc'] ?? 'Suivez les annonces, événements et initiatives relayés par les radioclubs voisins afin de garder le lien avec la communauté radioamateur.')) . '</p>'
+    . '<h2 class="text-2xl font-extrabold text-slate-900">' . e($homeText('home_other_sections_title')) . '</h2>'
+    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e($homeText('home_other_sections_desc')) . '</p>'
     . '</article>'
     . '</section>';
 
@@ -855,19 +869,19 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<h2 class="text-2xl font-bold text-slate-900">' . e((string) $homeI18n['club_spotlight_title']) . '</h2>'
     . '</header>'
     . '<div class="grid gap-4 lg:grid-cols-2">'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['latest_news_title'] ?? 'Dernières actualités')) . '</h3>' . $latestNewsHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_classifieds'] ?? 'Petites annonces')) . '</h3>' . $classifiedsHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['next_event_title'] ?? 'Prochain événement')) . '</h3>' . $nextEventHtml . '</article>'
-    . '<article><h3 class="home-tool-day-title mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_auction_live'] ?? 'L\'outil du jour')) . '</h3>' . $toolDayHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('latest_news_title')) . '</h3>' . $latestNewsHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('spotlight_classifieds')) . '</h3>' . $classifiedsHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('next_event_title')) . '</h3>' . $nextEventHtml . '</article>'
+    . '<article><h3 class="home-tool-day-title mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e($homeText('spotlight_auction_live')) . '</h3>' . $toolDayHtml . '</article>'
     . $memberSpotlightRowHtml
     . '</div>'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<div class="mb-5 max-w-3xl"><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['join_benefits_title'] ?? 'Ce que le CRD vous apporte')) . '</h2><p class="mt-2 text-slate-600">' . e((string) ($homeI18n['join_benefits_desc'] ?? 'Rejoindre le club, c’est avancer avec un cadre clair, des activités concrètes et une communauté disponible pour progresser en radioamateurisme.')) . '</p></div>'
+    . '<div class="mb-5 max-w-3xl"><h2 class="text-2xl font-extrabold text-slate-900">' . e($homeText('join_benefits_title')) . '</h2><p class="mt-2 text-slate-600">' . e($homeText('join_benefits_desc')) . '</p></div>'
     . '<div class="grid gap-4 md:grid-cols-3">'
-    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e((string) ($homeI18n['join_benefit_1_title'] ?? 'Un accompagnement utile')) . '</h3><p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['join_benefit_1_desc'] ?? 'Des membres expérimentés partagent leurs pratiques, répondent aux questions et aident à préparer les démarches radio.')) . '</p></article>'
-    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e((string) ($homeI18n['join_benefit_2_title'] ?? 'Des activités régulières')) . '</h3><p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['join_benefit_2_desc'] ?? 'Réunions, projets, activation et échanges techniques donnent des occasions concrètes de pratiquer et d’apprendre.')) . '</p></article>'
-    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e((string) ($homeI18n['join_benefit_3_title'] ?? 'Un réseau local actif')) . '</h3><p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['join_benefit_3_desc'] ?? 'Le CRD facilite les contacts entre passionnés, l’accès aux informations utiles et la participation à la vie du club.')) . '</p></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e($homeText('join_benefit_1_title')) . '</h3><p class="mt-2 text-sm leading-6 text-slate-600">' . e($homeText('join_benefit_1_desc')) . '</p></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e($homeText('join_benefit_2_title')) . '</h3><p class="mt-2 text-sm leading-6 text-slate-600">' . e($homeText('join_benefit_2_desc')) . '</p></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e($homeText('join_benefit_3_title')) . '</h3><p class="mt-2 text-sm leading-6 text-slate-600">' . e($homeText('join_benefit_3_desc')) . '</p></article>'
     . '</div>'
     . '</section>'
     . $memberModulesSectionHtml
@@ -907,4 +921,4 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '</section>';
 
 
-echo render_layout($content, (string) ($homeI18n['page_title'] ?? 'Accueil'));
+echo render_layout($content, $homeText('page_title'));

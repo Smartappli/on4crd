@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Tunniste-ehdotus',
   'proposal_type_subcategory' => 'Ala-aihe-ehdotus',
   'webotheque_title' => 'Verkkokirjasto',
+  'albums_title' => 'Albumit',
+  'auctions_title' => 'Huutokaupat',
+  'files_title' => 'Tiedostot',
+  'presentations_title' => 'Esitykset',
+  'minutes_title' => 'Pöytäkirjat',
+  'videos_title' => 'Videot',
+  'library_document_default_title' => 'Asiakirja',
+  'document_default_title' => 'Asiakirja',
 );

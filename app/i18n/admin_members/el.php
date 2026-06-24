@@ -10,7 +10,7 @@ return array (
   'members' => 'Μέλη',
   'th_callsign' => 'Ενδεικτικά',
   'th_name' => 'Όνομα',
-  'th_email' => 'E-mail',
+  'th_email' => 'Διεύθυνση e-mail',
   'th_locator' => 'Εντοπιστής',
   'th_active' => 'Ενεργός',
   'th_committee' => 'Επιτροπή',

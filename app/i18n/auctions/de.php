@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,27 @@ return array (
   'page' => 'Seite',
   'previous' => 'Zurück',
   'next' => 'Weiter',
+  'invalid' => 'Ungültige Anfrage.',
+  'storage_unavailable' => 'Keine laufenden Auktionen.',
+  'lot_created_direct' => 'Dokument vorgeschlagen und direkt genehmigt. Fügen Sie die Datei bei Bedarf in der Bibliotheksverwaltung hinzu.',
+  'proposal_recorded' => 'Vorschlag in Ihren Inhalten gespeichert.',
+  'propose_lot_subject' => 'Auktionen',
+  'propose_lot' => 'Vorschlagen - Los',
+  'create_lot' => 'Erstellen - Los',
+  'lot_direct_help' => 'Der Vorschlag wird direkt genehmigt; fügen Sie die Datei bei Bedarf in der Administration hinzu.',
+  'proposal_pending_help' => 'Vorschlag in Ihren Inhalten gespeichert.',
+  'title_label' => 'Titel',
+  'summary_label' => 'Zusammenfassung',
+  'starting_price_label' => 'Beginn',
+  'description_label' => 'Beschreibung',
+  'contact_label' => 'Ihr Kontakt',
+  'create' => 'Erstellen',
+  'proposal_submit' => 'Vorschlag senden',
+  'cancel' => 'Abbrechen',
+  'status_draft' => 'Entwurf',
+  'status_scheduled' => 'Geplant',
+  'status_active' => 'Aktiv',
+  'status_closed' => 'Beendet',
+  'status_cancelled' => 'Abgesagt',
+  'contact_prefix' => 'Kontakt:',
 );

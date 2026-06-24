@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Ei omistata.',
   'layout' => 'Uudiste rubriik',
   'meta_desc' => 'Uudiste kirjutamine, modereerimine ja haldamine rubriikide kaupa.',
+  'status_draft' => 'Mustand',
+  'status_pending' => 'Ootel',
+  'status_published' => 'Avaldatud',
+  'status_rejected' => 'Tagasi lükatud',
+  'status_archived' => 'Arhiveeritud',
 );

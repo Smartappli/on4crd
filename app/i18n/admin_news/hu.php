@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Nincs forrásmegjelölés.',
   'layout' => 'Hírek rovat',
   'meta_desc' => 'Hírek írása, moderálása és kezelése szakaszonként.',
+  'status_draft' => 'Piszkozat',
+  'status_pending' => 'Függőben',
+  'status_published' => 'Megjelent',
+  'status_rejected' => 'Elutasítva',
+  'status_archived' => 'Archivált',
 );

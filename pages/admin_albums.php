@@ -77,7 +77,7 @@ function albums_admin_photo_render_data(array $photo, array $messages, string $l
 
     $title = trim((string) ($photo['title'] ?? ''));
     if ($title === '') {
-        $title = (string) ($messages['photo'] ?? 'Photo');
+        $title = (string) $messages['photo'];
     }
 
     return [
@@ -94,6 +94,16 @@ function albums_admin_js_string(string $message): string
     $encoded = json_encode($message, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
     return is_string($encoded) ? $encoded : '""';
+}
+
+function albums_admin_text(string $key): string
+{
+    static $messages = null;
+    if ($messages === null) {
+        $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('admin_albums', function_exists('current_locale') ? current_locale() : null) : [];
+    }
+
+    return (string) ($messages[$key] ?? $key);
 }
 
 /**
@@ -120,7 +130,7 @@ function albums_admin_clear_cache(): void
 function albums_admin_validate_text_lengths(string $title, string $description = '', string $caption = ''): void
 {
     if (mb_strlen($title) > 190 || mb_strlen($description) > 10000 || mb_strlen($caption) > 5000) {
-        throw new RuntimeException('Un des champs dépasse la longueur autorisée.');
+        throw new RuntimeException(albums_admin_text('error_field_too_long'));
     }
 }
 
@@ -176,10 +186,7 @@ if (!albums_admin_ensure_photo_order_column() || !album_ensure_schema_columns_an
 album_sync_accepted_proposals();
 $albumCategories = album_categories();
 $albumSubcategoriesByCategory = album_subcategories_by_category();
-$featuredAlbumLabel = trim((string) ($t['featured_album'] ?? ''));
-if ($featuredAlbumLabel === '') {
-    $featuredAlbumLabel = $locale === 'fr' ? 'Album à la une' : 'Featured album';
-}
+$featuredAlbumLabel = (string) $t['featured_album'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -224,12 +231,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $category = album_category_from_input((string) ($_POST['category_code'] ?? ''), $albumCategories);
             if ($category === 'general') {
-                throw new RuntimeException((string) ($t['invalid_album'] ?? 'Invalid album.'));
+                throw new RuntimeException((string) $t['invalid_album']);
             }
             $subCountStmt = db()->prepare('SELECT COUNT(*) FROM album_subcategories WHERE category_code = ?');
             $subCountStmt->execute([$category]);
             if ((int) $subCountStmt->fetchColumn() > 0) {
-                throw new RuntimeException((string) ($t['err_category_has_subcategories'] ?? 'Supprimez d abord les sous-thématiques.'));
+                throw new RuntimeException((string) $t['err_category_has_subcategories']);
             }
             db()->prepare('UPDATE albums SET category = "general", subcategory = "" WHERE category = ?')->execute([$category]);
             db()->prepare('INSERT INTO album_categories (code, label, deleted_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE deleted_at = NOW()')
@@ -287,7 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $countStmt = db()->prepare('SELECT COUNT(*) FROM albums WHERE category = ? AND subcategory = ?');
             $countStmt->execute([$category, $subcategory]);
             if ((int) $countStmt->fetchColumn() > 0) {
-                throw new RuntimeException((string) ($t['err_subcategory_has_documents'] ?? 'Cette sous-thématique contient encore des albums.'));
+                throw new RuntimeException((string) $t['err_subcategory_has_documents']);
             }
             db()->prepare('DELETE FROM album_subcategories WHERE category_code = ? AND code = ?')->execute([$category, $subcategory]);
             album_clear_caches();
@@ -313,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ->execute([(int) (current_user()['id'] ?? 0), $category, $subcategory, $title, $description, $isFeatured, $isPublic]);
             $albumId = (int) db()->lastInsertId();
             album_clear_caches();
-            set_flash('success', (string) ($t['album_created_continue'] ?? $t['created_ok']));
+            set_flash('success', (string) $t['album_created_continue']);
             redirect_url(album_admin_wizard_url(['album_wizard' => $albumId, 'step' => 2]));
         }
 
@@ -401,11 +408,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException((string) $t['no_photo_imported']);
             }
             if (count($uploadBatch) > 100) {
-                throw new RuntimeException((string) ($t['batch_max_files'] ?? 'Maximum 100 photos par import.'));
+                throw new RuntimeException((string) $t['batch_max_files']);
             }
             $totalBytes = array_sum(array_map(static fn(array $item): int => max(0, (int) ($item['size'] ?? 0)), $uploadBatch));
             if ($totalBytes > 512 * 1024 * 1024) {
-                throw new RuntimeException((string) ($t['batch_max_size'] ?? 'Le lot de photos depasse 512 Mo.'));
+                throw new RuntimeException((string) $t['batch_max_size']);
             }
 
             $createdPaths = [];
@@ -438,8 +445,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             notify_member(
                 (int) current_user()['id'],
                 'import',
-                (string) ($t['notification_import_completed_title'] ?? 'Album import completed'),
-                sprintf((string) ($t['notification_import_completed_body'] ?? '%d photo(s) imported.'), $importedCount),
+                (string) $t['notification_import_completed_title'],
+                sprintf((string) $t['notification_import_completed_body'], $importedCount),
                 route_url('admin_albums')
             );
             if ((int) $albumRow['is_public'] === 1) {
@@ -474,7 +481,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $photoCountStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
             $photoCountStmt->execute([$albumId]);
             if ((int) ($photoCountStmt->fetchColumn() ?: 0) <= 0) {
-                throw new RuntimeException((string) ($t['wizard_no_photos'] ?? $t['no_photo_imported']));
+                throw new RuntimeException((string) $t['wizard_no_photos']);
             }
             $publish = (int) ($albumRow['publish_requested'] ?? 0) === 1 ? 1 : 0;
             db()->prepare('UPDATE albums SET is_public = ?, publish_requested = 0 WHERE id = ?')->execute([$publish, $albumId]);
@@ -490,9 +497,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             albums_admin_clear_cache();
             if (($socialResult['errors'] ?? []) !== []) {
-                set_flash('warning', (string) ($t['album_finalized_social_warning'] ?? 'Album finalise, mais la synchronisation sociale a echoue.'));
+                set_flash('warning', (string) $t['album_finalized_social_warning']);
             } else {
-                set_flash('success', (string) ($t['album_finalized_ok'] ?? $t['created_ok']));
+                set_flash('success', (string) $t['album_finalized_ok']);
             }
             redirect('admin_albums');
         }
@@ -683,30 +690,30 @@ ob_start();
     </section>
 
     <section class="card">
-        <h2><?= e((string) ($t['category_field'] ?? 'Thématiques')) ?></h2>
+        <h2><?= e((string) $t['category_field']) ?></h2>
         <div class="grid-2">
             <form method="post">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_category">
-                <label><?= e((string) ($t['category_field'] ?? 'Thématique')) ?>
+                <label><?= e((string) $t['category_field']) ?>
                     <input type="text" name="category_label" maxlength="160" required>
                 </label>
-                <button class="button"><?= e((string) ($t['add_category'] ?? $t['create_album'])) ?></button>
+                <button class="button"><?= e((string) $t['add_category']) ?></button>
             </form>
             <form method="post">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_subcategory">
-                <label><?= e((string) ($t['category_field'] ?? 'Thématique')) ?>
+                <label><?= e((string) $t['category_field']) ?>
                     <select name="subcategory_category">
                         <?php foreach ($albumCategories as $code => $label): ?>
                             <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><?= e((string) ($t['subcategory_field'] ?? 'Sous-thématique')) ?>
+                <label><?= e((string) $t['subcategory_field']) ?>
                     <input type="text" name="subcategory_label" maxlength="160" required>
                 </label>
-                <button class="button"><?= e((string) ($t['add_subcategory'] ?? $t['create_album'])) ?></button>
+                <button class="button"><?= e((string) $t['add_subcategory']) ?></button>
             </form>
         </div>
         <div class="tags-cloud">
@@ -720,7 +727,7 @@ ob_start();
                     <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
                     <span class="pill"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
                     <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
-                    <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Enregistrer')) ?></button>
+                    <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                     <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
                 </form>
             <?php endforeach; ?>
@@ -735,7 +742,7 @@ ob_start();
                         <input type="hidden" name="subcategory_ref" value="<?= e(album_subcategory_ref((string) $parentCode, $subCode)) ?>">
                         <span class="pill"><?= e((string) ($albumCategories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
                         <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
-                        <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Enregistrer')) ?></button>
+                        <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                         <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
                     </form>
                 <?php endforeach; ?>
@@ -745,11 +752,11 @@ ob_start();
 
     <div class="grid-2">
         <section class="card album-wizard" id="album-wizard">
-            <h2><?= e((string) ($t['wizard_title'] ?? $t['create_album'])) ?></h2>
-            <div class="actions" aria-label="<?= e((string) ($t['wizard_title'] ?? $t['create_album'])) ?>">
-                <span class="pill<?= $wizardStep === 1 ? ' is-active' : '' ?>">1. <?= e((string) ($t['wizard_step_details'] ?? $t['title'])) ?></span>
-                <span class="pill<?= $wizardStep === 2 ? ' is-active' : '' ?>">2. <?= e((string) ($t['wizard_step_upload'] ?? $t['upload'])) ?></span>
-                <span class="pill<?= $wizardStep === 3 ? ' is-active' : '' ?>">3. <?= e((string) ($t['wizard_step_review'] ?? $t['photos_editor'])) ?></span>
+            <h2><?= e((string) $t['wizard_title']) ?></h2>
+            <div class="actions" aria-label="<?= e((string) $t['wizard_title']) ?>">
+                <span class="pill<?= $wizardStep === 1 ? ' is-active' : '' ?>">1. <?= e((string) $t['wizard_step_details']) ?></span>
+                <span class="pill<?= $wizardStep === 2 ? ' is-active' : '' ?>">2. <?= e((string) $t['wizard_step_upload']) ?></span>
+                <span class="pill<?= $wizardStep === 3 ? ' is-active' : '' ?>">3. <?= e((string) $t['wizard_step_review']) ?></span>
             </div>
             <?php if ($wizardStep === 1): ?>
                 <form method="post" class="stack">
@@ -767,8 +774,8 @@ ob_start();
                     <input type="hidden" name="album_is_featured_present" value="1">
                     <input type="hidden" name="album_is_featured[]" value="0">
                     <label><input type="checkbox" name="album_is_featured[]" value="1" autocomplete="off"> <?= e($featuredAlbumLabel) ?></label>
-                    <p class="help"><?= e((string) ($t['wizard_private_help'] ?? 'The album stays private until final validation.')) ?></p>
-                    <button class="button"><?= e((string) ($t['wizard_continue_upload'] ?? $t['create_album'])) ?></button>
+                    <p class="help"><?= e((string) $t['wizard_private_help']) ?></p>
+                    <button class="button"><?= e((string) $t['wizard_continue_upload']) ?></button>
                 </form>
             <?php elseif ($wizardStep === 2 && is_array($wizardAlbum)): ?>
                 <h3><?= e((string) ($wizardAlbum['title'] ?? $t['create_album'])) ?></h3>
@@ -786,16 +793,16 @@ ob_start();
                         </div>
                         <input id="album-wizard-photos-input" type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required style="display:none;">
                     </label>
-                    <p class="help"><?= e((string) ($t['upload_help'] ?? '')) ?></p>
+                    <p class="help"><?= e((string) $t['upload_help']) ?></p>
                     <div class="actions">
                         <button class="button"><?= e((string) $t['upload']) ?></button>
-                        <a class="button secondary" href="<?= e(album_admin_wizard_url(['album_wizard' => $wizardAlbumId, 'step' => 3])) ?>"><?= e((string) ($t['wizard_review_now'] ?? $t['photos_editor'])) ?></a>
+                        <a class="button secondary" href="<?= e(album_admin_wizard_url(['album_wizard' => $wizardAlbumId, 'step' => 3])) ?>"><?= e((string) $t['wizard_review_now']) ?></a>
                     </div>
                 </form>
             <?php elseif ($wizardStep === 3 && is_array($wizardAlbum)): ?>
                 <h3><?= e((string) ($wizardAlbum['title'] ?? $t['create_album'])) ?></h3>
                 <?php if ($wizardPhotos === []): ?>
-                    <p class="help"><?= e((string) ($t['wizard_no_photos'] ?? $t['no_photo_imported'])) ?></p>
+                    <p class="help"><?= e((string) $t['wizard_no_photos']) ?></p>
                     <a class="button secondary" href="<?= e(album_admin_wizard_url(['album_wizard' => $wizardAlbumId, 'step' => 2])) ?>"><?= e((string) $t['upload']) ?></a>
                 <?php else: ?>
                     <div class="gallery-grid">
@@ -822,7 +829,7 @@ ob_start();
                                 albums_admin_log_photo_render_failure($throwable, $photo, 'album_admin_wizard_photo_render_failed');
                                 ?>
                                 <article class="gallery-item">
-                                    <p class="help"><?= e((string) ($t['invalid_photo'] ?? 'Photo invalide.')) ?></p>
+                                    <p class="help"><?= e((string) $t['invalid_photo']) ?></p>
                                 </article>
                             <?php } ?>
                         <?php endforeach; ?>
@@ -832,7 +839,7 @@ ob_start();
                         <input type="hidden" name="action" value="finalize_album_creation">
                         <input type="hidden" name="album_id" value="<?= (int) $wizardAlbumId ?>">
                         <a class="button secondary" href="<?= e(album_admin_wizard_url(['album_wizard' => $wizardAlbumId, 'step' => 2])) ?>"><?= e((string) $t['upload']) ?></a>
-                        <button class="button" type="submit"><?= e((string) ($t['wizard_finalize'] ?? $t['save'])) ?></button>
+                        <button class="button" type="submit"><?= e((string) $t['wizard_finalize']) ?></button>
                     </form>
                 <?php endif; ?>
             <?php endif; ?>
@@ -970,7 +977,7 @@ ob_start();
                         albums_admin_log_photo_render_failure($throwable, $photo, 'album_admin_photo_render_failed');
                         ?>
                         <article class="gallery-item">
-                            <p class="help"><?= e((string) ($t['invalid_photo'] ?? 'Photo invalide.')) ?></p>
+                            <p class="help"><?= e((string) $t['invalid_photo']) ?></p>
                         </article>
                     <?php } ?>
                 <?php endforeach; ?>

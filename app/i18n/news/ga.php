@@ -61,4 +61,13 @@ return array (
   'search' => 'Cuardach',
   'news_count_label' => 'Líon na nuachta',
   'proposal_recorded' => 'Sábháladh an moladh i d’inneachar.',
+  'invalid' => 'Iarratas neamhbhailí.',
+  'publish' => 'Foilsigh',
+  'create' => 'Cruthaigh',
+  'published' => 'Nuacht taifeadta.',
+  'category_created_direct' => 'Moladh an téama agus faomhadh é go díreach.',
+  'create_news' => 'Cruthaigh - Nuacht',
+  'create_category' => 'Cruthaigh - rúibric',
+  'news_direct_help' => 'Nuacht taifeadta.',
+  'category_direct_help' => 'Faomhfar an téama go díreach.',
 );

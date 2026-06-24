@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Narių sritis',
   'unavailable' => 'Wiki bus pasiekiama inicijavus puslapius.',
+  'invalid' => 'Netinkama užklausa.',
   'new_pages' => 'Nauji puslapiai',
   'updated_pages' => 'Modifikuoti puslapiai',
   'most_read' => 'Dauguma skaito',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Potemė',
   'no_subcategory' => 'Nėra potemės',
   'favorites' => 'Mėgstamiausi',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Pridėta prie mėgstamiausių',
+  'favorite_removed' => 'Pašalinta iš mėgstamiausių',
+  'favorite_added_msg' => 'Puslapis pridėtas prie mėgstamiausių.',
+  'favorite_removed_msg' => 'Puslapis pašalintas iš mėgstamiausių.',
+  'err_subcategory_category_mismatch' => 'Pasirinkta potemė nepriklauso pasirinktai temai.',
+  'category_general' => 'Bendra',
 );

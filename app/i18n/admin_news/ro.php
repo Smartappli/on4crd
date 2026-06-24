@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Fără atribuire.',
   'layout' => 'Secțiunea de știri',
   'meta_desc' => 'Scrierea, moderarea și gestionarea știrilor pe secțiuni.',
+  'status_draft' => 'Ciornă',
+  'status_pending' => 'În așteptare',
+  'status_published' => 'Publicat',
+  'status_rejected' => 'Respins',
+  'status_archived' => 'Arhivat',
 );

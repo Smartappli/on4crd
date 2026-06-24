@@ -218,7 +218,10 @@ function require_permission(string $permission): void
     }
 
     http_response_code(403);
-    echo render_layout('<div class="card"><h1>403</h1><p>Accès refusé.</p></div>', 'Accès refusé');
+    $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('errors', current_locale()) : [];
+    $title = (string) ($messages['access_denied_title'] ?? 'Access denied');
+    $message = (string) ($messages['access_denied_message'] ?? 'You do not have permission to access this page.');
+    echo render_layout('<div class="card"><h1>403</h1><p>' . e($message) . '</p></div>', $title);
     exit;
 }
 }

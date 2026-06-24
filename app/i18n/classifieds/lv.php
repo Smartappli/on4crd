@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Sludinājums moderēts',
   'notification_removed_body' => 'Reklāma noņemta ar regulēšanu: {title}',
   'notification_status_body' => 'Statuss atjaunināts uz {status}: {title}',
+  'propose_category_direct_help' => 'Kategorija tiks apstiprināta tieši.',
+  'propose_category_created_direct' => 'Kategorija izveidota un apstiprināta tieši.',
 );

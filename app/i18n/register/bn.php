@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL ব্যবস্থাপক',
   'qsl_choice_no_qsl' => 'QSL নয়',
   'qsl_choice_other' => 'অন্যান্য',
+  'registration_closed_title' => 'সদস্য নিবন্ধন',
+  'registration_closed_message' => 'সর্বজনীন নিবন্ধন বন্ধ। যাচাইয়ের পরে প্রশাসন সদস্য অ্যাকাউন্ট তৈরি করে।',
+  'membership_link' => 'সদস্য হোন',
 );

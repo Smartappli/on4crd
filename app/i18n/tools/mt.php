@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Qawwa riflessa (W)',
   'swr_result' => 'SWR ikkalkulat',
   'dbw_calc' => 'Konverżjoni dBm <-> dBW',
+  'cq_zone' => 'Żona CQ',
+  'itu_zone' => 'Żona ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Il-preset ġie ssejvjat.',
+  'preset_deleted' => 'Il-preset tħassar.',
+  'tools_stat_available' => 'Għodod disponibbli',
+  'tools_stat_categories' => 'Kategoriji',
 );

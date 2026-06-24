@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Gan sannadh.',
   'layout' => 'Rannóg nuachta',
   'meta_desc' => 'Scríobh, modhnóireacht agus bainistiú nuachta de réir ailt.',
+  'status_draft' => 'Dréacht',
+  'status_pending' => 'Ar feitheamh',
+  'status_published' => 'Foilsithe',
+  'status_rejected' => 'Diúltaithe',
+  'status_archived' => 'Cartlannaithe',
 );

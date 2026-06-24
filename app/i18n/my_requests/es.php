@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Propuesta de etiqueta',
   'proposal_type_subcategory' => 'Propuesta de subtema',
   'webotheque_title' => 'Biblioteca web',
+  'albums_title' => 'Álbumes',
+  'auctions_title' => 'Subastas',
+  'files_title' => 'Archivos',
+  'presentations_title' => 'Presentaciones',
+  'minutes_title' => 'Actas',
+  'videos_title' => 'Vídeos',
+  'library_document_default_title' => 'Documento',
+  'document_default_title' => 'Documento',
 );

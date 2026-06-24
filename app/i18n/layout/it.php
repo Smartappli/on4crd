@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Ricerca globale',
   'search_placeholder' => 'Cerca…',
   'search_submit' => 'Cerca',
+  'membership_good_standing' => 'Quota in regola',
 );

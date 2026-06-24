@@ -102,4 +102,7 @@ Kontakt:',
   'subcategory_field' => 'Underämne',
   'no_subcategory' => 'Inget underämne',
   'favorites' => 'Favoriter',
+  'invalid' => 'Ogiltig begäran.',
+  'err_invalid_category' => 'Ogiltig kategori.',
+  'err_subcategory_category_mismatch' => 'Det valda undertemat hör inte till det valda temat.',
 );

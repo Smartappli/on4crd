@@ -18,4 +18,6 @@ return array (
   'forgot_password' => 'Glemt adgangskode?',
   'no_member' => 'Ikke medlem endnu?',
   'create_account' => 'Opret en konto',
+  'membership_link' => 'Bliv medlem',
+  'login_required' => 'Log venligst ind for at fortsætte.',
 );

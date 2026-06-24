@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Advertentie gemodereerd',
   'notification_removed_body' => 'Advertentie met mate verwijderd: {title}',
   'notification_status_body' => 'Status bijgewerkt naar {status}: {title}',
+  'propose_category_direct_help' => 'De categorie wordt rechtstreeks goedgekeurd.',
+  'propose_category_created_direct' => 'Categorie aangemaakt en rechtstreeks goedgekeurd.',
 );

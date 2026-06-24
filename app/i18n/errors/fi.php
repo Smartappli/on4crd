@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Tarkista tulevat aktiviteetit.',
   'tools_link' => 'Radiotyökalut',
   'tools_hint' => 'Avaa käytännölliset radioamatöörityökalut.',
+  'module_unavailable' => 'Moduuli ei ole käytettävissä.',
+  'slug_article_unique_failed' => 'Ainutlaatuisen artikkelin luominen epäonnistui.',
+  'slug_wiki_unique_failed' => 'Ainutlaatuista wiki-slugia ei voi luoda.',
+  'slug_news_unique_failed' => 'Ainutlaatuista uutislokeroa ei voi luoda.',
+  'slug_event_unique_failed' => 'Ainutlaatuisen tapahtuman luominen epäonnistui.',
+  'storage_path_invalid' => 'Virheellinen tallennuspolku.',
+  'storage_path_forbidden' => 'Tallennuspolku ei ole sallittu.',
+  'remote_url_private' => 'Etä-URL osoittaa yksityiseen tai varattuun verkkoon.',
+  'remote_url_private_resolved' => 'Etä-URL ratkaisee yksityisen tai varatun IP-osoitteen.',
+  'field_too_long' => 'Yksi kentistä ylittää sallitun pituuden.',
+  'wiki_storage_unavailable' => 'Wiki-tallennustila ei ole käytettävissä.',
+  'wiki_page_invalid' => 'Virheellinen wikisivu.',
+  'wiki_page_not_found' => 'Wiki-sivua ei löydy.',
+  'newsletter_campaign_not_found' => 'Kampanjaa ei löydy.',
+  'internal_error' => 'Tapahtui sisäinen virhe.',
+  'error_reference' => 'Viite: {request_id}.',
+  'service_temporarily_unavailable' => 'Palvelu tilapäisesti poissa käytöstä.',
 );

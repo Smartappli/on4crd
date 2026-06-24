@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return [
     'err_invalid_reservation' => 'অনুগ্রহ করে একটি নাম এবং অন্তত একটি বৈধ রিজার্ভেশন লাইন প্রদান করুন৷',
     'ok_saved' => 'সংরক্ষণ সংরক্ষিত.',
@@ -42,4 +40,16 @@ return [
     'csv_line_total' => 'লাইন মোট',
     'csv_res_total' => 'মোট রিজার্ভেশন',
     'meta_desc' => 'বার্ষিক ডিনার সংরক্ষণ এবং রপ্তানি পরিচালনা করুন.',
+    'starter_potage' => 'ঘরে তৈরি স্যুপ',
+    'starter_croquettes' => 'চিজ ক্রোকেট',
+    'starter_salade' => 'ছোট সালাদ',
+    'meal_vol_au_vent' => 'Vol-au-vent',
+    'meal_boulettes' => 'টমেটো সসে মিটবল',
+    'meal_vegetarien' => 'নিরামিষ প্লেট',
+    'dessert_tiramisu' => 'তিরামিসু',
+    'dessert_mousse_choco' => 'চকোলেট মুস',
+    'dessert_salade_fruits' => 'ফলের সালাদ',
+    'line_enable_starter' => 'স্টার্টার সক্রিয় করুন',
+    'line_enable_meal' => 'প্রধান পদ সক্রিয় করুন',
+    'line_enable_dessert' => 'ডেজার্ট সক্রিয় করুন',
 ];

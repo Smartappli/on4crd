@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Trenutačno nema dostupnog trofeja.',
   'home_trophies_title' => 'Naši trofeji',
   'spotlight_member_gallery_empty' => 'Trenutačno nema dostupne slike u galeriji.',
+  'widget_temporarily_unavailable' => 'Widget je privremeno nedostupan.',
+  'ham_advice_temporarily_unavailable' => 'Radio savjet privremeno nedostupan.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'članovi',
+  'visibility_private' => 'Privatno',
 );

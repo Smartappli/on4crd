@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Member Area',
   'unavailable' => 'The wiki will be available after page initialization.',
+  'invalid' => 'Invalid request.',
   'new_pages' => 'New pages',
   'updated_pages' => 'Updated pages',
   'most_read' => 'Most read',
@@ -48,4 +49,6 @@ return array (
   'favorite_removed' => 'Favorite removed',
   'favorite_added_msg' => 'Page added to favorites.',
   'favorite_removed_msg' => 'Page removed from favorites.',
+  'err_subcategory_category_mismatch' => 'The selected subtopic does not belong to the selected topic.',
+  'category_general' => 'General',
 );

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Peržiūrėkite artėjančias veiklas.',
   'tools_link' => 'Radijo įrankiai',
   'tools_hint' => 'Atverkite praktinius radijo mėgėjų įrankius.',
+  'module_unavailable' => 'Modulis nepasiekiamas.',
+  'slug_article_unique_failed' => 'Nepavyko sukurti unikalaus straipsnio šliužo.',
+  'slug_wiki_unique_failed' => 'Nepavyko sukurti unikalaus wiki šliužo.',
+  'slug_news_unique_failed' => 'Nepavyko sukurti unikalaus naujienų šliužo.',
+  'slug_event_unique_failed' => 'Nepavyko sugeneruoti unikalaus įvykio šliužo.',
+  'storage_path_invalid' => 'Netinkamas saugyklos kelias.',
+  'storage_path_forbidden' => 'Saugojimo kelias neleidžiamas.',
+  'remote_url_private' => 'Nuotolinis URL nukreipia į privatų arba rezervuotą tinklą.',
+  'remote_url_private_resolved' => 'Nuotolinis URL išsprendžia privatų arba rezervuotą IP adresą.',
+  'field_too_long' => 'Vienas iš laukų viršija leistiną ilgį.',
+  'wiki_storage_unavailable' => 'Wiki saugykla nepasiekiama.',
+  'wiki_page_invalid' => 'Netinkamas wiki puslapis.',
+  'wiki_page_not_found' => 'Wiki puslapis nerastas.',
+  'newsletter_campaign_not_found' => 'Kampanija nerasta.',
+  'internal_error' => 'Įvyko vidinė klaida.',
+  'error_reference' => 'Nuoroda: {request_id}.',
+  'service_temporarily_unavailable' => 'Paslauga laikinai nepasiekiama.',
 );

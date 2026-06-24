@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'منطقة الأعضاء',
   'unavailable' => 'ستتوفر ويكي بعد تهيئة الصفحات.',
+  'invalid' => 'طلب غير صالح.',
   'new_pages' => 'صفحات جديدة',
   'updated_pages' => 'صفحات محدّثة',
   'most_read' => 'الأكثر قراءة',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'موضوع فرعي',
   'no_subcategory' => 'لا يوجد موضوع فرعي',
   'favorites' => 'المفضلة',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'تمت الإضافة إلى المفضلة',
+  'favorite_removed' => 'تمت الإزالة من المفضلة',
+  'favorite_added_msg' => 'تمت إضافة الصفحة إلى المفضلة.',
+  'favorite_removed_msg' => 'تمت إزالة الصفحة من المفضلة.',
+  'err_subcategory_category_mismatch' => 'الموضوع الفرعي المحدد لا ينتمي إلى الموضوع المختار.',
+  'category_general' => 'عام',
 );

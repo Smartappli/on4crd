@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Se kommende aktiviteter.',
   'tools_link' => 'Radioværktøjer',
   'tools_hint' => 'Åbn de praktiske radioamatørværktøjer.',
+  'module_unavailable' => 'Modulet er ikke tilgængeligt.',
+  'slug_article_unique_failed' => 'Kan ikke generere en unik artikelsnegl.',
+  'slug_wiki_unique_failed' => 'Kan ikke generere en unik wiki-slug.',
+  'slug_news_unique_failed' => 'Kan ikke generere en unik nyhedsslug.',
+  'slug_event_unique_failed' => 'Kan ikke generere en unik hændelsessnegl.',
+  'storage_path_invalid' => 'Ugyldig lagersti.',
+  'storage_path_forbidden' => 'Opbevaringssti er ikke tilladt.',
+  'remote_url_private' => 'Den eksterne URL peger på et privat eller reserveret netværk.',
+  'remote_url_private_resolved' => 'Den eksterne URL løses til en privat eller reserveret IP-adresse.',
+  'field_too_long' => 'Et af felterne overskrider den tilladte længde.',
+  'wiki_storage_unavailable' => 'Wiki-lagring er ikke tilgængelig.',
+  'wiki_page_invalid' => 'Ugyldig wiki-side.',
+  'wiki_page_not_found' => 'Wiki-siden blev ikke fundet.',
+  'newsletter_campaign_not_found' => 'Kampagnen blev ikke fundet.',
+  'internal_error' => 'Der opstod en intern fejl.',
+  'error_reference' => 'Referencekode: {request_id}.',
+  'service_temporarily_unavailable' => 'Tjenesten er midlertidigt utilgængelig.',
 );

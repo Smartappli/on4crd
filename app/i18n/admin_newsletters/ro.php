@@ -39,7 +39,7 @@ return array (
   'sent_results' => '%d a trimis/%d eșecuri',
   'send' => 'Trimite',
   'already_sent' => 'Deja trimis',
-  'email' => 'E-mail',
+  'email' => 'Adresă e-mail',
   'csv_ph' => 'e-mail\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Fără abonați.',
   'no_campaigns' => 'Fără campanie.',

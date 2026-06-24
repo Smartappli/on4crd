@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Puissance réfléchie (W)',
   'swr_result' => 'ROS calculé',
   'dbw_calc' => 'Conversion dBm ↔ dBW',
+  'cq_zone' => 'Zone CQ',
+  'itu_zone' => 'Zone ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Préréglage enregistré.',
+  'preset_deleted' => 'Préréglage supprimé.',
+  'tools_stat_available' => 'Outils disponibles',
+  'tools_stat_categories' => 'Catégories',
 );

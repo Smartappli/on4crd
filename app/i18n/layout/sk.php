@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Globálne vyhľadávanie',
   'search_placeholder' => 'Hľadať…',
   'search_submit' => 'Hľadať',
+  'membership_good_standing' => 'Členstvo v poriadku',
 );

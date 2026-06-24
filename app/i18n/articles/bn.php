@@ -102,4 +102,7 @@ return array (
   'subcategory_field' => 'সাবটপিক',
   'no_subcategory' => 'কোন সাবটপিক নেই',
   'favorites' => 'প্রিয়',
+  'invalid' => 'অবৈধ অনুরোধ।',
+  'err_invalid_category' => 'অবৈধ বিভাগ',
+  'err_subcategory_category_mismatch' => 'নির্বাচিত উপ-বিষয়টি নির্বাচিত বিষয়ের অন্তর্গত নয়।',
 );

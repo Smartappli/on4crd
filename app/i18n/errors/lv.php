@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Apskatiet gaidāmās aktivitātes.',
   'tools_link' => 'Radio rīki',
   'tools_hint' => 'Atveriet praktiskos radioamatieru rīkus.',
+  'module_unavailable' => 'Modulis nav pieejams.',
+  'slug_article_unique_failed' => 'Nevar ģenerēt unikālu rakstu.',
+  'slug_wiki_unique_failed' => 'Nevar ģenerēt unikālu wiki slug.',
+  'slug_news_unique_failed' => 'Nevar ģenerēt unikālu ziņu ziņu.',
+  'slug_event_unique_failed' => 'Nevar ģenerēt unikālu notikumu.',
+  'storage_path_invalid' => 'Nederīgs krātuves ceļš.',
+  'storage_path_forbidden' => 'Uzglabāšanas ceļš nav atļauts.',
+  'remote_url_private' => 'Attālais URL norāda uz privātu vai rezervētu tīklu.',
+  'remote_url_private_resolved' => 'Attālā URL atrisina uz privātu vai rezervētu IP adresi.',
+  'field_too_long' => 'Viens no laukiem pārsniedz atļauto garumu.',
+  'wiki_storage_unavailable' => 'Wiki krātuve nav pieejama.',
+  'wiki_page_invalid' => 'Nederīga wiki lapa.',
+  'wiki_page_not_found' => 'Wiki lapa nav atrasta.',
+  'newsletter_campaign_not_found' => 'Kampaņa nav atrasta.',
+  'internal_error' => 'Radās iekšēja kļūda.',
+  'error_reference' => 'Atsauce: {request_id}.',
+  'service_temporarily_unavailable' => 'Pakalpojums īslaicīgi nav pieejams.',
 );

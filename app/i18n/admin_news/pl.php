@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Brak przypisania.',
   'layout' => 'Sekcja aktualności',
   'meta_desc' => 'Pisanie, moderowanie i zarządzanie wiadomościami według sekcji.',
+  'status_draft' => 'Wersja robocza',
+  'status_pending' => 'Oczekujące',
+  'status_published' => 'Opublikowano',
+  'status_rejected' => 'Odrzucony',
+  'status_archived' => 'Zarchiwizowane',
 );

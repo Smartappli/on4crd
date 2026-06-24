@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Verificați activitățile viitoare.',
   'tools_link' => 'Instrumente radio',
   'tools_hint' => 'Deschideți instrumentele practice pentru radioamatori.',
+  'module_unavailable' => 'Modul indisponibil.',
+  'slug_article_unique_failed' => 'Nu se poate genera un articol unic slug.',
+  'slug_wiki_unique_failed' => 'Nu se poate genera un slug wiki unic.',
+  'slug_news_unique_failed' => 'Nu se poate genera un slug de știri unic.',
+  'slug_event_unique_failed' => 'Nu se poate genera un eveniment unic.',
+  'storage_path_invalid' => 'Cale de stocare nevalidă.',
+  'storage_path_forbidden' => 'Calea de stocare nu este permisă.',
+  'remote_url_private' => 'Telecomanda URL indică o rețea privată sau rezervată.',
+  'remote_url_private_resolved' => 'Telecomanda URL se rezolvă la o adresă IP privată sau rezervată.',
+  'field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
+  'wiki_storage_unavailable' => 'Stocarea Wiki indisponibilă.',
+  'wiki_page_invalid' => 'Pagina wiki nevalidă.',
+  'wiki_page_not_found' => 'Pagina wiki nu a fost găsită.',
+  'newsletter_campaign_not_found' => 'Campania nu a fost găsită.',
+  'internal_error' => 'A apărut o eroare internă.',
+  'error_reference' => 'Referință: {request_id}.',
+  'service_temporarily_unavailable' => 'Serviciul este temporar indisponibil.',
 );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Περιοχή μελών',
   'unavailable' => 'Το Βίκι θα είναι διαθέσιμο μετά την προετοιμασία των σελίδων.',
+  'invalid' => 'Μη έγκυρο αίτημα.',
   'new_pages' => 'Νέες σελίδες',
   'updated_pages' => 'Τροποποιημένες σελίδες',
   'most_read' => 'Οι περισσότεροι διαβάζονται',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Υποθέμα',
   'no_subcategory' => 'Χωρίς υποθέμα',
   'favorites' => 'Αγαπημένα',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Προστέθηκε στα αγαπημένα',
+  'favorite_removed' => 'Αφαιρέθηκε από τα αγαπημένα',
+  'favorite_added_msg' => 'Η σελίδα προστέθηκε στα αγαπημένα.',
+  'favorite_removed_msg' => 'Η σελίδα αφαιρέθηκε από τα αγαπημένα.',
+  'err_subcategory_category_mismatch' => 'Το επιλεγμένο υποθέμα δεν ανήκει στο επιλεγμένο θέμα.',
+  'category_general' => 'Γενικά',
 );

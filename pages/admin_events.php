@@ -75,7 +75,7 @@ function admin_event_unique_slug(string $value, int $ignoreId = 0, int $maxLengt
         $suffix++;
     } while ($suffix < 10000);
 
-    throw new RuntimeException('Impossible de générer un slug événement unique.');
+    throw new RuntimeException(i18n_error_text('slug_event_unique_failed', 'Unable to generate a unique event slug.'));
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

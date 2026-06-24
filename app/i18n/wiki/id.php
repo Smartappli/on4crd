@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Area Anggota',
   'unavailable' => 'Wiki akan tersedia setelah inisialisasi halaman.',
+  'invalid' => 'Permintaan tidak valid.',
   'new_pages' => 'Halaman baru',
   'updated_pages' => 'Halaman diperbarui',
   'most_read' => 'Paling banyak dibaca',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Subtopik',
   'no_subcategory' => 'Tidak ada subtopik',
   'favorites' => 'Favorit',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Ditambahkan ke favorit',
+  'favorite_removed' => 'Dihapus dari favorit',
+  'favorite_added_msg' => 'Halaman ditambahkan ke favorit.',
+  'favorite_removed_msg' => 'Halaman dihapus dari favorit.',
+  'err_subcategory_category_mismatch' => 'Subtema yang dipilih bukan bagian dari tema yang dipilih.',
+  'category_general' => 'Umum',
 );

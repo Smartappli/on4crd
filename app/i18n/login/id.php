@@ -18,4 +18,6 @@ return array (
   'forgot_password' => 'Lupa kata sandi?',
   'no_member' => 'Belum menjadi anggota?',
   'create_account' => 'Buat akun',
+  'membership_link' => 'Menjadi anggota',
+  'login_required' => 'Silakan masuk untuk melanjutkan.',
 );

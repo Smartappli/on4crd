@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Členská zóna',
   'unavailable' => 'Wiki bude k dispozícii po inicializácii stránok.',
+  'invalid' => 'Neplatná požiadavka.',
   'new_pages' => 'Nové stránky',
   'updated_pages' => 'Upravené stránky',
   'most_read' => 'Najčítanejšie',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Podtéma',
   'no_subcategory' => 'Žiadna podtéma',
   'favorites' => 'Obľúbené',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Pridané medzi obľúbené',
+  'favorite_removed' => 'Odstránené z obľúbených',
+  'favorite_added_msg' => 'Stránka pridaná medzi obľúbené.',
+  'favorite_removed_msg' => 'Stránka odstránená z obľúbených.',
+  'err_subcategory_category_mismatch' => 'Vybraná podtéma nepatrí k vybranej téme.',
+  'category_general' => 'Všeobecné',
 );

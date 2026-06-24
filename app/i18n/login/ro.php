@@ -18,4 +18,6 @@ return array (
   'forgot_password' => 'Parola uitată?',
   'no_member' => 'Nu sunteți încă membru?',
   'create_account' => 'Creați un cont',
+  'membership_link' => 'Deveniți membru',
+  'login_required' => 'Vă rugăm să vă conectați pentru a continua.',
 );

@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'مدير QSL',
   'qsl_choice_no_qsl' => 'بدون QSL',
   'qsl_choice_other' => 'أخرى',
+  'registration_closed_title' => 'تسجيل عضو',
+  'registration_closed_message' => 'التسجيل العام مغلق. تُنشئ الإدارة حسابات الأعضاء بعد التحقق.',
+  'membership_link' => 'كن عضوًا',
 );

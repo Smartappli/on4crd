@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Peegeldunud võimsus (W)',
   'swr_result' => 'Arvutatud SWR',
   'dbw_calc' => 'dBm <-> dBW teisendus',
+  'cq_zone' => 'CQ tsoon',
+  'itu_zone' => 'ITU tsoon',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Eelseadistus salvestati.',
+  'preset_deleted' => 'Eelseadistus kustutati.',
+  'tools_stat_available' => 'Saadaolevad tööriistad',
+  'tools_stat_categories' => 'Kategooriad',
 );

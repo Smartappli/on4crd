@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Album tidak valid.',
   'uploaded_count' => 'foto ditambahkan.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Impor album selesai',
+  'notification_import_completed_body' => '%d foto diimpor.',
   'no_photo_imported' => 'Tidak ada foto yang diimpor.',
   'created_thumbs' => 'thumbnail dibuat.',
   'manage_title' => 'Manajemen album',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Judul',
   'description' => 'Deskripsi',
   'public_album' => 'Album publik',
+  'featured_album' => 'Album unggulan',
   'photo_title' => 'Judul foto',
   'caption' => 'Keterangan',
   'files_dropzone' => 'File gambar',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album divalidasi, namun sinkronisasi sosial gagal.',
   'batch_max_files' => 'Maksimum 100 foto per impor.',
   'batch_max_size' => 'Kumpulan foto melebihi 512 MB.',
+  'error_field_too_long' => 'Salah satu bidang melebihi panjang yang diizinkan.',
 );

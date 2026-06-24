@@ -61,4 +61,13 @@ return array (
   'search' => 'Etsi',
   'news_count_label' => 'Uutisten määrä',
   'proposal_recorded' => 'Ehdotus tallennettiin sisältöihisi.',
+  'invalid' => 'Virheellinen pyyntö.',
+  'publish' => 'Julkaise',
+  'create' => 'Luo',
+  'published' => 'Uutisia tallennettu.',
+  'category_created_direct' => 'Aihe ehdotettiin ja hyväksyttiin suoraan.',
+  'create_news' => 'Luo - Uutiset',
+  'create_category' => 'Luo - Rubriikki',
+  'news_direct_help' => 'Uutisia tallennettu.',
+  'category_direct_help' => 'Aihe hyväksytään suoraan.',
 );

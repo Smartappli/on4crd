@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL ব্যবস্থাপক',
   'qsl_choice_no_qsl' => 'QSL নয়',
   'qsl_choice_other' => 'অন্যান্য',
+  'preview_public_title' => 'সর্বজনীন দৃশ্য',
+  'preview_members_title' => 'সদস্য দৃশ্য',
+  'preview_private_title' => 'কমিটি দৃশ্য',
+  'required_field_help' => 'আবশ্যিক ক্ষেত্র.',
+  'preview_empty' => 'কোনো দৃশ্যমান তথ্য নেই।',
 );

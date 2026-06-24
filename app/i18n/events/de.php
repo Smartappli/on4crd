@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'Abbrechen',
   'propose_event_close' => 'Schließen',
   'proposal_recorded' => 'Vorschlag in Ihren Inhalten gespeichert.',
+  'invalid' => 'Ungültige Anfrage.',
+  'event_published_direct' => 'Die Veranstaltung wurde direkt veröffentlicht.',
+  'propose_event_direct_help' => 'Die Veranstaltung wird direkt veröffentlicht.',
+  'publish_event' => 'Veröffentlichen',
+  'next_event_title' => 'Kommende Veranstaltungen',
 );

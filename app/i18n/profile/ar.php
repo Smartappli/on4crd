@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'مدير QSL',
   'qsl_choice_no_qsl' => 'بدون QSL',
   'qsl_choice_other' => 'أخرى',
+  'preview_public_title' => 'العرض العام',
+  'preview_members_title' => 'عرض الأعضاء',
+  'preview_private_title' => 'عرض اللجنة',
+  'required_field_help' => 'حقل إلزامي.',
+  'preview_empty' => 'لا توجد معلومات مرئية.',
 );

@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'Annuleren',
   'propose_event_close' => 'Sluiten',
   'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
+  'invalid' => 'Ongeldig verzoek.',
+  'event_published_direct' => 'Evenement direct gepubliceerd.',
+  'propose_event_direct_help' => 'Het evenement wordt direct gepubliceerd.',
+  'publish_event' => 'Publiceren',
+  'next_event_title' => 'Komende evenementen',
 );

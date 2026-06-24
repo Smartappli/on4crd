@@ -6,7 +6,7 @@ $conversionTools = isset($conversionTools) && is_array($conversionTools) ? $conv
 $radioMathTools = isset($radioMathTools) && is_array($radioMathTools) ? $radioMathTools : [];
 $unitConversionGroups = [
     'rf' => [
-        'label' => (string) ($t['unit_conv_group_rf'] ?? 'Radio / RF'),
+        'label' => (string) $t['unit_conv_group_rf'],
         'units' => [
             'hz' => ['label' => 'Hz', 'factor' => 1.0],
             'khz' => ['label' => 'kHz', 'factor' => 1_000.0],
@@ -18,7 +18,7 @@ $unitConversionGroups = [
         'default_to' => 'khz',
     ],
     'power' => [
-        'label' => (string) ($t['unit_conv_group_power'] ?? 'Puissance'),
+        'label' => (string) $t['unit_conv_group_power'],
         'units' => [
             'w' => ['label' => 'W', 'factor' => 1.0],
             'kw' => ['label' => 'kW', 'factor' => 1_000.0],
@@ -31,7 +31,7 @@ $unitConversionGroups = [
         'default_to' => 'dbm',
     ],
     'voltage' => [
-        'label' => (string) ($t['unit_conv_group_voltage'] ?? 'Tension sinusoidale'),
+        'label' => (string) $t['unit_conv_group_voltage'],
         'units' => [
             'vrms' => ['label' => 'Vrms', 'factor' => 1.0],
             'vpp' => ['label' => 'Vpp', 'factor' => 1 / (2 * sqrt(2))],
@@ -42,7 +42,7 @@ $unitConversionGroups = [
         'default_to' => 'vpp',
     ],
     'length' => [
-        'label' => (string) ($t['unit_conv_group_length'] ?? 'Longueur'),
+        'label' => (string) $t['unit_conv_group_length'],
         'units' => [
             'mm' => ['label' => 'mm', 'factor' => 0.001],
             'cm' => ['label' => 'cm', 'factor' => 0.01],
@@ -56,7 +56,7 @@ $unitConversionGroups = [
         'default_to' => 'ft',
     ],
     'energy' => [
-        'label' => (string) ($t['unit_conv_group_energy'] ?? 'Energie'),
+        'label' => (string) $t['unit_conv_group_energy'],
         'units' => [
             'j' => ['label' => 'J', 'factor' => 1.0],
             'wh' => ['label' => 'Wh', 'factor' => 3_600.0],
@@ -67,7 +67,7 @@ $unitConversionGroups = [
         'default_to' => 'j',
     ],
     'time' => [
-        'label' => (string) ($t['unit_conv_group_time'] ?? 'Temps'),
+        'label' => (string) $t['unit_conv_group_time'],
         'units' => [
             'ms' => ['label' => 'ms', 'factor' => 0.001],
             's' => ['label' => 's', 'factor' => 1.0],
@@ -79,7 +79,7 @@ $unitConversionGroups = [
         'default_to' => 's',
     ],
     'temperature' => [
-        'label' => (string) ($t['unit_conv_group_temperature'] ?? 'Temperature'),
+        'label' => (string) $t['unit_conv_group_temperature'],
         'units' => [
             'c' => ['label' => 'deg C', 'kind' => 'c'],
             'f' => ['label' => 'deg F', 'kind' => 'f'],
@@ -90,7 +90,7 @@ $unitConversionGroups = [
         'default_to' => 'f',
     ],
     'rotation' => [
-        'label' => (string) ($t['unit_conv_group_rotation'] ?? 'Rotation'),
+        'label' => (string) $t['unit_conv_group_rotation'],
         'units' => [
             'rpm' => ['label' => 'RPM', 'factor' => 1 / 60],
             'rps' => ['label' => 'RPS', 'factor' => 1.0],
@@ -101,7 +101,7 @@ $unitConversionGroups = [
         'default_to' => 'rps',
     ],
     'field' => [
-        'label' => (string) ($t['unit_conv_group_field'] ?? 'Signal level'),
+        'label' => (string) $t['unit_conv_group_field'],
         'units' => [
             'dbuv' => ['label' => 'dBuV', 'kind' => 'dbuv'],
             'sunit' => ['label' => 'S-unit', 'kind' => 'sunit'],
@@ -117,46 +117,46 @@ $unitConversionGroupsJson = json_encode($unitConversionGroups, JSON_UNESCAPED_UN
 <article class="card tool-panel is-hidden" id="<?= e($unitConversionPanelId) ?>" data-tool-panel data-unit-conv-groups="<?= e($unitConversionGroupsJson) ?>">
     <div class="section-header">
         <div>
-            <h2><?= e((string) ($t['unit_conv_title'] ?? 'Unit conversion')) ?></h2>
-            <p class="help"><?= e((string) ($t['unit_conv_help'] ?? 'Ham radio multi-unit converter.')) ?></p>
+            <h2><?= e((string) $t['unit_conv_title']) ?></h2>
+            <p class="help"><?= e((string) $t['unit_conv_help']) ?></p>
         </div>
-        <button type="button" class="button ghost" id="unit-conv-swap"><?= e((string) ($t['unit_conv_swap'] ?? 'Inverser')) ?></button>
+        <button type="button" class="button ghost" id="unit-conv-swap"><?= e((string) $t['unit_conv_swap']) ?></button>
     </div>
 
     <div class="grid-3">
-        <label><?= e((string) ($t['unit_conv_family'] ?? 'Famille')) ?>
+        <label><?= e((string) $t['unit_conv_family']) ?>
             <select id="unit-conv-group">
                 <?php foreach ($unitConversionGroups as $groupCode => $group): ?>
                     <option value="<?= e($groupCode) ?>"><?= e((string) $group['label']) ?></option>
                 <?php endforeach; ?>
             </select>
         </label>
-        <label><?= e((string) ($t['value_in'] ?? 'Input value')) ?>
+        <label><?= e((string) $t['value_in']) ?>
             <input id="unit-conv-input" type="text" data-step="any" value="145.5" inputmode="decimal">
         </label>
-        <label><?= e((string) ($t['value_out'] ?? 'Output value')) ?>
+        <label><?= e((string) $t['value_out']) ?>
             <output id="unit-conv-output" class="result-box">-</output>
         </label>
     </div>
 
     <div class="grid-2">
-        <label><?= e((string) ($t['unit_conv_from'] ?? 'Depuis')) ?>
+        <label><?= e((string) $t['unit_conv_from']) ?>
             <select id="unit-conv-from"></select>
         </label>
-        <label><?= e((string) ($t['unit_conv_to'] ?? 'Vers')) ?>
+        <label><?= e((string) $t['unit_conv_to']) ?>
             <select id="unit-conv-to"></select>
         </label>
     </div>
 
-    <div class="actions" id="unit-conv-presets" aria-label="<?= e((string) ($t['unit_conv_presets'] ?? 'Valeurs rapides')) ?>"></div>
+    <div class="actions" id="unit-conv-presets" aria-label="<?= e((string) $t['unit_conv_presets']) ?>"></div>
 
     <div class="grid-2">
         <section class="inner-card">
-            <h3><?= e((string) ($t['unit_conv_reference'] ?? 'Reference')) ?></h3>
+            <h3><?= e((string) $t['unit_conv_reference']) ?></h3>
             <p id="unit-conv-reference" class="help">-</p>
         </section>
         <section class="inner-card">
-            <h3><?= e((string) ($t['unit_conv_quick_links'] ?? 'Detailed converters')) ?></h3>
+            <h3><?= e((string) $t['unit_conv_quick_links']) ?></h3>
             <div class="actions">
                 <?php
                 $unitTools = [
@@ -164,16 +164,16 @@ $unitConversionGroupsJson = json_encode($unitConversionGroups, JSON_UNESCAPED_UN
                     'tool-kw-w', 'tool-hz-khz', 'tool-in-mm', 'tool-c-f', 'tool-vpp-vrms', 'tool-sunit-dbuv',
                 ];
                 $unitToolFallbackLabels = [
-                    'tool-power' => (string) ($t['power'] ?? 'Power (W <-> dBm)'),
-                    'tool-freq-wave' => (string) ($t['freq_wave'] ?? 'Frequency to wavelength'),
-                    'tool-dbuv' => (string) ($t['dbuv_calc'] ?? 'dBm to dBuV'),
-                    'tool-gain-conv' => (string) ($t['gain_conv_calc'] ?? 'dBd to dBi'),
-                    'tool-kw-w' => (string) ($t['kw_w_calc'] ?? 'kW to W'),
-                    'tool-hz-khz' => (string) ($t['hz_khz_calc'] ?? 'Hz to kHz'),
-                    'tool-in-mm' => (string) ($t['in_mm_calc'] ?? 'Inch to mm'),
-                    'tool-c-f' => (string) ($t['c_f_calc'] ?? 'C to F'),
-                    'tool-vpp-vrms' => (string) ($t['vpp_vrms_calc'] ?? 'Vpp to Vrms'),
-                    'tool-sunit-dbuv' => (string) ($t['sunit_dbuv_calc'] ?? 'S-unit to dBuV'),
+                    'tool-power' => (string) $t['power'],
+                    'tool-freq-wave' => (string) $t['freq_wave'],
+                    'tool-dbuv' => (string) $t['dbuv_calc'],
+                    'tool-gain-conv' => (string) $t['gain_conv_calc'],
+                    'tool-kw-w' => (string) $t['kw_w_calc'],
+                    'tool-hz-khz' => (string) $t['hz_khz_calc'],
+                    'tool-in-mm' => (string) $t['in_mm_calc'],
+                    'tool-c-f' => (string) $t['c_f_calc'],
+                    'tool-vpp-vrms' => (string) $t['vpp_vrms_calc'],
+                    'tool-sunit-dbuv' => (string) $t['sunit_dbuv_calc'],
                 ];
                 foreach ($unitTools as $unitToolId):
                     $unitLabel = '';

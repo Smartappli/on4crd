@@ -8,7 +8,7 @@ return [
     'releases_title' => 'Siaran pers',
     'full_name' => 'Nama lengkap',
     'role' => 'Peran',
-    'email' => 'E-mail',
+  'email' => 'Alamat email',
     'phone' => 'Telepon',
     'notes' => 'Catatan',
     'order' => 'Memesan',

@@ -125,6 +125,21 @@ function member_library_subcategory_ref_parts(string $value): array
 }
 }
 
+if (!function_exists('member_library_i18n_text')) {
+function member_library_i18n_text(string $key): string
+{
+    static $cache = [];
+
+    $locale = function_exists('current_locale') ? current_locale() : null;
+    $cacheKey = $locale ?? '__default__';
+    if (!array_key_exists($cacheKey, $cache)) {
+        $cache[$cacheKey] = function_exists('i18n_domain_locale') ? i18n_domain_locale('members_library', $locale) : [];
+    }
+
+    return (string) ($cache[$cacheKey][$key] ?? $key);
+}
+}
+
 if (!function_exists('member_library_taxonomy_from_input')) {
 /**
  * @return array{category:string,subcategory:string}
@@ -145,7 +160,7 @@ function member_library_taxonomy_from_input(string $categoryInput, string $subca
         return [$category, ''];
     }
     if ($parts['category'] !== '' && $parts['category'] !== $category) {
-        throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+        throw new RuntimeException(member_library_i18n_text('err_subcategory_category_mismatch'));
     }
 
     foreach ((array) (member_library_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
@@ -154,7 +169,7 @@ function member_library_taxonomy_from_input(string $categoryInput, string $subca
         }
     }
 
-    throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+    throw new RuntimeException(member_library_i18n_text('err_subcategory_category_mismatch'));
 }
 }
 
@@ -183,6 +198,13 @@ function member_library_document_upload_mimes(): array
         'html' => ['text/html', 'text/plain', 'application/xhtml+xml', 'application/octet-stream'],
         'htm' => ['text/html', 'text/plain', 'application/xhtml+xml', 'application/octet-stream'],
     ];
+}
+}
+
+if (!function_exists('member_library_upload_max_bytes')) {
+function member_library_upload_max_bytes(): int
+{
+    return 100 * 1024 * 1024;
 }
 }
 
@@ -224,7 +246,7 @@ function member_library_store_document_upload(?array $file, int $memberId, strin
         $prefix . '_' . $memberId . '-' . $base,
         $allowedExtensions,
         $allowedMimes,
-        25 * 1024 * 1024
+        member_library_upload_max_bytes()
     );
 
     return [
@@ -773,24 +795,24 @@ if (!function_exists('member_library_default_subcategories')) {
 function member_library_default_subcategories(): array
 {
     return [
-        ['category_code' => 'general', 'code' => 'references', 'label' => 'Références', 'sort_order' => 10],
-        ['category_code' => 'general', 'code' => 'club', 'label' => 'Club', 'sort_order' => 20],
-        ['category_code' => 'formation', 'code' => 'cours', 'label' => 'Cours', 'sort_order' => 10],
-        ['category_code' => 'formation', 'code' => 'examens', 'label' => 'Examens', 'sort_order' => 20],
-        ['category_code' => 'technique', 'code' => 'montages', 'label' => 'Montages', 'sort_order' => 10],
-        ['category_code' => 'technique', 'code' => 'mesures', 'label' => 'Mesures', 'sort_order' => 20],
-        ['category_code' => 'antennes', 'code' => 'construction', 'label' => 'Construction', 'sort_order' => 10],
-        ['category_code' => 'antennes', 'code' => 'reglages', 'label' => 'Réglages', 'sort_order' => 20],
-        ['category_code' => 'propagation', 'code' => 'bulletins', 'label' => 'Bulletins', 'sort_order' => 10],
-        ['category_code' => 'propagation', 'code' => 'previsions', 'label' => 'Prévisions', 'sort_order' => 20],
-        ['category_code' => 'modes-numeriques', 'code' => 'logiciels', 'label' => 'Logiciels', 'sort_order' => 10],
-        ['category_code' => 'modes-numeriques', 'code' => 'protocoles', 'label' => 'Protocoles', 'sort_order' => 20],
-        ['category_code' => 'reglementation', 'code' => 'licences', 'label' => 'Licences', 'sort_order' => 10],
-        ['category_code' => 'reglementation', 'code' => 'procedures', 'label' => 'Procédures', 'sort_order' => 20],
-        ['category_code' => 'procedures', 'code' => 'station', 'label' => 'Station', 'sort_order' => 10],
-        ['category_code' => 'procedures', 'code' => 'securite', 'label' => 'Sécurité', 'sort_order' => 20],
-        ['category_code' => 'club', 'code' => 'reunions', 'label' => 'Réunions', 'sort_order' => 10],
-        ['category_code' => 'club', 'code' => 'archives', 'label' => 'Archives', 'sort_order' => 20],
+        ['category_code' => 'general', 'code' => 'references', 'label' => member_library_i18n_text('subcategory_references'), 'sort_order' => 10],
+        ['category_code' => 'general', 'code' => 'club', 'label' => member_library_i18n_text('subcategory_club'), 'sort_order' => 20],
+        ['category_code' => 'formation', 'code' => 'cours', 'label' => member_library_i18n_text('subcategory_cours'), 'sort_order' => 10],
+        ['category_code' => 'formation', 'code' => 'examens', 'label' => member_library_i18n_text('subcategory_examens'), 'sort_order' => 20],
+        ['category_code' => 'technique', 'code' => 'montages', 'label' => member_library_i18n_text('subcategory_montages'), 'sort_order' => 10],
+        ['category_code' => 'technique', 'code' => 'mesures', 'label' => member_library_i18n_text('subcategory_mesures'), 'sort_order' => 20],
+        ['category_code' => 'antennes', 'code' => 'construction', 'label' => member_library_i18n_text('subcategory_construction'), 'sort_order' => 10],
+        ['category_code' => 'antennes', 'code' => 'reglages', 'label' => member_library_i18n_text('subcategory_reglages'), 'sort_order' => 20],
+        ['category_code' => 'propagation', 'code' => 'bulletins', 'label' => member_library_i18n_text('subcategory_bulletins'), 'sort_order' => 10],
+        ['category_code' => 'propagation', 'code' => 'previsions', 'label' => member_library_i18n_text('subcategory_previsions'), 'sort_order' => 20],
+        ['category_code' => 'modes-numeriques', 'code' => 'logiciels', 'label' => member_library_i18n_text('subcategory_logiciels'), 'sort_order' => 10],
+        ['category_code' => 'modes-numeriques', 'code' => 'protocoles', 'label' => member_library_i18n_text('subcategory_protocoles'), 'sort_order' => 20],
+        ['category_code' => 'reglementation', 'code' => 'licences', 'label' => member_library_i18n_text('subcategory_licences'), 'sort_order' => 10],
+        ['category_code' => 'reglementation', 'code' => 'procedures', 'label' => member_library_i18n_text('subcategory_procedures'), 'sort_order' => 20],
+        ['category_code' => 'procedures', 'code' => 'station', 'label' => member_library_i18n_text('subcategory_station'), 'sort_order' => 10],
+        ['category_code' => 'procedures', 'code' => 'securite', 'label' => member_library_i18n_text('subcategory_securite'), 'sort_order' => 20],
+        ['category_code' => 'club', 'code' => 'reunions', 'label' => member_library_i18n_text('subcategory_reunions'), 'sort_order' => 10],
+        ['category_code' => 'club', 'code' => 'archives', 'label' => member_library_i18n_text('subcategory_archives'), 'sort_order' => 20],
     ];
 }
 }
@@ -799,15 +821,15 @@ if (!function_exists('member_library_default_categories')) {
 function member_library_default_categories(): array
 {
     return [
-        ['code' => 'general', 'label' => 'Général', 'sort_order' => 1],
-        ['code' => 'formation', 'label' => 'Formation', 'sort_order' => 10],
-        ['code' => 'technique', 'label' => 'Technique', 'sort_order' => 20],
-        ['code' => 'antennes', 'label' => 'Antennes', 'sort_order' => 30],
-        ['code' => 'propagation', 'label' => 'Propagation', 'sort_order' => 40],
-        ['code' => 'modes-numeriques', 'label' => 'Modes numériques', 'sort_order' => 50],
-        ['code' => 'reglementation', 'label' => 'Réglementation', 'sort_order' => 60],
-        ['code' => 'procedures', 'label' => 'Procédures', 'sort_order' => 70],
-        ['code' => 'club', 'label' => 'Club', 'sort_order' => 80],
+        ['code' => 'general', 'label' => member_library_i18n_text('category_general'), 'sort_order' => 1],
+        ['code' => 'formation', 'label' => member_library_i18n_text('category_formation'), 'sort_order' => 10],
+        ['code' => 'technique', 'label' => member_library_i18n_text('category_technique'), 'sort_order' => 20],
+        ['code' => 'antennes', 'label' => member_library_i18n_text('category_antennes'), 'sort_order' => 30],
+        ['code' => 'propagation', 'label' => member_library_i18n_text('category_propagation'), 'sort_order' => 40],
+        ['code' => 'modes-numeriques', 'label' => member_library_i18n_text('category_modes_numeriques'), 'sort_order' => 50],
+        ['code' => 'reglementation', 'label' => member_library_i18n_text('category_reglementation'), 'sort_order' => 60],
+        ['code' => 'procedures', 'label' => member_library_i18n_text('category_procedures'), 'sort_order' => 70],
+        ['code' => 'club', 'label' => member_library_i18n_text('category_club'), 'sort_order' => 80],
     ];
 }
 }

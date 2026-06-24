@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Nieprawidłowy album.',
   'uploaded_count' => 'dodano zdjęcia.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Import albumu zakończony',
+  'notification_import_completed_body' => 'Zaimportowano %d zdjęć.',
   'no_photo_imported' => 'Nie zaimportowano żadnych zdjęć.',
   'created_thumbs' => 'wygenerowane miniatury.',
   'manage_title' => 'Zarządzanie albumem',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Tytuł',
   'description' => 'Opis',
   'public_album' => 'Album publiczny',
+  'featured_album' => 'Wyróżniony album',
   'photo_title' => 'Tytuł zdjęcia',
   'caption' => 'Legenda',
   'files_dropzone' => 'Pliki obrazów',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album został zatwierdzony, ale synchronizacja społecznościowa nie powiodła się.',
   'batch_max_files' => 'Maksymalnie 100 zdjęć na import.',
   'batch_max_size' => 'Partia zdjęć przekracza 512 MB.',
+  'error_field_too_long' => 'Jedno z pól przekracza dozwoloną długość.',
 );

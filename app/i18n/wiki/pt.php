@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Área de membros',
   'unavailable' => 'A Wiki estará disponível após a inicialização das páginas.',
+  'invalid' => 'Pedido inválido.',
   'new_pages' => 'Novas páginas',
   'updated_pages' => 'Páginas atualizadas',
   'most_read' => 'Mais lidas',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Subtópico',
   'no_subcategory' => 'Nenhum subtópico',
   'favorites' => 'Favoritos',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Adicionado aos favoritos',
+  'favorite_removed' => 'Removido dos favoritos',
+  'favorite_added_msg' => 'Página adicionada aos favoritos.',
+  'favorite_removed_msg' => 'Página removida dos favoritos.',
+  'err_subcategory_category_mismatch' => 'A subtemática selecionada não pertence à temática escolhida.',
+  'category_general' => 'Geral',
 );

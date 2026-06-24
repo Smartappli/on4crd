@@ -102,4 +102,7 @@ return array (
   'subcategory_field' => '副标题',
   'no_subcategory' => '无副主题',
   'favorites' => '收藏夹',
+  'invalid' => '无效请求。',
+  'err_invalid_category' => '类别无效。',
+  'err_subcategory_category_mismatch' => '所选子主题不属于所选主题。',
 );

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -61,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'Gestore QSL',
   'qsl_choice_no_qsl' => 'Nessuna QSL',
   'qsl_choice_other' => 'Altro',
+  'registration_closed_title' => 'Registrazione membro',
+  'registration_closed_message' => 'La registrazione pubblica è chiusa. Gli account dei membri vengono creati dall\'amministrazione dopo la validazione.',
+  'membership_link' => 'Diventare membro',
 );

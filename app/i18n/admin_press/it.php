@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Comunicati',
   'full_name' => 'Nome completo',
   'role' => 'Ruolo',
-  'email' => 'E-mail',
+  'email' => 'Indirizzo e-mail',
   'phone' => 'Telefono',
   'notes' => 'Note',
   'order' => 'Ordine',

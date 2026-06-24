@@ -102,4 +102,7 @@ return array (
   'subcategory_field' => 'موضوع فرعي',
   'no_subcategory' => 'لا يوجد موضوع فرعي',
   'favorites' => 'المفضلة',
+  'invalid' => 'طلب غير صالح.',
+  'err_invalid_category' => 'فئة غير صالحة.',
+  'err_subcategory_category_mismatch' => 'الموضوع الفرعي المحدد لا ينتمي إلى الموضوع المختار.',
 );

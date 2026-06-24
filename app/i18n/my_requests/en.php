@@ -62,4 +62,12 @@ return array (
   'proposal_type_domain' => 'Domain proposal',
   'proposal_type_tag' => 'Tag proposal',
   'proposal_type_subcategory' => 'Subtopic proposal',
+  'albums_title' => 'Albums',
+  'auctions_title' => 'Auctions',
+  'files_title' => 'Files',
+  'presentations_title' => 'Presentations',
+  'minutes_title' => 'Minutes',
+  'videos_title' => 'Videos',
+  'library_document_default_title' => 'Document',
+  'document_default_title' => 'Document',
 );

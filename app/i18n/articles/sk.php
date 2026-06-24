@@ -102,4 +102,7 @@ Kontakt:',
   'subcategory_field' => 'Podtéma',
   'no_subcategory' => 'Žiadna podtéma',
   'favorites' => 'Obľúbené',
+  'invalid' => 'Neplatná požiadavka.',
+  'err_invalid_category' => 'Neplatná kategória.',
+  'err_subcategory_category_mismatch' => 'Vybraná podtéma nepatrí k vybranej téme.',
 );

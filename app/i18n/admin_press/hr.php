@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Priopćenja za javnost',
   'full_name' => 'Puno ime',
   'role' => 'uloga',
-  'email' => 'E-mail',
+  'email' => 'E-adresa',
   'phone' => 'Telefon',
   'notes' => 'Bilješke',
   'order' => 'Red',

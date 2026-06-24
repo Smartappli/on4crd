@@ -350,23 +350,8 @@ function require_login(?string $nextUrl = null): array
 {
     $user = current_user();
     if ($user === null) {
-        $locale = current_locale();
-        $message = match ($locale) {
-            'en' => 'Please sign in to continue.',
-            'de' => 'Bitte melden Sie sich an, um fortzufahren.',
-            'nl' => 'Log in om verder te gaan.',
-            'es' => 'Inicia sesión para continuar.',
-            'it' => 'Accedi per continuare.',
-            'pt' => 'Inicie sessão para continuar.',
-            'ar' => 'يرجى تسجيل الدخول للمتابعة.',
-            'hi' => 'जारी रखने के लिए कृपया लॉग इन करें।',
-            'ja' => '続行するにはログインしてください。',
-            'zh' => '请先登录以继续。',
-            'bn' => 'চালিয়ে যেতে অনুগ্রহ করে লগইন করুন।',
-            'ru' => 'Пожалуйста, войдите, чтобы продолжить.',
-            'id' => 'Silakan masuk untuk melanjutkan.',
-            default => 'Veuillez vous connecter pour continuer.',
-        };
+        $messages = function_exists('i18n_domain_locale') ? i18n_domain_locale('login', current_locale()) : [];
+        $message = (string) ($messages['login_required'] ?? 'Please sign in to continue.');
         set_flash('error', $message);
         $loginQuery = [];
         $safeNextUrl = $nextUrl !== null ? safe_login_next_url($nextUrl) : null;

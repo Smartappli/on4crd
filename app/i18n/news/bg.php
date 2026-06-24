@@ -61,4 +61,13 @@ return array (
   'search' => 'Търсене',
   'news_count_label' => 'Брой новини',
   'proposal_recorded' => 'Предложението е запазено във вашето съдържание.',
+  'invalid' => 'Невалидна заявка.',
+  'publish' => 'Публикувай',
+  'create' => 'Създавайте',
+  'published' => 'Новините са записани.',
+  'category_created_direct' => 'Темата е предложена и одобрена директно.',
+  'create_news' => 'Създавайте - Новини',
+  'create_category' => 'Създавайте - Рубрика',
+  'news_direct_help' => 'Новините са записани.',
+  'category_direct_help' => 'Темата ще бъде одобрена директно.',
 );

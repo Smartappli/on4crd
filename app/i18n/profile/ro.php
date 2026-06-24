@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'Responsabil QSL',
   'qsl_choice_no_qsl' => 'Fără QSL',
   'qsl_choice_other' => 'Altceva',
+  'preview_public_title' => 'Vizualizare publică',
+  'preview_members_title' => 'Vizualizare membri',
+  'preview_private_title' => 'Vizualizare comitet',
+  'required_field_help' => 'Câmp obligatoriu.',
+  'preview_empty' => 'Nu există informații vizibile.',
 );

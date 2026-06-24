@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Πρόταση ετικέτας',
   'proposal_type_subcategory' => 'Πρόταση υποθεματικής',
   'webotheque_title' => 'Διαδικτυακή βιβλιοθήκη',
+  'albums_title' => 'Άλμπουμ',
+  'auctions_title' => 'δημοπρασίες',
+  'files_title' => 'Αρχεία',
+  'presentations_title' => 'Παρουσιάσεις',
+  'minutes_title' => 'Πρακτικά συνεδριάσεων',
+  'videos_title' => 'Βίντεο',
+  'library_document_default_title' => 'Έγγραφο',
+  'document_default_title' => 'Έγγραφο',
 );

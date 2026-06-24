@@ -20,6 +20,7 @@ return array (
   'title' => 'Title',
   'description' => 'Description',
   'public_album' => 'Public album',
+  'featured_album' => 'Featured album',
   'photo_title' => 'Photo title',
   'caption' => 'Caption',
   'files_dropzone' => 'Image files',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album validated, but social synchronization failed.',
   'batch_max_files' => 'Maximum 100 photos per import.',
   'batch_max_size' => 'The photo batch exceeds 512 MB.',
+  'error_field_too_long' => 'One of the fields exceeds the allowed length.',
 );

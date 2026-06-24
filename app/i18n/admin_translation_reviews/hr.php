@@ -15,4 +15,10 @@ return array (
   'no_article' => 'Nema prijevoda članaka na čekanju.',
   'layout' => 'Jezična lektura',
   'meta_desc' => 'Validacija automatskih prijevoda sadržaja.',
+  'assistant_title' => 'Admin asistent: provjera prijevoda i taksonomije',
+  'assistant_help' => 'Koristite ovu ploču za potvrdu prijevoda chatbota i otkrivanje duplikata taksonomije ili oznaka prije moderacije.',
+  'chatbot_i18n_title' => 'Kvaliteta prijevoda chatbota',
+  'chatbot_i18n_ok' => 'Sve jezične datoteke chatbota potpune su i dosljedne.',
+  'taxonomy_title' => 'Prijedlozi taksonomije i oznaka',
+  'taxonomy_empty' => 'Nisu pronađene duplicirane varijante.',
 );

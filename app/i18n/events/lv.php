@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'Atcelt',
   'propose_event_close' => 'Aizvērt',
   'proposal_recorded' => 'Priekšlikums saglabāts jūsu saturā.',
+  'invalid' => 'Nederīgs pieprasījums.',
+  'event_published_direct' => 'Pasākums publicēts tieši.',
+  'propose_event_direct_help' => 'Pasākums tiks publicēts tieši.',
+  'publish_event' => 'Publicēt',
+  'next_event_title' => 'Gaidāmie pasākumi',
 );

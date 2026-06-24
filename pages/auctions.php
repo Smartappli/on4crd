@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? '');
         if ($action !== 'propose_lot') {
-            throw new RuntimeException('Demande invalide.');
+            throw new RuntimeException((string) $t['invalid']);
         }
         $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
         $proposalSummary = (string) ($_POST['proposal_summary'] ?? '');
@@ -30,18 +30,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $descriptionText = content_proposal_clean_multiline($proposalDescription, 5000);
         $contact = content_proposal_clean_single_line($proposalContact, 220);
         if ($title === '') {
-            throw new RuntimeException('Demande invalide.');
+            throw new RuntimeException((string) $t['invalid']);
         }
 
         if (has_permission('auctions.manage')) {
             if (!table_exists('auction_lots')) {
-                throw new RuntimeException('Stockage des enchères indisponible.');
+                throw new RuntimeException((string) $t['storage_unavailable']);
             }
             $slug = auction_unique_slug($title);
             $startingPrice = max(0, parse_price_to_cents($proposalPrice));
             $descriptionHtml = $descriptionText !== '' ? '<p>' . nl2br(e($descriptionText), false) . '</p>' : '';
             if ($contact !== '') {
-                $descriptionHtml .= '<p><strong>Contact:</strong> ' . e($contact) . '</p>';
+                $descriptionHtml .= '<p><strong>' . e((string) $t['contact_prefix']) . '</strong> ' . e($contact) . '</p>';
             }
             $startsAt = time();
             $endsAt = strtotime('+7 days', $startsAt);
@@ -56,17 +56,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     date('Y-m-d H:i:s', $endsAt ?: ($startsAt + 7 * 86400)),
                 ]);
             cache_forget('auction_public_lots_60_v1');
-            set_flash('success', 'Lot créé et validé directement.');
+            set_flash('success', (string) $t['lot_created_direct']);
             redirect_url(route_url('auction_view', ['slug' => $slug]));
         }
 
         $proposalDetails = content_proposal_details_text([
-            'Résumé' => $summary,
-            'Prix de départ' => $proposalPrice,
-            'Description' => $descriptionText,
+            (string) $t['summary_label'] => $summary,
+            (string) $t['starting_price_label'] => $proposalPrice,
+            (string) $t['description_label'] => $descriptionText,
         ]);
         $proposalId = content_proposal_create((int) $user['id'], 'auctions', 'content', $title, $proposalDetails, $contact);
-        content_proposal_notify_site('Proposition de lot ON4CRD', [
+        content_proposal_notify_site((string) $t['propose_lot_subject'], [
             'area' => 'auctions',
             'proposal_type' => 'content',
             'title' => $title,
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'contact' => $contact,
             'source_ref' => 'content_proposals#' . $proposalId,
         ]);
-        set_flash('success', 'Proposition enregistree dans vos contenus.');
+        set_flash('success', (string) $t['proposal_recorded']);
         redirect('my_requests');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -158,27 +158,27 @@ ob_start();
                 </div>
             </div>
             <p class="actions">
-                <a class="button" href="<?= e($lotProposalUrl) ?>"><?= e($canManageAuctions ? 'Créer un lot' : 'Proposer un lot') ?></a>
-                <a class="button secondary auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) ($t['subscribe_auctions'] ?? "M'abonner aux enchères")) ?></a>
+                <a class="button" href="<?= e($lotProposalUrl) ?>"><?= e($canManageAuctions ? (string) $t['create_lot'] : (string) $t['propose_lot']) ?></a>
+                <a class="button secondary auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) $t['subscribe_auctions']) ?></a>
             </p>
         </div>
     </header>
 
     <?php if ($showLotProposalForm): ?>
     <section class="card">
-        <h2><?= e($canManageAuctions ? 'Créer un lot' : 'Proposer un lot') ?></h2>
-        <p class="help"><?= e($canManageAuctions ? 'Le lot sera activé directement pour 7 jours.' : 'Votre proposition sera envoyée en validation et visible dans Mes contenus.') ?></p>
+        <h2><?= e($canManageAuctions ? (string) $t['create_lot'] : (string) $t['propose_lot']) ?></h2>
+        <p class="help"><?= e($canManageAuctions ? (string) $t['lot_direct_help'] : (string) $t['proposal_pending_help']) ?></p>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="propose_lot">
-            <label><span>Titre</span><input type="text" name="proposal_title" maxlength="190" required></label>
-            <label><span>Résumé</span><input type="text" name="proposal_summary" maxlength="1000"></label>
-            <label><span>Prix de départ</span><input type="text" name="proposal_price" placeholder="0,00"></label>
-            <label><span>Description</span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
-            <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+            <label><span><?= e((string) $t['title_label']) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
+            <label><span><?= e((string) $t['summary_label']) ?></span><input type="text" name="proposal_summary" maxlength="1000"></label>
+            <label><span><?= e((string) $t['starting_price_label']) ?></span><input type="text" name="proposal_price" placeholder="0,00"></label>
+            <label><span><?= e((string) $t['description_label']) ?></span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
+            <label><span><?= e((string) $t['contact_label']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">
-                <button class="button" type="submit"><?= e($canManageAuctions ? 'Créer' : 'Envoyer la proposition') ?></button>
-                <a class="button secondary" href="<?= e(route_url('auctions')) ?>">Annuler</a>
+                <button class="button" type="submit"><?= e($canManageAuctions ? (string) $t['create'] : (string) $t['proposal_submit']) ?></button>
+                <a class="button secondary" href="<?= e(route_url('auctions')) ?>"><?= e((string) $t['cancel']) ?></a>
             </p>
         </form>
     </section>

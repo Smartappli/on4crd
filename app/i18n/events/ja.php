@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'キャンセル',
   'propose_event_close' => '閉じる',
   'proposal_recorded' => '提案はあなたのコンテンツに保存されました。',
+  'invalid' => '無効なリクエストです。',
+  'event_published_direct' => 'イベントが直接公開されました。',
+  'propose_event_direct_help' => 'イベントは直接公開されます。',
+  'publish_event' => '公開',
+  'next_event_title' => '今後のイベント',
 );

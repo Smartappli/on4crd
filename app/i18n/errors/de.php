@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Sehen Sie sich die kommenden Aktivitäten an.',
   'tools_link' => 'Funkwerkzeuge',
   'tools_hint' => 'Öffnen Sie die praktischen Funkamateur-Werkzeuge.',
+  'module_unavailable' => 'Modul nicht verfügbar.',
+  'slug_article_unique_failed' => 'Es kann kein eindeutiger Artikel-Slug generiert werden.',
+  'slug_wiki_unique_failed' => 'Es kann kein eindeutiger Wiki-Slug generiert werden.',
+  'slug_news_unique_failed' => 'Es kann kein eindeutiger News-Slug generiert werden.',
+  'slug_event_unique_failed' => 'Es kann kein eindeutiger Ereignis-Slug generiert werden.',
+  'storage_path_invalid' => 'Ungültiger Speicherpfad.',
+  'storage_path_forbidden' => 'Der Speicherpfad ist nicht zulässig.',
+  'remote_url_private' => 'Der Remote-URL verweist auf ein privates oder reserviertes Netzwerk.',
+  'remote_url_private_resolved' => 'Der Remote-URL wird in eine private oder reservierte IP-Adresse aufgelöst.',
+  'field_too_long' => 'Eines der Felder überschreitet die zulässige Länge.',
+  'wiki_storage_unavailable' => 'Wiki-Speicher nicht verfügbar.',
+  'wiki_page_invalid' => 'Ungültige Wiki-Seite.',
+  'wiki_page_not_found' => 'Wiki-Seite nicht gefunden.',
+  'newsletter_campaign_not_found' => 'Kampagne nicht gefunden.',
+  'internal_error' => 'Es ist ein interner Fehler aufgetreten.',
+  'error_reference' => 'Referenz: {request_id}.',
+  'service_temporarily_unavailable' => 'Der Dienst ist vorübergehend nicht verfügbar.',
 );

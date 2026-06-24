@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Albam neamhbhailí.',
   'uploaded_count' => 'grianghraf(í) curtha leis.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Iompórtáil alba críochnaithe',
+  'notification_import_completed_body' => 'Iompórtáladh %d grianghraf.',
   'no_photo_imported' => 'Níor iompórtáladh aon ghrianghraif.',
   'created_thumbs' => 'mionsamhail(í) ginte.',
   'manage_title' => 'Bainistíocht albam',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Teideal',
   'description' => 'Cur síos',
   'public_album' => 'Albam poiblí',
+  'featured_album' => 'Albam faoi thrácht',
   'photo_title' => 'Teideal an ghrianghraif',
   'caption' => 'Finscéal',
   'files_dropzone' => 'Comhaid íomhá',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Albam bailíochtaithe, ach theip ar an sioncronú sóisialta.',
   'batch_max_files' => 'Uasmhéid 100 grianghraf in aghaidh an allmhairithe.',
   'batch_max_size' => 'Sáraíonn an bhaisc grianghraf 512 MB.',
+  'error_field_too_long' => 'Tá ceann de na réimsí níos mó ná an fad ceadaithe.',
 );

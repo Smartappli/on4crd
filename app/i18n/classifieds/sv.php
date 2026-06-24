@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Radannons modererad',
   'notification_removed_body' => 'Annons borttagen av moderering: {title}',
   'notification_status_body' => 'Status uppdaterad till {status}: {title}',
+  'propose_category_direct_help' => 'Kategorin godkänns direkt.',
+  'propose_category_created_direct' => 'Kategorin skapades och godkändes direkt.',
 );

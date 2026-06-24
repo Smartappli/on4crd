@@ -102,4 +102,7 @@ Contact:',
   'subcategory_field' => 'Subiect',
   'no_subcategory' => 'Fără subiecte secundare',
   'favorites' => 'Favorite',
+  'invalid' => 'Cerere invalidă.',
+  'err_invalid_category' => 'Categorie nevalidă.',
+  'err_subcategory_category_mismatch' => 'Subtema selectată nu aparține temei alese.',
 );

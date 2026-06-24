@@ -102,4 +102,7 @@ Kontaktas:',
   'subcategory_field' => 'Potemė',
   'no_subcategory' => 'Nėra potemės',
   'favorites' => 'Mėgstamiausi',
+  'invalid' => 'Netinkama užklausa.',
+  'err_invalid_category' => 'Netinkama kategorija.',
+  'err_subcategory_category_mismatch' => 'Pasirinkta potemė nepriklauso pasirinktai temai.',
 );

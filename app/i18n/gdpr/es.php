@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -40,4 +39,33 @@ return array (
   'empty_visible_info' => 'Sin información visible.',
   'profile_data_title' => 'Datos del perfil',
   'profile_data_help' => 'Esta sección reutiliza los campos no vacíos de su perfil y aplica los mismos ajustes de visibilidad que el directorio. La exportación JSON también contiene los datos de perfil almacenados en la base de datos.',
+  'privacy_short_register' => 'Los datos de la cuenta se utilizan para crear el perfil, proteger el acceso y mostrar solo la información que usted hace visible. La geocodificación postal externa es opcional.',
+  'privacy_short_profile' => 'La información del perfil permanece controlada por su configuración de visibilidad. La geocodificación postal externa se envía solo si usted lo solicita.',
+  'privacy_short_newsletter' => 'El boletín requiere consentimiento explícito. Se conservan las pruebas de consentimiento y los datos técnicos seudonimizados.',
+  'privacy_short_geocode' => 'Si habilita la codificación geográfica automática, la dirección postal ingresada se envía a Nominatim y el resultado se almacena en caché durante 30 días.',
+  'privacy_short_default' => 'Los datos personales se limitan a los usos del sitio, con solicitudes de exportación, objeción y eliminación disponibles.',
+  'privacy_notice_link' => 'Ver el aviso GDPR',
+  'privacy_dpo_label' => 'DPO/contacto dedicado',
+  'privacy_tracking_matomo_configured' => 'La medición de audiencia de Matomo se puede cargar solo de acuerdo con la configuración de consentimiento, con la anonimización y las cookies deshabilitadas cuando se configuran.',
+  'privacy_tracking_matomo_unconfigured' => 'No se carga ninguna medición de audiencia externa de forma predeterminada; Matomo permanece deshabilitado hasta que se configura una instancia.',
+  'privacy_section_controller_title' => 'Responsable del tratamiento',
+  'privacy_section_controller_body' => '{controller_name} es el responsable del tratamiento de datos. Contacto público: {controller_email}. Dirección: {controller_postal_address}.{dpo}',
+  'privacy_section_purposes_title' => 'Propósitos',
+  'privacy_section_purposes_body' => 'Gestión de cuentas, directorio de radioaficionados, publicación de contenidos, propuestas de artículos, moderación, seguridad, estadísticas técnicas internas, newsletter, tienda/eventos y solicitudes de GDPR.',
+  'privacy_section_legal_bases_title' => 'Bases legales',
+  'privacy_section_legal_bases_body' => 'Rendimiento del servicio de cuenta de miembro, interés legítimo de seguridad y moderación, obligaciones legales para ciertos registros/transacciones, consentimiento para el boletín informativo, seguimiento no esencial y geocodificación postal externa.',
+  'privacy_section_processed_data_title' => 'Datos procesados',
+  'privacy_section_processed_data_body' => 'Identidad de radioaficionado, correo electrónico, perfil, configuración de visibilidad, contenido publicado, documentos cargados, preferencias, suscripciones, historiales técnicos seudonimizados, solicitudes GDPR, registros de seguridad y registros de consentimiento.',
+  'privacy_section_recipients_title' => 'Destinatarios',
+  'privacy_section_recipients_body' => 'Administradores autorizados, miembros según su configuración de visibilidad, visitantes de contenido público, el anfitrión del sitio, proveedores de correo electrónico estrictamente necesarios, Google Maps si muestra el mapa incrustado y Nominatim solo si habilita la codificación geográfica. Las principales bibliotecas front-end reciben servicio localmente, sin una CDN pública.',
+  'privacy_section_retention_title' => 'Retención',
+  'privacy_section_retention_body' => 'La cuenta se conserva mientras esté activa. Registros técnicos: {technical_logs_months} meses. Chatbot: {chatbot_days} días. Envíos de newsletter: {newsletter_deliveries_months} meses. Leer notificaciones: {read_notifications_months} meses. Solicitudes GDPR resueltas: {privacy_requests_years} años. Restablecimiento de contraseña: {password_reset_log_days} días. Caché de geocodificación: {geocode_cache_days} días.',
+  'privacy_section_rights_title' => 'Derechos',
+  'privacy_section_rights_body' => 'Podrá solicitar acceso, exportación, rectificación, restricción, oposición, portabilidad y supresión. La exportación JSON está disponible desde esta página para los miembros que hayan iniciado sesión; el borrado inicia una anonimización controlada con un registro de acciones.',
+  'privacy_section_cookies_title' => 'Cookies y medición',
+  'privacy_section_cookies_body' => 'Las cookies esenciales se utilizan para la sesión, la seguridad y las preferencias de idioma/tema. {tracking_text}',
+  'privacy_section_security_title' => 'Seguridad',
+  'privacy_section_security_body' => 'HMAC pseudonimiza las IP de las aplicaciones y los agentes de usuario con un secreto local persistente. Las acciones administrativas de GDPR se registran con el identificador del administrador, el estado y la marca de tiempo.',
+  'privacy_section_contact_title' => 'Contacto y denuncia',
+  'privacy_section_contact_body' => 'Para cualquier solicitud sobre datos personales: {controller_email}. Los miembros registrados también pueden utilizar el formulario de esta página. Autoridad supervisora: {supervisory_authority}.',
 );

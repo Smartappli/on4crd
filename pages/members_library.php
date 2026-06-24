@@ -8,10 +8,6 @@ $memberAreaLabel = member_area_eyebrow_label($locale);
 /** @var array{id:int} $user */
 $user = current_user() ?? ['id' => 0];
 $canManageLibrary = has_permission('admin.access');
-$isFrench = $locale === 'fr';
-$membersLibraryText = static function (string $key, string $fr, string $en) use ($t, $isFrench): string {
-    return (string) ($t[$key] ?? ($isFrench ? $fr : $en));
-};
 $proposalContactDefault = trim((string) ($user['email'] ?? ''));
 if ($proposalContactDefault === '') {
     $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
@@ -53,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $docStmt->execute([$documentId]);
                 $docRow = $docStmt->fetch() ?: null;
                 if ($docRow !== null) {
-                    $docTitle = trim((string) ($docRow['title'] ?? 'Document'));
+                    $docTitle = trim((string) ($docRow['title'] ?? $t['document']));
                     $docCategory = trim((string) ($docRow['category'] ?? ''));
                     $docSubcategory = trim((string) ($docRow['subcategory'] ?? ''));
                     $docTags = trim((string) ($docRow['tags'] ?? ''));
@@ -76,10 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $docStmt->execute([$documentId]);
             $document = $docStmt->fetch() ?: null;
             if (!is_array($document)) {
-                throw new RuntimeException($membersLibraryText('document_missing', 'Document introuvable.', 'Document not found.'));
+                throw new RuntimeException((string) $t['document_missing']);
             }
             if (!$canManageLibrary && (int) ($document['member_id'] ?? 0) !== (int) ($user['id'] ?? 0)) {
-                throw new RuntimeException($membersLibraryText('document_forbidden', 'Vous ne pouvez pas modifier ce document.', 'You cannot edit this document.'));
+                throw new RuntimeException((string) $t['document_forbidden']);
             }
 
             $file = $_FILES['document_file'] ?? null;
@@ -99,13 +95,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $description = content_proposal_clean_multiline((string) ($_POST['document_description'] ?? $document['description'] ?? ''), 1800);
 
             if ($title === '') {
-                throw new RuntimeException($membersLibraryText('document_title_required', 'Un titre est requis.', 'A title is required.'));
+                throw new RuntimeException((string) $t['document_title_required']);
             }
 
             if ($action === 'delete_document') {
                 if ($canManageLibrary) {
                     member_library_delete_document_record($documentId);
-                    set_flash('success', $membersLibraryText('document_deleted', 'Document supprimé.', 'Document deleted.'));
+                    set_flash('success', (string) $t['document_deleted']);
                     redirect_url($membersLibraryReturnUrl());
                 }
 
@@ -113,13 +109,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $proposalSummary = content_proposal_details_text([
                     'Action' => 'delete_document',
                     'Document ID' => (string) $documentId,
-                    'Category' => (string) ($document['category'] ?? 'general'),
-                    (string) ($t['propose_document_subcategory'] ?? 'Subcategory') => (string) ($document['subcategory'] ?? ''),
-                    'Tags' => (string) ($document['tags'] ?? ''),
-                    'Description' => mb_safe_substr((string) ($document['description'] ?? ''), 0, 1800),
+                    (string) $t['propose_document_category'] => (string) ($document['category'] ?? 'general'),
+                    (string) $t['propose_document_subcategory'] => (string) ($document['subcategory'] ?? ''),
+                    (string) $t['tags'] => (string) ($document['tags'] ?? ''),
+                    (string) $t['propose_document_description'] => mb_safe_substr((string) ($document['description'] ?? ''), 0, 1800),
                 ]);
                 $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $title, $proposalSummary, (string) ($user['email'] ?? ''), $sourceRef, 'pending');
-                content_proposal_notify_site($membersLibraryText('document_change_subject', 'Modification de document à valider', 'Document change pending review'), [
+                content_proposal_notify_site((string) $t['document_change_subject'], [
                     'area' => 'members_library',
                     'proposal_type' => 'content',
                     'title' => $title,
@@ -127,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'contact' => (string) ($user['email'] ?? ''),
                     'source_ref' => 'content_proposals#' . $proposalId,
                 ]);
-                set_flash('success', $membersLibraryText('document_change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+                set_flash('success', (string) $t['document_change_recorded']);
                 redirect('my_requests');
             }
 
@@ -138,20 +134,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($canManageLibrary) {
                 member_library_update_document_record($documentId, $title, $documentCategory, $documentTags, $description, $sourceRef, $documentSubcategory);
-                set_flash('success', $membersLibraryText('document_updated', 'Document mis à jour.', 'Document updated.'));
+                set_flash('success', (string) $t['document_updated']);
                 redirect_url($membersLibraryReturnUrl());
             }
 
             $proposalSummary = content_proposal_details_text([
                 'Action' => 'update_document',
                 'Document ID' => (string) $documentId,
-                'Category' => $documentCategory,
-                (string) ($t['propose_document_subcategory'] ?? 'Subcategory') => $documentSubcategory,
-                'Tags' => $documentTags,
-                'Description' => $description,
+                (string) $t['propose_document_category'] => $documentCategory,
+                (string) $t['propose_document_subcategory'] => $documentSubcategory,
+                (string) $t['tags'] => $documentTags,
+                (string) $t['propose_document_description'] => $description,
             ]);
             $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $title, $proposalSummary, (string) ($user['email'] ?? ''), $sourceRef, 'pending');
-            content_proposal_notify_site($membersLibraryText('document_change_subject', 'Modification de document à valider', 'Document change pending review'), [
+            content_proposal_notify_site((string) $t['document_change_subject'], [
                 'area' => 'members_library',
                 'proposal_type' => 'content',
                 'title' => $title,
@@ -159,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => (string) ($user['email'] ?? ''),
                 'source_ref' => 'content_proposals#' . $proposalId,
             ]);
-            set_flash('success', $membersLibraryText('document_change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+            set_flash('success', (string) $t['document_change_recorded']);
             redirect('my_requests');
         }
 
@@ -170,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $proposalContact = $proposalContactDefault;
             }
             $proposalSummary = content_proposal_details_text([
-                (string) ($t['propose_category_reason'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+                (string) $t['propose_category_reason'] => (string) ($_POST['proposal_reason'] ?? ''),
             ]);
             $autoAccept = has_permission('admin.access');
             if ($autoAccept) {
@@ -211,9 +207,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $proposalContact = $proposalContactDefault;
             }
             $proposalSummary = content_proposal_details_text([
-                (string) ($t['propose_document_category'] ?? 'Category') => $parentCategory,
-                (string) ($t['propose_document_subcategory'] ?? 'Subcategory') => $proposalTitle,
-                (string) ($t['propose_subcategory_reason'] ?? $t['propose_category_reason'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+                (string) $t['propose_document_category'] => $parentCategory,
+                (string) $t['propose_document_subcategory'] => $proposalTitle,
+                (string) $t['propose_subcategory_reason'] => (string) ($_POST['proposal_reason'] ?? ''),
             ]);
             $autoAccept = has_permission('admin.access');
             if ($autoAccept) {
@@ -227,11 +223,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 db()->prepare('INSERT INTO member_library_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                     ->execute([$parentCategory, $code, $label]);
-                set_flash('success', (string) ($t['subcategory_created_direct'] ?? $t['category_created_direct']));
+                set_flash('success', (string) $t['subcategory_created_direct']);
                 redirect_url(route_url_clean('members_library', ['category' => $parentCategory, 'subcategory' => $code]));
             }
             $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'subcategory', $proposalTitle, $proposalSummary, $proposalContact);
-            content_proposal_notify_site((string) ($t['propose_subcategory_subject'] ?? $t['propose_category_subject']), [
+            content_proposal_notify_site((string) $t['propose_subcategory_subject'], [
                 'area' => 'members_library',
                 'proposal_type' => 'subcategory',
                 'title' => content_proposal_clean_single_line($proposalTitle, 190),
@@ -250,12 +246,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $proposalContact = $proposalContactDefault;
             }
             $proposalSummary = content_proposal_details_text([
-                (string) ($t['propose_tag_reason'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+                (string) $t['propose_tag_reason'] => (string) ($_POST['proposal_reason'] ?? ''),
             ]);
             $proposalStatus = has_permission('admin.access') ? 'accepted' : 'pending';
             $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'tag', $proposalTitle, $proposalSummary, $proposalContact, '', $proposalStatus);
             if ($proposalStatus === 'accepted') {
-                set_flash('success', (string) ($t['tag_created_direct'] ?? $t['proposal_recorded']));
+                set_flash('success', (string) $t['tag_created_direct']);
                 redirect_url(route_url('members_library'));
             }
 
@@ -288,11 +284,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $storedDocument = member_library_store_proposed_document_upload($_FILES['proposal_file'] ?? null, (int) $user['id']);
             $proposalFilePath = (string) $storedDocument['public_path'];
             $proposalSummary = content_proposal_details_text([
-                (string) ($t['propose_document_category'] ?? 'Category') => $proposalCategory,
-                (string) ($t['propose_document_subcategory'] ?? 'Subcategory') => $proposalSubcategory,
-                (string) ($t['tags'] ?? 'Keywords') => $proposalTags,
-                (string) ($t['document'] ?? 'Document') => (string) $storedDocument['original_name'],
-                (string) ($t['propose_document_description'] ?? 'Description') => (string) ($_POST['proposal_description'] ?? ''),
+                (string) $t['propose_document_category'] => $proposalCategory,
+                (string) $t['propose_document_subcategory'] => $proposalSubcategory,
+                (string) $t['tags'] => $proposalTags,
+                (string) $t['document'] => (string) $storedDocument['original_name'],
+                (string) $t['propose_document_description'] => (string) ($_POST['proposal_description'] ?? ''),
             ]);
             $autoAccept = has_permission('admin.access');
             $proposalStatus = $autoAccept ? 'accepted' : 'pending';
@@ -343,6 +339,7 @@ $favoriteDocumentIds = member_library_favorite_document_ids((int) ($user['id'] ?
 $favoriteDocumentCount = count($favoriteDocumentIds);
 $favoritesOnly = (string) ($_GET['favorites'] ?? '') === '1' && $favoriteDocumentCount > 0;
 $favoritesLabel = member_library_favorites_label($t, $locale);
+$generalCategoryLabel = (string) $t['category_general'];
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $perPage = 12;
 
@@ -355,7 +352,7 @@ foreach ($documentCategories as $catRow) {
     }
     $categoryMap[$catCode] = [
         'category' => $catCode,
-        'label' => $catCode === 'general' ? 'Général' : $catCode,
+        'label' => $catCode === 'general' ? $generalCategoryLabel : $catCode,
         'total' => (int) ($catRow['total'] ?? 0),
     ];
 }
@@ -366,7 +363,7 @@ foreach (member_library_default_categories() as $defaultCategory) {
         continue;
     }
     if ($catLabel === '') {
-        $catLabel = $catCode === 'general' ? 'Général' : $catCode;
+        $catLabel = $catCode === 'general' ? $generalCategoryLabel : $catCode;
     }
     if (!isset($categoryMap[$catCode])) {
         $categoryMap[$catCode] = [
@@ -387,7 +384,7 @@ if (member_library_ensure_categories_table()) {
                 $catLabel = $catCode;
             }
             if ($catCode === 'general' && strcasecmp($catLabel, 'general') === 0) {
-                $catLabel = 'Général';
+                $catLabel = $generalCategoryLabel;
             }
             if (!isset($categoryMap[$catCode])) {
                 $categoryMap[$catCode] = ['category' => $catCode, 'label' => $catLabel, 'total' => 0];
@@ -404,7 +401,7 @@ $categoryLabels = [];
 foreach ($categories as $catInfo) {
     $catCode = trim((string) ($catInfo['category'] ?? ''));
     if ($catCode !== '') {
-        $categoryLabels[$catCode] = (string) ($catInfo['label'] ?? ($catCode === 'general' ? 'Général' : $catCode));
+        $categoryLabels[$catCode] = (string) ($catInfo['label'] ?? ($catCode === 'general' ? $generalCategoryLabel : $catCode));
     }
 }
 $subcategoryCounts = [];
@@ -498,14 +495,14 @@ if ($tag !== '') {
 $contactEmail = site_contact_email();
 $documentProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_document_subject']);
 $categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_category_subject']);
-$subcategoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) ($t['propose_subcategory_subject'] ?? $t['propose_category_subject']));
+$subcategoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_subcategory_subject']);
 $tagProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_tag_subject']);
 $showCategoryProposalForm = (string) ($_GET['propose_category'] ?? '') === '1';
 $showSubcategoryProposalForm = (string) ($_GET['propose_subcategory'] ?? '') === '1';
 $showTagProposalForm = (string) ($_GET['propose_tag'] ?? '') === '1';
 $showDocumentProposalForm = (string) ($_GET['propose_document'] ?? '') === '1';
 $pendingLibraryAdminUrl = route_url_clean('admin_library', ['status' => 'pending']) . '#pending-proposals';
-$pendingLibraryAdminLabel = $locale === 'fr' ? 'Administrer' : 'Manage';
+$pendingLibraryAdminLabel = (string) $t['administer'];
 
 $relatedByDocumentId = [];
 if ($documents !== []) {
@@ -593,7 +590,7 @@ ob_start();
                     <strong><?= (int) $totalDocuments ?></strong>
                 </article>
                 <article>
-                    <span><?= e((string) ($t['categories'] ?? $t['all_categories'])) ?></span>
+                    <span><?= e((string) $t['categories']) ?></span>
                     <strong><?= (int) count($visibleCategories) ?></strong>
                 </article>
                 <article>
@@ -607,12 +604,12 @@ ob_start();
             </div>
             <div class="members-library-hero-action">
                 <details class="members-library-propose-menu">
-                    <summary class="button" aria-haspopup="menu"><?= e((string) ($t['propose_menu'] ?? 'Proposer')) ?></summary>
+                    <summary class="button" aria-haspopup="menu"><?= e((string) $t['propose_menu']) ?></summary>
                     <div class="members-library-propose-menu-panel" role="menu">
-                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e((string) ($t['propose_category_item'] ?? 'Une thématique')) ?></a>
-                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($subcategoryProposalUrl) ?>" data-members-library-modal-open="members-library-subcategory-dialog" aria-haspopup="dialog" aria-controls="members-library-subcategory-dialog"><?= e((string) ($t['propose_subcategory_item'] ?? 'Une sous thématique')) ?></a>
-                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($tagProposalUrl) ?>" data-members-library-modal-open="members-library-tag-dialog" aria-haspopup="dialog" aria-controls="members-library-tag-dialog"><?= e((string) ($t['propose_tag_item'] ?? 'Un mot clé')) ?></a>
-                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e((string) ($t['propose_document_item'] ?? 'Un document')) ?></a>
+                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e((string) $t['propose_category_item']) ?></a>
+                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($subcategoryProposalUrl) ?>" data-members-library-modal-open="members-library-subcategory-dialog" aria-haspopup="dialog" aria-controls="members-library-subcategory-dialog"><?= e((string) $t['propose_subcategory_item']) ?></a>
+                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($tagProposalUrl) ?>" data-members-library-modal-open="members-library-tag-dialog" aria-haspopup="dialog" aria-controls="members-library-tag-dialog"><?= e((string) $t['propose_tag_item']) ?></a>
+                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e((string) $t['propose_document_item']) ?></a>
                     </div>
                 </details>
                 <?php if ($canManageLibrary): ?>
@@ -650,17 +647,17 @@ ob_start();
         <div class="members-library-dialog-card">
             <div class="members-library-dialog-header module-dialog-header">
                 <div>
-                    <p class="members-library-dialog-eyebrow module-dialog-eyebrow"><?= e((string) ($t['subcategory'] ?? 'Sous thématique')) ?></p>
-                    <h2 id="members-library-subcategory-title"><?= e((string) ($t['propose_subcategory'] ?? 'Proposer une sous thématique')) ?></h2>
-                    <p class="help"><?= e($canManageLibrary ? (string) ($t['subcategory_direct_help'] ?? $t['category_direct_help']) : (string) ($t['propose_subcategory_intro'] ?? $t['propose_category_intro'])) ?></p>
+                    <p class="members-library-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['subcategory']) ?></p>
+                    <h2 id="members-library-subcategory-title"><?= e((string) $t['propose_subcategory']) ?></h2>
+                    <p class="help"><?= e($canManageLibrary ? (string) $t['subcategory_direct_help'] : (string) $t['propose_subcategory_intro']) ?></p>
                 </div>
                 <button class="members-library-dialog-close module-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form module-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_subcategory_subject'] ?? $t['propose_category_subject'])) ?>" data-members-library-intro="<?= e((string) ($t['propose_subcategory_body_intro'] ?? $t['propose_category_body_intro'])) ?>">
+            <form class="members-library-dialog-form module-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_subcategory_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_subcategory_body_intro']) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_subcategory">
                 <label>
-                    <span><?= e((string) ($t['propose_subcategory_parent'] ?? $t['category'])) ?></span>
+                    <span><?= e((string) $t['propose_subcategory_parent']) ?></span>
                     <select name="proposal_parent_category" required>
                         <?php foreach ($categories as $proposalCategoryOption): ?>
                             <?php
@@ -674,8 +671,8 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><span><?= e((string) ($t['propose_subcategory_name'] ?? 'Nom de la sous thématique')) ?></span><input type="text" name="proposal_subcategory_name" maxlength="160" required></label>
-                <label><span><?= e((string) ($t['propose_subcategory_reason'] ?? $t['propose_category_reason'])) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
+                <label><span><?= e((string) $t['propose_subcategory_name']) ?></span><input type="text" name="proposal_subcategory_name" maxlength="160" required></label>
+                <label><span><?= e((string) $t['propose_subcategory_reason']) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
                 <div class="members-library-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['proposal_submit']) ?></button>
@@ -739,9 +736,9 @@ ob_start();
                     </select>
                 </label>
                 <label>
-                    <span><?= e((string) ($t['propose_document_subcategory'] ?? 'Subcategory')) ?></span>
+                    <span><?= e((string) $t['propose_document_subcategory']) ?></span>
                     <select name="proposal_subcategory_ref">
-                        <option value=""><?= e((string) ($t['no_subcategory'] ?? 'No subtopic')) ?></option>
+                        <option value=""><?= e((string) $t['no_subcategory']) ?></option>
                         <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
                             <optgroup label="<?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?>">
                                 <?php foreach ($subcatGroup as $subcatOption): ?>
@@ -804,7 +801,7 @@ ob_start();
                     <strong><?= (int) array_sum(array_map(static fn(array $cat): int => (int) ($cat['total'] ?? 0), $visibleCategories)) ?></strong>
                 </a>
                 <?php if ($visibleCategories === []): ?>
-                    <p class="help"><?= e((string) ($t['empty'] ?? 'Aucun document trouve.')) ?></p>
+                    <p class="help"><?= e((string) $t['empty']) ?></p>
                 <?php endif; ?>
                 <?php foreach ($visibleCategories as $cat): ?>
                     <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
@@ -840,7 +837,7 @@ ob_start();
                 <?php if ($safePath === null) { continue; } ?>
                 <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
                 <?php $docCategory = trim((string) ($document['category'] ?? 'general')); if ($docCategory === '') { $docCategory = 'general'; } ?>
-                <?php $docCategoryLabel = (string) ($categoryLabels[$docCategory] ?? ($docCategory === 'general' ? 'Général' : $docCategory)); ?>
+                <?php $docCategoryLabel = (string) ($categoryLabels[$docCategory] ?? ($docCategory === 'general' ? $generalCategoryLabel : $docCategory)); ?>
                 <?php $docSubcategory = member_library_subcategory_slug((string) ($document['subcategory'] ?? '')); ?>
                 <?php $docSubcategoryLabel = $docSubcategory !== '' ? (string) ($subcategoryLabels[$docCategory . ':' . $docSubcategory] ?? $docSubcategory) : ''; ?>
                 <?php $docTitle = trim((string) ($document['title'] ?? '')); if ($docTitle === '') { $docTitle = (string) $t['document']; } ?>
@@ -866,13 +863,13 @@ ob_start();
                         </details>
                     <?php endif; ?>
                     <details class="admin-library-related-toggle">
-                        <summary><?= e((string) ($t['related_docs'] ?? 'Documents lies')) ?></summary>
+                        <summary><?= e((string) $t['related_docs']) ?></summary>
                         <?php if ($relatedDocs === []): ?>
-                            <p class="help"><?= e((string) ($t['no_related_docs'] ?? 'Aucun document lie.')) ?></p>
+                            <p class="help"><?= e((string) $t['no_related_docs']) ?></p>
                         <?php else: ?>
                             <ul class="help" style="padding-left:1rem;margin:.4rem 0;">
                                 <?php foreach ($relatedDocs as $related): ?>
-                                    <?php $relatedTitle = trim((string) ($related['title'] ?? '')); if ($relatedTitle === '') { $relatedTitle = (string) ($t['document'] ?? 'Document'); } ?>
+                                    <?php $relatedTitle = trim((string) ($related['title'] ?? '')); if ($relatedTitle === '') { $relatedTitle = (string) $t['document']; } ?>
                                     <li><a href="<?= e(route_url_clean('members_library', ['q' => $relatedTitle, 'category' => (string) ($related['category'] ?? ''), 'subcategory' => (string) ($related['subcategory'] ?? ''), 'tag' => $tag])) ?>"><?= e($relatedTitle) ?></a></li>
                                 <?php endforeach; ?>
                             </ul>
@@ -883,7 +880,7 @@ ob_start();
                             <a class="button secondary" href="<?= e($docDownloadUrl) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a>
                         <?php endif; ?>
                         <?php if ($canEditDocument): ?>
-                            <button class="button secondary" type="button" data-members-library-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($membersLibraryText('edit_document', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
+                            <button class="button secondary" type="button" data-members-library-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e((string) $t['edit_document']) ?></button>
                         <?php endif; ?>
                         <form method="post" class="inline-form">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -899,7 +896,7 @@ ob_start();
                             <div class="members-library-dialog-header module-dialog-header">
                                 <div>
                                     <p class="members-library-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['document']) ?></p>
-                                    <h2 id="<?= e($editDialogId) ?>-title"><?= e($membersLibraryText('edit_document_title', 'Modifier le document', 'Edit document')) ?></h2>
+                                    <h2 id="<?= e($editDialogId) ?>-title"><?= e((string) $t['edit_document_title']) ?></h2>
                                     <p class="help"><?= e($docTitle) ?></p>
                                 </div>
                                 <button class="members-library-dialog-close module-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
@@ -931,9 +928,9 @@ ob_start();
                                     </select>
                                 </label>
                                 <label>
-                                    <span><?= e((string) ($t['propose_document_subcategory'] ?? 'Subcategory')) ?></span>
+                                    <span><?= e((string) $t['propose_document_subcategory']) ?></span>
                                     <select name="document_subcategory_ref">
-                                        <option value=""><?= e((string) ($t['no_subcategory'] ?? 'No subtopic')) ?></option>
+                                        <option value=""><?= e((string) $t['no_subcategory']) ?></option>
                                         <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
                                             <optgroup label="<?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?>">
                                                 <?php foreach ($subcatGroup as $subcatOption): ?>
@@ -945,9 +942,9 @@ ob_start();
                                 </label>
                                 <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="document_tags" value="<?= e($docTags) ?>" maxlength="255"></label>
                                 <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="document_description" rows="5" maxlength="1800"><?= e($docDescription) ?></textarea></label>
-                                <label><span><?= e($membersLibraryText('replace_document_file', 'Remplacer le fichier', 'Replace file')) ?></span><input type="file" name="document_file" accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
+                                <label><span><?= e((string) $t['replace_document_file']) ?></span><input type="file" name="document_file" accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
                                 <div class="members-library-dialog-actions module-dialog-actions">
-                                    <button class="button" type="submit"><?= e($membersLibraryText('save_document', 'Enregistrer', 'Save')) ?></button>
+                                    <button class="button" type="submit"><?= e((string) $t['save_document']) ?></button>
                                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
                                 </div>
                             </form>
@@ -961,8 +958,8 @@ ob_start();
                                 <input type="hidden" name="return_tag" value="<?= e($tag) ?>">
                                 <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                 <input type="hidden" name="return_p" value="<?= $page ?>">
-                                <p class="help"><?= e($membersLibraryText('delete_document_warning', 'La suppression du fichier est définitive.', 'Deleting this file is permanent.')) ?></p>
-                                <button class="button secondary members-library-danger" type="submit"><?= e($membersLibraryText('delete_document', 'Supprimer le document', 'Delete document')) ?></button>
+                                <p class="help"><?= e((string) $t['delete_document_warning']) ?></p>
+                                <button class="button secondary members-library-danger" type="submit"><?= e((string) $t['delete_document']) ?></button>
                             </form>
                         </div>
                     </dialog>

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Consulta las próximas actividades.',
   'tools_link' => 'Herramientas de radio',
   'tools_hint' => 'Abre las herramientas prácticas para radioaficionados.',
+  'module_unavailable' => 'Módulo no disponible.',
+  'slug_article_unique_failed' => 'No se puede generar un slug de artículo único.',
+  'slug_wiki_unique_failed' => 'No se puede generar un slug wiki único.',
+  'slug_news_unique_failed' => 'No se puede generar un fragmento de noticias único.',
+  'slug_event_unique_failed' => 'No se puede generar un slug de evento único.',
+  'storage_path_invalid' => 'Ruta de almacenamiento no válida.',
+  'storage_path_forbidden' => 'La ruta de almacenamiento no está permitida.',
+  'remote_url_private' => 'El URL remoto apunta a una red privada o reservada.',
+  'remote_url_private_resolved' => 'El URL remoto se resuelve en una dirección IP privada o reservada.',
+  'field_too_long' => 'Uno de los campos excede la longitud permitida.',
+  'wiki_storage_unavailable' => 'Almacenamiento wiki no disponible.',
+  'wiki_page_invalid' => 'Página wiki no válida.',
+  'wiki_page_not_found' => 'Página wiki no encontrada.',
+  'newsletter_campaign_not_found' => 'Campaña no encontrada.',
+  'internal_error' => 'Se produjo un error interno.',
+  'error_reference' => 'Referencia: {request_id}.',
+  'service_temporarily_unavailable' => 'Servicio no disponible temporalmente.',
 );

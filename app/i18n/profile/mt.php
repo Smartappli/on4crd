@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'Maniġer QSL',
   'qsl_choice_no_qsl' => 'Ebda QSL',
   'qsl_choice_other' => 'Ieħor',
+  'preview_public_title' => 'Veduta pubblika',
+  'preview_members_title' => 'Veduta tal-membri',
+  'preview_private_title' => 'Veduta tal-kumitat',
+  'required_field_help' => 'Qasam obbligatorju.',
+  'preview_empty' => 'M\'hemm l-ebda informazzjoni viżibbli.',
 );

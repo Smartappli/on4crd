@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Ingen tillskrivning.',
   'layout' => 'Nyhetssektionen',
   'meta_desc' => 'Skriva, moderera och hantera nyheter per sektion.',
+  'status_draft' => 'Utkast',
+  'status_pending' => 'Väntar',
+  'status_published' => 'Publicerad',
+  'status_rejected' => 'Avvisad',
+  'status_archived' => 'Arkiverad',
 );

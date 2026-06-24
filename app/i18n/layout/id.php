@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -52,4 +51,5 @@ return array (
   'search_label' => 'Pencarian situs',
   'search_placeholder' => 'Cari…',
   'search_submit' => 'Cari',
+  'membership_good_standing' => 'Keanggotaan aktif',
 );

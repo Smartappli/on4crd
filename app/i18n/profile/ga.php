@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'Bainisteoir QSL',
   'qsl_choice_no_qsl' => 'Gan QSL',
   'qsl_choice_other' => 'Eile',
+  'preview_public_title' => 'Amharc poiblí',
+  'preview_members_title' => 'Amharc ball',
+  'preview_private_title' => 'Amharc coiste',
+  'required_field_help' => 'Réimse éigeantach.',
+  'preview_empty' => 'Níl aon fhaisnéis infheicthe.',
 );

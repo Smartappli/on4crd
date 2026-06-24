@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Рубрикативное объявление модерируется',
   'notification_removed_body' => 'Объявление удалено модератором: {title}',
   'notification_status_body' => 'Статус обновлен до {status}: {title}.',
+  'propose_category_direct_help' => 'Категория будет одобрена напрямую.',
+  'propose_category_created_direct' => 'Категория создана и одобрена напрямую.',
 );

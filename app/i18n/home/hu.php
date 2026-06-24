@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Jelenleg nincs elérhető trófea.',
   'home_trophies_title' => 'Trófeáink',
   'spotlight_member_gallery_empty' => 'Jelenleg nincs elérhető galériakép.',
+  'widget_temporarily_unavailable' => 'A modul átmenetileg nem elérhető.',
+  'ham_advice_temporarily_unavailable' => 'A rádiós tanácsok átmenetileg nem elérhetők.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'tagok',
+  'visibility_private' => 'Privát',
 );

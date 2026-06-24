@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'Prekliči',
   'propose_event_close' => 'Zapri',
   'proposal_recorded' => 'Predlog je shranjen med vašo vsebino.',
+  'invalid' => 'Neveljavna zahteva.',
+  'event_published_direct' => 'Dogodek je neposredno objavljen.',
+  'propose_event_direct_help' => 'Dogodek bo neposredno objavljen.',
+  'publish_event' => 'Objavi',
+  'next_event_title' => 'Prihajajoči dogodki',
 );

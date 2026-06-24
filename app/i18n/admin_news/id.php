@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Tidak ada tugas.',
   'layout' => 'Bagian berita',
   'meta_desc' => 'Menulis, memoderasi, dan mengelola postingan berita bagian.',
+  'status_draft' => 'Draf',
+  'status_pending' => 'Tertunda',
+  'status_published' => 'Diterbitkan',
+  'status_rejected' => 'Ditolak',
+  'status_archived' => 'Diarsipkan',
 );

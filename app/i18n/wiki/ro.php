@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Spațiu membri',
   'unavailable' => 'Wiki va fi disponibil după inițializarea paginilor.',
+  'invalid' => 'Cerere nevalidă.',
   'new_pages' => 'Pagini noi',
   'updated_pages' => 'Pagini modificate',
   'most_read' => 'Cele mai citite',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Subiect',
   'no_subcategory' => 'Fără subiecte secundare',
   'favorites' => 'Favorite',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Adăugat la favorite',
+  'favorite_removed' => 'Eliminat din favorite',
+  'favorite_added_msg' => 'Pagină adăugată la favorite.',
+  'favorite_removed_msg' => 'Pagină eliminată din favorite.',
+  'err_subcategory_category_mismatch' => 'Subtema selectată nu aparține temei alese.',
+  'category_general' => 'Generală',
 );

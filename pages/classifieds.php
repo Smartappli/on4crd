@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proposalStatus = $autoAccept ? 'accepted' : 'pending';
             $proposalId = content_proposal_create((int) $user['id'], 'classifieds', 'category', $proposalCategory, $summary, $proposalEmail, '', $proposalStatus);
             if ($autoAccept) {
-                set_flash('success', 'Catégorie créée et validée directement.');
+                set_flash('success', $t('propose_category_created_direct'));
                 redirect_url(route_url_clean('classifieds', ['category' => content_proposal_category_code($proposalCategory, 32, 'classifieds')]));
             }
             content_proposal_notify_site($t('propose_category_subject'), [
@@ -204,10 +204,10 @@ $renderCategoryProposalForm = static function (bool $dialogMode) use ($t, $propo
     <?php
     return (string) ob_get_clean();
 };
-$classifiedsProposeMenuLabel = (string) ($messages['propose_menu'] ?? 'Proposer');
-$classifiedsProposeAdItemLabel = (string) ($messages['propose_ad_item'] ?? $t('propose_ad'));
-$classifiedsProposeCategoryItemLabel = (string) ($messages['propose_category_item'] ?? $t('propose_category'));
-$classifiedsAdminLabel = (string) ($messages['administer'] ?? ($locale === 'fr' ? 'Administrer' : 'Administer'));
+$classifiedsProposeMenuLabel = $t('propose_menu');
+$classifiedsProposeAdItemLabel = $t('propose_ad_item');
+$classifiedsProposeCategoryItemLabel = $t('propose_category_item');
+$classifiedsAdminLabel = $t('administer');
 
 set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
@@ -263,8 +263,8 @@ ob_start();
         <div class="classifieds-category-dialog-header module-dialog-header">
             <div>
                 <p class="directory-eyebrow"><?= e($t('category_label')) ?></p>
-                <h2><?= e($canModerateClassifieds ? 'Proposer une catégorie' : $t('propose_category')) ?></h2>
-                <p class="help"><?= e($canModerateClassifieds ? 'La catégorie sera validée directement.' : $t('propose_category_intro')) ?></p>
+                <h2><?= e($t('propose_category')) ?></h2>
+                <p class="help"><?= e($canModerateClassifieds ? $t('propose_category_direct_help') : $t('propose_category_intro')) ?></p>
             </div>
         </div>
         <?= $renderCategoryProposalForm(false) ?>
@@ -276,8 +276,8 @@ ob_start();
             <div class="classifieds-category-dialog-header module-dialog-header">
                 <div>
                     <p class="directory-eyebrow"><?= e($t('category_label')) ?></p>
-                    <h2 id="classifieds-category-title"><?= e($canModerateClassifieds ? 'Proposer une catégorie' : $t('propose_category')) ?></h2>
-                    <p class="help"><?= e($canModerateClassifieds ? 'La catégorie sera validée directement.' : $t('propose_category_intro')) ?></p>
+                    <h2 id="classifieds-category-title"><?= e($t('propose_category')) ?></h2>
+                    <p class="help"><?= e($canModerateClassifieds ? $t('propose_category_direct_help') : $t('propose_category_intro')) ?></p>
                 </div>
                 <button class="classifieds-category-dialog-close module-dialog-close" type="button" data-classifieds-category-close aria-label="<?= e($t('propose_category_close')) ?>">&times;</button>
             </div>

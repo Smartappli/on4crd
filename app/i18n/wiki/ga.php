@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Limistéar na mBall',
   'unavailable' => 'Beidh an Wiki ar fáil tar éis na leathanaigh a thúsú.',
+  'invalid' => 'Iarratas neamhbhailí.',
   'new_pages' => 'Leathanaigh nua',
   'updated_pages' => 'Leathanaigh leasaithe',
   'most_read' => 'Is mó a léann',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Fothopaic',
   'no_subcategory' => 'Gan fothopaic',
   'favorites' => 'Ceanáin',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Curtha le ceanáin',
+  'favorite_removed' => 'Baintha de cheanáin',
+  'favorite_added_msg' => 'Leathanach curtha le ceanáin.',
+  'favorite_removed_msg' => 'Leathanach bainte de cheanáin.',
+  'err_subcategory_category_mismatch' => 'Ní bhaineann an fofhothéama roghnaithe leis an téama roghnaithe.',
+  'category_general' => 'Ginearálta',
 );

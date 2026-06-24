@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL 管理员',
   'qsl_choice_no_qsl' => '无 QSL',
   'qsl_choice_other' => '其他',
+  'registration_closed_title' => '会员注册',
+  'registration_closed_message' => '公共注册已关闭。会员账户将在验证后由管理人员创建。',
+  'membership_link' => '成为会员',
 );

@@ -9,4 +9,10 @@ return array (
   'manage_label' => 'Leda kommittén',
   'none' => 'Inga utskottsledamöter publiceras för närvarande.',
   'portrait_of' => 'Porträtt av',
+  'editorial_title' => 'kommittén',
+  'editorial_intro' => 'Introduktion till radioklubbskommittén.',
+  'editorial_mission' => 'Transparens',
+  'editorial_onboarding' => 'Medlem välkommen',
+  'editorial_contact_title' => 'Kontakt',
+  'editorial_contact_text' => 'Kommittén finns tillgänglig för dina frågor.',
 );

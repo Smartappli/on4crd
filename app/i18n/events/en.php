@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'Cancel',
   'propose_event_close' => 'Close',
   'proposal_recorded' => 'Proposal saved in your content area.',
+  'invalid' => 'Invalid request.',
+  'event_published_direct' => 'Event published directly.',
+  'propose_event_direct_help' => 'Your event will be published directly.',
+  'publish_event' => 'Publish',
+  'next_event_title' => 'Next event',
 );

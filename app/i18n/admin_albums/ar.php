@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'الألبوم غير صالح.',
   'uploaded_count' => 'تمت إضافة الصورة (الصور).',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'اكتمل استيراد الألبوم',
+  'notification_import_completed_body' => 'تم استيراد %d صورة.',
   'no_photo_imported' => 'لم يتم استيراد أي صورة.',
   'created_thumbs' => 'تم إنشاء الصورة المصغرة (الصور المصغرة).',
   'manage_title' => 'إدارة الألبومات',
@@ -20,6 +20,7 @@ return array (
   'title' => 'العنوان',
   'description' => 'الوصف',
   'public_album' => 'ألبوم عام',
+  'featured_album' => 'ألبوم مميز',
   'photo_title' => 'عنوان الصورة',
   'caption' => 'تعليق',
   'files_dropzone' => 'ملفات الصور',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'تم التحقق من صحة الألبوم، ولكن فشلت المزامنة الاجتماعية.',
   'batch_max_files' => 'الحد الأقصى 100 صورة لكل عملية استيراد.',
   'batch_max_size' => 'يتجاوز حجم مجموعة الصور 512 ميجابايت.',
+  'error_field_too_long' => 'يتجاوز أحد الحقول الطول المسموح به.',
 );

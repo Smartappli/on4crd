@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'বাতিল',
   'propose_event_close' => 'বন্ধ করুন',
   'proposal_recorded' => 'প্রস্তাবটি আপনার কনটেন্টে সংরক্ষিত হয়েছে।',
+  'invalid' => 'অবৈধ অনুরোধ।',
+  'event_published_direct' => 'ইভেন্টটি সরাসরি প্রকাশিত হয়েছে।',
+  'propose_event_direct_help' => 'ইভেন্টটি সরাসরি প্রকাশিত হবে।',
+  'publish_event' => 'প্রকাশ করুন',
+  'next_event_title' => 'আসন্ন ইভেন্টসমূহ',
 );

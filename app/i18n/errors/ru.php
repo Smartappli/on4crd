@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Посмотрите предстоящие мероприятия.',
   'tools_link' => 'Радиоинструменты',
   'tools_hint' => 'Откройте практические инструменты радиолюбителя.',
+  'module_unavailable' => 'Модуль недоступен.',
+  'slug_article_unique_failed' => 'Не удалось создать уникальный slug статьи.',
+  'slug_wiki_unique_failed' => 'Не удалось создать уникальный slug wiki.',
+  'slug_news_unique_failed' => 'Не удалось создать уникальный slug новости.',
+  'slug_event_unique_failed' => 'Не удалось создать уникальный slug события.',
+  'storage_path_invalid' => 'Недопустимый путь хранения.',
+  'storage_path_forbidden' => 'Путь хранения не разрешён.',
+  'remote_url_private' => 'Удалённый URL указывает на частную или зарезервированную сеть.',
+  'remote_url_private_resolved' => 'Удалённый URL разрешается в частный или зарезервированный IP-адрес.',
+  'field_too_long' => 'Одно из полей превышает допустимую длину.',
+  'wiki_storage_unavailable' => 'Хранилище Wiki недоступно.',
+  'wiki_page_invalid' => 'Неверная вики-страница.',
+  'wiki_page_not_found' => 'Страница Wiki не найдена.',
+  'newsletter_campaign_not_found' => 'Кампания не найдена.',
+  'internal_error' => 'Произошла внутренняя ошибка.',
+  'error_reference' => 'Ссылка: {request_id}.',
+  'service_temporarily_unavailable' => 'Сервис временно недоступен.',
 );

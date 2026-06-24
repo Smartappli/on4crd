@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'Visszavert teljesítmény (W)',
   'swr_result' => 'Számított SWR',
   'dbw_calc' => 'dBm <-> dBW átváltás',
+  'cq_zone' => 'CQ zóna',
+  'itu_zone' => 'ITU zóna',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Előbeállítás mentve.',
+  'preset_deleted' => 'Előbeállítás törölve.',
+  'tools_stat_available' => 'Elérhető eszközök',
+  'tools_stat_categories' => 'Kategóriák',
 );

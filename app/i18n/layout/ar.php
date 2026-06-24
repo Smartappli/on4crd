@@ -51,4 +51,5 @@ return array (
   'search_label' => 'بحث عام',
   'search_placeholder' => 'بحث…',
   'search_submit' => 'بحث',
+  'membership_good_standing' => 'العضوية محدثة',
 );

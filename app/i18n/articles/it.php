@@ -102,4 +102,7 @@ Contatto:',
   'subcategory_field' => 'Sottoargomento',
   'no_subcategory' => 'Nessun sottoargomento',
   'favorites' => 'Preferiti',
+  'invalid' => 'Richiesta non valida.',
+  'err_invalid_category' => 'Categoria non valida.',
+  'err_subcategory_category_mismatch' => 'Il sottotema selezionato non appartiene al tema scelto.',
 );

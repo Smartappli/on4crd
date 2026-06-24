@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Δείτε τις επερχόμενες δραστηριότητες.',
   'tools_link' => 'Ραδιοερασιτεχνικά εργαλεία',
   'tools_hint' => 'Ανοίξτε τα πρακτικά εργαλεία για ραδιοερασιτέχνες.',
+  'module_unavailable' => 'Η ενότητα δεν είναι διαθέσιμη.',
+  'slug_article_unique_failed' => 'Δεν είναι δυνατή η δημιουργία ενός μοναδικού γυμνοσάλιαγκου άρθρου.',
+  'slug_wiki_unique_failed' => 'Δεν είναι δυνατή η δημιουργία ενός μοναδικού wiki slug.',
+  'slug_news_unique_failed' => 'Δεν είναι δυνατή η δημιουργία ενός μοναδικού γυμνοσάλιαγκου ειδήσεων.',
+  'slug_event_unique_failed' => 'Δεν είναι δυνατή η δημιουργία ενός μοναδικού γυμνοσάλιαγκου συμβάντος.',
+  'storage_path_invalid' => 'Μη έγκυρη διαδρομή αποθήκευσης.',
+  'storage_path_forbidden' => 'Η διαδρομή αποθήκευσης δεν επιτρέπεται.',
+  'remote_url_private' => 'Το απομακρυσμένο URL οδηγεί σε ιδιωτικό ή δεσμευμένο δίκτυο.',
+  'remote_url_private_resolved' => 'Το απομακρυσμένο URL κατευθύνεται σε μια ιδιωτική ή δεσμευμένη διεύθυνση IP.',
+  'field_too_long' => 'Ένα από τα πεδία υπερβαίνει το επιτρεπόμενο μήκος.',
+  'wiki_storage_unavailable' => 'Ο χώρος αποθήκευσης Wiki δεν είναι διαθέσιμος.',
+  'wiki_page_invalid' => 'Μη έγκυρη σελίδα wiki.',
+  'wiki_page_not_found' => 'Η σελίδα Wiki δεν βρέθηκε.',
+  'newsletter_campaign_not_found' => 'Η καμπάνια δεν βρέθηκε.',
+  'internal_error' => 'Παρουσιάστηκε εσωτερικό σφάλμα.',
+  'error_reference' => 'Αναφορά: {request_id}.',
+  'service_temporarily_unavailable' => 'Η υπηρεσία δεν είναι διαθέσιμη προσωρινά.',
 );

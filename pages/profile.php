@@ -221,9 +221,9 @@ if (trim((string) ($member['email'] ?? '')) === '') {
 }
 
 $profileViews = [
-    'public' => ['title' => 'Vue ' . strtolower($t('public'))],
-    'members' => ['title' => 'Vue ' . strtolower($t('members'))],
-    'private' => ['title' => 'Vue ' . strtolower($t('private'))],
+    'public' => ['title' => $t('preview_public_title')],
+    'members' => ['title' => $t('preview_members_title')],
+    'private' => ['title' => $t('preview_private_title')],
 ];
 $profilePreviewRows = [];
 foreach (array_keys($profileViews) as $viewer) {
@@ -237,7 +237,7 @@ $licenceClassOptionsHtml = member_profile_licence_class_options_html($t, (string
 $qslViaOptionsHtml = member_profile_qsl_via_options_html($t, (string) ($member['qsl_via'] ?? ''));
 $favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices(), (string) ($member['favourite_bands'] ?? ''));
 $favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices(), (string) ($member['favourite_modes'] ?? ''));
-$requiredFieldHelp = $locale === 'fr' ? 'Champ obligatoire.' : 'Required field.';
+$requiredFieldHelp = $t('required_field_help');
 $requiredFieldLabel = static function (string $label, string $tooltipId) use ($requiredFieldHelp): string {
     return '<span class="profile-label-with-help">' . e($label)
         . '<span class="profile-help-tooltip">'
@@ -276,7 +276,7 @@ ob_start();
                     </div>
                 </header>
                 <?php if ($profilePreviewRows[(string) $viewer] === []): ?>
-                    <p class="help">Aucune information visible.</p>
+                    <p class="help"><?= e($t('preview_empty')) ?></p>
                 <?php else: ?>
                     <dl class="profile-preview-summary">
                         <?php foreach ($profilePreviewRows[(string) $viewer] as $previewRow): ?>

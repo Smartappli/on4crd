@@ -9,14 +9,14 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $localeUi, (string) $key);
 }
-$tr = static function (string $key, string $fallback) use ($t): string {
+$tr = static function (string $key) use ($t): string {
     $value = trim((string) ($t[$key] ?? ''));
-    return $value !== '' ? $value : $fallback;
+    return $value;
 };
 
 set_page_meta([
-    'title' => (string) $tr('layout', 'Translation review'),
-    'description' => (string) $tr('meta_desc', 'Review and validate automated content translations.'),
+    'title' => (string) $tr('layout'),
+    'description' => (string) $tr('meta_desc'),
     'robots' => 'noindex,nofollow',
 ]);
 
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $locale = (string) ($_POST['locale'] ?? 'en');
         $reviewableLocales = array_values(array_filter(supported_locales(), static fn(string $supportedLocale): bool => $supportedLocale !== 'fr'));
         if (!in_array($locale, $reviewableLocales, true)) {
-            throw new RuntimeException((string) $tr('invalid_lang', 'Invalid language.'));
+            throw new RuntimeException((string) $tr('invalid_lang'));
         }
         if ($action === 'review_news_translation') {
             $stmt = db()->prepare('UPDATE news_translations SET title = ?, excerpt = ?, content = ?, status = "reviewed", reviewed_by = ?, reviewed_at = NOW() WHERE id = ? AND locale = ?');
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id,
                 $locale,
             ]);
-            set_flash('success', (string) $tr('ok_news', 'News translation reviewed.'));
+            set_flash('success', (string) $tr('ok_news'));
         } elseif ($action === 'review_article_translation') {
             $stmt = db()->prepare('UPDATE article_translations SET title = ?, excerpt = ?, content = ?, status = "reviewed", reviewed_by = ?, reviewed_at = NOW() WHERE id = ? AND locale = ?');
             $stmt->execute([
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id,
                 $locale,
             ]);
-            set_flash('success', (string) $tr('ok_article', 'Article translation reviewed.'));
+            set_flash('success', (string) $tr('ok_article'));
         }
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -189,13 +189,13 @@ ob_start();
 ?>
 <div class="stack">
   <section class="card">
-    <h1><?= e((string) $tr('assistant_title', 'Admin assistant: i18n and taxonomy QA')) ?></h1>
-    <p class="help"><?= e((string) $tr('assistant_help', 'Use this panel to validate chatbot translations and detect taxonomy/tag duplicates before moderation.')) ?></p>
+    <h1><?= e((string) $tr('assistant_title')) ?></h1>
+    <p class="help"><?= e((string) $tr('assistant_help')) ?></p>
     <div class="grid-2">
       <article class="card inner-card">
-        <h3><?= e((string) $tr('chatbot_i18n_title', 'Chatbot i18n quality')) ?></h3>
+        <h3><?= e((string) $tr('chatbot_i18n_title')) ?></h3>
         <?php if ($chatbotI18nQa['ok']): ?>
-          <p><?= e((string) $tr('chatbot_i18n_ok', 'All chatbot locale files are complete and consistent.')) ?></p>
+          <p><?= e((string) $tr('chatbot_i18n_ok')) ?></p>
         <?php else: ?>
           <ul class="help">
             <?php foreach ($chatbotI18nQa['issues'] as $issue): ?>
@@ -205,9 +205,9 @@ ob_start();
         <?php endif; ?>
       </article>
       <article class="card inner-card">
-        <h3><?= e((string) $tr('taxonomy_title', 'Taxonomy and tag suggestions')) ?></h3>
+        <h3><?= e((string) $tr('taxonomy_title')) ?></h3>
         <?php if ($taxonomySuggestions === []): ?>
-          <p><?= e((string) $tr('taxonomy_empty', 'No duplicate variants detected.')) ?></p>
+          <p><?= e((string) $tr('taxonomy_empty')) ?></p>
         <?php else: ?>
           <?php foreach ($taxonomySuggestions as $suggestion): ?>
             <details style="margin-bottom:.6rem;">
@@ -226,7 +226,7 @@ ob_start();
 
   <div class="grid-2">
     <section class="card">
-      <h2><?= e((string) $tr('news_title', 'News review')) ?></h2>
+      <h2><?= e((string) $tr('news_title')) ?></h2>
       <?php foreach ($newsTranslations as $translation): ?>
         <article class="card inner-card">
           <h3><?= e((string) $translation['source_title']) ?> — <?= strtoupper(e((string) $translation['locale'])) ?></h3>
@@ -235,18 +235,18 @@ ob_start();
             <input type="hidden" name="action" value="review_news_translation">
             <input type="hidden" name="id" value="<?= (int) $translation['id'] ?>">
             <input type="hidden" name="locale" value="<?= e((string) $translation['locale']) ?>">
-            <label><?= e((string) $tr('label_title', 'Title')) ?><input type="text" name="title" value="<?= e((string) $translation['title']) ?>"></label>
-            <label><?= e((string) $tr('label_excerpt', 'Excerpt')) ?><textarea name="excerpt" rows="3"><?= e((string) $translation['excerpt']) ?></textarea></label>
-            <label><?= e((string) $tr('label_content', 'Content')) ?><textarea name="content" rows="8"><?= e((string) $translation['content']) ?></textarea></label>
-            <button class="button"><?= e((string) $tr('submit', 'Approve translation')) ?></button>
+            <label><?= e((string) $tr('label_title')) ?><input type="text" name="title" value="<?= e((string) $translation['title']) ?>"></label>
+            <label><?= e((string) $tr('label_excerpt')) ?><textarea name="excerpt" rows="3"><?= e((string) $translation['excerpt']) ?></textarea></label>
+            <label><?= e((string) $tr('label_content')) ?><textarea name="content" rows="8"><?= e((string) $translation['content']) ?></textarea></label>
+            <button class="button"><?= e((string) $tr('submit')) ?></button>
           </form>
         </article>
       <?php endforeach; ?>
-      <?php if ($newsTranslations === []): ?><p><?= e((string) $tr('no_news', 'No pending news translation.')) ?></p><?php endif; ?>
+      <?php if ($newsTranslations === []): ?><p><?= e((string) $tr('no_news')) ?></p><?php endif; ?>
     </section>
 
     <section class="card">
-      <h2><?= e((string) $tr('article_title', 'Article review')) ?></h2>
+      <h2><?= e((string) $tr('article_title')) ?></h2>
       <?php foreach ($articleTranslations as $translation): ?>
         <article class="card inner-card">
           <h3><?= e((string) $translation['source_title']) ?> — <?= strtoupper(e((string) $translation['locale'])) ?></h3>
@@ -255,16 +255,16 @@ ob_start();
             <input type="hidden" name="action" value="review_article_translation">
             <input type="hidden" name="id" value="<?= (int) $translation['id'] ?>">
             <input type="hidden" name="locale" value="<?= e((string) $translation['locale']) ?>">
-            <label><?= e((string) $tr('label_title', 'Title')) ?><input type="text" name="title" value="<?= e((string) $translation['title']) ?>"></label>
-            <label><?= e((string) $tr('label_excerpt', 'Excerpt')) ?><textarea name="excerpt" rows="3"><?= e((string) $translation['excerpt']) ?></textarea></label>
-            <label><?= e((string) $tr('label_content', 'Content')) ?><textarea name="content" rows="8"><?= e((string) $translation['content']) ?></textarea></label>
-            <button class="button"><?= e((string) $tr('submit', 'Approve translation')) ?></button>
+            <label><?= e((string) $tr('label_title')) ?><input type="text" name="title" value="<?= e((string) $translation['title']) ?>"></label>
+            <label><?= e((string) $tr('label_excerpt')) ?><textarea name="excerpt" rows="3"><?= e((string) $translation['excerpt']) ?></textarea></label>
+            <label><?= e((string) $tr('label_content')) ?><textarea name="content" rows="8"><?= e((string) $translation['content']) ?></textarea></label>
+            <button class="button"><?= e((string) $tr('submit')) ?></button>
           </form>
         </article>
       <?php endforeach; ?>
-      <?php if ($articleTranslations === []): ?><p><?= e((string) $tr('no_article', 'No pending article translation.')) ?></p><?php endif; ?>
+      <?php if ($articleTranslations === []): ?><p><?= e((string) $tr('no_article')) ?></p><?php endif; ?>
     </section>
   </div>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), (string) $tr('layout', 'Translation review'));
+echo render_layout((string) ob_get_clean(), (string) $tr('layout'));

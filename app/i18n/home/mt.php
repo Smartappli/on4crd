@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Bħalissa m’hemm l-ebda trofew disponibbli.',
   'home_trophies_title' => 'It-trofej tagħna',
   'spotlight_member_gallery_empty' => 'Bħalissa m’hemm l-ebda immaġni tal-gallerija disponibbli.',
+  'widget_temporarily_unavailable' => 'Widget temporanjament mhux disponibbli.',
+  'ham_advice_temporarily_unavailable' => 'Parir tar-radju mhux disponibbli temporanjament.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'Membri',
+  'visibility_private' => 'Privat',
 );

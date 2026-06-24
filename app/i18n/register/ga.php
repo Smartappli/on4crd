@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'Bainisteoir QSL',
   'qsl_choice_no_qsl' => 'Gan QSL',
   'qsl_choice_other' => 'Eile',
+  'registration_closed_title' => 'Clárú ballraíochta',
+  'registration_closed_message' => 'Tá clárú poiblí dúnta. Cruthaíonn an riarachán cuntais bhaill tar éis bailíochtaithe.',
+  'membership_link' => 'Bí i do bhall',
 );

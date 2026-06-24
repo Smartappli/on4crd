@@ -9,4 +9,10 @@ return array (
   'manage_label' => 'Hallitse komiteaa',
   'none' => 'Toimikunnan jäseniä ei ole julkistettu tällä hetkellä.',
   'portrait_of' => 'Muotokuva',
+  'editorial_title' => 'komitea',
+  'editorial_intro' => 'Radioklubitoimikunnan esittely.',
+  'editorial_mission' => 'Läpinäkyvyys',
+  'editorial_onboarding' => 'Jäsen tervetuloa',
+  'editorial_contact_title' => 'Yhteys',
+  'editorial_contact_text' => 'Valiokunta on käytettävissä kysymyksiisi.',
 );

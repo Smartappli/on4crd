@@ -1,6 +1,8 @@
 ﻿(function () {
   const detailPanel = document.getElementById('event-detail');
   if (detailPanel) {
+    const calendarEl = document.getElementById('events-calendar');
+    const config = calendarEl && calendarEl.dataset.calendarConfig ? JSON.parse(calendarEl.dataset.calendarConfig) : {};
     const nextPanel = document.getElementById('events-next-event');
     const titleNode = document.getElementById('event-detail-title');
     const summaryNode = document.getElementById('event-detail-summary');
@@ -18,11 +20,11 @@
           nextPanel.hidden = true;
           nextPanel.classList.add('is-hidden');
         }
-        if (titleNode) titleNode.textContent = chip.dataset.title || 'Ã‰vÃ©nement';
-        if (summaryNode) summaryNode.textContent = chip.dataset.summary || 'Aucun rÃ©sumÃ© disponible.';
+        if (titleNode) titleNode.textContent = chip.dataset.title || config.eventLabel || 'Événement';
+        if (summaryNode) summaryNode.textContent = chip.dataset.summary || config.noSummary || 'Aucun résumé disponible.';
         if (startNode) startNode.textContent = chip.dataset.start || '';
         if (endNode) endNode.textContent = chip.dataset.end || '';
-        if (locationNode) locationNode.textContent = chip.dataset.location || 'Ã€ confirmer';
+        if (locationNode) locationNode.textContent = chip.dataset.location || config.locationTbd || 'À confirmer';
         if (externalLinkNode) {
           const url = chip.dataset.externalUrl || '';
           externalLinkNode.setAttribute('href', url || '#');
@@ -154,14 +156,14 @@
       nextPanel.hidden = true;
       nextPanel.classList.add('is-hidden');
     }
-    if (detail.title) detail.title.textContent = event.title || config.eventLabel || 'Evénement';
+    if (detail.title) detail.title.textContent = event.title || config.eventLabel || 'Événement';
     if (detail.summary) detail.summary.textContent = props.summary || config.noSummary || '';
     if (detail.start) detail.start.textContent = props.startLabel || '';
     if (detail.end) detail.end.textContent = props.endLabel || '';
     if (detail.location) detail.location.textContent = props.location || config.locationTbd || '';
     if (detail.image && detail.imageWrap) {
       const imageUrl = props.imageUrl || '';
-      detail.image.setAttribute('alt', event.title || config.eventLabel || 'Evénement');
+      detail.image.setAttribute('alt', event.title || config.eventLabel || 'Événement');
       if (imageUrl) {
         detail.image.setAttribute('src', imageUrl);
       } else {

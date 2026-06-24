@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Nevažeći album.',
   'uploaded_count' => 'fotografija(e) dodano.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Uvoz albuma dovršen',
+  'notification_import_completed_body' => 'Uvezeno je %d fotografija.',
   'no_photo_imported' => 'Nema uvezenih fotografija.',
   'created_thumbs' => 'generirane sličice.',
   'manage_title' => 'Upravljanje albumom',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Naslov',
   'description' => 'Opis',
   'public_album' => 'Javni album',
+  'featured_album' => 'Istaknuti album',
   'photo_title' => 'Naslov fotografije',
   'caption' => 'Legenda',
   'files_dropzone' => 'Slikovne datoteke',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album je potvrđen, ali društvena sinkronizacija nije uspjela.',
   'batch_max_files' => 'Maksimalno 100 fotografija po uvozu.',
   'batch_max_size' => 'Serija fotografija premašuje 512 MB.',
+  'error_field_too_long' => 'Jedno od polja premašuje dopuštenu duljinu.',
 );

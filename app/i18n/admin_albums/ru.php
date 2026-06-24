@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Неверный альбом.',
   'uploaded_count' => 'добавлены фотографии.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Импорт альбома завершён',
+  'notification_import_completed_body' => 'Импортировано %d фото.',
   'no_photo_imported' => 'Ни одна фотография не была импортирована.',
   'created_thumbs' => 'Созданы миниатюры.',
   'manage_title' => 'Управление альбомами',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Заголовок',
   'description' => 'Описание',
   'public_album' => 'Публичный альбом',
+  'featured_album' => 'Рекомендуемый альбом',
   'photo_title' => 'Название фотографии',
   'caption' => 'Подпись',
   'files_dropzone' => 'Файлы изображений',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Альбом проверен, но синхронизация с социальными сетями не удалась.',
   'batch_max_files' => 'Максимум 100 фотографий за один импорт.',
   'batch_max_size' => 'Пакет фотографий превышает 512 МБ.',
+  'error_field_too_long' => 'Одно из полей превышает допустимую длину.',
 );

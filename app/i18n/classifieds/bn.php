@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'শ্রেণীবদ্ধ বিজ্ঞাপন সংযত',
   'notification_removed_body' => 'সংযম দ্বারা বিজ্ঞাপন সরানো হয়েছে: {title}',
   'notification_status_body' => 'স্থিতি {status} এ আপডেট করা হয়েছে: {title}',
+  'propose_category_direct_help' => 'বিভাগটি সরাসরি অনুমোদিত হবে।',
+  'propose_category_created_direct' => 'বিভাগ তৈরি এবং সরাসরি অনুমোদিত হয়েছে।',
 );

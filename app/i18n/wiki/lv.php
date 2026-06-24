@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Biedru zona',
   'unavailable' => 'Wiki būs pieejams pēc lapu inicializācijas.',
+  'invalid' => 'Nederīgs pieprasījums.',
   'new_pages' => 'Jaunas lapas',
   'updated_pages' => 'Modificētas lapas',
   'most_read' => 'Visvairāk lasīts',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Apakštēma',
   'no_subcategory' => 'Nav apakštēmas',
   'favorites' => 'Izlase',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Pievienots izlasei',
+  'favorite_removed' => 'Noņemts no izlases',
+  'favorite_added_msg' => 'Lapa pievienota izlasei.',
+  'favorite_removed_msg' => 'Lapa noņemta no izlases.',
+  'err_subcategory_category_mismatch' => 'Izvēlētā apakštēma nepieder izvēlētajai tēmai.',
+  'category_general' => 'Vispārīgi',
 );

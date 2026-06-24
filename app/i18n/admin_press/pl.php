@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Komunikaty prasowe',
   'full_name' => 'Pełne imię i nazwisko',
   'role' => 'Rola',
-  'email' => 'E-mail',
+  'email' => 'Adres e-mail',
   'phone' => 'Telefon',
   'notes' => 'Notatki',
   'order' => 'Zamów',

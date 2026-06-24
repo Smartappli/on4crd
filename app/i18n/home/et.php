@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Hetkel pole ühtegi trofeed saadaval.',
   'home_trophies_title' => 'Meie trofeed',
   'spotlight_member_gallery_empty' => 'Hetkel pole galeriipilti saadaval.',
+  'widget_temporarily_unavailable' => 'Vidin pole ajutiselt saadaval.',
+  'ham_advice_temporarily_unavailable' => 'Raadionõuanded pole ajutiselt saadaval.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'liikmed',
+  'visibility_private' => 'Privaatne',
 );

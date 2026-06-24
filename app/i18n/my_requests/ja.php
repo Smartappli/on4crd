@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'タグ提案',
   'proposal_type_subcategory' => 'サブトピック提案',
   'webotheque_title' => 'ウェブライブラリ',
+  'albums_title' => 'アルバム',
+  'auctions_title' => 'オークション',
+  'files_title' => 'ファイル',
+  'presentations_title' => 'プレゼンテーション',
+  'minutes_title' => '議事録',
+  'videos_title' => '動画',
+  'library_document_default_title' => '資料',
+  'document_default_title' => '資料',
 );

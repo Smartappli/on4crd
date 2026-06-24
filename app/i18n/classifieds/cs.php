@@ -117,4 +117,6 @@ return array (
   'notification_moderated_title' => 'Inzerát moderován',
   'notification_removed_body' => 'Reklama odstraněna moderováním: {title}',
   'notification_status_body' => 'Stav aktualizován na {status}: {title}',
+  'propose_category_direct_help' => 'Kategorie bude schválena přímo.',
+  'propose_category_created_direct' => 'Kategorie byla vytvořena a přímo schválena.',
 );

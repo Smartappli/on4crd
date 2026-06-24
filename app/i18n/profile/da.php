@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL-administrator',
   'qsl_choice_no_qsl' => 'Ingen QSL',
   'qsl_choice_other' => 'Andet',
+  'preview_public_title' => 'Offentlig visning',
+  'preview_members_title' => 'Medlemsvisning',
+  'preview_private_title' => 'Udvalgsvisning',
+  'required_field_help' => 'Obligatorisk felt.',
+  'preview_empty' => 'Ingen synlige oplysninger.',
 );

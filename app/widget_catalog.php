@@ -2,26 +2,27 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/hamqsl_widgets.php';
+require_once __DIR__ . '/widget_i18n.php';
 
 if (!function_exists('widget_catalog')) {
 function widget_catalog(): array
 {
     return [
         'welcome' => [
-            'title' => 'Bienvenue',
-            'description' => 'Message d’accueil du tableau de bord membre.',
+            'title' => dashboard_widget_text('widget_welcome_title'),
+            'description' => dashboard_widget_text('widget_welcome_description'),
         ],
         'open_meteo' => [
-            'title' => 'Météo locale',
-            'description' => 'Conditions locales via Agromet avec secours Open-Meteo.',
+            'title' => dashboard_widget_text('widget_open_meteo_title'),
+            'description' => dashboard_widget_text('widget_open_meteo_description'),
         ],
         'radio_clocks' => [
-            'title' => 'Horloges radio',
-            'description' => 'Deux horloges synchronisées pour la date et heure UTC et locale.',
+            'title' => dashboard_widget_text('widget_radio_clocks_title'),
+            'description' => dashboard_widget_text('widget_radio_clocks_description'),
         ],
         'ham_weather_advice' => [
-            'title' => 'Météo radioamateur',
-            'description' => 'Score QSO, bandes, modes et créneau conseillé depuis les données météo et propagation.',
+            'title' => dashboard_widget_text('widget_ham_weather_advice_title'),
+            'description' => dashboard_widget_text('widget_ham_weather_advice_description'),
         ],
     ] + hamqsl_widget_catalog();
 }

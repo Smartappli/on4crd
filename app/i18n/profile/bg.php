@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL мениджър',
   'qsl_choice_no_qsl' => 'Без QSL',
   'qsl_choice_other' => 'Друго',
+  'preview_public_title' => 'Публичен изглед',
+  'preview_members_title' => 'Изглед за членове',
+  'preview_private_title' => 'Изглед за комитет',
+  'required_field_help' => 'Задължително поле.',
+  'preview_empty' => 'Няма видима информация.',
 );

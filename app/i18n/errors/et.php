@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Vaata tulevasi tegevusi.',
   'tools_link' => 'Raadiotööriistad',
   'tools_hint' => 'Ava praktilised raadioamatööri tööriistad.',
+  'module_unavailable' => 'Moodul pole saadaval.',
+  'slug_article_unique_failed' => 'Unikaalset artiklinälkjat ei saa luua.',
+  'slug_wiki_unique_failed' => 'Unikaalset wiki nälkjat ei saa luua.',
+  'slug_news_unique_failed' => 'Unikaalset uudisnälkjat ei õnnestu luua.',
+  'slug_event_unique_failed' => 'Unikaalset sündmusenäitajat ei saa luua.',
+  'storage_path_invalid' => 'Kehtetu salvestustee.',
+  'storage_path_forbidden' => 'Salvestustee pole lubatud.',
+  'remote_url_private' => 'Kaug-URL osutab privaatsele või reserveeritud võrgule.',
+  'remote_url_private_resolved' => 'Kaug-URL lahendab privaatse või reserveeritud IP-aadressi.',
+  'field_too_long' => 'Üks väljadest ületab lubatud pikkuse.',
+  'wiki_storage_unavailable' => 'Wiki salvestusruum pole saadaval.',
+  'wiki_page_invalid' => 'Vigane leht.',
+  'wiki_page_not_found' => 'Wiki lehte ei leitud.',
+  'newsletter_campaign_not_found' => 'Kampaaniat ei leitud.',
+  'internal_error' => 'Ilmnes sisemine viga.',
+  'error_reference' => 'Viide: {request_id}.',
+  'service_temporarily_unavailable' => 'Teenus ei ole ajutiselt saadaval.',
 );

@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Reflekteret effekt (W)',
   'swr_result' => 'Beregnet SWR',
   'dbw_calc' => 'dBm <-> dBW-konvertering',
+  'cq_zone' => 'CQ zone',
+  'itu_zone' => 'ITU zone',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Forudindstilling gemt.',
+  'preset_deleted' => 'Forudindstilling slettet.',
+  'tools_stat_available' => 'Tilgængelige værktøjer',
+  'tools_stat_categories' => 'Kategorier',
 );

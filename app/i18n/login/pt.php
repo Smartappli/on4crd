@@ -18,4 +18,6 @@ return array (
   'forgot_password' => 'Esqueceu-se da palavra-passe?',
   'no_member' => 'Ainda não é membro?',
   'create_account' => 'Criar conta',
+  'membership_link' => 'Tornar-se membro',
+  'login_required' => 'Faça login para continuar.',
 );

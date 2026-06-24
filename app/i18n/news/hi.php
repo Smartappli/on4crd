@@ -61,4 +61,13 @@ return array (
   'search' => 'खोजें',
   'news_count_label' => 'समाचारों की संख्या',
   'proposal_recorded' => 'प्रस्ताव आपकी सामग्री में सहेज दिया गया है।',
+  'invalid' => 'अमान्य अनुरोध।',
+  'publish' => 'प्रकाशित करना',
+  'create' => 'बनाएं',
+  'published' => 'समाचार आइटम सहेजा गया.',
+  'category_created_direct' => 'विषय प्रस्तावित और सीधे स्वीकृत किया गया।',
+  'create_news' => 'बनाएं - समाचार',
+  'create_category' => 'बनाएं - अनुभाग',
+  'news_direct_help' => 'समाचार आइटम सहेजा गया.',
+  'category_direct_help' => 'विषय सीधे स्वीकृत किया जाएगा।',
 );

@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'اقتراح وسم',
   'proposal_type_subcategory' => 'اقتراح موضوع فرعي',
   'webotheque_title' => 'مكتبة الويب',
+  'albums_title' => 'الألبومات',
+  'auctions_title' => 'المزادات',
+  'files_title' => 'الملفات',
+  'presentations_title' => 'العروض التقديمية',
+  'minutes_title' => 'محاضر الاجتماعات',
+  'videos_title' => 'الفيديوهات',
+  'library_document_default_title' => 'مستند',
+  'document_default_title' => 'مستند',
 );

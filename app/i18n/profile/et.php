@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL-haldur',
   'qsl_choice_no_qsl' => 'QSL puudub',
   'qsl_choice_other' => 'Muu',
+  'preview_public_title' => 'Avalik vaade',
+  'preview_members_title' => 'Liikmete vaade',
+  'preview_private_title' => 'Komitee vaade',
+  'required_field_help' => 'Kohustuslik väli.',
+  'preview_empty' => 'Nähtavat teavet pole.',
 );

@@ -1,57 +1,59 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/widget_i18n.php';
+
 if (!function_exists('hamqsl_widget_variants')) {
 function hamqsl_widget_variants(): array
 {
     return [
         'hamqsl_hf_vhf' => [
-            'title' => 'HAMQSL - Propagation HF/VHF',
-            'description' => 'Resume visuel des conditions HF/VHF, MUF et EME.',
+            'title' => dashboard_widget_text('widget_hamqsl_hf_vhf_title'),
+            'description' => dashboard_widget_text('widget_hamqsl_hf_vhf_description'),
             'image' => 'solarn0nbh.php',
-            'alt' => 'Données solaires et conditions HF VHF HAMQSL',
+            'alt' => dashboard_widget_text('widget_hamqsl_hf_vhf_alt'),
             'layout' => 'wide',
         ],
         'hamqsl_solar_image' => [
-            'title' => 'HAMQSL - Image solaire',
-            'description' => 'Image solaire et indices principaux dans une vue verticale.',
+            'title' => dashboard_widget_text('widget_hamqsl_solar_image_title'),
+            'description' => dashboard_widget_text('widget_hamqsl_solar_image_description'),
             'image' => 'solarpic.php',
-            'alt' => 'Image solaire et indices HAMQSL',
+            'alt' => dashboard_widget_text('widget_hamqsl_solar_image_alt'),
             'layout' => 'tall',
         ],
         'hamqsl_band_conditions' => [
-            'title' => 'HAMQSL - Bandes HF',
-            'description' => 'Conditions de bandes HF sous forme compacte.',
+            'title' => dashboard_widget_text('widget_hamqsl_band_conditions_title'),
+            'description' => dashboard_widget_text('widget_hamqsl_band_conditions_description'),
             'image' => 'solarbc.php',
-            'alt' => 'Conditions de bandes HF HAMQSL',
+            'alt' => dashboard_widget_text('widget_hamqsl_band_conditions_alt'),
             'layout' => 'compact',
         ],
         'hamqsl_muf_map' => [
-            'title' => 'HAMQSL - Carte MUF',
-            'description' => 'Carte mondiale avec flux solaire, taches solaires et lectures MUF.',
+            'title' => dashboard_widget_text('widget_hamqsl_muf_map_title'),
+            'description' => dashboard_widget_text('widget_hamqsl_muf_map_description'),
             'image' => 'solarmuf.php',
-            'alt' => 'Carte MUF et ensoleillement mondial HAMQSL',
+            'alt' => dashboard_widget_text('widget_hamqsl_muf_map_alt'),
             'layout' => 'wide',
         ],
         'hamqsl_solar_globe' => [
-            'title' => 'HAMQSL - Globe solaire',
-            'description' => 'Globe d ensoleillement mondial pour la propagation.',
+            'title' => dashboard_widget_text('widget_hamqsl_solar_globe_title'),
+            'description' => dashboard_widget_text('widget_hamqsl_solar_globe_description'),
             'image' => 'solarglobe.php',
-            'alt' => 'Globe solaire HAMQSL',
+            'alt' => dashboard_widget_text('widget_hamqsl_solar_globe_alt'),
             'layout' => 'wide',
         ],
         'hamqsl_moon_globe' => [
-            'title' => 'HAMQSL - Globe lunaire',
-            'description' => 'Vue lunaire du globe et degradation EME.',
+            'title' => dashboard_widget_text('widget_hamqsl_moon_globe_title'),
+            'description' => dashboard_widget_text('widget_hamqsl_moon_globe_description'),
             'image' => 'moonglobe.php',
-            'alt' => 'Globe lunaire et degradation EME HAMQSL',
+            'alt' => dashboard_widget_text('widget_hamqsl_moon_globe_alt'),
             'layout' => 'wide',
         ],
         'hamqsl_solar_system' => [
-            'title' => 'HAMQSL - Systeme solaire',
-            'description' => 'Position courante des planetes du systeme solaire.',
+            'title' => dashboard_widget_text('widget_hamqsl_solar_system_title'),
+            'description' => dashboard_widget_text('widget_hamqsl_solar_system_description'),
             'image' => 'solarsystem.php',
-            'alt' => 'Vue du systeme solaire HAMQSL',
+            'alt' => dashboard_widget_text('widget_hamqsl_solar_system_alt'),
             'layout' => 'wide',
         ],
     ];
@@ -87,7 +89,7 @@ function hamqsl_widget_image_url(string $image): string
 {
     $image = strtolower(trim($image));
     if (preg_match('/^[a-z0-9]+\.php$/', $image) !== 1) {
-        throw new RuntimeException('Image HAMQSL non autorisee.');
+        throw new RuntimeException(dashboard_widget_text('widget_hamqsl_image_invalid'));
     }
 
     return 'https://www.hamqsl.com/' . $image;
@@ -97,7 +99,7 @@ function render_hamqsl_widget(string $slug): string
 {
     $variant = hamqsl_widget_variant($slug);
     if ($variant === null) {
-        return '<p class="help">Widget HAMQSL indisponible.</p>';
+        return '<p class="help">' . e(dashboard_widget_text('widget_hamqsl_unavailable')) . '</p>';
     }
 
     $layout = preg_replace('/[^a-z0-9_-]/', '', (string) ($variant['layout'] ?? 'standard')) ?: 'standard';
@@ -108,10 +110,10 @@ function render_hamqsl_widget(string $slug): string
     $alt = (string) ($variant['alt'] ?? $title);
 
     return '<figure class="hamqsl-widget hamqsl-widget--' . e($layout) . '" data-widget-refresh="manual" data-provider="hamqsl">'
-        . '<a href="' . e($sourceUrl) . '" title="Codes et credits HAMQSL" target="_blank" rel="noopener noreferrer">'
+        . '<a href="' . e($sourceUrl) . '" title="' . e(dashboard_widget_text('widget_hamqsl_source_title')) . '" target="_blank" rel="noopener noreferrer">'
         . '<img src="' . e($imageUrl) . '" alt="' . e($alt) . '" loading="lazy" decoding="async" referrerpolicy="no-referrer">'
         . '</a>'
-        . '<figcaption class="help">' . e($description) . ' Source : HAMQSL / N0NBH.</figcaption>'
+        . '<figcaption class="help">' . e($description) . ' ' . e(dashboard_widget_text('widget_hamqsl_source_caption')) . '</figcaption>'
         . '</figure>';
 }
 }

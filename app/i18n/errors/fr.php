@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Consulter les prochaines activités.',
   'tools_link' => 'Outils radio',
   'tools_hint' => 'Ouvrir les outils pratiques radioamateurs.',
+  'module_unavailable' => 'Module indisponible.',
+  'slug_article_unique_failed' => 'Impossible de générer un slug article unique.',
+  'slug_wiki_unique_failed' => 'Impossible de générer un slug wiki unique.',
+  'slug_news_unique_failed' => 'Impossible de générer un slug actualité unique.',
+  'slug_event_unique_failed' => 'Impossible de générer un slug événement unique.',
+  'storage_path_invalid' => 'Chemin de stockage invalide.',
+  'storage_path_forbidden' => 'Chemin de stockage non autorisé.',
+  'remote_url_private' => 'L’URL distante pointe vers un réseau privé ou réservé.',
+  'remote_url_private_resolved' => 'L’URL distante résout vers une IP privée ou réservée.',
+  'field_too_long' => 'Un des champs dépasse la longueur autorisée.',
+  'wiki_storage_unavailable' => 'Stockage wiki indisponible.',
+  'wiki_page_invalid' => 'Page wiki invalide.',
+  'wiki_page_not_found' => 'Page wiki introuvable.',
+  'newsletter_campaign_not_found' => 'Campagne introuvable.',
+  'internal_error' => 'Une erreur interne est survenue.',
+  'error_reference' => 'Référence : {request_id}.',
+  'service_temporarily_unavailable' => 'Service temporairement indisponible.',
 );

@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Ungültiges Album.',
   'uploaded_count' => 'Foto(s) hinzugefügt.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'Albumimport abgeschlossen',
+  'notification_import_completed_body' => '%d Foto(s) importiert.',
   'no_photo_imported' => 'Es wurde kein Foto importiert.',
   'created_thumbs' => 'Miniaturansicht(en) generiert.',
   'manage_title' => 'Alben verwalten',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Titel',
   'description' => 'Beschreibung',
   'public_album' => 'Öffentliches Album',
+  'featured_album' => 'Album hervorheben',
   'photo_title' => 'Fototitel',
   'caption' => 'Bildtext',
   'files_dropzone' => 'Bilddateien',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album validiert, aber die soziale Synchronisierung ist fehlgeschlagen.',
   'batch_max_files' => 'Maximal 100 Fotos pro Import.',
   'batch_max_size' => 'Der Fotostapel überschreitet 512 MB.',
+  'error_field_too_long' => 'Eines der Felder überschreitet die zulässige Länge.',
 );

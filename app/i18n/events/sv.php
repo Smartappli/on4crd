@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'Avbryt',
   'propose_event_close' => 'Stäng',
   'proposal_recorded' => 'Förslaget har sparats i ditt innehåll.',
+  'invalid' => 'Ogiltig begäran.',
+  'event_published_direct' => 'Evenemanget publicerades direkt.',
+  'propose_event_direct_help' => 'Evenemanget publiceras direkt.',
+  'publish_event' => 'Publicera',
+  'next_event_title' => 'Kommande evenemang',
 );

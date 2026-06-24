@@ -195,7 +195,7 @@ final class AlbumHelpersTest extends TestCase
     public function testAlbumProposalSummaryExtractsDescriptionMetadataAndActions(): void
     {
         self::assertSame(
-            "Club fieldday\n\nThématique: radio\nMots clés: ft8",
+            "Club fieldday\n\nThématique: radio\nMots-clés: ft8",
             album_proposal_description_from_summary("Thematique: radio\nMots cles: ft8\nDescription: Club fieldday")
         );
         self::assertNull(album_proposal_description_from_summary(''));

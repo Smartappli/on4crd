@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'اطّلع على الأنشطة القادمة.',
   'tools_link' => 'أدوات الراديو',
   'tools_hint' => 'افتح الأدوات العملية لهواة الراديو.',
+  'module_unavailable' => 'الوحدة غير متوفرة.',
+  'slug_article_unique_failed' => 'غير قادر على إنشاء سبيكة مقالة فريدة.',
+  'slug_wiki_unique_failed' => 'غير قادر على إنشاء سبيكة wiki فريدة من نوعها.',
+  'slug_news_unique_failed' => 'غير قادر على إنشاء سبيكة أخبار فريدة.',
+  'slug_event_unique_failed' => 'غير قادر على إنشاء سبيكة حدث فريدة.',
+  'storage_path_invalid' => 'مسار التخزين غير صالح.',
+  'storage_path_forbidden' => 'مسار التخزين غير مسموح به.',
+  'remote_url_private' => 'يشير URL البعيد إلى شبكة خاصة أو محجوزة.',
+  'remote_url_private_resolved' => 'يتحول URL البعيد إلى عنوان IP خاص أو محجوز.',
+  'field_too_long' => 'يتجاوز أحد الحقول الطول المسموح به.',
+  'wiki_storage_unavailable' => 'مساحة تخزين Wiki غير متوفرة.',
+  'wiki_page_invalid' => 'صفحة ويكي غير صالحة.',
+  'wiki_page_not_found' => 'لم يتم العثور على صفحة ويكي.',
+  'newsletter_campaign_not_found' => 'لم يتم العثور على الحملة.',
+  'internal_error' => 'حدث خطأ داخلي.',
+  'error_reference' => 'المرجع: {request_id}.',
+  'service_temporarily_unavailable' => 'الخدمة غير متاحة مؤقتا.',
 );

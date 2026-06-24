@@ -154,7 +154,7 @@ function album_social_publish_if_public(int $albumId): array
 {
     $result = ['facebook' => null, 'instagram' => null, 'skipped' => [], 'errors' => []];
     if ($albumId <= 0 || !table_exists('albums') || !table_exists('album_photos')) {
-        $result['errors'][] = 'Invalid album.';
+        $result['errors'][] = album_admin_i18n_text('invalid_album');
         return $result;
     }
 
@@ -429,11 +429,37 @@ function album_subcategory_ref_parts(string $value): array
     return ['category' => '', 'subcategory' => album_subcategory_code($value)];
 }
 
+function album_i18n_text(string $key): string
+{
+    static $cache = [];
+
+    $locale = function_exists('current_locale') ? current_locale() : null;
+    $cacheKey = $locale ?? '__default__';
+    if (!array_key_exists($cacheKey, $cache)) {
+        $cache[$cacheKey] = function_exists('i18n_domain_locale') ? i18n_domain_locale('albums', $locale) : [];
+    }
+
+    return (string) ($cache[$cacheKey][$key] ?? $key);
+}
+
+function album_admin_i18n_text(string $key): string
+{
+    static $cache = [];
+
+    $locale = function_exists('current_locale') ? current_locale() : null;
+    $cacheKey = $locale ?? '__default__';
+    if (!array_key_exists($cacheKey, $cache)) {
+        $cache[$cacheKey] = function_exists('i18n_domain_locale') ? i18n_domain_locale('admin_albums', $locale) : [];
+    }
+
+    return (string) ($cache[$cacheKey][$key] ?? $key);
+}
+
 function album_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', album_category_code($code)));
     if ($label === '') {
-        return 'Général';
+        return album_i18n_text('category_general');
     }
 
     try {
@@ -453,12 +479,12 @@ function album_category_label_from_code(string $code): string
 function album_default_categories(): array
 {
     return [
-        'general' => 'Général',
-        'activites' => 'Activités club',
-        'contests' => 'Contests',
-        'formations' => 'Formations',
-        'sorties' => 'Sorties',
-        'radio' => 'Radioamateur',
+        'general' => album_i18n_text('category_general'),
+        'activites' => album_i18n_text('category_activites'),
+        'contests' => album_i18n_text('category_contests'),
+        'formations' => album_i18n_text('category_formations'),
+        'sorties' => album_i18n_text('category_sorties'),
+        'radio' => album_i18n_text('category_radio'),
     ];
 }
 
@@ -576,7 +602,7 @@ function album_category_from_input(string $value, array $categories): string
         $code = 'general';
     }
     if (!isset($categories[$code])) {
-        throw new RuntimeException('Invalid album category.');
+        throw new RuntimeException(album_i18n_text('invalid_request'));
     }
 
     return $code;
@@ -601,7 +627,7 @@ function album_taxonomy_from_input(string $categoryInput, string $subcategoryRef
 
     $refCategory = $parts['category'] !== '' ? album_category_from_input($parts['category'], $categories) : $category;
     if ($refCategory !== $category) {
-        throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+        throw new RuntimeException(album_i18n_text('err_subcategory_category_mismatch'));
     }
 
     foreach ((array) (album_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
@@ -610,7 +636,7 @@ function album_taxonomy_from_input(string $categoryInput, string $subcategoryRef
         }
     }
 
-    throw new RuntimeException('La sous-thématique sélectionnée ne correspond pas à la thématique choisie.');
+    throw new RuntimeException(album_i18n_text('err_subcategory_category_mismatch'));
 }
 
 /**
@@ -761,9 +787,9 @@ function render_album_taxonomy_fields(array $categories, array $labels = [], str
     $selectedCategory = album_category_code($selectedCategory !== '' ? $selectedCategory : 'general');
     $selectedSubcategory = album_subcategory_code($selectedSubcategory);
     $subcategoriesByCategory = album_subcategories_by_category();
-    $categoryLabel = (string) ($labels['category_field'] ?? 'Thématique');
-    $subcategoryLabel = (string) ($labels['subcategory_field'] ?? 'Sous-thématique');
-    $noSubcategory = (string) ($labels['no_subcategory'] ?? 'Sans sous-thématique');
+    $categoryLabel = (string) ($labels['category_field'] ?? album_i18n_text('category_field'));
+    $subcategoryLabel = (string) ($labels['subcategory_field'] ?? album_i18n_text('subcategory_field'));
+    $noSubcategory = (string) ($labels['no_subcategory'] ?? album_i18n_text('no_subcategory'));
 
     $html = '<label><span>' . e($categoryLabel) . '</span><select name="category">';
     foreach ($categories as $code => $label) {
@@ -828,8 +854,8 @@ function album_proposal_description_from_summary(string $summary): ?string
     $theme = content_proposal_detail_from_summary($summary, ['Thématique', 'Thematique', 'Theme', 'Topic']);
     $keywords = content_proposal_detail_from_summary($summary, ['Mots clés', 'Mots cles', 'Keywords', 'Tags']);
     $metadata = content_proposal_details_text([
-        'Thématique' => $theme,
-        'Mots clés' => $keywords,
+        album_i18n_text('category_field') => $theme,
+        album_i18n_text('keywords_label') => $keywords,
     ]);
     $albumDescription = trim($description . ($metadata !== '' ? "\n\n" . $metadata : ''));
 
@@ -872,7 +898,7 @@ function album_delete_photo_file(string $publicPath): void
 function album_update_record(int $albumId, string $title, string $description, ?int $isPublic = null, string $category = 'general', string $subcategory = '', ?int $isFeatured = null): void
 {
     if (!album_ensure_schema_columns_and_indexes() || !album_ensure_source_proposal_column()) {
-        throw new RuntimeException('Albums storage unavailable.');
+        throw new RuntimeException(album_admin_i18n_text('storage_unavailable'));
     }
 
     $title = content_proposal_clean_single_line($title, 190);
@@ -880,14 +906,14 @@ function album_update_record(int $albumId, string $title, string $description, ?
     $category = album_category_code($category !== '' ? $category : 'general');
     $subcategory = album_subcategory_code($subcategory);
     if ($albumId <= 0 || $title === '') {
-        throw new RuntimeException('Invalid album proposal.');
+        throw new RuntimeException(album_i18n_text('invalid_request'));
     }
 
     $stmt = db()->prepare('SELECT id, is_public, is_featured FROM albums WHERE id = ? LIMIT 1');
     $stmt->execute([$albumId]);
     $album = $stmt->fetch();
     if (!is_array($album)) {
-        throw new RuntimeException('Invalid album proposal.');
+        throw new RuntimeException(album_i18n_text('invalid_request'));
     }
 
     $visibility = $isPublic;
@@ -911,7 +937,7 @@ function album_update_record(int $albumId, string $title, string $description, ?
                 'expected' => $featured ? 1 : 0,
                 'stored' => $storedFeatured,
             ]);
-            throw new RuntimeException('Albums storage unavailable.');
+            throw new RuntimeException(album_admin_i18n_text('storage_unavailable'));
         }
     }
     if (table_exists('member_favorites')) {
@@ -924,16 +950,16 @@ function album_update_record(int $albumId, string $title, string $description, ?
 function album_delete_record(int $albumId): void
 {
     if (!album_ensure_source_proposal_column()) {
-        throw new RuntimeException('Albums storage unavailable.');
+        throw new RuntimeException(album_admin_i18n_text('storage_unavailable'));
     }
     if ($albumId <= 0) {
-        throw new RuntimeException('Invalid album proposal.');
+        throw new RuntimeException(album_i18n_text('invalid_request'));
     }
 
     $albumStmt = db()->prepare('SELECT id FROM albums WHERE id = ? LIMIT 1');
     $albumStmt->execute([$albumId]);
     if (!$albumStmt->fetchColumn()) {
-        throw new RuntimeException('Invalid album proposal.');
+        throw new RuntimeException(album_i18n_text('invalid_request'));
     }
 
     $photoStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ?');
@@ -967,12 +993,12 @@ function album_apply_accepted_proposal(array $proposal): ?int
     $proposalType = (string) ($proposal['proposal_type'] ?? '');
     if ($proposalType === 'category') {
         if (!album_ensure_categories_table()) {
-            throw new RuntimeException('Albums storage unavailable.');
+            throw new RuntimeException(album_admin_i18n_text('storage_unavailable'));
         }
         $label = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 160);
         $code = album_category_code($label);
         if ($label === '' || $code === '') {
-            throw new RuntimeException('Invalid album proposal.');
+            throw new RuntimeException(album_i18n_text('invalid_request'));
         }
         db()->prepare('INSERT INTO album_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
             ->execute([$code, $label]);
@@ -983,14 +1009,14 @@ function album_apply_accepted_proposal(array $proposal): ?int
 
     if ($proposalType === 'subcategory') {
         if (!album_ensure_subcategories_table()) {
-            throw new RuntimeException('Albums storage unavailable.');
+            throw new RuntimeException(album_admin_i18n_text('storage_unavailable'));
         }
         $summary = (string) ($proposal['summary'] ?? '');
         $label = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 160);
         $code = album_subcategory_code($label);
         $parentCategory = album_category_code((string) (content_proposal_detail_from_summary($summary, ['Thématique', 'Thematique', 'Theme', 'Topic', 'Category']) ?: 'general'));
         if ($label === '' || $code === '') {
-            throw new RuntimeException('Invalid album proposal.');
+            throw new RuntimeException(album_i18n_text('invalid_request'));
         }
         db()->prepare('INSERT INTO album_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
             ->execute([$parentCategory, $code, $label]);
@@ -1003,13 +1029,13 @@ function album_apply_accepted_proposal(array $proposal): ?int
         return null;
     }
     if (!album_ensure_source_proposal_column()) {
-        throw new RuntimeException('Albums storage unavailable.');
+        throw new RuntimeException(album_admin_i18n_text('storage_unavailable'));
     }
 
     $proposalId = (int) ($proposal['id'] ?? 0);
     $title = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 190);
     if ($proposalId <= 0 || $title === '') {
-        throw new RuntimeException('Invalid album proposal.');
+        throw new RuntimeException(album_i18n_text('invalid_request'));
     }
 
     $summary = (string) ($proposal['summary'] ?? '');
@@ -1187,30 +1213,30 @@ function album_upload_batch_from_files(mixed $files): array
  * @param mixed $files
  * @return array{count:int,last_title:string,paths:list<string>}
  */
-function album_store_uploaded_photos(int $albumId, mixed $files, string $title, string $caption, string $callsign, string $defaultPhotoTitle = 'Photo'): array
+function album_store_uploaded_photos(int $albumId, mixed $files, string $title, string $caption, string $callsign, string $defaultPhotoTitle = ''): array
 {
+    $messages = i18n_domain_locale('admin_albums', current_locale());
     if ($albumId <= 0 || !album_ensure_photo_sort_order_column()) {
-        throw new RuntimeException('Invalid album.');
+        throw new RuntimeException((string) $messages['invalid_album']);
     }
 
-    $messages = i18n_domain_locale('admin_albums', current_locale());
     $title = content_proposal_clean_single_line($title, 190);
     $caption = content_proposal_clean_multiline($caption, 5000);
-    $defaultPhotoTitle = content_proposal_clean_single_line($defaultPhotoTitle !== '' ? $defaultPhotoTitle : 'Photo', 190);
+    $defaultPhotoTitle = content_proposal_clean_single_line($defaultPhotoTitle !== '' ? $defaultPhotoTitle : (string) $messages['photo'], 190);
     if ($defaultPhotoTitle === '') {
-        $defaultPhotoTitle = 'Photo';
+        $defaultPhotoTitle = (string) $messages['photo'];
     }
 
     $uploadBatch = album_upload_batch_from_files($files);
     if ($uploadBatch === []) {
-        throw new RuntimeException((string) ($messages['no_photo_imported'] ?? 'No photo was imported.'));
+        throw new RuntimeException((string) $messages['no_photo_imported']);
     }
     if (count($uploadBatch) > 100) {
-        throw new RuntimeException((string) ($messages['batch_max_files'] ?? 'Maximum 100 photos per import.'));
+        throw new RuntimeException((string) $messages['batch_max_files']);
     }
     $totalBytes = array_sum(array_map(static fn(array $item): int => max(0, (int) ($item['size'] ?? 0)), $uploadBatch));
     if ($totalBytes > 512 * 1024 * 1024) {
-        throw new RuntimeException((string) ($messages['batch_max_size'] ?? 'The photo batch exceeds 512 MB.'));
+        throw new RuntimeException((string) $messages['batch_max_size']);
     }
 
     $insertPhotoStmt = db()->prepare('INSERT INTO album_photos (album_id, sort_order, title, caption, file_path) VALUES (?, ?, ?, ?, ?)');

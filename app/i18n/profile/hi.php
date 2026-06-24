@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL प्रबंधक',
   'qsl_choice_no_qsl' => 'QSL नहीं',
   'qsl_choice_other' => 'अन्य',
+  'preview_public_title' => 'सार्वजनिक दृश्य',
+  'preview_members_title' => 'सदस्यों का दृश्य',
+  'preview_private_title' => 'समिति दृश्य',
+  'required_field_help' => 'अनिवार्य फ़ील्ड.',
+  'preview_empty' => 'कोई दृश्यमान जानकारी नहीं है।',
 );

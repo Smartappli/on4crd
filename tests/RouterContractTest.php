@@ -63,7 +63,7 @@ final class RouterContractTest extends TestCase
 
         self::assertStringContainsString('if ($user !== null) {', $layout);
         self::assertStringContainsString('$membershipBadgeHtml = \'<span class="membership-status-badge">\'', $layout);
-        self::assertStringContainsString('En ordre de cotisation', $layout);
+        self::assertStringContainsString("layoutI18n['membership_good_standing']", $layout);
         self::assertStringContainsString('toolbar-account-stack', $layout);
         self::assertStringContainsString('membership-status-badge', $layout);
         self::assertStringContainsString("'</div>' . \$membershipBadgeHtml . '</div>'", $layout);

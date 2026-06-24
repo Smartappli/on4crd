@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Espace Membre',
   'unavailable' => 'Le wiki sera disponible après initialisation des pages.',
+  'invalid' => 'Requête invalide.',
   'new_pages' => 'Nouvelles pages',
   'updated_pages' => 'Pages modifiées',
   'most_read' => 'Les plus lues',
@@ -48,4 +49,6 @@ return array (
   'favorite_removed' => 'Favori retiré',
   'favorite_added_msg' => 'Page ajoutée aux favoris.',
   'favorite_removed_msg' => 'Page retirée des favoris.',
+  'err_subcategory_category_mismatch' => 'La sous-thématique sélectionnée ne correspond pas à la thématique choisie.',
+  'category_general' => 'Général',
 );

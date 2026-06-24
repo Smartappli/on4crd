@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'সদস্য এলাকা',
   'unavailable' => 'পৃষ্ঠা ইনিশিয়ালাইজেশনের পর উইকি উপলব্ধ হবে।',
+  'invalid' => 'অনুরোধটি অবৈধ।',
   'new_pages' => 'নতুন পৃষ্ঠা',
   'updated_pages' => 'আপডেট হওয়া পৃষ্ঠা',
   'most_read' => 'সর্বাধিক পঠিত',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'সাবটপিক',
   'no_subcategory' => 'কোন সাবটপিক নেই',
   'favorites' => 'প্রিয়',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'প্রিয়তে যোগ করা হয়েছে',
+  'favorite_removed' => 'প্রিয় থেকে সরানো হয়েছে',
+  'favorite_added_msg' => 'পৃষ্ঠা প্রিয়তে যোগ করা হয়েছে।',
+  'favorite_removed_msg' => 'পৃষ্ঠা প্রিয় থেকে সরানো হয়েছে।',
+  'err_subcategory_category_mismatch' => 'নির্বাচিত উপ-বিষয়টি নির্বাচিত বিষয়ের অন্তর্গত নয়।',
+  'category_general' => 'সাধারণ',
 );

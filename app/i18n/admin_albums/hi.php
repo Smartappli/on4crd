@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'अमान्य एल्बम.',
   'uploaded_count' => 'फ़ोटो जोड़ी गईं.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'एल्बम आयात पूरा हुआ',
+  'notification_import_completed_body' => '%d फ़ोटो आयात किए गए।',
   'no_photo_imported' => 'कोई फोटो आयात नहीं किया गया.',
   'created_thumbs' => 'थंबनेल उत्पन्न हुआ।',
   'manage_title' => 'एल्बम प्रबंधन',
@@ -20,6 +20,7 @@ return array (
   'title' => 'शीर्षक',
   'description' => 'विवरण',
   'public_album' => 'सार्वजनिक एल्बम',
+  'featured_album' => 'विशेष एल्बम',
   'photo_title' => 'फोटो शीर्षक',
   'caption' => 'कैप्शन',
   'files_dropzone' => 'छवि फ़ाइलें',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'एल्बम मान्य हो गया, लेकिन सामाजिक सिंक्रनाइज़ेशन विफल रहा।',
   'batch_max_files' => 'प्रति आयात अधिकतम 100 फ़ोटो।',
   'batch_max_size' => 'फोटो बैच 512 एमबी से अधिक है।',
+  'error_field_too_long' => 'फ़ील्ड में से एक की लंबाई अनुमत लंबाई से अधिक है.',
 );

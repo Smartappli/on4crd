@@ -11,4 +11,5 @@ return array (
   'prosign_sk' => 'Deireadh na teagmhála',
   'prosign_bt' => 'Deighilteoir',
   'prosign_as' => 'Fan',
+  'code' => 'Code',
 );

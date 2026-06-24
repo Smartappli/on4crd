@@ -9,7 +9,7 @@ return array (
   'members' => 'Leden',
   'th_callsign' => 'Roepnaam',
   'th_name' => 'Naam',
-  'th_email' => 'E-mail',
+  'th_email' => 'E-mailadres',
   'th_locator' => 'Zoeker',
   'th_active' => 'Actief',
   'th_committee' => 'Commissie',

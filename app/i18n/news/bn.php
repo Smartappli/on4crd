@@ -61,4 +61,13 @@ return array (
   'search' => 'অনুসন্ধান করুন',
   'news_count_label' => 'খবরের সংখ্যা',
   'proposal_recorded' => 'প্রস্তাবটি আপনার কনটেন্টে সংরক্ষিত হয়েছে।',
+  'invalid' => 'অবৈধ অনুরোধ।',
+  'publish' => 'প্রকাশ করুন',
+  'create' => 'তৈরি করুন',
+  'published' => 'সংবাদ আইটেম সংরক্ষিত.',
+  'category_created_direct' => 'বিষয়টি প্রস্তাবিত ও সরাসরি অনুমোদিত হয়েছে।',
+  'create_news' => 'তৈরি করুন - সংবাদ',
+  'create_category' => 'তৈরি করুন - বিভাগ',
+  'news_direct_help' => 'সংবাদ আইটেম সংরক্ষিত.',
+  'category_direct_help' => 'বিষয়টি সরাসরি অনুমোদিত হবে।',
 );

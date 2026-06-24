@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'অবৈধ অ্যালবাম।',
   'uploaded_count' => 'ছবি(গুলি) যোগ করা হয়েছে।',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'অ্যালবাম আমদানি সম্পন্ন',
+  'notification_import_completed_body' => '%dটি ছবি আমদানি হয়েছে।',
   'no_photo_imported' => 'কোনো ছবি আমদানি করা হয়নি।',
   'created_thumbs' => 'থাম্বনেইল(গুলি) তৈরি হয়েছে।',
   'manage_title' => 'অ্যালবাম ব্যবস্থাপনা',
@@ -20,6 +20,7 @@ return array (
   'title' => 'শিরোনাম',
   'description' => 'বিবরণ',
   'public_album' => 'পাবলিক অ্যালবাম',
+  'featured_album' => 'বিশেষ অ্যালবাম',
   'photo_title' => 'ছবির শিরোনাম',
   'caption' => 'ক্যাপশন',
   'files_dropzone' => 'ইমেজ ফাইল',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'অ্যালবাম যাচাই করা হয়েছে, কিন্তু সামাজিক সিঙ্ক্রোনাইজেশন ব্যর্থ হয়েছে৷',
   'batch_max_files' => 'প্রতি আমদানি সর্বোচ্চ 100টি ফটো।',
   'batch_max_size' => 'ছবির ব্যাচ 512 MB ছাড়িয়ে গেছে।',
+  'error_field_too_long' => 'ক্ষেত্রগুলির একটি অনুমোদিত দৈর্ঘ্য অতিক্রম করেছে৷',
 );

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => '今後の活動を確認する。',
   'tools_link' => '無線ツール',
   'tools_hint' => '実用的なアマチュア無線ツールを開く。',
+  'module_unavailable' => 'モジュールが利用できません。',
+  'slug_article_unique_failed' => '固有の記事スラッグを生成できません。',
+  'slug_wiki_unique_failed' => '固有の Wiki スラッグを生成できません。',
+  'slug_news_unique_failed' => '固有のニューススラッグを生成できません。',
+  'slug_event_unique_failed' => '固有のイベント スラッグを生成できません。',
+  'storage_path_invalid' => '無効なストレージ パスです。',
+  'storage_path_forbidden' => 'ストレージ パスは許可されません。',
+  'remote_url_private' => 'リモート URL は、プライベート ネットワークまたは予約済みネットワークを指します。',
+  'remote_url_private_resolved' => 'リモート URL は、プライベートまたは予約された IP アドレスに解決されます。',
+  'field_too_long' => 'フィールドの 1 つが許可された長さを超えています。',
+  'wiki_storage_unavailable' => 'Wiki ストレージが利用できません。',
+  'wiki_page_invalid' => '無効な Wiki ページです。',
+  'wiki_page_not_found' => 'Wiki ページが見つかりません。',
+  'newsletter_campaign_not_found' => 'キャンペーンが見つかりません。',
+  'internal_error' => '内部エラーが発生しました。',
+  'error_reference' => '参考：{request_id}。',
+  'service_temporarily_unavailable' => 'サービスが一時的に利用できなくなりました。',
 );

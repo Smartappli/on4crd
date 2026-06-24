@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'Quote of the day',
   'ham_weather' => 'Ham radio weather',
   'ham_weather_desc' => 'Recommendations are computed automatically from your location, time of day, weather and propagation to identify the most favorable bands and modes for QSO.',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'Classified ads',
   'spotlight_classifieds_empty' => 'No active classified ads at the moment.',
   'spotlight_classifieds_cta' => 'View classified ads',
-
   'spotlight_tool_day' => 'News / Announcement',
   'spotlight_for_sale' => 'Upcoming events',
   'spotlight_auction_live' => 'Tool of the day',
@@ -178,4 +177,9 @@ return [
   'home_trophies_empty' => 'No trophy is available at the moment.',
   'home_trophies_title' => 'Our trophies',
   'spotlight_member_gallery_empty' => 'No gallery image is available at the moment.',
-];
+  'widget_temporarily_unavailable' => 'Widget temporarily unavailable.',
+  'ham_advice_temporarily_unavailable' => 'Radio advice temporarily unavailable.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'Members',
+  'visibility_private' => 'Private',
+);

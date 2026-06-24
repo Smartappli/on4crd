@@ -42,4 +42,9 @@ return array (
   'no_assignment' => 'Ingen tilskrivning.',
   'layout' => 'Nyhedssektion',
   'meta_desc' => 'Skrivning, moderering og styring af nyheder efter afsnit.',
+  'status_draft' => 'Udkast',
+  'status_pending' => 'Afventer',
+  'status_published' => 'Udgivet',
+  'status_rejected' => 'Afvist',
+  'status_archived' => 'Arkiveret',
 );

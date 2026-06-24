@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -52,4 +51,5 @@ return array (
   'search_label' => 'Globale Suche',
   'search_placeholder' => 'Suchen…',
   'search_submit' => 'Suchen',
+  'membership_good_standing' => 'Mitgliedschaft aktuell',
 );

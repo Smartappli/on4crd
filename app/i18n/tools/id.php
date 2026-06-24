@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Daya pantulan (W)',
   'swr_result' => 'SWR yang dihitung',
   'dbw_calc' => 'Konversi dBm <-> dBW',
+  'cq_zone' => 'Zona CQ',
+  'itu_zone' => 'Zona ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Preset disimpan.',
+  'preset_deleted' => 'Preset dihapus.',
+  'tools_stat_available' => 'Alat tersedia',
+  'tools_stat_categories' => 'Kategori',
 );

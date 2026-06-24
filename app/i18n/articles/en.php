@@ -102,4 +102,7 @@ Contact:',
   'subcategory_field' => 'Subtopic',
   'no_subcategory' => 'No subtopic',
   'favorites' => 'Favorites',
+  'invalid' => 'Invalid request.',
+  'err_invalid_category' => 'Invalid category.',
+  'err_subcategory_category_mismatch' => 'The selected subtopic does not belong to the selected topic.',
 );

@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'Tühista',
   'propose_event_close' => 'Sulge',
   'proposal_recorded' => 'Ettepanek salvestati teie sisusse.',
+  'invalid' => 'Vigane päring.',
+  'event_published_direct' => 'Sündmus avaldati otse.',
+  'propose_event_direct_help' => 'Sündmus avaldatakse otse.',
+  'publish_event' => 'Avalda',
+  'next_event_title' => 'Eelseisvad sündmused',
 );

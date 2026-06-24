@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'परावर्तित शक्ति (डब्ल्यू)',
   'swr_result' => 'परिकलित एसडब्ल्यूआर',
   'dbw_calc' => 'dBm <-> dBW रूपांतरण',
+  'cq_zone' => 'CQ ज़ोन',
+  'itu_zone' => 'ITU ज़ोन',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'प्रीसेट सहेजा गया।',
+  'preset_deleted' => 'प्रीसेट हटाया गया।',
+  'tools_stat_available' => 'उपलब्ध उपकरण',
+  'tools_stat_categories' => 'श्रेणियाँ',
 );

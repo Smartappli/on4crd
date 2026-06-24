@@ -9,4 +9,10 @@ return array (
   'manage_label' => 'Riadiť výbor',
   'none' => 'V súčasnosti nie sú zverejnení žiadni členovia komisie.',
   'portrait_of' => 'Portrét z',
+  'editorial_title' => 'výboru',
+  'editorial_intro' => 'Predstavenie výboru rádioklubu.',
+  'editorial_mission' => 'Transparentnosť',
+  'editorial_onboarding' => 'Člen vítaný',
+  'editorial_contact_title' => 'Kontakt',
+  'editorial_contact_text' => 'Výbor je k dispozícii pre vaše otázky.',
 );

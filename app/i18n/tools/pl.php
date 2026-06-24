@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => 'Moc odbita (W)',
   'swr_result' => 'Obliczony SWR',
   'dbw_calc' => 'Konwersja dBm <-> dBW',
+  'cq_zone' => 'Strefa CQ',
+  'itu_zone' => 'Strefa ITU',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Ustawienie zapisane.',
+  'preset_deleted' => 'Ustawienie usunięte.',
+  'tools_stat_available' => 'Dostępne narzędzia',
+  'tools_stat_categories' => 'Kategorie',
 );

@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL-ansvarig',
   'qsl_choice_no_qsl' => 'Ingen QSL',
   'qsl_choice_other' => 'Annat',
+  'registration_closed_title' => 'Medlemsregistrering',
+  'registration_closed_message' => 'Offentlig registrering är stängd. Medlemskonton skapas av administrationen efter validering.',
+  'membership_link' => 'Bli medlem',
 );

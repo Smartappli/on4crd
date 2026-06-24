@@ -4,8 +4,8 @@ declare(strict_types=1);
 return array (
   'invalid_album' => 'Album mhux validu.',
   'uploaded_count' => 'ritratt(i) miżjud.',
-  'notification_import_completed_title' => 'Album import completed',
-  'notification_import_completed_body' => '%d photo(s) imported.',
+  'notification_import_completed_title' => 'L-importazzjoni tal-album tlestiet',
+  'notification_import_completed_body' => 'Ġew importati %d ritratti.',
   'no_photo_imported' => 'Ebda ritratti importati.',
   'created_thumbs' => 'thumbnail iġġenerat(i).',
   'manage_title' => 'Ġestjoni tal-album',
@@ -20,6 +20,7 @@ return array (
   'title' => 'Titolu',
   'description' => 'Deskrizzjoni',
   'public_album' => 'Album pubbliku',
+  'featured_album' => 'Album enfasizzat',
   'photo_title' => 'Titlu tar-ritratt',
   'caption' => 'Leġġenda',
   'files_dropzone' => 'Fajls tal-immaġni',
@@ -79,4 +80,5 @@ return array (
   'album_finalized_social_warning' => 'Album ivvalidat, iżda s-sinkronizzazzjoni soċjali falliet.',
   'batch_max_files' => 'Massimu 100 ritratt għal kull importazzjoni.',
   'batch_max_size' => 'Il-lott tar-ritratti jaqbeż il-512 MB.',
+  'error_field_too_long' => 'Wieħed mill-oqsma jaqbeż it-tul permess.',
 );

@@ -84,9 +84,10 @@ function ensure_member_library_categories_table(): void
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )');
     $categoryInsert = db()->prepare('INSERT IGNORE INTO member_library_categories (code, label, sort_order) VALUES (?, ?, ?)');
+    $libraryMessages = function_exists('i18n_domain_locale') ? i18n_domain_locale('members_library', current_locale()) : [];
     $defaultCategories = function_exists('member_library_default_categories')
         ? member_library_default_categories()
-        : [['code' => 'general', 'label' => 'Général', 'sort_order' => 1]];
+        : [['code' => 'general', 'label' => (string) ($libraryMessages['category_general'] ?? 'General'), 'sort_order' => 1]];
     foreach ($defaultCategories as $category) {
         $categoryInsert->execute([
             (string) $category['code'],
@@ -131,22 +132,21 @@ $adminLibraryRoute = (string) ($_GET['route'] ?? $_POST['route'] ?? 'admin_libra
 if (!in_array($adminLibraryRoute, $adminLibraryRoutes, true)) {
     $adminLibraryRoute = 'admin_library';
 }
-$isFrench = $locale === 'fr';
-$adminLibraryText = static function (string $key, string $fr, string $en) use ($t, $isFrench): string {
-    return (string) ($t[$key] ?? ($isFrench ? $fr : $en));
+$adminLibraryText = static function (string $key) use ($t): string {
+    return (string) ($t[$key] ?? $key);
 };
 $pendingProposalUrl = route_url_clean($adminLibraryRoute, ['status' => 'pending']) . '#pending-proposals';
 $proposalStatusLabels = [
-    'pending' => $adminLibraryText('proposal_status_pending', 'En attente', 'Pending'),
-    'reviewed' => $adminLibraryText('proposal_status_reviewed', 'Relue', 'Reviewed'),
-    'accepted' => $adminLibraryText('proposal_status_accepted', 'Acceptée', 'Accepted'),
-    'rejected' => $adminLibraryText('proposal_status_rejected', 'Refusée', 'Rejected'),
+    'pending' => $adminLibraryText('proposal_status_pending'),
+    'reviewed' => $adminLibraryText('proposal_status_reviewed'),
+    'accepted' => $adminLibraryText('proposal_status_accepted'),
+    'rejected' => $adminLibraryText('proposal_status_rejected'),
 ];
 $proposalTypeLabels = [
-    'category' => $adminLibraryText('proposal_type_category', 'Thématique', 'Topic'),
-    'subcategory' => $adminLibraryText('proposal_type_subcategory', 'Sous-thématique', 'Subtopic'),
-    'content' => $adminLibraryText('proposal_type_content', 'Document', 'Document'),
-    'tag' => $adminLibraryText('proposal_type_tag', 'Mot clé', 'Keyword'),
+    'category' => $adminLibraryText('proposal_type_category'),
+    'subcategory' => $adminLibraryText('proposal_type_subcategory'),
+    'content' => $adminLibraryText('proposal_type_content'),
+    'tag' => $adminLibraryText('proposal_type_tag'),
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "members_library"')
                 ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
-            set_flash('success', $adminLibraryText('proposal_status_saved', 'Proposition mise à jour.', 'Proposal updated.'));
+            set_flash('success', $adminLibraryText('proposal_status_saved'));
             redirect_url($pendingProposalUrl);
         }
         if ($action === 'add_category') {
@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('INSERT INTO member_library_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                 ->execute([$parentCode, $code, $label]);
-            set_flash('success', (string) ($t['ok_subcategory'] ?? $t['ok_category']));
+            set_flash('success', (string) $t['ok_subcategory']);
             redirect($adminLibraryRoute);
         }
         if ($action === 'update_subcategory') {
@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('INSERT INTO member_library_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                 ->execute([$parentCode, $code, $label]);
-            set_flash('success', (string) ($t['ok_subcategory'] ?? $t['ok_category']));
+            set_flash('success', (string) $t['ok_subcategory']);
             redirect($adminLibraryRoute);
         }
         if ($action === 'delete_subcategory') {
@@ -251,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 throw new RuntimeException('err_required');
             }
-            set_flash('success', (string) ($t['ok_subcategory_deleted'] ?? $t['ok_category_deleted']));
+            set_flash('success', (string) $t['ok_subcategory_deleted']);
             redirect($adminLibraryRoute);
         }
         if ($action === 'delete_document') {
@@ -372,11 +372,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             if (ensure_content_proposals_table()) {
                 $proposalSummary = content_proposal_details_text([
-                    (string) ($memberLibraryMessages['propose_document_category'] ?? 'Category') => $category,
-                    (string) ($memberLibraryMessages['propose_document_subcategory'] ?? 'Subcategory') => $subcategory,
-                    (string) ($memberLibraryMessages['tags'] ?? 'Keywords') => $tags,
-                    (string) ($memberLibraryMessages['document'] ?? 'Document') => (string) ($stored['original_name'] ?? ''),
-                    (string) ($memberLibraryMessages['propose_document_description'] ?? 'Description') => $description,
+                    (string) $memberLibraryMessages['propose_document_category'] => $category,
+                    (string) $memberLibraryMessages['propose_document_subcategory'] => $subcategory,
+                    (string) $memberLibraryMessages['tags'] => $tags,
+                    (string) $memberLibraryMessages['document'] => (string) ($stored['original_name'] ?? ''),
+                    (string) $memberLibraryMessages['propose_document_description'] => $description,
                     'Document ID' => (string) $documentId,
                 ]);
                 content_proposal_create(
@@ -396,7 +396,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'message' => $throwable->getMessage(),
             ]);
         }
-        notify_member((int) ($user['id'] ?? 0), 'import', (string) ($t['notification_import_completed_title'] ?? 'Library import completed'), $title, route_url($adminLibraryRoute));
+        notify_member((int) ($user['id'] ?? 0), 'import', (string) $t['notification_import_completed_title'], $title, route_url($adminLibraryRoute));
         set_flash('success', (string) $t['ok_added']);
         redirect($adminLibraryRoute);
     } catch (Throwable $throwable) {
@@ -537,11 +537,11 @@ ob_start();
     <?php if ($showPendingProposals): ?>
     <section class="admin-library-documents" id="pending-proposals" aria-labelledby="pending-proposals-title">
         <div class="admin-library-meta" style="justify-content:space-between;margin-bottom:.8rem;">
-            <h2 id="pending-proposals-title" style="margin:0;"><?= e($adminLibraryText('pending_proposals_title', 'Contenus en attente de validation', 'Content pending review')) ?></h2>
+            <h2 id="pending-proposals-title" style="margin:0;"><?= e($adminLibraryText('pending_proposals_title')) ?></h2>
             <a class="button secondary" href="<?= e(route_url($adminLibraryRoute)) ?>"><?= e((string) $t['reset']) ?></a>
         </div>
         <?php if ($pendingProposals === []): ?>
-            <article class="card admin-library-empty"><p><?= e($adminLibraryText('pending_proposals_empty', 'Aucun contenu members_library en attente de validation.', 'No members_library content is pending review.')) ?></p></article>
+            <article class="card admin-library-empty"><p><?= e($adminLibraryText('pending_proposals_empty')) ?></p></article>
         <?php endif; ?>
         <?php foreach ($pendingProposals as $proposal): ?>
             <?php
@@ -566,13 +566,13 @@ ob_start();
                     <span class="badge muted"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
                     <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
                 </p>
-                <h3><?= e((string) ($proposal['title'] ?? $adminLibraryText('proposal_default_title', 'Proposition', 'Proposal'))) ?></h3>
-                <p class="help"><?= e($adminLibraryText('proposal_author', 'Proposé par', 'Proposed by')) ?>: <?= e($memberLabel) ?></p>
+                <h3><?= e((string) ($proposal['title'] ?? $adminLibraryText('proposal_default_title'))) ?></h3>
+                <p class="help"><?= e($adminLibraryText('proposal_author')) ?>: <?= e($memberLabel) ?></p>
                 <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
                     <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
                 <?php endif; ?>
                 <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
-                    <p class="help"><?= e($adminLibraryText('proposal_contact', 'Contact', 'Contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
+                    <p class="help"><?= e($adminLibraryText('proposal_contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
                 <?php endif; ?>
                 <form method="post" class="admin-library-upload-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -580,7 +580,7 @@ ob_start();
                     <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
                     <div class="admin-library-upload-grid">
                         <label class="admin-library-field">
-                            <span><?= e($adminLibraryText('proposal_status_label', 'Statut', 'Status')) ?></span>
+                            <span><?= e($adminLibraryText('proposal_status_label')) ?></span>
                             <select name="proposal_status">
                                 <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
                                     <option value="<?= e($statusCode) ?>"<?= $proposalStatus === $statusCode ? ' selected' : '' ?>><?= e($statusLabel) ?></option>
@@ -588,15 +588,15 @@ ob_start();
                             </select>
                         </label>
                         <label class="admin-library-field admin-library-field-wide">
-                            <span><?= e($adminLibraryText('proposal_moderation_note', 'Note de modération', 'Moderation note')) ?></span>
+                            <span><?= e($adminLibraryText('proposal_moderation_note')) ?></span>
                             <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
                         </label>
                     </div>
                     <div class="actions">
                         <?php if ($sourceUrl !== ''): ?>
-                            <a class="button secondary" href="<?= e($sourceUrl) ?>" target="_blank" rel="noopener"><?= e($adminLibraryText('proposal_open_source', 'Ouvrir la source', 'Open source')) ?></a>
+                            <a class="button secondary" href="<?= e($sourceUrl) ?>" target="_blank" rel="noopener"><?= e($adminLibraryText('proposal_open_source')) ?></a>
                         <?php endif; ?>
-                        <button class="button" type="submit"><?= e($adminLibraryText('proposal_save_status', 'Enregistrer le statut', 'Save status')) ?></button>
+                        <button class="button" type="submit"><?= e($adminLibraryText('proposal_save_status')) ?></button>
                     </div>
                 </form>
             </article>
@@ -609,20 +609,20 @@ ob_start();
         <input type="hidden" name="action" value="upload">
         <div class="admin-library-upload-grid">
             <label class="admin-library-field">
-                <span><?= e((string) ($t['ingestion_template'] ?? 'Template')) ?></span>
+                <span><?= e((string) $t['ingestion_template']) ?></span>
                 <select name="template">
-                    <option value=""><?= e((string) ($t['ingestion_template_none'] ?? 'None')) ?></option>
-                    <option value="training"><?= e((string) ($t['ingestion_template_training'] ?? 'Training')) ?></option>
-                    <option value="safety"><?= e((string) ($t['ingestion_template_safety'] ?? 'Safety')) ?></option>
-                    <option value="technical"><?= e((string) ($t['ingestion_template_technical'] ?? 'Technical')) ?></option>
-                    <option value="legal"><?= e((string) ($t['ingestion_template_legal'] ?? 'Legal')) ?></option>
+                    <option value=""><?= e((string) $t['ingestion_template_none']) ?></option>
+                    <option value="training"><?= e((string) $t['ingestion_template_training']) ?></option>
+                    <option value="safety"><?= e((string) $t['ingestion_template_safety']) ?></option>
+                    <option value="technical"><?= e((string) $t['ingestion_template_technical']) ?></option>
+                    <option value="legal"><?= e((string) $t['ingestion_template_legal']) ?></option>
                 </select>
             </label>
             <label class="admin-library-field"><span><?= e((string) $t['category_ph']) ?></span><select name="category"><?php foreach ($categoryOptions as $catOpt): ?><option value="<?= e((string) $catOpt['code']) ?>" <?= $adminCategory === (string) $catOpt['code'] ? 'selected' : '' ?>><?= e((string) $catOpt['label']) ?></option><?php endforeach; ?></select></label>
             <label class="admin-library-field">
-                <span><?= e((string) ($t['subcategory_ph'] ?? 'Sous-thématique')) ?></span>
+                <span><?= e((string) $t['subcategory_ph']) ?></span>
                 <select name="subcategory_ref">
-                    <option value=""><?= e((string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></option>
+                    <option value=""><?= e((string) $t['no_subcategory']) ?></option>
                     <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
                         <optgroup label="<?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?>">
                             <?php foreach ($subcatGroup as $subcatOpt): ?>
@@ -658,7 +658,7 @@ ob_start();
                     <input type="hidden" name="category_code" value="<?= e((string) $catOpt['code']) ?>">
                     <span class="badge muted"><?= e((string) $catOpt['code']) ?></span>
                     <input type="text" name="category_label" value="<?= e((string) $catOpt['label']) ?>" maxlength="160" required>
-                    <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Enregistrer')) ?></button>
+                    <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                     <?php if ((string) $catOpt['code'] !== 'general'): ?><button class="button secondary small" type="submit" name="action" value="delete_category"><?= e((string) $t['delete']) ?></button><?php endif; ?>
                 </form>
             <?php endforeach; ?>
@@ -666,7 +666,7 @@ ob_start();
     </section>
 
     <section class="card admin-library-categories">
-        <h2><?= e((string) ($t['subcategories'] ?? 'Sous-thématiques')) ?></h2>
+        <h2><?= e((string) $t['subcategories']) ?></h2>
         <form method="post" class="inline-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="add_subcategory">
@@ -675,9 +675,9 @@ ob_start();
                     <option value="<?= e((string) $catOpt['code']) ?>"><?= e((string) $catOpt['label']) ?></option>
                 <?php endforeach; ?>
             </select>
-            <input type="text" name="subcategory_code" placeholder="<?= e((string) ($t['subcategory_code'] ?? 'Code sous-thématique')) ?>">
-            <input type="text" name="subcategory_label" placeholder="<?= e((string) ($t['subcategory_label'] ?? 'Libellé sous-thématique')) ?>">
-            <button class="button" type="submit"><?= e((string) ($t['add_subcategory'] ?? 'Ajouter une sous-thématique')) ?></button>
+            <input type="text" name="subcategory_code" placeholder="<?= e((string) $t['subcategory_code']) ?>">
+            <input type="text" name="subcategory_label" placeholder="<?= e((string) $t['subcategory_label']) ?>">
+            <button class="button" type="submit"><?= e((string) $t['add_subcategory']) ?></button>
         </form>
         <div class="admin-library-category-list">
             <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
@@ -689,7 +689,7 @@ ob_start();
                         <input type="hidden" name="subcategory_code" value="<?= e((string) $subcatOpt['code']) ?>">
                         <span class="badge muted"><?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?> / <?= e((string) $subcatOpt['code']) ?></span>
                         <input type="text" name="subcategory_label" value="<?= e((string) $subcatOpt['label']) ?>" maxlength="160" required>
-                        <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Enregistrer')) ?></button>
+                        <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                         <button class="button secondary small" type="submit" name="action" value="delete_subcategory"><?= e((string) $t['delete']) ?></button>
                     </form>
                 <?php endforeach; ?>
@@ -734,7 +734,7 @@ ob_start();
             <?php endforeach; ?>
         </select>
         <select name="subcategory">
-            <option value=""><?= e((string) ($t['all_subcategories'] ?? 'Toutes les sous-thématiques')) ?></option>
+            <option value=""><?= e((string) $t['all_subcategories']) ?></option>
             <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
                 <optgroup label="<?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?>">
                     <?php foreach ($subcatGroup as $subcatOpt): ?>

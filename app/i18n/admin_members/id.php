@@ -9,7 +9,7 @@ return array (
   'members' => 'Anggota',
   'th_callsign' => 'tanda panggilan',
   'th_name' => 'Nama',
-  'th_email' => 'E-mail',
+  'th_email' => 'Alamat email',
   'th_locator' => 'pencari lokasi',
   'th_active' => 'Aktif',
   'th_committee' => 'Komite',

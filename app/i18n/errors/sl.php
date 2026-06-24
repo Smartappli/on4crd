@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -22,4 +21,21 @@ return array (
   'events_hint' => 'Preverite prihajajoče dejavnosti.',
   'tools_link' => 'Radijska orodja',
   'tools_hint' => 'Odprite praktična radioamaterska orodja.',
+  'module_unavailable' => 'Modul ni na voljo.',
+  'slug_article_unique_failed' => 'Ni mogoče ustvariti edinstvenega polža članka.',
+  'slug_wiki_unique_failed' => 'Ni mogoče ustvariti edinstvenega wiki polža.',
+  'slug_news_unique_failed' => 'Ni mogoče ustvariti edinstvenega polža novic.',
+  'slug_event_unique_failed' => 'Ni mogoče ustvariti edinstvenega polža dogodka.',
+  'storage_path_invalid' => 'Neveljavna pot shranjevanja.',
+  'storage_path_forbidden' => 'Pot shranjevanja ni dovoljena.',
+  'remote_url_private' => 'Oddaljeni URL kaže na zasebno ali rezervirano omrežje.',
+  'remote_url_private_resolved' => 'Oddaljeni URL se razreši na zasebni ali rezervirani naslov IP.',
+  'field_too_long' => 'Eno od polj presega dovoljeno dolžino.',
+  'wiki_storage_unavailable' => 'Wiki shramba ni na voljo.',
+  'wiki_page_invalid' => 'Neveljavna wiki stran.',
+  'wiki_page_not_found' => 'Wiki strani ni mogoče najti.',
+  'newsletter_campaign_not_found' => 'Akcije ni bilo mogoče najti.',
+  'internal_error' => 'Prišlo je do notranje napake.',
+  'error_reference' => 'Sklic: {request_id}.',
+  'service_temporarily_unavailable' => 'Storitev začasno ni na voljo.',
 );

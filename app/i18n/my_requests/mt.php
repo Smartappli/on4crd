@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Proposta ta’ tikketta',
   'proposal_type_subcategory' => 'Proposta ta’ sotto-suġġett',
   'webotheque_title' => 'Librerija tal-web',
+  'albums_title' => 'Albums',
+  'auctions_title' => 'Irkant',
+  'files_title' => 'Fajls',
+  'presentations_title' => 'Preżentazzjonijiet',
+  'minutes_title' => 'Minuti',
+  'videos_title' => 'Vidjows',
+  'library_document_default_title' => 'Dokument',
+  'document_default_title' => 'Dokument',
 );

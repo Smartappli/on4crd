@@ -53,6 +53,8 @@ $technicalValues = array_fill_keys([
     'SSTV',
     'UTC',
     'URL',
+    'Tiramisu',
+    'Vol-au-vent',
     'Winlink',
     'WSPR',
     'eQSL',

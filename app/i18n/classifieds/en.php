@@ -115,4 +115,6 @@ return array (
   'notification_moderated_title' => 'Classified ad moderated',
   'notification_removed_body' => 'Ad removed by moderation: {title}',
   'notification_status_body' => 'Status updated to {status}: {title}',
+  'propose_category_direct_help' => 'The category will be approved directly.',
+  'propose_category_created_direct' => 'Category created and approved directly.',
 );

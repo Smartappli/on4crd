@@ -198,4 +198,12 @@ return array (
   'reflected_power' => 'Atstarotā jauda (W)',
   'swr_result' => 'Aprēķināts SWR',
   'dbw_calc' => 'dBm <-> dBW konvertēšana',
+  'cq_zone' => 'XPRTECT0X zona',
+  'itu_zone' => 'XPRTECT0X zona',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'Priekšiestatījums saglabāts.',
+  'preset_deleted' => 'Priekšiestatījums dzēsts.',
+  'tools_stat_available' => 'Pieejamie rīki',
+  'tools_stat_categories' => 'Kategorijas',
 );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Żona tal-membri',
   'unavailable' => 'Il-Wiki tkun disponibbli wara l-inizjalizzazzjoni tal-paġni.',
+  'invalid' => 'Talba invalida.',
   'new_pages' => 'Paġni ġodda',
   'updated_pages' => 'Paġni modifikati',
   'most_read' => 'Ħafna jinqraw',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Subtema',
   'no_subcategory' => 'L-ebda subsuġġett',
   'favorites' => 'Favoriti',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Miżjud mal-favoriti',
+  'favorite_removed' => 'Imneħħi mill-favoriti',
+  'favorite_added_msg' => 'Paġna miżjuda mal-favoriti.',
+  'favorite_removed_msg' => 'Paġna mneħħija mill-favoriti.',
+  'err_subcategory_category_mismatch' => 'Is-sottotema magħżula ma tappartjenix għat-tema magħżula.',
+  'category_general' => 'Ġenerali',
 );

@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Предложение тега',
   'proposal_type_subcategory' => 'Предложение подтемы',
   'webotheque_title' => 'Веб-библиотека',
+  'albums_title' => 'Альбомы',
+  'auctions_title' => 'Аукционы',
+  'files_title' => 'Файлы',
+  'presentations_title' => 'Презентации',
+  'minutes_title' => 'Протоколы',
+  'videos_title' => 'Видео',
+  'library_document_default_title' => 'Документ',
+  'document_default_title' => 'Документ',
 );

@@ -18,4 +18,6 @@ return array (
   'forgot_password' => 'Unustasid salasõna?',
   'no_member' => 'Pole veel liige?',
   'create_account' => 'Loo konto',
+  'membership_link' => 'Hakka liikmeks',
+  'login_required' => 'Jätkamiseks logige sisse.',
 );

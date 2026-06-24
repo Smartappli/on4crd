@@ -62,4 +62,12 @@ return array (
   'proposal_type_tag' => 'Címkejavaslat',
   'proposal_type_subcategory' => 'Altéma-javaslat',
   'webotheque_title' => 'Webkönyvtár',
+  'albums_title' => 'Albumok',
+  'auctions_title' => 'Aukciók',
+  'files_title' => 'Fájlok',
+  'presentations_title' => 'Bemutatók',
+  'minutes_title' => 'Jegyzőkönyvek',
+  'videos_title' => 'Videók',
+  'library_document_default_title' => 'dokumentum',
+  'document_default_title' => 'dokumentum',
 );

@@ -177,4 +177,9 @@ return array (
   'home_trophies_empty' => 'Momentan nu este disponibil niciun trofeu.',
   'home_trophies_title' => 'Trofeele noastre',
   'spotlight_member_gallery_empty' => 'Momentan nu este disponibilă nicio imagine în galerie.',
+  'widget_temporarily_unavailable' => 'Widget indisponibil temporar.',
+  'ham_advice_temporarily_unavailable' => 'Sfatul radio este temporar indisponibil.',
+  'visibility_public' => 'Public',
+  'visibility_members' => 'Membrii',
+  'visibility_private' => 'Privat',
 );

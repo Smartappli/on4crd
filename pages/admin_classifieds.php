@@ -6,8 +6,7 @@ require_permission('classifieds.moderate');
 $locale = current_locale();
 $t = i18n_domain_locale('classifieds', $locale);
 $tText = static function (string $key) use ($t): string {
-    $value = (string) ($t[$key] ?? '');
-    return $value !== '' ? $value : $key;
+    return (string) $t[$key];
 };
 $formatText = static function (string $key, array $vars = []) use ($tText): string {
     return strtr($tText($key), $vars);

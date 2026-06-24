@@ -51,4 +51,5 @@ return array (
   'search_label' => 'Global søgning',
   'search_placeholder' => 'Søg...',
   'search_submit' => 'Søg',
+  'membership_good_standing' => 'Kontingent betalt',
 );

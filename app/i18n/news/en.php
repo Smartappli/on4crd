@@ -61,4 +61,13 @@ return array (
   'search' => 'Search',
   'news_count_label' => 'News items',
   'proposal_recorded' => 'Proposal saved in your content area.',
+  'invalid' => 'Invalid request.',
+  'publish' => 'Publish',
+  'create' => 'Create',
+  'published' => 'News published.',
+  'category_created_direct' => 'Section created and approved immediately.',
+  'create_news' => 'Create news',
+  'create_category' => 'Create section',
+  'news_direct_help' => 'Your news will be published immediately.',
+  'category_direct_help' => 'The section will be approved immediately.',
 );

@@ -16,7 +16,7 @@ $t = isset($t) && is_array($t) ? $t : [];
         <p><strong><?= e((string) $t['found_address']) ?> :</strong> <span id="grid-found-address">-</span></p>
         <p><strong><?= e((string) $t['coords']) ?> :</strong> <span id="grid-found-coords">-</span></p>
         <p><strong><?= e((string) $t['locator']) ?> :</strong> <span id="grid-found-locator">-</span></p>
-        <p><strong><?= e((string) ($t['cq_zone'] ?? 'Zone CQ')) ?> :</strong> <span id="grid-found-cq-zone">-</span></p>
-        <p><strong><?= e((string) ($t['itu_zone'] ?? 'Zone ITU')) ?> :</strong> <span id="grid-found-itu-zone">-</span></p>
+        <p><strong><?= e((string) $t['cq_zone']) ?> :</strong> <span id="grid-found-cq-zone">-</span></p>
+        <p><strong><?= e((string) $t['itu_zone']) ?> :</strong> <span id="grid-found-itu-zone">-</span></p>
     </div>
 </article>

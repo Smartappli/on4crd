@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL menedzser',
   'qsl_choice_no_qsl' => 'Nincs QSL',
   'qsl_choice_other' => 'Egyéb',
+  'preview_public_title' => 'Nyilvános nézet',
+  'preview_members_title' => 'Tagi nézet',
+  'preview_private_title' => 'Bizottsági nézet',
+  'required_field_help' => 'Kötelező mező.',
+  'preview_empty' => 'Nincs látható információ.',
 );

@@ -4,9 +4,6 @@ declare(strict_types=1);
 require_permission('admin.access');
 $locale = current_locale();
 $t = admin_dashboard_translations($locale);
-$adminText = static function (string $fr, string $en = '') use ($locale): string {
-    return $locale === 'fr' || $en === '' ? $fr : $en;
-};
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -19,10 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 trim((string) ($_POST['moderation_note'] ?? '')),
                 $locale
             );
-            set_flash('success', $adminText('Proposition mise a jour.', 'Proposal updated.'));
+            set_flash('success', (string) $t['proposal_status_saved']);
             redirect_url(route_url('admin') . '#pending-proposals');
         }
-        throw new RuntimeException($adminText('Action invalide.', 'Invalid action.'));
+        throw new RuntimeException((string) $t['invalid_action']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect_url(route_url('admin') . '#pending-proposals');
@@ -70,10 +67,10 @@ ob_start();
         <section class="card" id="pending-proposals" aria-labelledby="pending-proposals-title">
             <div class="row-between">
                 <div>
-                    <h2 id="pending-proposals-title"><?= e($adminText('Contenus en attente', 'Pending content')) ?></h2>
-                    <p class="help"><?= e($adminText('Propositions envoyees depuis les modules publics et visibles pour les administrateurs concernes.', 'Proposals submitted from public modules and visible to matching administrators.')) ?></p>
+                    <h2 id="pending-proposals-title"><?= e((string) $t['pending_content_title']) ?></h2>
+                    <p class="help"><?= e((string) $t['pending_content_help']) ?></p>
                 </div>
-                <span class="admin-pending-badge"><?= count($pendingProposals) ?> <?= e($adminText('en attente', 'pending')) ?></span>
+                <span class="admin-pending-badge"><?= count($pendingProposals) ?> <?= e((string) $t['pending_label']) ?></span>
             </div>
             <div class="admin-pending-list">
                 <?php foreach ($pendingProposals as $proposal): ?>
@@ -97,36 +94,36 @@ ob_start();
                             <span class="badge muted"><?= e($proposalType) ?></span>
                             <span class="badge muted"><?= e(date('d/m/Y H:i', $createdTimestamp)) ?></span>
                         </p>
-                        <h3><?= e((string) ($proposal['title'] ?? $adminText('Proposition', 'Proposal'))) ?></h3>
-                        <p class="help"><?= e($adminText('Propose par', 'Proposed by')) ?>: <?= e($memberLabel) ?></p>
+                        <h3><?= e((string) ($proposal['title'] ?? $t['proposal_default_title'])) ?></h3>
+                        <p class="help"><?= e((string) $t['proposal_author']) ?>: <?= e($memberLabel) ?></p>
                         <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
                             <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
                         <?php endif; ?>
                         <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
-                            <p class="help"><?= e($adminText('Contact', 'Contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
+                            <p class="help"><?= e((string) $t['proposal_contact']) ?>: <?= e((string) $proposal['contact']) ?></p>
                         <?php endif; ?>
                         <?php if (trim((string) ($proposal['source_ref'] ?? '')) !== ''): ?>
-                            <p class="help"><?= e($adminText('Source', 'Source')) ?>: <?= e((string) $proposal['source_ref']) ?></p>
+                            <p class="help"><?= e((string) $t['proposal_source']) ?>: <?= e((string) $proposal['source_ref']) ?></p>
                         <?php endif; ?>
                         <form method="post" class="stack">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_content_proposal_status">
                             <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
                             <div class="grid-2">
-                                <label><?= e($adminText('Statut', 'Status')) ?>
+                                <label><?= e((string) $t['proposal_status_label']) ?>
                                     <select name="proposal_status">
                                         <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
                                             <option value="<?= e($statusCode) ?>"><?= e($statusLabel) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </label>
-                                <label><?= e($adminText('Note de moderation', 'Moderation note')) ?>
+                                <label><?= e((string) $t['proposal_moderation_note']) ?>
                                     <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
                                 </label>
                             </div>
                             <div class="actions">
-                                <a class="button secondary small" href="<?= e((string) ($proposal['area_url'] ?? route_url('admin'))) ?>"><?= e($adminText('Ouvrir le module', 'Open module')) ?></a>
-                                <button class="button small" type="submit"><?= e($adminText('Enregistrer', 'Save')) ?></button>
+                                <a class="button secondary small" href="<?= e((string) ($proposal['area_url'] ?? route_url('admin'))) ?>"><?= e((string) $t['proposal_open_module']) ?></a>
+                                <button class="button small" type="submit"><?= e((string) $t['proposal_save']) ?></button>
                             </div>
                         </form>
                     </article>
@@ -148,7 +145,7 @@ ob_start();
                 <p><?= e((string) $card['desc']) ?></p>
                 <div class="row-between" style="margin-top:.75rem;">
                     <?php if ((int) ($card['pending_count'] ?? 0) > 0): ?>
-                        <span class="admin-pending-badge"><?= (int) ($card['pending_count'] ?? 0) ?> <?= e($adminText('en attente', 'pending')) ?></span>
+                        <span class="admin-pending-badge"><?= (int) ($card['pending_count'] ?? 0) ?> <?= e((string) $t['pending_label']) ?></span>
                     <?php else: ?>
                         <span></span>
                     <?php endif; ?>

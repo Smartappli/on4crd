@@ -37,4 +37,9 @@ return array (
   'propose_event_cancel' => 'Anulează',
   'propose_event_close' => 'Închide',
   'proposal_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
+  'invalid' => 'Cerere invalidă.',
+  'event_published_direct' => 'Eveniment publicat direct.',
+  'propose_event_direct_help' => 'Evenimentul va fi publicat direct.',
+  'publish_event' => 'Publica',
+  'next_event_title' => 'Evenimente viitoare',
 );

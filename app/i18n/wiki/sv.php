@@ -4,6 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Medlemsområde',
   'unavailable' => 'Wiki kommer att vara tillgänglig efter initialisering av sidorna.',
+  'invalid' => 'Ogiltig begäran.',
   'new_pages' => 'Nya sidor',
   'updated_pages' => 'Ändrade sidor',
   'most_read' => 'Mest lästa',
@@ -44,8 +45,10 @@ return array (
   'subcategory_field' => 'Underämne',
   'no_subcategory' => 'Inget underämne',
   'favorites' => 'Favoriter',
-  'favorite_added' => 'Favorite added',
-  'favorite_removed' => 'Favorite removed',
-  'favorite_added_msg' => 'Page added to favorites.',
-  'favorite_removed_msg' => 'Page removed from favorites.',
+  'favorite_added' => 'Tillagd i favoriter',
+  'favorite_removed' => 'Borttagen från favoriter',
+  'favorite_added_msg' => 'Sida tillagd i favoriter.',
+  'favorite_removed_msg' => 'Sida borttagen från favoriter.',
+  'err_subcategory_category_mismatch' => 'Det valda undertemat hör inte till det valda temat.',
+  'category_general' => 'Allmänt',
 );

@@ -39,7 +39,7 @@ return array (
   'sent_results' => '%d terkirim / %d gagal',
   'send' => 'Mengirim',
   'already_sent' => 'Sudah terkirim',
-  'email' => 'E-mail',
+  'email' => 'Alamat email',
   'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Tidak ada pelanggan.',
   'no_campaigns' => 'Tidak ada kampanye.',

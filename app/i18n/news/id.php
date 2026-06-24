@@ -61,4 +61,13 @@ return array (
   'search' => 'Cari',
   'news_count_label' => 'Jumlah berita',
   'proposal_recorded' => 'Usulan disimpan di konten Anda.',
+  'invalid' => 'Permintaan tidak valid.',
+  'publish' => 'Menerbitkan',
+  'create' => 'Buat',
+  'published' => 'Item berita disimpan.',
+  'category_created_direct' => 'Topik diusulkan dan langsung disetujui.',
+  'create_news' => 'Buat - Berita',
+  'create_category' => 'Buat - Bagian',
+  'news_direct_help' => 'Item berita disimpan.',
+  'category_direct_help' => 'Topik akan langsung disetujui.',
 );

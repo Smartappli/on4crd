@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -197,4 +198,12 @@ return array (
   'reflected_power' => '反射電力(W)',
   'swr_result' => '計算されたSWR',
   'dbw_calc' => 'dBm <-> dBW 変換',
+  'cq_zone' => 'CQゾーン',
+  'itu_zone' => 'ITUゾーン',
+  'inductance_uh_ph' => '2.2',
+  'capacitance_pf_ph' => '100',
+  'preset_saved' => 'プリセットを保存しました。',
+  'preset_deleted' => 'プリセットを削除しました。',
+  'tools_stat_available' => '利用可能なツール',
+  'tools_stat_categories' => 'カテゴリ',
 );
