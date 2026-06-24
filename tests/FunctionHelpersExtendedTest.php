@@ -237,6 +237,13 @@ final class FunctionHelpersExtendedTest extends TestCase
         }
     }
 
+    public function testUploadErrorMessageReportsPhpSizeLimitsAsTooLarge(): void
+    {
+        self::assertSame(upload_i18n_message('file_too_large_or_empty'), upload_error_message(UPLOAD_ERR_INI_SIZE));
+        self::assertSame(upload_i18n_message('file_too_large_or_empty'), upload_error_message(UPLOAD_ERR_FORM_SIZE));
+        self::assertSame(upload_i18n_message('upload_failed'), upload_error_message(UPLOAD_ERR_PARTIAL));
+    }
+
     public function testClassifiedsPayloadValidationRejectsOversizedFields(): void
     {
         $categories = ['gear' => 'Gear'];
