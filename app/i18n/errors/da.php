@@ -31,4 +31,11 @@ return array (
   'remote_url_private' => 'Den eksterne URL peger på et privat eller reserveret netværk.',
   'remote_url_private_resolved' => 'Den eksterne URL løses til en privat eller reserveret IP-adresse.',
   'field_too_long' => 'Et af felterne overskrider den tilladte længde.',
+  'wiki_storage_unavailable' => 'Wiki-lagring er ikke tilgængelig.',
+  'wiki_page_invalid' => 'Ugyldig wiki-side.',
+  'wiki_page_not_found' => 'Wiki-siden blev ikke fundet.',
+  'newsletter_campaign_not_found' => 'Kampagnen blev ikke fundet.',
+  'internal_error' => 'Der opstod en intern fejl.',
+  'error_reference' => 'Referencekode: {request_id}.',
+  'service_temporarily_unavailable' => 'Tjenesten er midlertidigt utilgængelig.',
 );
