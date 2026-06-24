@@ -138,7 +138,7 @@ ADIF;
             'comment' => '<script>alert(1)</script>',
         ]);
 
-        self::assertStringContainsString('Verso', $svg);
+        self::assertStringContainsString('Confirmation QSL (verso)', $svg);
         self::assertStringContainsString('ON4CRD', $svg);
         self::assertStringNotContainsString('<script>', strtolower($svg));
     }
