@@ -453,9 +453,9 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString('ham_agromet_hourly_url()', $renderer);
         self::assertStringContainsString('ham_agromet_current_weather($payload)', $renderer);
         self::assertStringContainsString('widget:weather:agromet:', $renderer);
-        self::assertStringContainsString("'temperature' => 'Temperature'", $renderer);
-        self::assertStringContainsString("'humidity' => 'Humidite'", $renderer);
-        self::assertStringContainsString("'rain' => 'Pluie'", $renderer);
+        self::assertStringContainsString("dashboard_widget_text('widget_weather_temperature', \$locale)", $renderer);
+        self::assertStringContainsString("dashboard_widget_text('widget_weather_humidity', \$locale)", $renderer);
+        self::assertStringContainsString("dashboard_widget_text('widget_weather_rain', \$locale)", $renderer);
         self::assertStringContainsString('dashboard-weather-grid', $renderer);
         self::assertStringContainsString('dashboard-weather-item', $renderer);
         self::assertStringContainsString('.dashboard-weather-grid', $css);
@@ -463,6 +463,13 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString('.widget-card[data-widget="open_meteo"]', $css);
         self::assertStringContainsString('gap: .45rem;', $css);
         self::assertStringContainsString('padding: .4rem .55rem;', $css);
+
+        $messages = i18n_domain_messages('dashboard');
+        foreach (supported_locales() as $locale) {
+            foreach (['widget_weather_temperature', 'widget_weather_humidity', 'widget_weather_rain'] as $key) {
+                self::assertNotSame('', trim((string) ($messages[$locale][$key] ?? '')), sprintf('Missing dashboard weather translation %s for %s.', $key, $locale));
+            }
+        }
     }
 
     public function testDashboardJavascriptUsesLocalizedMessages(): void
