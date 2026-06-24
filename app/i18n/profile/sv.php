@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL-ansvarig',
   'qsl_choice_no_qsl' => 'Ingen QSL',
   'qsl_choice_other' => 'Annat',
+  'preview_public_title' => 'Offentlig vy',
+  'preview_members_title' => 'Medlemsvy',
+  'preview_private_title' => 'Kommittévy',
+  'required_field_help' => 'Obligatoriskt fält.',
+  'preview_empty' => 'Ingen synlig information.',
 );

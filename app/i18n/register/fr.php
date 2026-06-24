@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'manager QSL',
   'qsl_choice_no_qsl' => 'Pas de QSL',
   'qsl_choice_other' => 'Autre',
+  'registration_closed_title' => 'Inscription membre',
+  'registration_closed_message' => 'L\'inscription publique est fermée. La création des comptes membres est effectuée par l\'administration après validation.',
+  'membership_link' => 'Devenir membre',
 );

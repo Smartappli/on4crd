@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -19,4 +18,5 @@ return array (
   'forgot_password' => 'Password dimenticata?',
   'no_member' => 'Non sei ancora membro?',
   'create_account' => 'Crea un account',
+  'membership_link' => 'Diventare membro',
 );

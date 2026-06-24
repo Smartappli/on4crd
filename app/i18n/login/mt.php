@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -19,4 +18,5 @@ return array (
   'forgot_password' => 'Insejt il-password?',
   'no_member' => 'Għadu mhux membru?',
   'create_account' => 'Oħloq kont',
+  'membership_link' => 'Issir membru',
 );

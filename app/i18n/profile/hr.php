@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL menadžer',
   'qsl_choice_no_qsl' => 'Bez QSL-a',
   'qsl_choice_other' => 'Ostalo',
+  'preview_public_title' => 'Javni prikaz',
+  'preview_members_title' => 'Prikaz za članove',
+  'preview_private_title' => 'Prikaz odbora',
+  'required_field_help' => 'Obavezno polje.',
+  'preview_empty' => 'Nema vidljivih informacija.',
 );

@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'Pozabljeno geslo?',
   'no_member' => 'Še niste član?',
   'create_account' => 'Ustvari račun',
+  'membership_link' => 'Postanite član',
 );

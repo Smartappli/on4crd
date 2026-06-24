@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -61,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'Διαχειριστής QSL',
   'qsl_choice_no_qsl' => 'Χωρίς QSL',
   'qsl_choice_other' => 'Άλλο',
+  'registration_closed_title' => 'Εγγραφή μέλους',
+  'registration_closed_message' => 'Η δημόσια εγγραφή είναι κλειστή. Οι λογαριασμοί μελών δημιουργούνται από τη διαχείριση μετά την επικύρωση.',
+  'membership_link' => 'Γίνετε μέλος',
 );

@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'Забыли пароль?',
   'no_member' => 'Ещё не участник?',
   'create_account' => 'Создать аккаунт',
+  'membership_link' => 'Стать участником',
 );

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL manager',
   'qsl_choice_no_qsl' => 'No QSL',
   'qsl_choice_other' => 'Other',
+  'preview_public_title' => 'Public view',
+  'preview_members_title' => 'Member view',
+  'preview_private_title' => 'Committee view',
+  'required_field_help' => 'Required field.',
+  'preview_empty' => 'No visible information.',
 );

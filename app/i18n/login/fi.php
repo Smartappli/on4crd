@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'Unohtuiko salasana?',
   'no_member' => 'Etkö ole vielä jäsen?',
   'create_account' => 'Luo tili',
+  'membership_link' => 'Liity jäseneksi',
 );

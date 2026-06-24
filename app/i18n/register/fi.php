@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL-manageri',
   'qsl_choice_no_qsl' => 'Ei QSL:ää',
   'qsl_choice_other' => 'Muu',
+  'registration_closed_title' => 'Jäsenrekisteröinti',
+  'registration_closed_message' => 'Julkinen rekisteröityminen on suljettu. Hallinto luo jäsentilit vahvistuksen jälkeen.',
+  'membership_link' => 'Liity jäseneksi',
 );

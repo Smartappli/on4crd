@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSLマネージャー',
   'qsl_choice_no_qsl' => 'QSLなし',
   'qsl_choice_other' => 'その他',
+  'preview_public_title' => '公開表示',
+  'preview_members_title' => '会員向け表示',
+  'preview_private_title' => '委員会向け表示',
+  'required_field_help' => '必須項目です。',
+  'preview_empty' => '表示できる情報はありません。',
 );

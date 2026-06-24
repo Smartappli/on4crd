@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL-manager',
   'qsl_choice_no_qsl' => 'Geen QSL',
   'qsl_choice_other' => 'Anders',
+  'registration_closed_title' => 'Ledenregistratie',
+  'registration_closed_message' => 'Openbare registratie is gesloten. Ledenaccounts worden na validatie door de administratie aangemaakt.',
+  'membership_link' => 'Lid worden',
 );

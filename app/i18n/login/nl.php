@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'Wachtwoord vergeten?',
   'no_member' => 'Nog geen lid?',
   'create_account' => 'Account aanmaken',
+  'membership_link' => 'Lid worden',
 );

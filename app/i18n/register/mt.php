@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -61,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'Maniġer QSL',
   'qsl_choice_no_qsl' => 'Ebda QSL',
   'qsl_choice_other' => 'Ieħor',
+  'registration_closed_title' => 'Reġistrazzjoni ta\' membru',
+  'registration_closed_message' => 'Ir-reġistrazzjoni pubblika hija magħluqa. Il-kontijiet tal-membri jinħolqu mill-amministrazzjoni wara l-validazzjoni.',
+  'membership_link' => 'Issir membru',
 );

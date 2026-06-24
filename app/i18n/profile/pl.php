@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'Menedżer QSL',
   'qsl_choice_no_qsl' => 'Bez QSL',
   'qsl_choice_other' => 'Inne',
+  'preview_public_title' => 'Widok publiczny',
+  'preview_members_title' => 'Widok członków',
+  'preview_private_title' => 'Widok komitetu',
+  'required_field_help' => 'Pole obowiązkowe.',
+  'preview_empty' => 'Brak widocznych informacji.',
 );

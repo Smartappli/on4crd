@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL menedzser',
   'qsl_choice_no_qsl' => 'Nincs QSL',
   'qsl_choice_other' => 'Egyéb',
+  'registration_closed_title' => 'Tagregisztráció',
+  'registration_closed_message' => 'A nyilvános regisztráció zárva van. A tagi fiókokat az adminisztráció hozza létre jóváhagyás után.',
+  'membership_link' => 'Legyen tag',
 );

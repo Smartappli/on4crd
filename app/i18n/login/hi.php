@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'पासवर्ड भूल गए?',
   'no_member' => 'अभी सदस्य नहीं हैं?',
   'create_account' => 'खाता बनाएँ',
+  'membership_link' => 'सदस्य बनें',
 );

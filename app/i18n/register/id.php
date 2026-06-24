@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'Manajer QSL',
   'qsl_choice_no_qsl' => 'Tanpa QSL',
   'qsl_choice_other' => 'Lainnya',
+  'registration_closed_title' => 'Pendaftaran anggota',
+  'registration_closed_message' => 'Pendaftaran publik ditutup. Akun anggota dibuat oleh administrasi setelah validasi.',
+  'membership_link' => 'Menjadi anggota',
 );

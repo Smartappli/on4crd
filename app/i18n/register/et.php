@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL-haldur',
   'qsl_choice_no_qsl' => 'QSL puudub',
   'qsl_choice_other' => 'Muu',
+  'registration_closed_title' => 'Liikmeks registreerimine',
+  'registration_closed_message' => 'Avalik registreerimine on suletud. Liikmekontod loob administratsioon pärast kinnitamist.',
+  'membership_link' => 'Hakka liikmeks',
 );

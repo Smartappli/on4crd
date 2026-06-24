@@ -18,4 +18,5 @@ return array (
   'forgot_password' => '忘记密码？',
   'no_member' => '还不是会员？',
   'create_account' => '创建账号',
+  'membership_link' => '成为会员',
 );

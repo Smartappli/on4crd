@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'Διαχειριστής QSL',
   'qsl_choice_no_qsl' => 'Χωρίς QSL',
   'qsl_choice_other' => 'Άλλο',
+  'preview_public_title' => 'Δημόσια προβολή',
+  'preview_members_title' => 'Προβολή μελών',
+  'preview_private_title' => 'Προβολή επιτροπής',
+  'required_field_help' => 'Υποχρεωτικό πεδίο.',
+  'preview_empty' => 'Δεν υπάρχουν ορατές πληροφορίες.',
 );

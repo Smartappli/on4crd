@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL valdytojas',
   'qsl_choice_no_qsl' => 'Be QSL',
   'qsl_choice_other' => 'Kita',
+  'preview_public_title' => 'Viešas rodinys',
+  'preview_members_title' => 'Narių rodinys',
+  'preview_private_title' => 'Komiteto rodinys',
+  'required_field_help' => 'Privalomas laukas.',
+  'preview_empty' => 'Nėra matomos informacijos.',
 );

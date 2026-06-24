@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL-менеджер',
   'qsl_choice_no_qsl' => 'Без QSL',
   'qsl_choice_other' => 'Другое',
+  'registration_closed_title' => 'Регистрация участника',
+  'registration_closed_message' => 'Публичная регистрация закрыта. Учетные записи участников создаются администрацией после проверки.',
+  'membership_link' => 'Стать участником',
 );

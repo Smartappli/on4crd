@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'Elfelejtett jelszó?',
   'no_member' => 'Még nem tag?',
   'create_account' => 'Hozzon létre egy fiókot',
+  'membership_link' => 'Legyen tag',
 );

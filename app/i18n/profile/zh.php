@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL 管理员',
   'qsl_choice_no_qsl' => '无 QSL',
   'qsl_choice_other' => '其他',
+  'preview_public_title' => '公开视图',
+  'preview_members_title' => '会员视图',
+  'preview_private_title' => '委员会视图',
+  'required_field_help' => '必填字段。',
+  'preview_empty' => '没有可见信息。',
 );

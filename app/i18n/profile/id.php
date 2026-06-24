@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'Manajer QSL',
   'qsl_choice_no_qsl' => 'Tanpa QSL',
   'qsl_choice_other' => 'Lainnya',
+  'preview_public_title' => 'Tampilan publik',
+  'preview_members_title' => 'Tampilan anggota',
+  'preview_private_title' => 'Tampilan komite',
+  'required_field_help' => 'Kolom wajib.',
+  'preview_empty' => 'Tidak ada informasi yang terlihat.',
 );

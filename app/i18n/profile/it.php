@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'Gestore QSL',
   'qsl_choice_no_qsl' => 'Nessuna QSL',
   'qsl_choice_other' => 'Altro',
+  'preview_public_title' => 'Vista pubblica',
+  'preview_members_title' => 'Vista membri',
+  'preview_private_title' => 'Vista comitato',
+  'required_field_help' => 'Campo obbligatorio.',
+  'preview_empty' => 'Nessuna informazione visibile.',
 );

@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'Zapomenuté heslo?',
   'no_member' => 'Ještě nejste členem?',
   'create_account' => 'Vytvořte si účet',
+  'membership_link' => 'Stát se členem',
 );

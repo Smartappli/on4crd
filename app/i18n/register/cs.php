@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL manažer',
   'qsl_choice_no_qsl' => 'Bez QSL',
   'qsl_choice_other' => 'Jiné',
+  'registration_closed_title' => 'Registrace člena',
+  'registration_closed_message' => 'Veřejná registrace je uzavřena. Členské účty vytváří administrace po ověření.',
+  'membership_link' => 'Stát se členem',
 );

@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'Aizmirsāt paroli?',
   'no_member' => 'Vēl neesi dalībnieks?',
   'create_account' => 'Izveidojiet kontu',
+  'membership_link' => 'Kļūt par biedru',
 );

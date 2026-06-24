@@ -18,4 +18,5 @@ return array (
   'forgot_password' => '¿Olvidó su contraseña?',
   'no_member' => '¿Aún no es miembro?',
   'create_account' => 'Crear una cuenta',
+  'membership_link' => 'Hacerse miembro',
 );

@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSLマネージャー',
   'qsl_choice_no_qsl' => 'QSLなし',
   'qsl_choice_other' => 'その他',
+  'registration_closed_title' => '会員登録',
+  'registration_closed_message' => '公開登録は終了しています。会員アカウントは確認後に管理者が作成します。',
+  'membership_link' => '会員になる',
 );

@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'Pamiršote slaptažodį?',
   'no_member' => 'Dar nesate narys?',
   'create_account' => 'Susikurti paskyrą',
+  'membership_link' => 'Tapti nariu',
 );

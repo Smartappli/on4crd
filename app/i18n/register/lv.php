@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL pārvaldnieks',
   'qsl_choice_no_qsl' => 'Bez QSL',
   'qsl_choice_other' => 'Cits',
+  'registration_closed_title' => 'Biedra reģistrācija',
+  'registration_closed_message' => 'Publiskā reģistrācija ir slēgta. Biedru kontus pēc validācijas izveido administrācija.',
+  'membership_link' => 'Kļūt par biedru',
 );

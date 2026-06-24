@@ -18,4 +18,5 @@ return array (
   'forgot_password' => 'نسيت كلمة المرور؟',
   'no_member' => 'لست عضوًا بعد؟',
   'create_account' => 'إنشاء حساب',
+  'membership_link' => 'كن عضوًا',
 );

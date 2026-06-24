@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -86,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL-manager',
   'qsl_choice_no_qsl' => 'Geen QSL',
   'qsl_choice_other' => 'Anders',
+  'preview_public_title' => 'Openbare weergave',
+  'preview_members_title' => 'Ledenweergave',
+  'preview_private_title' => 'Bestuursweergave',
+  'required_field_help' => 'Verplicht veld.',
+  'preview_empty' => 'Geen zichtbare informatie.',
 );

@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL мениджър',
   'qsl_choice_no_qsl' => 'Без QSL',
   'qsl_choice_other' => 'Друго',
+  'registration_closed_title' => 'Регистрация на член',
+  'registration_closed_message' => 'Публичната регистрация е затворена. Членските акаунти се създават от администрацията след валидиране.',
+  'membership_link' => 'Станете член',
 );

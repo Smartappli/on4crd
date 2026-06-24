@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'QSL upravitelj',
   'qsl_choice_no_qsl' => 'Brez QSL',
   'qsl_choice_other' => 'Drugo',
+  'registration_closed_title' => 'Registracija člana',
+  'registration_closed_message' => 'Javna registracija je zaprta. Članske račune po potrditvi ustvari administracija.',
+  'membership_link' => 'Postanite član',
 );

@@ -60,4 +60,7 @@ return array (
   'qsl_choice_manager' => 'Responsabil QSL',
   'qsl_choice_no_qsl' => 'Fără QSL',
   'qsl_choice_other' => 'Altceva',
+  'registration_closed_title' => 'Înregistrare membru',
+  'registration_closed_message' => 'Înregistrarea publică este închisă. Conturile membrilor sunt create de administrație după validare.',
+  'membership_link' => 'Deveniți membru',
 );

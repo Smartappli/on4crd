@@ -85,4 +85,9 @@ return array (
   'qsl_choice_manager' => 'QSL pārvaldnieks',
   'qsl_choice_no_qsl' => 'Bez QSL',
   'qsl_choice_other' => 'Cits',
+  'preview_public_title' => 'Publiskais skats',
+  'preview_members_title' => 'Biedru skats',
+  'preview_private_title' => 'Komitejas skats',
+  'required_field_help' => 'Obligāts lauks.',
+  'preview_empty' => 'Nav redzamas informācijas.',
 );
