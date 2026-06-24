@@ -372,7 +372,7 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString('home_public_album_random_photos_v1', $home);
         self::assertStringContainsString('LIMIT 5', $home);
         self::assertStringContainsString('data-home-gallery-carousel', $home);
-        self::assertStringContainsString('Galerie photos', $home);
+        self::assertStringContainsString('spotlight_member_gallery', $home);
         self::assertStringContainsString("'spotlight_member_gallery' => 'Galerie photos'", $homeFr);
         self::assertStringContainsString("'spotlight_member_gallery' => 'Photo gallery'", $homeEn);
         self::assertStringContainsString("'nav_gallery' => 'Galerie photos'", $layoutFr);
