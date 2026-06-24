@@ -162,6 +162,6 @@ return array (
   'svg_label_band' => 'Pasmo',
   'svg_label_mode' => 'Tryb',
   'svg_label_rst_sr' => 'RST S/R',
-  'svg_label_operator' => 'Operator',
+  'svg_label_operator' => 'Operator stacji',
   'svg_label_qth' => 'QTH',
 );

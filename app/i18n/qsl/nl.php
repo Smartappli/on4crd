@@ -162,6 +162,6 @@ return array (
   'svg_label_band' => 'Band',
   'svg_label_mode' => 'Modus',
   'svg_label_rst_sr' => 'RST S/R',
-  'svg_label_operator' => 'Operator',
+  'svg_label_operator' => 'Operatornaam',
   'svg_label_qth' => 'QTH',
 );

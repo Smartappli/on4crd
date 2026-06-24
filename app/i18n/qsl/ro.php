@@ -151,7 +151,7 @@ return array (
   'band_placeholder' => '20M',
   'mode_placeholder' => 'SSB',
   'secure_unavailable' => 'QSL securizată nu este disponibilă',
-  'svg_default_title' => 'Carte QSL',
+  'svg_default_title' => 'Cartelă QSL',
   'svg_front_details_on_back' => 'Fața QSL — detalii pe verso',
   'svg_back_title' => 'Confirmare QSL (verso)',
   'svg_thanks_contact' => 'Mulțumesc pentru legătură — 73!',
@@ -162,6 +162,6 @@ return array (
   'svg_label_band' => 'Bandă',
   'svg_label_mode' => 'Mod',
   'svg_label_rst_sr' => 'RST S/R',
-  'svg_label_operator' => 'Operator',
+  'svg_label_operator' => 'Operator radio',
   'svg_label_qth' => 'QTH',
 );
