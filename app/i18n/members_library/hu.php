@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Kulcsszavak',
   'document_field' => 'Fájl',
   'upload_title' => 'Töltse fel a dokumentumot',
-  'upload_help' => 'Elfogadott formátumok: PDF, DOCX, TXT, Markdown és HTML. Maximális méret: 25 MB.',
+  'upload_help' => 'Elfogadott formátumok: PDF, DOCX, TXT, Markdown és HTML. Maximális méret: 100 MB.',
   'upload' => 'Töltse fel a dokumentumot',
   'delete' => 'Törölje',
   'confirm_delete' => 'Véglegesen törli ezt az elemet?',

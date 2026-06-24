@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'キーワード',
   'document_field' => 'ファイル',
   'upload_title' => '文書をアップロード',
-  'upload_help' => '受け入れられる形式: PDF、DOCX、TXT、Markdown、HTML。最大サイズ: 25 MB。',
+  'upload_help' => '受け入れられる形式: PDF、DOCX、TXT、Markdown、HTML。最大サイズ: 100 MB。',
   'upload' => '文書をアップロード',
   'delete' => '削除',
   'confirm_delete' => 'この項目を完全に削除しますか？',

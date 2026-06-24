@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Ključne besede',
   'document_field' => 'Datoteka',
   'upload_title' => 'Naložite dokument',
-  'upload_help' => 'Podprti formati: PDF, DOCX, TXT, Markdown in HTML. Največja velikost: 25 MB.',
+  'upload_help' => 'Podprti formati: PDF, DOCX, TXT, Markdown in HTML. Največja velikost: 100 MB.',
   'upload' => 'Naložite dokument',
   'delete' => 'Izbriši',
   'confirm_delete' => 'Želite trajno izbrisati ta element?',

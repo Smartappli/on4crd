@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Märksõnad',
   'document_field' => 'Fail',
   'upload_title' => 'Laadige dokument üles',
-  'upload_help' => 'Aktsepteeritud vormingud: PDF, DOCX, TXT, Markdown ja HTML. Maksimaalne suurus: 25 MB.',
+  'upload_help' => 'Aktsepteeritud vormingud: PDF, DOCX, TXT, Markdown ja HTML. Maksimaalne suurus: 100 MB.',
   'upload' => 'Laadige dokument üles',
   'delete' => 'Kustuta',
   'confirm_delete' => 'Kas kustutada see element jäädavalt?',

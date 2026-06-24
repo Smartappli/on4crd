@@ -124,7 +124,7 @@ return array (
   'tags_field' => '关键词',
   'document_field' => '文件',
   'upload_title' => '上传文档',
-  'upload_help' => '接受的格式：PDF、DOCX、TXT、Markdown 和 HTML。最大大小：25 MB。',
+  'upload_help' => '接受的格式：PDF、DOCX、TXT、Markdown 和 HTML。最大大小：100 MB。',
   'upload' => '上传文档',
   'delete' => '删除',
   'confirm_delete' => '永久删除此项目？',

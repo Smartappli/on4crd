@@ -201,6 +201,13 @@ function member_library_document_upload_mimes(): array
 }
 }
 
+if (!function_exists('member_library_upload_max_bytes')) {
+function member_library_upload_max_bytes(): int
+{
+    return 100 * 1024 * 1024;
+}
+}
+
 if (!function_exists('member_library_store_document_upload')) {
 /**
  * @return array{public_path:string,absolute_path:string,extension:string,original_name:string}
@@ -239,7 +246,7 @@ function member_library_store_document_upload(?array $file, int $memberId, strin
         $prefix . '_' . $memberId . '-' . $base,
         $allowedExtensions,
         $allowedMimes,
-        25 * 1024 * 1024
+        member_library_upload_max_bytes()
     );
 
     return [

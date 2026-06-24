@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Schlagwörter',
   'document_field' => 'Datei',
   'upload_title' => 'Dokument hochladen',
-  'upload_help' => 'Akzeptierte Formate: PDF, DOCX, TXT, Markdown und HTML. Maximale Größe: 25 MB.',
+  'upload_help' => 'Akzeptierte Formate: PDF, DOCX, TXT, Markdown und HTML. Maximale Größe: 100 MB.',
   'upload' => 'Dokument hochladen',
   'delete' => 'Loeschen',
   'confirm_delete' => 'Dieses Element dauerhaft löschen?',

@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'কীওয়ার্ড',
   'document_field' => 'ফাইল',
   'upload_title' => 'নথি আপলোড করুন',
-  'upload_help' => 'স্বীকৃত ফরম্যাট: PDF, DOCX, TXT, Markdown এবং HTML। সর্বাধিক আকার: 25 এমবি।',
+  'upload_help' => 'স্বীকৃত ফরম্যাট: PDF, DOCX, TXT, Markdown এবং HTML। সর্বাধিক আকার: 100 এমবি।',
   'upload' => 'নথি আপলোড করুন',
   'delete' => 'মুছুন',
   'confirm_delete' => 'এই আইটেমটি স্থায়ীভাবে মুছে ফেলবেন?',

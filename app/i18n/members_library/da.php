@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Nøgleord',
   'document_field' => 'Fil',
   'upload_title' => 'Upload dokumentet',
-  'upload_help' => 'Accepterede formater: PDF, DOCX, TXT, Markdown og HTML. Maksimal størrelse: 25 MB.',
+  'upload_help' => 'Accepterede formater: PDF, DOCX, TXT, Markdown og HTML. Maksimal størrelse: 100 MB.',
   'upload' => 'Upload dokumentet',
   'delete' => 'Slet',
   'confirm_delete' => 'Vil du slette dette element permanent?',

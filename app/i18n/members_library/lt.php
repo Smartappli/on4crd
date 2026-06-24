@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Raktiniai žodžiai',
   'document_field' => 'Failas',
   'upload_title' => 'Įkelti dokumentą',
-  'upload_help' => 'Priimami formatai: PDF, DOCX, TXT, Markdown ir HTML. Maksimalus dydis: 25 MB.',
+  'upload_help' => 'Priimami formatai: PDF, DOCX, TXT, Markdown ir HTML. Maksimalus dydis: 100 MB.',
   'upload' => 'Įkelti dokumentą',
   'delete' => 'Ištrinti',
   'confirm_delete' => 'Visam laikui ištrinti šį elementą?',

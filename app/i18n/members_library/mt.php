@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Kliem ewlieni',
   'document_field' => 'Fajl',
   'upload_title' => 'Tella d-dokument',
-  'upload_help' => 'Formati aċċettati: PDF, DOCX, TXT, Markdown u HTML. Daqs massimu: 25 MB.',
+  'upload_help' => 'Formati aċċettati: PDF, DOCX, TXT, Markdown u HTML. Daqs massimu: 100 MB.',
   'upload' => 'Tella d-dokument',
   'delete' => 'ĦaSsar',
   'confirm_delete' => 'Tħassar dan l-element b\'mod permanenti?',

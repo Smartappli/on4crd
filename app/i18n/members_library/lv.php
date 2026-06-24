@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Atslēgvārdi',
   'document_field' => 'Fails',
   'upload_title' => 'Augšupielādējiet dokumentu',
-  'upload_help' => 'Pieņemamie formāti: PDF, DOCX, TXT, Markdown un HTML. Maksimālais izmērs: 25 MB.',
+  'upload_help' => 'Pieņemamie formāti: PDF, DOCX, TXT, Markdown un HTML. Maksimālais izmērs: 100 MB.',
   'upload' => 'Augšupielādējiet dokumentu',
   'delete' => 'Dzēst',
   'confirm_delete' => 'Vai neatgriezeniski dzēst šo elementu?',

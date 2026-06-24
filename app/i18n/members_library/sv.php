@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Nyckelord',
   'document_field' => 'Arkiv',
   'upload_title' => 'Ladda upp dokumentet',
-  'upload_help' => 'Accepterade format: PDF, DOCX, TXT, Markdown och HTML. Maximal storlek: 25 MB.',
+  'upload_help' => 'Accepterade format: PDF, DOCX, TXT, Markdown och HTML. Maximal storlek: 100 MB.',
   'upload' => 'Ladda upp dokumentet',
   'delete' => 'Ta bort',
   'confirm_delete' => 'Vill du ta bort det här elementet permanent?',

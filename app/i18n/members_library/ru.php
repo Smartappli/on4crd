@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Ключевые слова',
   'document_field' => 'Файл',
   'upload_title' => 'Загрузить документ',
-  'upload_help' => 'Принимаемые форматы: PDF, DOCX, TXT, Markdown и HTML. Максимальный размер: 25 МБ.',
+  'upload_help' => 'Принимаемые форматы: PDF, DOCX, TXT, Markdown и HTML. Максимальный размер: 100 МБ.',
   'upload' => 'Загрузить документ',
   'delete' => 'Удалить',
   'confirm_delete' => 'Удалить этот элемент навсегда?',

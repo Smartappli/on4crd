@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Eochairfhocail',
   'document_field' => 'Comhad',
   'upload_title' => 'Uaslódáil an doiciméad',
-  'upload_help' => 'Formáidí a nglactar leo: PDF, DOCX, TXT, Markdown agus HTML. Uasmhéid: 25 MB.',
+  'upload_help' => 'Formáidí a nglactar leo: PDF, DOCX, TXT, Markdown agus HTML. Uasmhéid: 100 MB.',
   'upload' => 'Uaslódáil an doiciméad',
   'delete' => 'Scrios',
   'confirm_delete' => 'An bhfuil fonn ort an eilimint seo a scriosadh go buan?',

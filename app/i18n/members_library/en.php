@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Keywords',
   'document_field' => 'File',
   'upload_title' => 'Upload document',
-  'upload_help' => 'Accepted formats: PDF, DOC, DOCX, TXT, Markdown and HTML. Maximum size: 25 MB.',
+  'upload_help' => 'Accepted formats: PDF, DOC, DOCX, TXT, Markdown and HTML. Maximum size: 100 MB.',
   'upload' => 'Upload document',
   'delete' => 'Delete',
   'confirm_delete' => 'Delete this item permanently?',

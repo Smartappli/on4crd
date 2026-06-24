@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Palabras clave',
   'document_field' => 'Archivo',
   'upload_title' => 'Subir documento',
-  'upload_help' => 'Formatos aceptados: PDF, DOCX, TXT, Markdown y HTML. Tamaño máximo: 25 MB.',
+  'upload_help' => 'Formatos aceptados: PDF, DOCX, TXT, Markdown y HTML. Tamaño máximo: 100 MB.',
   'upload' => 'Subir documento',
   'delete' => 'Eliminar',
   'confirm_delete' => '¿Eliminar este elemento definitivamente?',

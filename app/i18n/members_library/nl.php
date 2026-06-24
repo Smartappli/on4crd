@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Trefwoorden',
   'document_field' => 'Bestand',
   'upload_title' => 'Document uploaden',
-  'upload_help' => 'Geaccepteerde formaten: PDF, DOCX, TXT, Markdown en HTML. Maximale grootte: 25 MB.',
+  'upload_help' => 'Geaccepteerde formaten: PDF, DOCX, TXT, Markdown en HTML. Maximale grootte: 100 MB.',
   'upload' => 'Document uploaden',
   'delete' => 'Verwijderen',
   'confirm_delete' => 'Dit item permanent verwijderen?',
