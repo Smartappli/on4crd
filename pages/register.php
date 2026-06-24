@@ -3,13 +3,10 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $registerI18n = i18n_domain_locale('register', $locale);
-$isFrench = $locale === 'fr';
-$title = $isFrench ? 'Inscription membre' : 'Member registration';
-$message = $isFrench
-    ? 'L inscription publique est fermee. La creation des comptes membres est effectuee par l administration apres validation.'
-    : 'Public registration is closed. Member accounts are created by the administration after validation.';
-$loginLabel = $isFrench ? 'Connexion' : 'Sign in';
-$membershipLabel = $isFrench ? 'Devenir membre' : 'Become a member';
+$title = (string) ($registerI18n['registration_closed_title'] ?? $registerI18n['layout_title'] ?? $registerI18n['title'] ?? 'Registration closed');
+$message = (string) ($registerI18n['registration_closed_message'] ?? $registerI18n['required'] ?? 'Public registration is closed.');
+$loginLabel = (string) ($registerI18n['login'] ?? 'Log in');
+$membershipLabel = (string) ($registerI18n['membership_link'] ?? 'Membership');
 
 if (current_user() !== null) {
     redirect(module_enabled('dashboard') ? 'dashboard' : 'home');

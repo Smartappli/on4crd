@@ -71,43 +71,20 @@ foreach ($lineColumnUpdates as $columnName => $statement) {
     }
 }
 
-$starterOptionsByLocale = [
-    'fr' => ['potage' => 'Potage maison', 'croquettes' => 'Croquettes de fromage', 'salade' => 'Petite salade'],
-    'en' => ['potage' => 'Homemade soup', 'croquettes' => 'Cheese croquettes', 'salade' => 'Small salad'],
-    'de' => ['potage' => 'Hausgemachte Suppe', 'croquettes' => 'Käsekroketten', 'salade' => 'Kleiner Salat'],
-    'nl' => ['potage' => 'Huisgemaakte soep', 'croquettes' => 'Kaaskroketten', 'salade' => 'Kleine salade'],
-];
-$mainOptionsByLocale = [
-    'fr' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Boulettes sauce tomate', 'vegetarien' => 'Assiette végétarienne'],
-    'en' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Meatballs in tomato sauce', 'vegetarien' => 'Vegetarian plate'],
-    'de' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Fleischbällchen in Tomatensauce', 'vegetarien' => 'Vegetarischer Teller'],
-    'nl' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Gehaktballetjes in tomatensaus', 'vegetarien' => 'Vegetarisch bord'],
-];
-$dessertOptionsByLocale = [
-    'fr' => ['tiramisu' => 'Tiramisu', 'mousse_choco' => 'Mousse au chocolat', 'salade_fruits' => 'Salade de fruits'],
-    'en' => ['tiramisu' => 'Tiramisu', 'mousse_choco' => 'Chocolate mousse', 'salade_fruits' => 'Fruit salad'],
-    'de' => ['tiramisu' => 'Tiramisu', 'mousse_choco' => 'Schokoladenmousse', 'salade_fruits' => 'Obstsalat'],
-    'nl' => ['tiramisu' => 'Tiramisu', 'mousse_choco' => 'Chocolademousse', 'salade_fruits' => 'Fruitsalade'],
-];
-
-$starterOptionLabels = $starterOptionsByLocale[$locale] ?? $starterOptionsByLocale['fr'];
-$mainOptionLabels = $mainOptionsByLocale[$locale] ?? $mainOptionsByLocale['fr'];
-$dessertOptionLabels = $dessertOptionsByLocale[$locale] ?? $dessertOptionsByLocale['fr'];
-
 $starterOptions = [
-    'potage' => ['label' => (string) ($starterOptionLabels['potage'] ?? $starterOptionsByLocale['fr']['potage']), 'price_cents' => 650],
-    'croquettes' => ['label' => (string) ($starterOptionLabels['croquettes'] ?? $starterOptionsByLocale['fr']['croquettes']), 'price_cents' => 750],
-    'salade' => ['label' => (string) ($starterOptionLabels['salade'] ?? $starterOptionsByLocale['fr']['salade']), 'price_cents' => 600],
+    'potage' => ['label' => (string) $t['starter_potage'], 'price_cents' => 650],
+    'croquettes' => ['label' => (string) $t['starter_croquettes'], 'price_cents' => 750],
+    'salade' => ['label' => (string) $t['starter_salade'], 'price_cents' => 600],
 ];
 $mainOptions = [
-    'vol_au_vent' => ['label' => (string) ($mainOptionLabels['vol_au_vent'] ?? $mainOptionsByLocale['fr']['vol_au_vent']), 'price_cents' => 1800],
-    'boulettes' => ['label' => (string) ($mainOptionLabels['boulettes'] ?? $mainOptionsByLocale['fr']['boulettes']), 'price_cents' => 1700],
-    'vegetarien' => ['label' => (string) ($mainOptionLabels['vegetarien'] ?? $mainOptionsByLocale['fr']['vegetarien']), 'price_cents' => 1650],
+    'vol_au_vent' => ['label' => (string) $t['meal_vol_au_vent'], 'price_cents' => 1800],
+    'boulettes' => ['label' => (string) $t['meal_boulettes'], 'price_cents' => 1700],
+    'vegetarien' => ['label' => (string) $t['meal_vegetarien'], 'price_cents' => 1650],
 ];
 $dessertOptions = [
-    'tiramisu' => ['label' => (string) ($dessertOptionLabels['tiramisu'] ?? $dessertOptionsByLocale['fr']['tiramisu']), 'price_cents' => 600],
-    'mousse_choco' => ['label' => (string) ($dessertOptionLabels['mousse_choco'] ?? $dessertOptionsByLocale['fr']['mousse_choco']), 'price_cents' => 550],
-    'salade_fruits' => ['label' => (string) ($dessertOptionLabels['salade_fruits'] ?? $dessertOptionsByLocale['fr']['salade_fruits']), 'price_cents' => 500],
+    'tiramisu' => ['label' => (string) $t['dessert_tiramisu'], 'price_cents' => 600],
+    'mousse_choco' => ['label' => (string) $t['dessert_mousse_choco'], 'price_cents' => 550],
+    'salade_fruits' => ['label' => (string) $t['dessert_salade_fruits'], 'price_cents' => 500],
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -382,11 +359,11 @@ ob_start();
         'meal' => $t['col_meal'],
         'dessert' => $t['col_dessert'],
         'qty' => $t['col_qty'],
-        'remove' => $locale === 'en' ? 'Remove' : ($locale === 'de' ? 'Entfernen' : ($locale === 'nl' ? 'Verwijderen' : 'Retirer')),
-        'enableStarter' => $locale === 'en' ? 'Enable starter' : ($locale === 'de' ? 'Vorspeise aktivieren' : ($locale === 'nl' ? 'Voorgerecht activeren' : 'Activer entrée')),
-        'enableMeal' => $locale === 'en' ? 'Enable main course' : ($locale === 'de' ? 'Hauptgericht aktivieren' : ($locale === 'nl' ? 'Hoofdgerecht activeren' : 'Activer plat')),
-        'enableDessert' => $locale === 'en' ? 'Enable dessert' : ($locale === 'de' ? 'Dessert aktivieren' : ($locale === 'nl' ? 'Dessert activeren' : 'Activer dessert')),
-        'lineTotal' => $locale === 'en' ? 'Line total' : ($locale === 'de' ? 'Zeilensumme' : ($locale === 'nl' ? 'Regeltotaal' : 'Total ligne')),
+        'remove' => $t['line_remove'],
+        'enableStarter' => $t['line_enable_starter'],
+        'enableMeal' => $t['line_enable_meal'],
+        'enableDessert' => $t['line_enable_dessert'],
+        'lineTotal' => $t['col_line_total'],
     ],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?: '{}' ?></script>
 <?php
