@@ -97,7 +97,7 @@ function require_module_enabled(string $module, ?string $nextRoute = null): void
     http_response_code(404);
     $locale = current_locale();
     $errors = i18n_domain_locale('errors', $locale);
-    $moduleUnavailable = (string) ($errors['module_unavailable'] ?? 'Module unavailable.');
+    $moduleUnavailable = (string) ($errors['module_unavailable'] ?? $errors['page_not_found'] ?? '404');
     echo render_layout('<div class="card"><h1>404</h1><p>' . e($moduleUnavailable) . '</p></div>', '404');
     exit;
 }
