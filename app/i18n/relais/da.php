@@ -15,7 +15,7 @@ return array (
   'callsign' => 'Vejledende',
   'channel' => 'Kanal',
   'mode' => 'tilstand',
-  'mode_value' => 'FM Repeater Mode + EchoLink',
+  'mode_value' => 'FM-repeatermodus + EchoLink',
   'input' => 'Indgangsfrekvens (TX)',
   'output' => 'Udgangsfrekvens (RX)',
   'shift' => 'Offset',

@@ -15,7 +15,7 @@ return array (
   'callsign' => 'Indikattiv',
   'channel' => 'Kanal',
   'mode' => 'Moda',
-  'mode_value' => 'FM Modalità Ripetitur + EchoLink',
+  'mode_value' => 'Modalità tar-ripetitur FM + EchoLink',
   'input' => 'Frekwenza tad-dħul (TX)',
   'output' => 'Frekwenza tal-ħruġ (RX)',
   'shift' => 'Gap',

@@ -15,7 +15,7 @@ return array (
   'callsign' => 'Orientacyjne',
   'channel' => 'Kanał',
   'mode' => 'Moda',
-  'mode_value' => 'Tryb wzmacniacza FM + EchoLink',
+  'mode_value' => 'Tryb przemiennika FM + EchoLink',
   'input' => 'Częstotliwość wejściowa (TX)',
   'output' => 'Częstotliwość wyjściowa (RX)',
   'shift' => 'Przesunięcie',

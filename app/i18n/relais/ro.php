@@ -15,7 +15,7 @@ return array (
   'callsign' => 'Indicativ',
   'channel' => 'Canal',
   'mode' => 'Modă',
-  'mode_value' => 'FM Mod repetitor + EchoLink',
+  'mode_value' => 'Mod repetor FM + EchoLink',
   'input' => 'Frecvența de intrare (TX)',
   'output' => 'Frecvența de ieșire (RX)',
   'shift' => 'Decalaj',

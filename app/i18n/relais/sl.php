@@ -15,7 +15,7 @@ return array (
   'callsign' => 'Indikativno',
   'channel' => 'Kanal',
   'mode' => 'Moda',
-  'mode_value' => 'FM Repeater Mode + EchoLink',
+  'mode_value' => 'Način FM repetitorja + EchoLink',
   'input' => 'Vhodna frekvenca (TX)',
   'output' => 'Izhodna frekvenca (RX)',
   'shift' => 'Odmik',

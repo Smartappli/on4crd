@@ -15,7 +15,7 @@ return array (
   'callsign' => 'Tájékoztató',
   'channel' => 'Csatorna',
   'mode' => 'Divat',
-  'mode_value' => 'FM Repeater mód + EchoLink',
+  'mode_value' => 'FM átjátszó mód + EchoLink',
   'input' => 'Bemeneti frekvencia (TX)',
   'output' => 'Kimeneti frekvencia (RX)',
   'shift' => 'Offset',

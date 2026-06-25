@@ -15,7 +15,7 @@ return array (
   'callsign' => 'Показателно',
   'channel' => 'Канал',
   'mode' => 'Мода',
-  'mode_value' => 'FM Режим на повторител + EchoLink',
+  'mode_value' => 'Режим на FM повторител + EchoLink',
   'input' => 'Входна честота (TX)',
   'output' => 'Изходна честота (RX)',
   'shift' => 'Офсет',

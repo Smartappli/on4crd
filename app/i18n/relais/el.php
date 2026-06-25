@@ -15,7 +15,7 @@ return array (
   'callsign' => 'Ενδεικτικά',
   'channel' => 'Κανάλι',
   'mode' => 'Μόδα',
-  'mode_value' => 'FM Repeater Mode + EchoLink',
+  'mode_value' => 'Λειτουργία αναμεταδότη FM + EchoLink',
   'input' => 'Συχνότητα εισόδου (TX)',
   'output' => 'Συχνότητα εξόδου (RX)',
   'shift' => 'Offset',

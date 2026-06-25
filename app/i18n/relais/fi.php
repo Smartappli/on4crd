@@ -15,7 +15,7 @@ return array (
   'callsign' => 'Ohjeellinen',
   'channel' => 'kanava',
   'mode' => 'Muoti',
-  'mode_value' => 'FM Toistintila + EchoLink',
+  'mode_value' => 'FM-toistintila + EchoLink',
   'input' => 'Tulotaajuus (TX)',
   'output' => 'Lähtötaajuus (RX)',
   'shift' => 'Offset',
