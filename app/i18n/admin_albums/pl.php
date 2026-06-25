@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Sprawdź album',
   'album_finalized_ok' => 'Album zatwierdzony.',
   'album_finalized_social_warning' => 'Album został zatwierdzony, ale synchronizacja społecznościowa nie powiodła się.',
-  'batch_max_files' => 'Maksymalnie 100 zdjęć na import.',
-  'batch_max_size' => 'Partia zdjęć przekracza 512 MB.',
+  'batch_max_files' => 'Maksymalnie 200 zdjęć na import.',
+  'batch_max_size' => 'Partia zdjęć przekracza 1024 MB.',
   'error_field_too_long' => 'Jedno z pól przekracza dozwoloną długość.',
 );

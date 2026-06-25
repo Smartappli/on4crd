@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Apstiprināt albumu',
   'album_finalized_ok' => 'Albums apstiprināts.',
   'album_finalized_social_warning' => 'Albums ir apstiprināts, taču sociālā sinhronizācija neizdevās.',
-  'batch_max_files' => 'Ne vairāk kā 100 fotoattēlu importēšanas reizē.',
-  'batch_max_size' => 'Fotoattēlu pakete pārsniedz 512 MB.',
+  'batch_max_files' => 'Ne vairāk kā 200 fotoattēlu importēšanas reizē.',
+  'batch_max_size' => 'Fotoattēlu pakete pārsniedz 1024 MB.',
   'error_field_too_long' => 'Viens no laukiem pārsniedz atļauto garumu.',
 );

@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Validera album',
   'album_finalized_ok' => 'Albumet har validerats.',
   'album_finalized_social_warning' => 'Albumet har validerats, men social synkronisering misslyckades.',
-  'batch_max_files' => 'Max 100 bilder per import.',
-  'batch_max_size' => 'Fotobatchen överstiger 512 MB.',
+  'batch_max_files' => 'Max 200 bilder per import.',
+  'batch_max_size' => 'Fotobatchen överstiger 1024 MB.',
   'error_field_too_long' => 'Ett av fälten överskrider den tillåtna längden.',
 );

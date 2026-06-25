@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Validate album',
   'album_finalized_ok' => 'Album validated.',
   'album_finalized_social_warning' => 'Album validated, but social synchronization failed.',
-  'batch_max_files' => 'Maximum 100 photos per import.',
-  'batch_max_size' => 'The photo batch exceeds 512 MB.',
+  'batch_max_files' => 'Maximum 200 photos per import.',
+  'batch_max_size' => 'The photo batch exceeds 1024 MB.',
   'error_field_too_long' => 'One of the fields exceeds the allowed length.',
 );

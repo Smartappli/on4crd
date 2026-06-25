@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Validar álbum',
   'album_finalized_ok' => 'Álbum validado.',
   'album_finalized_social_warning' => 'Álbum validado, mas falha na sincronização social.',
-  'batch_max_files' => 'Máximo de 100 fotos por importação.',
-  'batch_max_size' => 'O lote de fotos excede 512 MB.',
+  'batch_max_files' => 'Máximo de 200 fotos por importação.',
+  'batch_max_size' => 'O lote de fotos excede 1024 MB.',
   'error_field_too_long' => 'Um dos campos excede o comprimento permitido.',
 );

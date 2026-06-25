@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => '验证相册',
   'album_finalized_ok' => '专辑已验证。',
   'album_finalized_social_warning' => '相册已验证，但社交同步失败。',
-  'batch_max_files' => '每次导入最多 100 张照片。',
-  'batch_max_size' => '照片批次超过 512 MB。',
+  'batch_max_files' => '每次导入最多 200 张照片。',
+  'batch_max_size' => '照片批次超过 1024 MB。',
   'error_field_too_long' => '其中一个字段超出了允许的长度。',
 );

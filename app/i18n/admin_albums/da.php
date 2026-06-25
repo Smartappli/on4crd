@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Valider album',
   'album_finalized_ok' => 'Album valideret.',
   'album_finalized_social_warning' => 'Album valideret, men social synkronisering mislykkedes.',
-  'batch_max_files' => 'Maksimalt 100 billeder pr. import.',
-  'batch_max_size' => 'Fotobatchen overstiger 512 MB.',
+  'batch_max_files' => 'Maksimalt 200 billeder pr. import.',
+  'batch_max_size' => 'Fotobatchen overstiger 1024 MB.',
   'error_field_too_long' => 'Et af felterne overskrider den tilladte længde.',
 );

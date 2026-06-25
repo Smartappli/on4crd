@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Ivvalida l-album',
   'album_finalized_ok' => 'Album validat.',
   'album_finalized_social_warning' => 'Album ivvalidat, iżda s-sinkronizzazzjoni soċjali falliet.',
-  'batch_max_files' => 'Massimu 100 ritratt għal kull importazzjoni.',
-  'batch_max_size' => 'Il-lott tar-ritratti jaqbeż il-512 MB.',
+  'batch_max_files' => 'Massimu 200 ritratt għal kull importazzjoni.',
+  'batch_max_size' => 'Il-lott tar-ritratti jaqbeż il-1024 MB.',
   'error_field_too_long' => 'Wieħed mill-oqsma jaqbeż it-tul permess.',
 );

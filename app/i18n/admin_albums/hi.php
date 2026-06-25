@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'एल्बम मान्य करें',
   'album_finalized_ok' => 'एल्बम मान्य.',
   'album_finalized_social_warning' => 'एल्बम मान्य हो गया, लेकिन सामाजिक सिंक्रनाइज़ेशन विफल रहा।',
-  'batch_max_files' => 'प्रति आयात अधिकतम 100 फ़ोटो।',
-  'batch_max_size' => 'फोटो बैच 512 एमबी से अधिक है।',
+  'batch_max_files' => 'प्रति आयात अधिकतम 200 फ़ोटो।',
+  'batch_max_size' => 'फोटो बैच 1024 एमबी से अधिक है।',
   'error_field_too_long' => 'फ़ील्ड में से एक की लंबाई अनुमत लंबाई से अधिक है.',
 );

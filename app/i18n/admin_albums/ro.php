@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Validați albumul',
   'album_finalized_ok' => 'Album validat.',
   'album_finalized_social_warning' => 'Albumul a fost validat, dar sincronizarea socială a eșuat.',
-  'batch_max_files' => 'Maximum 100 de fotografii per import.',
-  'batch_max_size' => 'Lotul de fotografii depășește 512 MB.',
+  'batch_max_files' => 'Maximum 200 de fotografii per import.',
+  'batch_max_size' => 'Lotul de fotografii depășește 1024 MB.',
   'error_field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
 );

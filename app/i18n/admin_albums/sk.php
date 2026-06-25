@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Overiť album',
   'album_finalized_ok' => 'Album bol overený.',
   'album_finalized_social_warning' => 'Album bol overený, ale synchronizácia na sociálnych sieťach zlyhala.',
-  'batch_max_files' => 'Maximálne 100 fotografií na import.',
-  'batch_max_size' => 'Dávka fotografií presahuje 512 MB.',
+  'batch_max_files' => 'Maximálne 200 fotografií na import.',
+  'batch_max_size' => 'Dávka fotografií presahuje 1024 MB.',
   'error_field_too_long' => 'Jedno z polí prekračuje povolenú dĺžku.',
 );

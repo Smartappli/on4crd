@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'アルバムの検証',
   'album_finalized_ok' => 'アルバムが検証されました。',
   'album_finalized_social_warning' => 'アルバムは検証されましたが、ソーシャル同期に失敗しました。',
-  'batch_max_files' => 'インポートごとに最大 100 枚の写真。',
-  'batch_max_size' => '写真バッチが 512 MB を超えています。',
+  'batch_max_files' => 'インポートごとに最大 200 枚の写真。',
+  'batch_max_size' => '写真バッチが 1024 MB を超えています。',
   'error_field_too_long' => 'フィールドの 1 つが許可された長さを超えています。',
 );

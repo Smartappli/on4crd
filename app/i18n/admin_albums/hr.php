@@ -78,7 +78,7 @@ return array (
   'wizard_finalize' => 'Potvrdi album',
   'album_finalized_ok' => 'Album potvrđen.',
   'album_finalized_social_warning' => 'Album je potvrđen, ali društvena sinkronizacija nije uspjela.',
-  'batch_max_files' => 'Maksimalno 100 fotografija po uvozu.',
-  'batch_max_size' => 'Serija fotografija premašuje 512 MB.',
+  'batch_max_files' => 'Maksimalno 200 fotografija po uvozu.',
+  'batch_max_size' => 'Serija fotografija premašuje 1024 MB.',
   'error_field_too_long' => 'Jedno od polja premašuje dopuštenu duljinu.',
 );
