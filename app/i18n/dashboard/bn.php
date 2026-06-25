@@ -66,7 +66,7 @@ return array (
   'widget_clock_utc' => 'UTC তারিখ/সময়',
   'widget_clock_local' => 'স্থানীয় তারিখ/সময়',
   'widget_open_meteo_title' => 'স্থানীয় আবহাওয়া',
-  'widget_open_meteo_description' => 'Open-Meteo ফলব্যাক সহ Agromet এর মাধ্যমে স্থানীয় অবস্থা।',
+  'widget_open_meteo_description' => 'Open-Meteo বিকল্প উৎসসহ Agromet এর মাধ্যমে স্থানীয় অবস্থা।',
   'widget_weather_unavailable' => 'আবহাওয়ার ডেটা বর্তমানে অনুপলব্ধ৷',
   'widget_weather_label' => 'আবহাওয়া',
   'widget_weather_source' => 'উৎস',

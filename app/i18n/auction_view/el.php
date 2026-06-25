@@ -6,7 +6,7 @@ return array (
   'lot_not_exists' => 'Αυτή η παρτίδα δεν υπάρχει.',
   'lot_not_public' => 'Αυτή η παρτίδα δεν είναι δημόσια.',
   'default_desc' => 'Παρτίδα δημοπρασίας ON4CRD.',
-  'default_summary' => 'Οικόπεδο δημοπρασίας Club.',
+  'default_summary' => 'Αντικείμενο δημοπρασίας του συλλόγου.',
   'current_price' => 'Τρέχουσα τιμή:',
   'min_step' => 'Ελάχιστο βήμα:',
   'end' => 'Τέλος:',

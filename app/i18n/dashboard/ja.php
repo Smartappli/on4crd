@@ -66,7 +66,7 @@ return array (
   'widget_clock_utc' => 'UTC 日付/時刻',
   'widget_clock_local' => '現地の日付/時刻',
   'widget_open_meteo_title' => '現地の天気',
-  'widget_open_meteo_description' => 'Open-Meteo フォールバックを使用した Agromet 経由のローカル条件。',
+  'widget_open_meteo_description' => 'Open-Meteo を代替ソースとして使用する Agromet 経由の地域状況。',
   'widget_weather_unavailable' => '現在、気象データは利用できません。',
   'widget_weather_label' => '天気',
   'widget_weather_source' => 'ソース',

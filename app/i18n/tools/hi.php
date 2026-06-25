@@ -185,7 +185,7 @@ return array (
   'unit_conv_group_energy' => 'ऊर्जा',
   'unit_conv_group_time' => 'समय',
   'unit_conv_group_temperature' => 'तापमान',
-  'unit_conv_group_rotation' => 'ROTATION',
+  'unit_conv_group_rotation' => 'घूर्णन',
   'unit_conv_group_field' => 'सिग्नल स्तर',
   'unit_conv_swap' => 'बदलना',
   'unit_conv_family' => 'परिवार',

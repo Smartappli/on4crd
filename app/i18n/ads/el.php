@@ -55,7 +55,7 @@ return array (
   'format_landscape' => 'Οριζόντιο (1200×628)',
   'format_portrait' => 'Κατακόρυφο (1080×1350)',
   'placement_homepage_top_name' => 'Αρχική επάνω',
-  'placement_homepage_top_description' => 'Banner στην κορυφή της αρχικής σελίδας',
+  'placement_homepage_top_description' => 'Πανό στην κορυφή της αρχικής σελίδας',
   'placement_sidebar_name' => 'Πλευρική στήλη',
   'placement_sidebar_description' => 'Πλευρική θέση διαφήμισης',
   'placement_article_inline_name' => 'Μέσα στο άρθρο',

@@ -9,7 +9,7 @@ return array (
   'chatbot' => 'Помощник',
   'fullscreen' => 'Цял екран',
   'save_layout' => 'Запазване',
-  'widget_unavailable' => 'Widget временно не е наличен.',
+  'widget_unavailable' => 'Уиджетът временно не е наличен.',
   'table_missing' => 'Таблицата dashboard_widgets липсва: оформлението на уиджетите не може да бъде запазено.',
   'available_widgets' => 'Джаджи',
   'widgets_help' => 'Инсталирайте своите джаджи, след което плъзнете и пуснете, за да пренаредите мрежата.',

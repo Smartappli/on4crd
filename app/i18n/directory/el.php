@@ -10,7 +10,7 @@ return array (
   'members_title' => 'Κατάλογος μελών',
   'none' => 'Δεν βρέθηκαν μέλη.',
   'none_help' => 'Δοκιμάστε άλλη αναζήτηση ή αφαιρέστε τα ενεργά φίλτρα.',
-  'avatar_of' => 'avatar του',
+  'avatar_of' => 'Εικόνα προφίλ του',
   'search_label' => 'Αναζήτηση',
   'search_placeholder' => 'Ένδειξη ή όνομα',
   'licence_filter' => 'Φιλτράρισμα κατά άδεια',

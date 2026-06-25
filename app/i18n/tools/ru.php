@@ -16,7 +16,7 @@ return array (
   'choose_tool' => 'Категории инструментов',
   'grid_title' => 'Расчет локатора и зон CQ/ITU по почтовому адресу',
   'address' => 'Почтовый адрес',
-  'calc_grid' => 'Рассчитать grid',
+  'calc_grid' => 'Рассчитать локатор',
   'found_address' => 'Найденный адрес',
   'coords' => 'Координаты',
   'locator' => 'Maidenhead локатор',
