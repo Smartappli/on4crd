@@ -17,6 +17,8 @@ final class MemberModulesFinalizationTest extends TestCase
     public function testAlbumsModuleKeepsUploadSelectAndProposalMetadataControls(): void
     {
         self::assertSame('storage/uploads/albums/thumbs/photo.jpg', album_thumbnail_public_path('storage/uploads/albums/photo.webp'));
+        self::assertSame('storage/uploads/albums/thumbs/photo.webp', album_thumbnail_webp_public_path('storage/uploads/albums/photo.jpg'));
+        self::assertSame('storage/uploads/albums/display/photo.webp', album_display_webp_public_path('storage/uploads/albums/photo.png'));
 
         $albums = $this->source('pages/albums.php');
         $album = $this->source('pages/album.php');
@@ -66,9 +68,13 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("\$albumTitle = trim((string) (\$album['title'] ?? ''));", $album);
         self::assertStringContainsString('$albumDescriptionText = html_entity_decode(strip_tags($albumDescriptionText), ENT_QUOTES | ENT_HTML5, \'UTF-8\');', $album);
         self::assertStringContainsString('data-album-viewer-open', $album);
+        self::assertStringContainsString('data-photo-display-src', $album);
+        self::assertStringContainsString('album_picture_html($imageSrc', $album);
         self::assertStringContainsString('id="album-photo-viewer"', $album);
         self::assertStringContainsString('data-album-description="<?= e($albumDescriptionText) ?>"', $album);
+        self::assertStringContainsString('album_picture_html($coverSrc', $albums);
         self::assertStringContainsString('data-album-viewer-image', $albumJs);
+        self::assertStringContainsString("link.getAttribute('data-photo-display-src')", $albumJs);
         self::assertStringContainsString('dialog.showModal();', $albumJs);
         self::assertStringContainsString('.album-photo-viewer-copy', $albumsCss);
         self::assertStringContainsString("if (\$action === 'update_album' || \$action === 'delete_album')", $albums);
@@ -136,6 +142,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("params.get('focus') === 'album-wizard'", $adminAlbumsJs);
         self::assertStringContainsString("wizard.scrollIntoView({ block: 'start' });", $adminAlbumsJs);
         self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
+        self::assertStringContainsString('create_album_webp_derivatives($publicPath)', $albumHelpers);
+        self::assertStringContainsString('function album_picture_html(', $albumHelpers);
         self::assertMatchesRegularExpression('/secure_move_uploaded_file\([^;]+8 \* 1024 \* 1024,\s+true\s+\)/s', $albumHelpers);
         self::assertStringContainsString("getenv('FACEBOOK_ALBUM_ID')", $albumHelpers);
         self::assertStringContainsString("\$facebookPageId . '/photos'", $albumHelpers);
