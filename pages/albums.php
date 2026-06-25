@@ -748,9 +748,8 @@ ob_start();
                     $canEditAlbum = false;
                     try {
                         $coverPath = album_photo_public_path_or_null((string) ($row['cover_path'] ?? ''));
-                        $coverThumb = $coverPath !== null ? album_thumbnail_public_path($coverPath) : '';
-                        $coverThumbAbs = $coverThumb !== '' ? dirname(__DIR__) . '/' . $coverThumb : '';
-                        if ($coverThumb !== '' && is_file($coverThumbAbs)) {
+                        $coverThumb = $coverPath !== null ? album_existing_thumbnail_fallback_public_path($coverPath) : '';
+                        if ($coverThumb !== '') {
                             $coverSrc = $coverThumb;
                             $coverWebpSrc = album_existing_thumbnail_webp_public_path((string) $coverPath);
                         } else {

@@ -138,9 +138,8 @@ try {
     $coverStmt->execute([(int) $album['id']]);
     $coverPath = album_photo_public_path_or_null((string) ($coverStmt->fetchColumn() ?: ''));
     if ($coverPath !== null) {
-        $coverThumbPath = album_thumbnail_public_path($coverPath);
-        $coverThumbAbs = dirname(__DIR__) . '/' . $coverThumbPath;
-        if ($coverThumbPath !== '' && is_file($coverThumbAbs)) {
+        $coverThumbPath = album_existing_thumbnail_fallback_public_path($coverPath);
+        if ($coverThumbPath !== '') {
             $coverDisplayPath = $coverThumbPath;
             $coverDisplayWebpPath = album_existing_thumbnail_webp_public_path($coverPath);
         } else {
@@ -310,10 +309,9 @@ ob_start();
                         if ($filePath === null) {
                             continue;
                         }
-                        $thumbPath = album_thumbnail_public_path($filePath);
-                        $thumbAbs = dirname(__DIR__) . '/' . $thumbPath;
-                        $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
-                        $imageWebpSrc = is_file($thumbAbs) ? album_existing_thumbnail_webp_public_path($filePath) : album_existing_display_webp_public_path($filePath);
+                        $thumbPath = album_existing_thumbnail_fallback_public_path($filePath);
+                        $imageSrc = $thumbPath !== '' ? $thumbPath : $filePath;
+                        $imageWebpSrc = $thumbPath !== '' ? album_existing_thumbnail_webp_public_path($filePath) : album_existing_display_webp_public_path($filePath);
                         $displayWebpSrc = album_existing_display_webp_public_path($filePath);
                         $title = trim((string) ($photo['title'] ?? ''));
                         $caption = trim((string) ($photo['caption'] ?? ''));
