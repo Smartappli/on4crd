@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonimizzazzjoni',
   'no_events' => 'L-ebda avveniment.',
   'events_count' => '%d avveniment(i)',
-  'apply_erasure' => 'Applika anonimizzazzjoni awtomatika jekk l-istatus jinbidel għal resolved.',
+  'apply_erasure' => 'Applika anonimizzazzjoni awtomatika jekk l-istatus jinbidel għal "Solvuti".',
   'admin_notes' => 'Amministratur noti',
   'update' => 'Aġġornament',
   'none' => 'L-ebda talba GDPR.',

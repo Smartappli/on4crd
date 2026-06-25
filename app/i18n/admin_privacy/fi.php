@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonymisointi',
   'no_events' => 'Ei tapahtumaa.',
   'events_count' => '%d tapahtuma(t)',
-  'apply_erasure' => 'Käytä automaattista anonymisointia, jos tilaksi vaihtuu resolved.',
+  'apply_erasure' => 'Käytä automaattista anonymisointia, jos tilaksi vaihtuu "Ratkaistu".',
   'admin_notes' => 'Ylläpitäjän huomautukset',
   'update' => 'Päivittää',
   'none' => 'Ei GDPR-pyyntöä.',

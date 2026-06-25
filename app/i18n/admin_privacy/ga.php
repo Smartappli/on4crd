@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anaithnideacht',
   'no_events' => 'Gan imeacht.',
   'events_count' => 'Imeachtaí %d',
-  'apply_erasure' => 'Cuir anaithnidiú uathoibríoch i bhfeidhm má athraíonn an stádas go resolved.',
+  'apply_erasure' => 'Cuir anaithnidiú uathoibríoch i bhfeidhm má athraíonn an stádas go "Réitíodh".',
   'admin_notes' => 'Nótaí riarthóir',
   'update' => 'Nuashonrú',
   'none' => 'Gan iarratas GDPR.',

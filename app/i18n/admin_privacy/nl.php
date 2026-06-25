@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonimisering',
   'no_events' => 'Geen gebeurtenis.',
   'events_count' => '%d gebeurtenis(sen)',
-  'apply_erasure' => 'Automatische anonimisering toepassen als de status naar resolved gaat.',
+  'apply_erasure' => 'Automatische anonimisering toepassen als de status "Afgehandeld" wordt.',
   'admin_notes' => 'Beheerdersnotities',
   'update' => 'Bijwerken',
   'none' => 'Geen GDPR-aanvraag.',

@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonüümseks muutmine',
   'no_events' => 'Sündmust pole.',
   'events_count' => '%d sündmused',
-  'apply_erasure' => 'Kui olekuks muutub resolved, rakendage automaatset anonüümseks muutmist.',
+  'apply_erasure' => 'Rakendage automaatset anonüümseks muutmist, kui olekuks muutub "Lahendatud".',
   'admin_notes' => 'Administraatori märkused',
   'update' => 'Värskenda',
   'none' => 'GDPR taotlust pole.',

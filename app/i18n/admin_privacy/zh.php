@@ -20,7 +20,7 @@ return array (
   'anonymization' => '匿名化',
   'no_events' => '没有活动。',
   'events_count' => '%d 事件',
-  'apply_erasure' => '如果状态更改为 resolved，则应用自动匿名。',
+  'apply_erasure' => '如果状态更改为“已解决”，则应用自动匿名化。',
   'admin_notes' => '管理员备注',
   'update' => '更新',
   'none' => '无 GDPR 请求。',

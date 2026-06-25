@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonimização',
   'no_events' => 'Nenhum evento.',
   'events_count' => 'Evento(s) %d',
-  'apply_erasure' => 'Aplique o anonimato automático se o status mudar para resolved.',
+  'apply_erasure' => 'Aplique a anonimização automática se o status mudar para "Resolvido".',
   'admin_notes' => 'Notas do administrador',
   'update' => 'Atualizar',
   'none' => 'Nenhuma solicitação GDPR.',

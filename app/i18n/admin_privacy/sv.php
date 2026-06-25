@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonymisering',
   'no_events' => 'Ingen händelse.',
   'events_count' => '%d händelse(r)',
-  'apply_erasure' => 'Använd automatisk anonymisering om statusen ändras till resolved.',
+  'apply_erasure' => 'Använd automatisk anonymisering om statusen ändras till "Löst".',
   'admin_notes' => 'Administratörsanteckningar',
   'update' => 'Uppdatera',
   'none' => 'Ingen GDPR begäran.',

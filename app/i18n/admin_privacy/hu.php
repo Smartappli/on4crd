@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonimizálás',
   'no_events' => 'Nincs esemény.',
   'events_count' => '%d esemény(ek)',
-  'apply_erasure' => 'Alkalmazza az automatikus anonimizálást, ha az állapot resolved-ra változik.',
+  'apply_erasure' => 'Alkalmazza az automatikus anonimizálást, ha az állapot "Megoldva" értékre változik.',
   'admin_notes' => 'Rendszergazda megjegyzései',
   'update' => 'Frissítés',
   'none' => 'Nincs GDPR kérés.',

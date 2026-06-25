@@ -20,7 +20,7 @@ return array (
   'anonymization' => '匿名化',
   'no_events' => 'イベントはありません。',
   'events_count' => '%d イベント',
-  'apply_erasure' => 'ステータスが resolved に変わった場合は、自動匿名化を適用します。',
+  'apply_erasure' => 'ステータスが「解決済み」に変わった場合は、自動匿名化を適用します。',
   'admin_notes' => '管理者のメモ',
   'update' => 'アップデート',
   'none' => 'GDPR リクエストはありません。',

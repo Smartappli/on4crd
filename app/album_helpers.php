@@ -1592,7 +1592,7 @@ function create_album_png_thumbnail(string $publicPath, int $maxWidth = 640, int
     }
     $sourcePath = dirname(__DIR__) . '/' . ltrim($publicPath, '/');
     $source = album_image_resource_from_path($sourcePath);
-    if ($source === null || $source['mime'] !== 'image/png') {
+    if ($source === null || !in_array($source['mime'], ['image/png', 'image/webp'], true)) {
         if ($source !== null) {
             imagedestroy($source['image']);
         }

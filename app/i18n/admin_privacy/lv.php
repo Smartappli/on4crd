@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonimizācija',
   'no_events' => 'Notikuma nav.',
   'events_count' => '%d notikums(-i)',
-  'apply_erasure' => 'Lietojiet automātisko anonimizāciju, ja statuss mainās uz resolved.',
+  'apply_erasure' => 'Lietojiet automātisko anonimizāciju, ja statuss mainās uz "Atrisināts".',
   'admin_notes' => 'Administratora piezīmes',
   'update' => 'Atjaunināt',
   'none' => 'Nav GDPR pieprasījuma.',

@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonymizácia',
   'no_events' => 'Žiadna udalosť.',
   'events_count' => '%d udalosti',
-  'apply_erasure' => 'Ak sa stav zmení na resolved, použite automatickú anonymizáciu.',
+  'apply_erasure' => 'Ak sa stav zmení na "Vyriešené", použite automatickú anonymizáciu.',
   'admin_notes' => 'Poznámky správcu',
   'update' => 'Aktualizovať',
   'none' => 'Žiadna požiadavka GDPR.',

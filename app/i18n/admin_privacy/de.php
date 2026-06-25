@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonymisierung',
   'no_events' => 'Kein Ereignis.',
   'events_count' => '%d Ereignis(se)',
-  'apply_erasure' => 'Automatische Anonymisierung anwenden, wenn der Status auf resolved gesetzt wird.',
+  'apply_erasure' => 'Automatische Anonymisierung anwenden, wenn der Status auf "Erledigt" gesetzt wird.',
   'admin_notes' => 'Administratornotizen',
   'update' => 'Aktualisieren',
   'none' => 'Keine DSGVO-Anfrage.',

@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonimisasi',
   'no_events' => 'Tidak ada acara.',
   'events_count' => 'Acara %d',
-  'apply_erasure' => 'Terapkan anonimisasi otomatis jika status berubah menjadi resolved.',
+  'apply_erasure' => 'Terapkan anonimisasi otomatis jika status berubah menjadi "Terselesaikan".',
   'admin_notes' => 'Catatan administrator',
   'update' => 'Memperbarui',
   'none' => 'Tidak ada permintaan GDPR.',

@@ -25,7 +25,7 @@ return array (
   'type_portability' => 'Φορητότητα',
   'status_pending' => 'Εκκρεμής',
   'status_in_progress' => 'Σε εξέλιξη',
-  'status_resolved' => 'Αποφασισμένος',
+  'status_resolved' => 'Επιλυμένο',
   'status_rejected' => 'Απορρίφθηκε',
   'table_request' => 'Αίτημα',
   'table_status' => 'Κατάσταση',

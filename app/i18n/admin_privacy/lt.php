@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonimiškumas',
   'no_events' => 'Jokio įvykio.',
   'events_count' => '%d įvykis (-iai)',
-  'apply_erasure' => 'Taikykite automatinį anonimiškumą, jei būsena pasikeičia į resolved.',
+  'apply_erasure' => 'Taikykite automatinį anoniminimą, jei būsena pasikeičia į "Išspręsta".',
   'admin_notes' => 'Administratoriaus pastabos',
   'update' => 'Atnaujinti',
   'none' => 'Nėra GDPR užklausos.',

@@ -602,10 +602,9 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
                 continue;
             }
 
-            $thumbPath = album_thumbnail_public_path($filePath);
-            $thumbAbs = dirname(__DIR__) . '/' . $thumbPath;
-            $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
-            $imageWebpSrc = is_file($thumbAbs) ? album_existing_thumbnail_webp_public_path($filePath) : album_existing_display_webp_public_path($filePath);
+            $thumbPath = album_existing_thumbnail_fallback_public_path($filePath);
+            $imageSrc = $thumbPath !== '' ? $thumbPath : $filePath;
+            $imageWebpSrc = $thumbPath !== '' ? album_existing_thumbnail_webp_public_path($filePath) : album_existing_display_webp_public_path($filePath);
             $photoTitle = trim((string) ($photo['title'] ?? ''));
             $albumTitle = trim((string) ($photo['album_title'] ?? ''));
             $alt = $photoTitle !== '' ? $photoTitle : ($albumTitle !== '' ? $albumTitle : $homeText('spotlight_member_gallery'));

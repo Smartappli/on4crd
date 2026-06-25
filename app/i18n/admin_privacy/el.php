@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Ανωνυμοποίηση',
   'no_events' => 'Κανένα συμβάν.',
   'events_count' => '%d συμβάντα',
-  'apply_erasure' => 'Εφαρμόστε αυτόματη ανωνυμοποίηση εάν η κατάσταση αλλάξει σε resolved.',
+  'apply_erasure' => 'Εφαρμόστε αυτόματη ανωνυμοποίηση εάν η κατάσταση αλλάξει σε "Επιλυμένο".',
   'admin_notes' => 'Σημειώσεις διαχειριστή',
   'update' => 'Εκσυγχρονίζω',
   'none' => 'Κανένα αίτημα GDPR.',
@@ -32,6 +32,6 @@ return array (
   'type_portability' => 'Φορητότητα',
   'status_pending' => 'Εκκρεμής',
   'status_in_progress' => 'Σε εξέλιξη',
-  'status_resolved' => 'Αποφασισμένος',
+  'status_resolved' => 'Επιλυμένο',
   'status_rejected' => 'Απορρίφθηκε',
 );

@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonimizacija',
   'no_events' => 'Brez dogodka.',
   'events_count' => '%d dogodek(i)',
-  'apply_erasure' => 'Uporabi samodejno anonimizacijo, če se status spremeni v resolved.',
+  'apply_erasure' => 'Uporabi samodejno anonimizacijo, če se stanje spremeni v "Razrešeno".',
   'admin_notes' => 'Opombe skrbnika',
   'update' => 'posodobitev',
   'none' => 'Ni zahteve GDPR.',

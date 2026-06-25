@@ -20,7 +20,7 @@ return array (
   'anonymization' => 'Anonymisation',
   'no_events' => 'Aucun événement.',
   'events_count' => '%d événement(s)',
-  'apply_erasure' => 'Appliquer l’anonymisation automatique si le statut passe à resolved.',
+  'apply_erasure' => 'Appliquer l’anonymisation automatique si le statut passe à "Résolue".',
   'admin_notes' => 'Notes administrateur',
   'update' => 'Mettre à jour',
   'none' => 'Aucune demande RGPD.',
