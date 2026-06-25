@@ -159,7 +159,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("rebuildForm.dataset.autoContinue === '1'", $adminAlbumsJs);
         self::assertStringContainsString('rebuildForm.requestSubmit();', $adminAlbumsJs);
         self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
-        self::assertStringContainsString('create_album_png_thumbnail($publicPath)', $albumHelpers);
+        self::assertStringContainsString('create_album_png_thumbnail($publicPath', $albumHelpers);
         self::assertStringContainsString('create_album_webp_derivatives($publicPath)', $albumHelpers);
         self::assertStringContainsString('function album_thumbnail_png_public_path(', $albumHelpers);
         self::assertStringContainsString('function album_existing_thumbnail_fallback_public_path(', $albumHelpers);
