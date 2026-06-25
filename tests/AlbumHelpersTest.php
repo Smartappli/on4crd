@@ -64,6 +64,16 @@ final class AlbumHelpersTest extends TestCase
         self::assertStringNotContainsString('bad name', $html);
     }
 
+    public function testAlbumMemoryHelpersParseLimitsAndEstimateDecodeCost(): void
+    {
+        self::assertSame(-1, album_php_ini_bytes('-1'));
+        self::assertSame(128 * 1024 * 1024, album_php_ini_bytes('128M'));
+        self::assertSame(2 * 1024 * 1024 * 1024, album_php_ini_bytes('2G'));
+        self::assertSame(512 * 1024, album_php_ini_bytes('512K'));
+        self::assertGreaterThan(16 * 1024 * 1024, album_image_decode_estimate_bytes(1000, 800));
+        self::assertSame(PHP_INT_MAX, album_image_decode_estimate_bytes(0, 800));
+    }
+
     public function testAlbumPhotoPublicPathAcceptsStoredPathVariants(): void
     {
         self::assertSame(

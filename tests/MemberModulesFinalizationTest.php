@@ -121,6 +121,10 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("if (\$action === 'finalize_album_creation')", $adminAlbums);
         self::assertStringContainsString('album_social_publish_if_public($albumId)', $adminAlbums);
         self::assertStringContainsString('return_wizard_album_id', $adminAlbums);
+        self::assertStringContainsString('function albums_admin_rebuild_batch_size(): int', $adminAlbums);
+        self::assertStringContainsString('admin_albums_rebuild_thumbnails_v1', $adminAlbums);
+        self::assertStringContainsString('ALBUM_THUMBNAIL_REBUILD_BATCH_SIZE', $adminAlbums);
+        self::assertStringContainsString('WHERE id < ? ORDER BY id DESC LIMIT', $adminAlbums);
         self::assertStringContainsString('publish_requested', $adminAlbums);
         self::assertStringContainsString("if (\$action === 'add_subcategory')", $adminAlbums);
         self::assertStringContainsString("if (\$action === 'delete_subcategory')", $adminAlbums);
@@ -144,6 +148,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
         self::assertStringContainsString('create_album_webp_derivatives($publicPath)', $albumHelpers);
         self::assertStringContainsString('function album_picture_html(', $albumHelpers);
+        self::assertStringContainsString('function album_image_dimensions_fit_memory_budget(', $albumHelpers);
         self::assertMatchesRegularExpression('/secure_move_uploaded_file\([^;]+8 \* 1024 \* 1024,\s+true\s+\)/s', $albumHelpers);
         self::assertStringContainsString("getenv('FACEBOOK_ALBUM_ID')", $albumHelpers);
         self::assertStringContainsString("\$facebookPageId . '/photos'", $albumHelpers);
