@@ -25,7 +25,7 @@ return array (
   'recommendations_title' => 'আপনার জন্য প্রস্তাবিত',
   'recommendations_empty' => 'এখনও কোনো সুপারিশ নেই। পরামর্শ উন্নত করতে প্রিয় যোগ করুন।',
   'recommendations_opt_in_label' => 'ব্যক্তিগতকৃত সুপারিশ সক্রিয় করুন',
-  'recommendations_opt_in_help' => 'You can disable these suggestions at any time.',
+  'recommendations_opt_in_help' => 'আপনি যেকোনো সময় এই পরামর্শগুলো বন্ধ করতে পারেন।',
   'recommendations_pref_saved' => 'সুপারিশ পছন্দ আপডেট করা হয়েছে.',
   'recommendations_why' => 'কেন এই পরামর্শ',
   'recommendation_reason_default' => 'আপনার সাম্প্রতিক কার্যকলাপের উপর ভিত্তি করে।',

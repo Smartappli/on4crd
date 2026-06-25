@@ -25,7 +25,7 @@ return array (
   'recommendations_title' => '为你推荐',
   'recommendations_empty' => '目前没有推荐。添加收藏可改进建议。',
   'recommendations_opt_in_label' => '启用个性化推荐',
-  'recommendations_opt_in_help' => 'You can disable these suggestions at any time.',
+  'recommendations_opt_in_help' => '您可以随时关闭这些建议。',
   'recommendations_pref_saved' => '推荐偏好已更新。',
   'recommendations_why' => '为什么这个建议',
   'recommendation_reason_default' => '根据您最近的活动。',

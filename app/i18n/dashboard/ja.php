@@ -25,7 +25,7 @@ return array (
   'recommendations_title' => 'あなたへのおすすめ',
   'recommendations_empty' => 'まだおすすめはありません。お気に入りを追加すると提案が改善されます。',
   'recommendations_opt_in_label' => 'パーソナライズされた推奨事項を有効にする',
-  'recommendations_opt_in_help' => 'You can disable these suggestions at any time.',
+  'recommendations_opt_in_help' => 'これらの提案はいつでも無効にできます。',
   'recommendations_pref_saved' => '推奨設定が更新されました。',
   'recommendations_why' => 'なぜこの提案なのか',
   'recommendation_reason_default' => '最近のアクティビティに基づいています。',

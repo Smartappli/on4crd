@@ -25,7 +25,7 @@ return array (
   'recommendations_title' => 'आपके लिए अनुशंसित',
   'recommendations_empty' => 'अभी कोई अनुशंसा नहीं है। सुझाव बेहतर करने के लिए पसंदीदा जोड़ें।',
   'recommendations_opt_in_label' => 'वैयक्तिकृत अनुशंसाएँ सक्षम करें',
-  'recommendations_opt_in_help' => 'You can disable these suggestions at any time.',
+  'recommendations_opt_in_help' => 'आप इन सुझावों को किसी भी समय अक्षम कर सकते हैं।',
   'recommendations_pref_saved' => 'अनुशंसा प्राथमिकता अद्यतन की गई.',
   'recommendations_why' => 'यह सुझाव क्यों?',
   'recommendation_reason_default' => 'आपकी हाल की गतिविधि के आधार पर.',

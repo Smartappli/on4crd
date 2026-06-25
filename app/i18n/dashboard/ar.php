@@ -25,7 +25,7 @@ return array (
   'recommendations_title' => 'موصى به لك',
   'recommendations_empty' => 'لا توجد توصيات حالياً. أضف مفضلات لتحسين الاقتراحات.',
   'recommendations_opt_in_label' => 'تمكين التوصيات المخصصة',
-  'recommendations_opt_in_help' => 'You can disable these suggestions at any time.',
+  'recommendations_opt_in_help' => 'يمكنك تعطيل هذه الاقتراحات في أي وقت.',
   'recommendations_pref_saved' => 'تم تحديث تفضيلات التوصية.',
   'recommendations_why' => 'لماذا هذا الاقتراح',
   'recommendation_reason_default' => 'بناءً على نشاطك الأخير.',

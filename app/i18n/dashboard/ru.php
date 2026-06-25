@@ -25,7 +25,7 @@ return array (
   'recommendations_title' => 'Рекомендовано для вас',
   'recommendations_empty' => 'Пока нет рекомендаций. Добавьте избранное, чтобы улучшить подсказки.',
   'recommendations_opt_in_label' => 'Включить персональные рекомендации',
-  'recommendations_opt_in_help' => 'You can disable these suggestions at any time.',
+  'recommendations_opt_in_help' => 'Вы можете отключить эти предложения в любое время.',
   'recommendations_pref_saved' => 'Настройки рекомендаций обновлены.',
   'recommendations_why' => 'Почему это предложение',
   'recommendation_reason_default' => 'На основе вашей недавней активности.',
