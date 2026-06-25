@@ -26,6 +26,44 @@ final class AlbumHelpersTest extends TestCase
         );
     }
 
+    public function testAlbumWebpDerivativePathsUseImageBasename(): void
+    {
+        self::assertSame(
+            'storage/uploads/albums/thumbs/abcdef123456.webp',
+            album_thumbnail_webp_public_path('storage/uploads/albums/abcdef123456.jpg')
+        );
+        self::assertSame(
+            'storage/uploads/albums/display/photo.webp',
+            album_display_webp_public_path('/storage/uploads/albums/photo.png')
+        );
+        self::assertSame(
+            [
+                'storage/uploads/albums/thumbs/photo.jpg',
+                'storage/uploads/albums/thumbs/photo.webp',
+                'storage/uploads/albums/display/photo.webp',
+            ],
+            album_photo_derived_public_paths('storage/uploads/albums/photo.jpeg')
+        );
+    }
+
+    public function testAlbumPictureHtmlUsesWebpSourceAndEscapesAttributes(): void
+    {
+        $html = album_picture_html(
+            'storage/uploads/albums/thumbs/photo.jpg',
+            '<Photo>',
+            ['loading' => 'lazy', 'decoding' => 'async', 'bad name' => 'ignored'],
+            'storage/uploads/albums/thumbs/photo.webp'
+        );
+
+        self::assertStringStartsWith('<picture><source ', $html);
+        self::assertStringContainsString('type="image/webp"', $html);
+        self::assertStringContainsString('storage/uploads/albums/thumbs/photo.webp', $html);
+        self::assertStringContainsString('storage/uploads/albums/thumbs/photo.jpg', $html);
+        self::assertStringContainsString('alt="&lt;Photo&gt;"', $html);
+        self::assertStringContainsString('loading="lazy"', $html);
+        self::assertStringNotContainsString('bad name', $html);
+    }
+
     public function testAlbumPhotoPublicPathAcceptsStoredPathVariants(): void
     {
         self::assertSame(
