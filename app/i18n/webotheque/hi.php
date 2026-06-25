@@ -22,7 +22,7 @@ return array (
   'open' => 'खोलें',
   'storage_unavailable' => 'सदस्यों के साथ साझा उपयोगी वेब लिंक खोजें।',
   'forbidden' => 'आप इस लिंक को संपादित नहीं कर सकते।',
-  'admin_title' => 'Administration - वेब लाइब्रेरी',
+  'admin_title' => 'प्रशासन - वेब लाइब्रेरी',
   'add_link' => 'लिंक',
   'add_link_help' => 'सदस्यों के साथ साझा उपयोगी वेब लिंक खोजें।',
   'title_field' => 'शीर्षक',

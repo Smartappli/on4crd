@@ -22,7 +22,7 @@ return array (
   'open' => 'Öppna',
   'storage_unavailable' => 'Hitta användbara webblänkar som delas med medlemmar.',
   'forbidden' => 'Du kan inte redigera den här länken.',
-  'admin_title' => 'Administration - Webbibliotek',
+  'admin_title' => 'Administrering - Webbibliotek',
   'add_link' => 'Länkar',
   'add_link_help' => 'Hitta användbara webblänkar som delas med medlemmar.',
   'title_field' => 'Titel',

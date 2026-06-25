@@ -22,7 +22,7 @@ return array (
   'open' => 'Oscail',
   'storage_unavailable' => 'Aimsigh naisc ghréasáin úsáideacha roinnte leis na baill.',
   'forbidden' => 'Ní féidir leat an nasc seo a chur in eagar.',
-  'admin_title' => 'Administration - Leabharlann gréasáin',
+  'admin_title' => 'Riarachán - Leabharlann gréasáin',
   'add_link' => 'Naisc',
   'add_link_help' => 'Aimsigh naisc ghréasáin úsáideacha roinnte leis na baill.',
   'title_field' => 'Teideal',

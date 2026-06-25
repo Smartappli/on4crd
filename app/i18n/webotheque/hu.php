@@ -22,7 +22,7 @@ return array (
   'open' => 'Megnyitás',
   'storage_unavailable' => 'Hasznos, tagokkal megosztott webes hivatkozások.',
   'forbidden' => 'Nem szerkesztheti ezt a hivatkozást.',
-  'admin_title' => 'Administration - Webkönyvtár',
+  'admin_title' => 'Kezelés - Webkönyvtár',
   'add_link' => 'Hivatkozások',
   'add_link_help' => 'Hasznos, tagokkal megosztott webes hivatkozások.',
   'title_field' => 'Cím',

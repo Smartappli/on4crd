@@ -22,7 +22,7 @@ return array (
   'open' => 'Apri',
   'storage_unavailable' => 'Trova link web utili condivisi con i soci.',
   'forbidden' => 'Non puoi modificare questo link.',
-  'admin_title' => 'Administration - Biblioteca web',
+  'admin_title' => 'Amministrazione - Biblioteca web',
   'add_link' => 'Link',
   'add_link_help' => 'Trova link web utili condivisi con i soci.',
   'title_field' => 'Titolo',

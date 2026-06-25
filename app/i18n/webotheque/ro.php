@@ -22,7 +22,7 @@ return array (
   'open' => 'Deschide',
   'storage_unavailable' => 'Găsiți linkuri web utile partajate cu membrii.',
   'forbidden' => 'Nu puteți modifica acest link.',
-  'admin_title' => 'Administration - Bibliotecă web',
+  'admin_title' => 'Administrare - Bibliotecă web',
   'add_link' => 'Linkuri',
   'add_link_help' => 'Găsiți linkuri web utile partajate cu membrii.',
   'title_field' => 'Titlu',

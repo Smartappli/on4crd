@@ -22,7 +22,7 @@ return array (
   'open' => 'Abrir',
   'storage_unavailable' => 'Encuentra enlaces web útiles compartidos con los miembros.',
   'forbidden' => 'No puede modificar este enlace.',
-  'admin_title' => 'Administration - Biblioteca web',
+  'admin_title' => 'Administración - Biblioteca web',
   'add_link' => 'Enlaces',
   'add_link_help' => 'Encuentra enlaces web útiles compartidos con los miembros.',
   'title_field' => 'Título',

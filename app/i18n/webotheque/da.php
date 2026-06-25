@@ -22,7 +22,7 @@ return array (
   'open' => 'Åbn',
   'storage_unavailable' => 'Find nyttige weblinks delt med medlemmer.',
   'forbidden' => 'Du kan ikke redigere dette link.',
-  'admin_title' => 'Administration - Webbibliotek',
+  'admin_title' => 'Administrering - Webbibliotek',
   'add_link' => 'Links',
   'add_link_help' => 'Find nyttige weblinks delt med medlemmer.',
   'title_field' => 'Titel',

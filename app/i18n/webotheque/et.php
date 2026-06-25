@@ -22,7 +22,7 @@ return array (
   'open' => 'Ava',
   'storage_unavailable' => 'Leia liikmetega jagatud kasulikud veebilingid.',
   'forbidden' => 'Te ei saa seda linki muuta.',
-  'admin_title' => 'Administration - Veebikogu',
+  'admin_title' => 'Haldus - Veebikogu',
   'add_link' => 'Lingid',
   'add_link_help' => 'Leia liikmetega jagatud kasulikud veebilingid.',
   'title_field' => 'Pealkiri',

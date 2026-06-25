@@ -22,7 +22,7 @@ return array (
   'open' => 'فتح',
   'storage_unavailable' => 'اعثر على روابط ويب مفيدة مشتركة مع الأعضاء.',
   'forbidden' => 'لا يمكنك تعديل هذا الرابط.',
-  'admin_title' => 'Administration - مكتبة الويب',
+  'admin_title' => 'الإدارة - مكتبة الويب',
   'add_link' => 'روابط',
   'add_link_help' => 'اعثر على روابط ويب مفيدة مشتركة مع الأعضاء.',
   'title_field' => 'العنوان',

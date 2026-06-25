@@ -22,7 +22,7 @@ return array (
   'open' => 'Abrir',
   'storage_unavailable' => 'Encontre ligações web úteis partilhadas com os membros.',
   'forbidden' => 'Não pode editar esta ligação.',
-  'admin_title' => 'Administration - Biblioteca web',
+  'admin_title' => 'Administração - Biblioteca web',
   'add_link' => 'Ligações',
   'add_link_help' => 'Encontre ligações web úteis partilhadas com os membros.',
   'title_field' => 'Título',

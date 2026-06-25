@@ -22,7 +22,7 @@ return array (
   'open' => 'Atidaryti',
   'storage_unavailable' => 'Raskite nariams bendrinamas naudingas žiniatinklio nuorodas.',
   'forbidden' => 'Negalite redaguoti šios nuorodos.',
-  'admin_title' => 'Administration - Žiniatinklio biblioteka',
+  'admin_title' => 'Administravimas - Žiniatinklio biblioteka',
   'add_link' => 'Nuorodos',
   'add_link_help' => 'Raskite nariams bendrinamas naudingas žiniatinklio nuorodas.',
   'title_field' => 'Pavadinimas',

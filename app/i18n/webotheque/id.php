@@ -22,7 +22,7 @@ return array (
   'open' => 'Buka',
   'storage_unavailable' => 'Temukan tautan web berguna yang dibagikan kepada anggota.',
   'forbidden' => 'Anda tidak dapat mengedit tautan ini.',
-  'admin_title' => 'Administration - Perpustakaan web',
+  'admin_title' => 'Administrasi - Perpustakaan web',
   'add_link' => 'Tautan',
   'add_link_help' => 'Temukan tautan web berguna yang dibagikan kepada anggota.',
   'title_field' => 'Judul',

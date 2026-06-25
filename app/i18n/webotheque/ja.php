@@ -22,7 +22,7 @@ return array (
   'open' => '開く',
   'storage_unavailable' => '会員向けに共有された便利なウェブリンクを探せます。',
   'forbidden' => 'このリンクを編集できません。',
-  'admin_title' => 'Administration - ウェブライブラリ',
+  'admin_title' => '管理 - ウェブライブラリ',
   'add_link' => 'リンク',
   'add_link_help' => '会員向けに共有された便利なウェブリンクを探せます。',
   'title_field' => 'タイトル',

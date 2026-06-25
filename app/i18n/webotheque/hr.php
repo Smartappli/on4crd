@@ -22,7 +22,7 @@ return array (
   'open' => 'Otvori',
   'storage_unavailable' => 'Pronađite korisne web poveznice podijeljene s članovima.',
   'forbidden' => 'Ne možete uređivati ovu poveznicu.',
-  'admin_title' => 'Administration - Web knjižnica',
+  'admin_title' => 'Administracija - Web knjižnica',
   'add_link' => 'Poveznice',
   'add_link_help' => 'Pronađite korisne web poveznice podijeljene s članovima.',
   'title_field' => 'Naslov',

@@ -22,7 +22,7 @@ return array (
   'open' => 'Iftaħ',
   'storage_unavailable' => 'Sib links tal-web utli maqsuma mal-membri.',
   'forbidden' => 'Ma tistax teditja din il-link.',
-  'admin_title' => 'Administration - Librerija tal-web',
+  'admin_title' => 'Amministrazzjoni - Librerija tal-web',
   'add_link' => 'Links',
   'add_link_help' => 'Sib links tal-web utli maqsuma mal-membri.',
   'title_field' => 'Titlu',

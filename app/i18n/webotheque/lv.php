@@ -22,7 +22,7 @@ return array (
   'open' => 'Atvērt',
   'storage_unavailable' => 'Atrodiet ar biedriem kopīgotas noderīgas tīmekļa saites.',
   'forbidden' => 'Jūs nevarat rediģēt šo saiti.',
-  'admin_title' => 'Administration - Tīmekļa bibliotēka',
+  'admin_title' => 'Administrēšana - Tīmekļa bibliotēka',
   'add_link' => 'Saites',
   'add_link_help' => 'Atrodiet ar biedriem kopīgotas noderīgas tīmekļa saites.',
   'title_field' => 'Virsraksts',

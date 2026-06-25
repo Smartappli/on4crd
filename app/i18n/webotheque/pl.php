@@ -22,7 +22,7 @@ return array (
   'open' => 'Otwórz',
   'storage_unavailable' => 'Znajdź przydatne linki internetowe udostępnione członkom.',
   'forbidden' => 'Nie możesz edytować tego linku.',
-  'admin_title' => 'Administration - Biblioteka internetowa',
+  'admin_title' => 'Administracja - Biblioteka internetowa',
   'add_link' => 'Linki',
   'add_link_help' => 'Znajdź przydatne linki internetowe udostępnione członkom.',
   'title_field' => 'Tytuł',

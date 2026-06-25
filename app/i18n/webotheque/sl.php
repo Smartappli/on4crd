@@ -22,7 +22,7 @@ return array (
   'open' => 'Odpri',
   'storage_unavailable' => 'Poiščite uporabne spletne povezave, deljene s člani.',
   'forbidden' => 'Te povezave ne morete urejati.',
-  'admin_title' => 'Administration - Spletna knjižnica',
+  'admin_title' => 'Upravljanje - Spletna knjižnica',
   'add_link' => 'Povezave',
   'add_link_help' => 'Poiščite uporabne spletne povezave, deljene s člani.',
   'title_field' => 'Naslov',

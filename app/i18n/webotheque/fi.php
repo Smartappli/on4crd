@@ -22,7 +22,7 @@ return array (
   'open' => 'Avaa',
   'storage_unavailable' => 'Löydä jäsenille jaetut hyödylliset verkkolinkit.',
   'forbidden' => 'Et voi muokata tätä linkkiä.',
-  'admin_title' => 'Administration - Verkkokirjasto',
+  'admin_title' => 'Hallinta - Verkkokirjasto',
   'add_link' => 'Linkit',
   'add_link_help' => 'Löydä jäsenille jaetut hyödylliset verkkolinkit.',
   'title_field' => 'Otsikko',

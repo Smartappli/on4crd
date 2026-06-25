@@ -22,7 +22,7 @@ return array (
   'open' => 'Otvoriť',
   'storage_unavailable' => 'Nájdite užitočné webové odkazy zdieľané s členmi.',
   'forbidden' => 'Tento odkaz nemôžete upravovať.',
-  'admin_title' => 'Administration - Webová knižnica',
+  'admin_title' => 'Správa - Webová knižnica',
   'add_link' => 'Odkazy',
   'add_link_help' => 'Nájdite užitočné webové odkazy zdieľané s členmi.',
   'title_field' => 'Názov',

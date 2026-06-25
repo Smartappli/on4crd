@@ -22,7 +22,7 @@ return array (
   'open' => '打开',
   'storage_unavailable' => '查找与会员共享的实用网页链接。',
   'forbidden' => '您不能编辑此链接。',
-  'admin_title' => 'Administration - 网页资料库',
+  'admin_title' => '管理 - 网页资料库',
   'add_link' => '链接',
   'add_link_help' => '查找与会员共享的实用网页链接。',
   'title_field' => '标题',

@@ -22,7 +22,7 @@ return array (
   'open' => 'Openen',
   'storage_unavailable' => 'Vind nuttige weblinks die met leden worden gedeeld.',
   'forbidden' => 'U kunt deze link niet bewerken.',
-  'admin_title' => 'Administration - Webbibliotheek',
+  'admin_title' => 'Beheer - Webbibliotheek',
   'add_link' => 'Links',
   'add_link_help' => 'Vind nuttige weblinks die met leden worden gedeeld.',
   'title_field' => 'Titel',

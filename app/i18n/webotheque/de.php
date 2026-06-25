@@ -22,7 +22,7 @@ return array (
   'open' => 'Öffnen',
   'storage_unavailable' => 'Finden Sie nützliche Weblinks, die mit Mitgliedern geteilt werden.',
   'forbidden' => 'Sie können diesen Link nicht bearbeiten.',
-  'admin_title' => 'Administration - Webbibliothek',
+  'admin_title' => 'Verwaltung - Webbibliothek',
   'add_link' => 'Links',
   'add_link_help' => 'Finden Sie nützliche Weblinks, die mit Mitgliedern geteilt werden.',
   'title_field' => 'Titel',
