@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Tällä hetkellä ei ole galleriakuvaa saatavilla.',
   'widget_temporarily_unavailable' => 'Widget tilapäisesti poissa käytöstä.',
   'ham_advice_temporarily_unavailable' => 'Radioneuvonta ei tilapäisesti saatavilla.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Julkinen',
   'visibility_members' => 'jäsenet',
   'visibility_private' => 'Yksityinen',
 );

@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Trenutno ni na voljo nobene slike v galeriji.',
   'widget_temporarily_unavailable' => 'Pripomoček začasno ni na voljo.',
   'ham_advice_temporarily_unavailable' => 'Radijski nasvet začasno ni na voljo.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Javno',
   'visibility_members' => 'člani',
   'visibility_private' => 'Zasebno',
 );

@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Hetkel pole galeriipilti saadaval.',
   'widget_temporarily_unavailable' => 'Vidin pole ajutiselt saadaval.',
   'ham_advice_temporarily_unavailable' => 'Raadionõuanded pole ajutiselt saadaval.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Avalik',
   'visibility_members' => 'liikmed',
   'visibility_private' => 'Privaatne',
 );

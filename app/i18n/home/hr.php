@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Trenutačno nema dostupne slike u galeriji.',
   'widget_temporarily_unavailable' => 'Widget je privremeno nedostupan.',
   'ham_advice_temporarily_unavailable' => 'Radio savjet privremeno nedostupan.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Javno',
   'visibility_members' => 'članovi',
   'visibility_private' => 'Privatno',
 );

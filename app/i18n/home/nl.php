@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Er is momenteel geen galerijafbeelding beschikbaar.',
   'widget_temporarily_unavailable' => 'Widget tijdelijk niet beschikbaar.',
   'ham_advice_temporarily_unavailable' => 'Radioadvies tijdelijk niet beschikbaar.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Openbaar',
   'visibility_members' => 'Leden',
   'visibility_private' => 'Besloten',
 );

@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'इस समय कोई गैलरी छवि उपलब्ध नहीं है।',
   'widget_temporarily_unavailable' => 'विजेट अस्थायी रूप से अनुपलब्ध है.',
   'ham_advice_temporarily_unavailable' => 'रेडियो सलाह अस्थायी रूप से अनुपलब्ध है.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'सार्वजनिक',
   'visibility_members' => 'सदस्य',
   'visibility_private' => 'निजी',
 );

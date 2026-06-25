@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => '目前没有可用的图库图片。',
   'widget_temporarily_unavailable' => '小部件暂时不可用。',
   'ham_advice_temporarily_unavailable' => '无线电建议暂时无法使用。',
-  'visibility_public' => 'Public',
+  'visibility_public' => '公开',
   'visibility_members' => '会员',
   'visibility_private' => '私人的',
 );

@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'لا توجد صورة معرض متاحة في الوقت الحالي.',
   'widget_temporarily_unavailable' => 'القطعة غير متاحة مؤقتا.',
   'ham_advice_temporarily_unavailable' => 'نصائح الراديو غير متاحة مؤقتًا.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'عام',
   'visibility_members' => 'الأعضاء',
   'visibility_private' => 'خاص',
 );

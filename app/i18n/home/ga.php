@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Níl aon íomhá ghailearaí ar fáil faoi láthair.',
   'widget_temporarily_unavailable' => 'Níl an ghiuirléid ar fáil go sealadach.',
   'ham_advice_temporarily_unavailable' => 'Níl comhairle raidió ar fáil go sealadach.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Poiblí',
   'visibility_members' => 'Baill',
   'visibility_private' => 'Príobháideach',
 );

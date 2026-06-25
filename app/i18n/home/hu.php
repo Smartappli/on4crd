@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Jelenleg nincs elérhető galériakép.',
   'widget_temporarily_unavailable' => 'A modul átmenetileg nem elérhető.',
   'ham_advice_temporarily_unavailable' => 'A rádiós tanácsok átmenetileg nem elérhetők.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Nyilvános',
   'visibility_members' => 'tagok',
   'visibility_private' => 'Privát',
 );

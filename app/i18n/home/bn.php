@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'এই মুহূর্তে কোনো গ্যালারি ছবি উপলভ্য নেই।',
   'widget_temporarily_unavailable' => 'উইজেট সাময়িকভাবে অনুপলব্ধ৷',
   'ham_advice_temporarily_unavailable' => 'রেডিও পরামর্শ সাময়িকভাবে অনুপলব্ধ.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'সর্বজনীন',
   'visibility_members' => 'সদস্যরা',
   'visibility_private' => 'ব্যক্তিগত',
 );

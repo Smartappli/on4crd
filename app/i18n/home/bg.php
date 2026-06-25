@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'В момента няма налично изображение в галерията.',
   'widget_temporarily_unavailable' => 'Widget временно не е наличен.',
   'ham_advice_temporarily_unavailable' => 'Радио съветите временно са недостъпни.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Публично',
   'visibility_members' => 'Членове',
   'visibility_private' => 'Частно',
 );

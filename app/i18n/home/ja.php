@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => '現在利用できるギャラリー画像はありません。',
   'widget_temporarily_unavailable' => 'ウィジェットは一時的に利用できません。',
   'ham_advice_temporarily_unavailable' => '無線アドバイスは一時的に利用できません。',
-  'visibility_public' => 'Public',
+  'visibility_public' => '公開',
   'visibility_members' => 'メンバー',
   'visibility_private' => 'プライベート',
 );

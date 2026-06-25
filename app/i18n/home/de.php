@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Derzeit ist kein Galeriebild verfügbar.',
   'widget_temporarily_unavailable' => 'Widget vorübergehend nicht verfügbar.',
   'ham_advice_temporarily_unavailable' => 'Funkberatung vorübergehend nicht verfügbar.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Öffentlich',
   'visibility_members' => 'Mitglieder',
   'visibility_private' => 'Privat',
 );

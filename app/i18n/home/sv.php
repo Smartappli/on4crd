@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Det finns ingen galleribild tillgänglig just nu.',
   'widget_temporarily_unavailable' => 'Widget är tillfälligt otillgänglig.',
   'ham_advice_temporarily_unavailable' => 'Radiorådgivning är tillfälligt otillgänglig.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Offentlig',
   'visibility_members' => 'Medlemmar',
   'visibility_private' => 'Privat',
 );

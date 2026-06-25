@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Δεν υπάρχει διαθέσιμη εικόνα γκαλερί αυτή τη στιγμή.',
   'widget_temporarily_unavailable' => 'Το widget δεν είναι διαθέσιμο προσωρινά.',
   'ham_advice_temporarily_unavailable' => 'Οι συμβουλές ραδιοφώνου δεν είναι διαθέσιμες προσωρινά.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Δημόσιο',
   'visibility_members' => 'Μέλη',
   'visibility_private' => 'Ιδιωτικό',
 );

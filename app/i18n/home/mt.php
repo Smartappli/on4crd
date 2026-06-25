@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Bħalissa m’hemm l-ebda immaġni tal-gallerija disponibbli.',
   'widget_temporarily_unavailable' => 'Widget temporanjament mhux disponibbli.',
   'ham_advice_temporarily_unavailable' => 'Parir tar-radju mhux disponibbli temporanjament.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Pubbliku',
   'visibility_members' => 'Membri',
   'visibility_private' => 'Privat',
 );

@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Pašlaik nav pieejams neviens galerijas attēls.',
   'widget_temporarily_unavailable' => 'Logrīks īslaicīgi nav pieejams.',
   'ham_advice_temporarily_unavailable' => 'Radio padoms īslaicīgi nav pieejams.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Publisks',
   'visibility_members' => 'Biedri',
   'visibility_private' => 'Privāts',
 );

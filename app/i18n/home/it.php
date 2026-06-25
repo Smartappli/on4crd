@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Nessuna immagine della galleria disponibile al momento.',
   'widget_temporarily_unavailable' => 'Widget temporaneamente non disponibile.',
   'ham_advice_temporarily_unavailable' => 'I consigli radiofonici sono momentaneamente non disponibili.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Pubblico',
   'visibility_members' => 'Membri',
   'visibility_private' => 'Privato',
 );

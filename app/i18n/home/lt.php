@@ -179,7 +179,7 @@ return array (
   'spotlight_member_gallery_empty' => 'Šiuo metu nėra jokio galerijos vaizdo.',
   'widget_temporarily_unavailable' => 'Valdiklis laikinai nepasiekiamas.',
   'ham_advice_temporarily_unavailable' => 'Radijo patarimai laikinai neprieinami.',
-  'visibility_public' => 'Public',
+  'visibility_public' => 'Viešas',
   'visibility_members' => 'nariai',
   'visibility_private' => 'Privatus',
 );
