@@ -204,7 +204,7 @@ function member_library_document_upload_mimes(): array
 if (!function_exists('member_library_upload_max_bytes')) {
 function member_library_upload_max_bytes(): int
 {
-    return 100 * 1024 * 1024;
+    return 120 * 1024 * 1024;
 }
 }
 

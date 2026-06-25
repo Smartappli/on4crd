@@ -407,11 +407,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($uploadBatch === []) {
                 throw new RuntimeException((string) $t['no_photo_imported']);
             }
-            if (count($uploadBatch) > 100) {
+            if (count($uploadBatch) > album_upload_batch_max_files()) {
                 throw new RuntimeException((string) $t['batch_max_files']);
             }
             $totalBytes = array_sum(array_map(static fn(array $item): int => max(0, (int) ($item['size'] ?? 0)), $uploadBatch));
-            if ($totalBytes > 512 * 1024 * 1024) {
+            if ($totalBytes > album_upload_batch_max_bytes()) {
                 throw new RuntimeException((string) $t['batch_max_size']);
             }
 

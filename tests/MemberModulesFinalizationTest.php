@@ -291,7 +291,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_create_document_record(', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_store_document_upload(?array $file, int $memberId, string $prefix = \'doc\'): array', $memberLibraryHelpers);
-        self::assertSame(100 * 1024 * 1024, member_library_upload_max_bytes());
+        self::assertSame(120 * 1024 * 1024, member_library_upload_max_bytes());
         self::assertStringContainsString('ALTER TABLE member_library_documents ADD COLUMN extracted_text LONGTEXT NULL AFTER file_path', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_delete_document_file(string $publicPath): void', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_update_document_record(', $memberLibraryHelpers);
@@ -416,6 +416,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('data-member-document-modal-open', $renderer);
         self::assertStringContainsString('function member_document_upload_max_bytes(', $renderer);
         self::assertStringContainsString('1024 * 1024 * 1024', $renderer);
+        self::assertSame(120 * 1024 * 1024, member_document_upload_max_bytes('presentations', 'pdf'));
+        self::assertSame(120 * 1024 * 1024, member_document_upload_max_bytes('videos', 'pdf'));
+        self::assertSame(1024 * 1024 * 1024, member_document_upload_max_bytes('videos', 'mp4'));
         self::assertStringContainsString('member-document-video-player', $renderer);
 
         $adminHelpers = $this->source('app/admin_helpers.php');

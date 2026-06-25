@@ -925,7 +925,7 @@ function member_document_upload_max_bytes(string $moduleCode, string $extension)
         return 1024 * 1024 * 1024;
     }
 
-    return 100 * 1024 * 1024;
+    return 120 * 1024 * 1024;
 }
 }
 

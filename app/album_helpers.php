@@ -1209,6 +1209,16 @@ function album_upload_batch_from_files(mixed $files): array
     return $uploadBatch;
 }
 
+function album_upload_batch_max_files(): int
+{
+    return 200;
+}
+
+function album_upload_batch_max_bytes(): int
+{
+    return 1024 * 1024 * 1024;
+}
+
 /**
  * @param mixed $files
  * @return array{count:int,last_title:string,paths:list<string>}
@@ -1231,11 +1241,11 @@ function album_store_uploaded_photos(int $albumId, mixed $files, string $title, 
     if ($uploadBatch === []) {
         throw new RuntimeException((string) $messages['no_photo_imported']);
     }
-    if (count($uploadBatch) > 100) {
+    if (count($uploadBatch) > album_upload_batch_max_files()) {
         throw new RuntimeException((string) $messages['batch_max_files']);
     }
     $totalBytes = array_sum(array_map(static fn(array $item): int => max(0, (int) ($item['size'] ?? 0)), $uploadBatch));
-    if ($totalBytes > 512 * 1024 * 1024) {
+    if ($totalBytes > album_upload_batch_max_bytes()) {
         throw new RuntimeException((string) $messages['batch_max_size']);
     }
 

@@ -73,6 +73,12 @@ final class AlbumHelpersTest extends TestCase
         self::assertSame([], album_upload_batch_from_files(['error' => UPLOAD_ERR_NO_FILE]));
     }
 
+    public function testAlbumUploadBatchLimitsAreRaisedForBulkImports(): void
+    {
+        self::assertSame(200, album_upload_batch_max_files());
+        self::assertSame(1024 * 1024 * 1024, album_upload_batch_max_bytes());
+    }
+
     public function testSubcategoryReferencesNormalizeAndParseParentCategory(): void
     {
         self::assertSame('general:field-day', album_subcategory_ref('', 'Field Day'));
