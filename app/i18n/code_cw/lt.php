@@ -11,5 +11,5 @@ return array (
   'prosign_sk' => 'Susisiekimo pabaiga',
   'prosign_bt' => 'Atskyriklis',
   'prosign_as' => 'Palauk',
-  'code' => 'Code',
+  'code' => 'Kodas',
 );

@@ -11,5 +11,5 @@ return array (
   'prosign_sk' => 'Konec stika',
   'prosign_bt' => 'Ločilo',
   'prosign_as' => 'Počakaj',
-  'code' => 'Code',
+  'code' => 'Koda',
 );

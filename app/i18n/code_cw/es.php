@@ -11,5 +11,5 @@ return array (
   'prosign_sk' => 'Fin del contacto',
   'prosign_bt' => 'Separador',
   'prosign_as' => 'Espere',
-  'code' => 'Code',
+  'code' => 'Código',
 );

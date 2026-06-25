@@ -11,5 +11,5 @@ return array (
   'prosign_sk' => 'Tmiem tal-kuntatt',
   'prosign_bt' => 'Separatur',
   'prosign_as' => 'Stenna',
-  'code' => 'Code',
+  'code' => 'Kodiċi',
 );

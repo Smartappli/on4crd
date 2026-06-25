@@ -29,7 +29,7 @@ return array (
   'documents' => 'Documentos',
   'file' => 'Ficheiro',
   'file_help' => 'Formatos aceitos: PDF, DOCX, TXT, Markdown e HTML. Tamanho máximo: 120 MB.',
-  'category_code' => 'Code',
+  'category_code' => 'Código',
   'category_label' => 'Rótulo',
   'ok_category' => 'Categoria salva.',
   'ok_category_deleted' => 'Categoria excluída. Seus documentos foram transferidos para Geral.',

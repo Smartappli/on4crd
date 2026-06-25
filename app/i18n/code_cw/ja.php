@@ -11,5 +11,5 @@ return array (
   'prosign_sk' => '交信終了',
   'prosign_bt' => '区切り',
   'prosign_as' => '待機',
-  'code' => 'Code',
+  'code' => 'コード',
 );

@@ -29,7 +29,7 @@ return array (
   'documents' => 'Dokumen',
   'file' => 'Mengajukan',
   'file_help' => 'Format yang diterima: PDF, DOCX, TXT, Markdown, dan HTML. Ukuran maksimum: 120 MB.',
-  'category_code' => 'Code',
+  'category_code' => 'Kode',
   'category_label' => 'Nama label',
   'ok_category' => 'Kategori disimpan.',
   'ok_category_deleted' => 'Kategori dihapus. Dokumennya dipindahkan ke Jenderal.',

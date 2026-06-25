@@ -11,5 +11,5 @@ return array (
   'prosign_sk' => 'Akhir kontak',
   'prosign_bt' => 'Pemisah',
   'prosign_as' => 'Tunggu',
-  'code' => 'Code',
+  'code' => 'Kode',
 );

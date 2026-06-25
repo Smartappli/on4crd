@@ -11,5 +11,5 @@ return array (
   'prosign_sk' => '联络结束',
   'prosign_bt' => '分隔符',
   'prosign_as' => '等待',
-  'code' => 'Code',
+  'code' => '代码',
 );

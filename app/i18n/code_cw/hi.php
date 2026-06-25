@@ -11,5 +11,5 @@ return array (
   'prosign_sk' => 'संपर्क समाप्त',
   'prosign_bt' => 'विभाजक',
   'prosign_as' => 'प्रतीक्षा करें',
-  'code' => 'Code',
+  'code' => 'कोड',
 );
