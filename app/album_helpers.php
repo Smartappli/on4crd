@@ -888,10 +888,11 @@ function album_delete_photo_file(string $publicPath): void
     if (is_file($absolute)) {
         @unlink($absolute);
     }
-    $thumbPublic = album_thumbnail_public_path($safePath);
-    $thumbAbsolute = dirname(__DIR__) . '/' . $thumbPublic;
-    if (is_file($thumbAbsolute)) {
-        @unlink($thumbAbsolute);
+    foreach (album_photo_derived_public_paths($safePath) as $derivedPublic) {
+        $derivedAbsolute = dirname(__DIR__) . '/' . $derivedPublic;
+        if (is_file($derivedAbsolute)) {
+            @unlink($derivedAbsolute);
+        }
     }
 }
 
@@ -1175,6 +1176,11 @@ function handle_album_upload(?array $upload, string $callsign): string
     $thumbPath = create_album_thumbnail($publicPath, 640, 640);
     if ($thumbPath !== null) {
         @chmod(dirname(__DIR__) . '/' . $thumbPath, 0644);
+    }
+    foreach (create_album_webp_derivatives($publicPath) as $webpPath) {
+        if ($webpPath !== null) {
+            @chmod(dirname(__DIR__) . '/' . $webpPath, 0644);
+        }
     }
 
     return $publicPath;
