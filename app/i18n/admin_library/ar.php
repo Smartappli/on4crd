@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'إدارة المكتبة',
-  'intro' => 'انشر مستندات الأعضاء بصيغة PDF أو DOCX أو text أو Markdown أو HTML، واستخرج محتواها ونظمها حسب الفئة.',
+  'intro' => 'انشر مستندات الأعضاء بصيغة PDF أو DOCX أو نص أو Markdown أو HTML، واستخرج محتواها ونظمها حسب الفئة.',
   'category_ph' => 'الفئة',
   'categories' => 'الفئات',
   'existing_categories' => 'الفئات الحالية',

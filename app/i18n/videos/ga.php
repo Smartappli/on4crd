@@ -35,5 +35,5 @@ return array (
   'admin_title_prefix' => 'Riarachán',
   'admin_eyebrow' => 'Doiciméid',
   'admin_page_title' => 'Riarachán',
-  'admin_intro' => 'Foilsigh doiciméid na mball mar PDF, DOCX, text, Markdown nó HTML, bain a bhfuil iontu agus cuir i gcatagóir iad.',
+  'admin_intro' => 'Foilsigh doiciméid na mball mar PDF, DOCX, téacs, Markdown nó HTML, bain a bhfuil iontu agus cuir i gcatagóir iad.',
 );

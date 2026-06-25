@@ -149,7 +149,7 @@ return array (
   'manage_my_shares' => 'إدارة',
   'admin_page_title' => 'الإدارة',
   'admin_eyebrow' => 'المستندات',
-  'admin_intro' => 'انشر مستندات الأعضاء بصيغة PDF أو DOCX أو text أو Markdown أو HTML، واستخرج محتواها ونظمها حسب الفئة.',
+  'admin_intro' => 'انشر مستندات الأعضاء بصيغة PDF أو DOCX أو نص أو Markdown أو HTML، واستخرج محتواها ونظمها حسب الفئة.',
   'favorites' => 'المفضلة',
   'category_formation' => 'التدريب',
   'category_technique' => 'التقنية',

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Riarachán leabharlainne',
-  'intro' => 'Foilsigh doiciméid na mball mar PDF, DOCX, text, Markdown nó HTML, bain a bhfuil iontu agus cuir i gcatagóir iad.',
+  'intro' => 'Foilsigh doiciméid na mball mar PDF, DOCX, téacs, Markdown nó HTML, bain a bhfuil iontu agus cuir i gcatagóir iad.',
   'category_ph' => 'Catagóir',
   'categories' => 'Catagóirí',
   'existing_categories' => 'Catagóirí atá ann cheana féin',

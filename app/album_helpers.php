@@ -1177,6 +1177,10 @@ function handle_album_upload(?array $upload, string $callsign): string
     if ($thumbPath !== null) {
         @chmod(dirname(__DIR__) . '/' . $thumbPath, 0644);
     }
+    $pngThumbPath = create_album_png_thumbnail($publicPath, 640, 640);
+    if ($pngThumbPath !== null) {
+        @chmod(dirname(__DIR__) . '/' . $pngThumbPath, 0644);
+    }
     foreach (create_album_webp_derivatives($publicPath) as $webpPath) {
         if ($webpPath !== null) {
             @chmod(dirname(__DIR__) . '/' . $webpPath, 0644);
@@ -1474,6 +1478,68 @@ function album_resized_image_resource(mixed $src, int $width, int $height, int $
     return $dst;
 }
 
+function album_thumbnail_jpeg_quality(): int
+{
+    $quality = getenv('ALBUM_THUMBNAIL_JPEG_QUALITY');
+    if ($quality === false || trim($quality) === '') {
+        return 78;
+    }
+
+    return max(60, min(90, (int) $quality));
+}
+
+function album_thumbnail_png_compression(): int
+{
+    $compression = getenv('ALBUM_THUMBNAIL_PNG_COMPRESSION');
+    if ($compression === false || trim($compression) === '') {
+        return 9;
+    }
+
+    return max(0, min(9, (int) $compression));
+}
+
+function album_flatten_image_resource(mixed $src, int $red = 255, int $green = 255, int $blue = 255): mixed
+{
+    $width = imagesx($src);
+    $height = imagesy($src);
+    if ($width <= 0 || $height <= 0) {
+        return null;
+    }
+
+    $dst = imagecreatetruecolor($width, $height);
+    if (!$dst) {
+        return null;
+    }
+
+    $background = imagecolorallocate($dst, $red, $green, $blue);
+    if ($background !== false) {
+        imagefilledrectangle($dst, 0, 0, $width, $height, $background);
+    }
+    imagealphablending($dst, true);
+    imagecopy($dst, $src, 0, 0, 0, 0, $width, $height);
+
+    return $dst;
+}
+
+function album_image_has_alpha(mixed $image): bool
+{
+    $width = imagesx($image);
+    $height = imagesy($image);
+    if ($width <= 0 || $height <= 0) {
+        return false;
+    }
+
+    for ($y = 0; $y < $height; $y++) {
+        for ($x = 0; $x < $width; $x++) {
+            if (((imagecolorat($image, $x, $y) >> 24) & 0x7F) > 0) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $maxHeight = 640): ?string
 {
     if (!extension_loaded('gd')) {
@@ -1500,7 +1566,63 @@ function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $ma
     }
     $name = pathinfo($sourcePath, PATHINFO_FILENAME) . '.jpg';
     $thumbAbs = $dir . '/' . $name;
-    $ok = imagejpeg($dst, $thumbAbs, 84);
+    $jpeg = album_flatten_image_resource($dst);
+    if ($jpeg === null) {
+        imagedestroy($src);
+        imagedestroy($dst);
+        return null;
+    }
+    imageinterlace($jpeg, true);
+    $ok = imagejpeg($jpeg, $thumbAbs, album_thumbnail_jpeg_quality());
+    imagedestroy($src);
+    imagedestroy($dst);
+    imagedestroy($jpeg);
+    if (!$ok) {
+        return null;
+    }
+    @chmod($thumbAbs, 0644);
+
+    return 'storage/uploads/albums/thumbs/' . $name;
+}
+
+function create_album_png_thumbnail(string $publicPath, int $maxWidth = 640, int $maxHeight = 640): ?string
+{
+    if (!extension_loaded('gd')) {
+        return null;
+    }
+    $sourcePath = dirname(__DIR__) . '/' . ltrim($publicPath, '/');
+    $source = album_image_resource_from_path($sourcePath);
+    if ($source === null || $source['mime'] !== 'image/png') {
+        if ($source !== null) {
+            imagedestroy($source['image']);
+        }
+
+        return null;
+    }
+
+    $src = $source['image'];
+    $dst = album_resized_image_resource($src, $source['width'], $source['height'], $maxWidth, $maxHeight);
+    if ($dst === null) {
+        imagedestroy($src);
+        return null;
+    }
+    if (!album_image_has_alpha($dst)) {
+        imagedestroy($src);
+        imagedestroy($dst);
+        return null;
+    }
+
+    $dir = dirname($sourcePath) . '/thumbs';
+    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
+        imagedestroy($src);
+        imagedestroy($dst);
+        return null;
+    }
+    $name = pathinfo($sourcePath, PATHINFO_FILENAME) . '.png';
+    $thumbAbs = $dir . '/' . $name;
+    imagealphablending($dst, false);
+    imagesavealpha($dst, true);
+    $ok = imagepng($dst, $thumbAbs, album_thumbnail_png_compression());
     imagedestroy($src);
     imagedestroy($dst);
     if (!$ok) {
@@ -1565,6 +1687,12 @@ function album_thumbnail_public_path(string $photoPath): string
     return 'storage/uploads/albums/thumbs/' . $base . '.jpg';
 }
 
+function album_thumbnail_png_public_path(string $photoPath): string
+{
+    $base = pathinfo($photoPath, PATHINFO_FILENAME);
+    return 'storage/uploads/albums/thumbs/' . $base . '.png';
+}
+
 function album_thumbnail_webp_public_path(string $photoPath): string
 {
     $base = pathinfo($photoPath, PATHINFO_FILENAME);
@@ -1584,6 +1712,7 @@ function album_photo_derived_public_paths(string $photoPath): array
 {
     return [
         album_thumbnail_public_path($photoPath),
+        album_thumbnail_png_public_path($photoPath),
         album_thumbnail_webp_public_path($photoPath),
         album_display_webp_public_path($photoPath),
     ];
@@ -1604,6 +1733,25 @@ function album_existing_thumbnail_webp_public_path(string $photoPath): string
     $path = album_thumbnail_webp_public_path($photoPath);
 
     return album_public_file_exists($path) ? $path : '';
+}
+
+function album_existing_thumbnail_png_public_path(string $photoPath): string
+{
+    $path = album_thumbnail_png_public_path($photoPath);
+
+    return album_public_file_exists($path) ? $path : '';
+}
+
+function album_existing_thumbnail_fallback_public_path(string $photoPath): string
+{
+    $pngPath = album_existing_thumbnail_png_public_path($photoPath);
+    if ($pngPath !== '') {
+        return $pngPath;
+    }
+
+    $jpegPath = album_thumbnail_public_path($photoPath);
+
+    return album_public_file_exists($jpegPath) ? $jpegPath : '';
 }
 
 function album_existing_display_webp_public_path(string $photoPath): string

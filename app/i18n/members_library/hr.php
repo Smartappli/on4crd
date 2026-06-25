@@ -149,7 +149,7 @@ return array (
   'manage_my_shares' => 'Administriraj',
   'admin_page_title' => 'administracija',
   'admin_eyebrow' => 'Dokumenti',
-  'admin_intro' => 'Objavite dokumente članova kao PDF, DOCX, text, Markdown ili HTML, izdvojite njihov sadržaj i kategorizirajte ih.',
+  'admin_intro' => 'Objavite dokumente članova kao PDF, DOCX, tekst, Markdown ili HTML, izdvojite njihov sadržaj i kategorizirajte ih.',
   'favorites' => 'Favoriti',
   'category_formation' => 'Trening',
   'category_technique' => 'tehnički',

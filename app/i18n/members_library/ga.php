@@ -149,7 +149,7 @@ return array (
   'manage_my_shares' => 'Riar',
   'admin_page_title' => 'Riarachán',
   'admin_eyebrow' => 'Doiciméid',
-  'admin_intro' => 'Foilsigh doiciméid na mball mar PDF, DOCX, text, Markdown nó HTML, bain a bhfuil iontu agus cuir i gcatagóir iad.',
+  'admin_intro' => 'Foilsigh doiciméid na mball mar PDF, DOCX, téacs, Markdown nó HTML, bain a bhfuil iontu agus cuir i gcatagóir iad.',
   'favorites' => 'Ceanáin',
   'category_formation' => 'Traenáil',
   'category_technique' => 'Teicniúil',

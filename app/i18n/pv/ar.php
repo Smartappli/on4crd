@@ -35,5 +35,5 @@ return array (
   'admin_title_prefix' => 'الإدارة',
   'admin_eyebrow' => 'المستندات',
   'admin_page_title' => 'الإدارة',
-  'admin_intro' => 'انشر مستندات الأعضاء بصيغة PDF أو DOCX أو text أو Markdown أو HTML، واستخرج محتواها ونظمها حسب الفئة.',
+  'admin_intro' => 'انشر مستندات الأعضاء بصيغة PDF أو DOCX أو نص أو Markdown أو HTML، واستخرج محتواها ونظمها حسب الفئة.',
 );

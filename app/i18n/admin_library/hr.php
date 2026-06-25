@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Administracija knjižnice',
-  'intro' => 'Objavite dokumente članova kao PDF, DOCX, text, Markdown ili HTML, izdvojite njihov sadržaj i kategorizirajte ih.',
+  'intro' => 'Objavite dokumente članova kao PDF, DOCX, tekst, Markdown ili HTML, izdvojite njihov sadržaj i kategorizirajte ih.',
   'category_ph' => 'Kategorija',
   'categories' => 'kategorije',
   'existing_categories' => 'Postojeće kategorije',

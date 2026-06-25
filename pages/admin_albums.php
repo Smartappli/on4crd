@@ -63,10 +63,9 @@ function albums_admin_photo_render_data(array $photo, array $messages, string $l
         if ($safePath !== null) {
             $imageSrc = $safePath;
             $displayWebpSrc = album_existing_display_webp_public_path($safePath);
-            $thumbPath = album_thumbnail_public_path($safePath);
-            $thumbAbs = $thumbPath !== '' ? dirname(__DIR__) . '/' . $thumbPath : '';
-            if ($thumbAbs !== '' && is_file($thumbAbs)) {
-                $imageSrc = $thumbPath;
+            $fallbackThumbPath = album_existing_thumbnail_fallback_public_path($safePath);
+            if ($fallbackThumbPath !== '') {
+                $imageSrc = $fallbackThumbPath;
                 $imageWebpSrc = album_existing_thumbnail_webp_public_path($safePath);
             } else {
                 $imageWebpSrc = $displayWebpSrc;
@@ -637,8 +636,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     continue;
                 }
                 $thumbPath = create_album_thumbnail($safePath, 640, 640);
+                $pngThumbPath = create_album_png_thumbnail($safePath, 640, 640);
                 $webpPaths = create_album_webp_derivatives($safePath);
-                if ($thumbPath !== null || $webpPaths['thumbnail'] !== null || $webpPaths['display'] !== null) {
+                if ($thumbPath !== null || $pngThumbPath !== null || $webpPaths['thumbnail'] !== null || $webpPaths['display'] !== null) {
                     $created++;
                 }
             }

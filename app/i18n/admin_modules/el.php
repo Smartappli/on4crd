@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'updated' => 'Ενημερωμένα modules.',
+  'updated' => 'Οι ενότητες ενημερώθηκαν.',
   'title' => 'Ενότητες',
   'core' => 'Καρδιά',
   'enabled' => 'Ενεργοποιήθηκε',
