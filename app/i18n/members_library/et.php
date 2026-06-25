@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protokollid',
   'subcategory_licences' => 'Litsentsid',
   'subcategory_procedures' => 'Protseduurid',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Raadiojaam',
   'subcategory_securite' => 'Ohutus',
   'subcategory_reunions' => 'Koosolekud',
   'subcategory_archives' => 'Arhiivid',

@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protokolai',
   'subcategory_licences' => 'Licencijos',
   'subcategory_procedures' => 'Procedūros',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Stotis',
   'subcategory_securite' => 'Saugumas',
   'subcategory_reunions' => 'Susitikimai',
   'subcategory_archives' => 'Archyvai',

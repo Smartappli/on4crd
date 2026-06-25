@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'প্রোটোকল',
   'subcategory_licences' => 'লাইসেন্স',
   'subcategory_procedures' => 'পদ্ধতি',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'রেডিও স্টেশন',
   'subcategory_securite' => 'নিরাপত্তা',
   'subcategory_reunions' => 'মিটিং',
   'subcategory_archives' => 'আর্কাইভস',

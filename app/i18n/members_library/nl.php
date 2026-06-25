@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protocollen',
   'subcategory_licences' => 'Licenties',
   'subcategory_procedures' => 'Werkwijzen',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Radiostation',
   'subcategory_securite' => 'Veiligheid',
   'subcategory_reunions' => 'Vergaderingen',
   'subcategory_archives' => 'Archief',

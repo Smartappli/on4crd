@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protokol',
   'subcategory_licences' => 'Lisensi',
   'subcategory_procedures' => 'Prosedur',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Stasiun',
   'subcategory_securite' => 'Keamanan',
   'subcategory_reunions' => 'Rapat',
   'subcategory_archives' => 'Arsip',

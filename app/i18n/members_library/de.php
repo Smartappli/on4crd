@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protokolle',
   'subcategory_licences' => 'Lizenzen',
   'subcategory_procedures' => 'Verfahren',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Funkstation',
   'subcategory_securite' => 'Sicherheit',
   'subcategory_reunions' => 'Treffen',
   'subcategory_archives' => 'Archive',

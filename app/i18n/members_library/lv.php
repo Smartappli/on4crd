@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protokoli',
   'subcategory_licences' => 'Atļaujas',
   'subcategory_procedures' => 'Procedūras',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Stacija',
   'subcategory_securite' => 'Drošība',
   'subcategory_reunions' => 'Sanāksmes',
   'subcategory_archives' => 'Arhīvi',

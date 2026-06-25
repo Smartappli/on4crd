@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'プロトコル',
   'subcategory_licences' => 'ライセンス',
   'subcategory_procedures' => '手順',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => '無線局',
   'subcategory_securite' => '安全性',
   'subcategory_reunions' => '会議',
   'subcategory_archives' => 'アーカイブ',

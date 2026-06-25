@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'протоколи',
   'subcategory_licences' => 'Лицензи',
   'subcategory_procedures' => 'Процедури',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Станция',
   'subcategory_securite' => 'Безопасност',
   'subcategory_reunions' => 'Срещи',
   'subcategory_archives' => 'Архив',

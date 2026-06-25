@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protocoale',
   'subcategory_licences' => 'Licențe',
   'subcategory_procedures' => 'Proceduri',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Stație',
   'subcategory_securite' => 'Siguranță',
   'subcategory_reunions' => 'Întâlniri',
   'subcategory_archives' => 'Arhivele',

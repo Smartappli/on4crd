@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Prótacail',
   'subcategory_licences' => 'Ceadúnais',
   'subcategory_procedures' => 'Nósanna Imeachta',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Stáisiún',
   'subcategory_securite' => 'Sábháilteacht',
   'subcategory_reunions' => 'Cruinnithe',
   'subcategory_archives' => 'Cartlanna',

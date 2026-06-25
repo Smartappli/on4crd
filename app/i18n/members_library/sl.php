@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protokoli',
   'subcategory_licences' => 'Licence',
   'subcategory_procedures' => 'Postopki',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Postaja',
   'subcategory_securite' => 'Varnost',
   'subcategory_reunions' => 'Srečanja',
   'subcategory_archives' => 'Arhivi',

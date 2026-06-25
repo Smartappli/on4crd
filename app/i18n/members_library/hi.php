@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'प्रोटोकॉल',
   'subcategory_licences' => 'लाइसेंस',
   'subcategory_procedures' => 'प्रक्रियाएं',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'रेडियो स्टेशन',
   'subcategory_securite' => 'सुरक्षा',
   'subcategory_reunions' => 'बैठकें',
   'subcategory_archives' => 'पुरालेख',

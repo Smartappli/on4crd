@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protokolli',
   'subcategory_licences' => 'Liċenzji',
   'subcategory_procedures' => 'Proċeduri',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Stazzjon',
   'subcategory_securite' => 'Sigurtà',
   'subcategory_reunions' => 'Laqgħat',
   'subcategory_archives' => 'Arkivji',

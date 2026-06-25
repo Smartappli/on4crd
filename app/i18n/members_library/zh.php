@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => '协议',
   'subcategory_licences' => '许可证',
   'subcategory_procedures' => '程序',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => '电台',
   'subcategory_securite' => '安全',
   'subcategory_reunions' => '会议',
   'subcategory_archives' => '档案',

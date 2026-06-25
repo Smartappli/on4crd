@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protokollok',
   'subcategory_licences' => 'Licencek',
   'subcategory_procedures' => 'Eljárások',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Állomás',
   'subcategory_securite' => 'Biztonság',
   'subcategory_reunions' => 'Találkozók',
   'subcategory_archives' => 'Archívum',

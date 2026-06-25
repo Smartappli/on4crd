@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Πρωτόκολλα',
   'subcategory_licences' => 'Άδειες',
   'subcategory_procedures' => 'Διαδικασίες',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Σταθμός',
   'subcategory_securite' => 'Ασφάλεια',
   'subcategory_reunions' => 'Συναντήσεις',
   'subcategory_archives' => 'Αρχεία',

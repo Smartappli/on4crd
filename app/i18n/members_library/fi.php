@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'Protokollat',
   'subcategory_licences' => 'Lisenssit',
   'subcategory_procedures' => 'Menettelyt',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'Asema',
   'subcategory_securite' => 'Turvallisuus',
   'subcategory_reunions' => 'Kokoukset',
   'subcategory_archives' => 'Arkistot',

@@ -173,7 +173,7 @@ return array (
   'subcategory_protocoles' => 'البروتوكولات',
   'subcategory_licences' => 'التراخيص',
   'subcategory_procedures' => 'الإجراءات',
-  'subcategory_station' => 'Station',
+  'subcategory_station' => 'محطة',
   'subcategory_securite' => 'السلامة',
   'subcategory_reunions' => 'الاجتماعات',
   'subcategory_archives' => 'المحفوظات',
