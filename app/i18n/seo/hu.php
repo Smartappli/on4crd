@@ -100,7 +100,7 @@ return array (
   'gdpr_title' => 'ON4CRD Adatvédelem',
   'gdpr_description' => 'Az ON4CRD tagprofil adatvédelmi és láthatósági beállításainak kezelése.',
   'installphp_title' => 'ON4CRD telepítés',
-  'installphp_description' => 'Technikai XPRTECT0X telepítési végpont.',
+  'installphp_description' => 'Technikai ON4CRD telepítési végpont.',
   'knowledgegraphjsonld_title' => 'ON4CRD Tudásgráf',
   'knowledgegraphjsonld_description' => 'Nyilvános JSON-LD grafikon az Radio Club Durnal ON4CRD-hez.',
   'llmstxt_title' => 'ON4CRD LLMS',

@@ -48,7 +48,7 @@ return array (
   'propose_news_source_label' => 'Linkki tai lähde',
   'propose_news_contact_label' => 'Yhteystietosi',
   'propose_category' => 'Ehdota luokkaa',
-  'propose_category_subject' => 'Uutiskategoriaehdotus XPRTECT0X',
+  'propose_category_subject' => 'ON4CRD-uutiskategoriaehdotus',
   'propose_category_intro' => 'Ilmoita lisättävä osio ja sen relevanssi uutiseen.',
   'propose_category_body_intro' => 'Luokkaehdotus ON4CRD-uutisille:',
   'propose_category_name' => 'Luokan nimi',

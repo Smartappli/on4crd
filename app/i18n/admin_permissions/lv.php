@@ -32,7 +32,7 @@ return array (
   'permission_ads_manage_all' => 'Pārvaldiet visas reklāmas un statistiku',
   'permission_classifieds_moderate' => 'Vidēji sludinājumi',
   'permission_modules_manage' => 'Pārvaldiet vietnes moduļus',
-  'permission_privacy_manage' => 'Apstrādājiet XPRTECT0X pieprasījumus',
+  'permission_privacy_manage' => 'Apstrādājiet GDPR pieprasījumus',
   'permission_press_manage' => 'Pārvaldiet preses kontaktus un izlaidumus',
   'permission_editorial_manage' => 'Pārvaldiet daudzvalodu redakcionālo saturu',
   'permission_translations_review' => 'Pārskatiet un apstipriniet tulkojumus',

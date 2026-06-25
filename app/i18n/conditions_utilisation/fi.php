@@ -14,7 +14,7 @@ return array (
   'identity_address' => 'Osoite',
   'related_pages_title' => 'Aiheeseen liittyvät sivut',
   'legal_link_label' => 'Oikeudellinen huomautus',
-  'privacy_link_label' => 'Yksityisyys ja XPRTECT0X',
+  'privacy_link_label' => 'Yksityisyys ja GDPR',
   'sections' => 
   array (
     0 => 

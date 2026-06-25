@@ -44,7 +44,7 @@ return array (
   'privacy_short_newsletter' => 'Biļetenam ir nepieciešama nepārprotama piekrišana. Piekrišanas apliecinājums un pseidonimizēti tehniskie dati tiek saglabāti.',
   'privacy_short_geocode' => 'Ja iespējojat automātisko ģeokodēšanu, ievadītā pasta adrese tiek nosūtīta uz Nominatim un rezultāts tiek saglabāts kešatmiņā 30 dienas.',
   'privacy_short_default' => 'Personas dati attiecas tikai uz vietnes izmantošanu, un ir pieejami eksportēšanas, iebildumu un dzēšanas pieprasījumi.',
-  'privacy_notice_link' => 'Skatiet XPRTECT0X paziņojumu',
+  'privacy_notice_link' => 'Skatiet GDPR paziņojumu',
   'privacy_dpo_label' => 'Īpašs DPO/kontaktpersona',
   'privacy_tracking_matomo_configured' => 'Matomo auditorijas mērījumus var ielādēt tikai saskaņā ar piekrišanas konfigurāciju, un pēc konfigurācijas ir atspējota anonimizācija un sīkfaili.',
   'privacy_tracking_matomo_unconfigured' => 'Pēc noklusējuma netiek ielādēts neviens ārējās auditorijas mērījums; Matomo paliek atspējots, līdz tiek konfigurēts gadījums.',

@@ -25,7 +25,7 @@ return array (
   'permission_albums_manage' => 'Beheer albums',
   'permission_albums_sync' => 'Synchroniseer openbare albums',
   'permission_dashboard_manage' => 'Beheer dashboard',
-  'permission_qsl_manage' => 'Gebruik de XPRTECT0X-module',
+  'permission_qsl_manage' => 'Gebruik de QSL-module',
   'permission_chatbot_manage' => 'Bekijk chatbotlogboeken',
   'permission_ads_submit' => 'Beheer eigen advertenties',
   'permission_ads_moderate' => 'Matige advertenties',

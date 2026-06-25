@@ -41,7 +41,7 @@ return array (
   'answer_summary' => 'Kopsavilkums:',
   'answer_link' => 'Saite:',
   'answer_articles_source' => 'ON4CRD raksti',
-  'answer_knowledge_source' => 'XPRTECT0X zināšanu bāze',
+  'answer_knowledge_source' => 'ON4CRD zināšanu bāze',
   'answer_article_label' => 'Raksts',
   'answer_no_answer' => 'Man nav precīzas atbildes uz šo jautājumu. Mēģiniet pievienot atslēgvārdu (QSL, antena, izplatīšana, licence) vai pārlūkojiet rakstu moduli.',
   'answer_assistant_source' => 'Raimonda palīgs',

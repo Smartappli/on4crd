@@ -29,7 +29,7 @@ return array (
   'storage_path_invalid' => 'Ongeldig opslagpad.',
   'storage_path_forbidden' => 'Opslagpad is niet toegestaan.',
   'remote_url_private' => 'De externe URL verwijst naar een particulier of gereserveerd netwerk.',
-  'remote_url_private_resolved' => 'De externe URL wordt omgezet naar een privé- of gereserveerd XiPX-adres.',
+  'remote_url_private_resolved' => 'De externe URL wordt omgezet naar een privé- of gereserveerd IP-adres.',
   'field_too_long' => 'Eén van de velden overschrijdt de toegestane lengte.',
   'wiki_storage_unavailable' => 'Wiki-opslag niet beschikbaar.',
   'wiki_page_invalid' => 'Ongeldige wikipagina.',

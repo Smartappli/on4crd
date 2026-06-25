@@ -16,7 +16,7 @@ return array (
   'identity_hosting' => 'Hostings',
   'related_pages_title' => 'Saistītās lapas',
   'terms_link_label' => 'Lietošanas noteikumi',
-  'privacy_link_label' => 'Privātums un XPRTECT0X',
+  'privacy_link_label' => 'Privātums un GDPR',
   'sections' =>
   array (
     0 =>

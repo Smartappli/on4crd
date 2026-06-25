@@ -48,7 +48,7 @@ return array (
   'propose_news_source_label' => 'Nuoroda arba šaltinis',
   'propose_news_contact_label' => 'Jūsų kontaktas',
   'propose_category' => 'Pasiūlykite kategoriją',
-  'propose_category_subject' => 'Naujienų kategorijos pasiūlymas XPRTECT0X',
+  'propose_category_subject' => 'ON4CRD naujienų kategorijos pasiūlymas',
   'propose_category_intro' => 'Nurodykite skyrių, kurį norite pridėti, ir jo aktualumą naujienoms.',
   'propose_category_body_intro' => 'ON4CRD naujienų kategorijos pasiūlymas:',
   'propose_category_name' => 'Kategorijos pavadinimas',

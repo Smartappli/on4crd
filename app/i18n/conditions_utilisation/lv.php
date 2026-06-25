@@ -14,7 +14,7 @@ return array (
   'identity_address' => 'Adrese',
   'related_pages_title' => 'Saistītās lapas',
   'legal_link_label' => 'Juridisks paziņojums',
-  'privacy_link_label' => 'Privātums un XPRTECT0X',
+  'privacy_link_label' => 'Privātums un GDPR',
   'sections' => 
   array (
     0 => 

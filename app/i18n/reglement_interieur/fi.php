@@ -13,7 +13,7 @@ return array (
   'related_pages_title' => 'Aiheeseen liittyvät sivut',
   'membership_link_label' => 'Liity jäseneksi',
   'terms_link_label' => 'Käyttöehdot',
-  'privacy_link_label' => 'Yksityisyys ja XPRTECT0X',
+  'privacy_link_label' => 'Yksityisyys ja GDPR',
   'sections' => 
   array (
     0 => 
