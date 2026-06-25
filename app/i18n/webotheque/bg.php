@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Бележка за модериране',
   'proposal_save_status' => 'Запазване на състоянието',
   'proposal_status_saved' => 'Предложението е актуализирано.',
-  'proposal_open_source' => 'Отворете Източник',
+  'proposal_open_source' => 'Отворете източника',
   'pending_proposals_empty' => 'Няма предложения за уеб библиотеката, чакащи преглед.',
   'proposal_type_domain' => 'Тема',
   'proposal_type_category' => 'Тема',

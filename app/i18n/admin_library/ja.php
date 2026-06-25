@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => '資料',
   'proposal_type_subcategory' => 'サブトピック',
   'pending_proposals_empty' => '審査中の資料提案はありません。',
-  'proposal_open_source' => '開く ソース',
+  'proposal_open_source' => 'ソースを開く',
 );

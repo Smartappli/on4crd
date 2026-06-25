@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Dokument',
   'proposal_type_subcategory' => 'Unterthema',
   'pending_proposals_empty' => 'Kein Dokumentvorschlag steht zur Prüfung aus.',
-  'proposal_open_source' => 'Öffnen Quelle',
+  'proposal_open_source' => 'Quelle öffnen',
 );

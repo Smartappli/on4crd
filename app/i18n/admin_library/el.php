@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Έγγραφο',
   'proposal_type_subcategory' => 'Υποθέμα',
   'pending_proposals_empty' => 'Καμία πρόταση άρθρου δεν εκκρεμεί εξέταση.',
-  'proposal_open_source' => 'Ανοίξτε Πηγή',
+  'proposal_open_source' => 'Άνοιγμα πηγής',
 );

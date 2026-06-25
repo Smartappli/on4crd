@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'مستند',
   'proposal_type_subcategory' => 'موضوع فرعي',
   'pending_proposals_empty' => 'لا يوجد مقترح مقال في انتظار المراجعة.',
-  'proposal_open_source' => 'مفتوح المصدر',
+  'proposal_open_source' => 'فتح المصدر',
 );

@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Mõõduka märkus',
   'proposal_save_status' => 'Salvesta olek',
   'proposal_status_saved' => 'Ettepanekut värskendati.',
-  'proposal_open_source' => 'Avatud Allikas',
+  'proposal_open_source' => 'Ava allikas',
   'pending_proposals_empty' => 'Ühtegi veebikogu ettepanekut pole ülevaatamisel.',
   'proposal_type_domain' => 'Teema',
   'proposal_type_category' => 'Teema',

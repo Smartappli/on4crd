@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Nie można zapisać zaimportowanego dokumentu.',
   'imported_doc' => 'Import dokumentów:',
   'imported_docx' => 'Import dokumentu DOCX:',
-  'source_file' => 'Dokument open source',
+  'source_file' => 'Otwórz dokument źródłowy',
   'pdf_extraction_unavailable' => 'PDF został zaimportowany, ale nie można było automatycznie wyodrębnić jego tekstu. Dokument źródłowy pozostaje dostępny poniżej.',
   'docx_extraction_unavailable' => 'DOCX został zaimportowany, ale nie można było automatycznie wyodrębnić jego tekstu. Dokument źródłowy pozostaje dostępny poniżej.',
 );

@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Nepavyko išsaugoti importuoto dokumento.',
   'imported_doc' => 'Dokumentų importas:',
   'imported_docx' => 'Importo dokumentas DOCX:',
-  'source_file' => 'Atvirojo kodo dokumentas',
+  'source_file' => 'Atidaryti šaltinio dokumentą',
   'pdf_extraction_unavailable' => 'PDF buvo importuotas, bet jo teksto nepavyko automatiškai išgauti. Pirminis dokumentas išlieka žemiau.',
   'docx_extraction_unavailable' => 'DOCX buvo importuotas, bet jo teksto nepavyko automatiškai išgauti. Pirminis dokumentas išlieka žemiau.',
 );

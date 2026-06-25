@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'モデレーションノート',
   'proposal_save_status' => 'ステータスの保存',
   'proposal_status_saved' => '提案が更新されました。',
-  'proposal_open_source' => '開く ソース',
+  'proposal_open_source' => 'ソースを開く',
   'pending_proposals_empty' => 'レビュー待ちのウェブライブラリ提案はありません。',
   'proposal_type_domain' => 'テーマ',
   'proposal_type_category' => 'テーマ',

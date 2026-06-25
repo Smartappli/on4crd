@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Moderatie opmerking',
   'proposal_save_status' => 'Status opslaan',
   'proposal_status_saved' => 'Voorstel bijgewerkt.',
-  'proposal_open_source' => 'Openen Bron',
+  'proposal_open_source' => 'Bron openen',
   'pending_proposals_empty' => 'Geen webbibliotheekvoorstellen wachten op beoordeling.',
   'proposal_type_domain' => 'Thema',
   'proposal_type_category' => 'Thema',

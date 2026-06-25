@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Dokuments',
   'proposal_type_subcategory' => 'Apakštēma',
   'pending_proposals_empty' => 'Neviens raksta priekšlikums nav pārskatīts.',
-  'proposal_open_source' => 'Atvērt Avots',
+  'proposal_open_source' => 'Atvērt avotu',
 );

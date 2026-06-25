@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Uvoženega dokumenta ni mogoče shraniti.',
   'imported_doc' => 'Uvozi dokumentov:',
   'imported_docx' => 'Uvozi dokumenta DOCX:',
-  'source_file' => 'Odprtokodni dokument',
+  'source_file' => 'Odpri izvorni dokument',
   'pdf_extraction_unavailable' => 'PDF je bil uvožen, vendar njegovega besedila ni bilo mogoče samodejno ekstrahirati. Izvorni dokument je na voljo spodaj.',
   'docx_extraction_unavailable' => 'DOCX je bil uvožen, vendar njegovega besedila ni bilo mogoče samodejno ekstrahirati. Izvorni dokument je na voljo spodaj.',
 );

@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Catatan moderasi',
   'proposal_save_status' => 'Simpan status',
   'proposal_status_saved' => 'Proposal diperbarui.',
-  'proposal_open_source' => 'Buka Sumber',
+  'proposal_open_source' => 'Buka sumber',
   'pending_proposals_empty' => 'Tidak ada usulan perpustakaan web yang menunggu peninjauan.',
   'proposal_type_domain' => 'Topik',
   'proposal_type_category' => 'Topik',

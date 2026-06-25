@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Napomena za moderiranje',
   'proposal_save_status' => 'Spremi status',
   'proposal_status_saved' => 'Prijedlog ažuriran.',
-  'proposal_open_source' => 'Otvoreno Izvor',
+  'proposal_open_source' => 'Otvori izvor',
   'pending_proposals_empty' => 'Nema prijedloga web knjižnice koji čekaju pregled.',
   'proposal_type_domain' => 'Tema',
   'proposal_type_category' => 'Tema',

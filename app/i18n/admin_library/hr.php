@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'dokument',
   'proposal_type_subcategory' => 'Podtema',
   'pending_proposals_empty' => 'Nijedan prijedlog članka ne čeka recenziju.',
-  'proposal_open_source' => 'Otvoreno Izvor',
+  'proposal_open_source' => 'Otvori izvor',
 );

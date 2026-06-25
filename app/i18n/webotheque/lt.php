@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Moderacijos pastaba',
   'proposal_save_status' => 'Išsaugoti būseną',
   'proposal_status_saved' => 'Pasiūlymas atnaujintas.',
-  'proposal_open_source' => 'Atidaryti Šaltinis',
+  'proposal_open_source' => 'Atidaryti šaltinį',
   'pending_proposals_empty' => 'Nėra žiniatinklio bibliotekos pasiūlymų, laukiančių peržiūros.',
   'proposal_type_domain' => 'Tema',
   'proposal_type_category' => 'Tema',

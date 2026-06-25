@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Nije moguće spremiti uvezeni dokument.',
   'imported_doc' => 'Uvoz dokumenata:',
   'imported_docx' => 'Uvozi dokumenta DOCX:',
-  'source_file' => 'Dokument otvorenog koda',
+  'source_file' => 'Otvori izvorni dokument',
   'pdf_extraction_unavailable' => 'PDF je uvezen, ali se njegov tekst nije mogao automatski izdvojiti. Izvorni dokument ostaje dostupan u nastavku.',
   'docx_extraction_unavailable' => 'DOCX je uvezen, ali se njegov tekst nije mogao automatski izdvojiti. Izvorni dokument ostaje dostupan u nastavku.',
 );

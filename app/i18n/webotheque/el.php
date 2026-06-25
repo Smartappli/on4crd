@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Σημείωση μετριοπάθειας',
   'proposal_save_status' => 'Αποθήκευση κατάστασης',
   'proposal_status_saved' => 'Η πρόταση ενημερώθηκε.',
-  'proposal_open_source' => 'Ανοίξτε Πηγή',
+  'proposal_open_source' => 'Άνοιγμα πηγής',
   'pending_proposals_empty' => 'Δεν εκκρεμεί πρόταση διαδικτυακής βιβλιοθήκης για έλεγχο.',
   'proposal_type_domain' => 'Θεματική',
   'proposal_type_category' => 'Θεματική',

@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Uwaga moderacyjna',
   'proposal_save_status' => 'Zapisz stan',
   'proposal_status_saved' => 'Oferta zaktualizowana.',
-  'proposal_open_source' => 'Otwórz Źródło',
+  'proposal_open_source' => 'Otwórz źródło',
   'pending_proposals_empty' => 'Brak propozycji biblioteki internetowej oczekujących na przegląd.',
   'proposal_type_domain' => 'Temat',
   'proposal_type_category' => 'Temat',

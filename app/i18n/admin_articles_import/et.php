@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Imporditud dokumenti ei saa salvestada.',
   'imported_doc' => 'Dokumentide import:',
   'imported_docx' => 'Dokument DOCX impordib:',
-  'source_file' => 'Avatud lähtekoodiga dokument',
+  'source_file' => 'Ava lähtedokument',
   'pdf_extraction_unavailable' => 'PDF imporditi, kuid selle teksti ei saanud automaatselt ekstraktida. Algdokument jääb allpool kättesaadavaks.',
   'docx_extraction_unavailable' => 'DOCX imporditi, kuid selle teksti ei saanud automaatselt ekstraktida. Algdokument jääb allpool kättesaadavaks.',
 );

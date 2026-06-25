@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'दस्तावेज़',
   'proposal_type_subcategory' => 'उपविषय',
   'pending_proposals_empty' => 'कोई भी लेख प्रस्ताव समीक्षा के लिए लंबित नहीं है.',
-  'proposal_open_source' => 'खुला स्रोत',
+  'proposal_open_source' => 'स्रोत खोलें',
 );

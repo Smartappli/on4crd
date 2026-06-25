@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Dokumen',
   'proposal_type_subcategory' => 'Subtopik',
   'pending_proposals_empty' => 'Tidak ada proposal Dokumen yang menunggu peninjauan.',
-  'proposal_open_source' => 'Buka Sumber',
+  'proposal_open_source' => 'Buka sumber',
 );

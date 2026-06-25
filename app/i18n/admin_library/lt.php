@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'dokumentas',
   'proposal_type_subcategory' => 'Potemė',
   'pending_proposals_empty' => 'Nė vienas straipsnio pasiūlymas nelaukia peržiūros.',
-  'proposal_open_source' => 'Atidaryti Šaltinis',
+  'proposal_open_source' => 'Atidaryti šaltinį',
 );

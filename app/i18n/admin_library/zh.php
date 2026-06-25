@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => '文档',
   'proposal_type_subcategory' => '子主题',
   'pending_proposals_empty' => '没有文档提案正在等待审核。',
-  'proposal_open_source' => '打开 来源',
+  'proposal_open_source' => '打开来源',
 );

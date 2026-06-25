@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Moderācijas piezīme',
   'proposal_save_status' => 'Saglabāt statusu',
   'proposal_status_saved' => 'Piedāvājums atjaunināts.',
-  'proposal_open_source' => 'Atvērt Avots',
+  'proposal_open_source' => 'Atvērt avotu',
   'pending_proposals_empty' => 'Nav tīmekļa bibliotēkas priekšlikumu, kas gaida pārskatīšanu.',
   'proposal_type_domain' => 'Temats',
   'proposal_type_category' => 'Temats',

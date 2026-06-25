@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Notă de moderare',
   'proposal_save_status' => 'Salvare stare',
   'proposal_status_saved' => 'Propunerea a fost actualizată.',
-  'proposal_open_source' => 'Deschide Sursa',
+  'proposal_open_source' => 'Deschide sursa',
   'pending_proposals_empty' => 'Nu există propuneri pentru biblioteca web în așteptare.',
   'proposal_type_domain' => 'Tematică',
   'proposal_type_category' => 'Tematică',

@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Dokument',
   'proposal_type_subcategory' => 'Underemne',
   'pending_proposals_empty' => 'Intet Dokumentforslag afventer gennemgang.',
-  'proposal_open_source' => 'Åbn Kilde',
+  'proposal_open_source' => 'Åbn kilde',
 );

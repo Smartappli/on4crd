@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Moderationsnotat',
   'proposal_save_status' => 'Gem status',
   'proposal_status_saved' => 'Forslaget opdateret.',
-  'proposal_open_source' => 'Åbn Kilde',
+  'proposal_open_source' => 'Åbn kilde',
   'pending_proposals_empty' => 'Ingen webbiblioteksforslag afventer gennemgang.',
   'proposal_type_domain' => 'Tema',
   'proposal_type_category' => 'Tema',

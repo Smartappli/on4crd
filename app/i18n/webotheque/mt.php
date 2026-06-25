@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Nota ta\' moderazzjoni',
   'proposal_save_status' => 'Issejvja l-istatus',
   'proposal_status_saved' => 'Proposta aġġornata.',
-  'proposal_open_source' => 'Miftuħa Sors',
+  'proposal_open_source' => 'Iftaħ is-sors',
   'pending_proposals_empty' => 'L-ebda proposta tal-librerija tal-web mhi qed tistenna reviżjoni.',
   'proposal_type_domain' => 'Tema',
   'proposal_type_category' => 'Tema',

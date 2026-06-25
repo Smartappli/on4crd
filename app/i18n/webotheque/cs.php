@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Poznámka k moderování',
   'proposal_save_status' => 'Uložit stav',
   'proposal_status_saved' => 'Návrh aktualizován.',
-  'proposal_open_source' => 'Otevřít Zdroj',
+  'proposal_open_source' => 'Otevřít zdroj',
   'pending_proposals_empty' => 'Žádný návrh webové knihovny nečeká na kontrolu.',
   'proposal_type_domain' => 'Téma',
   'proposal_type_category' => 'Téma',

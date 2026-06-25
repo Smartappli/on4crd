@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Opomba o moderiranju',
   'proposal_save_status' => 'Shrani stanje',
   'proposal_status_saved' => 'Predlog posodobljen.',
-  'proposal_open_source' => 'Odpri Vir',
+  'proposal_open_source' => 'Odpri vir',
   'pending_proposals_empty' => 'Noben predlog spletne knjižnice ne čaka na pregled.',
   'proposal_type_domain' => 'Tematika',
   'proposal_type_category' => 'Tematika',

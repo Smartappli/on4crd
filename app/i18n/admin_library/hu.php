@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'dokumentum',
   'proposal_type_subcategory' => 'Altéma',
   'pending_proposals_empty' => 'Nincs felülvizsgálatra váró dokumentumjavaslat.',
-  'proposal_open_source' => 'Nyissa meg Forrás',
+  'proposal_open_source' => 'Forrás megnyitása',
 );

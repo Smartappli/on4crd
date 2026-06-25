@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Dokument',
   'proposal_type_subcategory' => 'Podtéma',
   'pending_proposals_empty' => 'Žiadny návrh článku nečaká na posúdenie.',
-  'proposal_open_source' => 'Otvorte Zdroj',
+  'proposal_open_source' => 'Otvoriť zdroj',
 );

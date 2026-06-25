@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Документ',
   'proposal_type_subcategory' => 'Подтема',
   'pending_proposals_empty' => 'Нито едно предложение за Документ не чака преглед.',
-  'proposal_open_source' => 'Отворете Източник',
+  'proposal_open_source' => 'Отворете източника',
 );

@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Documento',
   'proposal_type_subcategory' => 'Subtema',
   'pending_proposals_empty' => 'Nenhuma proposta de Documento está pendente de revisão.',
-  'proposal_open_source' => 'Abrir Fonte',
+  'proposal_open_source' => 'Abrir fonte',
 );

@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => '审核说明',
   'proposal_save_status' => '保存状态',
   'proposal_status_saved' => '提案已更新。',
-  'proposal_open_source' => '打开 来源',
+  'proposal_open_source' => '打开来源',
   'pending_proposals_empty' => '没有待审核的网页资料库提案。',
   'proposal_type_domain' => '主题',
   'proposal_type_category' => '主题',

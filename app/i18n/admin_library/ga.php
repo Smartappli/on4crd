@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Doiciméad',
   'proposal_type_subcategory' => 'Fo-théama',
   'pending_proposals_empty' => 'Níl aon togra Doiciméad ar feitheamh athbhreithniú.',
-  'proposal_open_source' => 'Oscail Foinse',
+  'proposal_open_source' => 'Oscail foinse',
 );

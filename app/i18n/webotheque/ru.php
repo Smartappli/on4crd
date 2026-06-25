@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Примечание модератора',
   'proposal_save_status' => 'Сохранить статус',
   'proposal_status_saved' => 'Предложение обновлено.',
-  'proposal_open_source' => 'Открыть Источник',
+  'proposal_open_source' => 'Открыть источник',
   'pending_proposals_empty' => 'Нет предложений веб-библиотеки, ожидающих проверки.',
   'proposal_type_domain' => 'Тема',
   'proposal_type_category' => 'Тема',

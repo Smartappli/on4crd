@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'मॉडरेशन नोट',
   'proposal_save_status' => 'स्थिति सहेजें',
   'proposal_status_saved' => 'प्रस्ताव अद्यतन किया गया.',
-  'proposal_open_source' => 'खुला स्रोत',
+  'proposal_open_source' => 'स्रोत खोलें',
   'pending_proposals_empty' => 'कोई वेब लाइब्रेरी प्रस्ताव समीक्षा की प्रतीक्षा में नहीं है।',
   'proposal_type_domain' => 'विषय',
   'proposal_type_category' => 'विषय',

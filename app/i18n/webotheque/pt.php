@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Nota de moderação',
   'proposal_save_status' => 'Salvar status',
   'proposal_status_saved' => 'Proposta atualizada.',
-  'proposal_open_source' => 'Abrir Fonte',
+  'proposal_open_source' => 'Abrir fonte',
   'pending_proposals_empty' => 'Nenhuma proposta da biblioteca web aguarda revisão.',
   'proposal_type_domain' => 'Temática',
   'proposal_type_category' => 'Temática',

@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Dokument',
   'proposal_type_subcategory' => 'Podtemat',
   'pending_proposals_empty' => 'Żadna propozycja Dokumentu nie oczekuje na sprawdzenie.',
-  'proposal_open_source' => 'Otwórz Źródło',
+  'proposal_open_source' => 'Otwórz źródło',
 );

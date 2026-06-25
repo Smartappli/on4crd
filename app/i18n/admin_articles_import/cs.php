@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Importovaný dokument nelze uložit.',
   'imported_doc' => 'Import dokumentů:',
   'imported_docx' => 'Import dokumentu DOCX:',
-  'source_file' => 'Otevřený zdrojový dokument',
+  'source_file' => 'Otevřít zdrojový dokument',
   'pdf_extraction_unavailable' => 'PDF byl importován, ale jeho text nebylo možné automaticky extrahovat. Zdrojový dokument zůstává dostupný níže.',
   'docx_extraction_unavailable' => 'DOCX byl importován, ale jeho text nebylo možné automaticky extrahovat. Zdrojový dokument zůstává dostupný níže.',
 );

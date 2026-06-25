@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'সংযম নোট',
   'proposal_save_status' => 'স্থিতি সংরক্ষণ করুন',
   'proposal_status_saved' => 'প্রস্তাব আপডেট করা হয়েছে।',
-  'proposal_open_source' => 'খোলা উৎস',
+  'proposal_open_source' => 'সোর্স খুলুন',
   'pending_proposals_empty' => 'কোনো ওয়েব লাইব্রেরি প্রস্তাব পর্যালোচনার অপেক্ষায় নেই।',
   'proposal_type_domain' => 'বিষয়',
   'proposal_type_category' => 'বিষয়',

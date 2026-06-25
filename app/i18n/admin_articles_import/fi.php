@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Tuotua asiakirjaa ei voi tallentaa.',
   'imported_doc' => 'Asiakirjojen tuonti:',
   'imported_docx' => 'Asiakirjan DOCX tuonti:',
-  'source_file' => 'Avoimen lähdekoodin asiakirja',
+  'source_file' => 'Avaa lähdedokumentti',
   'pdf_extraction_unavailable' => 'PDF tuotiin, mutta sen tekstiä ei voitu purkaa automaattisesti. Lähdedokumentti on edelleen saatavilla alla.',
   'docx_extraction_unavailable' => 'DOCX tuotiin, mutta sen tekstiä ei voitu purkaa automaattisesti. Lähdedokumentti on edelleen saatavilla alla.',
 );

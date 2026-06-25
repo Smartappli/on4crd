@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Dokument',
   'proposal_type_subcategory' => 'Sottotema',
   'pending_proposals_empty' => 'L-ebda proposta ta\' Dokument m\'hi pendenti reviżjoni.',
-  'proposal_open_source' => 'Miftuħa Sors',
+  'proposal_open_source' => 'Iftaħ is-sors',
 );

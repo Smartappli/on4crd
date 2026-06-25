@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Nevar saglabāt importēto dokumentu.',
   'imported_doc' => 'Dokumentu importēšana:',
   'imported_docx' => 'DOCX importa dokuments:',
-  'source_file' => 'Atvērtā pirmkoda dokuments',
+  'source_file' => 'Atvērt avota dokumentu',
   'pdf_extraction_unavailable' => 'PDF tika importēts, taču tā tekstu nevarēja automātiski izvilkt. Avota dokuments joprojām ir pieejams zemāk.',
   'docx_extraction_unavailable' => 'DOCX tika importēts, taču tā tekstu nevarēja automātiski izvilkt. Avota dokuments joprojām ir pieejams zemāk.',
 );

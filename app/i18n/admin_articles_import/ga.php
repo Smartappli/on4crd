@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Ní féidir an doiciméad iompórtáilte a shábháil.',
   'imported_doc' => 'Allmhairí doiciméad:',
   'imported_docx' => 'Allmhairí doiciméad DOCX:',
-  'source_file' => 'Doiciméad foinse oscailte',
+  'source_file' => 'Oscail an doiciméad foinse',
   'pdf_extraction_unavailable' => 'Iompórtáladh an PDF, ach níorbh fhéidir a théacs a bhaint go huathoibríoch. Tá an doiciméad foinseach fós ar fáil thíos.',
   'docx_extraction_unavailable' => 'Iompórtáladh an DOCX, ach níorbh fhéidir a théacs a bhaint go huathoibríoch. Tá an doiciméad foinseach fós ar fáil thíos.',
 );

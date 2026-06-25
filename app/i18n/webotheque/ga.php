@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Nóta modhnóireachta',
   'proposal_save_status' => 'Sábháil stádas',
   'proposal_status_saved' => 'Nuashonraíodh an togra.',
-  'proposal_open_source' => 'Oscail Foinse',
+  'proposal_open_source' => 'Oscail foinse',
   'pending_proposals_empty' => 'Níl aon mholadh leabharlainne gréasáin ag fanacht le hathbhreithniú.',
   'proposal_type_domain' => 'Téama',
   'proposal_type_category' => 'Téama',

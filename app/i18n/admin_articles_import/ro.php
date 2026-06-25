@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Nu se poate salva documentul importat.',
   'imported_doc' => 'Import de documente:',
   'imported_docx' => 'Importuri de documente DOCX:',
-  'source_file' => 'Document open source',
+  'source_file' => 'Deschide documentul sursă',
   'pdf_extraction_unavailable' => 'PDF a fost importat, dar textul său nu a putut fi extras automat. Documentul sursă rămâne disponibil mai jos.',
   'docx_extraction_unavailable' => 'DOCX a fost importat, dar textul său nu a putut fi extras automat. Documentul sursă rămâne disponibil mai jos.',
 );

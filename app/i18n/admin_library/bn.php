@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'নথি',
   'proposal_type_subcategory' => 'উপবিষয়',
   'pending_proposals_empty' => 'কোন নিবন্ধ প্রস্তাব পর্যালোচনা মুলতুবি আছে.',
-  'proposal_open_source' => 'খোলা উৎস',
+  'proposal_open_source' => 'সোর্স খুলুন',
 );

@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Bibliotheekdocument',
   'proposal_type_subcategory' => 'Subthema',
   'pending_proposals_empty' => 'Er is geen Documentvoorstel in afwachting van beoordeling.',
-  'proposal_open_source' => 'Openen Bron',
+  'proposal_open_source' => 'Bron openen',
 );

@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Modereringsanteckning',
   'proposal_save_status' => 'Spara status',
   'proposal_status_saved' => 'Förslaget uppdaterat.',
-  'proposal_open_source' => 'Öppna Källa',
+  'proposal_open_source' => 'Öppna källa',
   'pending_proposals_empty' => 'Inga webbiblioteksförslag väntar på granskning.',
   'proposal_type_domain' => 'Tema',
   'proposal_type_category' => 'Tema',

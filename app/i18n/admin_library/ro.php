@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Document de bibliotecă',
   'proposal_type_subcategory' => 'Subtemă',
   'pending_proposals_empty' => 'Nicio propunere de articol nu este în așteptarea examinării.',
-  'proposal_open_source' => 'Deschide Sursa',
+  'proposal_open_source' => 'Deschide sursa',
 );

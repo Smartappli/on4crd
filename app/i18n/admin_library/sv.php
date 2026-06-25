@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Dokument',
   'proposal_type_subcategory' => 'Underämne',
   'pending_proposals_empty' => 'Inget Dokumentförslag väntar på granskning.',
-  'proposal_open_source' => 'Öppna Källa',
+  'proposal_open_source' => 'Öppna källa',
 );

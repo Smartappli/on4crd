@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'ملاحظة الاعتدال',
   'proposal_save_status' => 'حفظ الحالة',
   'proposal_status_saved' => 'تم تحديث الاقتراح.',
-  'proposal_open_source' => 'مفتوح المصدر',
+  'proposal_open_source' => 'فتح المصدر',
   'pending_proposals_empty' => 'لا توجد مقترحات لمكتبة الويب بانتظار المراجعة.',
   'proposal_type_domain' => 'موضوع',
   'proposal_type_category' => 'موضوع',

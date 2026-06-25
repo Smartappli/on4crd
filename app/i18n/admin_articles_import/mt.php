@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Ma tistax tissejvja d-dokument importat.',
   'imported_doc' => 'Importazzjonijiet tad-dokumenti:',
   'imported_docx' => 'Dokument DOCX importazzjonijiet:',
-  'source_file' => 'Dokument ta\' sors miftuħ',
+  'source_file' => 'Iftaħ id-dokument sors',
   'pdf_extraction_unavailable' => 'Iż-PDF ġie importat, iżda t-test tiegħu ma setax jiġi estratt awtomatikament. Id-dokument tas-sors jibqa\' disponibbli hawn taħt.',
   'docx_extraction_unavailable' => 'Iż-DOCX ġie importat, iżda t-test tiegħu ma setax jiġi estratt awtomatikament. Id-dokument tas-sors jibqa\' disponibbli hawn taħt.',
 );

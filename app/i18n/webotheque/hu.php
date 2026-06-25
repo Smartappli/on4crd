@@ -127,7 +127,7 @@ return array (
   'proposal_moderation_note' => 'Moderálási megjegyzés',
   'proposal_save_status' => 'Állapot mentése',
   'proposal_status_saved' => 'A javaslat frissítve.',
-  'proposal_open_source' => 'Nyissa meg Forrás',
+  'proposal_open_source' => 'Forrás megnyitása',
   'pending_proposals_empty' => 'Nincs ellenőrzésre váró webkönyvtári javaslat.',
   'proposal_type_domain' => 'Téma',
   'proposal_type_category' => 'Téma',

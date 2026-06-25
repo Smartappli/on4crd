@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Nem sikerült menteni az importált dokumentumot.',
   'imported_doc' => 'Dokumentumimportálás:',
   'imported_docx' => 'DOCX import dokumentum:',
-  'source_file' => 'Nyílt forráskódú dokumentum',
+  'source_file' => 'Forrásdokumentum megnyitása',
   'pdf_extraction_unavailable' => 'A PDF importálva lett, de a szövegét nem lehetett automatikusan kicsomagolni. A forrásdokumentum alább elérhető marad.',
   'docx_extraction_unavailable' => 'A DOCX importálva lett, de a szövegét nem lehetett automatikusan kicsomagolni. A forrásdokumentum alább elérhető marad.',
 );

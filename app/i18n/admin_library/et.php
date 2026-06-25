@@ -87,5 +87,5 @@ return array (
   'proposal_type_content' => 'Dokument',
   'proposal_type_subcategory' => 'Alateema',
   'pending_proposals_empty' => 'Ükski artikli ettepanek ei ole ülevaatamisel.',
-  'proposal_open_source' => 'Avatud Allikas',
+  'proposal_open_source' => 'Ava allikas',
 );

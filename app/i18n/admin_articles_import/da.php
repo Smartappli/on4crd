@@ -9,7 +9,7 @@ return array (
   'save_doc' => 'Kan ikke gemme det importerede dokument.',
   'imported_doc' => 'Dokumentimport:',
   'imported_docx' => 'Dokument DOCX importerer:',
-  'source_file' => 'Open source-dokument',
+  'source_file' => 'Åbn kildedokumentet',
   'pdf_extraction_unavailable' => 'PDF blev importeret, men teksten kunne ikke udtrækkes automatisk. Kildedokumentet forbliver tilgængeligt nedenfor.',
   'docx_extraction_unavailable' => 'DOCX blev importeret, men teksten kunne ikke udtrækkes automatisk. Kildedokumentet forbliver tilgængeligt nedenfor.',
 );
