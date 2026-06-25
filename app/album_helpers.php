@@ -1364,6 +1364,18 @@ function album_image_resource_from_path(string $sourcePath): ?array
     if ($width <= 0 || $height <= 0) {
         return null;
     }
+    if (!album_image_dimensions_fit_memory_budget((int) $width, (int) $height)) {
+        if (function_exists('log_structured_event')) {
+            log_structured_event('album_image_memory_budget_skipped', [
+                'path' => basename($sourcePath),
+                'width' => (int) $width,
+                'height' => (int) $height,
+                'memory_limit' => (string) ini_get('memory_limit'),
+            ]);
+        }
+
+        return null;
+    }
 
     $mime = (string) $info['mime'];
     $src = match ($mime) {
@@ -1382,6 +1394,63 @@ function album_image_resource_from_path(string $sourcePath): ?array
         'height' => (int) $height,
         'mime' => $mime,
     ];
+}
+
+function album_php_ini_bytes(string $value): int
+{
+    $value = trim($value);
+    if ($value === '') {
+        return 0;
+    }
+    if ($value === '-1') {
+        return -1;
+    }
+    if (preg_match('/^(\d+)([kmg])?$/i', $value, $matches) !== 1) {
+        return max(0, (int) $value);
+    }
+
+    $bytes = (int) $matches[1];
+    $unit = strtolower((string) ($matches[2] ?? ''));
+    if ($unit === 'g') {
+        return $bytes * 1024 * 1024 * 1024;
+    }
+    if ($unit === 'm') {
+        return $bytes * 1024 * 1024;
+    }
+    if ($unit === 'k') {
+        return $bytes * 1024;
+    }
+
+    return $bytes;
+}
+
+function album_available_memory_budget_bytes(): int
+{
+    $limit = album_php_ini_bytes((string) ini_get('memory_limit'));
+    if ($limit < 0) {
+        return PHP_INT_MAX;
+    }
+    if ($limit === 0) {
+        return 96 * 1024 * 1024;
+    }
+
+    $available = $limit - memory_get_usage(true);
+
+    return max(0, (int) floor($available * 0.70));
+}
+
+function album_image_decode_estimate_bytes(int $width, int $height): int
+{
+    if ($width <= 0 || $height <= 0) {
+        return PHP_INT_MAX;
+    }
+
+    return (int) ceil(($width * $height * 5) + (16 * 1024 * 1024));
+}
+
+function album_image_dimensions_fit_memory_budget(int $width, int $height): bool
+{
+    return album_image_decode_estimate_bytes($width, $height) <= album_available_memory_budget_bytes();
 }
 
 function album_resized_image_resource(mixed $src, int $width, int $height, int $maxWidth, int $maxHeight): mixed

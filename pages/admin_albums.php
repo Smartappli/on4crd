@@ -138,6 +138,13 @@ function albums_admin_clear_cache(): void
     cache_forget('admin_albums_photos_total_v2');
 }
 
+function albums_admin_rebuild_batch_size(): int
+{
+    $configured = (int) (getenv('ALBUM_THUMBNAIL_REBUILD_BATCH_SIZE') ?: 12);
+
+    return max(1, min(30, $configured));
+}
+
 function albums_admin_validate_text_lengths(string $title, string $description = '', string $caption = ''): void
 {
     if (mb_strlen($title) > 190 || mb_strlen($description) > 10000 || mb_strlen($caption) > 5000) {
@@ -590,9 +597,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'rebuild_thumbnails') {
-            $photoRows = db()->query('SELECT file_path FROM album_photos ORDER BY id DESC LIMIT 500')->fetchAll() ?: [];
+            $sessionKey = 'admin_albums_rebuild_thumbnails_v1';
+            $batchSize = albums_admin_rebuild_batch_size();
+            $total = (int) (db()->query('SELECT COUNT(*) FROM album_photos')?->fetchColumn() ?: 0);
+            $progress = $_SESSION[$sessionKey] ?? null;
+            if (
+                !is_array($progress)
+                || (int) ($progress['cursor'] ?? 0) <= 0
+                || time() - (int) ($progress['started_at'] ?? 0) > 3600
+            ) {
+                $maxId = (int) (db()->query('SELECT COALESCE(MAX(id), 0) FROM album_photos')?->fetchColumn() ?: 0);
+                $progress = [
+                    'cursor' => $maxId + 1,
+                    'processed' => 0,
+                    'created' => 0,
+                    'total' => $total,
+                    'started_at' => time(),
+                ];
+            }
+
+            $cursor = max(1, (int) ($progress['cursor'] ?? 1));
+            $photoStmt = db()->prepare('SELECT id, file_path FROM album_photos WHERE id < ? ORDER BY id DESC LIMIT ' . $batchSize);
+            $photoStmt->execute([$cursor]);
+            $photoRows = $photoStmt->fetchAll() ?: [];
             $created = 0;
+            $processed = 0;
+            $lastId = $cursor;
             foreach ($photoRows as $photoRow) {
+                $lastId = max(0, (int) ($photoRow['id'] ?? 0));
+                $processed++;
                 $safePath = albums_admin_safe_photo_path((string) ($photoRow['file_path'] ?? ''));
                 if ($safePath === null) {
                     continue;
@@ -603,8 +636,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $created++;
                 }
             }
+
+            $progress['cursor'] = $photoRows !== [] ? $lastId : 0;
+            $progress['processed'] = (int) ($progress['processed'] ?? 0) + $processed;
+            $progress['created'] = (int) ($progress['created'] ?? 0) + $created;
+            $progress['total'] = $total;
+            $remaining = 0;
+            if ((int) $progress['cursor'] > 0) {
+                $remainingStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE id < ?');
+                $remainingStmt->execute([(int) $progress['cursor']]);
+                $remaining = (int) ($remainingStmt->fetchColumn() ?: 0);
+            }
             albums_admin_clear_cache();
-            set_flash('success', $created . ' ' . (string) $t['created_thumbs']);
+            if ($remaining > 0) {
+                $_SESSION[$sessionKey] = $progress;
+                set_flash(
+                    'success',
+                    $created . ' ' . (string) $t['created_thumbs']
+                    . ' ' . min($total, (int) $progress['processed']) . '/' . $total
+                    . '. ' . (string) $t['rebuild_thumbs'] . ' pour continuer.'
+                );
+            } else {
+                unset($_SESSION[$sessionKey]);
+                set_flash('success', (int) $progress['created'] . ' ' . (string) $t['created_thumbs']);
+            }
             redirect('admin_albums');
         }
     } catch (Throwable $throwable) {
