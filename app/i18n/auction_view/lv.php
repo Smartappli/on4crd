@@ -14,7 +14,7 @@ return array (
   'reserve_met' => 'rezerve sasniegta',
   'reserve_not_met' => 'rezerve nav sasniegta',
   'provisional_winner' => 'Pagaidu uzvarētājs:',
-  'bid' => 'Bid',
+  'bid' => 'Solīt',
   'inactive' => 'Lote pašlaik nenotiek aktīvajā izsolē.',
   'login_needed' => 'Lai solītu, jums ir jāpiesakās.',
   'member_login' => 'Dalībnieka pieteikšanās',

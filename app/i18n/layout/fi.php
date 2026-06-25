@@ -16,7 +16,7 @@ return array (
   'nav_library' => 'Kirjasto',
   'nav_webotheque' => 'Verkkokirjasto',
   'nav_auctions' => 'Huutokaupat',
-  'nav_assistant' => 'Assistant',
+  'nav_assistant' => 'Avustaja',
   'nav_presentations' => 'Esitykset',
   'nav_videos' => 'Videot',
   'nav_minutes' => 'Pöytäkirjat',

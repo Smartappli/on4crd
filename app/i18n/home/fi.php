@@ -69,7 +69,7 @@ return array (
   'spotlight_member_updated_on' => 'Päivitetty',
   'spotlight_member_library' => 'Kirjasto',
   'spotlight_member_auctions' => 'Huutokaupat',
-  'spotlight_member_assistant' => 'Assistant',
+  'spotlight_member_assistant' => 'Avustaja',
   'home_other_sections_title' => 'Uutisia muilta radiokerhoilta',
   'home_other_sections_desc' => 'Seuraa naapuriradioklubien ilmoituksia, tapahtumia ja aloitteita, jotta voit pitää yhteyttä radioamatööriyhteisöön.',
   'home_section_hf_title' => 'Naapuriseurojen toimintaa',

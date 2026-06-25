@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'ON3 båndplan',
-  'header_band' => 'Band',
+  'header_band' => 'Bånd',
   'header_freq' => 'Frekvenser (MHz)',
   'header_modes' => 'Tilstande',
   'header_power' => 'Maks effekt*',

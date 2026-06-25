@@ -6,7 +6,7 @@ return array (
   'meta_desc' => 'Mukauta ON4CRD-kojelautasi suosikkiwidgeteilläsi.',
   'title' => 'Kojelauta',
   'notifications' => 'Ilmoitukset',
-  'chatbot' => 'Assistant',
+  'chatbot' => 'Avustaja',
   'fullscreen' => 'Koko näyttö',
   'save_layout' => 'Tallenna',
   'widget_unavailable' => 'Widget tilapäisesti poissa käytöstä.',
