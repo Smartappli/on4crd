@@ -18,7 +18,7 @@ return array (
   'documents' => 'Dokumenti',
   'reset' => 'Irrisettja',
   'document' => 'Dokument',
-  'preview' => 'Ħarsa ġenerali integrata',
+  'preview' => 'Previżjoni',
   'prev' => 'Preċedenti',
   'next' => 'Wara',
   'page' => 'Paġna',

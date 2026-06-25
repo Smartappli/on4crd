@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'updated' => 'Umpan langsung diperbarui.',
-  'title' => 'Administrasi feed langsung',
+  'title' => 'Administrasi umpan langsung',
   'intro' => 'Widget real-time terbatas pada dashboard anggota. Kelola aktivasi, URL, parser, dan TTL tanpa menampilkan widget di halaman publik.',
   'active' => 'Aktif',
   'label' => 'Nama label',

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return array (
-  'updated' => 'Livefeeds bijgewerkt.',
-  'title' => 'Beheer van livefeeds',
+  'updated' => 'Realtimegegevensstromen bijgewerkt.',
+  'title' => 'Beheer van realtimegegevensstromen',
   'intro' => 'Realtime widgets zijn beperkt tot het ledendashboard. Beheer hier activatie, URL, parser en TTL zonder ze publiek te tonen.',
   'active' => 'Actief',
   'label' => 'Etiket',
@@ -13,6 +13,6 @@ return array (
   'refresh' => 'Browserverversing',
   'notes' => 'Notities',
   'save' => 'Opslaan',
-  'layout' => 'Livefeeds',
-  'meta_desc' => 'Configuratie van livefeeds die in de ledenruimte worden getoond.',
+  'layout' => 'Realtimegegevensstromen',
+  'meta_desc' => 'Configuratie van realtimegegevensstromen die in de ledenruimte worden getoond.',
 );

@@ -72,7 +72,7 @@ return array (
   'confirm_restore_revision' => 'Deze versie herstellen?',
   'preview' => 'Voorbeeld',
   'preview_help' => 'Controleer de weergave voor publicatie.',
-  'preview_empty' => 'De preview verschijnt na klikken op "Voorbeeld".',
+  'preview_empty' => 'De voorvertoning verschijnt na klikken op "Voorbeeld".',
   'editorial_queue' => 'Redactionele wachtrij',
   'editorial_queue_help' => 'Bord met geplande inhoud, blokkeringsredenen en herstart met een klik.',
   'editorial_queue_empty' => 'Geen geplande artikelen in de wachtrij.',

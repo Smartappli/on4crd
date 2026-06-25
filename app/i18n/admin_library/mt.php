@@ -14,7 +14,7 @@ return array (
   'desc_ph' => 'Sommarju jew kliem ewlieni',
   'upload' => 'Tella d-dokument',
   'open' => 'Dokument miftuħ',
-  'preview' => 'Ħarsa ġenerali integrata',
+  'preview' => 'Previżjoni inkorporata',
   'prev' => 'Preċedenti',
   'next' => 'Wara',
   'page' => 'Paġna',

@@ -72,7 +72,7 @@ return array (
   'confirm_restore_revision' => 'Vil du gendanne denne version?',
   'preview' => 'Forhåndsvisning',
   'preview_help' => 'Tjek gengivelsen før offentliggørelse.',
-  'preview_empty' => 'Forhåndsvisningen vises efter klik på "Preview".',
+  'preview_empty' => 'Forhåndsvisningen vises efter klik på "Forhåndsvisning".',
   'editorial_queue' => 'Redaktionel fil',
   'editorial_queue_help' => 'Tabel over planlagt indhold med blokeringsårsager og genstart med et enkelt klik.',
   'editorial_queue_empty' => 'Ingen planlagte varer i køen.',

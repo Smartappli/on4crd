@@ -36,7 +36,7 @@ return array (
   'permission_press_manage' => 'Beheer perscontacten en persberichten',
   'permission_editorial_manage' => 'Beheer meertalige redactionele inhoud',
   'permission_translations_review' => 'Vertalingen beoordelen en valideren',
-  'permission_live_feeds_manage' => 'Beheer livefeeds in detail',
+  'permission_live_feeds_manage' => 'Beheer realtimegegevensstromen in detail',
   'permission_events_manage' => 'Beheer agenda en evenementen',
   'permission_shop_manage' => 'Winkel beheren',
   'permission_auctions_manage' => 'Beheer veilingen',

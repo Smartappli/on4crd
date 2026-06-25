@@ -36,7 +36,7 @@ return array (
   'permission_press_manage' => 'Hantera presskontakter och pressmeddelanden',
   'permission_editorial_manage' => 'Hantera flerspråkigt redaktionellt innehåll',
   'permission_translations_review' => 'Granska och validera översättningar',
-  'permission_live_feeds_manage' => 'Hantera liveflöden i detalj',
+  'permission_live_feeds_manage' => 'Hantera realtidsflöden i detalj',
   'permission_events_manage' => 'Hantera agenda och evenemang',
   'permission_shop_manage' => 'Hantera butik',
   'permission_auctions_manage' => 'Hantera auktioner',

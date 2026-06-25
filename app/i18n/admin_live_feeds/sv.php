@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return array (
-  'updated' => 'Uppdaterat liveflöde.',
-  'title' => 'Administration av liveströmmar',
+  'updated' => 'Realtidsflöden uppdaterade.',
+  'title' => 'Administration av realtidsflöden',
   'intro' => 'Realtidswidgetar är begränsade till medlemsinstrumentpanelen. Här hanterar du aktiveringen, URL, parsern och TTL utan att exponera dessa widgets på offentliga sidor.',
   'active' => 'Aktiv',
   'label' => 'Formulering',
@@ -13,6 +13,6 @@ return array (
   'refresh' => 'Uppdatera webbläsaren',
   'notes' => 'Anteckningar',
   'save' => 'Spara',
-  'layout' => 'Livestream',
-  'meta_desc' => 'Konfiguration av liveströmmar som visas i medlemsområdet.',
+  'layout' => 'Realtidsflöden',
+  'meta_desc' => 'Konfiguration av realtidsflöden som visas i medlemsområdet.',
 );

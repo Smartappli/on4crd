@@ -36,7 +36,7 @@ return array (
   'permission_press_manage' => 'Gerenciar contatos de imprensa e comunicados',
   'permission_editorial_manage' => 'Gerenciar conteúdo editorial multilíngue',
   'permission_translations_review' => 'Revise e valide traduções',
-  'permission_live_feeds_manage' => 'Gerencie feeds ao vivo em detalhes',
+  'permission_live_feeds_manage' => 'Gerencie fluxos em tempo real em detalhes',
   'permission_events_manage' => 'Gerenciar agenda e eventos',
   'permission_shop_manage' => 'Gerenciar loja',
   'permission_auctions_manage' => 'Gerenciar leilões',

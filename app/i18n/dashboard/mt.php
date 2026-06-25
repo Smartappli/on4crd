@@ -52,7 +52,7 @@ return array (
   'save_error' => 'Żball fil-ħażna.',
   'layout_saved_at' => 'It-tqassim ġie ssejvjat fi {time}.',
   'remove_widget' => 'Neħħi l-widget',
-  'preview_unavailable' => 'Il-preview mhuwiex disponibbli.',
+  'preview_unavailable' => 'Il-previżjoni mhijiex disponibbli.',
   'loading' => 'Qed jitgħabba...',
   'load_widget_error' => 'Il-widget ma setax jitgħabba.',
   'widget_welcome_title' => 'Merħba',

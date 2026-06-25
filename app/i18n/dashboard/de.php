@@ -66,7 +66,7 @@ return array (
   'widget_clock_utc' => 'UTC-Datum/Uhrzeit',
   'widget_clock_local' => 'Lokales Datum/Uhrzeit',
   'widget_open_meteo_title' => 'Lokales Wetter',
-  'widget_open_meteo_description' => 'Lokale Bedingungen über Agromet mit Open-Meteo-Fallback.',
+  'widget_open_meteo_description' => 'Lokale Bedingungen über Agromet mit Open-Meteo als Ausweichquelle.',
   'widget_weather_unavailable' => 'Wetterdaten sind derzeit nicht verfügbar.',
   'widget_weather_label' => 'Wetter',
   'widget_weather_source' => 'Quelle',

@@ -17,7 +17,7 @@ return array (
   'admin_press_title' => 'Пресса',
   'admin_press_desc' => 'Контакты для прессы, датированные релизы и загружаемые документы.',
   'admin_events_title' => 'Повестка',
-  'admin_events_desc' => 'События клуба и местные контесты в live-виджетах.',
+  'admin_events_desc' => 'События клуба и местные соревнования в виджетах реального времени.',
   'admin_dinner_reservations_title' => 'Ежегодный ужин',
   'admin_dinner_reservations_desc' => 'Бронирования, позиции меню/десерта, количества и автосумма.',
   'admin_auctions_title' => 'Аукционы',
