@@ -60,22 +60,24 @@ final class AlbumHelpersTest extends TestCase
         $previousJpegQuality = getenv('ALBUM_THUMBNAIL_JPEG_QUALITY');
         $previousPngCompression = getenv('ALBUM_THUMBNAIL_PNG_COMPRESSION');
 
-        putenv('ALBUM_THUMBNAIL_JPEG_QUALITY=95');
-        putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION=12');
-        self::assertSame(90, album_thumbnail_jpeg_quality());
-        self::assertSame(9, album_thumbnail_png_compression());
+        try {
+            putenv('ALBUM_THUMBNAIL_JPEG_QUALITY=95');
+            putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION=12');
+            self::assertSame(90, album_thumbnail_jpeg_quality());
+            self::assertSame(9, album_thumbnail_png_compression());
 
-        putenv('ALBUM_THUMBNAIL_JPEG_QUALITY=40');
-        putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION=-4');
-        self::assertSame(60, album_thumbnail_jpeg_quality());
-        self::assertSame(0, album_thumbnail_png_compression());
-
-        $previousJpegQuality === false
-            ? putenv('ALBUM_THUMBNAIL_JPEG_QUALITY')
-            : putenv('ALBUM_THUMBNAIL_JPEG_QUALITY=' . $previousJpegQuality);
-        $previousPngCompression === false
-            ? putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION')
-            : putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION=' . $previousPngCompression);
+            putenv('ALBUM_THUMBNAIL_JPEG_QUALITY=40');
+            putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION=-4');
+            self::assertSame(60, album_thumbnail_jpeg_quality());
+            self::assertSame(0, album_thumbnail_png_compression());
+        } finally {
+            $previousJpegQuality === false
+                ? putenv('ALBUM_THUMBNAIL_JPEG_QUALITY')
+                : putenv('ALBUM_THUMBNAIL_JPEG_QUALITY=' . $previousJpegQuality);
+            $previousPngCompression === false
+                ? putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION')
+                : putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION=' . $previousPngCompression);
+        }
     }
 
     public function testAlbumPictureHtmlUsesWebpSourceAndEscapesAttributes(): void

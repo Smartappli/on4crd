@@ -17,6 +17,7 @@ final class MemberModulesFinalizationTest extends TestCase
     public function testAlbumsModuleKeepsUploadSelectAndProposalMetadataControls(): void
     {
         self::assertSame('storage/uploads/albums/thumbs/photo.jpg', album_thumbnail_public_path('storage/uploads/albums/photo.webp'));
+        self::assertSame('storage/uploads/albums/thumbs/photo.png', album_thumbnail_png_public_path('storage/uploads/albums/photo.webp'));
         self::assertSame('storage/uploads/albums/thumbs/photo.webp', album_thumbnail_webp_public_path('storage/uploads/albums/photo.jpg'));
         self::assertSame('storage/uploads/albums/display/photo.webp', album_display_webp_public_path('storage/uploads/albums/photo.png'));
 
@@ -70,9 +71,12 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('data-album-viewer-open', $album);
         self::assertStringContainsString('data-photo-display-src', $album);
         self::assertStringContainsString('album_picture_html($imageSrc', $album);
+        self::assertStringContainsString('album_existing_thumbnail_fallback_public_path($filePath)', $album);
+        self::assertStringContainsString('album_existing_thumbnail_fallback_public_path($coverPath)', $album);
         self::assertStringContainsString('id="album-photo-viewer"', $album);
         self::assertStringContainsString('data-album-description="<?= e($albumDescriptionText) ?>"', $album);
         self::assertStringContainsString('album_picture_html($coverSrc', $albums);
+        self::assertStringContainsString('album_existing_thumbnail_fallback_public_path($coverPath)', $albums);
         self::assertStringContainsString('data-album-viewer-image', $albumJs);
         self::assertStringContainsString("link.getAttribute('data-photo-display-src')", $albumJs);
         self::assertStringContainsString('dialog.showModal();', $albumJs);
@@ -126,6 +130,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('admin_albums_rebuild_thumbnails_v1', $adminAlbums);
         self::assertStringContainsString('ALBUM_THUMBNAIL_REBUILD_BATCH_SIZE', $adminAlbums);
         self::assertStringContainsString('WHERE id < ? ORDER BY id DESC LIMIT', $adminAlbums);
+        self::assertStringContainsString('create_album_png_thumbnail($safePath', $adminAlbums);
+        self::assertStringContainsString('album_existing_thumbnail_fallback_public_path($safePath)', $adminAlbums);
         self::assertStringContainsString('data-admin-album-rebuild-form', $adminAlbums);
         self::assertStringContainsString('data-auto-continue="1"', $adminAlbums);
         self::assertStringContainsString('data-admin-album-rebuild-progress', $adminAlbums);
@@ -153,7 +159,12 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("rebuildForm.dataset.autoContinue === '1'", $adminAlbumsJs);
         self::assertStringContainsString('rebuildForm.requestSubmit();', $adminAlbumsJs);
         self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
+        self::assertStringContainsString('create_album_png_thumbnail($publicPath)', $albumHelpers);
         self::assertStringContainsString('create_album_webp_derivatives($publicPath)', $albumHelpers);
+        self::assertStringContainsString('function album_thumbnail_png_public_path(', $albumHelpers);
+        self::assertStringContainsString('function album_existing_thumbnail_fallback_public_path(', $albumHelpers);
+        self::assertStringContainsString('function album_thumbnail_jpeg_quality(', $albumHelpers);
+        self::assertStringContainsString('function album_thumbnail_png_compression(', $albumHelpers);
         self::assertStringContainsString('function album_picture_html(', $albumHelpers);
         self::assertStringContainsString('function album_image_dimensions_fit_memory_budget(', $albumHelpers);
         self::assertMatchesRegularExpression('/secure_move_uploaded_file\([^;]+8 \* 1024 \* 1024,\s+true\s+\)/s', $albumHelpers);
