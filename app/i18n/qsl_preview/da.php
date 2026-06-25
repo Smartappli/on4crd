@@ -6,8 +6,8 @@ return array (
   'layout_title' => 'QSL',
   'front' => 'Foran',
   'front_alt' => 'Forhåndsvisning af QSL foran',
-  'front_download' => 'Download forsiden (SVG)',
+  'front_download' => 'Hent forsiden (SVG)',
   'back' => 'Tilbage',
   'back_alt' => 'Forhåndsvisning af QSL tilbage',
-  'back_download' => 'Download bagsiden (SVG)',
+  'back_download' => 'Hent bagsiden (SVG)',
 );

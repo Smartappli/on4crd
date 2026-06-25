@@ -122,9 +122,13 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('album_social_publish_if_public($albumId)', $adminAlbums);
         self::assertStringContainsString('return_wizard_album_id', $adminAlbums);
         self::assertStringContainsString('function albums_admin_rebuild_batch_size(): int', $adminAlbums);
+        self::assertStringContainsString('function albums_admin_rebuild_session_key(): string', $adminAlbums);
         self::assertStringContainsString('admin_albums_rebuild_thumbnails_v1', $adminAlbums);
         self::assertStringContainsString('ALBUM_THUMBNAIL_REBUILD_BATCH_SIZE', $adminAlbums);
         self::assertStringContainsString('WHERE id < ? ORDER BY id DESC LIMIT', $adminAlbums);
+        self::assertStringContainsString('data-admin-album-rebuild-form', $adminAlbums);
+        self::assertStringContainsString('data-auto-continue="1"', $adminAlbums);
+        self::assertStringContainsString('data-admin-album-rebuild-progress', $adminAlbums);
         self::assertStringContainsString('publish_requested', $adminAlbums);
         self::assertStringContainsString("if (\$action === 'add_subcategory')", $adminAlbums);
         self::assertStringContainsString("if (\$action === 'delete_subcategory')", $adminAlbums);
@@ -145,6 +149,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('ALTER TABLE albums ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER social_publish_error', $albumSchema);
         self::assertStringContainsString("params.get('focus') === 'album-wizard'", $adminAlbumsJs);
         self::assertStringContainsString("wizard.scrollIntoView({ block: 'start' });", $adminAlbumsJs);
+        self::assertStringContainsString("document.querySelector('[data-admin-album-rebuild-form]')", $adminAlbumsJs);
+        self::assertStringContainsString("rebuildForm.dataset.autoContinue === '1'", $adminAlbumsJs);
+        self::assertStringContainsString('rebuildForm.requestSubmit();', $adminAlbumsJs);
         self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
         self::assertStringContainsString('create_album_webp_derivatives($publicPath)', $albumHelpers);
         self::assertStringContainsString('function album_picture_html(', $albumHelpers);

@@ -66,7 +66,7 @@ return array (
   'widget_clock_utc' => 'tanggal/waktu UTC',
   'widget_clock_local' => 'Tanggal/waktu setempat',
   'widget_open_meteo_title' => 'Cuaca lokal',
-  'widget_open_meteo_description' => 'Kondisi lokal melalui Agromet dengan fallback Open-Meteo.',
+  'widget_open_meteo_description' => 'Kondisi lokal melalui Agromet dengan Open-Meteo sebagai cadangan.',
   'widget_weather_unavailable' => 'Data cuaca saat ini tidak tersedia.',
   'widget_weather_label' => 'Cuaca',
   'widget_weather_source' => 'Sumber',

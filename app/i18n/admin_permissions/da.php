@@ -36,7 +36,7 @@ return array (
   'permission_press_manage' => 'Administrer pressekontakter og pressemeddelelser',
   'permission_editorial_manage' => 'Administrer flersproget redaktionelt indhold',
   'permission_translations_review' => 'Gennemgå og valider oversættelser',
-  'permission_live_feeds_manage' => 'Administrer live-feeds i detaljer',
+  'permission_live_feeds_manage' => 'Administrer realtidsdatastrømme i detaljer',
   'permission_events_manage' => 'Administrer dagsorden og arrangementer',
   'permission_shop_manage' => 'Administrer butik',
   'permission_auctions_manage' => 'Administrer auktioner',

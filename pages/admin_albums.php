@@ -145,6 +145,11 @@ function albums_admin_rebuild_batch_size(): int
     return max(1, min(30, $configured));
 }
 
+function albums_admin_rebuild_session_key(): string
+{
+    return 'admin_albums_rebuild_thumbnails_v1';
+}
+
 function albums_admin_validate_text_lengths(string $title, string $description = '', string $caption = ''): void
 {
     if (mb_strlen($title) > 190 || mb_strlen($description) > 10000 || mb_strlen($caption) > 5000) {
@@ -597,7 +602,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'rebuild_thumbnails') {
-            $sessionKey = 'admin_albums_rebuild_thumbnails_v1';
+            $sessionKey = albums_admin_rebuild_session_key();
             $batchSize = albums_admin_rebuild_batch_size();
             $total = (int) (db()->query('SELECT COUNT(*) FROM album_photos')?->fetchColumn() ?: 0);
             $progress = $_SESSION[$sessionKey] ?? null;
@@ -613,6 +618,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'created' => 0,
                     'total' => $total,
                     'started_at' => time(),
+                    'auto_continue' => true,
                 ];
             }
 
@@ -649,12 +655,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             albums_admin_clear_cache();
             if ($remaining > 0) {
+                $progress['auto_continue'] = true;
                 $_SESSION[$sessionKey] = $progress;
                 set_flash(
                     'success',
                     $created . ' ' . (string) $t['created_thumbs']
                     . ' ' . min($total, (int) $progress['processed']) . '/' . $total
-                    . '. ' . (string) $t['rebuild_thumbs'] . ' pour continuer.'
+                    . '.'
                 );
             } else {
                 unset($_SESSION[$sessionKey]);
@@ -714,6 +721,16 @@ $photos = db()->query(
      ORDER BY p.album_id ASC, p.sort_order ASC, p.id ASC
      LIMIT ' . (int) $photosPerPage . ' OFFSET ' . (int) $photosOffset
 )->fetchAll() ?: [];
+$thumbnailRebuildProgress = $_SESSION[albums_admin_rebuild_session_key()] ?? null;
+$thumbnailRebuildActive = is_array($thumbnailRebuildProgress)
+    && (bool) ($thumbnailRebuildProgress['auto_continue'] ?? false)
+    && (int) ($thumbnailRebuildProgress['cursor'] ?? 0) > 0
+    && time() - (int) ($thumbnailRebuildProgress['started_at'] ?? 0) <= 3600;
+$thumbnailRebuildTotal = $thumbnailRebuildActive ? max(0, (int) ($thumbnailRebuildProgress['total'] ?? $photosTotal)) : 0;
+$thumbnailRebuildProcessed = $thumbnailRebuildActive ? min($thumbnailRebuildTotal, max(0, (int) ($thumbnailRebuildProgress['processed'] ?? 0))) : 0;
+$thumbnailRebuildLabel = $thumbnailRebuildActive && $thumbnailRebuildTotal > 0
+    ? $thumbnailRebuildProcessed . ' / ' . $thumbnailRebuildTotal
+    : '';
 
 $wizardAlbumId = max(0, (int) ($_GET['album_wizard'] ?? 0));
 $wizardStep = max(1, min(3, (int) ($_GET['step'] ?? 1)));
@@ -746,10 +763,13 @@ ob_start();
                 <h1><?= e((string) $t['manage_title']) ?></h1>
                 <p class="help"><?= e((string) $t['intro']) ?></p>
             </div>
-            <form method="post">
+            <form method="post" data-admin-album-rebuild-form<?= $thumbnailRebuildActive ? ' data-auto-continue="1"' : '' ?>>
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="rebuild_thumbnails">
                 <button class="button secondary small" type="submit"><?= e((string) $t['rebuild_thumbs']) ?></button>
+                <?php if ($thumbnailRebuildLabel !== ''): ?>
+                    <span class="pill" data-admin-album-rebuild-progress><?= e($thumbnailRebuildLabel) ?></span>
+                <?php endif; ?>
             </form>
         </div>
         <div class="stats-grid">

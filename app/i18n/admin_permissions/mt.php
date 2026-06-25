@@ -36,7 +36,7 @@ return array (
   'permission_press_manage' => 'Immaniġġja kuntatti għall-istampa u stqarrijiet',
   'permission_editorial_manage' => 'Immaniġġja l-kontenut editorjali multilingwi',
   'permission_translations_review' => 'Irrevedi u vvalida traduzzjonijiet',
-  'permission_live_feeds_manage' => 'Immaniġġja live feeds fid-dettall',
+  'permission_live_feeds_manage' => 'Immaniġġja l-flussi f\'ħin reali fid-dettall',
   'permission_events_manage' => 'Immaniġġja l-aġenda u l-avvenimenti',
   'permission_shop_manage' => 'Immaniġġja ħanut',
   'permission_auctions_manage' => 'Immaniġġja l-irkanti',

@@ -36,7 +36,7 @@ return array (
   'permission_press_manage' => 'Hallitse lehdistökontakteja ja tiedotteita',
   'permission_editorial_manage' => 'Hallinnoi monikielistä toimituksellista sisältöä',
   'permission_translations_review' => 'Tarkista ja vahvista käännökset',
-  'permission_live_feeds_manage' => 'Hallitse live-syötteitä yksityiskohtaisesti',
+  'permission_live_feeds_manage' => 'Hallitse reaaliaikaisia syötteitä yksityiskohtaisesti',
   'permission_events_manage' => 'Hallitse esityslistaa ja tapahtumia',
   'permission_shop_manage' => 'Hallitse kauppaa',
   'permission_auctions_manage' => 'Hallitse huutokauppoja',

@@ -66,7 +66,7 @@ return array (
   'widget_clock_utc' => 'UTC datum/tid',
   'widget_clock_local' => 'Lokalt datum/tid',
   'widget_open_meteo_title' => 'Lokalt väder',
-  'widget_open_meteo_description' => 'Lokala förhållanden via Agromet med Open-Meteo fallback.',
+  'widget_open_meteo_description' => 'Lokala förhållanden via Agromet med Open-Meteo som reserv.',
   'widget_weather_unavailable' => 'Väderdata är för närvarande inte tillgänglig.',
   'widget_weather_label' => 'Väder',
   'widget_weather_source' => 'Källa',

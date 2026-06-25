@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return array (
-  'updated' => 'Feeds live atualizados.',
-  'title' => 'Administração de feeds live',
+  'updated' => 'Fluxos em tempo real atualizados.',
+  'title' => 'Administração de fluxos em tempo real',
   'intro' => 'Os widgets em tempo real estão limitados ao painel de membros.',
   'active' => 'Ativo',
   'label' => 'Rótulo',
@@ -13,6 +13,6 @@ return array (
   'refresh' => 'Atualização navegador',
   'notes' => 'Notas',
   'save' => 'Guardar',
-  'layout' => 'Feeds live',
-  'meta_desc' => 'Configuração de feeds live na área de membros.',
+  'layout' => 'Fluxos em tempo real',
+  'meta_desc' => 'Configuração de fluxos em tempo real na área de membros.',
 );

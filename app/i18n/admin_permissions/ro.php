@@ -36,7 +36,7 @@ return array (
   'permission_press_manage' => 'Gestionați contactele de presă și comunicatele',
   'permission_editorial_manage' => 'Gestionați conținutul editorial multilingv',
   'permission_translations_review' => 'Examinați și validați traducerile',
-  'permission_live_feeds_manage' => 'Gestionați fluxurile live în detaliu',
+  'permission_live_feeds_manage' => 'Gestionați fluxurile în timp real în detaliu',
   'permission_events_manage' => 'Gestionați agenda și evenimentele',
   'permission_shop_manage' => 'Gestionează magazinul',
   'permission_auctions_manage' => 'Gestionați licitațiile',

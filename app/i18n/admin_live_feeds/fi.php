@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return array (
-  'updated' => 'Päivitetty live-syöte.',
-  'title' => 'Livestriimien hallinnointi',
+  'updated' => 'Reaaliaikaiset syötteet päivitetty.',
+  'title' => 'Reaaliaikaisten syötteiden hallinta',
   'intro' => 'Reaaliaikaiset widgetit rajoittuvat jäsenten kojelautaan. Täällä hallitset aktivointia, URL:tä, jäsentäjää ja TTL:ta paljastamatta näitä widgetejä julkisilla sivuilla.',
   'active' => 'Aktiivinen',
   'label' => 'Sanamuoto',
@@ -13,6 +13,6 @@ return array (
   'refresh' => 'Selaimen päivitys',
   'notes' => 'Huomautuksia',
   'save' => 'Tallenna',
-  'layout' => 'Suora lähetys',
-  'meta_desc' => 'Jäsenalueella näytettävien live-lähetysten määritykset.',
+  'layout' => 'Reaaliaikaiset syötteet',
+  'meta_desc' => 'Jäsenalueella näytettävien reaaliaikaisten syötteiden määritykset.',
 );

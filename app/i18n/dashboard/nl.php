@@ -66,7 +66,7 @@ return array (
   'widget_clock_utc' => 'UTC-datum/-tijd',
   'widget_clock_local' => 'Lokale datum/tijd',
   'widget_open_meteo_title' => 'Lokaal weer',
-  'widget_open_meteo_description' => 'Lokale omstandigheden via Agromet met Open-Meteo fallback.',
+  'widget_open_meteo_description' => 'Lokale omstandigheden via Agromet met Open-Meteo als reserve.',
   'widget_weather_unavailable' => 'Weergegevens zijn momenteel niet beschikbaar.',
   'widget_weather_label' => 'Weer',
   'widget_weather_source' => 'Bron',

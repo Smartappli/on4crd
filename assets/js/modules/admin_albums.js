@@ -69,4 +69,25 @@
       }
     });
   });
+
+  const rebuildForm = document.querySelector('[data-admin-album-rebuild-form]');
+  if (rebuildForm instanceof HTMLFormElement && rebuildForm.dataset.autoContinue === '1') {
+    const submitButton = rebuildForm.querySelector('button[type="submit"]');
+    rebuildForm.setAttribute('aria-busy', 'true');
+    if (submitButton instanceof HTMLButtonElement) {
+      submitButton.setAttribute('aria-disabled', 'true');
+    }
+
+    window.setTimeout(() => {
+      try {
+        if (typeof rebuildForm.requestSubmit === 'function') {
+          rebuildForm.requestSubmit();
+          return;
+        }
+        rebuildForm.submit();
+      } catch (error) {
+        rebuildForm.submit();
+      }
+    }, 900);
+  }
 })();

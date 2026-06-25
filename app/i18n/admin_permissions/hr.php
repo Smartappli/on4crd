@@ -36,7 +36,7 @@ return array (
   'permission_press_manage' => 'Upravljanje kontaktima s medijima i priopćenjima',
   'permission_editorial_manage' => 'Upravljajte višejezičnim uredničkim sadržajem',
   'permission_translations_review' => 'Pregledajte i potvrdite prijevode',
-  'permission_live_feeds_manage' => 'Detaljno upravljajte live feedovima',
+  'permission_live_feeds_manage' => 'Detaljno upravljajte izvorima u stvarnom vremenu',
   'permission_events_manage' => 'Upravljajte dnevnim redom i događajima',
   'permission_shop_manage' => 'Upravljajte trgovinom',
   'permission_auctions_manage' => 'Upravljajte aukcijama',

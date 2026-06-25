@@ -66,7 +66,7 @@ return array (
   'widget_clock_utc' => 'UTC dato/tid',
   'widget_clock_local' => 'Lokal dato/tid',
   'widget_open_meteo_title' => 'Lokalt vejr',
-  'widget_open_meteo_description' => 'Lokale forhold via Agromet med Open-Meteo fallback.',
+  'widget_open_meteo_description' => 'Lokale forhold via Agromet med Open-Meteo som reserve.',
   'widget_weather_unavailable' => 'Vejrdata er i øjeblikket ikke tilgængelige.',
   'widget_weather_label' => 'Vejret',
   'widget_weather_source' => 'Kilde',

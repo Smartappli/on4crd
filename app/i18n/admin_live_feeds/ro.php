@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return array (
-  'updated' => 'Feed live actualizat.',
-  'title' => 'Administrarea fluxurilor live',
+  'updated' => 'Fluxuri în timp real actualizate.',
+  'title' => 'Administrarea fluxurilor în timp real',
   'intro' => 'Widgeturile în timp real sunt limitate la tabloul de bord pentru membri. Aici gestionați activarea, URL, analizatorul și TTL fără a expune aceste widget-uri pe paginile publice.',
   'active' => 'Activ',
   'label' => 'Formulare',
@@ -13,6 +13,6 @@ return array (
   'refresh' => 'Reîmprospătare browser',
   'notes' => 'Note',
   'save' => 'Salva',
-  'layout' => 'Stream live',
-  'meta_desc' => 'Configurarea fluxurilor live afișate în zona membrilor.',
+  'layout' => 'Fluxuri în timp real',
+  'meta_desc' => 'Configurarea fluxurilor în timp real afișate în zona membrilor.',
 );

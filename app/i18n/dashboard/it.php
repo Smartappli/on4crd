@@ -66,7 +66,7 @@ return array (
   'widget_clock_utc' => 'Data/ora UTC',
   'widget_clock_local' => 'Data/ora locale',
   'widget_open_meteo_title' => 'Meteo locale',
-  'widget_open_meteo_description' => 'Condizioni locali tramite Agromet con fallback Open-Meteo.',
+  'widget_open_meteo_description' => 'Condizioni locali tramite Agromet con Open-Meteo di riserva.',
   'widget_weather_unavailable' => 'I dati meteorologici non sono al momento disponibili.',
   'widget_weather_label' => 'Tempo atmosferico',
   'widget_weather_source' => 'Fonte',

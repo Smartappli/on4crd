@@ -1,7 +1,7 @@
 <?php
 return [
-    'updated' => 'Live-Feeds aktualisiert.',
-    'title' => 'Verwaltung der Live-Feeds',
+    'updated' => 'Echtzeit-Datenquellen aktualisiert.',
+    'title' => 'Verwaltung der Echtzeit-Datenquellen',
     'intro' => 'Echtzeit-Widgets sind auf das Mitglieder-Dashboard beschränkt. Verwalten Sie Aktivierung, URL, Parser und TTL ohne öffentliche Anzeige.',
     'active' => 'Aktiv',
     'label' => 'Bezeichnung',
@@ -11,6 +11,6 @@ return [
     'refresh' => 'Browser-Aktualisierung',
     'notes' => 'Notizen',
     'save' => 'Speichern',
-    'layout' => 'Live-Feeds',
-    'meta_desc' => 'Konfiguration der Live-Feeds im Mitgliederbereich.',
+    'layout' => 'Echtzeit-Datenquellen',
+    'meta_desc' => 'Konfiguration der Echtzeit-Datenquellen im Mitgliederbereich.',
 ];
