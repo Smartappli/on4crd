@@ -43,7 +43,7 @@ return array (
   'answer_articles_source' => 'ON4CRD নিবন্ধ',
   'answer_knowledge_source' => 'ON4CRD জ্ঞানের ভিত্তি',
   'answer_article_label' => 'প্রবন্ধ',
-  'answer_no_answer' => 'আমার কাছে এই প্রশ্নের সঠিক উত্তর নেই। একটি কীওয়ার্ড যোগ করার চেষ্টা করুন (QSL, antenna, propagation, লাইসেন্স) অথবা নিবন্ধ মডিউল ব্রাউজ করুন।',
+  'answer_no_answer' => 'আমার কাছে এই প্রশ্নের সঠিক উত্তর নেই। একটি কীওয়ার্ড যোগ করার চেষ্টা করুন (QSL, অ্যান্টেনা, প্রসারণ, লাইসেন্স) অথবা নিবন্ধ মডিউল ব্রাউজ করুন।',
   'answer_assistant_source' => 'রেমন্ড সহকারী',
   'answer_doc_fallback' => 'পিডিএফ ডকুমেন্ট',
   'answer_doc_prefix' => 'আমি সদস্যদের লাইব্রেরিতে একটি নথি পেয়েছি:',

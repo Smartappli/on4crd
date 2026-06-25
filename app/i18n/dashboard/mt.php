@@ -11,7 +11,7 @@ return array (
   'save_layout' => 'Ħlief',
   'widget_unavailable' => 'Widget temporanjament mhux disponibbli.',
   'table_missing' => 'It-tabella dashboard_widgets hija nieqsa: it-tqassim tal-widgets ma jistax jiġi ssejvjat.',
-  'available_widgets' => 'Widgets',
+  'available_widgets' => 'Komponenti',
   'widgets_help' => 'Installa l-widgets tiegħek, imbagħad drag u waqqa\' biex terġa\' tordna l-grilja.',
   'no_widgets' => 'Ebda widgets attivati ​​bħalissa.',
   'add' => 'Żid',

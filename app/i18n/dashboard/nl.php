@@ -11,7 +11,7 @@ return array (
   'save_layout' => 'Opslaan',
   'widget_unavailable' => 'Widget tijdelijk niet beschikbaar.',
   'table_missing' => 'De tabel dashboard_widgets ontbreekt: de widgetindeling kan niet worden opgeslagen.',
-  'available_widgets' => 'Widgets',
+  'available_widgets' => 'Onderdelen',
   'widgets_help' => 'Installeer je widgets en herschik het raster met slepen en neerzetten.',
   'no_widgets' => 'Er zijn momenteel geen widgets geactiveerd.',
   'add' => 'Toevoegen',

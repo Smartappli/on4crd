@@ -11,7 +11,7 @@ return array (
   'save_layout' => 'Guardar',
   'widget_unavailable' => 'Widget temporariamente indisponível.',
   'table_missing' => 'A tabela dashboard_widgets esta em falta.',
-  'available_widgets' => 'Widgets',
+  'available_widgets' => 'Componentes',
   'widgets_help' => 'Instale os widgets e arraste para reordenar a grelha.',
   'no_widgets' => 'Nenhum widget ativo.',
   'add' => 'Adicionar',

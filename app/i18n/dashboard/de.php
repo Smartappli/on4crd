@@ -11,7 +11,7 @@ return array (
   'save_layout' => 'Speichern',
   'widget_unavailable' => 'Widget vorübergehend nicht verfügbar.',
   'table_missing' => 'Die Tabelle dashboard_widgets fehlt: Das Widget-Layout kann nicht gespeichert werden.',
-  'available_widgets' => 'Widgets',
+  'available_widgets' => 'Elemente',
   'widgets_help' => 'Installieren Sie Ihre Widgets und ordnen Sie das Raster per Drag-and-drop neu.',
   'no_widgets' => 'Derzeit sind keine Widgets aktiviert.',
   'add' => 'Hinzufügen',

@@ -177,7 +177,7 @@ return array (
   'home_trophies_empty' => 'В момента няма наличен трофей.',
   'home_trophies_title' => 'Нашите трофеи',
   'spotlight_member_gallery_empty' => 'В момента няма налично изображение в галерията.',
-  'widget_temporarily_unavailable' => 'Widget временно не е наличен.',
+  'widget_temporarily_unavailable' => 'Уиджетът временно не е наличен.',
   'ham_advice_temporarily_unavailable' => 'Радио съветите временно са недостъпни.',
   'visibility_public' => 'Публично',
   'visibility_members' => 'Членове',

@@ -11,7 +11,7 @@ return array (
   'save_layout' => 'Spara',
   'widget_unavailable' => 'Widget är tillfälligt otillgänglig.',
   'table_missing' => 'Tabellen dashboard_widgets saknas: layouten för widgetarna kan inte sparas.',
-  'available_widgets' => 'Widgets',
+  'available_widgets' => 'Komponenter',
   'widgets_help' => 'Installera dina widgetar och dra och släpp för att ändra ordningen på rutnätet.',
   'no_widgets' => 'Inga widgetar är aktiverade för tillfället.',
   'add' => 'Lägg till',

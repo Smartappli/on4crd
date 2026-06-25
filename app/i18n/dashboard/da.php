@@ -11,7 +11,7 @@ return array (
   'save_layout' => 'Gem',
   'widget_unavailable' => 'Widget er midlertidigt utilgængelig.',
   'table_missing' => 'Tabellen Dashboard_widgets mangler: layoutet af widgets kan ikke gemmes.',
-  'available_widgets' => 'Widgets',
+  'available_widgets' => 'Komponenter',
   'widgets_help' => 'Installer dine widgets, og træk og slip derefter for at omorganisere gitteret.',
   'no_widgets' => 'Ingen widgets aktiveret i øjeblikket.',
   'add' => 'Tilføj',
