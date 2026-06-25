@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return array (
-  'updated' => 'Opdateret live feed.',
-  'title' => 'Administration af livestreams',
+  'updated' => 'Realtidsdatastrømme opdateret.',
+  'title' => 'Administration af realtidsdatastrømme',
   'intro' => 'Realtidswidgets er begrænset til medlemsdashboardet. Her administrerer du aktiveringen, URL, parseren og TTL uden at udsætte disse widgets på offentlige sider.',
   'active' => 'Aktiv',
   'label' => 'Ordlyd',
@@ -13,6 +13,6 @@ return array (
   'refresh' => 'Browser opdatering',
   'notes' => 'Noter',
   'save' => 'Gem',
-  'layout' => 'Live stream',
-  'meta_desc' => 'Konfiguration af livestreams vist i medlemsområdet.',
+  'layout' => 'Realtidsdatastrømme',
+  'meta_desc' => 'Konfiguration af realtidsdatastrømme vist i medlemsområdet.',
 );
