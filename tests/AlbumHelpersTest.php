@@ -21,8 +21,16 @@ final class AlbumHelpersTest extends TestCase
             album_thumbnail_public_path('storage/uploads/albums/abcdef123456.webp')
         );
         self::assertSame(
+            'storage/uploads/albums/thumbs/abcdef123456.png',
+            album_thumbnail_png_public_path('storage/uploads/albums/abcdef123456.webp')
+        );
+        self::assertSame(
             'storage/uploads/albums/thumbs/photo.jpg',
             album_thumbnail_public_path('/storage/uploads/albums/photo.png')
+        );
+        self::assertSame(
+            'storage/uploads/albums/thumbs/photo.png',
+            album_thumbnail_png_public_path('/storage/uploads/albums/photo.png')
         );
     }
 
@@ -39,11 +47,35 @@ final class AlbumHelpersTest extends TestCase
         self::assertSame(
             [
                 'storage/uploads/albums/thumbs/photo.jpg',
+                'storage/uploads/albums/thumbs/photo.png',
                 'storage/uploads/albums/thumbs/photo.webp',
                 'storage/uploads/albums/display/photo.webp',
             ],
             album_photo_derived_public_paths('storage/uploads/albums/photo.jpeg')
         );
+    }
+
+    public function testAlbumThumbnailCompressionSettingsAreClamped(): void
+    {
+        $previousJpegQuality = getenv('ALBUM_THUMBNAIL_JPEG_QUALITY');
+        $previousPngCompression = getenv('ALBUM_THUMBNAIL_PNG_COMPRESSION');
+
+        putenv('ALBUM_THUMBNAIL_JPEG_QUALITY=95');
+        putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION=12');
+        self::assertSame(90, album_thumbnail_jpeg_quality());
+        self::assertSame(9, album_thumbnail_png_compression());
+
+        putenv('ALBUM_THUMBNAIL_JPEG_QUALITY=40');
+        putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION=-4');
+        self::assertSame(60, album_thumbnail_jpeg_quality());
+        self::assertSame(0, album_thumbnail_png_compression());
+
+        $previousJpegQuality === false
+            ? putenv('ALBUM_THUMBNAIL_JPEG_QUALITY')
+            : putenv('ALBUM_THUMBNAIL_JPEG_QUALITY=' . $previousJpegQuality);
+        $previousPngCompression === false
+            ? putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION')
+            : putenv('ALBUM_THUMBNAIL_PNG_COMPRESSION=' . $previousPngCompression);
     }
 
     public function testAlbumPictureHtmlUsesWebpSourceAndEscapesAttributes(): void
