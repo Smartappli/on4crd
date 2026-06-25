@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Kata kunci',
   'document_field' => 'Mengajukan',
   'upload_title' => 'Unggah dokumen',
-  'upload_help' => 'Format yang diterima: PDF, DOCX, TXT, Markdown, dan HTML. Ukuran maksimum: 100 MB.',
+  'upload_help' => 'Format yang diterima: PDF, DOCX, TXT, Markdown, dan HTML. Ukuran maksimum: 120 MB.',
   'upload' => 'Unggah dokumen',
   'delete' => 'Hapus',
   'confirm_delete' => 'Hapus item ini secara permanen?',

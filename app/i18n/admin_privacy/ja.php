@@ -6,7 +6,7 @@ return array (
   'meta_desc' => 'ON4CRD GDPR リクエストを処理します。',
   'request_updated' => 'GDPR リクエストが更新されました。',
   'files_processed_summary' => '処理されたファイル: %d は削除されました、%d はすでに見つかりません、%d は失敗しました。',
-  'intro' => 'Access is restricted to the privacy.manage permission.ステータスの変更、匿名化、およびファイル処理がログに記録されます。',
+  'intro' => 'アクセスは privacy.manage 権限に制限されています。ステータスの変更、匿名化、およびファイル処理がログに記録されます。',
   'id' => 'ID',
   'member' => 'メンバー',
   'type' => 'タイプ',

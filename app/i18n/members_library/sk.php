@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Kľúčové slová',
   'document_field' => 'Súbor',
   'upload_title' => 'Nahrajte dokument',
-  'upload_help' => 'Akceptované formáty: PDF, DOCX, TXT, Markdown a HTML. Maximálna veľkosť: 100 MB.',
+  'upload_help' => 'Akceptované formáty: PDF, DOCX, TXT, Markdown a HTML. Maximálna veľkosť: 120 MB.',
   'upload' => 'Nahrajte dokument',
   'delete' => 'Odstrániť',
   'confirm_delete' => 'Chcete natrvalo odstrániť tento prvok?',

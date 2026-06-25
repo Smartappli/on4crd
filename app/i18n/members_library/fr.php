@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Mots-clés',
   'document_field' => 'Fichier',
   'upload_title' => 'Téléverser le document',
-  'upload_help' => 'Formats acceptés : PDF, DOC, DOCX, TXT, Markdown et HTML. Taille maximale : 100 Mo.',
+  'upload_help' => 'Formats acceptés : PDF, DOC, DOCX, TXT, Markdown et HTML. Taille maximale : 120 Mo.',
   'upload' => 'Téléverser le document',
   'delete' => 'Supprimer',
   'confirm_delete' => 'Supprimer définitivement cet élément ?',

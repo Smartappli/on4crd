@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Cuvinte-cheie',
   'document_field' => 'Fişier',
   'upload_title' => 'Încărcați documentul',
-  'upload_help' => 'Formate acceptate: PDF, DOCX, TXT, Markdown și HTML. Dimensiune maximă: 100 MB.',
+  'upload_help' => 'Formate acceptate: PDF, DOCX, TXT, Markdown și HTML. Dimensiune maximă: 120 MB.',
   'upload' => 'Încărcați documentul',
   'delete' => 'ŞTERGE',
   'confirm_delete' => 'Ștergeți definitiv acest element?',

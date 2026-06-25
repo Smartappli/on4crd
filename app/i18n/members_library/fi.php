@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Avainsanat',
   'document_field' => 'Tiedosto',
   'upload_title' => 'Lataa asiakirja',
-  'upload_help' => 'Hyväksytyt muodot: PDF, DOCX, TXT, Markdown ja HTML. Suurin koko: 100 MB.',
+  'upload_help' => 'Hyväksytyt muodot: PDF, DOCX, TXT, Markdown ja HTML. Suurin koko: 120 MB.',
   'upload' => 'Lataa asiakirja',
   'delete' => 'Poista',
   'confirm_delete' => 'Poistetaanko tämä elementti pysyvästi?',

@@ -24,7 +24,7 @@ return array (
   'search_ph' => 'ابحث في العنوان أو الملخص أو المحتوى المفهرس',
   'empty' => 'لم يتم العثور على أي مستند.',
   'upload_title' => 'رفع المستند',
-  'upload_help' => 'Accepted formats: PDF, DOCX, TXT, Markdown and HTML. الحد الأقصى للحجم: 25 ميجابايت.',
+  'upload_help' => 'الصيغ المقبولة: PDF و DOC و DOCX و TXT و Markdown و HTML. الحد الأقصى للحجم: 25 ميجابايت.',
   'document_field' => 'ملف',
   'upload' => 'رفع المستند',
   'delete' => 'حذف',

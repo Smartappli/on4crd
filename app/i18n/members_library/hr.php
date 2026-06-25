@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Ključne riječi',
   'document_field' => 'Datoteka',
   'upload_title' => 'Učitajte dokument',
-  'upload_help' => 'Prihvaćeni formati: PDF, DOCX, TXT, Markdown i HTML. Maksimalna veličina: 100 MB.',
+  'upload_help' => 'Prihvaćeni formati: PDF, DOCX, TXT, Markdown i HTML. Maksimalna veličina: 120 MB.',
   'upload' => 'Učitajte dokument',
   'delete' => 'Izbriši',
   'confirm_delete' => 'Trajno izbrisati ovaj element?',

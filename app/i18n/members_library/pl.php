@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Słowa kluczowe',
   'document_field' => 'Plik',
   'upload_title' => 'Prześlij dokument',
-  'upload_help' => 'Akceptowane formaty: PDF, DOCX, TXT, Markdown i HTML. Maksymalny rozmiar: 100 MB.',
+  'upload_help' => 'Akceptowane formaty: PDF, DOCX, TXT, Markdown i HTML. Maksymalny rozmiar: 120 MB.',
   'upload' => 'Prześlij dokument',
   'delete' => 'Usuń',
   'confirm_delete' => 'Trwale usunąć ten element?',

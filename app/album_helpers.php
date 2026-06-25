@@ -1339,22 +1339,23 @@ function album_ensure_public_photo_permissions(string $publicPath): void
         @chmod($absolutePath, 0644);
     }
 
-    $thumbPath = album_thumbnail_public_path($publicPath);
-    $thumbAbsolutePath = dirname(__DIR__) . '/' . ltrim($thumbPath, '/');
-    if (is_file($thumbAbsolutePath)) {
-        @chmod($thumbAbsolutePath, 0644);
+    foreach (album_photo_derived_public_paths($publicPath) as $derivedPath) {
+        $derivedAbsolutePath = dirname(__DIR__) . '/' . ltrim($derivedPath, '/');
+        if (is_file($derivedAbsolutePath)) {
+            @chmod($derivedAbsolutePath, 0644);
+        }
     }
 }
 
-function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $maxHeight = 640): ?string
+/**
+ * @return ?array{image:mixed,width:int,height:int,mime:string}
+ */
+function album_image_resource_from_path(string $sourcePath): ?array
 {
-    if (!extension_loaded('gd')) {
-        return null;
-    }
-    $sourcePath = dirname(__DIR__) . '/' . ltrim($publicPath, '/');
     if (!is_file($sourcePath)) {
         return null;
     }
+
     $info = @getimagesize($sourcePath);
     if (!is_array($info)) {
         return null;
@@ -1363,6 +1364,7 @@ function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $ma
     if ($width <= 0 || $height <= 0) {
         return null;
     }
+
     $mime = (string) $info['mime'];
     $src = match ($mime) {
         'image/jpeg' => @imagecreatefromjpeg($sourcePath),
@@ -1370,16 +1372,56 @@ function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $ma
         'image/webp' => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($sourcePath) : false,
         default => false,
     };
-    if (!$src) {
+    if (!is_resource($src) && !is_object($src)) {
         return null;
     }
+
+    return [
+        'image' => $src,
+        'width' => (int) $width,
+        'height' => (int) $height,
+        'mime' => $mime,
+    ];
+}
+
+function album_resized_image_resource(mixed $src, int $width, int $height, int $maxWidth, int $maxHeight): mixed
+{
     $ratio = min($maxWidth / $width, $maxHeight / $height, 1);
     $newW = max(1, (int) floor($width * $ratio));
     $newH = max(1, (int) floor($height * $ratio));
     $dst = imagecreatetruecolor($newW, $newH);
+    if (!$dst) {
+        return null;
+    }
+
     imagealphablending($dst, false);
     imagesavealpha($dst, true);
+    $transparent = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+    if ($transparent !== false) {
+        imagefilledrectangle($dst, 0, 0, $newW, $newH, $transparent);
+    }
     imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $width, $height);
+
+    return $dst;
+}
+
+function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $maxHeight = 640): ?string
+{
+    if (!extension_loaded('gd')) {
+        return null;
+    }
+    $sourcePath = dirname(__DIR__) . '/' . ltrim($publicPath, '/');
+    $source = album_image_resource_from_path($sourcePath);
+    if ($source === null) {
+        return null;
+    }
+
+    $src = $source['image'];
+    $dst = album_resized_image_resource($src, $source['width'], $source['height'], $maxWidth, $maxHeight);
+    if ($dst === null) {
+        imagedestroy($src);
+        return null;
+    }
 
     $dir = dirname($sourcePath) . '/thumbs';
     if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
@@ -1395,11 +1437,137 @@ function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $ma
     if (!$ok) {
         return null;
     }
+    @chmod($thumbAbs, 0644);
+
     return 'storage/uploads/albums/thumbs/' . $name;
+}
+
+function create_album_webp_variant(string $publicPath, string $targetPublicPath, int $maxWidth, int $maxHeight, int $quality = 82): ?string
+{
+    if (!extension_loaded('gd') || !function_exists('imagewebp')) {
+        return null;
+    }
+    $sourcePath = dirname(__DIR__) . '/' . ltrim($publicPath, '/');
+    $source = album_image_resource_from_path($sourcePath);
+    if ($source === null) {
+        return null;
+    }
+
+    $src = $source['image'];
+    $dst = album_resized_image_resource($src, $source['width'], $source['height'], $maxWidth, $maxHeight);
+    if ($dst === null) {
+        imagedestroy($src);
+        return null;
+    }
+
+    $targetAbs = dirname(__DIR__) . '/' . ltrim($targetPublicPath, '/');
+    $dir = dirname($targetAbs);
+    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
+        imagedestroy($src);
+        imagedestroy($dst);
+        return null;
+    }
+
+    $ok = imagewebp($dst, $targetAbs, max(1, min(100, $quality)));
+    imagedestroy($src);
+    imagedestroy($dst);
+    if (!$ok) {
+        return null;
+    }
+    @chmod($targetAbs, 0644);
+
+    return $targetPublicPath;
+}
+
+/**
+ * @return array{thumbnail:?string,display:?string}
+ */
+function create_album_webp_derivatives(string $publicPath): array
+{
+    return [
+        'thumbnail' => create_album_webp_variant($publicPath, album_thumbnail_webp_public_path($publicPath), 640, 640, 82),
+        'display' => create_album_webp_variant($publicPath, album_display_webp_public_path($publicPath), 1600, 1600, 84),
+    ];
 }
 
 function album_thumbnail_public_path(string $photoPath): string
 {
     $base = pathinfo($photoPath, PATHINFO_FILENAME);
     return 'storage/uploads/albums/thumbs/' . $base . '.jpg';
+}
+
+function album_thumbnail_webp_public_path(string $photoPath): string
+{
+    $base = pathinfo($photoPath, PATHINFO_FILENAME);
+    return 'storage/uploads/albums/thumbs/' . $base . '.webp';
+}
+
+function album_display_webp_public_path(string $photoPath): string
+{
+    $base = pathinfo($photoPath, PATHINFO_FILENAME);
+    return 'storage/uploads/albums/display/' . $base . '.webp';
+}
+
+/**
+ * @return list<string>
+ */
+function album_photo_derived_public_paths(string $photoPath): array
+{
+    return [
+        album_thumbnail_public_path($photoPath),
+        album_thumbnail_webp_public_path($photoPath),
+        album_display_webp_public_path($photoPath),
+    ];
+}
+
+function album_public_file_exists(string $publicPath): bool
+{
+    $safePath = safe_storage_public_path_or_null($publicPath, ['storage/uploads/albums/']);
+    if ($safePath === null) {
+        return false;
+    }
+
+    return is_file(dirname(__DIR__) . '/' . $safePath);
+}
+
+function album_existing_thumbnail_webp_public_path(string $photoPath): string
+{
+    $path = album_thumbnail_webp_public_path($photoPath);
+
+    return album_public_file_exists($path) ? $path : '';
+}
+
+function album_existing_display_webp_public_path(string $photoPath): string
+{
+    $path = album_display_webp_public_path($photoPath);
+
+    return album_public_file_exists($path) ? $path : '';
+}
+
+function album_picture_html(string $fallbackPath, string $alt, array $attributes = [], string $webpPath = ''): string
+{
+    if ($fallbackPath === '') {
+        return '';
+    }
+
+    $imgAttributes = ['src' => base_url($fallbackPath), 'alt' => $alt] + $attributes;
+    $img = '<img';
+    foreach ($imgAttributes as $name => $value) {
+        $name = (string) $name;
+        if (preg_match('/^[a-zA-Z_:][-a-zA-Z0-9_:.]*$/', $name) !== 1 || $value === null || $value === false) {
+            continue;
+        }
+        if ($value === true) {
+            $img .= ' ' . $name;
+            continue;
+        }
+        $img .= ' ' . $name . '="' . e((string) $value) . '"';
+    }
+    $img .= '>';
+
+    if ($webpPath === '' || $webpPath === $fallbackPath) {
+        return $img;
+    }
+
+    return '<picture><source srcset="' . e(base_url($webpPath)) . '" type="image/webp">' . $img . '</picture>';
 }

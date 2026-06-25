@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'मुख्य शब्द',
   'document_field' => 'फ़ाइल',
   'upload_title' => 'दस्तावेज अपलोड करें',
-  'upload_help' => 'स्वीकृत प्रारूप: PDF, DOCX, TXT, मार्कडाउन और HTML। अधिकतम आकार: 100 एमबी.',
+  'upload_help' => 'स्वीकृत प्रारूप: PDF, DOCX, TXT, मार्कडाउन और HTML। अधिकतम आकार: 120 एमबी.',
   'upload' => 'दस्तावेज अपलोड करें',
   'delete' => 'हटाएं',
   'confirm_delete' => 'यह आइटम स्थायी रूप से हटाएँ?',

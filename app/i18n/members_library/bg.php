@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Ключови думи',
   'document_field' => 'Файл',
   'upload_title' => 'Качете документа',
-  'upload_help' => 'Приети формати: PDF, DOCX, TXT, Markdown и HTML. Максимален размер: 100 MB.',
+  'upload_help' => 'Приети формати: PDF, DOCX, TXT, Markdown и HTML. Максимален размер: 120 MB.',
   'upload' => 'Качете документа',
   'delete' => 'Изтриване',
   'confirm_delete' => 'Изтриване за постоянно на този елемент?',

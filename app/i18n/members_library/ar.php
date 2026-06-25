@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'كلمات مفتاحية',
   'document_field' => 'ملف',
   'upload_title' => 'رفع المستند',
-  'upload_help' => 'Accepted formats: PDF, DOCX, TXT, Markdown and HTML. الحد الأقصى للحجم: 100 ميجابايت.',
+  'upload_help' => 'الصيغ المقبولة: PDF و DOC و DOCX و TXT و Markdown و HTML. الحد الأقصى للحجم: 120 ميجابايت.',
   'upload' => 'رفع المستند',
   'delete' => 'حذف',
   'confirm_delete' => 'حذف هذا العنصر نهائيا؟',

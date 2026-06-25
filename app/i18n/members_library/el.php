@@ -124,7 +124,7 @@ return array (
   'tags_field' => 'Λέξεις-κλειδιά',
   'document_field' => 'Αρχείο',
   'upload_title' => 'Ανεβάστε το έγγραφο',
-  'upload_help' => 'Αποδεκτές μορφές: PDF, DOCX, TXT, Markdown και HTML. Μέγιστο μέγεθος: 100 MB.',
+  'upload_help' => 'Αποδεκτές μορφές: PDF, DOCX, TXT, Markdown και HTML. Μέγιστο μέγεθος: 120 MB.',
   'upload' => 'Ανεβάστε το έγγραφο',
   'delete' => 'Διαγραφή',
   'confirm_delete' => 'Να διαγραφεί οριστικά αυτό το στοιχείο;',

@@ -37,10 +37,11 @@ function albums_admin_delete_photo_files(string $publicPath): bool
     if (is_file($absolute)) {
         $ok = @unlink($absolute) && $ok;
     }
-    $thumbPublic = album_thumbnail_public_path($safePath);
-    $thumbAbsolute = dirname(__DIR__) . '/' . $thumbPublic;
-    if (is_file($thumbAbsolute)) {
-        $ok = @unlink($thumbAbsolute) && $ok;
+    foreach (album_photo_derived_public_paths($safePath) as $derivedPublic) {
+        $derivedAbsolute = dirname(__DIR__) . '/' . $derivedPublic;
+        if (is_file($derivedAbsolute)) {
+            $ok = @unlink($derivedAbsolute) && $ok;
+        }
     }
     return $ok;
 }
@@ -48,21 +49,27 @@ function albums_admin_delete_photo_files(string $publicPath): bool
 /**
  * @param array<string, mixed> $photo
  * @param array<string, mixed> $messages
- * @return array{safe_path:?string,image_src:string,title:string,caption:string,album_title:string}
+ * @return array{safe_path:?string,image_src:string,image_webp_src:string,display_webp_src:string,title:string,caption:string,album_title:string}
  */
 function albums_admin_photo_render_data(array $photo, array $messages, string $logEvent): array
 {
     $safePath = null;
     $imageSrc = '';
+    $imageWebpSrc = '';
+    $displayWebpSrc = '';
 
     try {
         $safePath = albums_admin_safe_photo_path((string) ($photo['file_path'] ?? ''));
         if ($safePath !== null) {
             $imageSrc = $safePath;
+            $displayWebpSrc = album_existing_display_webp_public_path($safePath);
             $thumbPath = album_thumbnail_public_path($safePath);
             $thumbAbs = $thumbPath !== '' ? dirname(__DIR__) . '/' . $thumbPath : '';
             if ($thumbAbs !== '' && is_file($thumbAbs)) {
                 $imageSrc = $thumbPath;
+                $imageWebpSrc = album_existing_thumbnail_webp_public_path($safePath);
+            } else {
+                $imageWebpSrc = $displayWebpSrc;
             }
         }
     } catch (Throwable $throwable) {
@@ -73,6 +80,8 @@ function albums_admin_photo_render_data(array $photo, array $messages, string $l
         ]);
         $safePath = null;
         $imageSrc = '';
+        $imageWebpSrc = '';
+        $displayWebpSrc = '';
     }
 
     $title = trim((string) ($photo['title'] ?? ''));
@@ -83,6 +92,8 @@ function albums_admin_photo_render_data(array $photo, array $messages, string $l
     return [
         'safe_path' => $safePath,
         'image_src' => $imageSrc,
+        'image_webp_src' => $imageWebpSrc,
+        'display_webp_src' => $displayWebpSrc,
         'title' => $title,
         'caption' => trim((string) ($photo['caption'] ?? '')),
         'album_title' => trim((string) ($photo['album_title'] ?? '')),
@@ -583,7 +594,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $created = 0;
             foreach ($photoRows as $photoRow) {
                 $safePath = albums_admin_safe_photo_path((string) ($photoRow['file_path'] ?? ''));
-                if ($safePath !== null && create_album_thumbnail($safePath, 640, 640) !== null) {
+                if ($safePath === null) {
+                    continue;
+                }
+                $thumbPath = create_album_thumbnail($safePath, 640, 640);
+                $webpPaths = create_album_webp_derivatives($safePath);
+                if ($thumbPath !== null || $webpPaths['thumbnail'] !== null || $webpPaths['display'] !== null) {
                     $created++;
                 }
             }
@@ -815,7 +831,7 @@ ob_start();
                             ?>
                             <article class="gallery-item">
                                 <?php if ($imageSrc !== ''): ?>
-                                    <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($photoRender['title']) ?>">
+                                    <?= album_picture_html($imageSrc, $photoRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $photoRender['image_webp_src']) ?>
                                 <?php endif; ?>
                                 <form method="post" onsubmit="return confirm(<?= e(albums_admin_js_string((string) $t['confirm_delete_photo'])) ?>)">
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -941,7 +957,7 @@ ob_start();
                     ?>
                     <article class="gallery-item">
                         <?php if ($imageSrc !== ''): ?>
-                            <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($photoRender['title']) ?>">
+                            <?= album_picture_html($imageSrc, $photoRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $photoRender['image_webp_src']) ?>
                         <?php endif; ?>
                         <p class="help"><?= e((string) $t['album_word']) ?> : <?= e($photoRender['album_title']) ?></p>
                         <form method="post">
