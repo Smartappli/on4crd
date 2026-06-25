@@ -120,6 +120,7 @@ $offset = 0;
 $photos = [];
 $coverPath = null;
 $coverDisplayPath = null;
+$coverDisplayWebpPath = '';
 try {
     $countStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
     $countStmt->execute([(int) $album['id']]);
@@ -139,7 +140,13 @@ try {
     if ($coverPath !== null) {
         $coverThumbPath = album_thumbnail_public_path($coverPath);
         $coverThumbAbs = dirname(__DIR__) . '/' . $coverThumbPath;
-        $coverDisplayPath = $coverThumbPath !== '' && is_file($coverThumbAbs) ? $coverThumbPath : $coverPath;
+        if ($coverThumbPath !== '' && is_file($coverThumbAbs)) {
+            $coverDisplayPath = $coverThumbPath;
+            $coverDisplayWebpPath = album_existing_thumbnail_webp_public_path($coverPath);
+        } else {
+            $coverDisplayPath = $coverPath;
+            $coverDisplayWebpPath = album_existing_display_webp_public_path($coverPath);
+        }
     }
 } catch (Throwable $throwable) {
     log_structured_event('album_detail_photos_prepare_failed', [
@@ -235,7 +242,7 @@ ob_start();
         <div class="album-detail-cover-stack">
             <div class="album-detail-cover">
                 <?php if ($coverDisplayPath !== null): ?>
-                    <img src="<?= e(base_url($coverDisplayPath)) ?>" alt="<?= e($albumTitle) ?>" loading="eager" decoding="async" fetchpriority="high">
+                    <?= album_picture_html($coverDisplayPath, $albumTitle, ['loading' => 'eager', 'decoding' => 'async', 'fetchpriority' => 'high'], $coverDisplayWebpPath) ?>
                 <?php else: ?>
                     <span class="album-placeholder-mark" aria-hidden="true"></span>
                 <?php endif; ?>
@@ -306,6 +313,8 @@ ob_start();
                         $thumbPath = album_thumbnail_public_path($filePath);
                         $thumbAbs = dirname(__DIR__) . '/' . $thumbPath;
                         $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
+                        $imageWebpSrc = is_file($thumbAbs) ? album_existing_thumbnail_webp_public_path($filePath) : album_existing_display_webp_public_path($filePath);
+                        $displayWebpSrc = album_existing_display_webp_public_path($filePath);
                         $title = trim((string) ($photo['title'] ?? ''));
                         $caption = trim((string) ($photo['caption'] ?? ''));
                     } catch (Throwable $throwable) {
@@ -318,8 +327,8 @@ ob_start();
                     }
                     ?>
                     <figure class="album-photo-card">
-                        <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener" data-album-viewer-open data-photo-title="<?= e($title) ?>" data-photo-caption="<?= e($caption) ?>">
-                            <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($title !== '' ? $title : (string) $t['photo_alt']) ?>" loading="lazy" decoding="async">
+                        <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener" data-album-viewer-open data-photo-title="<?= e($title) ?>" data-photo-caption="<?= e($caption) ?>" data-photo-display-src="<?= e($displayWebpSrc !== '' ? base_url($displayWebpSrc) : '') ?>" data-photo-fallback-src="<?= e(base_url($filePath)) ?>">
+                            <?= album_picture_html($imageSrc, $title !== '' ? $title : (string) $t['photo_alt'], ['loading' => 'lazy', 'decoding' => 'async'], $imageWebpSrc) ?>
                         </a>
                     </figure>
                 <?php endforeach; ?>

@@ -731,6 +731,7 @@ ob_start();
                         $albumTitle = (string) $t['albums'];
                     }
                     $coverSrc = '';
+                    $coverWebpSrc = '';
                     $photoCount = (int) ($row['photo_count'] ?? 0);
                     $description = trim((string) ($row['description'] ?? ''));
                     $descriptionText = '';
@@ -749,7 +750,13 @@ ob_start();
                         $coverPath = album_photo_public_path_or_null((string) ($row['cover_path'] ?? ''));
                         $coverThumb = $coverPath !== null ? album_thumbnail_public_path($coverPath) : '';
                         $coverThumbAbs = $coverThumb !== '' ? dirname(__DIR__) . '/' . $coverThumb : '';
-                        $coverSrc = $coverThumb !== '' && is_file($coverThumbAbs) ? $coverThumb : ($coverPath ?? '');
+                        if ($coverThumb !== '' && is_file($coverThumbAbs)) {
+                            $coverSrc = $coverThumb;
+                            $coverWebpSrc = album_existing_thumbnail_webp_public_path((string) $coverPath);
+                        } else {
+                            $coverSrc = $coverPath ?? '';
+                            $coverWebpSrc = $coverPath !== null ? album_existing_display_webp_public_path($coverPath) : '';
+                        }
                         $albumCategory = album_category_code((string) ($row['category'] ?? 'general'));
                         $albumSubcategory = album_subcategory_code((string) ($row['subcategory'] ?? ''));
                         $albumCategoryLabel = (string) ($albumCategories[$albumCategory] ?? album_category_label_from_code($albumCategory));
@@ -767,7 +774,7 @@ ob_start();
                         <div class="album-tile-media-stack">
                             <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
                                 <?php if ($coverSrc !== ''): ?>
-                                    <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e($albumTitle) ?>" loading="lazy" decoding="async">
+                                    <?= album_picture_html($coverSrc, (string) $t['cover_alt'] . ' ' . $albumTitle, ['loading' => 'lazy', 'decoding' => 'async'], $coverWebpSrc) ?>
                                 <?php else: ?>
                                     <span class="album-placeholder-mark" aria-hidden="true"></span>
                                 <?php endif; ?>

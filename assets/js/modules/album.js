@@ -79,6 +79,7 @@
   };
 
   const clearImage = () => {
+    image.onerror = null;
     image.removeAttribute('src');
     image.alt = '';
   };
@@ -91,7 +92,10 @@
     currentIndex = (index + links.length) % links.length;
     const link = links[currentIndex];
     const href = link.getAttribute('href') || '';
-    if (href === '') {
+    const displaySrc = link.getAttribute('data-photo-display-src') || '';
+    const fallbackSrc = link.getAttribute('data-photo-fallback-src') || href;
+    const imageSrc = displaySrc || fallbackSrc;
+    if (imageSrc === '') {
       return;
     }
 
@@ -101,7 +105,13 @@
     const description = dialog.getAttribute('data-album-description') || '';
     const fallbackAlt = thumbnail instanceof HTMLImageElement ? thumbnail.alt : '';
 
-    image.src = href;
+    image.onerror = () => {
+      if (fallbackSrc !== '' && image.src !== fallbackSrc) {
+        image.onerror = null;
+        image.src = fallbackSrc;
+      }
+    };
+    image.src = imageSrc;
     image.alt = title.trim() || fallbackAlt;
 
     const hasTitle = setText(titleNode, title);
