@@ -29,7 +29,7 @@ return array (
   'storage_path_invalid' => 'Nieprawidłowa ścieżka przechowywania.',
   'storage_path_forbidden' => 'Ścieżka magazynu jest niedozwolona.',
   'remote_url_private' => 'Zdalny URL wskazuje na sieć prywatną lub zarezerwowaną.',
-  'remote_url_private_resolved' => 'Zdalny URL jest przekształcany na prywatny lub zastrzeżony adres IP.',
+  'remote_url_private_resolved' => 'Zdalny URL jest rozwiązywany do prywatnego lub zarezerwowanego adresu IP.',
   'field_too_long' => 'Jedno z pól przekracza dozwoloną długość.',
   'wiki_storage_unavailable' => 'Pamięć Wiki jest niedostępna.',
   'wiki_page_invalid' => 'Nieprawidłowa strona wiki.',

@@ -29,7 +29,7 @@ return array (
   'storage_path_invalid' => 'Nederīgs krātuves ceļš.',
   'storage_path_forbidden' => 'Uzglabāšanas ceļš nav atļauts.',
   'remote_url_private' => 'Attālais URL norāda uz privātu vai rezervētu tīklu.',
-  'remote_url_private_resolved' => 'Attālā URL atrisina uz privātu vai rezervētu IP adresi.',
+  'remote_url_private_resolved' => 'Attālais URL tiek atrisināts uz privātu vai rezervētu IP adresi.',
   'field_too_long' => 'Viens no laukiem pārsniedz atļauto garumu.',
   'wiki_storage_unavailable' => 'Wiki krātuve nav pieejama.',
   'wiki_page_invalid' => 'Nederīga wiki lapa.',

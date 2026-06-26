@@ -53,7 +53,7 @@ return array (
   'tag_to_ph' => 'Tag canônica',
   'tag_duplicates_empty' => 'Nenhuma variante duplicada de tag detectada.',
   'ok_tags_merged' => 'Tags mescladas em %d documento(s).',
-  'ingestion_template' => 'Modelo de ingestao',
+  'ingestion_template' => 'Modelo de ingestão',
   'ingestion_template_none' => 'Nenhum',
   'ingestion_template_training' => 'Treinamento',
   'ingestion_template_safety' => 'Seguranca',

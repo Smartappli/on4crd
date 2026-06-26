@@ -61,7 +61,7 @@ return array (
   'bulk_to_draft' => 'Als Entwurf',
   'bulk_to_sold' => 'Als verkauft',
   'bulk_archive' => 'Archivieren',
-  'bulk_delete' => 'Loeschen',
+  'bulk_delete' => 'Löschen',
   'prev' => 'Zurueck',
   'default_ad_title' => 'Anzeige',
   'favorite_added' => 'Favorit hinzugefuegt',

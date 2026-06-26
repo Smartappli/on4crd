@@ -29,7 +29,7 @@ return array (
   'storage_path_invalid' => 'Μη έγκυρη διαδρομή αποθήκευσης.',
   'storage_path_forbidden' => 'Η διαδρομή αποθήκευσης δεν επιτρέπεται.',
   'remote_url_private' => 'Το απομακρυσμένο URL οδηγεί σε ιδιωτικό ή δεσμευμένο δίκτυο.',
-  'remote_url_private_resolved' => 'Το απομακρυσμένο URL κατευθύνεται σε μια ιδιωτική ή δεσμευμένη διεύθυνση IP.',
+  'remote_url_private_resolved' => 'Το απομακρυσμένο URL επιλύεται σε ιδιωτική ή δεσμευμένη διεύθυνση IP.',
   'field_too_long' => 'Ένα από τα πεδία υπερβαίνει το επιτρεπόμενο μήκος.',
   'wiki_storage_unavailable' => 'Ο χώρος αποθήκευσης Wiki δεν είναι διαθέσιμος.',
   'wiki_page_invalid' => 'Μη έγκυρη σελίδα wiki.',

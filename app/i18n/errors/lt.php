@@ -29,7 +29,7 @@ return array (
   'storage_path_invalid' => 'Netinkamas saugyklos kelias.',
   'storage_path_forbidden' => 'Saugojimo kelias neleidžiamas.',
   'remote_url_private' => 'Nuotolinis URL nukreipia į privatų arba rezervuotą tinklą.',
-  'remote_url_private_resolved' => 'Nuotolinis URL išsprendžia privatų arba rezervuotą IP adresą.',
+  'remote_url_private_resolved' => 'Nuotolinis URL išsprendžiamas į privatų arba rezervuotą IP adresą.',
   'field_too_long' => 'Vienas iš laukų viršija leistiną ilgį.',
   'wiki_storage_unavailable' => 'Wiki saugykla nepasiekiama.',
   'wiki_page_invalid' => 'Netinkamas wiki puslapis.',

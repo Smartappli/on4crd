@@ -8,7 +8,7 @@ return array (
   'categories' => 'Kategorien',
   'existing_categories' => 'Vorhandene Kategorien',
   'add_category' => 'Kategorie hinzufuegen',
-  'delete' => 'Loeschen',
+  'delete' => 'Löschen',
   'save' => 'Speichern',
   'title_ph' => 'Titel',
   'desc_ph' => 'Zusammenfassung oder Schlüsselwörter',

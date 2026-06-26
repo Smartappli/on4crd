@@ -27,7 +27,7 @@ return array (
   'upload_help' => 'Akzeptierte Formate: PDF, DOCX, TXT, Markdown und HTML. Maximale Größe: 25 MB.',
   'document_field' => 'Datei',
   'upload' => 'Dokument hochladen',
-  'delete' => 'Loeschen',
+  'delete' => 'Löschen',
   'confirm_delete' => 'Dieses Element dauerhaft löschen?',
   'ok_added' => 'Dokument zur Mitgliedsbibliothek hinzugefügt.',
   'ok_deleted' => 'Dokument gelöscht.',

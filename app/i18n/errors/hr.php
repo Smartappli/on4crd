@@ -29,7 +29,7 @@ return array (
   'storage_path_invalid' => 'Nevažeći put za pohranu.',
   'storage_path_forbidden' => 'Putanja za pohranu nije dopuštena.',
   'remote_url_private' => 'Udaljeni URL pokazuje na privatnu ili rezerviranu mrežu.',
-  'remote_url_private_resolved' => 'Udaljeni URL rješava privatnu ili rezerviranu IP adresu.',
+  'remote_url_private_resolved' => 'Udaljeni URL razrješava se u privatnu ili rezerviranu IP adresu.',
   'field_too_long' => 'Jedno od polja premašuje dopuštenu duljinu.',
   'wiki_storage_unavailable' => 'Wiki pohrana nije dostupna.',
   'wiki_page_invalid' => 'Nevažeća wiki stranica.',
