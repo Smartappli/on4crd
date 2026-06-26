@@ -108,7 +108,7 @@ final class MemberModuleRegressionContractsTest extends TestCase
             'pages/admin_library.php' => [
                 'SELECT COUNT(*) FROM member_library_subcategories WHERE category_code = ?',
                 "throw new RuntimeException('err_category_has_subcategories');",
-                'UPDATE member_library_documents SET category = "general", subcategory = "" WHERE category = ?',
+                'UPDATE member_library_documents SET category = "general", subcategory = "", subsubcategory = "" WHERE category = ?',
                 'SELECT COUNT(*) FROM member_library_documents WHERE category = ? AND subcategory = ?',
                 "throw new RuntimeException('err_subcategory_has_documents');",
             ],

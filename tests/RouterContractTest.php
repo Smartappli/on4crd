@@ -733,6 +733,7 @@ final class RouterContractTest extends TestCase
             'app/member_webotheque.php' => [
                 'data-webotheque-modal-open="webotheque-link-dialog"',
                 'data-webotheque-modal-open="webotheque-domain-dialog"',
+                'data-webotheque-modal-open="webotheque-subsubcategory-dialog"',
                 'data-webotheque-modal-open="webotheque-tag-dialog"',
                 'data-webotheque-modal-open="admin-webotheque-link-dialog"',
             ],
@@ -865,7 +866,7 @@ final class RouterContractTest extends TestCase
             'pages/auctions.php' => ["has_permission('auctions.manage')", "INSERT INTO auction_lots", "content_proposal_create((int) \$user['id'], 'auctions', 'content'", "redirect('my_requests')"],
             'pages/classifieds.php' => ["classifieds_can_moderate()", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "redirect('my_requests')"],
             'pages/classifieds_manage.php' => ["content_proposal_accepted_categories('classifieds', 32)"],
-            'app/member_webotheque.php' => ["data-webotheque-modal-open=\"webotheque-link-dialog\"", "data-webotheque-modal-open=\"webotheque-domain-dialog\"", "data-webotheque-modal-open=\"webotheque-tag-dialog\"", "data-webotheque-modal-open=\"admin-webotheque-link-dialog\"", "id=\"webotheque-link-dialog\"", "id=\"webotheque-domain-dialog\"", "id=\"webotheque-tag-dialog\"", "id=\"admin-webotheque-link-dialog\"", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "content_proposal_create((int) \$user['id'], 'webotheque', 'content'", "content_proposal_create((int) \$user['id'], 'webotheque', 'domain'", "content_proposal_create((int) \$user['id'], 'webotheque', 'tag'", "webotheque_insert_link", "redirect('my_requests')"],
+            'app/member_webotheque.php' => ["data-webotheque-modal-open=\"webotheque-link-dialog\"", "data-webotheque-modal-open=\"webotheque-domain-dialog\"", "data-webotheque-modal-open=\"webotheque-subsubcategory-dialog\"", "data-webotheque-modal-open=\"webotheque-tag-dialog\"", "data-webotheque-modal-open=\"admin-webotheque-link-dialog\"", "id=\"webotheque-link-dialog\"", "id=\"webotheque-domain-dialog\"", "id=\"webotheque-subsubcategory-dialog\"", "id=\"webotheque-tag-dialog\"", "id=\"admin-webotheque-link-dialog\"", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "content_proposal_create((int) \$user['id'], 'webotheque', 'content'", "content_proposal_create((int) \$user['id'], 'webotheque', 'domain'", "content_proposal_create((int) \$user['id'], 'webotheque', 'subsubcategory'", "content_proposal_create((int) \$user['id'], 'webotheque', 'tag'", "webotheque_insert_link", "redirect('my_requests')"],
         ];
 
         foreach ($contracts as $relativePath => $needles) {
