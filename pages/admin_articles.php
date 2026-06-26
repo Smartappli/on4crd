@@ -323,7 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'delete_category') {
-            if (!article_ensure_categories_table($articleMessages) || !article_ensure_subcategories_table()) {
+            if (!article_ensure_categories_table($articleMessages) || !article_ensure_subcategories_table() || !article_ensure_subsubcategories_table()) {
                 throw new RuntimeException($t('module_unavailable'));
             }
             $category = article_category_from_input((string) ($_POST['category_code'] ?? $_POST['code'] ?? ''), $knownCategories);
@@ -335,7 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ((int) ($subCountStmt->fetchColumn() ?: 0) > 0) {
                 throw new RuntimeException($t('err_category_has_subcategories'));
             }
-            db()->prepare('UPDATE articles SET category = "autres", subcategory = "" WHERE category = ?')->execute([$category]);
+            db()->prepare('UPDATE articles SET category = "autres", subcategory = "", subsubcategory = "" WHERE category = ?')->execute([$category]);
             db()->prepare('INSERT INTO article_categories (code, label, deleted_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE deleted_at = NOW()')
                 ->execute([$category, (string) ($knownCategories[$category] ?? article_category_label_from_code($category))]);
             set_flash('success', $t('ok_category_deleted'));
@@ -386,6 +386,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($subcategory === '') {
                 throw new RuntimeException($t('err_invalid_category'));
             }
+            if (article_ensure_subsubcategories_table()) {
+                $subsubcategoryCountStmt = db()->prepare('SELECT COUNT(*) FROM article_subsubcategories WHERE category_code = ? AND subcategory_code = ?');
+                $subsubcategoryCountStmt->execute([$category, $subcategory]);
+                if ((int) ($subsubcategoryCountStmt->fetchColumn() ?: 0) > 0) {
+                    throw new RuntimeException($t('err_subcategory_has_subsubcategories'));
+                }
+            }
             $countStmt = db()->prepare('SELECT COUNT(*) FROM articles WHERE category = ? AND subcategory = ?');
             $countStmt->execute([$category, $subcategory]);
             if ((int) ($countStmt->fetchColumn() ?: 0) > 0) {
@@ -394,6 +401,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare('DELETE FROM article_subcategories WHERE category_code = ? AND code = ?')->execute([$category, $subcategory]);
             set_flash('success', $t('ok_subcategory_deleted'));
             redirect_url(route_url_clean('admin_articles', ['category' => $category]));
+        }
+
+        if ($action === 'add_subsubcategory') {
+            if (!article_ensure_subsubcategories_table()) {
+                throw new RuntimeException($t('module_unavailable'));
+            }
+            $parentParts = article_subcategory_ref_parts((string) ($_POST['subsubcategory_parent_ref'] ?? ''));
+            $category = article_category_from_input($parentParts['category'] !== '' ? $parentParts['category'] : (string) ($_POST['subsubcategory_category'] ?? 'autres'), $knownCategories);
+            $subcategory = article_subcategory_code($parentParts['subcategory'] !== '' ? $parentParts['subcategory'] : (string) ($_POST['subsubcategory_parent'] ?? ''));
+            [$category, $subcategory] = article_taxonomy_from_input($category, article_subcategory_ref($category, $subcategory), $knownCategories);
+            $label = content_proposal_clean_single_line((string) ($_POST['subsubcategory_label'] ?? ''), 160);
+            $codeInput = trim((string) ($_POST['subsubcategory_code'] ?? ''));
+            $code = article_subsubcategory_code($codeInput !== '' ? $codeInput : $label);
+            if ($subcategory === '' || $label === '' || $code === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            db()->prepare('INSERT INTO article_subsubcategories (category_code, subcategory_code, code, label) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$category, $subcategory, $code, $label]);
+            set_flash('success', $t('ok_subsubcategory_updated'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $subcategory, 'subsubcategory' => $code]));
+        }
+
+        if ($action === 'update_subsubcategory') {
+            if (!article_ensure_subsubcategories_table()) {
+                throw new RuntimeException($t('module_unavailable'));
+            }
+            $category = article_category_from_input((string) ($_POST['subsubcategory_category'] ?? 'autres'), $knownCategories);
+            $subcategory = article_subcategory_code((string) ($_POST['subsubcategory_parent'] ?? ''));
+            $code = article_subsubcategory_code((string) ($_POST['subsubcategory_code'] ?? ''));
+            $label = content_proposal_clean_single_line((string) ($_POST['subsubcategory_label'] ?? ''), 160);
+            if ($subcategory === '' || $code === '' || $label === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            [$category, $subcategory] = article_taxonomy_from_input($category, article_subcategory_ref($category, $subcategory), $knownCategories);
+            db()->prepare('INSERT INTO article_subsubcategories (category_code, subcategory_code, code, label) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$category, $subcategory, $code, $label]);
+            set_flash('success', $t('ok_subsubcategory_updated'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $subcategory, 'subsubcategory' => $code]));
+        }
+
+        if ($action === 'delete_subsubcategory') {
+            if (!article_ensure_subsubcategories_table()) {
+                throw new RuntimeException($t('module_unavailable'));
+            }
+            $category = article_category_from_input((string) ($_POST['subsubcategory_category'] ?? 'autres'), $knownCategories);
+            $subcategory = article_subcategory_code((string) ($_POST['subsubcategory_parent'] ?? ''));
+            $code = article_subsubcategory_code((string) ($_POST['subsubcategory_code'] ?? ''));
+            if ($subcategory === '' || $code === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            [$category, $subcategory] = article_taxonomy_from_input($category, article_subcategory_ref($category, $subcategory), $knownCategories);
+            $countStmt = db()->prepare('SELECT COUNT(*) FROM articles WHERE category = ? AND subcategory = ? AND subsubcategory = ?');
+            $countStmt->execute([$category, $subcategory, $code]);
+            if ((int) ($countStmt->fetchColumn() ?: 0) > 0) {
+                throw new RuntimeException($t('err_subsubcategory_has_documents'));
+            }
+            db()->prepare('DELETE FROM article_subsubcategories WHERE category_code = ? AND subcategory_code = ? AND code = ?')->execute([$category, $subcategory, $code]);
+            set_flash('success', $t('ok_subsubcategory_deleted'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $subcategory]));
         }
 
         if ($action === 'save_article' || $action === 'preview_article') {
