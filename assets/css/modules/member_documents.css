@@ -100,6 +100,11 @@
   margin: 0;
 }
 
+[data-route="videos"] .member-document-propose-menu-panel {
+  top: auto;
+  bottom: calc(100% + .45rem);
+}
+
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-search-panel {
   margin-top: 0;
   padding-block: .65rem;
