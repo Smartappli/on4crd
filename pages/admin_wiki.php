@@ -507,7 +507,7 @@ ob_start();
     </section>
     <div class="table-wrap">
         <table>
-            <thead><tr><th><?= e($t('th_title')) ?></th><th><?= e($t('th_slug')) ?></th><th><?= e($wikiThemeLabel) ?></th><th><?= e($tr('th_status')) ?></th><th><?= e($t('th_updated')) ?></th><th><?= e($t('th_action')) ?></th></tr></thead>
+            <thead><tr><th><?= e($t('th_title')) ?></th><th><?= e($t('th_slug')) ?></th><th class="taxonomy-theme-column"><?= e($wikiThemeLabel) ?></th><th><?= e($tr('th_status')) ?></th><th><?= e($t('th_updated')) ?></th><th><?= e($t('th_action')) ?></th></tr></thead>
             <tbody>
             <?php foreach ($pages as $page):
                 $pageStatus = (string) ($page['status'] ?? 'published');
@@ -547,11 +547,11 @@ ob_start();
                         <?php endif; ?>
                     </td>
                     <td><code><?= e((string) $page['slug']) ?></code></td>
-                    <td>
+                    <td class="taxonomy-theme-column">
                         <div class="taxonomy-badge-row">
                             <span class="badge muted taxonomy-pill-category"><?= e($pageCategoryLabel) ?></span>
                             <?php if ($pageSubcategory !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($pageSubcategoryLabel) ?></span><?php endif; ?>
-                            <?php if ($pageSubcategory !== '' && $pageSubsubcategory !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($pageSubsubcategoryLabel) ?></span><?php endif; ?>
+                            <?php if ($pageSubsubcategory !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($pageSubsubcategoryLabel) ?></span><?php endif; ?>
                         </div>
                     </td>
                     <td><span class="badge muted"><?= e((string) ($statusLabels[$pageStatus] ?? $pageStatus)) ?></span></td>
