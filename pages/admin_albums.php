@@ -816,7 +816,7 @@ ob_start();
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
-                    <span class="pill"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
+                    <span class="pill taxonomy-pill-category"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
                     <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
                     <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                     <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
@@ -831,7 +831,7 @@ ob_start();
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_ref" value="<?= e(album_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                        <span class="pill"><?= e((string) ($albumCategories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
+                        <span class="pill taxonomy-pill-subcategory"><?= e((string) ($albumCategories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
                         <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
                         <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                         <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
