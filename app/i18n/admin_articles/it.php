@@ -59,7 +59,7 @@ return array (
   'search' => 'Ricerca',
   'all_statuses' => 'Tutti gli stati',
   'all_categories' => 'Tutte le categorie',
-  'filter' => 'Filtro',
+  'filter' => 'Filtra',
   'reset_filter' => 'Reimposta',
   'revisions' => 'Storico versioni',
   'scheduled_at' => 'Data di pubblicazione',

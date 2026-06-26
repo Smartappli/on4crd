@@ -28,7 +28,7 @@ return array (
   'unsubscribe' => 'Ħassar l-abbonament',
   'reactivate' => 'Attiva mill-ġdid',
   'confirm_delete_subscriber' => 'Tħassar dan l-abbonat?',
-  'delete' => 'ĦaSsar',
+  'delete' => 'Ħassar',
   'campaigns' => 'Kampanji',
   'title' => 'Titolu',
   'email_subject' => 'Suġġett tal-email',

@@ -12,7 +12,7 @@ return [
     'cache_ttl' => 'TTL缓存',
     'refresh' => '浏览器刷新',
     'notes' => '笔记',
-    'save' => '节省',
+    'save' => '保存',
     'layout' => '直播',
     'meta_desc' => '配置会员区域中显示的实时提要。',
 ];

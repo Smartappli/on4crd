@@ -21,7 +21,7 @@ return [
     'col_qty' => 'Mennyiség',
     'col_line_total' => 'Teljes sor',
     'line_active' => 'Aktív',
-    'line_remove' => 'Törölje',
+    'line_remove' => 'Törlés',
     'yes' => 'Igen',
     'no' => 'Nem',
     'csv_reservation_id' => 'Foglalás ID',

@@ -19,7 +19,7 @@ return array (
   'title_content_required' => 'A cím és a tartalom kötelező.',
   'field_too_long' => 'Az egyik mező túllépi a megengedett hosszt.',
   'update_success' => 'Mentett Wiki oldal.',
-  'edit_page' => 'Szerkesztés / Törölje',
+  'edit_page' => 'Szerkesztés / törlés',
   'edit_page_title' => 'Wiki szerkesztése',
   'close' => 'Bezárás',
   'title_label' => 'Cím',

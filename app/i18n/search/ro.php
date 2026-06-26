@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Cercetare',
+  'title' => 'Căutare',
   'eyebrow' => 'Modul public',
   'lead' => 'Găsiți rapid știri, articole, pagini Wiki, documente, anunțuri și albume.',
   'placeholder' => 'Indicator, cuvânt cheie, temă, document...',
@@ -14,7 +14,7 @@ return array (
   'empty_help' => 'Încercați un cuvânt cheie mai scurt, o altă sursă sau o ortografie diferită.',
   'query_too_short' => 'Vă rugăm să introduceți cel puțin 2 caractere.',
   'previous' => 'Anterior',
-  'next' => 'Urmând',
+  'next' => 'Următor',
   'page' => 'Pagină',
   'pagination' => 'Paging',
   'meta_desc' => 'Căutare globală ON4CRD în conținutul site-ului.',

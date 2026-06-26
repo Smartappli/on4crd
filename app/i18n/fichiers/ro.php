@@ -27,7 +27,7 @@ return array (
   'upload_help' => 'Formate acceptate: PDF, DOCX, TXT, Markdown și HTML. Dimensiune maximă: 25 MB.',
   'document_field' => 'Fişier',
   'upload' => 'Încărcați documentul',
-  'delete' => 'ŞTERGE',
+  'delete' => 'Șterge',
   'confirm_delete' => 'Ștergeți definitiv acest element?',
   'ok_added' => 'Document adăugat în biblioteca membrilor.',
   'ok_deleted' => 'Document șters.',

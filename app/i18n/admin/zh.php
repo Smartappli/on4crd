@@ -23,7 +23,7 @@ return array (
   'proposal_status_label' => '地位',
   'proposal_moderation_note' => '审核说明',
   'proposal_open_module' => '打开',
-  'proposal_save' => '节省',
+  'proposal_save' => '保存',
   'pending_area_articles' => '文章',
   'pending_area_albums' => '相册',
   'pending_area_auctions' => '拍卖',

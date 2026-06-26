@@ -28,7 +28,7 @@ return array (
   'unsubscribe' => 'Dezabonați-vă',
   'reactivate' => 'Reactiva',
   'confirm_delete_subscriber' => 'Ștergeți acest abonat?',
-  'delete' => 'ŞTERGE',
+  'delete' => 'Șterge',
   'campaigns' => 'Campanii',
   'title' => 'Titlu',
   'email_subject' => 'Subiectul e-mailului',

@@ -38,7 +38,7 @@ return array (
   'save' => 'Ħlief',
   'album_word' => 'Album tar-ritratti',
   'update' => 'Biex taġġorna',
-  'delete' => 'ĦaSsar',
+  'delete' => 'Ħassar',
   'ready_files' => 'fajl(s) lest(i) biex jiġi importat.',
   'meta_desc' => 'Ġestjoni ta\' albums tar-ritratti u l-kontenut pubbliku tagħhom.',
   'storage_unavailable' => 'Il-ħażna tal-album mhix disponibbli.',

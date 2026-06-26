@@ -27,7 +27,7 @@ return array (
   'upload_help' => 'Formati aċċettati: PDF, DOCX, TXT, Markdown u HTML. Daqs massimu: 25 MB.',
   'document_field' => 'Fajl',
   'upload' => 'Tella d-dokument',
-  'delete' => 'ĦaSsar',
+  'delete' => 'Ħassar',
   'confirm_delete' => 'Tħassar dan l-element b\'mod permanenti?',
   'ok_added' => 'Dokument miżjud mal-librerija tal-membri.',
   'ok_deleted' => 'Dokument imħassar.',

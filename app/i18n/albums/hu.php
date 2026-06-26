@@ -43,7 +43,7 @@ return array (
   'other_albums' => 'További albumok',
   'favorite_add' => 'Hozzáadás a kedvencekhez',
   'favorite_remove' => 'Eltávolítás a kedvencekből',
-  'edit_album' => 'Frissítés / Törölje',
+  'edit_album' => 'Frissítés / törlés',
   'edit_album_title' => 'Frissítés Fotóalbum',
   'close' => 'Bezárás',
   'title_label' => 'Cím',

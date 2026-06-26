@@ -5,7 +5,7 @@ return array (
   'err_title_required' => 'Vyžaduje sa názov partie.',
   'ok_saved' => 'Registrovaná dávka.',
   'edit' => 'Upraviť',
-  'create' => 'Vytvorte',
+  'create' => 'Vytvoriť',
   'a_lot' => 'veľa',
   'title' => 'Názov',
   'slug' => 'Slimák',

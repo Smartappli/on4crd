@@ -23,7 +23,7 @@ return array (
   'proposal_status_label' => 'Статус',
   'proposal_moderation_note' => 'Примечание модератора',
   'proposal_open_module' => 'Открыть',
-  'proposal_save' => 'Сохранять',
+  'proposal_save' => 'Сохранить',
   'pending_area_articles' => 'Статьи',
   'pending_area_albums' => 'Альбомы',
   'pending_area_auctions' => 'Аукционы',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'err_title_required' => 'Titlul lotului este necesar.',
   'ok_saved' => 'Lot înregistrat.',
-  'edit' => 'A modifica',
+  'edit' => 'Editează',
   'create' => 'Crea',
   'a_lot' => 'mult',
   'title' => 'Titlu',

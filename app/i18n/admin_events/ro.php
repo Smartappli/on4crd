@@ -6,7 +6,7 @@ return array (
   'layout' => 'Administrarea calendarului',
   'title_required' => 'Titlul necesar.',
   'form_title' => 'un eveniment',
-  'edit' => 'A modifica',
+  'edit' => 'Editează',
   'create' => 'Crea',
   'title' => 'Titlu',
   'slug' => 'Melc',

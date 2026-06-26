@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'not_found' => 'Pagina Wiki nu a fost găsită.',
-  'edit' => 'A modifica',
+  'edit' => 'Editează',
   'layout' => 'Wiki',
   'meta_desc' => 'Consultarea unei pagini Wiki.',
   'history' => 'Istoric',
@@ -19,7 +19,7 @@ return array (
   'title_content_required' => 'Titlul și conținutul sunt obligatorii.',
   'field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
   'update_success' => 'Pagina Wiki salvată.',
-  'edit_page' => 'A modifica / Ștergeți',
+  'edit_page' => 'Editează / șterge',
   'edit_page_title' => 'Editați Wiki',
   'close' => 'Închide',
   'title_label' => 'Titlu',

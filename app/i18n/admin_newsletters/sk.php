@@ -33,7 +33,7 @@ return array (
   'title' => 'Názov',
   'email_subject' => 'Predmet e-mailu',
   'content' => 'Obsah',
-  'create_campaign' => 'Vytvorte kampaň',
+  'create_campaign' => 'Vytvoriť kampaň',
   'results' => 'Výsledky',
   'action' => 'Akcia',
   'sent_results' => 'Odoslané %d / zlyhania %d',

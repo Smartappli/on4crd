@@ -13,7 +13,7 @@ return array (
   'page' => 'Stránka',
   'previous' => 'Predchádzajúce',
   'next' => 'Ďalej',
-  'create_album' => 'Vytvorte album',
+  'create_album' => 'Vytvoriť album',
   'add_photo' => 'Pridajte fotku',
   'upload' => 'Nahrať',
   'rebuild_thumbs' => 'Obnovte miniatúry',

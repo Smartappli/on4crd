@@ -8,7 +8,7 @@ return array (
   'th_slug' => 'Melc',
   'th_updated' => 'Actualizare',
   'th_action' => 'Acţiune',
-  'edit' => 'A modifica',
+  'edit' => 'Editează',
   'empty' => 'Fara pagini.',
   'layout' => 'Administrare wiki',
   'meta_desc' => 'Gestionarea paginilor wiki.',

@@ -10,7 +10,7 @@ return [
     'english' => '英语',
     'deutsch' => '德语',
     'dutch' => '荷兰语',
-    'save' => '节省',
+    'save' => '保存',
     'committee_title' => '委员会 — 名称',
     'committee_intro' => '委员会——简介',
     'committee_mission' => '委员会——使命',

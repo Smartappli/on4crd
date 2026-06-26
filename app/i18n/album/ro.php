@@ -24,7 +24,7 @@ return array (
   'page' => 'Pagină',
   'pagination' => 'Paginare foto',
   'previous' => 'Anterior',
-  'next' => 'Urmând',
+  'next' => 'Următor',
   'uploaded_count' => 'fotografii adăugate.',
   'caption' => 'Legendă',
   'files_dropzone' => 'Fișiere imagine',

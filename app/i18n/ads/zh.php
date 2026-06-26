@@ -28,7 +28,7 @@ return array (
   'label_status' => '地位',
   'label_visual' => '视觉的',
   'end_date_help' => '结束日期将在注册时自动计算。如果活动结束前达到最大观看次数，活动将自动过期。',
-  'save' => '节省',
+  'save' => '保存',
   'my_ads' => '我的广告',
   'col_title' => '蒂特雷',
   'col_placement' => '放置',

@@ -5,7 +5,7 @@ return [
     'ok_updated' => '仪表板小部件已更新。',
     'title' => '仪表板管理',
     'help' => '启用/禁用会员仪表板上可用的小部件。',
-    'save' => '节省',
+    'save' => '保存',
     'layout' => '仪表板',
     'meta_desc' => '成员仪表板小部件的配置。',
     'members_title' => '会员管理',

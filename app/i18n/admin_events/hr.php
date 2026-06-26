@@ -7,7 +7,7 @@ return array (
   'title_required' => 'Naslov je obavezan.',
   'form_title' => 'događaj',
   'edit' => 'Uredi',
-  'create' => 'Stvorite',
+  'create' => 'Kreiraj',
   'title' => 'Naslov',
   'slug' => 'Puž',
   'summary' => 'Sažetak',

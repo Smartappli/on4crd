@@ -38,7 +38,7 @@ return array (
   'save' => 'Mentés',
   'album_word' => 'Fotóalbum',
   'update' => 'Frissítés',
-  'delete' => 'Törölje',
+  'delete' => 'Törlés',
   'ready_files' => 'importálásra kész fájl(ok).',
   'meta_desc' => 'Fotóalbumok és nyilvános tartalmaik kezelése.',
   'storage_unavailable' => 'Az album tárhelye nem érhető el.',

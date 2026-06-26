@@ -16,7 +16,7 @@ return array (
   'err_delete_category' => 'Nije moguće izbrisati za ovu kategoriju.',
   'ok_category_deleted' => 'Kategorija uklonjena (članci premješteni u "ostalo").',
   'edit' => 'Uredi',
-  'create' => 'Stvorite',
+  'create' => 'Kreiraj',
   'an_article' => 'članak',
   'title' => 'Naslov',
   'slug' => 'Puž',

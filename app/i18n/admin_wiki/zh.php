@@ -39,7 +39,7 @@ return array (
   'err_category_has_subcategories' => '首先删除所有子主题。',
   'err_subcategory_has_documents' => '该子主题仍然包含页面。',
   'storage_unavailable' => '维基存储不可用。',
-  'save' => '节省',
+  'save' => '保存',
   'proposal_status_saved' => '提案已更新。',
   'invalid_proposal' => '维基页面无效。',
   'proposal_storage_unavailable' => '维基存储不可用。',
@@ -58,5 +58,5 @@ return array (
   'proposal_contact' => '接触',
   'proposal_status_label' => '地位',
   'proposal_moderation_note' => '审核说明',
-  'proposal_save_status' => '节省',
+  'proposal_save_status' => '保存',
 );

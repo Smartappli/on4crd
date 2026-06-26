@@ -27,7 +27,7 @@ return array (
   'upload_help' => 'Elfogadott formátumok: PDF, DOCX, TXT, Markdown és HTML. Maximális méret: 25 MB.',
   'document_field' => 'Fájl',
   'upload' => 'Töltse fel a dokumentumot',
-  'delete' => 'Törölje',
+  'delete' => 'Törlés',
   'confirm_delete' => 'Véglegesen törli ezt az elemet?',
   'ok_added' => 'A dokumentum hozzáadva a tagok könyvtárához.',
   'ok_deleted' => 'A dokumentum törölve.',

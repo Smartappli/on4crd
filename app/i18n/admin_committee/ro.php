@@ -23,6 +23,6 @@ return array (
   'move_up' => 'Mută în sus',
   'move_down' => 'Mută în jos',
   'member' => 'Membru',
-  'edit' => 'A modifica',
+  'edit' => 'Editează',
   'avatar_alt' => 'Avatarul membrului',
 );

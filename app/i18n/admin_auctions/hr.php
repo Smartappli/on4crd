@@ -5,7 +5,7 @@ return array (
   'err_title_required' => 'Potreban naziv lota.',
   'ok_saved' => 'Registrirana serija.',
   'edit' => 'Uredi',
-  'create' => 'Stvorite',
+  'create' => 'Kreiraj',
   'a_lot' => 'puno',
   'title' => 'Naslov',
   'slug' => 'Puž',

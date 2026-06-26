@@ -20,7 +20,7 @@ return array (
   'simple_html' => '简单的 HTML 内容',
   'editor_tip' => '提示：使用编辑器工具栏中的“导入 Word”按钮（.docx 格式）。',
   'status' => '地位',
-  'save' => '节省',
+  'save' => '保存',
   'my_news' => '我的新闻/管理版块',
   'action' => '行动',
   'edit_action' => '编辑',

@@ -100,7 +100,7 @@ return array (
   'step_a' => 'Krok A',
   'step_b' => 'Krok B',
   'need_now' => 'co chceš teď dělat?',
-  'manual_flow' => 'Vytvořte manuál QSL',
+  'manual_flow' => 'Vytvořit ruční QSL',
   'adif_flow' => 'Import QSO ADIF',
   'guided_manual_form' => 'Manuální průvodce formulářem',
   'contact_callsign' => 'Kontaktní kód',

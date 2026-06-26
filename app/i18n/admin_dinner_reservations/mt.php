@@ -23,7 +23,7 @@ return array (
   'col_qty' => 'Kwantità',
   'col_line_total' => 'Linja totali',
   'line_active' => 'Attiva',
-  'line_remove' => 'ĦaSsar',
+  'line_remove' => 'Ħassar',
   'yes' => 'Iva',
   'no' => 'Le',
   'csv_reservation_id' => 'Riżerva ID',

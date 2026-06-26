@@ -16,7 +16,7 @@ return array (
   'nav_design' => '1 - Personalizza design',
   'nav_design_help' => 'Aggiungi uno sfondo immagine, un colore pieno, un gradiente o una palette pronta.',
   'nav_create' => '2 - Crea / importa',
-  'nav_create_help' => 'Crea una QSL manuale o importa file ADIF con drag and drop.',
+  'nav_create_help' => 'Crea una QSL manuale o importa file ADIF tramite trascinamento.',
   'nav_manage' => '3 - Gestisci ed esporta',
   'nav_manage_help' => 'Filtra i QSO, genera in batch ed esporta fronte/retro.',
   'bulk_generate' => 'Genera le carte QSL selezionate',

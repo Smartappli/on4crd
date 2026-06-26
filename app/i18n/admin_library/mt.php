@@ -8,7 +8,7 @@ return array (
   'categories' => 'Kategoriji',
   'existing_categories' => 'Kategoriji eżistenti',
   'add_category' => 'Żid kategorija',
-  'delete' => 'ĦaSsar',
+  'delete' => 'Ħassar',
   'save' => 'Issejvja',
   'title_ph' => 'Titolu',
   'desc_ph' => 'Sommarju jew kliem ewlieni',

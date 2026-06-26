@@ -20,7 +20,7 @@ return array (
   'subscribe_auctions' => 'Abonați-vă la licitație',
   'page' => 'Pagină',
   'previous' => 'Anterior',
-  'next' => 'Urmând',
+  'next' => 'Următor',
   'invalid' => 'Cerere invalidă.',
   'storage_unavailable' => 'Nu există licitații în curs.',
   'lot_created_direct' => 'Document propus și aprobat direct. Adăugați fișierul din administrarea bibliotecii dacă este necesar.',

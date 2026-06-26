@@ -16,7 +16,7 @@ return array (
   'err_delete_category' => 'Pre túto kategóriu nie je možné odstrániť.',
   'ok_category_deleted' => 'Kategória bola odstránená (články boli presunuté do kategórie „iné“).',
   'edit' => 'Upraviť',
-  'create' => 'Vytvorte',
+  'create' => 'Vytvoriť',
   'an_article' => 'článok',
   'title' => 'Názov',
   'slug' => 'Slimák',

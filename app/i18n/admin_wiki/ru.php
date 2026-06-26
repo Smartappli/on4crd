@@ -39,7 +39,7 @@ return array (
   'err_category_has_subcategories' => 'Сначала удалите все подтемы.',
   'err_subcategory_has_documents' => 'В этой подтеме все еще есть страницы.',
   'storage_unavailable' => 'Хранилище Wiki недоступно.',
-  'save' => 'Сохранять',
+  'save' => 'Сохранить',
   'proposal_status_saved' => 'Предложение обновлено.',
   'invalid_proposal' => 'Неверная вики-страница.',
   'proposal_storage_unavailable' => 'Хранилище Wiki недоступно.',
@@ -58,5 +58,5 @@ return array (
   'proposal_contact' => 'Контакт',
   'proposal_status_label' => 'Статус',
   'proposal_moderation_note' => 'Примечание модератора',
-  'proposal_save_status' => 'Сохранять',
+  'proposal_save_status' => 'Сохранить',
 );

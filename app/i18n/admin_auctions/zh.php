@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 return [
     'err_title_required' => '需要提供地块名称。',
-    'ok_saved' => '节省了很多。',
+    'ok_saved' => '拍品已保存。',
     'edit' => '编辑',
-    'create' => '创造',
-    'a_lot' => '很多',
+    'create' => '创建',
+    'a_lot' => '一个拍品',
     'title' => '标题',
     'slug' => '蛞蝓',
     'summary' => '概括',
@@ -19,9 +19,9 @@ return [
     'start' => '开始',
     'end' => '结尾',
     'status' => '地位',
-    'save_lot' => '节省很多',
-    'saved_lots' => '节省了很多',
-    'no_lot' => '没有很多。',
+    'save_lot' => '保存拍品',
+    'saved_lots' => '已保存的拍品',
+    'no_lot' => '暂无拍品。',
     'layout' => '拍卖管理',
     'meta_desc' => '管理拍卖批次和安排设置。',
 ];

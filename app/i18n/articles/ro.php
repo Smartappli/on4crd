@@ -17,7 +17,7 @@ return array (
   'layout_title' => 'Spațiu membri',
   'page' => 'Pagină',
   'previous' => 'Anterior',
-  'next' => 'Urmând',
+  'next' => 'Următor',
   'theme_antennes' => 'Antene',
   'theme_trafic' => 'Trafic și DX',
   'theme_numerique' => 'Moduri digitale',

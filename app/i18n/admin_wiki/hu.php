@@ -30,7 +30,7 @@ return array (
   'modification_applied' => 'Wiki szerkesztés alkalmazva.',
   'add_category' => 'Téma hozzáadása',
   'add_subcategory' => 'Altéma hozzáadása',
-  'delete' => 'Törölje',
+  'delete' => 'Törlés',
   'category_saved' => 'Wiki téma mentve.',
   'category_deleted' => 'Wiki téma törölve.',
   'subcategory_saved' => 'Wiki altéma mentve.',

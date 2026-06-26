@@ -7,7 +7,7 @@ return array (
   'title_required' => 'Vyžaduje sa titul.',
   'form_title' => 'udalosť',
   'edit' => 'Upraviť',
-  'create' => 'Vytvorte',
+  'create' => 'Vytvoriť',
   'title' => 'Názov',
   'slug' => 'Slimák',
   'summary' => 'Zhrnutie',

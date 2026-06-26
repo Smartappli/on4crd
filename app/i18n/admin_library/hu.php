@@ -8,7 +8,7 @@ return array (
   'categories' => 'Kategóriák',
   'existing_categories' => 'Meglévő kategóriák',
   'add_category' => 'Kategória hozzáadása',
-  'delete' => 'Törölje',
+  'delete' => 'Törlés',
   'save' => 'Mentés',
   'title_ph' => 'Cím',
   'desc_ph' => 'Összegzés vagy kulcsszavak',

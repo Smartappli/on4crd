@@ -28,7 +28,7 @@ return array (
   'unsubscribe' => 'Leiratkozás',
   'reactivate' => 'Aktiválja újra',
   'confirm_delete_subscriber' => 'Törli ezt az előfizetőt?',
-  'delete' => 'Törölje',
+  'delete' => 'Törlés',
   'campaigns' => 'Kampányok',
   'title' => 'Cím',
   'email_subject' => 'E-mail tárgya',

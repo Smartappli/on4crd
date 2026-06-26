@@ -9,7 +9,7 @@ return array (
   'role' => '委员会的角色',
   'sort_order' => '显示顺序',
   'bio' => '简介',
-  'save' => '节省',
+  'save' => '保存',
   'layout' => '委员会管理',
   'meta_desc' => '管理委员会页面上显示的成员。',
   'invalid_member' => '成员无效。',

@@ -43,7 +43,7 @@ return array (
   'all_categories' => 'Todas as categorias',
   'search_ph' => 'Procurar',
   'tag_search_ph' => 'Tags de pesquisa',
-  'filter' => 'Filtro',
+  'filter' => 'Filtrar',
   'reset' => 'Reiniciar',
   'bulk_delete' => 'Excluir seleção',
   'select' => 'Selecione',

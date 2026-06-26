@@ -61,7 +61,7 @@ return array (
   'bulk_to_draft' => 'Mur għall-abbozz',
   'bulk_to_sold' => 'Mur mibjugħa',
   'bulk_archive' => 'Arkivju',
-  'bulk_delete' => 'ĦaSsar',
+  'bulk_delete' => 'Ħassar',
   'prev' => 'Preċedenti',
   'default_ad_title' => 'Tħabbira',
   'favorite_added' => 'Miżjud favorit',

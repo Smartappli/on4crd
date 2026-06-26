@@ -19,7 +19,7 @@ return array (
   'status_rejected' => 'Respinto',
   'status_filter' => 'Filtra per stato',
   'all_statuses' => 'Tutti gli stati',
-  'filter' => 'Filtro',
+  'filter' => 'Filtra',
   'clear_filter' => 'Mostra tutto',
   'type_modification' => 'Modificare',
   'source_page' => 'Fonte',

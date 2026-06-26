@@ -59,7 +59,7 @@ return array (
   'search' => 'Procurar',
   'all_statuses' => 'Todos os status',
   'all_categories' => 'Todas as categorias',
-  'filter' => 'Filtro',
+  'filter' => 'Filtrar',
   'reset_filter' => 'Reiniciar',
   'revisions' => 'Historico de versoes',
   'scheduled_at' => 'Data de publicação',

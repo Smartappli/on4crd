@@ -43,7 +43,7 @@ return array (
   'other_albums' => 'Albums oħra',
   'favorite_add' => 'Żid mal-favoriti',
   'favorite_remove' => 'Neħħi mill-favoriti',
-  'edit_album' => 'Biex taġġorna / ĦaSsar',
+  'edit_album' => 'Aġġorna / ħassar',
   'edit_album_title' => 'Biex taġġorna Album tar-ritratti',
   'close' => 'Agħlaq',
   'title_label' => 'Titolu',

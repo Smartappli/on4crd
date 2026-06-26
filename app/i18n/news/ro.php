@@ -37,7 +37,7 @@ return array (
   'page' => 'Pagină',
   'news_count' => '%d știri',
   'previous' => 'Anterior',
-  'next' => 'Urmând',
+  'next' => 'Următor',
   'news_actions' => 'Acțiuni de știri',
   'propose_news' => 'Propune noutati',
   'propose_news_subject' => 'Propunerea curentă ON4CRD',

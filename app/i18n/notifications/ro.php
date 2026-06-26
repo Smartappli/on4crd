@@ -18,6 +18,6 @@ return array (
   'open' => 'Deschide',
   'empty' => 'Nu există notificări pentru acest filtru.',
   'prev' => 'Anterior',
-  'next' => 'Urmând',
+  'next' => 'Următor',
   'page' => 'Pagină',
 );

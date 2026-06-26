@@ -21,7 +21,7 @@ return [
     'col_qty' => 'Cantitate',
     'col_line_total' => 'Linie totală',
     'line_active' => 'Activ',
-    'line_remove' => 'ŞTERGE',
+    'line_remove' => 'Șterge',
     'yes' => 'Da',
     'no' => 'Nu',
     'csv_reservation_id' => 'Rezervare ID',

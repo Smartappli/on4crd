@@ -9,7 +9,7 @@ return array (
   'invalid_status' => 'Stare nevalidă.',
   'moderation_saved' => 'Decizia de moderare a fost înregistrată.',
   'manager_added' => 'Manager de secție a fost adăugat.',
-  'edit' => 'A modifica',
+  'edit' => 'Editează',
   'write' => 'Scrie',
   'news_item' => 'o veste',
   'help_intro' => 'Textele sunt scrise în limba franceză. Versiunile EN/DE/NL sunt generate automat și apoi reluate dacă este necesar. Managerii de secțiune pot trimite conținut, moderatorii îl validează înainte de publicare.',

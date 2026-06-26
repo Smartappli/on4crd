@@ -10,7 +10,7 @@ return [
     'english' => 'Английский',
     'deutsch' => 'немецкий',
     'dutch' => 'Голландский',
-    'save' => 'Сохранять',
+    'save' => 'Сохранить',
     'committee_title' => 'Комитет — название',
     'committee_intro' => 'Комитет — введение',
     'committee_mission' => 'Комитет — миссия',

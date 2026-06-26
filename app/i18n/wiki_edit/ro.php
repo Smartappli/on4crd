@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'saved' => 'Pagina Wiki salvată.',
-  'edit' => 'A modifica',
+  'edit' => 'Editează',
   'create' => 'Crea',
   'heading_suffix' => 'o pagină Wiki',
   'title_label' => 'Titlu',
