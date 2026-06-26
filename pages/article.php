@@ -66,6 +66,7 @@ $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (
 
 $articleCategories = article_categories($articleMessages);
 $articleSubcategoriesByCategory = article_subcategories_by_category();
+$articleSubsubcategoriesByParent = article_subsubcategories_by_parent();
 $category = article_category_code((string) ($row['category'] ?? 'autres'));
 $categoryLabel = (string) ($articleCategories[$category] ?? article_category_label_from_code($category));
 $subcategory = article_subcategory_code((string) ($row['subcategory'] ?? ''));
@@ -73,6 +74,14 @@ $subcategoryLabel = '';
 foreach ($articleSubcategoriesByCategory[$category] ?? [] as $subcategoryInfo) {
     if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategory) {
         $subcategoryLabel = (string) ($subcategoryInfo['label'] ?? $subcategory);
+        break;
+    }
+}
+$subsubcategory = article_subsubcategory_code((string) ($row['subsubcategory'] ?? ''));
+$subsubcategoryLabel = '';
+foreach ($articleSubsubcategoriesByParent[$category . ':' . $subcategory] ?? [] as $subsubcategoryInfo) {
+    if (article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')) === $subsubcategory) {
+        $subsubcategoryLabel = (string) ($subsubcategoryInfo['label'] ?? $subsubcategory);
         break;
     }
 }
@@ -94,8 +103,8 @@ set_page_meta([
     'published_time' => $articlePublishedAt,
     'modified_time' => $articleModifiedAt,
     'section' => $categoryLabel,
-    'tags' => array_filter([$categoryLabel, $subcategoryLabel, 'radioamateur', 'ON4CRD']),
-    'keywords' => array_filter([$categoryLabel, $subcategoryLabel, 'radioamateur', 'article technique', 'Radio Club Durnal', 'ON4CRD']),
+    'tags' => array_filter([$categoryLabel, $subcategoryLabel, $subsubcategoryLabel, 'radioamateur', 'ON4CRD']),
+    'keywords' => array_filter([$categoryLabel, $subcategoryLabel, $subsubcategoryLabel, 'radioamateur', 'article technique', 'Radio Club Durnal', 'ON4CRD']),
     'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         '@context' => 'https://schema.org',
@@ -146,7 +155,7 @@ $next = $nextStmt->fetch() ?: null;
 ob_start();
 ?>
 <article class="card article-view">
-    <p><a class="pill" href="<?= e(route_url('articles', ['theme' => $category, 'subcategory' => $subcategory])) ?>"><?= e((string) $t['back_to_articles']) ?></a></p>
+    <p><a class="pill" href="<?= e(route_url('articles', ['theme' => $category, 'subcategory' => $subcategory, 'subsubcategory' => $subsubcategory])) ?>"><?= e((string) $t['back_to_articles']) ?></a></p>
     <?php if ($user !== null): ?>
         <form method="post" class="inline-form" style="margin-bottom:.7rem;">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -156,7 +165,7 @@ ob_start();
     <?php endif; ?>
     <h1><?= e((string) $row['title_localized']) ?></h1>
     <p class="help">
-        <?= e($categoryLabel) ?><?= $subcategoryLabel !== '' ? ' / ' . e($subcategoryLabel) : '' ?> ·
+        <?= e($categoryLabel) ?><?= $subcategoryLabel !== '' ? ' / ' . e($subcategoryLabel) : '' ?><?= $subsubcategoryLabel !== '' ? ' / ' . e($subsubcategoryLabel) : '' ?> ·
         <?= e($articleDisplayDate) ?> ·
         <?= $readingMinutes ?> <?= e((string) $t['reading_minutes']) ?>
     </p>

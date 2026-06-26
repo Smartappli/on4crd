@@ -66,12 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $articleTitle = trim((string) ($_POST['title'] ?? ''));
         $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
         $rawContent = trim((string) ($_POST['content'] ?? ''));
-        [$category, $subcategory] = article_taxonomy_from_input(
+        [$category, $subcategory, $subsubcategory] = article_taxonomy_from_input(
             (string) ($_POST['category'] ?? 'autres'),
             trim((string) ($_POST['subcategory_ref'] ?? '')),
-            $categories
+            $categories,
+            'autres',
+            trim((string) ($_POST['subsubcategory_ref'] ?? ''))
         );
-        if (mb_strlen($articleTitle) > 190 || mb_strlen($excerpt) > 2000 || mb_strlen($rawContent) > 50000) {
+        if (mb_strlen($articleTitle) > 190 || mb_strlen($excerpt) > 2000 || mb_strlen($rawContent) > 50000 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($subsubcategory) > 120) {
             throw new RuntimeException($label('error_field_too_long'));
         }
         if ($articleTitle === '' || $rawContent === '') {
@@ -90,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slug = article_unique_slug($articleTitle);
             try {
                 db()->beginTransaction();
-                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, subcategory, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?, ?)')
-                    ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, $subcategory, (int) $user['id']]);
+                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, subcategory, subsubcategory, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?, ?, ?)')
+                    ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, $subcategory, $subsubcategory, (int) $user['id']]);
                 db()->commit();
                 break;
             } catch (Throwable $submitThrowable) {

@@ -288,6 +288,7 @@ CREATE TABLE IF NOT EXISTS articles (
     status ENUM('draft','pending','scheduled','published','rejected') NOT NULL DEFAULT 'draft',
     category VARCHAR(120) NOT NULL DEFAULT 'autres',
     subcategory VARCHAR(120) NOT NULL DEFAULT '',
+    subsubcategory VARCHAR(120) NOT NULL DEFAULT '',
     scheduled_at DATETIME NULL DEFAULT NULL,
     published_at DATETIME NULL DEFAULT NULL,
     moderation_note TEXT DEFAULT NULL,
@@ -295,7 +296,9 @@ CREATE TABLE IF NOT EXISTS articles (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_articles_category (category),
-    INDEX idx_articles_subcategory (category, subcategory)
+    INDEX idx_articles_subcategory (category, subcategory),
+    INDEX idx_articles_subsubcategory (subsubcategory),
+    INDEX idx_articles_category_subcategory_subsubcategory (category, subcategory, subsubcategory)
 );
 
 CREATE TABLE IF NOT EXISTS article_categories (
@@ -317,6 +320,18 @@ CREATE TABLE IF NOT EXISTS article_subcategories (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uniq_article_subcategory (category_code, code),
     INDEX idx_article_subcategory_category (category_code)
+);
+
+CREATE TABLE IF NOT EXISTS article_subsubcategories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_code VARCHAR(120) NOT NULL,
+    subcategory_code VARCHAR(120) NOT NULL,
+    code VARCHAR(120) NOT NULL,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_article_subsubcategory (category_code, subcategory_code, code),
+    INDEX idx_article_subsubcategory_parent (category_code, subcategory_code)
 );
 
 CREATE TABLE IF NOT EXISTS wiki_pages (

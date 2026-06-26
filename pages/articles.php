@@ -65,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect_url(route_url_clean('articles', [
                 'theme' => (string) ($_GET['theme'] ?? ''),
                 'subcategory' => (string) ($_GET['subcategory'] ?? ''),
+                'subsubcategory' => (string) ($_GET['subsubcategory'] ?? ''),
                 'favorites' => (string) ($_POST['return_favorites'] ?? $_GET['favorites'] ?? '') === '1' ? '1' : '',
                 'q' => (string) ($_GET['q'] ?? ''),
                 'page' => max(1, (int) ($_GET['page'] ?? 1)),
@@ -120,12 +121,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $articleCategories = article_categories($t);
 $articleSubcategoriesByCategory = article_subcategories_by_category();
+$articleSubsubcategoriesByParent = article_subsubcategories_by_parent();
 $themeFilterRaw = trim((string) ($_GET['theme'] ?? ''));
 $themeFilter = $themeFilterRaw !== '' ? article_category_code($themeFilterRaw) : '';
 if ($themeFilter === 'n-a') {
     $themeFilter = '';
 }
 $subcategoryFilter = article_subcategory_code(trim((string) ($_GET['subcategory'] ?? '')));
+$subsubcategoryFilter = article_subsubcategory_code(trim((string) ($_GET['subsubcategory'] ?? '')));
 $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 120) {
     $search = mb_substr($search, 0, 120);
@@ -135,6 +138,7 @@ $perPage = 12;
 $articlesTableAvailable = table_exists('articles');
 $themeCounts = [];
 $subcategoryCounts = [];
+$subsubcategoryCounts = [];
 if ($articlesTableAvailable) {
     try {
         $themeCounts = cache_remember('articles_theme_counts_v2', 180, static function (): array {
@@ -173,14 +177,42 @@ if ($articlesTableAvailable) {
                 ];
             }
         }
+        $subsubcategoryRows = db()->query('SELECT category, subcategory, subsubcategory, COUNT(*) AS total FROM articles WHERE status = "published" AND subcategory IS NOT NULL AND subcategory <> "" AND subsubcategory IS NOT NULL AND subsubcategory <> "" GROUP BY category, subcategory, subsubcategory ORDER BY category ASC, subcategory ASC, subsubcategory ASC')->fetchAll() ?: [];
+        foreach ($subsubcategoryRows as $subsubcategoryRow) {
+            $themeCode = article_category_code((string) ($subsubcategoryRow['category'] ?? 'autres'));
+            $subCode = article_subcategory_code((string) ($subsubcategoryRow['subcategory'] ?? ''));
+            $subsubCode = article_subsubcategory_code((string) ($subsubcategoryRow['subsubcategory'] ?? ''));
+            if ($themeCode === '' || $subCode === '' || $subsubCode === '') {
+                continue;
+            }
+            $parentRef = $themeCode . ':' . $subCode;
+            $subsubcategoryCounts[$parentRef . ':' . $subsubCode] = (int) ($subsubcategoryRow['total'] ?? 0);
+            $known = false;
+            foreach ($articleSubsubcategoriesByParent[$parentRef] ?? [] as $subsubcategoryOption) {
+                if (article_subsubcategory_code((string) ($subsubcategoryOption['code'] ?? '')) === $subsubCode) {
+                    $known = true;
+                    break;
+                }
+            }
+            if (!$known) {
+                $articleSubsubcategoriesByParent[$parentRef][] = [
+                    'category_code' => $themeCode,
+                    'subcategory_code' => $subCode,
+                    'code' => $subsubCode,
+                    'label' => article_category_label_from_code($subsubCode),
+                ];
+            }
+        }
     } catch (Throwable) {
         $themeCounts = [];
         $subcategoryCounts = [];
+        $subsubcategoryCounts = [];
         $articlesTableAvailable = false;
     }
 }
 $visibleArticleCategories = article_visible_categories($articleCategories, $themeCounts);
 $visibleArticleSubcategoriesByCategory = article_visible_subcategories_by_category($articleSubcategoriesByCategory, $subcategoryCounts);
+$visibleArticleSubsubcategoriesByParent = article_visible_subsubcategories_by_parent($articleSubsubcategoriesByParent, $subsubcategoryCounts);
 if ($themeFilter !== '' && !isset($visibleArticleCategories[$themeFilter])) {
     $themeFilter = '';
 }
@@ -209,6 +241,32 @@ if ($subcategoryFilter !== '') {
         $subcategoryFilter = '';
     }
 }
+if ($subsubcategoryFilter !== '') {
+    $candidateTheme = $themeFilter;
+    $candidateSubcategory = $subcategoryFilter;
+    if ($candidateTheme === '' || $candidateSubcategory === '') {
+        foreach ($visibleArticleSubsubcategoriesByParent as $parentRef => $subsubcategories) {
+            $parentParts = article_subcategory_ref_parts((string) $parentRef);
+            foreach ($subsubcategories as $subsubcategoryInfo) {
+                if (article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')) === $subsubcategoryFilter) {
+                    $candidateTheme = $parentParts['category'];
+                    $candidateSubcategory = $parentParts['subcategory'];
+                    break 2;
+                }
+            }
+        }
+    }
+    if (
+        $candidateTheme !== ''
+        && $candidateSubcategory !== ''
+        && (int) ($subsubcategoryCounts[$candidateTheme . ':' . $candidateSubcategory . ':' . $subsubcategoryFilter] ?? 0) > 0
+    ) {
+        $themeFilter = $candidateTheme;
+        $subcategoryFilter = $candidateSubcategory;
+    } else {
+        $subsubcategoryFilter = '';
+    }
+}
 $favoriteArticleIds = $user !== null ? article_favorite_article_ids((int) ($user['id'] ?? 0)) : [];
 $favoriteArticleCount = count($favoriteArticleIds);
 $favoritesOnly = (string) ($_GET['favorites'] ?? '') === '1' && $favoriteArticleCount > 0;
@@ -224,9 +282,14 @@ if ($subcategoryFilter !== '') {
     $whereParts[] = 'subcategory = ?';
     $whereParams[] = $subcategoryFilter;
 }
+if ($subsubcategoryFilter !== '') {
+    $whereParts[] = 'subsubcategory = ?';
+    $whereParams[] = $subsubcategoryFilter;
+}
 if ($search !== '') {
-    $whereParts[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ? OR category LIKE ? OR subcategory LIKE ?)';
+    $whereParts[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ? OR category LIKE ? OR subcategory LIKE ? OR subsubcategory LIKE ?)';
     $like = '%' . $search . '%';
+    $whereParams[] = $like;
     $whereParams[] = $like;
     $whereParams[] = $like;
     $whereParams[] = $like;
@@ -257,7 +320,7 @@ $offset = $pagination['offset'];
 $articlePublicationSort = article_publication_sort_expression();
 if ($articlesTableAvailable) {
     try {
-        $dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, subcategory, published_at, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+        $dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, subcategory, subsubcategory, published_at, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
         $dataStmt->execute($whereParams);
         $pagedRows = $dataStmt->fetchAll() ?: [];
 

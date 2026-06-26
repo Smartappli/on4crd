@@ -130,6 +130,11 @@ function article_subcategory_code(string $value): string
     return content_taxonomy_code($value, 120, '', true);
 }
 
+function article_subsubcategory_code(string $value): string
+{
+    return article_subcategory_code($value);
+}
+
 function article_subcategory_ref(string $categoryCode, string $subcategoryCode): string
 {
     $categoryCode = article_category_code($categoryCode !== '' ? $categoryCode : 'autres');
@@ -148,8 +153,8 @@ function article_subcategory_ref_parts(string $value): array
         return ['category' => '', 'subcategory' => ''];
     }
 
-    $parts = explode(':', $value, 2);
-    if (count($parts) === 2) {
+    $parts = explode(':', $value);
+    if (count($parts) >= 2) {
         return [
             'category' => article_category_code($parts[0] !== '' ? $parts[0] : 'autres'),
             'subcategory' => article_subcategory_code($parts[1]),
@@ -157,6 +162,48 @@ function article_subcategory_ref_parts(string $value): array
     }
 
     return ['category' => '', 'subcategory' => article_subcategory_code($value)];
+}
+
+function article_subsubcategory_ref(string $categoryCode, string $subcategoryCode, string $subsubcategoryCode): string
+{
+    $categoryCode = article_category_code($categoryCode !== '' ? $categoryCode : 'autres');
+    $subcategoryCode = article_subcategory_code($subcategoryCode);
+    $subsubcategoryCode = article_subsubcategory_code($subsubcategoryCode);
+
+    return $subcategoryCode !== '' && $subsubcategoryCode !== '' ? ($categoryCode . ':' . $subcategoryCode . ':' . $subsubcategoryCode) : '';
+}
+
+/**
+ * @return array{category:string,subcategory:string,subsubcategory:string}
+ */
+function article_subsubcategory_ref_parts(string $value): array
+{
+    $value = trim($value);
+    if ($value === '') {
+        return ['category' => '', 'subcategory' => '', 'subsubcategory' => ''];
+    }
+
+    $parts = explode(':', $value);
+    if (count($parts) >= 3) {
+        return [
+            'category' => article_category_code($parts[0] !== '' ? $parts[0] : 'autres'),
+            'subcategory' => article_subcategory_code($parts[1]),
+            'subsubcategory' => article_subsubcategory_code($parts[2]),
+        ];
+    }
+    if (count($parts) === 2) {
+        return [
+            'category' => '',
+            'subcategory' => article_subcategory_code($parts[0]),
+            'subsubcategory' => article_subsubcategory_code($parts[1]),
+        ];
+    }
+
+    return [
+        'category' => '',
+        'subcategory' => '',
+        'subsubcategory' => article_subsubcategory_code($value),
+    ];
 }
 
 function article_category_label_from_code(string $code): string
@@ -251,6 +298,28 @@ function article_ensure_subcategories_table(): bool
     }
 }
 
+function article_ensure_subsubcategories_table(): bool
+{
+    try {
+        article_ensure_subcategories_table();
+        db()->exec('CREATE TABLE IF NOT EXISTS article_subsubcategories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category_code VARCHAR(120) NOT NULL,
+            subcategory_code VARCHAR(120) NOT NULL,
+            code VARCHAR(120) NOT NULL,
+            label VARCHAR(160) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 100,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_article_subsubcategory (category_code, subcategory_code, code),
+            INDEX idx_article_subsubcategory_parent (category_code, subcategory_code)
+        )');
+
+        return table_exists('article_subsubcategories');
+    } catch (Throwable) {
+        return false;
+    }
+}
+
 function article_ensure_revisions_table(): bool
 {
     try {
@@ -265,6 +334,7 @@ function article_ensure_revisions_table(): bool
                 status VARCHAR(32) NOT NULL DEFAULT "draft",
                 category VARCHAR(120) NOT NULL DEFAULT "autres",
                 subcategory VARCHAR(120) NOT NULL DEFAULT "",
+                subsubcategory VARCHAR(120) NOT NULL DEFAULT "",
                 scheduled_at DATETIME NULL DEFAULT NULL,
                 published_at DATETIME NULL DEFAULT NULL,
                 author_id INT NULL DEFAULT NULL,
@@ -276,8 +346,11 @@ function article_ensure_revisions_table(): bool
         if (!table_has_column('article_revisions', 'subcategory')) {
             db()->exec('ALTER TABLE article_revisions ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
         }
+        if (!table_has_column('article_revisions', 'subsubcategory')) {
+            db()->exec('ALTER TABLE article_revisions ADD COLUMN subsubcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER subcategory');
+        }
         if (!table_has_column('article_revisions', 'scheduled_at')) {
-            db()->exec('ALTER TABLE article_revisions ADD COLUMN scheduled_at DATETIME NULL DEFAULT NULL AFTER subcategory');
+            db()->exec('ALTER TABLE article_revisions ADD COLUMN scheduled_at DATETIME NULL DEFAULT NULL AFTER subsubcategory');
         }
         if (!table_has_column('article_revisions', 'published_at')) {
             db()->exec('ALTER TABLE article_revisions ADD COLUMN published_at DATETIME NULL DEFAULT NULL AFTER scheduled_at');
@@ -305,21 +378,33 @@ function article_ensure_taxonomy_schema(array $messages = []): bool
             if (!table_has_column('articles', 'subcategory')) {
                 db()->exec('ALTER TABLE articles ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
             }
+            if (!table_has_column('articles', 'subsubcategory')) {
+                db()->exec('ALTER TABLE articles ADD COLUMN subsubcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER subcategory');
+            }
             if (!table_has_index('articles', 'idx_articles_category')) {
                 db()->exec('ALTER TABLE articles ADD INDEX idx_articles_category (category)');
             }
             if (!table_has_index('articles', 'idx_articles_subcategory')) {
                 db()->exec('ALTER TABLE articles ADD INDEX idx_articles_subcategory (category, subcategory)');
             }
+            if (!table_has_index('articles', 'idx_articles_subsubcategory')) {
+                db()->exec('ALTER TABLE articles ADD INDEX idx_articles_subsubcategory (subsubcategory)');
+            }
+            if (!table_has_index('articles', 'idx_articles_category_subcategory_subsubcategory')) {
+                db()->exec('ALTER TABLE articles ADD INDEX idx_articles_category_subcategory_subsubcategory (category, subcategory, subsubcategory)');
+            }
             db()->exec('UPDATE articles SET subcategory = "" WHERE subcategory IS NULL');
+            db()->exec('UPDATE articles SET subsubcategory = "" WHERE subsubcategory IS NULL');
         }
 
         if (article_ensure_revisions_table()) {
             db()->exec('UPDATE article_revisions SET subcategory = "" WHERE subcategory IS NULL');
+            db()->exec('UPDATE article_revisions SET subsubcategory = "" WHERE subsubcategory IS NULL');
         }
 
         article_ensure_categories_table($messages);
         article_ensure_subcategories_table();
+        article_ensure_subsubcategories_table();
 
         return true;
     } catch (Throwable) {
@@ -408,19 +493,30 @@ function article_category_from_input(string $value, array $categories): string
 
 /**
  * @param array<string,string> $categories
- * @return array{category:string,subcategory:string}
+ * @return array{category:string,subcategory:string,subsubcategory:string}
  */
-function article_taxonomy_from_input(string $categoryInput, string $subcategoryRef, array $categories, string $fallbackCategory = 'autres'): array
+function article_taxonomy_from_input(string $categoryInput, string $subcategoryRef, array $categories, string $fallbackCategory = 'autres', string $subsubcategoryRef = ''): array
 {
     $category = article_category_from_input($categoryInput !== '' ? $categoryInput : $fallbackCategory, $categories);
     $subcategoryRef = trim($subcategoryRef);
+    $subsubcategoryRef = trim($subsubcategoryRef);
+    if ($subsubcategoryRef === '' && substr_count($subcategoryRef, ':') >= 2) {
+        $subsubcategoryRef = $subcategoryRef;
+    }
     if ($subcategoryRef === '') {
-        return [$category, ''];
+        if ($subsubcategoryRef === '') {
+            return [$category, '', ''];
+        }
+        $subsubcategoryParts = article_subsubcategory_ref_parts($subsubcategoryRef);
+        if ($subsubcategoryParts['category'] !== '') {
+            $category = article_category_from_input($subsubcategoryParts['category'], $categories);
+        }
+        $subcategoryRef = article_subcategory_ref($category, $subsubcategoryParts['subcategory']);
     }
 
     $parts = article_subcategory_ref_parts($subcategoryRef);
     if ($parts['subcategory'] === '') {
-        return [$category, ''];
+        return [$category, '', ''];
     }
 
     $refCategory = $parts['category'] !== '' ? article_category_from_input($parts['category'], $categories) : $category;
@@ -430,7 +526,29 @@ function article_taxonomy_from_input(string $categoryInput, string $subcategoryR
 
     foreach ((array) (article_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
         if (article_subcategory_code((string) ($knownSubcategory['code'] ?? '')) === $parts['subcategory']) {
-            return [$category, $parts['subcategory']];
+            $subcategory = $parts['subcategory'];
+            if ($subsubcategoryRef === '') {
+                return [$category, $subcategory, ''];
+            }
+
+            $subsubcategoryParts = article_subsubcategory_ref_parts($subsubcategoryRef);
+            if ($subsubcategoryParts['subsubcategory'] === '') {
+                return [$category, $subcategory, ''];
+            }
+            if (
+                ($subsubcategoryParts['category'] !== '' && $subsubcategoryParts['category'] !== $category)
+                || ($subsubcategoryParts['subcategory'] !== '' && $subsubcategoryParts['subcategory'] !== $subcategory)
+            ) {
+                throw new RuntimeException(article_i18n_text('err_subsubcategory_category_mismatch'));
+            }
+
+            foreach ((array) (article_subsubcategories_by_parent()[$category . ':' . $subcategory] ?? []) as $knownSubsubcategory) {
+                if (article_subsubcategory_code((string) ($knownSubsubcategory['code'] ?? '')) === $subsubcategoryParts['subsubcategory']) {
+                    return [$category, $subcategory, $subsubcategoryParts['subsubcategory']];
+                }
+            }
+
+            throw new RuntimeException(article_i18n_text('err_subsubcategory_category_mismatch'));
         }
     }
 
@@ -463,6 +581,53 @@ function article_subcategory_options(): array
     }
 
     return $options;
+}
+
+/**
+ * @return list<array{category_code:string,subcategory_code:string,code:string,label:string}>
+ */
+function article_subsubcategory_options(): array
+{
+    if (!article_ensure_subsubcategories_table()) {
+        return [];
+    }
+
+    try {
+        $rows = db()->query('SELECT category_code, subcategory_code, code, label FROM article_subsubcategories ORDER BY category_code ASC, subcategory_code ASC, sort_order ASC, label ASC')->fetchAll() ?: [];
+    } catch (Throwable) {
+        $rows = [];
+    }
+
+    $options = [];
+    foreach ($rows as $row) {
+        $categoryCode = article_category_code((string) ($row['category_code'] ?? 'autres'));
+        $subcategoryCode = article_subcategory_code((string) ($row['subcategory_code'] ?? ''));
+        $code = article_subsubcategory_code((string) ($row['code'] ?? ''));
+        $label = content_proposal_clean_single_line((string) ($row['label'] ?? $code), 160);
+        if ($categoryCode !== '' && $subcategoryCode !== '' && $code !== '' && $label !== '') {
+            $options[] = [
+                'category_code' => $categoryCode,
+                'subcategory_code' => $subcategoryCode,
+                'code' => $code,
+                'label' => $label,
+            ];
+        }
+    }
+
+    return $options;
+}
+
+/**
+ * @return array<string,list<array{category_code:string,subcategory_code:string,code:string,label:string}>>
+ */
+function article_subsubcategories_by_parent(): array
+{
+    $byParent = [];
+    foreach (article_subsubcategory_options() as $subsubcategory) {
+        $byParent[$subsubcategory['category_code'] . ':' . $subsubcategory['subcategory_code']][] = $subsubcategory;
+    }
+
+    return $byParent;
 }
 
 /**
@@ -520,6 +685,29 @@ function article_visible_subcategories_by_category(array $subcategoriesByCategor
 }
 
 /**
+ * @param array<string,list<array<string,mixed>>> $subsubcategoriesByParent
+ * @param array<string,int> $countsBySubsubcategory
+ * @return array<string,list<array<string,mixed>>>
+ */
+function article_visible_subsubcategories_by_parent(array $subsubcategoriesByParent, array $countsBySubsubcategory): array
+{
+    $visible = [];
+    foreach ($subsubcategoriesByParent as $parentRef => $subsubcategories) {
+        foreach ($subsubcategories as $subsubcategory) {
+            $code = article_subsubcategory_code((string) ($subsubcategory['code'] ?? ''));
+            $count = (int) ($countsBySubsubcategory[(string) $parentRef . ':' . $code] ?? 0);
+            if ($code === '' || $count <= 0) {
+                continue;
+            }
+            $subsubcategory['total'] = $count;
+            $visible[(string) $parentRef][] = $subsubcategory;
+        }
+    }
+
+    return $visible;
+}
+
+/**
  * @param array<string,mixed> $messages
  */
 function article_favorites_label(array $messages, string $locale = ''): string
@@ -560,14 +748,18 @@ function article_favorite_article_ids(int $memberId): array
  * @param array<string,string> $categories
  * @param array<string,mixed> $labels
  */
-function render_article_taxonomy_fields(array $categories, array $labels = [], string $selectedCategory = 'autres', string $selectedSubcategory = ''): string
+function render_article_taxonomy_fields(array $categories, array $labels = [], string $selectedCategory = 'autres', string $selectedSubcategory = '', string $selectedSubsubcategory = ''): string
 {
     $selectedCategory = article_category_code($selectedCategory !== '' ? $selectedCategory : 'autres');
     $selectedSubcategory = article_subcategory_code($selectedSubcategory);
+    $selectedSubsubcategory = article_subsubcategory_code($selectedSubsubcategory);
     $subcategoriesByCategory = article_subcategories_by_category();
+    $subsubcategoriesByParent = article_subsubcategories_by_parent();
     $categoryLabel = (string) ($labels['category_label'] ?? article_i18n_text('category_label'));
     $subcategoryLabel = (string) ($labels['subcategory_field'] ?? article_i18n_text('subcategory_field'));
     $noSubcategory = (string) ($labels['no_subcategory'] ?? article_i18n_text('no_subcategory'));
+    $subsubcategoryLabel = (string) ($labels['subsubcategory_field'] ?? article_i18n_text('subsubcategory_field'));
+    $noSubsubcategory = (string) ($labels['no_subsubcategory'] ?? article_i18n_text('no_subsubcategory'));
 
     $html = '<label><span>' . e($categoryLabel) . '</span><select name="category">';
     foreach ($categories as $code => $label) {
@@ -586,6 +778,37 @@ function render_article_taxonomy_fields(array $categories, array $labels = [], s
             $html .= '<option value="' . e(article_subcategory_ref((string) $parentCode, $code)) . '"'
                 . ($selectedCategory === (string) $parentCode && $selectedSubcategory === $code ? ' selected' : '')
                 . '>' . e((string) $subcategory['label']) . '</option>';
+        }
+        $html .= '</optgroup>';
+    }
+
+    $html .= '</select></label>'
+        . '<label><span>' . e($subsubcategoryLabel) . '</span><select name="subsubcategory_ref">'
+        . '<option value="">' . e($noSubsubcategory) . '</option>';
+    foreach ($subsubcategoriesByParent as $parentRef => $subsubcategories) {
+        $parentParts = article_subcategory_ref_parts((string) $parentRef);
+        $parentCategory = $parentParts['category'];
+        $parentSubcategory = $parentParts['subcategory'];
+        if ($parentCategory === '' || $parentSubcategory === '') {
+            continue;
+        }
+        $parentCategoryLabel = (string) ($categories[$parentCategory] ?? article_category_label_from_code($parentCategory));
+        $parentSubcategoryLabel = article_category_label_from_code($parentSubcategory);
+        foreach ($subcategoriesByCategory[$parentCategory] ?? [] as $subcategory) {
+            if (article_subcategory_code((string) ($subcategory['code'] ?? '')) === $parentSubcategory) {
+                $parentSubcategoryLabel = (string) ($subcategory['label'] ?? $parentSubcategory);
+                break;
+            }
+        }
+        $html .= '<optgroup label="' . e($parentCategoryLabel . ' / ' . $parentSubcategoryLabel) . '">';
+        foreach ($subsubcategories as $subsubcategory) {
+            $code = article_subsubcategory_code((string) ($subsubcategory['code'] ?? ''));
+            if ($code === '') {
+                continue;
+            }
+            $html .= '<option value="' . e(article_subsubcategory_ref($parentCategory, $parentSubcategory, $code)) . '"'
+                . ($selectedCategory === $parentCategory && $selectedSubcategory === $parentSubcategory && $selectedSubsubcategory === $code ? ' selected' : '')
+                . '>' . e((string) ($subsubcategory['label'] ?? $code)) . '</option>';
         }
         $html .= '</optgroup>';
     }
