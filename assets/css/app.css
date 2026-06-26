@@ -1811,6 +1811,12 @@ textarea { resize: vertical; }
 .album-detail-copy p {
   max-width: 70ch;
 }
+.album-detail-taxonomy {
+  margin: .25rem 0 .75rem;
+}
+.admin-album-taxonomy {
+  grid-column: 1 / -1;
+}
 .albums-hero-stats,
 .album-detail-stats {
   display: grid;

@@ -250,6 +250,10 @@ ob_start();
         <div class="album-detail-copy">
             <p><a href="<?= e(route_url('albums')) ?>"><?= e((string) $t['back']) ?></a></p>
             <h1><?= e($albumTitle) ?></h1>
+            <div class="taxonomy-badge-row album-detail-taxonomy">
+                <a class="badge muted taxonomy-pill-category" href="<?= e(route_url_clean('albums', ['category' => $albumCategoryCode])) ?>"><?= e($albumCategoryLabel) ?></a>
+                <?php if ($albumSubcategoryLabel !== ''): ?><a class="badge muted taxonomy-pill-subcategory" href="<?= e(route_url_clean('albums', ['category' => $albumCategoryCode, 'subcategory' => $albumSubcategoryCode])) ?>"><?= e($albumSubcategoryLabel) ?></a><?php endif; ?>
+            </div>
             <div class="album-detail-stats">
                 <article>
                     <span><?= e((string) $t['photos']) ?></span>

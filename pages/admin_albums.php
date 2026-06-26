@@ -980,6 +980,16 @@ ob_start();
                     <?php
                     $albumId = (int) $album['id'];
                     $albumEditFormId = 'admin-album-edit-form-' . $albumId;
+                    $albumCategoryCode = album_category_code((string) ($album['category'] ?? 'general'));
+                    $albumSubcategoryCode = album_subcategory_code((string) ($album['subcategory'] ?? ''));
+                    $albumCategoryLabel = (string) ($albumCategories[$albumCategoryCode] ?? album_category_label_from_code($albumCategoryCode));
+                    $albumSubcategoryLabel = $albumSubcategoryCode !== '' ? album_category_label_from_code($albumSubcategoryCode) : '';
+                    foreach ($albumSubcategoriesByCategory[$albumCategoryCode] ?? [] as $subcategoryInfo) {
+                        if (album_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $albumSubcategoryCode) {
+                            $albumSubcategoryLabel = (string) ($subcategoryInfo['label'] ?? $albumSubcategoryLabel);
+                            break;
+                        }
+                    }
                     ?>
                     <article class="article-item">
                         <form id="<?= e($albumEditFormId) ?>" method="post" action="<?= e(route_url('admin_albums')) ?>" class="grid-2" autocomplete="off">
@@ -994,6 +1004,10 @@ ob_start();
                             <input type="hidden" name="album_is_featured_present" value="1">
                             <input type="hidden" name="album_is_featured[]" value="0">
                             <label><input type="checkbox" name="album_is_featured[]" value="1" autocomplete="off" <?= (int) ($album['is_featured'] ?? 0) === 1 ? 'checked' : '' ?>> <?= e($featuredAlbumLabel) ?></label>
+                            <div class="taxonomy-badge-row admin-album-taxonomy">
+                                <span class="badge muted taxonomy-pill-category"><?= e($albumCategoryLabel) ?></span>
+                                <?php if ($albumSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($albumSubcategoryLabel) ?></span><?php endif; ?>
+                            </div>
                             <div style="grid-column:1 / -1;">
                                 <?= render_album_taxonomy_fields($albumCategories, $t, (string) ($album['category'] ?? 'general'), (string) ($album['subcategory'] ?? '')) ?>
                             </div>

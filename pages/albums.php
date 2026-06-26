@@ -866,6 +866,8 @@ ob_start();
                                     <?php if ($albumSectionFeatured): ?>
                                         <span class="badge album-featured-badge"><?= e($featuredAlbumBadge) ?></span>
                                     <?php endif; ?>
+                                    <span class="badge muted taxonomy-pill-category"><?= e($albumCategoryLabel) ?></span>
+                                    <?php if ($albumSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($albumSubcategoryLabel) ?></span><?php endif; ?>
                                     <span class="badge muted album-photo-count-badge"><?= $photoCount ?> <?= e((string) ($photoCount > 1 ? $t['photos'] : $t['photo'])) ?></span>
                                     <?php if ($user !== null): ?>
                                         <?php $isFavorite = favorite_is_saved((int) $user['id'], 'album', (int) ($row['id'] ?? 0)); ?>

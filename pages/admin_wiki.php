@@ -547,7 +547,13 @@ ob_start();
                         <?php endif; ?>
                     </td>
                     <td><code><?= e((string) $page['slug']) ?></code></td>
-                    <td><span class="badge muted taxonomy-pill-category"><?= e($pageCategoryLabel) ?></span><?php if ($pageSubcategory !== ''): ?> <span class="badge muted taxonomy-pill-subcategory"><?= e($pageSubcategoryLabel) ?></span><?php endif; ?><?php if ($pageSubcategory !== '' && $pageSubsubcategory !== ''): ?> <span class="badge muted taxonomy-pill-subsubcategory"><?= e($pageSubsubcategoryLabel) ?></span><?php endif; ?></td>
+                    <td>
+                        <div class="taxonomy-badge-row">
+                            <span class="badge muted taxonomy-pill-category"><?= e($pageCategoryLabel) ?></span>
+                            <?php if ($pageSubcategory !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($pageSubcategoryLabel) ?></span><?php endif; ?>
+                            <?php if ($pageSubcategory !== '' && $pageSubsubcategory !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($pageSubsubcategoryLabel) ?></span><?php endif; ?>
+                        </div>
+                    </td>
                     <td><span class="badge muted"><?= e((string) ($statusLabels[$pageStatus] ?? $pageStatus)) ?></span></td>
                     <td><?= e((string) $page['updated_at']) ?></td>
                     <td>
