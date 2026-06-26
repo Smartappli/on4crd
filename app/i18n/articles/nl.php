@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Contact:',
   'subsubcategory_field' => 'Subsubthema',
   'no_subsubcategory' => 'Geen subsubthema',
   'err_subsubcategory_category_mismatch' => 'Het gekozen subsubthema hoort niet bij het gekozen thema.',
+  'propose_subcategory_item' => 'Een subonderwerp',
+  'propose_subsubcategory_item' => 'Een subonderwerp',
+  'propose_subcategory' => 'Een subonderwerp voorstellen',
+  'propose_subcategory_subject' => 'Subonderwerpvoorstel voor de ON4CRD-bibliotheek',
+  'propose_subcategory_intro' => 'Geef het toe te voegen subonderwerp en het bovenliggende thema op.',
+  'propose_subcategory_body_intro' => 'Subonderwerpvoorstel voor de ledenbibliotheek:',
+  'propose_subcategory_name_label' => 'Naam van het subonderwerp',
+  'propose_subcategory_parent_label' => 'Bovenliggend thema',
+  'propose_subcategory_reason_label' => 'Waarom dit subonderwerp toevoegen?',
+  'propose_subcategory_submit' => 'Voorstel verzenden',
+  'propose_subcategory_cancel' => 'Annuleren',
+  'propose_subcategory_close' => 'Sluiten',
+  'propose_subsubcategory' => 'Een subonderwerp voorstellen',
+  'propose_subsubcategory_subject' => 'Subonderwerpvoorstel voor de ON4CRD-bibliotheek',
+  'propose_subsubcategory_intro' => 'Geef het toe te voegen subonderwerp en het bovenliggende thema op.',
+  'propose_subsubcategory_body_intro' => 'Subonderwerpvoorstel voor de ledenbibliotheek:',
+  'propose_subsubcategory_name_label' => 'Naam van het subonderwerp',
+  'propose_subsubcategory_parent_label' => 'Subthema',
+  'propose_subsubcategory_reason_label' => 'Waarom dit subonderwerp toevoegen?',
+  'propose_subsubcategory_submit' => 'Voorstel verzenden',
+  'propose_subsubcategory_cancel' => 'Annuleren',
+  'propose_subsubcategory_close' => 'Sluiten',
 );

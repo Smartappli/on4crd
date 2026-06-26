@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ ON4CRD の技術記事を提案したいです。
   'subsubcategory_field' => 'サブサブテーマ',
   'no_subsubcategory' => 'サブサブテーマなし',
   'err_subsubcategory_category_mismatch' => '選択したサブテーマは選択したテーマに属していません。',
+  'propose_subcategory_item' => 'サブトピック',
+  'propose_subsubcategory_item' => 'サブサブテーマ',
+  'propose_subcategory' => 'サブトピックを提案',
+  'propose_subcategory_subject' => 'ON4CRDライブラリへのサブトピック提案',
+  'propose_subcategory_intro' => '追加するサブトピックとその親トピックを指定してください。',
+  'propose_subcategory_body_intro' => 'メンバーライブラリへのサブトピック提案:',
+  'propose_subcategory_name_label' => 'サブトピック名',
+  'propose_subcategory_parent_label' => '親トピック',
+  'propose_subcategory_reason_label' => 'このサブトピックを追加する理由',
+  'propose_subcategory_submit' => '提案を送信',
+  'propose_subcategory_cancel' => 'キャンセル',
+  'propose_subcategory_close' => '閉じる',
+  'propose_subsubcategory' => 'サブサブテーマを提案',
+  'propose_subsubcategory_subject' => 'ON4CRDライブラリへのサブサブテーマ提案',
+  'propose_subsubcategory_intro' => '追加するサブサブテーマとその親トピックを指定してください。',
+  'propose_subsubcategory_body_intro' => 'メンバーライブラリへのサブサブテーマ提案:',
+  'propose_subsubcategory_name_label' => 'サブサブテーマ名',
+  'propose_subsubcategory_parent_label' => 'サブトピック',
+  'propose_subsubcategory_reason_label' => 'このサブサブテーマを追加する理由',
+  'propose_subsubcategory_submit' => '提案を送信',
+  'propose_subsubcategory_cancel' => 'キャンセル',
+  'propose_subsubcategory_close' => '閉じる',
 );

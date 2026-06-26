@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kapcsolat:',
   'subsubcategory_field' => 'Al-altéma',
   'no_subsubcategory' => 'Nincs al-altéma',
   'err_subsubcategory_category_mismatch' => 'A kiválasztott al-altéma nem tartozik a kiválasztott témához.',
+  'propose_subcategory_item' => 'Altéma',
+  'propose_subsubcategory_item' => 'Al-altéma',
+  'propose_subcategory' => 'Altéma javaslata',
+  'propose_subcategory_subject' => 'Altéma-javaslat az ON4CRD könyvtárhoz',
+  'propose_subcategory_intro' => 'Adja meg a hozzáadandó altémát és a szülőtémáját.',
+  'propose_subcategory_body_intro' => 'Altéma-javaslat a tagi könyvtárhoz:',
+  'propose_subcategory_name_label' => 'Altéma neve',
+  'propose_subcategory_parent_label' => 'Szülőtéma',
+  'propose_subcategory_reason_label' => 'Miért kerüljön be ez az altéma?',
+  'propose_subcategory_submit' => 'Javaslat küldése',
+  'propose_subcategory_cancel' => 'Mégse',
+  'propose_subcategory_close' => 'Bezárás',
+  'propose_subsubcategory' => 'Al-altéma javaslata',
+  'propose_subsubcategory_subject' => 'Al-altéma-javaslat az ON4CRD könyvtárhoz',
+  'propose_subsubcategory_intro' => 'Adja meg a hozzáadandó altémát és a szülőtémáját.',
+  'propose_subsubcategory_body_intro' => 'Al-altéma-javaslat a tagi könyvtárhoz:',
+  'propose_subsubcategory_name_label' => 'Al-altéma neve',
+  'propose_subsubcategory_parent_label' => 'Altéma',
+  'propose_subsubcategory_reason_label' => 'Miért kerüljön be ez az al-altéma?',
+  'propose_subsubcategory_submit' => 'Javaslat küldése',
+  'propose_subsubcategory_cancel' => 'Mégse',
+  'propose_subsubcategory_close' => 'Bezárás',
 );

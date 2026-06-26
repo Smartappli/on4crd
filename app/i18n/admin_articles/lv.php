@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Vispirms dzēsiet visas šīs tēmas apakšapakštēmas.',
   'err_subsubcategory_has_documents' => 'Šajā apakšapakštēmā vēl ir raksti.',
   'proposal_type_subsubcategory' => 'Apakšapakštēma',
+  'proposal_type_subcategory' => 'Apakštēma',
 );

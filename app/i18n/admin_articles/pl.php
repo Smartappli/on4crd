@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Najpierw usuń wszystkie podpodtematy w tym temacie.',
   'err_subsubcategory_has_documents' => 'Ten podpodtemat nadal zawiera artykuły.',
   'proposal_type_subsubcategory' => 'Podpodtemat',
+  'proposal_type_subcategory' => 'Podtemat',
 );

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ return array (
   'subsubcategory_field' => 'উপ-উপবিষয়',
   'no_subsubcategory' => 'কোনও উপ-উপবিষয় নেই',
   'err_subsubcategory_category_mismatch' => 'নির্বাচিত উপ-বিষয়টি নির্বাচিত বিষয়ের অন্তর্গত নয়।',
+  'propose_subcategory_item' => 'একটি উপবিষয়',
+  'propose_subsubcategory_item' => 'একটি উপ-উপবিষয়',
+  'propose_subcategory' => 'উপবিষয় প্রস্তাব করুন',
+  'propose_subcategory_subject' => 'ON4CRD লাইব্রেরির জন্য উপবিষয় প্রস্তাব',
+  'propose_subcategory_intro' => 'যোগ করতে চাওয়া উপবিষয় এবং তার মূল বিষয় উল্লেখ করুন।',
+  'propose_subcategory_body_intro' => 'সদস্য লাইব্রেরির জন্য উপবিষয় প্রস্তাব:',
+  'propose_subcategory_name_label' => 'উপবিষয়ের নাম',
+  'propose_subcategory_parent_label' => 'মূল বিষয়',
+  'propose_subcategory_reason_label' => 'কেন এই উপবিষয় যোগ করবেন?',
+  'propose_subcategory_submit' => 'প্রস্তাব পাঠান',
+  'propose_subcategory_cancel' => 'বাতিল',
+  'propose_subcategory_close' => 'বন্ধ করুন',
+  'propose_subsubcategory' => 'উপ-উপবিষয় প্রস্তাব করুন',
+  'propose_subsubcategory_subject' => 'ON4CRD লাইব্রেরির জন্য উপ-উপবিষয় প্রস্তাব',
+  'propose_subsubcategory_intro' => 'যোগ করতে চাওয়া উপ-উপবিষয় এবং তার মূল বিষয় উল্লেখ করুন।',
+  'propose_subsubcategory_body_intro' => 'সদস্য লাইব্রেরির জন্য উপ-উপবিষয় প্রস্তাব:',
+  'propose_subsubcategory_name_label' => 'উপ-উপবিষয়ের নাম',
+  'propose_subsubcategory_parent_label' => 'উপবিষয়',
+  'propose_subsubcategory_reason_label' => 'কেন এই উপ-উপবিষয় যোগ করবেন?',
+  'propose_subsubcategory_submit' => 'প্রস্তাব পাঠান',
+  'propose_subsubcategory_cancel' => 'বাতিল',
+  'propose_subsubcategory_close' => 'বন্ধ করুন',
 );

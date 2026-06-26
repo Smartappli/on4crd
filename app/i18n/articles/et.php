@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kontakt:',
   'subsubcategory_field' => 'Alam-alamteema',
   'no_subsubcategory' => 'Alam-alamteemata',
   'err_subsubcategory_category_mismatch' => 'Valitud alam-alamteema ei kuulu valitud teema alla.',
+  'propose_subcategory_item' => 'Alateema',
+  'propose_subsubcategory_item' => 'Alam-alamteema',
+  'propose_subcategory' => 'Paku alateemat',
+  'propose_subcategory_subject' => 'Alateema ettepanek ON4CRD kogule',
+  'propose_subcategory_intro' => 'Märkige lisatav alateema ja selle ülemteema.',
+  'propose_subcategory_body_intro' => 'Alateema ettepanek liikmete kogule:',
+  'propose_subcategory_name_label' => 'Alateema nimi',
+  'propose_subcategory_parent_label' => 'Ülemteema',
+  'propose_subcategory_reason_label' => 'Miks see alateema lisada?',
+  'propose_subcategory_submit' => 'Saada ettepanek',
+  'propose_subcategory_cancel' => 'Tühista',
+  'propose_subcategory_close' => 'Sulge',
+  'propose_subsubcategory' => 'Paku alam-alamteemat',
+  'propose_subsubcategory_subject' => 'Alam-alamteema ettepanek ON4CRD kogule',
+  'propose_subsubcategory_intro' => 'Märkige lisatav alam-alamteema ja selle ülemteema.',
+  'propose_subsubcategory_body_intro' => 'Alam-alamteema ettepanek liikmete kogule:',
+  'propose_subsubcategory_name_label' => 'Alam-alamteema nimi',
+  'propose_subsubcategory_parent_label' => 'Alateema',
+  'propose_subsubcategory_reason_label' => 'Miks see alam-alamteema lisada?',
+  'propose_subsubcategory_submit' => 'Saada ettepanek',
+  'propose_subsubcategory_cancel' => 'Tühista',
+  'propose_subsubcategory_close' => 'Sulge',
 );

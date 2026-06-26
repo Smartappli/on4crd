@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kuntatt:',
   'subsubcategory_field' => 'Sub-subtema',
   'no_subsubcategory' => 'L-ebda sub-subtema',
   'err_subsubcategory_category_mismatch' => 'Is-sub-subtema magħżula ma tappartjenix għat-tema magħżula.',
+  'propose_subcategory_item' => 'Sotto-suġġett',
+  'propose_subsubcategory_item' => 'Sotto-suġġett',
+  'propose_subcategory' => 'Ipproponi sotto-suġġett',
+  'propose_subcategory_subject' => 'Proposta ta’ sotto-suġġett għall-librerija ON4CRD',
+  'propose_subcategory_intro' => 'Indika s-sotto-suġġett li għandu jiżdied u s-suġġett ewlieni tiegħu.',
+  'propose_subcategory_body_intro' => 'Proposta ta’ sotto-suġġett għall-librerija tal-membri:',
+  'propose_subcategory_name_label' => 'Isem is-sotto-suġġett',
+  'propose_subcategory_parent_label' => 'Suġġett ewlieni',
+  'propose_subcategory_reason_label' => 'Għaliex iżżid dan is-sotto-suġġett?',
+  'propose_subcategory_submit' => 'Ibgħat il-proposta',
+  'propose_subcategory_cancel' => 'Ikkanċella',
+  'propose_subcategory_close' => 'Agħlaq',
+  'propose_subsubcategory' => 'Ipproponi sotto-suġġett',
+  'propose_subsubcategory_subject' => 'Proposta ta’ sotto-suġġett għall-librerija ON4CRD',
+  'propose_subsubcategory_intro' => 'Indika s-sotto-suġġett li għandu jiżdied u s-suġġett ewlieni tiegħu.',
+  'propose_subsubcategory_body_intro' => 'Proposta ta’ sotto-suġġett għall-librerija tal-membri:',
+  'propose_subsubcategory_name_label' => 'Isem is-sotto-suġġett',
+  'propose_subsubcategory_parent_label' => 'Sottotema',
+  'propose_subsubcategory_reason_label' => 'Għaliex iżżid dan is-sotto-suġġett?',
+  'propose_subsubcategory_submit' => 'Ibgħat il-proposta',
+  'propose_subsubcategory_cancel' => 'Ikkanċella',
+  'propose_subsubcategory_close' => 'Agħlaq',
 );

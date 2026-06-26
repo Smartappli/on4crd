@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Διαγράψτε πρώτα όλα τα υπο-υποθεματικές αυτού του θέματος.',
   'err_subsubcategory_has_documents' => 'Αυτή η υπο-υποθεματική εξακολουθεί να περιέχει άρθρα.',
   'proposal_type_subsubcategory' => 'Υπο-υποθεματική',
+  'proposal_type_subcategory' => 'Υποθέμα',
 );

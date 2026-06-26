@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kontaktas:',
   'subsubcategory_field' => 'Po-potemė',
   'no_subsubcategory' => 'Be po-potemės',
   'err_subsubcategory_category_mismatch' => 'Pasirinkta po-potemė nepriklauso pasirinktai temai.',
+  'propose_subcategory_item' => 'Potemę',
+  'propose_subsubcategory_item' => 'Potemę',
+  'propose_subcategory' => 'Pasiūlyti potemę',
+  'propose_subcategory_subject' => 'Potemės pasiūlymas ON4CRD bibliotekai',
+  'propose_subcategory_intro' => 'Nurodykite pridedamą potemę ir jos pagrindinę temą.',
+  'propose_subcategory_body_intro' => 'Potemės pasiūlymas narių bibliotekai:',
+  'propose_subcategory_name_label' => 'Potemės pavadinimas',
+  'propose_subcategory_parent_label' => 'Pagrindinė tema',
+  'propose_subcategory_reason_label' => 'Kodėl pridėti šią potemę?',
+  'propose_subcategory_submit' => 'Pateikti pasiūlymą',
+  'propose_subcategory_cancel' => 'Atšaukti',
+  'propose_subcategory_close' => 'Uždaryti',
+  'propose_subsubcategory' => 'Pasiūlyti potemę',
+  'propose_subsubcategory_subject' => 'Po-potemės pasiūlymas ON4CRD bibliotekai',
+  'propose_subsubcategory_intro' => 'Nurodykite pridedamą potemę ir jos pagrindinę temą.',
+  'propose_subsubcategory_body_intro' => 'Po-potemės pasiūlymas narių bibliotekai:',
+  'propose_subsubcategory_name_label' => 'Po-potemės pavadinimas',
+  'propose_subsubcategory_parent_label' => 'Potemė',
+  'propose_subsubcategory_reason_label' => 'Kodėl pridėti šią potemę?',
+  'propose_subsubcategory_submit' => 'Pateikti pasiūlymą',
+  'propose_subsubcategory_cancel' => 'Atšaukti',
+  'propose_subsubcategory_close' => 'Uždaryti',
 );

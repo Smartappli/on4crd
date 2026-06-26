@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Pirmiausia ištrinkite visas šios temos po-potemės.',
   'err_subsubcategory_has_documents' => 'Šioje po-potemėje vis dar yra straipsnių.',
   'proposal_type_subsubcategory' => 'Po-potemė',
+  'proposal_type_subcategory' => 'Potemė',
 );

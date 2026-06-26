@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Yhteystiedot:',
   'subsubcategory_field' => 'Ali-alateema',
   'no_subsubcategory' => 'Ei ali-alateemaa',
   'err_subsubcategory_category_mismatch' => 'Valittu ali-alateema ei kuulu valittuun teemaan.',
+  'propose_subcategory_item' => 'Ala-aihe',
+  'propose_subsubcategory_item' => 'Ala-aihe',
+  'propose_subcategory' => 'Ehdota ala-aihetta',
+  'propose_subcategory_subject' => 'Ala-aihe-ehdotus ON4CRD-kirjastoon',
+  'propose_subcategory_intro' => 'Ilmoita lisättävä ala-aihe ja sen pääaihe.',
+  'propose_subcategory_body_intro' => 'Ala-aihe-ehdotus jäsenkirjastoon:',
+  'propose_subcategory_name_label' => 'Ala-aiheen nimi',
+  'propose_subcategory_parent_label' => 'Pääaihe',
+  'propose_subcategory_reason_label' => 'Miksi tämä ala-aihe lisätään?',
+  'propose_subcategory_submit' => 'Lähetä ehdotus',
+  'propose_subcategory_cancel' => 'Peruuta',
+  'propose_subcategory_close' => 'Sulje',
+  'propose_subsubcategory' => 'Ehdota ala-aihetta',
+  'propose_subsubcategory_subject' => 'Ala-aihe-ehdotus ON4CRD-kirjastoon',
+  'propose_subsubcategory_intro' => 'Ilmoita lisättävä ala-aihe ja sen pääaihe.',
+  'propose_subsubcategory_body_intro' => 'Ala-aihe-ehdotus jäsenkirjastoon:',
+  'propose_subsubcategory_name_label' => 'Ala-aiheen nimi',
+  'propose_subsubcategory_parent_label' => 'Alateema',
+  'propose_subsubcategory_reason_label' => 'Miksi tämä ala-aihe lisätään?',
+  'propose_subsubcategory_submit' => 'Lähetä ehdotus',
+  'propose_subsubcategory_cancel' => 'Peruuta',
+  'propose_subsubcategory_close' => 'Sulje',
 );

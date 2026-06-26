@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Scrios na fo-fho-théamaí uile sa téama seo ar dtús.',
   'err_subsubcategory_has_documents' => 'Tá ailt fós san fho-fho-théama seo.',
   'proposal_type_subsubcategory' => 'Fo-fho-théama',
+  'proposal_type_subcategory' => 'Fo-théama',
 );

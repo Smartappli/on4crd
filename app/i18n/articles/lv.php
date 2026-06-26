@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kontaktinformācija:',
   'subsubcategory_field' => 'Apakšapakštēma',
   'no_subsubcategory' => 'Bez apakšapakštēmas',
   'err_subsubcategory_category_mismatch' => 'Izvēlētā apakšapakštēma nepieder izvēlētajai tēmai.',
+  'propose_subcategory_item' => 'Apakštēmu',
+  'propose_subsubcategory_item' => 'Apakštēmu',
+  'propose_subcategory' => 'Ieteikt apakštēmu',
+  'propose_subcategory_subject' => 'Apakštēmas priekšlikums ON4CRD bibliotēkai',
+  'propose_subcategory_intro' => 'Norādiet pievienojamo apakštēmu un tās vecāktēmu.',
+  'propose_subcategory_body_intro' => 'Apakštēmas priekšlikums biedru bibliotēkai:',
+  'propose_subcategory_name_label' => 'Apakštēmas nosaukums',
+  'propose_subcategory_parent_label' => 'Vecāktēma',
+  'propose_subcategory_reason_label' => 'Kāpēc pievienot šo apakštēmu?',
+  'propose_subcategory_submit' => 'Nosūtīt priekšlikumu',
+  'propose_subcategory_cancel' => 'Atcelt',
+  'propose_subcategory_close' => 'Aizvērt',
+  'propose_subsubcategory' => 'Ieteikt apakštēmu',
+  'propose_subsubcategory_subject' => 'Apakšapakštēmas priekšlikums ON4CRD bibliotēkai',
+  'propose_subsubcategory_intro' => 'Norādiet pievienojamo apakštēmu un tās vecāktēmu.',
+  'propose_subsubcategory_body_intro' => 'Apakšapakštēmas priekšlikums biedru bibliotēkai:',
+  'propose_subsubcategory_name_label' => 'Apakšapakštēmas nosaukums',
+  'propose_subsubcategory_parent_label' => 'Apakštēma',
+  'propose_subsubcategory_reason_label' => 'Kāpēc pievienot šo apakštēmu?',
+  'propose_subsubcategory_submit' => 'Nosūtīt priekšlikumu',
+  'propose_subsubcategory_cancel' => 'Atcelt',
+  'propose_subsubcategory_close' => 'Aizvērt',
 );

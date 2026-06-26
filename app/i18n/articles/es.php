@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Contacto:',
   'subsubcategory_field' => 'Subsubtema',
   'no_subsubcategory' => 'Sin subsubtema',
   'err_subsubcategory_category_mismatch' => 'La subtemática seleccionada no pertenece a la temática elegida.',
+  'propose_subcategory_item' => 'Un subtema',
+  'propose_subsubcategory_item' => 'Un subsubtema',
+  'propose_subcategory' => 'Proponer un subtema',
+  'propose_subcategory_subject' => 'Propuesta de subtema para la biblioteca ON4CRD',
+  'propose_subcategory_intro' => 'Indica el subtema que se debe añadir y su temática principal.',
+  'propose_subcategory_body_intro' => 'Propuesta de subtema para la biblioteca de miembros:',
+  'propose_subcategory_name_label' => 'Nombre del subtema',
+  'propose_subcategory_parent_label' => 'Temática principal',
+  'propose_subcategory_reason_label' => '¿Por qué añadir este subtema?',
+  'propose_subcategory_submit' => 'Enviar la propuesta',
+  'propose_subcategory_cancel' => 'Cancelar',
+  'propose_subcategory_close' => 'Cerrar',
+  'propose_subsubcategory' => 'Proponer un subsubtema',
+  'propose_subsubcategory_subject' => 'Propuesta de subsubtema para la biblioteca ON4CRD',
+  'propose_subsubcategory_intro' => 'Indica el subsubtema que se debe añadir y su temática principal.',
+  'propose_subsubcategory_body_intro' => 'Propuesta de subsubtema para la biblioteca de miembros:',
+  'propose_subsubcategory_name_label' => 'Nombre del subsubtema',
+  'propose_subsubcategory_parent_label' => 'Subtema',
+  'propose_subsubcategory_reason_label' => '¿Por qué añadir este subsubtema?',
+  'propose_subsubcategory_submit' => 'Enviar la propuesta',
+  'propose_subsubcategory_cancel' => 'Cancelar',
+  'propose_subsubcategory_close' => 'Cerrar',
 );

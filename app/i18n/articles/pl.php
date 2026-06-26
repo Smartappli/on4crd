@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kontakt:',
   'subsubcategory_field' => 'Podpodtemat',
   'no_subsubcategory' => 'Bez podpodtematu',
   'err_subsubcategory_category_mismatch' => 'Wybrany podpodtemat nie należy do wybranego tematu.',
+  'propose_subcategory_item' => 'Podtemat',
+  'propose_subsubcategory_item' => 'Podpodtemat',
+  'propose_subcategory' => 'Zaproponuj podtemat',
+  'propose_subcategory_subject' => 'Propozycja podtematu dla biblioteki ON4CRD',
+  'propose_subcategory_intro' => 'Wskaż podtemat do dodania oraz jego temat nadrzędny.',
+  'propose_subcategory_body_intro' => 'Propozycja podtematu dla biblioteki członków:',
+  'propose_subcategory_name_label' => 'Nazwa podtematu',
+  'propose_subcategory_parent_label' => 'Temat nadrzędny',
+  'propose_subcategory_reason_label' => 'Dlaczego dodać ten podtemat?',
+  'propose_subcategory_submit' => 'Wyślij propozycję',
+  'propose_subcategory_cancel' => 'Anuluj',
+  'propose_subcategory_close' => 'Zamknij',
+  'propose_subsubcategory' => 'Zaproponuj podpodtemat',
+  'propose_subsubcategory_subject' => 'Propozycja podpodtematu dla biblioteki ON4CRD',
+  'propose_subsubcategory_intro' => 'Wskaż podpodtemat do dodania oraz jego temat nadrzędny.',
+  'propose_subsubcategory_body_intro' => 'Propozycja podpodtematu dla biblioteki członków:',
+  'propose_subsubcategory_name_label' => 'Nazwa podpodtematu',
+  'propose_subsubcategory_parent_label' => 'Podtemat',
+  'propose_subsubcategory_reason_label' => 'Dlaczego dodać ten podpodtemat?',
+  'propose_subsubcategory_submit' => 'Wyślij propozycję',
+  'propose_subsubcategory_cancel' => 'Anuluj',
+  'propose_subsubcategory_close' => 'Zamknij',
 );

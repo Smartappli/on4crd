@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kontakt:',
   'subsubcategory_field' => 'Podpodtema',
   'no_subsubcategory' => 'Brez podpodteme',
   'err_subsubcategory_category_mismatch' => 'Izbrana podpodtema ne spada k izbrani temi.',
+  'propose_subcategory_item' => 'Podtemo',
+  'propose_subsubcategory_item' => 'Podtemo',
+  'propose_subcategory' => 'Predlagaj podtemo',
+  'propose_subcategory_subject' => 'Predlog podteme za knjižnico ON4CRD',
+  'propose_subcategory_intro' => 'Navedite podtemo za dodajanje in njeno nadrejeno temo.',
+  'propose_subcategory_body_intro' => 'Predlog podteme za knjižnico članov:',
+  'propose_subcategory_name_label' => 'Ime podteme',
+  'propose_subcategory_parent_label' => 'Nadrejena tema',
+  'propose_subcategory_reason_label' => 'Zakaj dodati to podtemo?',
+  'propose_subcategory_submit' => 'Pošlji predlog',
+  'propose_subcategory_cancel' => 'Prekliči',
+  'propose_subcategory_close' => 'Zapri',
+  'propose_subsubcategory' => 'Predlagaj podtemo',
+  'propose_subsubcategory_subject' => 'Predlog podpodteme za knjižnico ON4CRD',
+  'propose_subsubcategory_intro' => 'Navedite podtemo za dodajanje in njeno nadrejeno temo.',
+  'propose_subsubcategory_body_intro' => 'Predlog podpodteme za knjižnico članov:',
+  'propose_subsubcategory_name_label' => 'Ime podpodteme',
+  'propose_subsubcategory_parent_label' => 'Podtema',
+  'propose_subsubcategory_reason_label' => 'Zakaj dodati to podtemo?',
+  'propose_subsubcategory_submit' => 'Pošlji predlog',
+  'propose_subsubcategory_cancel' => 'Prekliči',
+  'propose_subsubcategory_close' => 'Zapri',
 );

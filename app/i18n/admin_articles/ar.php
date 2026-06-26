@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'احذف أولاً كل الموضوعات الفرعية في هذا الموضوع.',
   'err_subsubcategory_has_documents' => 'لا يزال هذا الموضوع الفرعي الثاني يحتوي على مقالات.',
   'proposal_type_subsubcategory' => 'موضوع فرعي ثان',
+  'proposal_type_subcategory' => 'موضوع فرعي',
 );

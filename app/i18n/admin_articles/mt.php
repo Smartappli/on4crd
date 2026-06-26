@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Ħassar l-ewwel is-sub-subtemi kollha f’din it-tema.',
   'err_subsubcategory_has_documents' => 'Din is-sub-subtema għadha fiha artikli.',
   'proposal_type_subsubcategory' => 'Sub-subtema',
+  'proposal_type_subcategory' => 'Sottotema',
 );

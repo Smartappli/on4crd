@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Hapus semua sub-subtopik dalam topik ini terlebih dahulu.',
   'err_subsubcategory_has_documents' => 'Sub-subtopik ini masih berisi artikel.',
   'proposal_type_subsubcategory' => 'Sub-subtopik',
+  'proposal_type_subcategory' => 'Subtopik',
 );

@@ -194,6 +194,13 @@ if (table_exists('member_webotheque_categories')) {
     db()->prepare('DELETE FROM member_webotheque_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
 }
 
+if (table_exists('article_subsubcategories')) {
+    db()->prepare('DELETE FROM article_subsubcategories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+if (table_exists('article_subcategories')) {
+    db()->prepare('DELETE FROM article_subcategories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+
 if (table_exists('member_module_subcategories')) {
     db()->prepare('DELETE FROM member_module_subcategories WHERE module_code = "presentations" AND (code LIKE ? OR label LIKE ?)')->execute([$like, $like]);
 }
@@ -667,10 +674,36 @@ test('Selenium membre/public: propositions et auto-publications des modules publ
   await withSelenium(t, async (driver) => {
     try {
       await loginAsAdmin(driver, credentials.username, credentials.password);
+      const articleSubcategoryCode = `selenium-${token.toLowerCase()}`;
+      runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/article_helpers.php';
+$messages = i18n_domain_locale('articles', current_locale());
+article_ensure_taxonomy_schema($messages);
+$token = trim((string) getenv('SELENIUM_TOKEN'));
+$code = article_subcategory_code('selenium-' . strtolower($token));
+if ($token === '' || $code === '') {
+    throw new RuntimeException('Missing article taxonomy fixture input.');
+}
+db()->prepare('INSERT INTO article_subcategories (category_code, code, label) VALUES ("autres", ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+    ->execute([$code, 'Selenium subcategory ' . $token]);
+`, { SELENIUM_TOKEN: token });
 
       await submitProposal(driver, 'articles', {}, 'propose_category', {
         proposal_category: `Article category ${token}`,
         proposal_reason: `Reason ${token}`,
+        proposal_contact: contact,
+      });
+      await submitProposal(driver, 'articles', {}, 'propose_subcategory', {
+        proposal_category: 'autres',
+        proposal_subcategory: `Article subcategory ${token}`,
+        proposal_reason: `Reason subcategory ${token}`,
+        proposal_contact: contact,
+      });
+      await submitProposal(driver, 'articles', {}, 'propose_subsubcategory', {
+        proposal_subsubcategory_parent_ref: `autres:${articleSubcategoryCode}`,
+        proposal_subsubcategory: `Article subsubcategory ${token}`,
+        proposal_reason: `Reason subsubcategory ${token}`,
         proposal_contact: contact,
       });
       await submitProposal(driver, 'articles', {}, 'propose_tag', {

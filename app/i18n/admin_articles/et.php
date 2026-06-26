@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Kustutage esmalt kõik selle teema alam-alamteemad.',
   'err_subsubcategory_has_documents' => 'See alamalamteema sisaldab veel artikleid.',
   'proposal_type_subsubcategory' => 'Alam-alamteema',
+  'proposal_type_subcategory' => 'Alateema',
 );

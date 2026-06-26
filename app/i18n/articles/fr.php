@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Contact :',
   'subsubcategory_field' => 'Sous-sous-thématique',
   'no_subsubcategory' => 'Sans sous-sous-thématique',
   'err_subsubcategory_category_mismatch' => 'La sous-sous-thématique sélectionnée ne correspond pas à la thématique ou à la sous-thématique choisie.',
+  'propose_subcategory_item' => 'Une sous-thématique',
+  'propose_subsubcategory_item' => 'Une sous-sous-thématique',
+  'propose_subcategory' => 'Proposer une sous-thématique',
+  'propose_subcategory_subject' => 'Proposition de sous-thématique d’article ON4CRD',
+  'propose_subcategory_intro' => 'Indiquez la sous-thématique à ajouter et sa thématique parente.',
+  'propose_subcategory_body_intro' => 'Bonjour, je souhaite proposer une nouvelle sous-thématique d’article.',
+  'propose_subcategory_name_label' => 'Nom de la sous-thématique',
+  'propose_subcategory_parent_label' => 'Thématique parente',
+  'propose_subcategory_reason_label' => 'Raison',
+  'propose_subcategory_submit' => 'Envoyer la proposition',
+  'propose_subcategory_cancel' => 'Annuler',
+  'propose_subcategory_close' => 'Fermer',
+  'propose_subsubcategory' => 'Proposer une sous-sous-thématique',
+  'propose_subsubcategory_subject' => 'Proposition de sous-sous-thématique d’article ON4CRD',
+  'propose_subsubcategory_intro' => 'Indiquez la sous-sous-thématique à ajouter et sa sous-thématique parente.',
+  'propose_subsubcategory_body_intro' => 'Bonjour, je souhaite proposer une nouvelle sous-sous-thématique d’article.',
+  'propose_subsubcategory_name_label' => 'Nom de la sous-sous-thématique',
+  'propose_subsubcategory_parent_label' => 'Sous-thématique parente',
+  'propose_subsubcategory_reason_label' => 'Raison',
+  'propose_subsubcategory_submit' => 'Envoyer la proposition',
+  'propose_subsubcategory_cancel' => 'Annuler',
+  'propose_subsubcategory_close' => 'Fermer',
 );

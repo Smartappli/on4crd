@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kontakt:',
   'subsubcategory_field' => 'Underundertema',
   'no_subsubcategory' => 'Intet underundertema',
   'err_subsubcategory_category_mismatch' => 'Det valgte underundertema hører ikke til det valgte emne.',
+  'propose_subcategory_item' => 'Et underemne',
+  'propose_subsubcategory_item' => 'Et underundertema',
+  'propose_subcategory' => 'Foreslå et underemne',
+  'propose_subcategory_subject' => 'Forslag til underemne for ON4CRD-biblioteket',
+  'propose_subcategory_intro' => 'Angiv det underemne, der skal tilføjes, og dets overordnede tema.',
+  'propose_subcategory_body_intro' => 'Forslag til underemne for medlemsbiblioteket:',
+  'propose_subcategory_name_label' => 'Navn på underemne',
+  'propose_subcategory_parent_label' => 'Overordnet tema',
+  'propose_subcategory_reason_label' => 'Hvorfor tilføje dette underemne?',
+  'propose_subcategory_submit' => 'Send forslag',
+  'propose_subcategory_cancel' => 'Annuller',
+  'propose_subcategory_close' => 'Luk',
+  'propose_subsubcategory' => 'Foreslå et underundertema',
+  'propose_subsubcategory_subject' => 'Forslag til underundertema for ON4CRD-biblioteket',
+  'propose_subsubcategory_intro' => 'Angiv det underundertema, der skal tilføjes, og dets overordnede tema.',
+  'propose_subsubcategory_body_intro' => 'Forslag til underundertema for medlemsbiblioteket:',
+  'propose_subsubcategory_name_label' => 'Navn på underundertema',
+  'propose_subsubcategory_parent_label' => 'Underemne',
+  'propose_subsubcategory_reason_label' => 'Hvorfor tilføje dette underundertema?',
+  'propose_subsubcategory_submit' => 'Send forslag',
+  'propose_subsubcategory_cancel' => 'Annuller',
+  'propose_subsubcategory_close' => 'Luk',
 );

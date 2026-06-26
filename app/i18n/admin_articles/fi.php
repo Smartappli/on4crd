@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Poista ensin kaikki tämän teeman ali-alateemat.',
   'err_subsubcategory_has_documents' => 'Tämä alialateema sisältää edelleen artikkeleita.',
   'proposal_type_subsubcategory' => 'Ali-alateema',
+  'proposal_type_subcategory' => 'Alateema',
 );

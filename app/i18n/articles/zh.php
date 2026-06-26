@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ return array (
   'subsubcategory_field' => '子子主题',
   'no_subsubcategory' => '无子子主题',
   'err_subsubcategory_category_mismatch' => '所选子子主题不属于所选主题。',
+  'propose_subcategory_item' => '一个子主题',
+  'propose_subsubcategory_item' => '一个子子主题',
+  'propose_subcategory' => '建议子主题',
+  'propose_subcategory_subject' => 'ON4CRD 图书馆子主题建议',
+  'propose_subcategory_intro' => '说明要添加的子主题及其父主题。',
+  'propose_subcategory_body_intro' => '会员图书馆子主题建议：',
+  'propose_subcategory_name_label' => '子主题名称',
+  'propose_subcategory_parent_label' => '父主题',
+  'propose_subcategory_reason_label' => '为什么添加此子主题？',
+  'propose_subcategory_submit' => '提交建议',
+  'propose_subcategory_cancel' => '取消',
+  'propose_subcategory_close' => '关闭',
+  'propose_subsubcategory' => '建议子子主题',
+  'propose_subsubcategory_subject' => 'ON4CRD 图书馆子子主题建议',
+  'propose_subsubcategory_intro' => '说明要添加的子子主题及其父主题。',
+  'propose_subsubcategory_body_intro' => '会员图书馆子子主题建议：',
+  'propose_subsubcategory_name_label' => '子子主题名称',
+  'propose_subsubcategory_parent_label' => '子主题',
+  'propose_subsubcategory_reason_label' => '为什么添加此子子主题？',
+  'propose_subsubcategory_submit' => '提交建议',
+  'propose_subsubcategory_cancel' => '取消',
+  'propose_subsubcategory_close' => '关闭',
 );

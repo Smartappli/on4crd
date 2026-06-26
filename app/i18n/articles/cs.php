@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kontakt:',
   'subsubcategory_field' => 'Podpodtéma',
   'no_subsubcategory' => 'Bez podpodtématu',
   'err_subsubcategory_category_mismatch' => 'Vybrané podpodtéma nepatří k vybranému tématu.',
+  'propose_subcategory_item' => 'Podtéma',
+  'propose_subsubcategory_item' => 'Podpodtéma',
+  'propose_subcategory' => 'Navrhnout podtéma',
+  'propose_subcategory_subject' => 'Návrh podtématu pro knihovnu ON4CRD',
+  'propose_subcategory_intro' => 'Uveďte podtéma, které chcete přidat, a jeho nadřazené téma.',
+  'propose_subcategory_body_intro' => 'Návrh podtématu pro členskou knihovnu:',
+  'propose_subcategory_name_label' => 'Název podtématu',
+  'propose_subcategory_parent_label' => 'Nadřazené téma',
+  'propose_subcategory_reason_label' => 'Proč toto podtéma přidat?',
+  'propose_subcategory_submit' => 'Odeslat návrh',
+  'propose_subcategory_cancel' => 'Zrušit',
+  'propose_subcategory_close' => 'Zavřít',
+  'propose_subsubcategory' => 'Navrhnout podpodtéma',
+  'propose_subsubcategory_subject' => 'Návrh podpodtématu pro knihovnu ON4CRD',
+  'propose_subsubcategory_intro' => 'Uveďte podpodtéma, které chcete přidat, a jeho nadřazené téma.',
+  'propose_subsubcategory_body_intro' => 'Návrh podpodtématu pro členskou knihovnu:',
+  'propose_subsubcategory_name_label' => 'Název podpodtématu',
+  'propose_subsubcategory_parent_label' => 'Podtéma',
+  'propose_subsubcategory_reason_label' => 'Proč toto podpodtéma přidat?',
+  'propose_subsubcategory_submit' => 'Odeslat návrh',
+  'propose_subsubcategory_cancel' => 'Zrušit',
+  'propose_subsubcategory_close' => 'Zavřít',
 );

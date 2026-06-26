@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Contact:',
   'subsubcategory_field' => 'Sub-subtopic',
   'no_subsubcategory' => 'No sub-subtopic',
   'err_subsubcategory_category_mismatch' => 'The selected sub-subtopic does not match the chosen topic or subtopic.',
+  'propose_subcategory_item' => 'A subtopic',
+  'propose_subsubcategory_item' => 'A sub-subtopic',
+  'propose_subcategory' => 'Propose a subtopic',
+  'propose_subcategory_subject' => 'ON4CRD article subtopic proposal',
+  'propose_subcategory_intro' => 'Enter the subtopic to add and its parent topic.',
+  'propose_subcategory_body_intro' => 'Hello, I would like to propose a new article subtopic.',
+  'propose_subcategory_name_label' => 'Subtopic name',
+  'propose_subcategory_parent_label' => 'Parent topic',
+  'propose_subcategory_reason_label' => 'Reason',
+  'propose_subcategory_submit' => 'Submit proposal',
+  'propose_subcategory_cancel' => 'Cancel',
+  'propose_subcategory_close' => 'Close',
+  'propose_subsubcategory' => 'Propose a sub-subtopic',
+  'propose_subsubcategory_subject' => 'ON4CRD article sub-subtopic proposal',
+  'propose_subsubcategory_intro' => 'Enter the sub-subtopic to add and its parent subtopic.',
+  'propose_subsubcategory_body_intro' => 'Hello, I would like to propose a new article sub-subtopic.',
+  'propose_subsubcategory_name_label' => 'Sub-subtopic name',
+  'propose_subsubcategory_parent_label' => 'Parent subtopic',
+  'propose_subsubcategory_reason_label' => 'Reason',
+  'propose_subsubcategory_submit' => 'Submit proposal',
+  'propose_subsubcategory_cancel' => 'Cancel',
+  'propose_subsubcategory_close' => 'Close',
 );

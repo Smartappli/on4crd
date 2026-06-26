@@ -944,6 +944,9 @@ final class I18nNativeLocalesTest extends TestCase
         self::assertSame('Proposition de thématique d’article ON4CRD', $articles['propose_category_subject']);
         self::assertStringContainsString('nouvelle thématique d’article', (string) $articles['propose_category_body']);
         self::assertSame('Nom de la thématique', $articles['propose_category_name_label']);
+        self::assertSame('Une sous-thématique', $articles['propose_subcategory_item']);
+        self::assertSame('Une sous-sous-thématique', $articles['propose_subsubcategory_item']);
+        self::assertSame('Proposition de sous-thématique d’article ON4CRD', $articles['propose_subcategory_subject']);
 
         $articlesSource = file_get_contents(__DIR__ . '/../app/i18n/articles/fr.php');
         self::assertIsString($articlesSource);

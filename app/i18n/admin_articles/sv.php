@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Ta först bort alla underunderteman i detta ämne.',
   'err_subsubcategory_has_documents' => 'Detta underundertema innehåller fortfarande artiklar.',
   'proposal_type_subsubcategory' => 'Underundertema',
+  'proposal_type_subcategory' => 'Underämne',
 );

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Először törölje a téma összes altémáját.',
   'err_subsubcategory_has_documents' => 'Ez az al-altéma még tartalmaz cikkeket.',
   'proposal_type_subsubcategory' => 'Al-altéma',
+  'proposal_type_subcategory' => 'Altéma',
 );

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Delete all sub-subtopics in this subtopic first.',
   'err_subsubcategory_has_documents' => 'This sub-subtopic still contains articles.',
   'proposal_type_subsubcategory' => 'Sub-subtopic',
+  'proposal_type_subcategory' => 'Subtopic',
 );

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Najprv odstráňte všetky podpodtémy tejto témy.',
   'err_subsubcategory_has_documents' => 'Táto podpodtéma stále obsahuje články.',
   'proposal_type_subsubcategory' => 'Podpodtéma',
+  'proposal_type_subcategory' => 'Podtéma',
 );

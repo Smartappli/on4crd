@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kontakt:',
   'subsubcategory_field' => 'Underundertema',
   'no_subsubcategory' => 'Inget underundertema',
   'err_subsubcategory_category_mismatch' => 'Det valda undertemat hör inte till det valda temat.',
+  'propose_subcategory_item' => 'Ett underämne',
+  'propose_subsubcategory_item' => 'Ett underundertema',
+  'propose_subcategory' => 'Föreslå ett underämne',
+  'propose_subcategory_subject' => 'Förslag på underämne för ON4CRD-biblioteket',
+  'propose_subcategory_intro' => 'Ange underämnet som ska läggas till och dess överordnade ämne.',
+  'propose_subcategory_body_intro' => 'Förslag på underämne för medlemsbiblioteket:',
+  'propose_subcategory_name_label' => 'Namn på underämne',
+  'propose_subcategory_parent_label' => 'Överordnat ämne',
+  'propose_subcategory_reason_label' => 'Varför lägga till detta underämne?',
+  'propose_subcategory_submit' => 'Skicka förslag',
+  'propose_subcategory_cancel' => 'Avbryt',
+  'propose_subcategory_close' => 'Stäng',
+  'propose_subsubcategory' => 'Föreslå ett underundertema',
+  'propose_subsubcategory_subject' => 'Förslag på underundertema för ON4CRD-biblioteket',
+  'propose_subsubcategory_intro' => 'Ange underundertemat som ska läggas till och dess överordnade ämne.',
+  'propose_subsubcategory_body_intro' => 'Förslag på underundertema för medlemsbiblioteket:',
+  'propose_subsubcategory_name_label' => 'Namn på underundertema',
+  'propose_subsubcategory_parent_label' => 'Underämne',
+  'propose_subsubcategory_reason_label' => 'Varför lägga till detta underundertema?',
+  'propose_subsubcategory_submit' => 'Skicka förslag',
+  'propose_subsubcategory_cancel' => 'Avbryt',
+  'propose_subsubcategory_close' => 'Stäng',
 );

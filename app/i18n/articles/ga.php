@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Teagmháil:',
   'subsubcategory_field' => 'Fo-fho-théama',
   'no_subsubcategory' => 'Gan fo-fho-théama',
   'err_subsubcategory_category_mismatch' => 'Ní bhaineann an fofhothéama roghnaithe leis an téama roghnaithe.',
+  'propose_subcategory_item' => 'Fo-ábhar',
+  'propose_subsubcategory_item' => 'Fo-ábhar',
+  'propose_subcategory' => 'Mol fo-ábhar',
+  'propose_subcategory_subject' => 'Moladh fo-ábhair do leabharlann ON4CRD',
+  'propose_subcategory_intro' => 'Luaigh an fo-ábhar le cur leis agus a ábhar tuismitheora.',
+  'propose_subcategory_body_intro' => 'Moladh fo-ábhair do leabharlann na gcomhaltaí:',
+  'propose_subcategory_name_label' => 'Ainm an fho-ábhair',
+  'propose_subcategory_parent_label' => 'Ábhar tuismitheora',
+  'propose_subcategory_reason_label' => 'Cén fáth an fo-ábhar seo a chur leis?',
+  'propose_subcategory_submit' => 'Seol an moladh',
+  'propose_subcategory_cancel' => 'Cealaigh',
+  'propose_subcategory_close' => 'Dún',
+  'propose_subsubcategory' => 'Mol fo-ábhar',
+  'propose_subsubcategory_subject' => 'Moladh fo-ábhair do leabharlann ON4CRD',
+  'propose_subsubcategory_intro' => 'Luaigh an fo-ábhar le cur leis agus a ábhar tuismitheora.',
+  'propose_subsubcategory_body_intro' => 'Moladh fo-ábhair do leabharlann na gcomhaltaí:',
+  'propose_subsubcategory_name_label' => 'Ainm an fho-ábhair',
+  'propose_subsubcategory_parent_label' => 'Fo-théama',
+  'propose_subsubcategory_reason_label' => 'Cén fáth an fo-ábhar seo a chur leis?',
+  'propose_subsubcategory_submit' => 'Seol an moladh',
+  'propose_subsubcategory_cancel' => 'Cealaigh',
+  'propose_subsubcategory_close' => 'Dún',
 );

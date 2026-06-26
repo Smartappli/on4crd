@@ -92,6 +92,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('my_requests');
         }
 
+        if ($action === 'propose_subcategory') {
+            $user = require_login(route_url('articles'));
+            $proposalCategories = article_categories($t);
+            $proposalCategory = article_category_from_input((string) ($_POST['proposal_category'] ?? ''), $proposalCategories);
+            $proposalCategoryLabel = (string) ($proposalCategories[$proposalCategory] ?? article_category_label_from_code($proposalCategory));
+            $proposalTitle = (string) ($_POST['proposal_subcategory'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) $t['propose_subcategory_parent_label'] => $proposalCategoryLabel,
+                (string) $t['propose_subcategory_reason_label'] => (string) ($_POST['proposal_reason'] ?? ''),
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'articles', 'subcategory', $proposalTitle, $proposalSummary, $proposalContact, 'article_category:' . $proposalCategory);
+            content_proposal_notify_site((string) $t['propose_subcategory_subject'], [
+                'area' => 'articles',
+                'proposal_type' => 'subcategory',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) $t['proposal_recorded']);
+            redirect('my_requests');
+        }
+
+        if ($action === 'propose_subsubcategory') {
+            $user = require_login(route_url('articles'));
+            $proposalCategories = article_categories($t);
+            $proposalParentParts = article_subcategory_ref_parts((string) ($_POST['proposal_subsubcategory_parent_ref'] ?? ''));
+            if ($proposalParentParts['category'] === '' || $proposalParentParts['subcategory'] === '') {
+                throw new RuntimeException((string) $t['err_subcategory_category_mismatch']);
+            }
+            [$proposalCategory, $proposalSubcategory] = article_taxonomy_from_input(
+                $proposalParentParts['category'],
+                article_subcategory_ref($proposalParentParts['category'], $proposalParentParts['subcategory']),
+                $proposalCategories
+            );
+            $proposalCategoryLabel = (string) ($proposalCategories[$proposalCategory] ?? article_category_label_from_code($proposalCategory));
+            $proposalSubcategoryLabel = article_category_label_from_code($proposalSubcategory);
+            foreach ((array) (article_subcategories_by_category()[$proposalCategory] ?? []) as $proposalSubcategoryOption) {
+                if (article_subcategory_code((string) ($proposalSubcategoryOption['code'] ?? '')) === $proposalSubcategory) {
+                    $proposalSubcategoryLabel = (string) ($proposalSubcategoryOption['label'] ?? $proposalSubcategoryLabel);
+                    break;
+                }
+            }
+            $proposalTitle = (string) ($_POST['proposal_subsubcategory'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) $t['propose_subsubcategory_parent_label'] => $proposalCategoryLabel . ' / ' . $proposalSubcategoryLabel,
+                (string) $t['propose_subsubcategory_reason_label'] => (string) ($_POST['proposal_reason'] ?? ''),
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'articles', 'subsubcategory', $proposalTitle, $proposalSummary, $proposalContact, 'article_subcategory:' . $proposalCategory . ':' . $proposalSubcategory);
+            content_proposal_notify_site((string) $t['propose_subsubcategory_subject'], [
+                'area' => 'articles',
+                'proposal_type' => 'subsubcategory',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) $t['proposal_recorded']);
+            redirect('my_requests');
+        }
+
         if ($action === 'propose_tag') {
             $user = require_login(route_url('articles'));
             $proposalTitle = (string) ($_POST['proposal_tag'] ?? '');
@@ -363,6 +426,8 @@ $canAdminArticles = $user !== null && has_permission('admin.access');
 $articlesAdminUrl = route_url_clean('admin_articles', ['status' => 'pending']) . '#pending-proposals';
 $articlesProposeLabel = (string) $t['propose_menu'];
 $articlesProposeCategoryLabel = (string) $t['propose_category_item'];
+$articlesProposeSubcategoryLabel = (string) $t['propose_subcategory_item'];
+$articlesProposeSubsubcategoryLabel = (string) $t['propose_subsubcategory_item'];
 $articlesProposeTagLabel = (string) $t['propose_tag_item'];
 $articlesProposeArticleLabel = (string) $t['propose_article_item'];
 $articlesAdminLabel = (string) $t['administer'];
@@ -396,6 +461,8 @@ ob_start();
                     <summary class="button" aria-haspopup="menu"><?= e($articlesProposeLabel) ?></summary>
                     <div class="articles-propose-menu-panel" role="menu">
                         <a class="articles-propose-menu-item" role="menuitem" href="<?= e($categoryProposalUrl) ?>" data-articles-category-open data-articles-dialog-open="articles-category-dialog" aria-haspopup="dialog" aria-controls="articles-category-dialog"><?= e($articlesProposeCategoryLabel) ?></a>
+                        <a class="articles-propose-menu-item" role="menuitem" href="#articles-subcategory-dialog" data-articles-dialog-open="articles-subcategory-dialog" aria-haspopup="dialog" aria-controls="articles-subcategory-dialog"><?= e($articlesProposeSubcategoryLabel) ?></a>
+                        <a class="articles-propose-menu-item" role="menuitem" href="#articles-subsubcategory-dialog" data-articles-dialog-open="articles-subsubcategory-dialog" aria-haspopup="dialog" aria-controls="articles-subsubcategory-dialog"><?= e($articlesProposeSubsubcategoryLabel) ?></a>
                         <a class="articles-propose-menu-item" role="menuitem" href="#articles-tag-dialog" data-articles-dialog-open="articles-tag-dialog" aria-haspopup="dialog" aria-controls="articles-tag-dialog"><?= e($articlesProposeTagLabel) ?></a>
                         <a class="articles-propose-menu-item" role="menuitem" href="<?= e(route_url('article_propose')) ?>"><?= e($articlesProposeArticleLabel) ?></a>
                     </div>
@@ -437,6 +504,108 @@ ob_start();
                 <div class="articles-category-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['propose_category_submit']) ?></button>
                     <button class="button secondary" type="button" data-articles-category-close><?= e((string) $t['propose_category_cancel']) ?></button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <dialog class="articles-category-dialog articles-proposal-dialog" id="articles-subcategory-dialog" aria-labelledby="articles-subcategory-title">
+        <div class="articles-category-dialog-card">
+            <div class="articles-category-dialog-header module-dialog-header">
+                <div>
+                    <p class="articles-category-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['subcategory_field']) ?></p>
+                    <h2 id="articles-subcategory-title"><?= e((string) $t['propose_subcategory']) ?></h2>
+                    <p class="help"><?= e((string) $t['propose_subcategory_intro']) ?></p>
+                </div>
+                <button class="articles-category-dialog-close module-dialog-close" type="button" data-articles-dialog-close aria-label="<?= e((string) $t['propose_subcategory_close']) ?>">&times;</button>
+            </div>
+            <form class="articles-category-form module-dialog-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-articles-proposal-form data-articles-proposal-recipient="<?= e($contactEmail) ?>" data-articles-proposal-subject="<?= e((string) $t['propose_subcategory_subject']) ?>" data-articles-proposal-intro="<?= e((string) $t['propose_subcategory_body_intro']) ?>">
+                <?php if ($user !== null): ?>
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="propose_subcategory">
+                <?php endif; ?>
+                <label>
+                    <span><?= e((string) $t['propose_subcategory_parent_label']) ?></span>
+                    <select name="proposal_category" required>
+                        <option value="" disabled selected><?= e((string) $t['propose_subcategory_parent_label']) ?></option>
+                        <?php foreach ($articleCategories as $proposalCategoryCode => $proposalCategoryLabel): ?>
+                            <option value="<?= e((string) $proposalCategoryCode) ?>"><?= e((string) $proposalCategoryLabel) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label>
+                    <span><?= e((string) $t['propose_subcategory_name_label']) ?></span>
+                    <input type="text" name="proposal_subcategory" maxlength="160" required>
+                </label>
+                <label>
+                    <span><?= e((string) $t['propose_subcategory_reason_label']) ?></span>
+                    <textarea name="proposal_reason" rows="5" maxlength="1600"></textarea>
+                </label>
+                <label>
+                    <span><?= e((string) $t['propose_category_contact_label']) ?></span>
+                    <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
+                </label>
+                <div class="articles-category-dialog-actions module-dialog-actions">
+                    <button class="button" type="submit"><?= e((string) $t['propose_subcategory_submit']) ?></button>
+                    <button class="button secondary" type="button" data-articles-dialog-close><?= e((string) $t['propose_subcategory_cancel']) ?></button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <dialog class="articles-category-dialog articles-proposal-dialog" id="articles-subsubcategory-dialog" aria-labelledby="articles-subsubcategory-title">
+        <div class="articles-category-dialog-card">
+            <div class="articles-category-dialog-header module-dialog-header">
+                <div>
+                    <p class="articles-category-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['subsubcategory_field']) ?></p>
+                    <h2 id="articles-subsubcategory-title"><?= e((string) $t['propose_subsubcategory']) ?></h2>
+                    <p class="help"><?= e((string) $t['propose_subsubcategory_intro']) ?></p>
+                </div>
+                <button class="articles-category-dialog-close module-dialog-close" type="button" data-articles-dialog-close aria-label="<?= e((string) $t['propose_subsubcategory_close']) ?>">&times;</button>
+            </div>
+            <form class="articles-category-form module-dialog-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-articles-proposal-form data-articles-proposal-recipient="<?= e($contactEmail) ?>" data-articles-proposal-subject="<?= e((string) $t['propose_subsubcategory_subject']) ?>" data-articles-proposal-intro="<?= e((string) $t['propose_subsubcategory_body_intro']) ?>">
+                <?php if ($user !== null): ?>
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="propose_subsubcategory">
+                <?php endif; ?>
+                <label>
+                    <span><?= e((string) $t['propose_subsubcategory_parent_label']) ?></span>
+                    <select name="proposal_subsubcategory_parent_ref" required>
+                        <option value="" disabled selected><?= e((string) $t['propose_subsubcategory_parent_label']) ?></option>
+                        <?php foreach ($articleCategories as $proposalCategoryCode => $proposalCategoryLabel): ?>
+                            <?php $proposalSubcategoryOptions = $articleSubcategoriesByCategory[(string) $proposalCategoryCode] ?? []; ?>
+                            <?php if ($proposalSubcategoryOptions === []): ?>
+                                <?php continue; ?>
+                            <?php endif; ?>
+                            <optgroup label="<?= e((string) $proposalCategoryLabel) ?>">
+                                <?php foreach ($proposalSubcategoryOptions as $proposalSubcategoryOption): ?>
+                                    <?php
+                                    $proposalSubcategoryCode = article_subcategory_code((string) ($proposalSubcategoryOption['code'] ?? ''));
+                                    if ($proposalSubcategoryCode === '') {
+                                        continue;
+                                    }
+                                    ?>
+                                    <option value="<?= e(article_subcategory_ref((string) $proposalCategoryCode, $proposalSubcategoryCode)) ?>"><?= e((string) ($proposalSubcategoryOption['label'] ?? article_category_label_from_code($proposalSubcategoryCode))) ?></option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label>
+                    <span><?= e((string) $t['propose_subsubcategory_name_label']) ?></span>
+                    <input type="text" name="proposal_subsubcategory" maxlength="160" required>
+                </label>
+                <label>
+                    <span><?= e((string) $t['propose_subsubcategory_reason_label']) ?></span>
+                    <textarea name="proposal_reason" rows="5" maxlength="1600"></textarea>
+                </label>
+                <label>
+                    <span><?= e((string) $t['propose_category_contact_label']) ?></span>
+                    <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
+                </label>
+                <div class="articles-category-dialog-actions module-dialog-actions">
+                    <button class="button" type="submit"><?= e((string) $t['propose_subsubcategory_submit']) ?></button>
+                    <button class="button secondary" type="button" data-articles-dialog-close><?= e((string) $t['propose_subsubcategory_cancel']) ?></button>
                 </div>
             </form>
         </div>

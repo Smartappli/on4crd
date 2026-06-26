@@ -1252,7 +1252,7 @@ function ensure_content_proposals_table(): bool
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 member_id INT NOT NULL,
                 area VARCHAR(64) NOT NULL,
-                proposal_type ENUM("category","content","domain","tag","subcategory") NOT NULL DEFAULT "content",
+                proposal_type ENUM("category","content","domain","tag","subcategory","subsubcategory") NOT NULL DEFAULT "content",
                 title VARCHAR(190) NOT NULL,
                 summary TEXT DEFAULT NULL,
                 contact VARCHAR(220) DEFAULT NULL,
@@ -1270,7 +1270,7 @@ function ensure_content_proposals_table(): bool
         $columns = [
             'member_id' => 'ALTER TABLE content_proposals ADD COLUMN member_id INT NOT NULL DEFAULT 0 AFTER id',
             'area' => 'ALTER TABLE content_proposals ADD COLUMN area VARCHAR(64) NOT NULL DEFAULT "articles" AFTER member_id',
-            'proposal_type' => 'ALTER TABLE content_proposals ADD COLUMN proposal_type ENUM("category","content","domain","tag","subcategory") NOT NULL DEFAULT "content" AFTER area',
+            'proposal_type' => 'ALTER TABLE content_proposals ADD COLUMN proposal_type ENUM("category","content","domain","tag","subcategory","subsubcategory") NOT NULL DEFAULT "content" AFTER area',
             'title' => 'ALTER TABLE content_proposals ADD COLUMN title VARCHAR(190) NOT NULL DEFAULT "Proposal" AFTER proposal_type',
             'summary' => 'ALTER TABLE content_proposals ADD COLUMN summary TEXT DEFAULT NULL AFTER title',
             'contact' => 'ALTER TABLE content_proposals ADD COLUMN contact VARCHAR(220) DEFAULT NULL AFTER summary',
@@ -1287,9 +1287,9 @@ function ensure_content_proposals_table(): bool
             }
         }
         $proposalTypeMetadata = content_proposals_column_metadata('proposal_type');
-        if ($proposalTypeMetadata !== null && (!str_contains($proposalTypeMetadata['type'], '"domain"') || !str_contains($proposalTypeMetadata['type'], '"tag"') || !str_contains($proposalTypeMetadata['type'], '"subcategory"'))) {
+        if ($proposalTypeMetadata !== null && (!str_contains($proposalTypeMetadata['type'], '"domain"') || !str_contains($proposalTypeMetadata['type'], '"tag"') || !str_contains($proposalTypeMetadata['type'], '"subcategory"') || !str_contains($proposalTypeMetadata['type'], '"subsubcategory"'))) {
             try {
-                db()->exec('ALTER TABLE content_proposals MODIFY COLUMN proposal_type ENUM("category","content","domain","tag","subcategory") NOT NULL DEFAULT "content"');
+                db()->exec('ALTER TABLE content_proposals MODIFY COLUMN proposal_type ENUM("category","content","domain","tag","subcategory","subsubcategory") NOT NULL DEFAULT "content"');
             } catch (Throwable) {
                 // Some database engines used in tests do not support MySQL ENUM modification.
             }
@@ -1615,7 +1615,7 @@ function content_proposal_payload(
     if (
         $memberId <= 0
         || !isset(content_proposal_allowed_areas()[$area])
-        || !in_array($proposalType, ['category', 'content', 'domain', 'tag', 'subcategory'], true)
+        || !in_array($proposalType, ['category', 'content', 'domain', 'tag', 'subcategory', 'subsubcategory'], true)
         || !in_array($status, ['pending', 'reviewed', 'accepted', 'rejected'], true)
         || $title === ''
     ) {

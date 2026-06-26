@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ return array (
   'subsubcategory_field' => 'موضوع فرعي ثان',
   'no_subsubcategory' => 'بدون موضوع فرعي ثان',
   'err_subsubcategory_category_mismatch' => 'الموضوع الفرعي المحدد لا ينتمي إلى الموضوع المختار.',
+  'propose_subcategory_item' => 'موضوع فرعي',
+  'propose_subsubcategory_item' => 'موضوع فرعي ثان',
+  'propose_subcategory' => 'اقتراح موضوع فرعي',
+  'propose_subcategory_subject' => 'اقتراح موضوع فرعي لمكتبة ON4CRD',
+  'propose_subcategory_intro' => 'اذكر الموضوع الفرعي المطلوب إضافته والموضوع الأصل.',
+  'propose_subcategory_body_intro' => 'اقتراح موضوع فرعي لمكتبة الأعضاء:',
+  'propose_subcategory_name_label' => 'اسم الموضوع الفرعي',
+  'propose_subcategory_parent_label' => 'الموضوع الأصل',
+  'propose_subcategory_reason_label' => 'لماذا تريد إضافة هذا الموضوع الفرعي؟',
+  'propose_subcategory_submit' => 'إرسال الاقتراح',
+  'propose_subcategory_cancel' => 'إلغاء',
+  'propose_subcategory_close' => 'إغلاق',
+  'propose_subsubcategory' => 'اقتراح موضوع فرعي ثان',
+  'propose_subsubcategory_subject' => 'اقتراح موضوع فرعي ثان لمكتبة ON4CRD',
+  'propose_subsubcategory_intro' => 'اذكر الموضوع الفرعي المطلوب إضافته والموضوع الأصل.',
+  'propose_subsubcategory_body_intro' => 'اقتراح موضوع فرعي ثان لمكتبة الأعضاء:',
+  'propose_subsubcategory_name_label' => 'اسم الموضوع الفرعي',
+  'propose_subsubcategory_parent_label' => 'موضوع فرعي',
+  'propose_subsubcategory_reason_label' => 'لماذا تريد إضافة هذا الموضوع الفرعي؟',
+  'propose_subsubcategory_submit' => 'إرسال الاقتراح',
+  'propose_subsubcategory_cancel' => 'إلغاء',
+  'propose_subsubcategory_close' => 'إغلاق',
 );

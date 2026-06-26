@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ return array (
   'subsubcategory_field' => 'Подподтема',
   'no_subsubcategory' => 'Без подподтемы',
   'err_subsubcategory_category_mismatch' => 'Выбранная подподтема не относится к выбранной теме.',
+  'propose_subcategory_item' => 'Подтему',
+  'propose_subsubcategory_item' => 'Подтему',
+  'propose_subcategory' => 'Предложить подтему',
+  'propose_subcategory_subject' => 'Предложение подтемы для библиотеки ON4CRD',
+  'propose_subcategory_intro' => 'Укажите подтему для добавления и ее родительскую тему.',
+  'propose_subcategory_body_intro' => 'Предложение подтемы для библиотеки участников:',
+  'propose_subcategory_name_label' => 'Название подтемы',
+  'propose_subcategory_parent_label' => 'Родительская тема',
+  'propose_subcategory_reason_label' => 'Зачем добавить эту подтему?',
+  'propose_subcategory_submit' => 'Отправить предложение',
+  'propose_subcategory_cancel' => 'Отмена',
+  'propose_subcategory_close' => 'Закрыть',
+  'propose_subsubcategory' => 'Предложить подтему',
+  'propose_subsubcategory_subject' => 'Предложение подподтемы для библиотеки ON4CRD',
+  'propose_subsubcategory_intro' => 'Укажите подтему для добавления и ее родительскую тему.',
+  'propose_subsubcategory_body_intro' => 'Предложение подподтемы для библиотеки участников:',
+  'propose_subsubcategory_name_label' => 'Название подподтемы',
+  'propose_subsubcategory_parent_label' => 'Подтема',
+  'propose_subsubcategory_reason_label' => 'Зачем добавить эту подтему?',
+  'propose_subsubcategory_submit' => 'Отправить предложение',
+  'propose_subsubcategory_cancel' => 'Отмена',
+  'propose_subsubcategory_close' => 'Закрыть',
 );

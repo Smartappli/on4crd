@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Contact:',
   'subsubcategory_field' => 'Sub-subtemă',
   'no_subsubcategory' => 'Fără sub-subtemă',
   'err_subsubcategory_category_mismatch' => 'Subtema selectată nu aparține temei alese.',
+  'propose_subcategory_item' => 'O subtematică',
+  'propose_subsubcategory_item' => 'O subtematică',
+  'propose_subcategory' => 'Propune o subtematică',
+  'propose_subcategory_subject' => 'Propunere de subtematică pentru biblioteca ON4CRD',
+  'propose_subcategory_intro' => 'Indică subtematica de adăugat și tematica părinte.',
+  'propose_subcategory_body_intro' => 'Propunere de subtematică pentru biblioteca membrilor:',
+  'propose_subcategory_name_label' => 'Numele subtematicii',
+  'propose_subcategory_parent_label' => 'Tematică părinte',
+  'propose_subcategory_reason_label' => 'De ce să fie adăugată această subtematică?',
+  'propose_subcategory_submit' => 'Trimite propunerea',
+  'propose_subcategory_cancel' => 'Anulează',
+  'propose_subcategory_close' => 'Închide',
+  'propose_subsubcategory' => 'Propune o subtematică',
+  'propose_subsubcategory_subject' => 'Propunere de subtematică pentru biblioteca ON4CRD',
+  'propose_subsubcategory_intro' => 'Indică subtematica de adăugat și tematica părinte.',
+  'propose_subsubcategory_body_intro' => 'Propunere de subtematică pentru biblioteca membrilor:',
+  'propose_subsubcategory_name_label' => 'Numele subtematicii',
+  'propose_subsubcategory_parent_label' => 'Subtemă',
+  'propose_subsubcategory_reason_label' => 'De ce să fie adăugată această subtematică?',
+  'propose_subsubcategory_submit' => 'Trimite propunerea',
+  'propose_subsubcategory_cancel' => 'Anulează',
+  'propose_subsubcategory_close' => 'Închide',
 );

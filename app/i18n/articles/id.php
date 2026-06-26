@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ Kontak:',
   'subsubcategory_field' => 'Sub-subtopik',
   'no_subsubcategory' => 'Tanpa sub-subtopik',
   'err_subsubcategory_category_mismatch' => 'Subtema yang dipilih bukan bagian dari tema yang dipilih.',
+  'propose_subcategory_item' => 'Sebuah subtopik',
+  'propose_subsubcategory_item' => 'Sebuah sub-subtopik',
+  'propose_subcategory' => 'Usulkan subtopik',
+  'propose_subcategory_subject' => 'Usulan subtopik untuk pustaka ON4CRD',
+  'propose_subcategory_intro' => 'Sebutkan subtopik yang akan ditambahkan dan topik induknya.',
+  'propose_subcategory_body_intro' => 'Usulan subtopik untuk pustaka anggota:',
+  'propose_subcategory_name_label' => 'Nama subtopik',
+  'propose_subcategory_parent_label' => 'Topik induk',
+  'propose_subcategory_reason_label' => 'Mengapa menambahkan subtopik ini?',
+  'propose_subcategory_submit' => 'Kirim usulan',
+  'propose_subcategory_cancel' => 'Batal',
+  'propose_subcategory_close' => 'Tutup',
+  'propose_subsubcategory' => 'Usulkan sub-subtopik',
+  'propose_subsubcategory_subject' => 'Usulan sub-subtopik untuk pustaka ON4CRD',
+  'propose_subsubcategory_intro' => 'Sebutkan sub-subtopik yang akan ditambahkan dan topik induknya.',
+  'propose_subsubcategory_body_intro' => 'Usulan sub-subtopik untuk pustaka anggota:',
+  'propose_subsubcategory_name_label' => 'Nama sub-subtopik',
+  'propose_subsubcategory_parent_label' => 'Subtopik',
+  'propose_subsubcategory_reason_label' => 'Mengapa menambahkan sub-subtopik ini?',
+  'propose_subsubcategory_submit' => 'Kirim usulan',
+  'propose_subsubcategory_cancel' => 'Batal',
+  'propose_subsubcategory_close' => 'Tutup',
 );

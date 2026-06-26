@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -108,4 +109,26 @@ return array (
   'subsubcategory_field' => 'उप-उपविषय',
   'no_subsubcategory' => 'कोई उप-उपविषय नहीं',
   'err_subsubcategory_category_mismatch' => 'चुना गया उप-विषय चुने गए विषय से संबंधित नहीं है।',
+  'propose_subcategory_item' => 'एक उपविषय',
+  'propose_subsubcategory_item' => 'एक उप-उपविषय',
+  'propose_subcategory' => 'उपविषय प्रस्तावित करें',
+  'propose_subcategory_subject' => 'ON4CRD लाइब्रेरी के लिए उपविषय प्रस्ताव',
+  'propose_subcategory_intro' => 'जोड़े जाने वाले उपविषय और उसके मुख्य विषय को बताएं।',
+  'propose_subcategory_body_intro' => 'सदस्य लाइब्रेरी के लिए उपविषय प्रस्ताव:',
+  'propose_subcategory_name_label' => 'उपविषय का नाम',
+  'propose_subcategory_parent_label' => 'मुख्य विषय',
+  'propose_subcategory_reason_label' => 'यह उपविषय क्यों जोड़ें?',
+  'propose_subcategory_submit' => 'प्रस्ताव भेजें',
+  'propose_subcategory_cancel' => 'रद्द करें',
+  'propose_subcategory_close' => 'बंद करें',
+  'propose_subsubcategory' => 'उप-उपविषय प्रस्तावित करें',
+  'propose_subsubcategory_subject' => 'ON4CRD लाइब्रेरी के लिए उप-उपविषय प्रस्ताव',
+  'propose_subsubcategory_intro' => 'जोड़े जाने वाले उप-उपविषय और उसके मुख्य विषय को बताएं।',
+  'propose_subsubcategory_body_intro' => 'सदस्य लाइब्रेरी के लिए उप-उपविषय प्रस्ताव:',
+  'propose_subsubcategory_name_label' => 'उप-उपविषय का नाम',
+  'propose_subsubcategory_parent_label' => 'उपविषय',
+  'propose_subsubcategory_reason_label' => 'यह उप-उपविषय क्यों जोड़ें?',
+  'propose_subsubcategory_submit' => 'प्रस्ताव भेजें',
+  'propose_subsubcategory_cancel' => 'रद्द करें',
+  'propose_subsubcategory_close' => 'बंद करें',
 );

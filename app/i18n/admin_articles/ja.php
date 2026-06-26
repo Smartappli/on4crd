@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => '先にこのトピック内のすべてのサブサブテーマを削除してください。',
   'err_subsubcategory_has_documents' => 'このサブサブテーマにはまだ記事があります。',
   'proposal_type_subsubcategory' => 'サブサブテーマ',
+  'proposal_type_subcategory' => 'サブトピック',
 );

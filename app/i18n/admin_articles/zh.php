@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => '请先删除此主题中的所有子子主题。',
   'err_subsubcategory_has_documents' => '此子子主题仍包含文章。',
   'proposal_type_subsubcategory' => '子子主题',
+  'proposal_type_subcategory' => '子主题',
 );

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'पहले इस विषय के सभी उप-उपविषय हटाएँ.',
   'err_subsubcategory_has_documents' => 'इस उप-उपविषय में अभी भी लेख हैं।',
   'proposal_type_subsubcategory' => 'उप-उपविषय',
+  'proposal_type_subcategory' => 'उपविषय',
 );

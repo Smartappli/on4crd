@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Najprej izbrišite vse podpodteme te teme.',
   'err_subsubcategory_has_documents' => 'Ta podpodtema še vedno vsebuje članke.',
   'proposal_type_subsubcategory' => 'Podpodtema',
+  'proposal_type_subcategory' => 'Podtema',
 );

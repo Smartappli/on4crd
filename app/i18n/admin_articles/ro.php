@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -120,4 +121,5 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Ștergeți mai întâi toate sub-subtemele din această temă.',
   'err_subsubcategory_has_documents' => 'Această sub-subtemă conține încă articole.',
   'proposal_type_subsubcategory' => 'Sub-subtemă',
+  'proposal_type_subcategory' => 'Subtemă',
 );
