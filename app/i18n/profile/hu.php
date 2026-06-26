@@ -9,7 +9,7 @@ return array (
   'private' => 'bizottság',
   'saved' => 'A láthatósági beállítások frissítve.',
   'title' => 'Profil',
-  'avatar_alt' => 'Tag avatar',
+  'avatar_alt' => 'Tag avatárja',
   'callsign' => 'Indikatif / Azonosító LoTW',
   'name' => 'Név',
   'email' => 'E-mail',

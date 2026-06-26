@@ -24,5 +24,5 @@ return array (
   'move_down' => 'Mozgatás le',
   'member' => 'tag',
   'edit' => 'Szerkesztés',
-  'avatar_alt' => 'Tag avatar',
+  'avatar_alt' => 'Tag avatárja',
 );

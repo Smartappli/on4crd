@@ -77,7 +77,7 @@ Kontakt:',
   'excerpt_placeholder' => 'Kurze Zusammenfassung wird in der Artikelliste angezeigt.',
   'content_label' => 'Formatierter Inhalt',
   'content_placeholder' => '<h2>Abschnittstitel</h2>
-<p>YIhr Text...</p>
+<p>Ihr Text...</p>
 <ul><li>Wichtiger Punkt</li></ul>',
   'html_cleanup_help' => 'HTML wird automatisch bereinigt. Skripte, Iframes und gefährliche Attribute werden vor der Validierung entfernt.',
   'submit_for_review' => 'Zur Validierung einreichen',
