@@ -10,7 +10,7 @@ return array (
   'saved' => 'A láthatósági beállítások frissítve.',
   'title' => 'Profil',
   'avatar_alt' => 'Tag avatárja',
-  'callsign' => 'Indikatif / Azonosító LoTW',
+  'callsign' => 'Hívójel / LoTW-azonosító',
   'name' => 'Név',
   'email' => 'E-mail',
   'directory_visibility' => 'Láthatóság a címtárban',

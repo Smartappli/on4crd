@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Vaš račun još nije potvrđen.',
   'login_success' => 'Povezivanje uspješno.',
   'title' => 'Veza',
-  'callsign' => 'Indikativno',
+  'callsign' => 'Pozivni znak',
   'password' => 'Lozinka',
   'captcha_question' => 'Captcha: koliko',
   'login' => 'Prijavite se',

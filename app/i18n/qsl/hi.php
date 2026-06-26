@@ -103,7 +103,7 @@ return array (
   'manual_flow' => 'एक मैन्युअल QSL बनाएं',
   'adif_flow' => 'एडीआईएफ क्यूएसओ आयात करें',
   'guided_manual_form' => 'निर्देशित मैनुअल प्रपत्र',
-  'contact_callsign' => 'कॉलसाइन से संपर्क करें',
+  'contact_callsign' => 'संपर्क का कॉलसाइन',
   'qso_date' => 'क्यूएसओ तिथि',
   'utc' => 'UTC',
   'band' => 'बैंड',

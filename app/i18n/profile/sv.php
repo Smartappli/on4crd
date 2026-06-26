@@ -10,7 +10,7 @@ return array (
   'saved' => 'Synlighetsinställningar uppdaterade.',
   'title' => 'Profil',
   'avatar_alt' => 'Medlemsavatar',
-  'callsign' => 'Indikator / Identifiering LoTW',
+  'callsign' => 'Anropssignal / LoTW-id',
   'name' => 'Namn',
   'email' => 'E-post',
   'directory_visibility' => 'Synlighet i katalogen',

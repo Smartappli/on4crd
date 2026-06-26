@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'Muokkaa Wikiä',
   'close' => 'Sulje',
   'title_label' => 'Otsikko',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL-tunniste',
   'content_label' => 'Sisältö (HTML yksinkertainen)',
   'save_page' => 'Tallenna',
   'cancel' => 'Peruuta',

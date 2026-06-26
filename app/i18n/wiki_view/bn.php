@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'উইকি সম্পাদনা',
   'close' => 'বন্ধ',
   'title_label' => 'শিরোনাম',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL শনাক্তকারী',
   'content_label' => 'বিষয়বস্তু (সহজ HTML)',
   'save_page' => 'সংরক্ষণ করুন',
   'cancel' => 'বাতিল করুন',

@@ -12,7 +12,7 @@ return array (
   'shift_value' => '0.6',
   'subtone_value' => '131.8',
   'subtone_status_value' => 'Ya / Ya (enc./des.)',
-  'callsign' => 'tanda panggilan',
+  'callsign' => 'tanda panggil',
   'channel' => 'Saluran',
   'mode' => 'Modus',
   'mode_value' => 'Mode pengulang FM + EchoLink',

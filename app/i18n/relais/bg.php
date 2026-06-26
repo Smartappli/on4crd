@@ -12,7 +12,7 @@ return array (
   'shift_value' => '0,6',
   'subtone_value' => '131,8',
   'subtone_status_value' => 'Да / Да (вкл./дек.)',
-  'callsign' => 'Показателно',
+  'callsign' => 'Позивна',
   'channel' => 'Канал',
   'mode' => 'Мода',
   'mode_value' => 'Режим на FM повторител + EchoLink',

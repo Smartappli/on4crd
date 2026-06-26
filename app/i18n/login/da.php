@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Din konto er endnu ikke bekræftet.',
   'login_success' => 'Forbindelsen lykkedes.',
   'title' => 'Forbindelse',
-  'callsign' => 'Vejledende',
+  'callsign' => 'Kaldesignal',
   'password' => 'Adgangskode',
   'captcha_question' => 'Captcha: hvor mange',
   'login' => 'Log ind',

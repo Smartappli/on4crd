@@ -9,7 +9,7 @@ return array (
   'edit' => 'Ubah',
   'create' => 'Buat',
   'title' => 'Judul',
-  'slug' => 'Slug',
+  'slug' => 'Pengidentifikasi URL',
   'summary' => 'Ringkasan',
   'description' => 'Deskripsi',
   'start' => 'Mulai',

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'club_numbers' => 'Modul publik',
-  'intro' => 'Temukan anggota klub yang terlihat, callsign, lisensi, QTH, dan detail kontak sesuai pengaturan privasi tiap anggota.',
+  'intro' => 'Temukan anggota klub yang terlihat, tanda panggil, lisensi, QTH, dan detail kontak sesuai pengaturan privasi tiap anggota.',
   'member_list' => 'Direktori anggota',
   'visible_members' => 'Profil terlihat',
   'uba_members' => 'Anggota UBA',
@@ -12,7 +12,7 @@ return array (
   'none_help' => 'Coba pencarian lain atau hapus filter aktif.',
   'avatar_of' => 'Avatar',
   'search_label' => 'Cari',
-  'search_placeholder' => 'Callsign atau nama',
+  'search_placeholder' => 'Tanda panggil atau nama',
   'licence_filter' => 'Filter berdasarkan lisensi',
   'all_licences' => 'Semua lisensi',
   'apply_filters' => 'Menyaring',

@@ -17,7 +17,7 @@ return array (
   'create' => 'Crea',
   'an_article' => 'un articolo',
   'title' => 'Titolo',
-  'slug' => 'Slug',
+  'slug' => 'Identificativo URL',
   'category' => 'Categoria',
   'new_category' => 'Nuova categoria…',
   'new_category_id' => 'Nuova categoria (identificatore)',

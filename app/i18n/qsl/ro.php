@@ -103,7 +103,7 @@ return array (
   'manual_flow' => 'Creați un manual QSL',
   'adif_flow' => 'Importați QSO ADIF',
   'guided_manual_form' => 'Ghid manual de formulare',
-  'contact_callsign' => 'Cod de contact',
+  'contact_callsign' => 'Indicativul contactului',
   'qso_date' => 'Data QSO',
   'utc' => 'UTC',
   'band' => 'Bandă',

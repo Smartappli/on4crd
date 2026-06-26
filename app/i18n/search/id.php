@@ -5,7 +5,7 @@ return array (
   'title' => 'Pencarian',
   'eyebrow' => 'Modul publik',
   'lead' => 'Temukan berita, artikel, halaman Wiki, dokumen, iklan, dan album dengan cepat.',
-  'placeholder' => 'Callsign, kata kunci, topik, dokumen...',
+  'placeholder' => 'Tanda panggil, kata kunci, topik, dokumen...',
   'query_label' => 'Pencarian Anda',
   'source_label' => 'Sumber',
   'submit' => 'Cari',

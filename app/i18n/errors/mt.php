@@ -13,7 +13,7 @@ return array (
   'search_label' => 'Fittex fuq ON4CRD',
   'search_placeholder' => 'Kelma ewlenija, artiklu, avveniment...',
   'search_submit' => 'Fittex',
-  'search_hint' => 'Ipprova callsign, suġġett tar-radju, isem ta\' avveniment jew servizz tal-klabb.',
+  'search_hint' => 'Ipprova indikattiv, suġġett tar-radju, isem ta\' avveniment jew servizz tal-klabb.',
   'quick_links_title' => 'Links utli',
   'news_link' => 'Aħbarijiet',
   'news_hint' => 'Aqra l-aħħar aġġornamenti tal-klabb.',

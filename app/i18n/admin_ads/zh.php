@@ -20,7 +20,7 @@ return [
     'col_title' => '标题',
     'col_owner' => '所有者',
     'col_placement' => '放置',
-    'col_status' => '地位',
+    'col_status' => '状态',
     'col_url' => 'URL',
     'col_code' => '代码',
     'col_name' => '姓名',

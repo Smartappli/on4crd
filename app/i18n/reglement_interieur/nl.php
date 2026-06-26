@@ -19,7 +19,7 @@ return array (
     0 => 
     array (
       'title' => 'Doel van de regelgeving',
-      'body' => 'Het reglement vormt een aanvulling op de statuten, commissiebesluiten en praktische clubinstructies. Ze zijn bedoeld om een ​​duidelijk, gastvrij en veilig kader te bieden voor radioamateuractiviteiten.',
+      'body' => 'Het reglement vormt een aanvulling op de statuten, commissiebesluiten en praktische clubinstructies. Ze zijn bedoeld om een duidelijk, gastvrij en veilig kader te bieden voor radioamateuractiviteiten.',
     ),
     1 => 
     array (

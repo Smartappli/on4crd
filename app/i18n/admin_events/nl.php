@@ -9,7 +9,7 @@ return array (
   'edit' => 'Bewerken',
   'create' => 'Aanmaken',
   'title' => 'Titel',
-  'slug' => 'Slug',
+  'slug' => 'URL-identificatie',
   'summary' => 'Samenvatting',
   'description' => 'Beschrijving',
   'start' => 'Begin',

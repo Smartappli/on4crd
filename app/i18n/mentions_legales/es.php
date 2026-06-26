@@ -47,7 +47,7 @@ return array (
     5 =>
     array (
       'title' => 'Datos personales',
-      'body' => 'La información sobre el tratamiento de datos personales, derechos de los interesados ​​y solicitudes de contacto se detalla en la página de Privacidad y GDPR.',
+      'body' => 'La información sobre el tratamiento de datos personales, derechos de los interesados y solicitudes de contacto se detalla en la página de Privacidad y GDPR.',
     ),
     6 =>
     array (

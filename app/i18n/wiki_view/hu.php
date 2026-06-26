@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'Wiki szerkesztése',
   'close' => 'Bezárás',
   'title_label' => 'Cím',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL-azonosító',
   'content_label' => 'Tartalom (HTML egyszerű)',
   'save_page' => 'Mentés',
   'cancel' => 'Mégse',

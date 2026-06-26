@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Manajer bagian',
   'member' => 'Anggota',
   'assign' => 'Menetapkan',
-  'callsign' => 'tanda panggilan',
+  'callsign' => 'tanda panggil',
   'no_assignment' => 'Tidak ada tugas.',
   'layout' => 'Bagian berita',
   'meta_desc' => 'Menulis, memoderasi, dan mengelola postingan berita bagian.',

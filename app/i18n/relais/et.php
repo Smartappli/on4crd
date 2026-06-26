@@ -12,7 +12,7 @@ return array (
   'shift_value' => '0,6',
   'subtone_value' => '131,8',
   'subtone_status_value' => 'Jah / Jah (k.a/kah.)',
-  'callsign' => 'Soovituslik',
+  'callsign' => 'Kutsung',
   'channel' => 'Kanal',
   'mode' => 'Mood',
   'mode_value' => 'FM kordusrežiim + EchoLink',

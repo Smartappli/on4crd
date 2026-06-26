@@ -7,7 +7,7 @@ return array (
   'create' => 'Создать',
   'heading_suffix' => 'страницу Вики',
   'title_label' => 'Заголовок',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL-идентификатор',
   'content_label' => 'Содержимое (простой HTML)',
   'save' => 'Сохранить',
   'layout' => 'Редактирование Вики',

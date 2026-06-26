@@ -103,7 +103,7 @@ return array (
   'manual_flow' => '手動 QSL を作成する',
   'adif_flow' => 'ADIF QSO をインポートする',
   'guided_manual_form' => 'ガイド付きマニュアルフォーム',
-  'contact_callsign' => 'コンタクトコールサイン',
+  'contact_callsign' => '相手局のコールサイン',
   'qso_date' => 'QSO日',
   'utc' => 'UTC',
   'band' => 'バンド',

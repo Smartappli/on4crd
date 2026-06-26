@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Sektionschefer',
   'member' => 'Medlem',
   'assign' => 'Tilldela',
-  'callsign' => 'Vägledande',
+  'callsign' => 'Anropssignal',
   'no_assignment' => 'Ingen tillskrivning.',
   'layout' => 'Nyhetssektionen',
   'meta_desc' => 'Skriva, moderera och hantera nyheter per sektion.',

@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Voditelji sekcija',
   'member' => 'član',
   'assign' => 'Dodijeliti',
-  'callsign' => 'Indikativno',
+  'callsign' => 'Pozivni znak',
   'no_assignment' => 'Nema atribucije.',
   'layout' => 'Odjeljak vijesti',
   'meta_desc' => 'Pisanje, moderiranje i upravljanje vijestima po odjeljcima.',

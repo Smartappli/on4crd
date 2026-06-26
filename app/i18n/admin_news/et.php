@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Sektsioonide juhid',
   'member' => 'liige',
   'assign' => 'Määra',
-  'callsign' => 'Soovituslik',
+  'callsign' => 'Kutsung',
   'no_assignment' => 'Ei omistata.',
   'layout' => 'Uudiste rubriik',
   'meta_desc' => 'Uudiste kirjutamine, modereerimine ja haldamine rubriikide kaupa.',

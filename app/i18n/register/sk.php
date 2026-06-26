@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Príliš veľa pokusov. Skúste to znova neskôr.',
   'ok_created' => 'Účet bol úspešne vytvorený. Vitajte v sekcii pre členov!',
   'title' => 'Vytvorte si členský účet',
-  'callsign' => 'Indikačné / Identifikačné LoTW',
+  'callsign' => 'Volacia značka / identifikátor LoTW',
   'full_name' => 'Celé meno',
   'first_name' => 'Krstné meno',
   'last_name' => 'Priezvisko',

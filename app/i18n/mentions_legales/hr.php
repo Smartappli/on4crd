@@ -37,7 +37,7 @@ return array (
     3 =>
     array (
       'title' => 'Intelektualno vlasništvo',
-      'body' => 'Tekstovi, slike, dokumenti, logotipi i materijali objavljeni na stranici ostaju vlasništvo njihovih autora ili kluba. Svaka reprodukcija ili ponovna uporaba mora poštivati ​​izvor, primjenjiva prava i sva autorska dopuštenja.',
+      'body' => 'Tekstovi, slike, dokumenti, logotipi i materijali objavljeni na stranici ostaju vlasništvo njihovih autora ili kluba. Svaka reprodukcija ili ponovna uporaba mora poštivati izvor, primjenjiva prava i sva autorska dopuštenja.',
     ),
     4 =>
     array (

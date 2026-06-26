@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Kierownicy sekcji',
   'member' => 'Członek',
   'assign' => 'Przypisz',
-  'callsign' => 'Orientacyjne',
+  'callsign' => 'Znak wywoławczy',
   'no_assignment' => 'Brak przypisania.',
   'layout' => 'Sekcja aktualności',
   'meta_desc' => 'Pisanie, moderowanie i zarządzanie wiadomościami według sekcji.',

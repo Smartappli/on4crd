@@ -5,7 +5,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Sada nástrojů',
   'tool_index' => 'Veřejný modul',
-  'category_locators' => 'Orientační body a geolokace',
+  'category_locators' => 'Lokátory a geolokace',
   'category_conversions' => 'Rádiové konverze',
   'category_antenna' => 'Antény a šíření',
   'category_power' => 'Výkon a energie',
@@ -19,7 +19,7 @@ return array (
   'calc_grid' => 'Vypočítejte mřížku',
   'found_address' => 'Adresa nalezena',
   'coords' => 'Souřadnice',
-  'locator' => 'Orientační bod Maidenhead',
+  'locator' => 'Lokátor Maidenhead',
   'conv' => 'Užitečné konverze',
   'freq_wave' => 'Frekvence → vlnová délka',
   'freq_mhz' => 'Frekvence (MHz)',

@@ -5,7 +5,7 @@ return array (
   'title' => 'Wiki adminisztráció',
   'new_page' => 'Új oldal',
   'th_title' => 'Cím',
-  'th_slug' => 'Slug',
+  'th_slug' => 'URL-azonosító',
   'th_updated' => 'Frissítés',
   'th_action' => 'Akció',
   'edit' => 'Szerkesztés',

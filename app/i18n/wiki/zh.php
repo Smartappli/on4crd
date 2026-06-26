@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => '会员专区',
-  'unavailable' => '页面初始化后 维基 将可用。',
+  'unavailable' => '页面初始化后维基将可用。',
   'invalid' => '请求无效。',
   'new_pages' => '新页面',
   'updated_pages' => '已更新页面',
@@ -12,7 +12,7 @@ return array (
   'search_placeholder' => '搜索页面（标题或内容）',
   'search' => '搜索',
   'reset' => '重置',
-  'wiki_pages' => '维基 页面',
+  'wiki_pages' => '维基页面',
   'no_page' => '未找到页面',
   'for_search' => ' 的搜索结果',
   'summary_fallback' => '打开此页面以查看完整内容。',
@@ -21,7 +21,7 @@ return array (
   'open_page' => '打开页面',
   'themes' => '主题',
   'all_themes' => '所有主题',
-  'propose_theme_subject' => 'ON4CRD 维基 主题提案',
+  'propose_theme_subject' => 'ON4CRD 维基主题提案',
   'propose_theme' => '建议主题',
   'create_theme' => '创建主题',
   'create_theme_intro' => '根据您的审核权限，该主题将直接通过验证。',

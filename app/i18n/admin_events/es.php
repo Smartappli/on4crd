@@ -9,7 +9,7 @@ return array (
   'edit' => 'Editar',
   'create' => 'Crear',
   'title' => 'Título',
-  'slug' => 'Slug',
+  'slug' => 'Identificador URL',
   'summary' => 'Resumen',
   'description' => 'Descripción',
   'start' => 'Inicio',

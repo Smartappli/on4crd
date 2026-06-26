@@ -21,7 +21,7 @@ return array (
   'radio_section' => 'Radio information',
   'photo_section' => 'Photo',
   'avatar_alt' => 'Member avatar',
-  'callsign' => 'Indicatif / Identifiant LoTW',
+  'callsign' => 'Callsign / LoTW identifier',
   'name' => 'Name',
   'email' => 'Email',
   'directory_visibility' => 'Directory visibility',

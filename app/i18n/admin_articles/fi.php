@@ -19,7 +19,7 @@ return array (
   'create' => 'Luo',
   'an_article' => 'artikkeli',
   'title' => 'Otsikko',
-  'slug' => 'Slug',
+  'slug' => 'URL-tunniste',
   'category' => 'Luokka',
   'new_category' => 'Uusi kategoria…',
   'new_category_id' => 'Uusi luokka (ID)',

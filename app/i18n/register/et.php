@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Liiga palju katseid. Proovige hiljem uuesti.',
   'ok_created' => 'Konto loomine õnnestus. Tere tulemast liikmete piirkonda!',
   'title' => 'Loo liikmekonto',
-  'callsign' => 'Näitaja / Identifikaator LoTW',
+  'callsign' => 'Kutsung / LoTW identifikaator',
   'full_name' => 'Täisnimi',
   'first_name' => 'Eesnimi',
   'last_name' => 'Perekonnanimi',

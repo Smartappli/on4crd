@@ -14,7 +14,7 @@ return array (
   'back_login' => 'Irritorna għall-login',
   'email_label' => 'E-mail',
   'email_subject' => 'ON4CRD - Reset tal-password',
-  'email_body' => 'Hello,
+  'email_body' => 'Bonġu,
 
 Uża din il-link biex tirrisettja l-password tiegħek ON4CRD:
 {reset_link}

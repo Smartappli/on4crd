@@ -15,7 +15,7 @@ return array (
   'help_intro' => 'Teksten worden in het Frans geschreven. EN/DE/NL-versies worden automatisch gegenereerd en indien nodig nagelezen. Sectieverantwoordelijken kunnen inhoud indienen; moderatoren valideren vóór publicatie.',
   'section' => 'Sectie',
   'title' => 'Titel',
-  'slug' => 'Slug',
+  'slug' => 'URL-identificatie',
   'excerpt' => 'Uittreksel',
   'simple_html' => 'Eenvoudige HTML-inhoud',
   'editor_tip' => 'Tip: gebruik de knop Word importeren (.docx) in de editorwerkbalk.',

@@ -58,7 +58,7 @@ return array (
   'qrz_url' => 'QRZ URL',
   'qrz_help' => 'Este enlace se comprueba automáticamente a partir del indicativo al guardar.',
   'website' => 'Sitio web',
-  'website_help' => 'Sitio web personal o de emisora ​​opcional. Utilice una URL completa que comience con https:// o http://.',
+  'website_help' => 'Sitio web personal o de emisora opcional. Utilice una URL completa que comience con https:// o http://.',
   'uba_member' => 'Miembro UBA',
   'uba_member_number' => 'Número de miembro UBA',
   'uba_member_number_help' => 'Ingrese su número de miembro UBA solo si la casilla de verificación de miembro UBA está seleccionada.',

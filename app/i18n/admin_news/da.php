@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Sektionsledere',
   'member' => 'Medlem',
   'assign' => 'Tildel',
-  'callsign' => 'Vejledende',
+  'callsign' => 'Kaldesignal',
   'no_assignment' => 'Ingen tilskrivning.',
   'layout' => 'Nyhedssektion',
   'meta_desc' => 'Skrivning, moderering og styring af nyheder efter afsnit.',

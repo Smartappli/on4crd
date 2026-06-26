@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'Wiki bearbeiten',
   'close' => 'Schließen',
   'title_label' => 'Titel',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL-Kennung',
   'content_label' => 'Inhalt (einfaches HTML)',
   'save_page' => 'Speichern',
   'cancel' => 'Abbrechen',

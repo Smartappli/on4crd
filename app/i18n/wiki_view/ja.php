@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'ウィキを編集',
   'close' => '閉じる',
   'title_label' => 'タイトル',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL 識別子',
   'content_label' => '内容（シンプルHTML）',
   'save_page' => '保存',
   'cancel' => 'キャンセル',

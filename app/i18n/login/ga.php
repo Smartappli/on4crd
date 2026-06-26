@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Níl do chuntas fíoraithe fós.',
   'login_success' => 'Ceangal rathúil.',
   'title' => 'Ceangal',
-  'callsign' => 'táscach',
+  'callsign' => 'Comhartha glao',
   'password' => 'Pasfhocal',
   'captcha_question' => 'Captcha: cé mhéad',
   'login' => 'Logáil isteach',

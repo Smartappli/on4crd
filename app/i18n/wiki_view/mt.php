@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'Editja Wiki',
   'close' => 'Agħlaq',
   'title_label' => 'Titolu',
-  'slug_label' => 'Slug',
+  'slug_label' => 'Identifikatur URL',
   'content_label' => 'Kontenut (HTML sempliċi)',
   'save_page' => 'Ħlief',
   'cancel' => 'Ikkanċella',

@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Jūsu konts vēl nav verificēts.',
   'login_success' => 'Savienojums veiksmīgs.',
   'title' => 'Savienojums',
-  'callsign' => 'Indikatīvs',
+  'callsign' => 'Izsaukuma signāls',
   'password' => 'Parole',
   'captcha_question' => 'Captcha: cik daudz',
   'login' => 'Piesakieties',

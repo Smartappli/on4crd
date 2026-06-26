@@ -10,7 +10,7 @@ return array (
   'saved' => 'Nähtavuse eelistusi värskendati.',
   'title' => 'Profiil',
   'avatar_alt' => 'Liikme avatar',
-  'callsign' => 'Näitaja / Identifikaator LoTW',
+  'callsign' => 'Kutsung / LoTW identifikaator',
   'name' => 'Nimi',
   'email' => 'Meil',
   'directory_visibility' => 'Nähtavus kataloogis',

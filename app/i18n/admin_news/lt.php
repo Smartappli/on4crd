@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Skyrių vadovai',
   'member' => 'narys',
   'assign' => 'Priskirti',
-  'callsign' => 'Orientacinė',
+  'callsign' => 'Šaukinys',
   'no_assignment' => 'Jokio priskyrimo.',
   'layout' => 'Naujienų skiltis',
   'meta_desc' => 'Naujienų rašymas, moderavimas ir valdymas pagal skyrius.',

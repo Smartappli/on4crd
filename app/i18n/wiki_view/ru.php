@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'Редактирование Вики',
   'close' => 'Закрыть',
   'title_label' => 'Заголовок',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL-идентификатор',
   'content_label' => 'Содержимое (простой HTML)',
   'save_page' => 'Сохранить',
   'cancel' => 'Отмена',

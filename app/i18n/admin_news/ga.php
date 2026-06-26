@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Bainisteoirí rannóige',
   'member' => 'Ball',
   'assign' => 'Sann',
-  'callsign' => 'táscach',
+  'callsign' => 'Comhartha glao',
   'no_assignment' => 'Gan sannadh.',
   'layout' => 'Rannóg nuachta',
   'meta_desc' => 'Scríobh, modhnóireacht agus bainistiú nuachta de réir ailt.',

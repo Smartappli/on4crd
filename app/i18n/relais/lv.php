@@ -12,7 +12,7 @@ return array (
   'shift_value' => '0,6',
   'subtone_value' => '131,8',
   'subtone_status_value' => 'Jā/Jā (iek./dec.)',
-  'callsign' => 'Indikatīvs',
+  'callsign' => 'Izsaukuma signāls',
   'channel' => 'Kanāls',
   'mode' => 'Režīms',
   'mode_value' => 'FM atkārtotāja režīms + EchoLink',

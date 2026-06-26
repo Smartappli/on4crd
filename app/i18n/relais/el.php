@@ -12,7 +12,7 @@ return array (
   'shift_value' => '0,6',
   'subtone_value' => '131,8',
   'subtone_status_value' => 'Ναι / Ναι (συμπ./δ.)',
-  'callsign' => 'Ενδεικτικά',
+  'callsign' => 'Διακριτικό κλήσης',
   'channel' => 'Κανάλι',
   'mode' => 'Μόδα',
   'mode_value' => 'Λειτουργία αναμεταδότη FM + EchoLink',

@@ -9,7 +9,7 @@ return array (
   'too_many' => 'An iomarca iarrachtaí. Bain triail eile as ar ball.',
   'ok_created' => 'Cruthaíodh an cuntas go rathúil. Fáilte go ceantar na mball!',
   'title' => 'Cruthaigh cuntas ball',
-  'callsign' => 'Táscaire / Aitheantóir LoTW',
+  'callsign' => 'Comhartha glao / aitheantóir LoTW',
   'full_name' => 'Ainm iomlán',
   'first_name' => 'Céad ainm',
   'last_name' => 'Sloinne',

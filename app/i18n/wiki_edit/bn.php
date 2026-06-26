@@ -7,7 +7,7 @@ return array (
   'create' => 'তৈরি করুন',
   'heading_suffix' => 'একটি উইকি পৃষ্ঠা',
   'title_label' => 'শিরোনাম',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL শনাক্তকারী',
   'content_label' => 'বিষয়বস্তু (সহজ HTML)',
   'save' => 'সংরক্ষণ করুন',
   'layout' => 'উইকি সম্পাদনা',

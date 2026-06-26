@@ -8,7 +8,7 @@ return array (
   'create' => 'Aanmaken',
   'a_lot' => 'een lot',
   'title' => 'Titel',
-  'slug' => 'Slug',
+  'slug' => 'URL-identificatie',
   'summary' => 'Samenvatting',
   'description' => 'Beschrijving',
   'image_url' => 'Afbeeldings-URL',

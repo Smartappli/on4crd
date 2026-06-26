@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Previše pokušaja. Pokušajte ponovno kasnije.',
   'ok_created' => 'Račun je uspješno kreiran. Dobrodošli u područje za članove!',
   'title' => 'Napravite članski račun',
-  'callsign' => 'Indikator / Identifikator LoTW',
+  'callsign' => 'Pozivni znak / LoTW identifikator',
   'full_name' => 'Puno ime',
   'first_name' => 'Ime',
   'last_name' => 'Prezime',

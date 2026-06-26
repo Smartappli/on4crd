@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Privacidad y GDPR',
-  'meta_desc' => 'Aviso ON4CRD GDPR, derechos de los interesados ​​y configuración de visibilidad del perfil.',
+  'meta_desc' => 'Aviso ON4CRD GDPR, derechos de los interesados y configuración de visibilidad del perfil.',
   'notice_version' => 'Versión de aviso',
   'member_rights' => 'Derechos de los miembros',
   'public_contact_prefix' => 'Contacto público para cualquier solicitud de datos personales',

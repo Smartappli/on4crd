@@ -9,7 +9,7 @@ return array (
   'edit' => 'Biex timmodifika',
   'create' => 'Oħloq',
   'title' => 'Titolu',
-  'slug' => 'Slug',
+  'slug' => 'Identifikatur URL',
   'summary' => 'Sommarju',
   'description' => 'Deskrizzjoni',
   'start' => 'Bidu',

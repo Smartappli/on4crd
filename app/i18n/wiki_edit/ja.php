@@ -7,7 +7,7 @@ return array (
   'create' => '作成',
   'heading_suffix' => 'ウィキページ',
   'title_label' => 'タイトル',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL 識別子',
   'content_label' => '内容（シンプルHTML）',
   'save' => '保存',
   'layout' => 'ウィキを編集',

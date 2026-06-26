@@ -19,7 +19,7 @@ return array (
   'create' => 'Oħloq',
   'an_article' => 'artiklu',
   'title' => 'Titolu',
-  'slug' => 'Slug',
+  'slug' => 'Identifikatur URL',
   'category' => 'Kategorija',
   'new_category' => 'Kategorija ġdida...',
   'new_category_id' => 'Kategorija ġdida (ID)',

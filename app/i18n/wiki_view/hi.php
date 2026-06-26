@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'विकी संपादित करें',
   'close' => 'बंद करें',
   'title_label' => 'शीर्षक',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL पहचानकर्ता',
   'content_label' => 'सामग्री (सरल HTML)',
   'save_page' => 'सहेजें',
   'cancel' => 'रद्द करें',

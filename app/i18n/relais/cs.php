@@ -12,7 +12,7 @@ return array (
   'shift_value' => '0,6',
   'subtone_value' => '131,8',
   'subtone_status_value' => 'Ano / Ano (včetně/prosin.)',
-  'callsign' => 'Orientační',
+  'callsign' => 'Volací značka',
   'channel' => 'kanál',
   'mode' => 'móda',
   'mode_value' => 'Režim opakovače FM + EchoLink',

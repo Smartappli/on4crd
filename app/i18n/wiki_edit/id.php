@@ -7,7 +7,7 @@ return array (
   'create' => 'Buat',
   'heading_suffix' => 'sebuah halaman Wiki',
   'title_label' => 'Judul',
-  'slug_label' => 'Slug',
+  'slug_label' => 'Pengidentifikasi URL',
   'content_label' => 'Konten (HTML sederhana)',
   'save' => 'Simpan',
   'layout' => 'Sunting Wiki',

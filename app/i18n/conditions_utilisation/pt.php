@@ -46,12 +46,12 @@ return array (
     4 => 
     array (
       'title' => 'Disponibilidade e precisão',
-      'body' => 'O site é fornecido como um recurso de informação e coordenação. O clube trabalha para manter confiáveis ​​os dados publicados, mas as informações técnicas, regulatórias ou práticas podem sofrer alterações. As fontes oficiais têm prioridade quando uma decisão depende de uma obrigação regulatória.',
+      'body' => 'O site é fornecido como um recurso de informação e coordenação. O clube trabalha para manter confiáveis os dados publicados, mas as informações técnicas, regulatórias ou práticas podem sofrer alterações. As fontes oficiais têm prioridade quando uma decisão depende de uma obrigação regulatória.',
     ),
     5 => 
     array (
       'title' => 'Propriedade intelectual',
-      'body' => 'Salvo indicação em contrário, os textos, imagens, documentos e materiais publicados no site pertencem aos seus respectivos autores ou ao clube. Qualquer reutilização deve respeitar a fonte, os direitos aplicáveis ​​e qualquer acordo de autor.',
+      'body' => 'Salvo indicação em contrário, os textos, imagens, documentos e materiais publicados no site pertencem aos seus respectivos autores ou ao clube. Qualquer reutilização deve respeitar a fonte, os direitos aplicáveis e qualquer acordo de autor.',
     ),
     6 => 
     array (

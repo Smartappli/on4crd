@@ -38,7 +38,7 @@ return array (
   'news_count' => '%d 条新闻',
   'previous' => '上一页',
   'next' => '下一页',
-  'news_actions' => '新闻行动',
+  'news_actions' => '新闻操作',
   'propose_news' => '推荐新闻',
   'propose_news_subject' => '当前提案 ON4CRD',
   'propose_news_intro' => '发送由俱乐部团队转发的信息。',

@@ -8,7 +8,7 @@ return array (
   'create' => 'Crear',
   'a_lot' => 'un lote',
   'title' => 'Título',
-  'slug' => 'Slug',
+  'slug' => 'Identificador URL',
   'summary' => 'Resumen',
   'description' => 'Descripción',
   'image_url' => 'URL de imagen',

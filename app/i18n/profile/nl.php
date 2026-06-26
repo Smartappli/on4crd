@@ -10,7 +10,7 @@ return array (
   'saved' => 'Zichtbaarheidsvoorkeuren bijgewerkt.',
   'title' => 'Profiel',
   'avatar_alt' => 'Avatar van lid',
-  'callsign' => 'Indicatief / Identificatie LoTW',
+  'callsign' => 'Roepnaam / LoTW-identificatie',
   'name' => 'Naam',
   'email' => 'E-mail',
   'directory_visibility' => 'Zichtbaarheid in de gids',

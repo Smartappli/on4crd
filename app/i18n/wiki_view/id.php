@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'Sunting Wiki',
   'close' => 'Tutup',
   'title_label' => 'Judul',
-  'slug_label' => 'Slug',
+  'slug_label' => 'Pengidentifikasi URL',
   'content_label' => 'Konten (HTML sederhana)',
   'save_page' => 'Simpan',
   'cancel' => 'Batalkan',

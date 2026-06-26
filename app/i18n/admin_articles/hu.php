@@ -19,7 +19,7 @@ return array (
   'create' => 'Létrehozása',
   'an_article' => 'egy cikk',
   'title' => 'Cím',
-  'slug' => 'Slug',
+  'slug' => 'URL-azonosító',
   'category' => 'Kategória',
   'new_category' => 'Új kategória…',
   'new_category_id' => 'Új kategória (azonosító)',

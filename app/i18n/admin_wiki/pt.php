@@ -5,7 +5,7 @@ return array (
   'title' => 'Administração do wiki',
   'new_page' => 'Nova página',
   'th_title' => 'Título',
-  'th_slug' => 'Slug',
+  'th_slug' => 'Identificador URL',
   'th_updated' => 'Atualizado',
   'th_action' => 'Ação',
   'edit' => 'Editar',

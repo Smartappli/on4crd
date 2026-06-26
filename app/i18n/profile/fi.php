@@ -10,7 +10,7 @@ return array (
   'saved' => 'Näkyvyysasetukset päivitetty.',
   'title' => 'Profiili',
   'avatar_alt' => 'Jäsen avatar',
-  'callsign' => 'Indikaattori / Tunniste LoTW',
+  'callsign' => 'Kutsutunnus / LoTW-tunniste',
   'name' => 'Nimi',
   'email' => 'Sähköposti',
   'directory_visibility' => 'Näkyvyys hakemistossa',

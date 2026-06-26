@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Ditt konto är inte verifierat ännu.',
   'login_success' => 'Anslutningen lyckades.',
   'title' => 'Anslutning',
-  'callsign' => 'Vägledande',
+  'callsign' => 'Anropssignal',
   'password' => 'Lösenord',
   'captcha_question' => 'Captcha: hur många',
   'login' => 'Logga in',

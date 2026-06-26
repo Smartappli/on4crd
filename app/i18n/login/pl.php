@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Twoje konto nie zostało jeszcze zweryfikowane.',
   'login_success' => 'Połączenie pomyślne.',
   'title' => 'Połączenie',
-  'callsign' => 'Orientacyjne',
+  'callsign' => 'Znak wywoławczy',
   'password' => 'Hasło',
   'captcha_question' => 'Captcha: ile',
   'login' => 'Zaloguj się',

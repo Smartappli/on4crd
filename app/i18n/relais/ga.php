@@ -12,7 +12,7 @@ return array (
   'shift_value' => '0,6',
   'subtone_value' => '131, 8',
   'subtone_status_value' => 'Tá / Tá (inc./dec.)',
-  'callsign' => 'táscach',
+  'callsign' => 'Comhartha glao',
   'channel' => 'Cainéal',
   'mode' => 'Faisean',
   'mode_value' => 'Mód Athsheoltóra FM + EchoLink',

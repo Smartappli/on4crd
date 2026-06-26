@@ -125,7 +125,7 @@ return array (
   'fast_adif_import' => 'Importação ADIF rápida',
   'adif_drop_here' => 'Arraste e solte seus arquivos ADIF aqui',
   'adif_drop_click' => 'ou clique para selecionar vários arquivos (.adi, .adif)',
-  'adif_auto_status' => 'Os arquivos são processados ​​automaticamente quando adicionados.',
+  'adif_auto_status' => 'Os arquivos são processados automaticamente quando adicionados.',
   'adif_duplicates_help' => 'Duplicatas exatas são ignoradas automaticamente durante a importação.',
   'records_count' => 'registro(s)',
   'cards_count' => 'cartão(ões)',

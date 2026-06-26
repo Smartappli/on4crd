@@ -18,7 +18,7 @@ return array (
   'pending_label' => '保留中',
   'proposal_default_title' => '提案',
   'proposal_author' => '提案者',
-  'proposal_contact' => '接触',
+  'proposal_contact' => '連絡先',
   'proposal_source' => 'リンクまたはソース',
   'proposal_status_label' => '状態',
   'proposal_moderation_note' => 'モデレーションノート',

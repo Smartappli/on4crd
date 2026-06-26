@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Sadaļu vadītāji',
   'member' => 'Biedrs',
   'assign' => 'Piešķirt',
-  'callsign' => 'Indikatīvs',
+  'callsign' => 'Izsaukuma signāls',
   'no_assignment' => 'Nav attiecinājuma.',
   'layout' => 'Ziņu sadaļa',
   'meta_desc' => 'Ziņu rakstīšana, moderēšana un pārvaldība pa sadaļām.',

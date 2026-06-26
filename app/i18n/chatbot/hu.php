@@ -9,7 +9,7 @@ return array (
   'chatbot_alt' => 'Illusztráció a Raymond chatbotról',
   'clear' => 'Tiszta beszélgetés',
   'conversation_label' => 'Beszélgetés Raymonddal',
-  'welcome' => 'Hello, Raymond vagyok. Tedd fel kérdésed, én válaszolok.',
+  'welcome' => 'Helló, Raymond vagyok. Tedd fel a kérdésed, én válaszolok.',
   'source' => 'Forrás:',
   'question_label' => 'kérdés',
   'placeholder' => 'Pl.: Hol találhatók a QSL eljárások?',

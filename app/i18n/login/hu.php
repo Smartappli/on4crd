@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Fiókja még nincs igazolva.',
   'login_success' => 'Sikeres csatlakozás.',
   'title' => 'Csatlakozás',
-  'callsign' => 'Tájékoztató',
+  'callsign' => 'Hívójel',
   'password' => 'Jelszó',
   'captcha_question' => 'Captcha: hány',
   'login' => 'Jelentkezzen be',

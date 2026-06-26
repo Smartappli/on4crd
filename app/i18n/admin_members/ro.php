@@ -15,7 +15,7 @@ return array (
   'th_committee' => 'Comitet',
   'th_actions' => 'Acțiuni',
   'save' => 'Salva',
-  'err_callsign' => 'Indicator necesar.',
+  'err_callsign' => 'Indicativ obligatoriu.',
   'err_email' => 'E-mail nevalid.',
   'err_locator' => 'Localizator nevalid.',
   'search' => 'Căutați un membru',

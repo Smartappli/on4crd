@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Zbyt wiele prób. Spróbuj ponownie później.',
   'ok_created' => 'Konto utworzone pomyślnie. Witamy w strefie członkowskiej!',
   'title' => 'Utwórz konto członkowskie',
-  'callsign' => 'Wskazanie/identyfikator LoTW',
+  'callsign' => 'Znak wywoławczy / identyfikator LoTW',
   'full_name' => 'Pełne imię i nazwisko',
   'first_name' => 'Imię',
   'last_name' => 'Nazwisko',

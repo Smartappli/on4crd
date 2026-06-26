@@ -7,7 +7,7 @@ return array (
   'intro' => 'Kirim ide, saran, atau usulan perbaikan kepada komite.',
   'close' => 'Tutup',
   'name_label' => 'Nama Anda',
-  'name_placeholder' => 'Nama dan callsign, jika ada',
+  'name_placeholder' => 'Nama dan tanda panggil, jika ada',
   'email_label' => 'Email Anda',
   'email_placeholder' => 'anda@example.com',
   'idea_title_label' => 'Judul ide',

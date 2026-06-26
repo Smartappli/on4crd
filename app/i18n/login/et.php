@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Teie konto pole veel kinnitatud.',
   'login_success' => 'Ühendus õnnestus.',
   'title' => 'Ühendus',
-  'callsign' => 'Soovituslik',
+  'callsign' => 'Kutsung',
   'password' => 'Parool',
   'captcha_question' => 'Captcha: kui palju',
   'login' => 'Logi sisse',

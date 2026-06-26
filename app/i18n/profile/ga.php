@@ -10,7 +10,7 @@ return array (
   'saved' => 'Sainroghanna infheictheachta nuashonraithe.',
   'title' => 'Próifíl',
   'avatar_alt' => 'Avatar ball',
-  'callsign' => 'Táscaire / Aitheantóir LoTW',
+  'callsign' => 'Comhartha glao / aitheantóir LoTW',
   'name' => 'Ainm',
   'email' => 'Ríomhphost',
   'directory_visibility' => 'Infheictheacht san eolaire',

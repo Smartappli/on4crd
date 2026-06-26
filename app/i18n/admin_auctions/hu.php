@@ -8,7 +8,7 @@ return array (
   'create' => 'Létrehozása',
   'a_lot' => 'sokat',
   'title' => 'Cím',
-  'slug' => 'Slug',
+  'slug' => 'URL-azonosító',
   'summary' => 'Összegzés',
   'description' => 'Leírás',
   'image_url' => 'Kép URL',

@@ -15,7 +15,7 @@ return array (
   'help_intro' => 'It-testi huma miktuba bil-Franċiż. Il-verżjonijiet EN/DE/NL jiġu ġġenerati awtomatikament u mbagħad jerġgħu jintlaqgħu jekk meħtieġ. Il-maniġers tat-taqsima jistgħu jissottomettu l-kontenut, il-moderaturi jivvalidawh qabel il-pubblikazzjoni.',
   'section' => 'Taqsima',
   'title' => 'Titolu',
-  'slug' => 'Slug',
+  'slug' => 'Identifikatur URL',
   'excerpt' => 'Estratt',
   'simple_html' => 'Kontenut sempliċi HTML',
   'editor_tip' => 'Tip: Uża l-buttuna Importa Kelma (format .docx) fil-bar tal-editur.',

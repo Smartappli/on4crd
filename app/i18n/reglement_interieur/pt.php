@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Regulamento interno',
-  'summary' => 'Este regulamento define as regras de funcionamento, participação e conduta aplicáveis ​​aos associados, atividades e espaços geridos pela {club_name}.',
-  'body' => 'Este regulamento define as regras de funcionamento, participação e conduta aplicáveis ​​aos associados, atividades e espaços geridos pela {club_name}.',
+  'summary' => 'Este regulamento define as regras de funcionamento, participação e conduta aplicáveis aos associados, atividades e espaços geridos pela {club_name}.',
+  'body' => 'Este regulamento define as regras de funcionamento, participação e conduta aplicáveis aos associados, atividades e espaços geridos pela {club_name}.',
   'updated_at_label' => 'Última atualização',
   'updated_at' => '2026-06-05',
   'status_label' => 'Estado',

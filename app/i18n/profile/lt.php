@@ -10,7 +10,7 @@ return array (
   'saved' => 'Matomumo nuostatos atnaujintos.',
   'title' => 'Profilis',
   'avatar_alt' => 'Nario avataras',
-  'callsign' => 'Indikatorius / Identifikatorius LoTW',
+  'callsign' => 'Šaukinys / LoTW identifikatorius',
   'name' => 'Vardas',
   'email' => 'El. paštas',
   'directory_visibility' => 'Matomumas kataloge',

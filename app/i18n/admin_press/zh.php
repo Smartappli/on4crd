@@ -15,7 +15,7 @@ return [
     'add' => '添加',
     'th_name' => '姓名',
     'th_role' => '角色',
-    'th_contact' => '接触',
+    'th_contact' => '联系方式',
     'title' => '标题',
     'summary' => '概括',
     'publish_date' => '出版日期',

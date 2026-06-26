@@ -36,7 +36,7 @@ return array (
     2 => 
     array (
       'title' => 'Poslani sadržaj',
-      'body' => 'Članci, vijesti, događaji, Wiki stranice, oglasi i dokumenti dostavljeni putem stranice mogu se pregledati, ispraviti, odbiti ili ukloniti prije ili nakon objave. Sadržaj mora ostati koristan za radioamatersku zajednicu i poštivati ​​ljude, zakon i pravila kluba.',
+      'body' => 'Članci, vijesti, događaji, Wiki stranice, oglasi i dokumenti dostavljeni putem stranice mogu se pregledati, ispraviti, odbiti ili ukloniti prije ili nakon objave. Sadržaj mora ostati koristan za radioamatersku zajednicu i poštivati ljude, zakon i pravila kluba.',
     ),
     3 => 
     array (
@@ -51,7 +51,7 @@ return array (
     5 => 
     array (
       'title' => 'Intelektualno vlasništvo',
-      'body' => 'Osim ako nije drugačije navedeno, tekstovi, slike, dokumenti i materijali objavljeni na stranici pripadaju njihovim autorima ili klubu. Svaka ponovna uporaba mora poštivati ​​izvor, primjenjiva prava i svaki autorski ugovor.',
+      'body' => 'Osim ako nije drugačije navedeno, tekstovi, slike, dokumenti i materijali objavljeni na stranici pripadaju njihovim autorima ili klubu. Svaka ponovna uporaba mora poštivati izvor, primjenjiva prava i svaki autorski ugovor.',
     ),
     6 => 
     array (

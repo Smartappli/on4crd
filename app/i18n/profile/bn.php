@@ -10,7 +10,7 @@ return array (
   'saved' => 'দৃশ্যমানতার পছন্দ আপডেট হয়েছে।',
   'title' => 'প্রোফাইল',
   'avatar_alt' => 'সদস্যের অবতার',
-  'callsign' => 'নির্দেশক / সনাক্তকারী LoTW',
+  'callsign' => 'কলসাইন / LoTW শনাক্তকারী',
   'name' => 'নাম',
   'email' => 'ইমেইল',
   'directory_visibility' => 'ডিরেক্টরিতে দৃশ্যমানতা',

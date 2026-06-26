@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Liikaa yrityksiä. Yritä myöhemmin uudelleen.',
   'ok_created' => 'Tili luotu onnistuneesti. Tervetuloa jäsenalueelle!',
   'title' => 'Luo jäsentili',
-  'callsign' => 'Indikaattori / Tunniste LoTW',
+  'callsign' => 'Kutsutunnus / LoTW-tunniste',
   'full_name' => 'Koko nimi',
   'first_name' => 'Etunimi',
   'last_name' => 'Sukunimi',

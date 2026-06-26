@@ -10,7 +10,7 @@ return array (
   'saved' => '可见性偏好已更新。',
   'title' => '资料',
   'avatar_alt' => '会员头像',
-  'callsign' => '指示符/标识符 LoTW',
+  'callsign' => '呼号 / LoTW 标识符',
   'name' => '姓名',
   'email' => '电子邮箱',
   'directory_visibility' => '名录可见性',

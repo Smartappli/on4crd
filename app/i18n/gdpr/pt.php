@@ -39,7 +39,7 @@ return array (
   'empty_visible_info' => 'Nenhuma informação visível.',
   'profile_data_title' => 'Dados do perfil',
   'profile_data_help' => 'Esta secção reutiliza os campos não vazios do seu perfil e aplica as mesmas definições de visibilidade do diretório. A exportação JSON também contém os dados de perfil guardados na base de dados.',
-  'privacy_short_register' => 'Os dados da conta são usados ​​para criar o perfil, proteger o acesso e exibir apenas as informações que você torna visíveis. A geocodificação postal externa é opcional.',
+  'privacy_short_register' => 'Os dados da conta são usados para criar o perfil, proteger o acesso e exibir apenas as informações que você torna visíveis. A geocodificação postal externa é opcional.',
   'privacy_short_profile' => 'As informações do perfil permanecem controladas pelas suas configurações de visibilidade. A geocodificação postal externa é enviada somente se você solicitar.',
   'privacy_short_newsletter' => 'O boletim informativo requer consentimento explícito. A prova de consentimento e os dados técnicos pseudonimizados são retidos.',
   'privacy_short_geocode' => 'Se você ativar a geocodificação automática, o endereço postal inserido será enviado para Nominatim e o resultado será armazenado em cache por 30 dias.',

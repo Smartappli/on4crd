@@ -10,7 +10,7 @@ return array (
   'saved' => 'Synlighedspræferencer opdateret.',
   'title' => 'Profil',
   'avatar_alt' => 'Medlemmets avatar',
-  'callsign' => 'Indikatif / Identifiant LoTW',
+  'callsign' => 'Kaldesignal / LoTW-id',
   'name' => 'Navn',
   'email' => 'E-mail',
   'directory_visibility' => 'Synlighed i mappen',

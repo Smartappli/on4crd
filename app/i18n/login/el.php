@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Ο λογαριασμός σας δεν έχει επαληθευτεί ακόμη.',
   'login_success' => 'Επιτυχής σύνδεση.',
   'title' => 'Σύνδεση',
-  'callsign' => 'Ενδεικτικά',
+  'callsign' => 'Διακριτικό κλήσης',
   'password' => 'Κωδικός πρόσβασης',
   'captcha_question' => 'Captcha: πόσα',
   'login' => 'Συνδεθείτε',

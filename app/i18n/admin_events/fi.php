@@ -9,7 +9,7 @@ return array (
   'edit' => 'Muokkaa',
   'create' => 'Luo',
   'title' => 'Otsikko',
-  'slug' => 'Slug',
+  'slug' => 'URL-tunniste',
   'summary' => 'Yhteenveto',
   'description' => 'Kuvaus',
   'start' => 'Aloita',

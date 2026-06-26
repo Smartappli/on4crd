@@ -10,7 +10,7 @@ return array (
   'saved' => 'تم تحديث تفضيلات الظهور.',
   'title' => 'الملف الشخصي',
   'avatar_alt' => 'الصورة الرمزية للعضو',
-  'callsign' => 'المؤشر / المعرف LoTW',
+  'callsign' => 'إشارة النداء / معرف LoTW',
   'name' => 'الاسم',
   'email' => 'البريد الإلكتروني',
   'directory_visibility' => 'الظهور في الدليل',

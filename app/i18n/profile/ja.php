@@ -10,7 +10,7 @@ return array (
   'saved' => '公開範囲の設定を更新しました。',
   'title' => 'プロフィール',
   'avatar_alt' => 'メンバーのアバター',
-  'callsign' => '指標 / 識別子 LoTW',
+  'callsign' => 'コールサイン / LoTW 識別子',
   'name' => '名前',
   'email' => 'メール',
   'directory_visibility' => 'ディレクトリでの公開範囲',

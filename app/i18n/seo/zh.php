@@ -94,7 +94,7 @@ return array (
   'events_feed_title' => 'ON4CRD 日历源',
   'events_feed_description' => '用于 FullCalendar 和导出的技术 ON4CRD 事件源。',
   'footer_contact_title' => '联系方式',
-  'footer_contact_description' => 'ON4CRD 的页脚接触端点。',
+  'footer_contact_description' => 'ON4CRD 的页脚联系方式端点。',
   'forgot_password_title' => 'ON4CRD 忘记密码',
   'forgot_password_description' => 'ON4CRD 会员区的帐户访问恢复程序。',
   'gdpr_title' => 'ON4CRD 隐私',

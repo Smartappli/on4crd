@@ -17,7 +17,7 @@ return array (
   'create' => 'Buat',
   'an_article' => 'sebuah artikel',
   'title' => 'Judul',
-  'slug' => 'Slug',
+  'slug' => 'Pengidentifikasi URL',
   'category' => 'Kategori',
   'new_category' => 'Kategori baru…',
   'new_category_id' => 'Kategori baru (identifier)',

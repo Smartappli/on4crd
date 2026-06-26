@@ -10,7 +10,7 @@ return array (
   'saved' => 'दृश्यता प्राथमिकताएँ अपडेट हुईं।',
   'title' => 'प्रोफ़ाइल',
   'avatar_alt' => 'सदस्य अवतार',
-  'callsign' => 'संकेतक/पहचानकर्ता LoTW',
+  'callsign' => 'कॉलसाइन / LoTW पहचानकर्ता',
   'name' => 'नाम',
   'email' => 'ईमेल',
   'directory_visibility' => 'निर्देशिका दृश्यता',

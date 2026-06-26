@@ -15,7 +15,7 @@ return array (
   'help_intro' => 'Texte werden auf Französisch verfasst. EN/DE/NL-Versionen werden automatisch erzeugt und bei Bedarf überprüft. Bereichsverantwortliche können Inhalte einreichen, Moderatoren geben sie vor Veröffentlichung frei.',
   'section' => 'Bereich',
   'title' => 'Titel',
-  'slug' => 'Slug',
+  'slug' => 'URL-Kennung',
   'excerpt' => 'Auszug',
   'simple_html' => 'Einfacher HTML-Inhalt',
   'editor_tip' => 'Tipp: Verwenden Sie die Schaltfläche Word importieren (.docx) in der Editorleiste.',

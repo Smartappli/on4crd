@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Too many attempts. Please try again later.',
   'ok_created' => 'Account created successfully. Welcome to the member area!',
   'title' => 'Create a member account',
-  'callsign' => 'Indicatif / Identifiant LoTW',
+  'callsign' => 'Callsign / LoTW identifier',
   'full_name' => 'Full name',
   'first_name' => 'First name',
   'last_name' => 'Last name',

@@ -10,7 +10,7 @@ return array (
   'saved' => 'Předvolby viditelnosti byly aktualizovány.',
   'title' => 'Profil',
   'avatar_alt' => 'Avatar člena',
-  'callsign' => 'Indikace / Identifikační LoTW',
+  'callsign' => 'Volací značka / identifikátor LoTW',
   'name' => 'Jméno',
   'email' => 'E-mail',
   'directory_visibility' => 'Viditelnost v adresáři',

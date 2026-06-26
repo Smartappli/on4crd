@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Jūsų paskyra dar nepatvirtinta.',
   'login_success' => 'Prisijungimas sėkmingas.',
   'title' => 'Ryšys',
-  'callsign' => 'Orientacinė',
+  'callsign' => 'Šaukinys',
   'password' => 'Slaptažodis',
   'captcha_question' => 'Captcha: kiek',
   'login' => 'Prisijunkite',

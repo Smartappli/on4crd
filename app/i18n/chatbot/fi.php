@@ -9,7 +9,7 @@ return array (
   'chatbot_alt' => 'Kuva Raymond-chatbotista',
   'clear' => 'Selkeä keskustelu',
   'conversation_label' => 'Keskustelu Raymondin kanssa',
-  'welcome' => 'Hei, olen Raymond. Esitä kysymyksesi, minä vastaan ​​sinulle.',
+  'welcome' => 'Hei, olen Raymond. Esitä kysymyksesi, minä vastaan sinulle.',
   'source' => 'Lähde:',
   'question_label' => 'Kysymys',
   'placeholder' => 'Esim.: Mistä löytää QSL-menettelyt?',

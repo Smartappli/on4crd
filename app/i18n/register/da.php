@@ -9,7 +9,7 @@ return array (
   'too_many' => 'For mange forsøg. Prøv venligst igen senere.',
   'ok_created' => 'Konto oprettet. Velkommen til medlemsområdet!',
   'title' => 'Opret en medlemskonto',
-  'callsign' => 'Indikatif / Identifiant LoTW',
+  'callsign' => 'Kaldesignal / LoTW-id',
   'full_name' => 'Fulde navn',
   'first_name' => 'Fornavn',
   'last_name' => 'Efternavn',

@@ -9,7 +9,7 @@ return array (
   'too_many' => '試行回数が多すぎます。後でもう一度お試しください。',
   'ok_created' => 'アカウントを作成しました。メンバーエリアへようこそ！',
   'title' => 'メンバーアカウント作成',
-  'callsign' => '指標 / 識別子 LoTW',
+  'callsign' => 'コールサイン / LoTW 識別子',
   'full_name' => '氏名',
   'first_name' => '名',
   'last_name' => '姓',

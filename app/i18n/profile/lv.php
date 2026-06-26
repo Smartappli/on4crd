@@ -10,7 +10,7 @@ return array (
   'saved' => 'Redzamības preferences atjauninātas.',
   'title' => 'Profils',
   'avatar_alt' => 'Dalībnieka iemiesojums',
-  'callsign' => 'Indikators / identifikators LoTW',
+  'callsign' => 'Izsaukuma signāls / LoTW identifikators',
   'name' => 'Vārds',
   'email' => 'E-pasts',
   'directory_visibility' => 'Redzamība direktorijā',

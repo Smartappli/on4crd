@@ -8,7 +8,7 @@ return array (
   'create' => 'Luo',
   'a_lot' => 'paljon',
   'title' => 'Otsikko',
-  'slug' => 'Slug',
+  'slug' => 'URL-tunniste',
   'summary' => 'Yhteenveto',
   'description' => 'Kuvaus',
   'image_url' => 'Kuva URL',

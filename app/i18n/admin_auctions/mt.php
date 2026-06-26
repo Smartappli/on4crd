@@ -8,7 +8,7 @@ return array (
   'create' => 'Oħloq',
   'a_lot' => 'ħafna',
   'title' => 'Titolu',
-  'slug' => 'Slug',
+  'slug' => 'Identifikatur URL',
   'summary' => 'Sommarju',
   'description' => 'Deskrizzjoni',
   'image_url' => 'Immaġni URL',

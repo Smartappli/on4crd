@@ -7,7 +7,7 @@ return array (
   'intro' => 'Ibgħat idea, suġġeriment jew titjib lill-kumitat.',
   'close' => 'Agħlaq',
   'name_label' => 'Ismek',
-  'name_placeholder' => 'Isem u callsign, jekk japplika',
+  'name_placeholder' => 'Isem u indikattiv, jekk japplika',
   'email_label' => 'L-email tiegħek',
   'email_placeholder' => 'int@example.com',
   'idea_title_label' => 'Titlu tal-idea',

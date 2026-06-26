@@ -15,7 +15,7 @@ return [
     'add' => '追加',
     'th_name' => '名前',
     'th_role' => '役割',
-    'th_contact' => '接触',
+    'th_contact' => '連絡先',
     'title' => 'タイトル',
     'summary' => 'まとめ',
     'publish_date' => '発行日',

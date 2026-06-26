@@ -38,7 +38,7 @@ return array (
   'section_managers' => 'Manažéri sekcií',
   'member' => 'člen',
   'assign' => 'Priradiť',
-  'callsign' => 'Orientačné',
+  'callsign' => 'Volacia značka',
   'no_assignment' => 'Bez uvedenia zdroja.',
   'layout' => 'Sekcia noviniek',
   'meta_desc' => 'Písanie, moderovanie a správa správ podľa sekcií.',

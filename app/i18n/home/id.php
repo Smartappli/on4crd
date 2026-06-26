@@ -38,7 +38,7 @@ return array (
   'vhf_voice_value' => '145.500 MHz (panggilan simplex regional)',
   'cw_qrp_label' => 'Frekuensi CW QRP:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz (frekuensi CW QRP)',
-  'good_practice_value' => 'umumkan callsign + QTH + trafik yang diminta',
+  'good_practice_value' => 'umumkan tanda panggil + QTH + trafik yang diminta',
   'map_title' => 'Peta Google - Radio Club Durnal',
   'address_title' => 'Alamat',
   'contact_people' => 'Narahubung',

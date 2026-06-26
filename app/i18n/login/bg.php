@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Вашият акаунт все още не е потвърден.',
   'login_success' => 'Връзката е успешна.',
   'title' => 'Връзка',
-  'callsign' => 'Показателно',
+  'callsign' => 'Позивна',
   'password' => 'Парола',
   'captcha_question' => 'Captcha: колко',
   'login' => 'влезте',

@@ -13,7 +13,7 @@ return array (
   'search_label' => 'Cari di ON4CRD',
   'search_placeholder' => 'Kata kunci, artikel, acara...',
   'search_submit' => 'Cari',
-  'search_hint' => 'Coba callsign, topik radio, nama acara, atau layanan klub.',
+  'search_hint' => 'Coba tanda panggil, topik radio, nama acara, atau layanan klub.',
   'quick_links_title' => 'Tautan berguna',
   'news_link' => 'Berita',
   'news_hint' => 'Baca pembaruan terbaru klub.',

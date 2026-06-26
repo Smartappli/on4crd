@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Túl sok próbálkozás. Kérjük, próbálja újra később.',
   'ok_created' => 'A fiók sikeresen létrehozva. Üdvözöljük a tagok oldalán!',
   'title' => 'Hozzon létre egy tagi fiókot',
-  'callsign' => 'Indikatif / Azonosító LoTW',
+  'callsign' => 'Hívójel / LoTW-azonosító',
   'full_name' => 'Teljes név',
   'first_name' => 'Keresztnév',
   'last_name' => 'Vezetéknév',

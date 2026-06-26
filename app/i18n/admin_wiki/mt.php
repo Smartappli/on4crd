@@ -5,7 +5,7 @@ return array (
   'title' => 'Amministrazzjoni tal-Wiki',
   'new_page' => 'Paġna ġdida',
   'th_title' => 'Titolu',
-  'th_slug' => 'Slug',
+  'th_slug' => 'Identifikatur URL',
   'th_updated' => 'Aġġornament',
   'th_action' => 'Azzjoni',
   'edit' => 'Biex timmodifika',

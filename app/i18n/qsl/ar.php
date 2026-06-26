@@ -103,7 +103,7 @@ return array (
   'manual_flow' => 'إنشاء QSL يدوي',
   'adif_flow' => 'استيراد ADIF QSOs',
   'guided_manual_form' => 'النموذج اليدوي الموجه',
-  'contact_callsign' => 'إشارة النداء الاتصال',
+  'contact_callsign' => 'إشارة نداء جهة الاتصال',
   'qso_date' => 'تاريخ QSO',
   'utc' => 'UTC',
   'band' => 'فرقة',

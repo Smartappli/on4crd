@@ -9,7 +9,7 @@ return array (
   'edit' => 'Szerkesztés',
   'create' => 'Létrehozása',
   'title' => 'Cím',
-  'slug' => 'Slug',
+  'slug' => 'URL-azonosító',
   'summary' => 'Összegzés',
   'description' => 'Leírás',
   'start' => 'Indítsa el',

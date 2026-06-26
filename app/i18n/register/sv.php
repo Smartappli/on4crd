@@ -9,7 +9,7 @@ return array (
   'too_many' => 'För många försök. Försök igen senare.',
   'ok_created' => 'Kontot har skapats. Välkommen till medlemsområdet!',
   'title' => 'Skapa ett medlemskonto',
-  'callsign' => 'Indikator / Identifiering LoTW',
+  'callsign' => 'Anropssignal / LoTW-id',
   'full_name' => 'Fullständigt namn',
   'first_name' => 'Förnamn',
   'last_name' => 'Efternamn',

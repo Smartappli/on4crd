@@ -55,7 +55,7 @@ return array (
   'proposal_type_tag' => 'キーワード',
   'proposal_default_title' => '提案',
   'proposal_author' => '提案者',
-  'proposal_contact' => '接触',
+  'proposal_contact' => '連絡先',
   'proposal_status_label' => '状態',
   'proposal_moderation_note' => 'モデレーションノート',
   'proposal_save_status' => '保存',

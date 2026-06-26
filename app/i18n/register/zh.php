@@ -9,7 +9,7 @@ return array (
   'too_many' => '尝试次数过多。请稍后再试。',
   'ok_created' => '账户已成功创建。欢迎进入会员区！',
   'title' => '创建会员账户',
-  'callsign' => '指示符/标识符 LoTW',
+  'callsign' => '呼号 / LoTW 标识符',
   'full_name' => '全名',
   'first_name' => '名',
   'last_name' => '姓',

@@ -10,7 +10,7 @@ return array (
   'saved' => 'Sichtbarkeitseinstellungen wurden aktualisiert.',
   'title' => 'Profil',
   'avatar_alt' => 'Mitglieder-Avatar',
-  'callsign' => 'Indikator / Identifiant LoTW',
+  'callsign' => 'Rufzeichen / LoTW-Kennung',
   'name' => 'Name',
   'email' => 'E-Mail',
   'directory_visibility' => 'Sichtbarkeit im Verzeichnis',

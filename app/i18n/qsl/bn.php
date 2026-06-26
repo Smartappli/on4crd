@@ -103,7 +103,7 @@ return array (
   'manual_flow' => 'একটি ম্যানুয়াল QSL তৈরি করুন',
   'adif_flow' => 'ADIF QSOs আমদানি করুন',
   'guided_manual_form' => 'নির্দেশিত ম্যানুয়াল ফর্ম',
-  'contact_callsign' => 'যোগাযোগ কল সাইন',
+  'contact_callsign' => 'যোগাযোগের কলসাইন',
   'qso_date' => 'QSO তারিখ',
   'utc' => 'UTC',
   'band' => 'ব্যান্ড',

@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Váš účet ještě není ověřen.',
   'login_success' => 'Připojení úspěšné.',
   'title' => 'Připojení',
-  'callsign' => 'Orientační',
+  'callsign' => 'Volací značka',
   'password' => 'Heslo',
   'captcha_question' => 'Captcha: kolik',
   'login' => 'Přihlaste se',

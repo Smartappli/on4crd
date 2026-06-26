@@ -7,7 +7,7 @@ return array (
   'create' => 'Oħloq',
   'heading_suffix' => 'paġna Wiki',
   'title_label' => 'Titolu',
-  'slug_label' => 'Slug',
+  'slug_label' => 'Identifikatur URL',
   'content_label' => 'Kontenut (HTML sempliċi)',
   'save' => 'Ħlief',
   'layout' => 'Editja Wiki',

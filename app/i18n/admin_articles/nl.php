@@ -17,7 +17,7 @@ return array (
   'create' => 'Aanmaken',
   'an_article' => 'een artikel',
   'title' => 'Titel',
-  'slug' => 'Slug',
+  'slug' => 'URL-identificatie',
   'category' => 'Categorie',
   'new_category' => 'Nieuwe categorie…',
   'new_category_id' => 'Nieuwe categorie (identifier)',

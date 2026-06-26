@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Wisq tentattivi. Jekk jogħġbok erġa\' pprova aktar tard.',
   'ok_created' => 'Kont maħluq b\'suċċess. Merħba fiż-żona tal-membri!',
   'title' => 'Oħloq kont membru',
-  'callsign' => 'Indikattiv / Identifiant LoTW',
+  'callsign' => 'Indikattiv / identifikatur LoTW',
   'full_name' => 'Isem sħiħ',
   'first_name' => 'L-isem',
   'last_name' => 'Kunjom',

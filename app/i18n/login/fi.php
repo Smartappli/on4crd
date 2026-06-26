@@ -11,7 +11,7 @@ return array (
   'not_verified' => 'Tiliäsi ei ole vielä vahvistettu.',
   'login_success' => 'Yhteys onnistui.',
   'title' => 'Yhteys',
-  'callsign' => 'Ohjeellinen',
+  'callsign' => 'Kutsutunnus',
   'password' => 'Salasana',
   'captcha_question' => 'Captcha: kuinka monta',
   'login' => 'Kirjaudu sisään',

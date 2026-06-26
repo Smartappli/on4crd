@@ -23,7 +23,7 @@ return array (
   'edit_page_title' => 'Editar Wiki',
   'close' => 'Cerca',
   'title_label' => 'Título',
-  'slug_label' => 'Slug',
+  'slug_label' => 'Identificador URL',
   'content_label' => 'Contenido (HTML simple)',
   'save_page' => 'Guardar',
   'cancel' => 'Cancelar',

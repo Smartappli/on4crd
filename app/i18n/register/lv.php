@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Pārāk daudz mēģinājumu. Lūdzu, vēlāk mēģiniet vēlreiz.',
   'ok_created' => 'Konts veiksmīgi izveidots. Laipni lūgti dalībnieku zonā!',
   'title' => 'Izveidojiet dalībnieka kontu',
-  'callsign' => 'Indikators / identifikators LoTW',
+  'callsign' => 'Izsaukuma signāls / LoTW identifikators',
   'full_name' => 'Pilns vārds',
   'first_name' => 'Vārds',
   'last_name' => 'Uzvārds',

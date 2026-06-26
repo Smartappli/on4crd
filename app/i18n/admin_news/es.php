@@ -15,7 +15,7 @@ return array (
   'help_intro' => 'Los textos se redactan en francés. Las versiones EN/DE/NL se generan automáticamente y luego se revisan si es necesario. Los responsables de sección pueden enviar contenidos; los moderadores los validan antes de publicar.',
   'section' => 'Sección',
   'title' => 'Título',
-  'slug' => 'Slug',
+  'slug' => 'Identificador URL',
   'excerpt' => 'Extracto',
   'simple_html' => 'Contenido HTML simple',
   'editor_tip' => 'Consejo: use el botón Importar Word (formato .docx) en la barra del editor.',

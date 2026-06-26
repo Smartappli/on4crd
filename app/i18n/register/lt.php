@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Per daug bandymų. Bandykite dar kartą vėliau.',
   'ok_created' => 'Paskyra sėkmingai sukurta. Sveiki atvykę į narių sritį!',
   'title' => 'Sukurkite nario paskyrą',
-  'callsign' => 'Indikatorius / Identifikatorius LoTW',
+  'callsign' => 'Šaukinys / LoTW identifikatorius',
   'full_name' => 'Pilnas vardas',
   'first_name' => 'Vardas',
   'last_name' => 'Pavardė',

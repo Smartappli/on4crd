@@ -14,7 +14,7 @@ return array (
   'back_login' => 'Vissza a bejelentkezéshez',
   'email_label' => 'E-mail',
   'email_subject' => 'ON4CRD - Jelszó visszaállítása',
-  'email_body' => 'Hello!
+  'email_body' => 'Helló!
 
 Használja ezt a hivatkozást az ON4CRD jelszavának visszaállításához:
 {reset_link}

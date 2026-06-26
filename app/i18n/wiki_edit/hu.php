@@ -7,7 +7,7 @@ return array (
   'create' => 'Létrehozása',
   'heading_suffix' => 'egy Wiki oldal',
   'title_label' => 'Cím',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL-azonosító',
   'content_label' => 'Tartalom (HTML egyszerű)',
   'save' => 'Mentés',
   'layout' => 'Wiki szerkesztése',

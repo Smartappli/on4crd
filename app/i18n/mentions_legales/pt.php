@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Informações legais',
-  'summary' => 'Esta página lista as informações de identificação, publicação, hospedagem e responsabilidade aplicáveis ​​ao site ON4CRD.',
-  'body' => 'Esta página lista as informações de identificação, publicação, hospedagem e responsabilidade aplicáveis ​​ao site ON4CRD.',
+  'summary' => 'Esta página lista as informações de identificação, publicação, hospedagem e responsabilidade aplicáveis ao site ON4CRD.',
+  'body' => 'Esta página lista as informações de identificação, publicação, hospedagem e responsabilidade aplicáveis ao site ON4CRD.',
   'updated_at_label' => 'Última atualização',
   'updated_at' => '2026-06-05',
   'not_provided' => 'não fornecido',
@@ -37,7 +37,7 @@ return array (
     3 =>
     array (
       'title' => 'Propriedade intelectual',
-      'body' => 'Textos, imagens, documentos, logotipos e materiais publicados no site permanecem propriedade de seus respectivos autores ou do clube. Qualquer reprodução ou reutilização deverá respeitar a fonte, os direitos aplicáveis ​​e qualquer permissão do autor.',
+      'body' => 'Textos, imagens, documentos, logotipos e materiais publicados no site permanecem propriedade de seus respectivos autores ou do clube. Qualquer reprodução ou reutilização deverá respeitar a fonte, os direitos aplicáveis e qualquer permissão do autor.',
     ),
     4 =>
     array (

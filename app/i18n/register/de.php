@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Zu viele Versuche. Bitte versuchen Sie es später erneut.',
   'ok_created' => 'Konto erfolgreich erstellt. Willkommen im Mitgliederbereich!',
   'title' => 'Mitgliedskonto erstellen',
-  'callsign' => 'Indikator / Identifiant LoTW',
+  'callsign' => 'Rufzeichen / LoTW-Kennung',
   'full_name' => 'Vollständiger Name',
   'first_name' => 'Vorname',
   'last_name' => 'Nachname',

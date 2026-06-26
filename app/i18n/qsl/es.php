@@ -103,7 +103,7 @@ return array (
   'manual_flow' => 'Crear una QSL manual',
   'adif_flow' => 'Importar QSO de ADIF',
   'guided_manual_form' => 'Formulario manual guiado',
-  'contact_callsign' => 'indicativo de contacto',
+  'contact_callsign' => 'Indicativo del contacto',
   'qso_date' => 'fecha del QSO',
   'utc' => 'UTC',
   'band' => 'Banda',

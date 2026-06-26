@@ -7,7 +7,7 @@ return array (
   'create' => 'Erstellen',
   'heading_suffix' => 'eine Wiki-Seite',
   'title_label' => 'Titel',
-  'slug_label' => 'Slug',
+  'slug_label' => 'URL-Kennung',
   'content_label' => 'Inhalt (einfaches HTML)',
   'save' => 'Speichern',
   'layout' => 'Wiki bearbeiten',

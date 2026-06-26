@@ -2,17 +2,17 @@
 declare(strict_types=1);
 
 return array (
-  'meta_title' => 'Nasz przekaźnik ONŘCRD',
-  'meta_desc' => 'Informacje techniczne i dostęp EchoLink dla przekaźnika ONŘCRD.',
+  'meta_title' => 'Nasz przekaźnik ONØCRD',
+  'meta_desc' => 'Informacje techniczne i dostęp EchoLink dla przekaźnika ONØCRD.',
   'title' => 'Nasza sztafeta',
-  'callsign_value' => 'ONŘCRD',
+  'callsign_value' => 'ONØCRD',
   'channel_value' => 'RV 46',
   'input_value' => '144, 975',
   'output_value' => '145, 575',
   'shift_value' => '0,6',
   'subtone_value' => '131,8',
   'subtone_status_value' => 'Tak / Tak (włącznie/grudzień)',
-  'callsign' => 'Orientacyjne',
+  'callsign' => 'Znak wywoławczy',
   'channel' => 'Kanał',
   'mode' => 'Moda',
   'mode_value' => 'Tryb przemiennika FM + EchoLink',
@@ -36,6 +36,6 @@ return array (
   'unit_hz' => 'Hz',
   'p1' => 'Dostęp do Echolinku skonfigurowany dla naszych przyjaciół poza zasięgiem przekaźnika Durnal.',
   'p2' => 'Jeśli jesteś w zasięgu przekaźnika, wybierz VHF. Sygnalizator głosowy co 15 min.',
-  'p3' => 'Zainstalowany przekaźnik SVXlink jest implementacją łącza SVXLink (Echolink) z istniejącym przekaźnikiem FM. Tutaj: ONŘCRD – Sysop ON4DL – Alternatywny ON5GB. „svxlink” to system usług głosowych ogólnego przeznaczenia do „amatorskiego” użytku radiowego.',
-  'p4' => 'Dzięki współpracy ON4LS, z tego 18/03/2021 narodził się dostęp Echolink na ONŘCRD. W ten sposób otwieramy drzwi naszym przyjaciołom do utrzymywania kontaktu z OM na obszarze objętym przekaźnikiem.',
+  'p3' => 'Zainstalowany przekaźnik SVXlink jest implementacją łącza SVXLink (Echolink) z istniejącym przekaźnikiem FM. Tutaj: ONØCRD – Sysop ON4DL – Alternatywny ON5GB. „svxlink” to system usług głosowych ogólnego przeznaczenia do „amatorskiego” użytku radiowego.',
+  'p4' => 'Dzięki współpracy ON4LS, z tego 18/03/2021 narodził się dostęp Echolink na ONØCRD. W ten sposób otwieramy drzwi naszym przyjaciołom do utrzymywania kontaktu z OM na obszarze objętym przekaźnikiem.',
 );

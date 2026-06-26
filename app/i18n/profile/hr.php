@@ -10,7 +10,7 @@ return array (
   'saved' => 'Postavke vidljivosti ažurirane.',
   'title' => 'Profil',
   'avatar_alt' => 'Avatar člana',
-  'callsign' => 'Indikator / Identifikator LoTW',
+  'callsign' => 'Pozivni znak / LoTW identifikator',
   'name' => 'Ime',
   'email' => 'E-mail',
   'directory_visibility' => 'Vidljivost u imeniku',

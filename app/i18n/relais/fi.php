@@ -12,7 +12,7 @@ return array (
   'shift_value' => '0,6',
   'subtone_value' => '131,8',
   'subtone_status_value' => 'Kyllä / Kyllä (sis./lask.)',
-  'callsign' => 'Ohjeellinen',
+  'callsign' => 'Kutsutunnus',
   'channel' => 'kanava',
   'mode' => 'Muoti',
   'mode_value' => 'FM-toistintila + EchoLink',

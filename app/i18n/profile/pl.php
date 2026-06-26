@@ -10,7 +10,7 @@ return array (
   'saved' => 'Zaktualizowano preferencje widoczności.',
   'title' => 'Profil',
   'avatar_alt' => 'Awatar członka',
-  'callsign' => 'Wskazanie/identyfikator LoTW',
+  'callsign' => 'Znak wywoławczy / identyfikator LoTW',
   'name' => 'Imię',
   'email' => 'E-mail',
   'directory_visibility' => 'Widoczność w katalogu',
