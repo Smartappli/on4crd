@@ -979,7 +979,7 @@ ob_start();
                         <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
                     </a>
                     <?php if (($visibleSubcategoriesByCategory[$catName] ?? []) !== []): ?>
-                        <div class="members-library-subcategory-list">
+                        <div class="members-library-subcategory-list module-taxonomy-children">
                             <?php foreach ($visibleSubcategoriesByCategory[$catName] as $subcatInfo): ?>
                                 <?php $subcatCode = (string) ($subcatInfo['code'] ?? ''); if ($subcatCode === '') { continue; } ?>
                                 <a class="members-library-subcategory-item module-taxonomy-item<?= !$favoritesOnly && $catName === $category && $subcatCode === $subcategory && $subsubcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'q' => $search, 'tag' => $tag])) ?>">
@@ -988,7 +988,7 @@ ob_start();
                                 </a>
                                 <?php $subsubParentRef = $catName . ':' . $subcatCode; ?>
                                 <?php if (($visibleSubsubcategoriesByParent[$subsubParentRef] ?? []) !== []): ?>
-                                    <div class="members-library-subsubcategory-list">
+                                    <div class="members-library-subsubcategory-list module-taxonomy-children">
                                         <?php foreach ($visibleSubsubcategoriesByParent[$subsubParentRef] as $subsubcatInfo): ?>
                                             <?php $subsubcatCode = (string) ($subsubcatInfo['code'] ?? ''); if ($subsubcatCode === '') { continue; } ?>
                                             <a class="members-library-subsubcategory-item module-taxonomy-item<?= !$favoritesOnly && $catName === $category && $subcatCode === $subcategory && $subsubcatCode === $subsubcategory ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'subsubcategory' => $subsubcatCode, 'q' => $search, 'tag' => $tag])) ?>">

@@ -395,8 +395,8 @@ ob_start();
 
     <section class="wiki-layout module-taxonomy-layout">
         <aside class="wiki-themes module-taxonomy-index card">
-            <p class="wiki-themes-title"><?= e($tr('themes')) ?></p>
-            <nav class="wiki-theme-list" aria-label="<?= e($tr('themes')) ?>">
+            <p class="wiki-themes-title module-taxonomy-title"><?= e($tr('themes')) ?></p>
+            <nav class="wiki-theme-list module-taxonomy-list" aria-label="<?= e($tr('themes')) ?>">
                 <?php if ($favoriteWikiPageCount > 0): ?>
                     <a class="wiki-theme-item module-taxonomy-item<?= $favoritesOnly ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['favorites' => '1', 'q' => $search])) ?>"<?= $favoritesOnly ? ' aria-current="page"' : '' ?>>
                         <span><?= e($favoritesLabel) ?></span>
