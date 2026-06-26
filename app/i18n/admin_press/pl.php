@@ -23,6 +23,6 @@ return array (
   'th_date' => 'Data',
   'th_file' => 'Plik',
   'open' => 'otwarte',
-  'layout' => 'Naciśnij',
+  'layout' => 'Prasa',
   'meta_desc' => 'Zarządzanie kontaktami prasowymi i komunikatami prasowymi.',
 );

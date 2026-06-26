@@ -2,6 +2,6 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Naciśnij',
+  'title' => 'Prasa',
   'body' => 'Sekcja prasowa będzie obsługiwana poprzez moduł administracyjny.',
 );

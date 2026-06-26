@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Publiczne artykuły techniczne.',
   'admin_committee_title' => 'Komitet',
   'admin_committee_desc' => 'Członkowie komisji, rola, porządek i biografia.',
-  'admin_press_title' => 'Naciśnij',
+  'admin_press_title' => 'Prasa',
   'admin_press_desc' => 'Kontakty prasowe, datowane komunikaty i dokumenty do pobrania.',
   'admin_events_title' => 'Porządek obrad',
   'admin_events_desc' => 'Wydarzenia klubowe i lokalne konkursy pokazywane w widżetach na żywo.',
