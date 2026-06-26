@@ -3128,6 +3128,9 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .taxonomy-pill-category { --taxonomy-pill-color: #2563eb; }
 .taxonomy-pill-subcategory { --taxonomy-pill-color: #15803d; }
 .taxonomy-pill-subsubcategory { --taxonomy-pill-color: #dc2626; }
+.taxonomy-pill-category,
+.taxonomy-pill-subcategory,
+.taxonomy-pill-subsubcategory,
 .pill.taxonomy-pill-category,
 .pill.taxonomy-pill-subcategory,
 .pill.taxonomy-pill-subsubcategory,
