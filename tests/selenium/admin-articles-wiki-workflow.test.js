@@ -171,6 +171,9 @@ if ($token !== '') {
     if (table_exists('content_proposals')) {
         db()->prepare('DELETE FROM content_proposals WHERE title LIKE ? OR summary LIKE ?')->execute([$like, $like]);
     }
+    if (table_exists('article_subsubcategories')) {
+        db()->prepare('DELETE FROM article_subsubcategories WHERE category_code LIKE ? OR subcategory_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like, $like]);
+    }
     if (table_exists('article_subcategories')) {
         db()->prepare('DELETE FROM article_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
     }
@@ -181,14 +184,15 @@ if ($token !== '') {
 `, { SELENIUM_TOKEN: token });
 }
 
-function articleTaxonomyByLabels(categoryLabel, subcategoryLabel) {
+function articleTaxonomyByLabels(categoryLabel, subcategoryLabel, subsubcategoryLabel = '') {
   return phpJson(`
 require_once 'app/bootstrap.php';
 require_once 'app/article_helpers.php';
 article_ensure_taxonomy_schema();
 $categoryLabel = (string) (getenv('SELENIUM_CATEGORY_LABEL') ?: '');
 $subcategoryLabel = (string) (getenv('SELENIUM_SUBCATEGORY_LABEL') ?: '');
-$result = ['category' => null, 'subcategory' => null];
+$subsubcategoryLabel = (string) (getenv('SELENIUM_SUBSUBCATEGORY_LABEL') ?: '');
+$result = ['category' => null, 'subcategory' => null, 'subsubcategory' => null];
 $stmt = db()->prepare('SELECT code, label, deleted_at FROM article_categories WHERE label = ? ORDER BY id DESC LIMIT 1');
 $stmt->execute([$categoryLabel]);
 $category = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
@@ -201,10 +205,19 @@ $subcategory = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 if (is_array($subcategory)) {
     $result['subcategory'] = $subcategory;
 }
+if ($subsubcategoryLabel !== '') {
+    $stmt = db()->prepare('SELECT category_code, subcategory_code, code, label FROM article_subsubcategories WHERE label = ? ORDER BY id DESC LIMIT 1');
+    $stmt->execute([$subsubcategoryLabel]);
+    $subsubcategory = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    if (is_array($subsubcategory)) {
+        $result['subsubcategory'] = $subsubcategory;
+    }
+}
 echo json_encode($result, JSON_THROW_ON_ERROR);
 `, {
     SELENIUM_CATEGORY_LABEL: categoryLabel,
     SELENIUM_SUBCATEGORY_LABEL: subcategoryLabel,
+    SELENIUM_SUBSUBCATEGORY_LABEL: subsubcategoryLabel,
   });
 }
 
@@ -224,10 +237,28 @@ function articleRecordBySlug(slug) {
   return phpJson(`
 require_once 'app/bootstrap.php';
 $slug = (string) (getenv('SELENIUM_SLUG') ?: '');
-$stmt = db()->prepare('SELECT id, author_id, title, slug, excerpt, content, status, category, subcategory FROM articles WHERE slug = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, author_id, title, slug, excerpt, content, status, category, subcategory, subsubcategory FROM articles WHERE slug = ? LIMIT 1');
 $stmt->execute([$slug]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_THROW_ON_ERROR);
 `, { SELENIUM_SLUG: slug });
+}
+
+function setArticleTaxonomy(slug, category, subcategory, subsubcategory = '') {
+  runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/article_helpers.php';
+article_ensure_taxonomy_schema();
+$slug = (string) (getenv('SELENIUM_SLUG') ?: '');
+$category = (string) (getenv('SELENIUM_CATEGORY_CODE') ?: 'autres');
+$subcategory = (string) (getenv('SELENIUM_SUBCATEGORY_CODE') ?: '');
+$subsubcategory = (string) (getenv('SELENIUM_SUBSUBCATEGORY_CODE') ?: '');
+db()->prepare('UPDATE articles SET category = ?, subcategory = ?, subsubcategory = ?, updated_at = NOW() WHERE slug = ?')->execute([$category, $subcategory, $subsubcategory, $slug]);
+`, {
+    SELENIUM_SLUG: slug,
+    SELENIUM_CATEGORY_CODE: category,
+    SELENIUM_SUBCATEGORY_CODE: subcategory,
+    SELENIUM_SUBSUBCATEGORY_CODE: subsubcategory,
+  });
 }
 
 function articleRevisionCount(articleId) {
@@ -437,6 +468,8 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
   const updatedTitle = `Selenium article modifie ${suffix}`;
   const categoryLabel = `Selenium article theme ${suffix}`;
   const subcategoryLabel = `Selenium article sous theme ${suffix}`;
+  const subsubcategoryLabel = `Selenium article sous sous theme ${suffix}`;
+  const updatedSubsubcategoryLabel = `Selenium article sous sous theme updated ${suffix}`;
   const proposalTitle = `Selenium article proposition ${suffix}`;
   const proposalNote = `Moderation article Selenium ${suffix}`;
 
@@ -472,11 +505,34 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
       assert.equal(taxonomy.subcategory.category_code, categoryCode, 'La sous-thematique article doit etre rattachee a la thematique creee.');
       assert.equal(taxonomy.subcategory.label, subcategoryLabel, 'Le libelle de sous-thematique article doit etre persiste.');
 
+      const subsubcategoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_subsubcategory"]]'));
+      await selectValue(driver, await subsubcategoryForm.findElement(By.css('select[name="subsubcategory_parent_ref"]')), subcategoryRef);
+      await subsubcategoryForm.findElement(By.css('input[name="subsubcategory_label"]')).sendKeys(subsubcategoryLabel);
+      await submitForm(driver, subsubcategoryForm);
+
+      taxonomy = articleTaxonomyByLabels(categoryLabel, subcategoryLabel, subsubcategoryLabel);
+      assert.ok(taxonomy.subsubcategory && taxonomy.subsubcategory.code, 'La sous-sous-thematique article doit etre creee.');
+      const subsubcategoryCode = taxonomy.subsubcategory.code;
+      const subsubcategoryRef = `${categoryCode}:${subcategoryCode}:${subsubcategoryCode}`;
+      assert.equal(taxonomy.subsubcategory.category_code, categoryCode, 'La sous-sous-thematique article doit etre rattachee a la thematique creee.');
+      assert.equal(taxonomy.subsubcategory.subcategory_code, subcategoryCode, 'La sous-sous-thematique article doit etre rattachee a la sous-thematique creee.');
+      assert.equal(taxonomy.subsubcategory.label, subsubcategoryLabel, 'Le libelle de sous-sous-thematique article doit etre persiste.');
+
+      const subsubcategoryUpdateForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_subsubcategory"] and .//input[@name="subsubcategory_category" and @value="${categoryCode}"] and .//input[@name="subsubcategory_parent" and @value="${subcategoryCode}"] and .//input[@name="subsubcategory_code" and @value="${subsubcategoryCode}"]]`));
+      await subsubcategoryUpdateForm.findElement(By.css('input[name="subsubcategory_label"]')).clear();
+      await subsubcategoryUpdateForm.findElement(By.css('input[name="subsubcategory_label"]')).sendKeys(updatedSubsubcategoryLabel);
+      await submitForm(driver, subsubcategoryUpdateForm);
+
+      taxonomy = articleTaxonomyByLabels(categoryLabel, subcategoryLabel, updatedSubsubcategoryLabel);
+      assert.ok(taxonomy.subsubcategory && taxonomy.subsubcategory.code, 'La sous-sous-thematique article doit exister apres modification.');
+      assert.equal(taxonomy.subsubcategory.label, updatedSubsubcategoryLabel, 'Le libelle de sous-sous-thematique article doit etre modifie.');
+
       const createForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save_article"]]'));
       await setFieldValue(driver, await createForm.findElement(By.css('input[name="title"]')), title);
       await setFieldValue(driver, await createForm.findElement(By.css('input[name="slug"]')), slug);
       await selectValue(driver, await createForm.findElement(By.css('select[name="category"]')), categoryCode);
       await selectValue(driver, await createForm.findElement(By.css('select[name="subcategory_ref"]')), subcategoryRef);
+      await selectValue(driver, await createForm.findElement(By.css('select[name="subsubcategory_ref"]')), subsubcategoryRef);
       await setFieldValue(driver, await createForm.findElement(By.css('textarea[name="excerpt"]')), `Extrait article ${token}`);
       await setFieldValue(driver, await createForm.findElement(By.css('textarea[name="content"]')), `<p>Contenu initial article ${token}</p>`);
       await selectValue(driver, await createForm.findElement(By.css('select[name="status"]')), 'draft');
@@ -500,10 +556,13 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
       assert.equal(article.status, 'draft');
       assert.equal(article.category, categoryCode);
       assert.equal(article.subcategory, subcategoryCode);
+      assert.equal(article.subsubcategory, subsubcategoryCode);
 
       await visit(driver, 'admin_articles');
       const subDeleteDisabled = await buttonDisabledByHidden(driver, 'delete_subcategory', 'subcategory_ref', subcategoryRef);
       assert.equal(subDeleteDisabled, true, 'La sous-thematique article utilisee ne doit pas etre supprimable.');
+      const subsubDeleteDisabled = await buttonDisabledByHidden(driver, 'delete_subsubcategory', 'subsubcategory_code', subsubcategoryCode);
+      assert.equal(subsubDeleteDisabled, true, 'La sous-sous-thematique article utilisee ne doit pas etre supprimable.');
 
       await visit(driver, 'admin_articles', { id: article.id });
       const editForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save_article"]]'));
@@ -540,6 +599,10 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
       assert.equal(articleRecordBySlug(slug), null, 'L article doit etre supprime.');
 
       await visit(driver, 'admin_articles');
+      await submitFormByHidden(driver, 'delete_subsubcategory', 'subsubcategory_code', subsubcategoryCode);
+      taxonomy = articleTaxonomyByLabels(categoryLabel, subcategoryLabel, updatedSubsubcategoryLabel);
+      assert.equal(taxonomy.subsubcategory, null, 'La sous-sous-thematique article vide doit etre supprimee.');
+
       await submitFormByHidden(driver, 'delete_subcategory', 'subcategory_ref', subcategoryRef);
       taxonomy = articleTaxonomyByLabels(categoryLabel, subcategoryLabel);
       assert.equal(taxonomy.subcategory, null, 'La sous-thematique article vide doit etre supprimee.');

@@ -487,10 +487,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!isset($knownCategories[$category])) {
                 throw new RuntimeException($t('err_invalid_category'));
             }
-            [$category, $subcategory] = article_taxonomy_from_input(
+            [$category, $subcategory, $subsubcategory] = article_taxonomy_from_input(
                 $category,
                 trim((string) ($_POST['subcategory_ref'] ?? '')),
-                $knownCategories
+                $knownCategories,
+                'autres',
+                trim((string) ($_POST['subsubcategory_ref'] ?? ''))
             );
             if ($title === '' || !isset($articleStatusChoices[$status])) {
                 throw new RuntimeException($t('err_invalid_article'));
@@ -534,6 +536,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 || mb_strlen($content) > 50000
                 || mb_strlen($category) > 120
                 || mb_strlen($subcategory) > 120
+                || mb_strlen($subsubcategory) > 120
             ) {
                 throw new RuntimeException($t('err_invalid_article'));
             }
@@ -545,6 +548,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'status' => $status,
                     'category' => $category,
                     'subcategory' => $subcategory,
+                    'subsubcategory' => $subsubcategory,
                     'scheduled_at' => $scheduledAtValue,
                     'moderation_note' => $moderationNoteValue,
                 ];
@@ -557,6 +561,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'status' => $status,
                     'category' => $category,
                     'subcategory' => $subcategory,
+                    'subsubcategory' => $subsubcategory,
                     'scheduled_at' => $scheduledAtValue,
                     'moderation_note' => $moderationNoteValue,
                 ]);
@@ -569,7 +574,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         db()->beginTransaction();
                         if ($id > 0) {
-                            $previousStmt = db()->prepare('SELECT title, slug, excerpt, content, status, category, subcategory, scheduled_at, published_at, author_id FROM articles WHERE id = ? LIMIT 1');
+                            $previousStmt = db()->prepare('SELECT title, slug, excerpt, content, status, category, subcategory, subsubcategory, scheduled_at, published_at, author_id FROM articles WHERE id = ? LIMIT 1');
                             $previousStmt->execute([$id]);
                             $previous = $previousStmt->fetch() ?: null;
                             if (!is_array($previous)) {
@@ -579,7 +584,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $existingPublishedAt = trim((string) ($previous['published_at'] ?? ''));
                             $publishedAtValue = $publishNow ? ($existingPublishedAt !== '' ? $existingPublishedAt : date('Y-m-d H:i:s')) : null;
                             if (table_exists('article_revisions')) {
-                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, subcategory, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, subcategory, subsubcategory, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
                                     ->execute([
                                         $id,
                                         (string) ($previous['title'] ?? ''),
@@ -589,21 +594,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         (string) ($previous['status'] ?? 'draft'),
                                         (string) ($previous['category'] ?? 'autres'),
                                         (string) ($previous['subcategory'] ?? ''),
+                                        (string) ($previous['subsubcategory'] ?? ''),
                                         $previous['scheduled_at'] ?? null,
                                         $previous['published_at'] ?? null,
                                         isset($previous['author_id']) ? (int) $previous['author_id'] : null,
                                     ]);
                             }
-                            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, subcategory = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id = ?')
-                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $subcategory, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, $id]);
+                            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, subcategory = ?, subsubcategory = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id = ?')
+                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $subcategory, $subsubcategory, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, $id]);
                         } else {
                             $publishedAtValue = $publishNow ? date('Y-m-d H:i:s') : null;
-                            db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, subcategory, scheduled_at, published_at, moderation_note, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $subcategory, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, (int) current_user()['id']]);
+                            db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, subcategory, subsubcategory, scheduled_at, published_at, moderation_note, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $subcategory, $subsubcategory, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, (int) current_user()['id']]);
                             $id = (int) db()->lastInsertId();
                             if (table_exists('article_revisions')) {
-                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, subcategory, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                                    ->execute([$id, $title, $slug, $excerpt, $content, $status, $category, $subcategory, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
+                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, subcategory, subsubcategory, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                                    ->execute([$id, $title, $slug, $excerpt, $content, $status, $category, $subcategory, $subsubcategory, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
                             }
                         }
                         db()->commit();
@@ -671,7 +677,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('err_invalid_article'));
             }
             $restoredStatus = (string) ($revision['status'] ?? 'draft');
-            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, subcategory = ?, scheduled_at = ?, published_at = ?, moderation_note = NULL, updated_at = NOW() WHERE id = ?')
+            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, subcategory = ?, subsubcategory = ?, scheduled_at = ?, published_at = ?, moderation_note = NULL, updated_at = NOW() WHERE id = ?')
                 ->execute([
                     (string) ($revision['title'] ?? ''),
                     (string) ($revision['slug'] ?? ''),
@@ -680,6 +686,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $restoredStatus,
                     (string) ($revision['category'] ?? 'autres'),
                     (string) ($revision['subcategory'] ?? ''),
+                    (string) ($revision['subsubcategory'] ?? ''),
                     $revision['scheduled_at'] ?? null,
                     $revision['published_at'] ?? null,
                     $articleId,
@@ -701,6 +708,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('UPDATE article_categories SET code = ? WHERE code = ?')->execute([$newCode, $oldCode]);
             db()->prepare('UPDATE article_subcategories SET category_code = ? WHERE category_code = ?')->execute([$newCode, $oldCode]);
+            if (article_ensure_subsubcategories_table()) {
+                db()->prepare('UPDATE article_subsubcategories SET category_code = ? WHERE category_code = ?')->execute([$newCode, $oldCode]);
+            }
             db()->prepare('UPDATE articles SET category = ? WHERE category = ?')->execute([$newCode, $oldCode]);
             set_flash('success', $t('ok_category_updated'));
             redirect('admin_articles');
@@ -754,6 +764,7 @@ $adminStatus = (string) ($_GET['status'] ?? '');
 $adminCategoryRaw = trim((string) ($_GET['category'] ?? ''));
 $adminCategory = $adminCategoryRaw !== '' ? article_category_code($adminCategoryRaw) : '';
 $adminSubcategory = article_subcategory_code(trim((string) ($_GET['subcategory'] ?? '')));
+$adminSubsubcategory = article_subsubcategory_code(trim((string) ($_GET['subsubcategory'] ?? '')));
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
 $adminWhere = [];
 $adminParams = [];
@@ -769,9 +780,14 @@ if ($adminSubcategory !== '') {
     $adminWhere[] = 'subcategory = ?';
     $adminParams[] = $adminSubcategory;
 }
+if ($adminSubsubcategory !== '') {
+    $adminWhere[] = 'subsubcategory = ?';
+    $adminParams[] = $adminSubsubcategory;
+}
 if ($adminSearch !== '') {
-    $adminWhere[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ? OR category LIKE ? OR subcategory LIKE ?)';
+    $adminWhere[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ? OR category LIKE ? OR subcategory LIKE ? OR subsubcategory LIKE ?)';
     $needle = '%' . $adminSearch . '%';
+    $adminParams[] = $needle;
     $adminParams[] = $needle;
     $adminParams[] = $needle;
     $adminParams[] = $needle;
@@ -798,16 +814,21 @@ foreach ($articleStats as $statRow) {
 }
 $articleCategoryCounts = [];
 $articleSubcategoryCounts = [];
-$articleTaxonomyRows = db()->query('SELECT category, subcategory, COUNT(*) AS total FROM articles GROUP BY category, subcategory ORDER BY category ASC, subcategory ASC')->fetchAll() ?: [];
+$articleSubsubcategoryCounts = [];
+$articleTaxonomyRows = db()->query('SELECT category, subcategory, subsubcategory, COUNT(*) AS total FROM articles GROUP BY category, subcategory, subsubcategory ORDER BY category ASC, subcategory ASC, subsubcategory ASC')->fetchAll() ?: [];
 foreach ($articleTaxonomyRows as $articleTaxonomyRow) {
     $categoryCode = article_category_code((string) ($articleTaxonomyRow['category'] ?? 'autres'));
     $subcategoryCode = article_subcategory_code((string) ($articleTaxonomyRow['subcategory'] ?? ''));
+    $subsubcategoryCode = article_subsubcategory_code((string) ($articleTaxonomyRow['subsubcategory'] ?? ''));
     $total = (int) ($articleTaxonomyRow['total'] ?? 0);
     if ($categoryCode !== '') {
         $articleCategoryCounts[$categoryCode] = ($articleCategoryCounts[$categoryCode] ?? 0) + $total;
     }
     if ($categoryCode !== '' && $subcategoryCode !== '') {
         $articleSubcategoryCounts[$categoryCode . ':' . $subcategoryCode] = ($articleSubcategoryCounts[$categoryCode . ':' . $subcategoryCode] ?? 0) + $total;
+    }
+    if ($categoryCode !== '' && $subcategoryCode !== '' && $subsubcategoryCode !== '') {
+        $articleSubsubcategoryCounts[$categoryCode . ':' . $subcategoryCode . ':' . $subsubcategoryCode] = ($articleSubsubcategoryCounts[$categoryCode . ':' . $subcategoryCode . ':' . $subsubcategoryCode] ?? 0) + $total;
     }
 }
 if ($previewPayload === null) {
@@ -884,6 +905,37 @@ ob_start();
                                 $isSelectedSubcategory = $editingCategory === (string) $subcategoryCategoryCode && $editingSubcategory === $subcategoryCode;
                                 ?>
                                 <option value="<?= e($subcategoryRef) ?>" <?= $isSelectedSubcategory ? 'selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subcategoryCode)) ?></option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+            <label><?= e($t('subsubcategory_field')) ?>
+                <select name="subsubcategory_ref">
+                    <?php $editingSubsubcategory = article_subsubcategory_code((string) ($editing['subsubcategory'] ?? '')); ?>
+                    <option value=""><?= e($t('no_subsubcategory')) ?></option>
+                    <?php foreach ($articleSubsubcategoriesByParent as $subsubcategoryParentRef => $subsubcategories): ?>
+                        <?php $subsubcategoryParentParts = article_subcategory_ref_parts((string) $subsubcategoryParentRef); ?>
+                        <?php $subsubcategoryParentCategory = $subsubcategoryParentParts['category']; ?>
+                        <?php $subsubcategoryParentSubcategory = $subsubcategoryParentParts['subcategory']; ?>
+                        <?php if ($subsubcategoryParentCategory === '' || $subsubcategoryParentSubcategory === ''): ?>
+                            <?php continue; ?>
+                        <?php endif; ?>
+                        <?php $subsubcategoryParentLabel = article_category_label_from_code($subsubcategoryParentSubcategory); ?>
+                        <?php foreach ($articleSubcategoriesByCategory[$subsubcategoryParentCategory] ?? [] as $subcategoryInfo): ?>
+                            <?php if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subsubcategoryParentSubcategory) { $subsubcategoryParentLabel = (string) ($subcategoryInfo['label'] ?? $subsubcategoryParentLabel); break; } ?>
+                        <?php endforeach; ?>
+                        <optgroup label="<?= e((string) ($knownCategories[$subsubcategoryParentCategory] ?? article_category_label_from_code($subsubcategoryParentCategory)) . ' / ' . $subsubcategoryParentLabel) ?>">
+                            <?php foreach ($subsubcategories as $subsubcategoryInfo): ?>
+                                <?php
+                                $subsubcategoryCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? ''));
+                                if ($subsubcategoryCode === '') {
+                                    continue;
+                                }
+                                $subsubcategoryRef = article_subsubcategory_ref($subsubcategoryParentCategory, $subsubcategoryParentSubcategory, $subsubcategoryCode);
+                                $isSelectedSubsubcategory = $editingCategory === $subsubcategoryParentCategory && $editingSubcategory === $subsubcategoryParentSubcategory && $editingSubsubcategory === $subsubcategoryCode;
+                                ?>
+                                <option value="<?= e($subsubcategoryRef) ?>" <?= $isSelectedSubsubcategory ? 'selected' : '' ?>><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubcategoryCode)) ?></option>
                             <?php endforeach; ?>
                         </optgroup>
                     <?php endforeach; ?>
@@ -1106,6 +1158,34 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
+                <label><?= e($t('subsubcategory_field')) ?>
+                    <select name="subsubcategory">
+                        <option value=""><?= e($t('no_subsubcategory')) ?></option>
+                        <?php foreach ($articleSubsubcategoriesByParent as $subsubcategoryParentRef => $subsubcategories): ?>
+                            <?php $subsubcategoryParentParts = article_subcategory_ref_parts((string) $subsubcategoryParentRef); ?>
+                            <?php $subsubcategoryParentCategory = $subsubcategoryParentParts['category']; ?>
+                            <?php $subsubcategoryParentSubcategory = $subsubcategoryParentParts['subcategory']; ?>
+                            <?php if ($subsubcategoryParentCategory === '' || $subsubcategoryParentSubcategory === ''): ?>
+                                <?php continue; ?>
+                            <?php endif; ?>
+                            <?php $subsubcategoryParentLabel = article_category_label_from_code($subsubcategoryParentSubcategory); ?>
+                            <?php foreach ($articleSubcategoriesByCategory[$subsubcategoryParentCategory] ?? [] as $subcategoryInfo): ?>
+                                <?php if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subsubcategoryParentSubcategory) { $subsubcategoryParentLabel = (string) ($subcategoryInfo['label'] ?? $subsubcategoryParentLabel); break; } ?>
+                            <?php endforeach; ?>
+                            <optgroup label="<?= e((string) ($knownCategories[$subsubcategoryParentCategory] ?? article_category_label_from_code($subsubcategoryParentCategory)) . ' / ' . $subsubcategoryParentLabel) ?>">
+                                <?php foreach ($subsubcategories as $subsubcategoryInfo): ?>
+                                    <?php
+                                    $subsubcategoryCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? ''));
+                                    if ($subsubcategoryCode === '') {
+                                        continue;
+                                    }
+                                    ?>
+                                    <option value="<?= e($subsubcategoryCode) ?>" <?= $adminSubsubcategory === $subsubcategoryCode ? 'selected' : '' ?>><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubcategoryCode)) ?></option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
             </div>
             <p><button class="button" type="submit"><?= e($t('filter')) ?></button> <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter')) ?></a></p>
         </form>
@@ -1122,10 +1202,18 @@ ob_start();
                         break;
                     }
                 }
+                $articleSubsubcategoryCode = article_subsubcategory_code((string) ($article['subsubcategory'] ?? ''));
+                $articleSubsubcategoryLabel = '';
+                foreach ($articleSubsubcategoriesByParent[$articleCategoryCode . ':' . $articleSubcategoryCode] ?? [] as $subsubcategoryInfo) {
+                    if (article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')) === $articleSubsubcategoryCode) {
+                        $articleSubsubcategoryLabel = (string) ($subsubcategoryInfo['label'] ?? $articleSubsubcategoryCode);
+                        break;
+                    }
+                }
                 ?>
                 <article class="article-item">
                     <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
-                    <p><strong><?= e($t('category_label')) ?></strong> <?= e($articleCategoryLabel) ?><?= $articleSubcategoryLabel !== '' ? ' / ' . e($articleSubcategoryLabel) : '' ?> - <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
+                    <p><strong><?= e($t('category_label')) ?></strong> <?= e($articleCategoryLabel) ?><?= $articleSubcategoryLabel !== '' ? ' / ' . e($articleSubcategoryLabel) : '' ?><?= $articleSubsubcategoryLabel !== '' ? ' / ' . e($articleSubsubcategoryLabel) : '' ?> - <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
                 </article>
             <?php endforeach; ?>
@@ -1133,9 +1221,9 @@ ob_start();
         </div>
         <?php if ($totalPages > 1): ?>
             <nav class="actions mt-3">
-                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page - 1])) ?>">&larr; <?= e($t('previous')) ?></a><?php endif; ?>
+                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'subsubcategory' => $adminSubsubcategory, 'p' => $page - 1])) ?>">&larr; <?= e($t('previous')) ?></a><?php endif; ?>
                 <span class="badge muted"><?= $page ?> / <?= $totalPages ?></span>
-                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page + 1])) ?>"><?= e($t('next')) ?> &rarr;</a><?php endif; ?>
+                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'subsubcategory' => $adminSubsubcategory, 'p' => $page + 1])) ?>"><?= e($t('next')) ?> &rarr;</a><?php endif; ?>
             </nav>
         <?php endif; ?>
     </section>
@@ -1167,6 +1255,29 @@ ob_start();
                 <input type="hidden" name="subcategory_code" value="">
                 <button class="button" type="submit"><?= e($t('add_subcategory')) ?></button>
             </form>
+            <form method="post" class="stack">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="add_subsubcategory">
+                <label><?= e($t('subcategory_field')) ?>
+                    <select name="subsubcategory_parent_ref" required>
+                        <option value=""><?= e($t('no_subcategory')) ?></option>
+                        <?php foreach ($articleSubcategoriesByCategory as $parentCode => $subcategories): ?>
+                            <optgroup label="<?= e((string) ($knownCategories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) ?>">
+                                <?php foreach ($subcategories as $subcategoryInfo): ?>
+                                    <?php $subCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                                    <?php if ($subCode === '') { continue; } ?>
+                                    <option value="<?= e(article_subcategory_ref((string) $parentCode, $subCode)) ?>"><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label><?= e($t('subsubcategory_field')) ?>
+                    <input type="text" name="subsubcategory_label" maxlength="160" required>
+                </label>
+                <input type="hidden" name="subsubcategory_code" value="">
+                <button class="button" type="submit"><?= e($t('add_subsubcategory')) ?></button>
+            </form>
         </div>
         <div class="tags-cloud">
             <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
@@ -1193,6 +1304,8 @@ ob_start();
                         continue;
                     }
                     $subTotal = (int) ($articleSubcategoryCounts[(string) $parentCode . ':' . $subCode] ?? 0);
+                    $subsubParentRef = (string) $parentCode . ':' . $subCode;
+                    $subsubcategoryTotal = count($articleSubsubcategoriesByParent[$subsubParentRef] ?? []);
                     ?>
                     <form method="post" class="inline-form">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -1201,7 +1314,33 @@ ob_start();
                         <span class="pill"><?= e((string) ($knownCategories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
                         <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
                         <button class="button small" type="submit"><?= e($t('save')) ?></button>
-                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= ($subTotal > 0 || $subsubcategoryTotal > 0) ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
+                    </form>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+            <?php foreach ($articleSubsubcategoriesByParent as $parentRef => $subsubcategories): ?>
+                <?php $parentParts = article_subcategory_ref_parts((string) $parentRef); ?>
+                <?php $parentCategory = $parentParts['category']; ?>
+                <?php $parentSubcategory = $parentParts['subcategory']; ?>
+                <?php if ($parentCategory === '' || $parentSubcategory === '') { continue; } ?>
+                <?php $parentSubcategoryLabel = article_category_label_from_code($parentSubcategory); ?>
+                <?php foreach ($articleSubcategoriesByCategory[$parentCategory] ?? [] as $subcategoryInfo): ?>
+                    <?php if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $parentSubcategory) { $parentSubcategoryLabel = (string) ($subcategoryInfo['label'] ?? $parentSubcategory); break; } ?>
+                <?php endforeach; ?>
+                <?php foreach ($subsubcategories as $subsubcategoryInfo): ?>
+                    <?php $subsubCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')); ?>
+                    <?php if ($subsubCode === '') { continue; } ?>
+                    <?php $subsubTotal = (int) ($articleSubsubcategoryCounts[$parentCategory . ':' . $parentSubcategory . ':' . $subsubCode] ?? 0); ?>
+                    <form method="post" class="inline-form">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="update_subsubcategory">
+                        <input type="hidden" name="subsubcategory_category" value="<?= e($parentCategory) ?>">
+                        <input type="hidden" name="subsubcategory_parent" value="<?= e($parentSubcategory) ?>">
+                        <input type="hidden" name="subsubcategory_code" value="<?= e($subsubCode) ?>">
+                        <span class="pill"><?= e((string) ($knownCategories[$parentCategory] ?? article_category_label_from_code($parentCategory))) ?> / <?= e($parentSubcategoryLabel) ?> / <?= e($subsubCode) ?> (<?= $subsubTotal ?>)</span>
+                        <input type="text" name="subsubcategory_label" value="<?= e((string) ($subsubcategoryInfo['label'] ?? $subsubCode)) ?>" maxlength="160" required>
+                        <button class="button small" type="submit"><?= e($t('save')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subsubcategory"<?= $subsubTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>

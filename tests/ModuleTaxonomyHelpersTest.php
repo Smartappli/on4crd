@@ -41,9 +41,14 @@ final class ModuleTaxonomyHelpersTest extends TestCase
     public function testArticleTaxonomyReferencesAreNormalized(): void
     {
         self::assertSame('autres:reglementation', article_subcategory_ref('', 'Reglementation'));
+        self::assertSame('autres:reglementation:legislation', article_subsubcategory_ref('', 'Reglementation', 'Legislation'));
         self::assertSame(
             ['category' => 'antennes', 'subcategory' => 'yagi'],
             article_subcategory_ref_parts('Antennes:Yagi')
+        );
+        self::assertSame(
+            ['category' => 'antennes', 'subcategory' => 'yagi', 'subsubcategory' => 'baluns'],
+            article_subsubcategory_ref_parts('Antennes:Yagi:Baluns')
         );
         self::assertSame('Mes favoris', article_favorites_label(['favorites' => 'Mes favoris'], 'fr'));
         self::assertSame('Favorites', article_favorites_label([], 'en'));

@@ -105,10 +105,15 @@ final class MemberModuleRegressionContractsTest extends TestCase
             'pages/admin_articles.php' => [
                 'SELECT COUNT(*) FROM article_subcategories WHERE category_code = ?',
                 'err_category_has_subcategories',
-                'UPDATE articles SET category = "autres", subcategory = "" WHERE category = ?',
+                'UPDATE articles SET category = "autres", subcategory = "", subsubcategory = "" WHERE category = ?',
+                'SELECT COUNT(*) FROM article_subsubcategories WHERE category_code = ? AND subcategory_code = ?',
+                'err_subcategory_has_subsubcategories',
                 'SELECT COUNT(*) FROM articles WHERE category = ? AND subcategory = ?',
                 'err_subcategory_has_documents',
                 'DELETE FROM article_subcategories WHERE category_code = ? AND code = ?',
+                'SELECT COUNT(*) FROM articles WHERE category = ? AND subcategory = ? AND subsubcategory = ?',
+                'err_subsubcategory_has_documents',
+                'DELETE FROM article_subsubcategories WHERE category_code = ? AND subcategory_code = ? AND code = ?',
             ],
             'pages/admin_library.php' => [
                 'SELECT COUNT(*) FROM member_library_subcategories WHERE category_code = ?',
@@ -135,8 +140,11 @@ final class MemberModuleRegressionContractsTest extends TestCase
         self::assertStringContainsString('$code = article_category_code($codeInput !== \'\' ? $codeInput : $label);', $source);
         self::assertStringContainsString('$codeInput = trim((string) ($_POST[\'subcategory_code\'] ?? \'\'));', $source);
         self::assertStringContainsString('$code = article_subcategory_code($codeInput !== \'\' ? $codeInput : $label);', $source);
+        self::assertStringContainsString('$codeInput = trim((string) ($_POST[\'subsubcategory_code\'] ?? \'\'));', $source);
+        self::assertStringContainsString('$code = article_subsubcategory_code($codeInput !== \'\' ? $codeInput : $label);', $source);
         self::assertStringNotContainsString('article_category_code((string) ($_POST[\'category_code\'] ?? $label))', $source);
         self::assertStringNotContainsString('article_subcategory_code((string) ($_POST[\'subcategory_code\'] ?? $label))', $source);
+        self::assertStringNotContainsString('article_subsubcategory_code((string) ($_POST[\'subsubcategory_code\'] ?? $label))', $source);
     }
 
     public function testSchemaKeepsTaxonomyColumnsAndDeletionTombstones(): void
@@ -156,6 +164,7 @@ final class MemberModuleRegressionContractsTest extends TestCase
             'CREATE TABLE IF NOT EXISTS album_subcategories',
             'CREATE TABLE IF NOT EXISTS article_categories',
             'CREATE TABLE IF NOT EXISTS article_subcategories',
+            'CREATE TABLE IF NOT EXISTS article_subsubcategories',
             'subcategory VARCHAR(120) NOT NULL DEFAULT \'\'',
             'subsubcategory VARCHAR(120) NOT NULL DEFAULT \'\'',
             'idx_wiki_category_deleted',
@@ -167,6 +176,7 @@ final class MemberModuleRegressionContractsTest extends TestCase
             'idx_album_category_deleted',
             'idx_article_category_deleted',
             'idx_articles_subcategory',
+            'idx_article_subsubcategory_parent',
         ] as $snippet) {
             self::assertStringContainsString($snippet, $schema);
         }

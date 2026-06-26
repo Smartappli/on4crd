@@ -82,9 +82,9 @@ final class AdminActionCoverageTest extends TestCase
             ],
             'admin article taxonomy actions' => [
                 'page' => 'pages/admin_articles.php',
-                'controller_snippets' => ["'add_category'", "'update_category'", "'delete_category'", "'add_subcategory'", "'update_subcategory'", "'delete_subcategory'"],
+                'controller_snippets' => ["'add_category'", "'update_category'", "'delete_category'", "'add_subcategory'", "'update_subcategory'", "'delete_subcategory'", "'add_subsubcategory'", "'update_subsubcategory'", "'delete_subsubcategory'"],
                 'selenium' => 'tests/selenium/admin-articles-wiki-workflow.test.js',
-                'selenium_snippets' => ['add_category', 'add_subcategory', 'delete_subcategory', 'delete_category'],
+                'selenium_snippets' => ['add_category', 'add_subcategory', 'add_subsubcategory', 'update_subsubcategory', 'delete_subsubcategory', 'delete_subcategory', 'delete_category'],
             ],
             'admin news save actions' => [
                 'page' => 'pages/admin_news.php',
