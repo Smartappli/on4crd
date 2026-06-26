@@ -92,6 +92,19 @@
   font-size: .92rem;
 }
 
+[data-route="members_library"] .members-library-subsubcategory-list {
+  display: grid;
+  gap: .2rem;
+  margin: .2rem 0 .45rem .65rem;
+  padding-left: .6rem;
+  border-left: 1px dashed var(--border);
+}
+
+[data-route="members_library"] .members-library-subsubcategory-item {
+  min-height: 1.95rem;
+  font-size: .86rem;
+}
+
 [data-route="members_library"] .members-library-document-card {
   height: 100%;
 }

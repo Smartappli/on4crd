@@ -258,6 +258,9 @@ if (table_exists('member_library_documents')) {
         db()->prepare('DELETE FROM member_library_documents WHERE id IN (' . $placeholders . ')')->execute($libraryIds);
     }
 }
+if (table_exists('member_library_subsubcategories')) {
+    db()->prepare('DELETE FROM member_library_subsubcategories WHERE category_code LIKE ? OR subcategory_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like, $like]);
+}
 if (table_exists('member_library_subcategories')) {
     db()->prepare('DELETE FROM member_library_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
 }
@@ -475,7 +478,7 @@ if ($id <= 0 || !table_exists('member_library_documents')) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, description, tags, file_path FROM member_library_documents WHERE id = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, subsubcategory, title, description, tags, file_path FROM member_library_documents WHERE id = ? LIMIT 1');
 $stmt->execute([$id]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_DOCUMENT_ID: String(documentId) });
@@ -489,7 +492,7 @@ if ($title === '' || !table_exists('member_library_documents')) {
     echo 'null';
     return;
 }
-$stmt = db()->prepare('SELECT id, member_id, category, subcategory, title, description, tags, file_path FROM member_library_documents WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt = db()->prepare('SELECT id, member_id, category, subcategory, subsubcategory, title, description, tags, file_path FROM member_library_documents WHERE title = ? ORDER BY id DESC LIMIT 1');
 $stmt->execute([$title]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_DOCUMENT_TITLE: title });
@@ -554,6 +557,22 @@ echo json_encode($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_TH
 `, { SELENIUM_TAXONOMY_AREA: area, SELENIUM_CATEGORY_CODE: categoryCode, SELENIUM_SUBCATEGORY_CODE: subcategoryCode });
 }
 
+function adminLibrarySubsubcategoryRecord(categoryCode, subcategoryCode, subsubcategoryCode) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$category = trim((string) getenv('SELENIUM_CATEGORY_CODE'));
+$subcategory = trim((string) getenv('SELENIUM_SUBCATEGORY_CODE'));
+$code = trim((string) getenv('SELENIUM_SUBSUBCATEGORY_CODE'));
+$row = null;
+if ($category !== '' && $subcategory !== '' && $code !== '' && table_exists('member_library_subsubcategories')) {
+    $stmt = db()->prepare('SELECT category_code, subcategory_code, code, label FROM member_library_subsubcategories WHERE category_code = ? AND subcategory_code = ? AND code = ? LIMIT 1');
+    $stmt->execute([$category, $subcategory, $code]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+}
+echo json_encode($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_CATEGORY_CODE: categoryCode, SELENIUM_SUBCATEGORY_CODE: subcategoryCode, SELENIUM_SUBSUBCATEGORY_CODE: subsubcategoryCode });
+}
+
 function writeTextFixture(title, token, prefix = 'admin') {
   const fixtureDir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
   fs.mkdirSync(fixtureDir, { recursive: true });
@@ -594,6 +613,9 @@ async function createUpdateDeleteAdminTaxonomy(driver, { area, route }, token) {
   const updatedCategoryLabel = `${categoryCode}-updated`;
   const subcategoryLabel = subcategoryCode;
   const updatedSubcategoryLabel = `${subcategoryCode}-updated`;
+  const subsubcategoryCode = `${subcategoryCode}-sub`;
+  const subsubcategoryLabel = subsubcategoryCode;
+  const updatedSubsubcategoryLabel = `${subsubcategoryCode}-updated`;
 
   await visit(driver, route);
   let categoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_category"]]'));
@@ -633,6 +655,36 @@ async function createUpdateDeleteAdminTaxonomy(driver, { area, route }, token) {
   subcategory = adminTaxonomySubcategoryRecord(area, categoryCode, subcategoryCode);
   assert.ok(subcategory, `La sous-thematique ${area} doit exister apres modification.`);
   assert.equal(subcategory.label, updatedSubcategoryLabel, `La sous-thematique ${area} doit etre modifiee.`);
+
+  if (area === 'library') {
+    await visit(driver, route);
+    const subsubcategoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_subsubcategory"]]'));
+    await setOptionalNamedFieldValue(driver, subsubcategoryForm, 'subsubcategory_parent_ref', `${categoryCode}:${subcategoryCode}`);
+    await setOptionalNamedFieldValue(driver, subsubcategoryForm, 'subsubcategory_code', subsubcategoryCode);
+    await setOptionalNamedFieldValue(driver, subsubcategoryForm, 'subsubcategory_label', subsubcategoryLabel);
+    await submitForm(driver, subsubcategoryForm);
+
+    let subsubcategory = adminLibrarySubsubcategoryRecord(categoryCode, subcategoryCode, subsubcategoryCode);
+    assert.ok(subsubcategory, 'La sous-sous-thematique library doit etre creee.');
+    assert.equal(subsubcategory.label, subsubcategoryLabel, 'La sous-sous-thematique library doit avoir le libelle initial.');
+
+    await visit(driver, route);
+    const subsubcategoryUpdateForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_subsubcategory"] and .//input[@name="subsubcategory_category" and @value="${categoryCode}"] and .//input[@name="subsubcategory_parent" and @value="${subcategoryCode}"] and .//input[@name="subsubcategory_code" and @value="${subsubcategoryCode}"]]`));
+    await setFieldValue(driver, await subsubcategoryUpdateForm.findElement(By.css('input[name="subsubcategory_label"]')), updatedSubsubcategoryLabel);
+    await submitForm(driver, subsubcategoryUpdateForm);
+
+    subsubcategory = adminLibrarySubsubcategoryRecord(categoryCode, subcategoryCode, subsubcategoryCode);
+    assert.ok(subsubcategory, 'La sous-sous-thematique library doit exister apres modification.');
+    assert.equal(subsubcategory.label, updatedSubsubcategoryLabel, 'La sous-sous-thematique library doit etre modifiee.');
+
+    await visit(driver, route);
+    const subsubcategoryDeleteForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_subsubcategory"] and .//input[@name="subsubcategory_category" and @value="${categoryCode}"] and .//input[@name="subsubcategory_parent" and @value="${subcategoryCode}"] and .//input[@name="subsubcategory_code" and @value="${subsubcategoryCode}"]]`));
+    const subsubcategoryDeleteButton = await subsubcategoryDeleteForm.findElement(By.css('button[name="action"][value="delete_subsubcategory"]'));
+    await submitForm(driver, subsubcategoryDeleteForm, subsubcategoryDeleteButton);
+
+    subsubcategory = adminLibrarySubsubcategoryRecord(categoryCode, subcategoryCode, subsubcategoryCode);
+    assert.equal(subsubcategory, null, 'La sous-sous-thematique library doit etre supprimee.');
+  }
 
   await visit(driver, route);
   const subcategoryDeleteForm = await findSubcategoryForm(driver, categoryCode, subcategoryCode);
@@ -927,6 +979,7 @@ async function createLibraryDocumentFromAdminRoute(driver, token) {
   assert.ok(Number(document.member_id) > 0, 'Le document member_library doit etre rattache a un membre.');
   assert.equal(document.category, 'general', 'La categorie member_library creee depuis admin_library doit etre persistee.');
   assert.equal(document.subcategory, '', 'La sous-categorie member_library creee depuis admin_library doit rester vide par defaut.');
+  assert.equal(document.subsubcategory, '', 'La sous-sous-categorie member_library creee depuis admin_library doit rester vide par defaut.');
   assert.equal(document.title, title, 'Le titre member_library cree depuis admin_library doit etre persiste.');
   assert.equal(document.description, `Document member_library admin Selenium ${token}`, 'La description member_library creee doit etre persistee.');
   assert.equal(document.tags, tags, 'Les tags member_library crees doivent etre filtres et persistes selon le vocabulaire controle.');

@@ -21,6 +21,13 @@ function library_subcategory_slug(string $value): string
         : (slugify($value) ?: '');
 }
 
+function library_subsubcategory_slug(string $value): string
+{
+    return function_exists('member_library_subsubcategory_slug')
+        ? member_library_subsubcategory_slug($value)
+        : (slugify($value) ?: '');
+}
+
 function library_tag_norm(string $value): string
 {
     $tag = trim($value);
@@ -98,6 +105,9 @@ function ensure_member_library_categories_table(): void
     if (function_exists('member_library_ensure_subcategories_table')) {
         member_library_ensure_subcategories_table();
     }
+    if (function_exists('member_library_ensure_subsubcategories_table')) {
+        member_library_ensure_subsubcategories_table();
+    }
 }
 
 function library_extract_text(string $path, string $extension): string
@@ -145,6 +155,7 @@ $proposalStatusLabels = [
 $proposalTypeLabels = [
     'category' => $adminLibraryText('proposal_type_category'),
     'subcategory' => $adminLibraryText('proposal_type_subcategory'),
+    'subsubcategory' => $adminLibraryText('proposal_type_subsubcategory'),
     'content' => $adminLibraryText('proposal_type_content'),
     'tag' => $adminLibraryText('proposal_type_tag'),
 ];
@@ -205,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         throw new RuntimeException('err_category_has_subcategories');
                     }
                 }
-                db()->prepare('UPDATE member_library_documents SET category = "general", subcategory = "" WHERE category = ?')->execute([$code]);
+                db()->prepare('UPDATE member_library_documents SET category = "general", subcategory = "", subsubcategory = "" WHERE category = ?')->execute([$code]);
                 db()->prepare('DELETE FROM member_library_categories WHERE code = ? LIMIT 1')->execute([$code]);
             }
             set_flash('success', (string) $t['ok_category_deleted']);
@@ -242,6 +253,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!function_exists('member_library_ensure_subcategories_table') || !member_library_ensure_subcategories_table()) {
                     throw new RuntimeException('storage_unavailable');
                 }
+                if (function_exists('member_library_ensure_subsubcategories_table') && member_library_ensure_subsubcategories_table()) {
+                    $subsubcategoryCountStmt = db()->prepare('SELECT COUNT(*) FROM member_library_subsubcategories WHERE category_code = ? AND subcategory_code = ?');
+                    $subsubcategoryCountStmt->execute([$parentCode, $code]);
+                    if ((int) ($subsubcategoryCountStmt->fetchColumn() ?: 0) > 0) {
+                        throw new RuntimeException('err_subcategory_has_subsubcategories');
+                    }
+                }
                 $documentCountStmt = db()->prepare('SELECT COUNT(*) FROM member_library_documents WHERE category = ? AND subcategory = ?');
                 $documentCountStmt->execute([$parentCode, $code]);
                 if ((int) ($documentCountStmt->fetchColumn() ?: 0) > 0) {
@@ -252,6 +270,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('err_required');
             }
             set_flash('success', (string) $t['ok_subcategory_deleted']);
+            redirect($adminLibraryRoute);
+        }
+        if ($action === 'add_subsubcategory') {
+            $parentCategory = library_category_slug((string) ($_POST['subsubcategory_category'] ?? 'general'));
+            $parentSubcategory = library_subcategory_slug((string) ($_POST['subsubcategory_parent'] ?? ''));
+            if (isset($_POST['subsubcategory_parent_ref'])) {
+                $parentParts = member_library_subcategory_ref_parts((string) $_POST['subsubcategory_parent_ref']);
+                $parentCategory = library_category_slug($parentParts['category'] !== '' ? $parentParts['category'] : 'general');
+                $parentSubcategory = library_subcategory_slug($parentParts['subcategory']);
+            }
+            if ($parentSubcategory !== '') {
+                [$parentCategory, $parentSubcategory] = member_library_taxonomy_from_input(
+                    $parentCategory,
+                    member_library_subcategory_ref($parentCategory, $parentSubcategory),
+                    $parentCategory
+                );
+            }
+            $code = library_subsubcategory_slug((string) ($_POST['subsubcategory_code'] ?? ''));
+            $label = trim((string) ($_POST['subsubcategory_label'] ?? '')) ?: $code;
+            if ($parentSubcategory === '' || $code === '' || $label === '') {
+                throw new RuntimeException('err_required');
+            }
+            if (!function_exists('member_library_ensure_subsubcategories_table') || !member_library_ensure_subsubcategories_table()) {
+                throw new RuntimeException('storage_unavailable');
+            }
+            db()->prepare('INSERT INTO member_library_subsubcategories (category_code, subcategory_code, code, label) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$parentCategory, $parentSubcategory, $code, $label]);
+            set_flash('success', (string) $t['ok_subsubcategory']);
+            redirect($adminLibraryRoute);
+        }
+        if ($action === 'update_subsubcategory') {
+            $parentCategory = library_category_slug((string) ($_POST['subsubcategory_category'] ?? 'general'));
+            $parentSubcategory = library_subcategory_slug((string) ($_POST['subsubcategory_parent'] ?? ''));
+            if ($parentSubcategory !== '') {
+                [$parentCategory, $parentSubcategory] = member_library_taxonomy_from_input(
+                    $parentCategory,
+                    member_library_subcategory_ref($parentCategory, $parentSubcategory),
+                    $parentCategory
+                );
+            }
+            $code = library_subsubcategory_slug((string) ($_POST['subsubcategory_code'] ?? ''));
+            $label = trim((string) ($_POST['subsubcategory_label'] ?? ''));
+            if ($parentSubcategory === '' || $code === '' || $label === '') {
+                throw new RuntimeException('err_required');
+            }
+            if (!function_exists('member_library_ensure_subsubcategories_table') || !member_library_ensure_subsubcategories_table()) {
+                throw new RuntimeException('storage_unavailable');
+            }
+            db()->prepare('INSERT INTO member_library_subsubcategories (category_code, subcategory_code, code, label) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$parentCategory, $parentSubcategory, $code, $label]);
+            set_flash('success', (string) $t['ok_subsubcategory']);
+            redirect($adminLibraryRoute);
+        }
+        if ($action === 'delete_subsubcategory') {
+            $parentCategory = library_category_slug((string) ($_POST['subsubcategory_category'] ?? 'general'));
+            $parentSubcategory = library_subcategory_slug((string) ($_POST['subsubcategory_parent'] ?? ''));
+            $code = library_subsubcategory_slug((string) ($_POST['subsubcategory_code'] ?? ''));
+            if ($parentSubcategory === '' || $code === '') {
+                throw new RuntimeException('err_required');
+            }
+            if (!function_exists('member_library_ensure_subsubcategories_table') || !member_library_ensure_subsubcategories_table()) {
+                throw new RuntimeException('storage_unavailable');
+            }
+            $documentCountStmt = db()->prepare('SELECT COUNT(*) FROM member_library_documents WHERE category = ? AND subcategory = ? AND subsubcategory = ?');
+            $documentCountStmt->execute([$parentCategory, $parentSubcategory, $code]);
+            if ((int) ($documentCountStmt->fetchColumn() ?: 0) > 0) {
+                throw new RuntimeException('err_subsubcategory_has_documents');
+            }
+            db()->prepare('DELETE FROM member_library_subsubcategories WHERE category_code = ? AND subcategory_code = ? AND code = ? LIMIT 1')
+                ->execute([$parentCategory, $parentSubcategory, $code]);
+            set_flash('success', (string) $t['ok_subsubcategory_deleted']);
             redirect($adminLibraryRoute);
         }
         if ($action === 'delete_document') {
@@ -335,9 +424,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect($adminLibraryRoute);
         }
 
-        [$category, $subcategory] = member_library_taxonomy_from_input(
+        [$category, $subcategory, $subsubcategory] = member_library_taxonomy_from_input(
             (string) ($_POST['category'] ?? 'general'),
-            trim((string) ($_POST['subcategory_ref'] ?? ''))
+            trim((string) ($_POST['subcategory_ref'] ?? '')),
+            'general',
+            trim((string) ($_POST['subsubcategory_ref'] ?? ''))
         );
         $title = trim((string) ($_POST['title'] ?? ''));
         $description = trim((string) ($_POST['description'] ?? ''));
@@ -367,13 +458,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tags,
             $description,
             (string) $stored['public_path'],
-            $subcategory
+            $subcategory,
+            $subsubcategory
         );
         try {
             if (ensure_content_proposals_table()) {
                 $proposalSummary = content_proposal_details_text([
                     (string) $memberLibraryMessages['propose_document_category'] => $category,
                     (string) $memberLibraryMessages['propose_document_subcategory'] => $subcategory,
+                    (string) $memberLibraryMessages['propose_document_subsubcategory'] => $subsubcategory,
                     (string) $memberLibraryMessages['tags'] => $tags,
                     (string) $memberLibraryMessages['document'] => (string) ($stored['original_name'] ?? ''),
                     (string) $memberLibraryMessages['propose_document_description'] => $description,
@@ -429,6 +522,25 @@ foreach ($subcategoryOptions as $subcatOpt) {
     ];
     $subcategoryLabels[$parentCode . ':' . $subcatCode] = $subcatLabel;
 }
+$subsubcategoryOptions = function_exists('member_library_subsubcategory_options') ? member_library_subsubcategory_options() : [];
+$subsubcategoriesByParent = [];
+$subsubcategoryLabels = [];
+foreach ($subsubcategoryOptions as $subsubcatOpt) {
+    $parentCode = library_category_slug((string) $subsubcatOpt['category_code']);
+    $subcatCode = library_subcategory_slug((string) $subsubcatOpt['subcategory_code']);
+    $subsubcatCode = library_subsubcategory_slug((string) $subsubcatOpt['code']);
+    if ($subcatCode === '' || $subsubcatCode === '') {
+        continue;
+    }
+    $subsubcatLabel = (string) $subsubcatOpt['label'];
+    $subsubcategoriesByParent[$parentCode . ':' . $subcatCode][] = [
+        'category_code' => $parentCode,
+        'subcategory_code' => $subcatCode,
+        'code' => $subsubcatCode,
+        'label' => $subsubcatLabel,
+    ];
+    $subsubcategoryLabels[$parentCode . ':' . $subcatCode . ':' . $subsubcatCode] = $subsubcatLabel;
+}
 $perPage = 20;
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $adminCategory = library_category_slug((string) ($_GET['category'] ?? ''));
@@ -436,6 +548,7 @@ if ($adminCategory === 'general' && !isset($_GET['category'])) {
     $adminCategory = '';
 }
 $adminSubcategory = library_subcategory_slug((string) ($_GET['subcategory'] ?? ''));
+$adminSubsubcategory = library_subsubcategory_slug((string) ($_GET['subsubcategory'] ?? ''));
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
 $adminTag = trim((string) ($_GET['tag'] ?? ''));
 $where = [];
@@ -447,6 +560,10 @@ if ($adminCategory !== '') {
 if ($adminSubcategory !== '') {
     $where[] = 'subcategory = ?';
     $params[] = $adminSubcategory;
+}
+if ($adminSubsubcategory !== '') {
+    $where[] = 'subsubcategory = ?';
+    $params[] = $adminSubsubcategory;
 }
 if ($adminSearch !== '') {
     $where[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
@@ -465,7 +582,7 @@ $pagination = pagination_state($totalDocuments, $page, $perPage);
 $page = $pagination['page'];
 $totalPages = $pagination['total_pages'];
 $offset = $pagination['offset'];
-$stmt = db()->prepare('SELECT id, category, subcategory, tags, title, description, file_path, extracted_text, uploaded_at FROM member_library_documents' . $whereSql . ' ORDER BY uploaded_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+$stmt = db()->prepare('SELECT id, category, subcategory, subsubcategory, tags, title, description, file_path, extracted_text, uploaded_at FROM member_library_documents' . $whereSql . ' ORDER BY uploaded_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $stmt->execute($params);
 $documents = $stmt->fetchAll() ?: [];
 
@@ -632,6 +749,20 @@ ob_start();
                     <?php endforeach; ?>
                 </select>
             </label>
+            <label class="admin-library-field">
+                <span><?= e((string) $t['subsubcategory_ph']) ?></span>
+                <select name="subsubcategory_ref">
+                    <option value=""><?= e((string) $t['no_subsubcategory']) ?></option>
+                    <?php foreach ($subsubcategoriesByParent as $parentRef => $subsubcatGroup): ?>
+                        <?php [$parentCategoryCode, $parentSubcategoryCode] = array_pad(explode(':', (string) $parentRef, 2), 2, ''); ?>
+                        <optgroup label="<?= e((string) ($categoryLabels[$parentCategoryCode] ?? $parentCategoryCode)) ?> / <?= e((string) ($subcategoryLabels[$parentRef] ?? $parentSubcategoryCode)) ?>">
+                            <?php foreach ($subsubcatGroup as $subsubcatOpt): ?>
+                                <option value="<?= e(member_library_subsubcategory_ref($parentCategoryCode, $parentSubcategoryCode, (string) $subsubcatOpt['code'])) ?>"<?= $adminSubsubcategory === (string) $subsubcatOpt['code'] && ($adminCategory === '' || $adminCategory === $parentCategoryCode) && ($adminSubcategory === '' || $adminSubcategory === $parentSubcategoryCode) ? ' selected' : '' ?>><?= e((string) $subsubcatOpt['label']) ?></option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                    <?php endforeach; ?>
+                </select>
+            </label>
             <label class="admin-library-field"><span><?= e((string) $t['title_ph']) ?></span><input type="text" name="title" required></label>
             <label class="admin-library-field"><span><?= e((string) $t['tags_ph']) ?></span><input type="text" name="tags" placeholder="<?= e((string) $t['tags_help']) ?>"></label>
             <label class="admin-library-field admin-library-field-wide"><span><?= e((string) $t['desc_ph']) ?></span><textarea name="description"></textarea></label>
@@ -698,6 +829,44 @@ ob_start();
     </section>
 
     <section class="card admin-library-categories">
+        <h2><?= e((string) $t['subsubcategories']) ?></h2>
+        <form method="post" class="inline-form">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="add_subsubcategory">
+            <select name="subsubcategory_parent_ref" required>
+                <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
+                    <optgroup label="<?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?>">
+                        <?php foreach ($subcatGroup as $subcatOpt): ?>
+                            <option value="<?= e(member_library_subcategory_ref($parentCode, (string) $subcatOpt['code'])) ?>"><?= e((string) $subcatOpt['label']) ?></option>
+                        <?php endforeach; ?>
+                    </optgroup>
+                <?php endforeach; ?>
+            </select>
+            <input type="text" name="subsubcategory_code" placeholder="<?= e((string) $t['subsubcategory_code']) ?>">
+            <input type="text" name="subsubcategory_label" placeholder="<?= e((string) $t['subsubcategory_label']) ?>">
+            <button class="button" type="submit"><?= e((string) $t['add_subsubcategory']) ?></button>
+        </form>
+        <div class="admin-library-category-list">
+            <?php foreach ($subsubcategoriesByParent as $parentRef => $subsubcatGroup): ?>
+                <?php [$parentCategoryCode, $parentSubcategoryCode] = array_pad(explode(':', (string) $parentRef, 2), 2, ''); ?>
+                <?php foreach ($subsubcatGroup as $subsubcatOpt): ?>
+                    <form method="post" class="inline-form admin-library-category-item">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="update_subsubcategory">
+                        <input type="hidden" name="subsubcategory_category" value="<?= e($parentCategoryCode) ?>">
+                        <input type="hidden" name="subsubcategory_parent" value="<?= e($parentSubcategoryCode) ?>">
+                        <input type="hidden" name="subsubcategory_code" value="<?= e((string) $subsubcatOpt['code']) ?>">
+                        <span class="badge muted"><?= e((string) ($categoryLabels[$parentCategoryCode] ?? $parentCategoryCode)) ?> / <?= e((string) ($subcategoryLabels[$parentRef] ?? $parentSubcategoryCode)) ?> / <?= e((string) $subsubcatOpt['code']) ?></span>
+                        <input type="text" name="subsubcategory_label" value="<?= e((string) $subsubcatOpt['label']) ?>" maxlength="160" required>
+                        <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subsubcategory"><?= e((string) $t['delete']) ?></button>
+                    </form>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
+    </section>
+
+    <section class="card admin-library-categories">
         <h2><?= e((string) $t['tag_cleanup_title']) ?></h2>
         <p class="help"><?= e((string) $t['tag_cleanup_help']) ?></p>
         <form method="post" class="inline-form" style="flex-wrap:wrap;gap:.6rem;">
@@ -743,6 +912,17 @@ ob_start();
                 </optgroup>
             <?php endforeach; ?>
         </select>
+        <select name="subsubcategory">
+            <option value=""><?= e((string) $t['all_subsubcategories']) ?></option>
+            <?php foreach ($subsubcategoriesByParent as $parentRef => $subsubcatGroup): ?>
+                <?php [$parentCategoryCode, $parentSubcategoryCode] = array_pad(explode(':', (string) $parentRef, 2), 2, ''); ?>
+                <optgroup label="<?= e((string) ($categoryLabels[$parentCategoryCode] ?? $parentCategoryCode)) ?> / <?= e((string) ($subcategoryLabels[$parentRef] ?? $parentSubcategoryCode)) ?>">
+                    <?php foreach ($subsubcatGroup as $subsubcatOpt): ?>
+                        <option value="<?= e((string) $subsubcatOpt['code']) ?>" <?= $adminSubsubcategory === (string) $subsubcatOpt['code'] && ($adminCategory === '' || $adminCategory === $parentCategoryCode) && ($adminSubcategory === '' || $adminSubcategory === $parentSubcategoryCode) ? 'selected' : '' ?>><?= e((string) $subsubcatOpt['label']) ?></option>
+                    <?php endforeach; ?>
+                </optgroup>
+            <?php endforeach; ?>
+        </select>
         <input type="search" name="q" value="<?= e($adminSearch) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
         <input type="search" name="tag" value="<?= e($adminTag) ?>" placeholder="<?= e((string) $t['tag_search_ph']) ?>">
         <button class="button" type="submit"><?= e((string) $t['filter']) ?></button>
@@ -764,8 +944,10 @@ ob_start();
         <?php $documentId = (int) ($document['id'] ?? 0); ?>
         <?php $documentCategory = library_category_slug((string) ($document['category'] ?? 'general')); ?>
         <?php $documentSubcategory = library_subcategory_slug((string) ($document['subcategory'] ?? '')); ?>
+        <?php $documentSubsubcategory = library_subsubcategory_slug((string) ($document['subsubcategory'] ?? '')); ?>
         <?php $documentCategoryLabel = (string) ($categoryLabels[$documentCategory] ?? $documentCategory); ?>
         <?php $documentSubcategoryLabel = $documentSubcategory !== '' ? (string) ($subcategoryLabels[$documentCategory . ':' . $documentSubcategory] ?? $documentSubcategory) : ''; ?>
+        <?php $documentSubsubcategoryLabel = $documentSubcategory !== '' && $documentSubsubcategory !== '' ? (string) ($subsubcategoryLabels[$documentCategory . ':' . $documentSubcategory . ':' . $documentSubsubcategory] ?? $documentSubsubcategory) : ''; ?>
         <?php $documentPreviewUrl = $documentId > 0 ? route_url('member_library_preview', ['id' => $documentId]) . '#view=Fit' : ''; ?>
         <?php $documentDownloadUrl = $documentId > 0 ? route_url('member_library_preview', ['id' => $documentId, 'download' => '1']) : ''; ?>
         <article class="card admin-library-document">
@@ -773,6 +955,7 @@ ob_start();
             <p>
                 <span class="badge muted"><?= e($documentCategoryLabel) ?></span>
                 <?php if ($documentSubcategoryLabel !== ''): ?><span class="badge muted"><?= e($documentSubcategoryLabel) ?></span><?php endif; ?>
+                <?php if ($documentSubsubcategoryLabel !== ''): ?><span class="badge muted"><?= e($documentSubsubcategoryLabel) ?></span><?php endif; ?>
                 <span class="badge muted"><?= e(strtoupper($extension)) ?></span>
             </p>
             <h3><?= e((string) $document['title']) ?></h3>
@@ -798,9 +981,9 @@ ob_start();
     </section>
     <?php if ($totalPages > 1): ?>
         <nav class="admin-library-pagination" aria-label="Pagination documents">
-            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'subcategory' => $adminSubcategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
+            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'subcategory' => $adminSubcategory, 'subsubcategory' => $adminSubsubcategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
             <span class="badge muted"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
-            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'subcategory' => $adminSubcategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
+            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'subcategory' => $adminSubcategory, 'subsubcategory' => $adminSubsubcategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
         </nav>
     <?php endif; ?>
 </div>

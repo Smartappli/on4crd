@@ -351,6 +351,7 @@ Object.assign(routeContracts, {
       'propose_category',
       'propose_document',
       'propose_subcategory',
+      'propose_subsubcategory',
       'propose_tag',
       'toggle_favorite_document',
       'update_document',

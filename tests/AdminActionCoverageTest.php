@@ -106,9 +106,9 @@ final class AdminActionCoverageTest extends TestCase
             ],
             'admin library upload taxonomy and delete actions' => [
                 'page' => 'pages/admin_library.php',
-                'controller_snippets' => ["'upload'", "'delete_document'", "'add_category'", "'update_category'", "'delete_category'", "'add_subcategory'", "'update_subcategory'", "'delete_subcategory'", 'library_store_upload('],
+                'controller_snippets' => ["'upload'", "'delete_document'", "'add_category'", "'update_category'", "'delete_category'", "'add_subcategory'", "'update_subcategory'", "'delete_subcategory'", "'add_subsubcategory'", "'update_subsubcategory'", "'delete_subsubcategory'", 'library_store_upload('],
                 'selenium' => 'tests/selenium/admin-module-crud-workflows.test.js',
-                'selenium_snippets' => ['admin_library', 'admin-library-upload-form', 'delete_document', 'createLibraryDocumentFromAdminRoute', 'createUpdateDeleteAdminTaxonomy'],
+                'selenium_snippets' => ['admin_library', 'admin-library-upload-form', 'delete_document', 'createLibraryDocumentFromAdminRoute', 'createUpdateDeleteAdminTaxonomy', 'add_subsubcategory', 'update_subsubcategory', 'delete_subsubcategory'],
             ],
             'admin classifieds bulk actions' => [
                 'page' => 'pages/admin_classifieds.php',

@@ -106,6 +106,9 @@ if ($title !== '') {
         db()->prepare('DELETE FROM content_proposals WHERE title = ?')->execute([$title . ' updated']);
         db()->prepare('DELETE FROM content_proposals WHERE title LIKE ?')->execute([$title . '%']);
     }
+    if (table_exists('member_library_subsubcategories')) {
+        db()->prepare('DELETE FROM member_library_subsubcategories WHERE category_code LIKE ? OR subcategory_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like, $like]);
+    }
     if (table_exists('member_library_subcategories')) {
         db()->prepare('DELETE FROM member_library_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
     }
@@ -169,6 +172,20 @@ if ($label === '' || !table_exists('member_library_subcategories')) {
     return;
 }
 $stmt = db()->prepare('SELECT category_code, code, label FROM member_library_subcategories WHERE label = ? ORDER BY code DESC LIMIT 1');
+$stmt->execute([$label]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_LIBRARY_LABEL: label }).trim() || 'null');
+}
+
+function memberLibrarySubsubcategoryByLabel(label) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$label = (string) getenv('SELENIUM_LIBRARY_LABEL');
+if ($label === '' || !table_exists('member_library_subsubcategories')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT category_code, subcategory_code, code, label FROM member_library_subsubcategories WHERE label = ? ORDER BY code DESC LIMIT 1');
 $stmt->execute([$label]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_LIBRARY_LABEL: label }).trim() || 'null');
@@ -470,6 +487,7 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
   const updatedTitle = `${title} updated`;
   const categoryTitle = `${title}-category`;
   const subcategoryTitle = `${title}-subcategory`;
+  const subsubcategoryTitle = `${title}-subsubcategory`;
   const tagTitle = `${title}-tag`;
   const fixtureDir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
   fs.mkdirSync(fixtureDir, { recursive: true });
@@ -504,6 +522,17 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
       assert.equal(subcategory.category_code, category.code, 'La sous-categorie doit etre rattachee a la categorie proposee.');
 
       await visit(driver, 'members_library');
+      const subsubcategoryForm = await driver.findElement(By.xpath('//dialog[@id="members-library-subsubcategory-dialog"]//form[.//input[@name="action" and @value="propose_subsubcategory"]]'));
+      await setInputValue(driver, await subsubcategoryForm.findElement(By.css('select[name="proposal_parent_subcategory_ref"]')), `${category.code}:${subcategory.code}`);
+      await setInputValue(driver, await subsubcategoryForm.findElement(By.css('input[name="proposal_subsubcategory_name"]')), subsubcategoryTitle);
+      await setInputValue(driver, await subsubcategoryForm.findElement(By.css('textarea[name="proposal_reason"]')), 'Sous-sous-categorie bibliotheque proposee par Selenium.');
+      await submitForm(driver, subsubcategoryForm);
+      const subsubcategory = memberLibrarySubsubcategoryByLabel(subsubcategoryTitle);
+      assert.ok(subsubcategory && subsubcategory.code, 'La proposition de sous-sous-categorie bibliotheque doit creer la sous-sous-categorie en admin.');
+      assert.equal(subsubcategory.category_code, category.code, 'La sous-sous-categorie doit etre rattachee a la categorie proposee.');
+      assert.equal(subsubcategory.subcategory_code, subcategory.code, 'La sous-sous-categorie doit etre rattachee a la sous-categorie proposee.');
+
+      await visit(driver, 'members_library');
       const tagForm = await driver.findElement(By.xpath('//dialog[@id="members-library-tag-dialog"]//form[.//input[@name="action" and @value="propose_tag"]]'));
       await setInputValue(driver, await tagForm.findElement(By.css('input[name="proposal_tag"]')), tagTitle);
       await setInputValue(driver, await tagForm.findElement(By.css('textarea[name="proposal_reason"]')), 'Mot cle bibliotheque propose par Selenium.');
@@ -527,6 +556,7 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
       await setInputValue(driver, await form.findElement(By.css('input[name="proposal_title"]')), title);
       await setInputValue(driver, await form.findElement(By.css('select[name="proposal_category"]')), category.code);
       await setInputValue(driver, await form.findElement(By.css('select[name="proposal_subcategory_ref"]')), `${category.code}:${subcategory.code}`);
+      await setInputValue(driver, await form.findElement(By.css('select[name="proposal_subsubcategory_ref"]')), `${category.code}:${subcategory.code}:${subsubcategory.code}`);
       await setInputValue(driver, await form.findElement(By.css('input[name="proposal_tags"]')), tagTitle);
       await form.findElement(By.css('input[type="file"][name="proposal_file"]')).sendKeys(path.resolve(fixture));
       await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Document propose depuis la bibliotheque membre.');
