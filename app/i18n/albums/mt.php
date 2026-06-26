@@ -9,7 +9,7 @@ return array (
   'albums' => 'Albums',
   'indexed_photos' => 'Ritratti indiċjati',
   'search_placeholder' => 'Fittex album skont it-titlu jew id-deskrizzjoni',
-  'search' => 'Għar-riċerka',
+  'search' => 'Fittex',
   'reset' => 'Irrisettja',
   'gallery' => 'Żona tal-membri',
   'none' => 'L-ebda album pubbliku disponibbli',

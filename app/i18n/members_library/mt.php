@@ -9,7 +9,7 @@ return array (
   'storage_unavailable' => 'Il-librerija hija temporanjament mhux disponibbli.',
   'meta_desc' => 'Librerija privata tal-membri ON4CRD.',
   'search_ph' => 'Fittex bit-titlu, kontenut astratt jew indiċjat',
-  'search' => 'Għar-riċerka',
+  'search' => 'Fittex',
   'category' => 'Tema',
   'categories' => 'Temi',
   'category_help' => 'Agħżel tema jew uża s-shortcuts hawn taħt biex tiffiltra d-dokumenti.',

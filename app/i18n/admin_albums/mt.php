@@ -55,7 +55,7 @@ return array (
   'confirm_delete_album' => 'Tħassar dan l-album u r-ritratti kollha tiegħu?',
   'delete_album' => 'Ħassar album',
   'no_photos' => 'Ebda ritratti mtella\'.',
-  'open' => 'Miftuħa',
+  'open' => 'Iftaħ',
   'photo' => 'Ritratt',
   'confirm_delete_photo' => 'Tħassar dan ir-ritratt b\'mod permanenti?',
   'category_field' => 'Suġġett',

@@ -50,6 +50,6 @@ return array (
   'main_navigation' => 'Navigazzjoni prinċipali',
   'search_label' => 'Tfittxija globali',
   'search_placeholder' => 'Biex tirriċerka...',
-  'search_submit' => 'Għar-riċerka',
+  'search_submit' => 'Fittex',
   'membership_good_standing' => 'Sħubija aġġornata',
 );

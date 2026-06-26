@@ -16,7 +16,7 @@ return array (
   'previous' => 'Anterior',
   'next' => 'Următor',
   'page' => 'Pagină',
-  'pagination' => 'Paging',
+  'pagination' => 'Paginare',
   'meta_desc' => 'Căutare globală ON4CRD în conținutul site-ului.',
   'source_all' => 'Toate',
   'source_news' => 'Ştiri',

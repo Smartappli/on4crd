@@ -15,7 +15,7 @@ return array (
   'filter' => 'Iffiltra',
   'mark_all_read' => 'Immarka kollox bħala moqri',
   'mark_read' => 'Immarka kif moqri',
-  'open' => 'Miftuħa',
+  'open' => 'Iftaħ',
   'empty' => 'L-ebda notifika għal dan il-filtru.',
   'prev' => 'Preċedenti',
   'next' => 'Wara',

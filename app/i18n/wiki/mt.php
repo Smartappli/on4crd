@@ -10,7 +10,7 @@ return array (
   'most_read' => 'Ħafna jinqraw',
   'new_page' => 'Paġna ġdida',
   'search_placeholder' => 'Fittex għal paġna (titlu jew kontenut)',
-  'search' => 'Għar-riċerka',
+  'search' => 'Fittex',
   'reset' => 'Irrisettja',
   'wiki_pages' => 'paġni Wiki',
   'no_page' => 'Ebda paġni misjuba',

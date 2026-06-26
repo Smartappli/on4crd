@@ -16,7 +16,7 @@ return array (
   'no_widgets' => 'Ebda widgets attivati bħalissa.',
   'add' => 'Żid',
   'close' => 'Agħlaq',
-  'open' => 'Miftuħa',
+  'open' => 'Iftaħ',
   'unread' => 'mhux moqrija',
   'mark_all_read' => 'Immarka kollha moqrija',
   'no_notifications' => 'Ebda notifiki.',

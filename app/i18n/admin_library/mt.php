@@ -41,7 +41,7 @@ return array (
   'tags_help' => 'Eżempju: legali, sigurtà, taħriġ',
   'tags' => 'Tikketti',
   'all_categories' => 'Il-kategoriji kollha',
-  'search_ph' => 'Għar-riċerka',
+  'search_ph' => 'Fittex',
   'tag_search_ph' => 'Fittex tags',
   'filter' => 'Iffiltra',
   'reset' => 'Irrisettja',

@@ -10,7 +10,7 @@ return array (
   'article_count' => 'Artiklu/i',
   'reset_filter' => 'Irrisettja l-filtru',
   'search_placeholder' => 'Fittex għal oġġett',
-  'search' => 'Għar-riċerka',
+  'search' => 'Fittex',
   'reset_search' => 'Irrisettja t-tfittxija',
   'no_article_for_theme' => 'Ebda artikoli disponibbli għal dan is-suġġett.',
   'read_article' => 'Aqra l-artiklu',
