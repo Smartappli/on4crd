@@ -486,16 +486,19 @@ ob_start();
             <?php if ($subcategoryFilter !== ''): ?>
                 <input type="hidden" name="subcategory" value="<?= e($subcategoryFilter) ?>">
             <?php endif; ?>
+            <?php if ($subsubcategoryFilter !== ''): ?>
+                <input type="hidden" name="subsubcategory" value="<?= e($subsubcategoryFilter) ?>">
+            <?php endif; ?>
             <?php if ($favoritesOnly): ?>
                 <input type="hidden" name="favorites" value="1">
             <?php endif; ?>
             <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-            <?php if ($search !== '' || $themeFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?>
+            <?php if ($search !== '' || $themeFilter !== '' || $subcategoryFilter !== '' || $subsubcategoryFilter !== '' || $favoritesOnly): ?>
                 <a class="button secondary" href="<?= e(route_url('articles')) ?>"><?= e((string) $t['reset_search']) ?></a>
             <?php endif; ?>
         </form>
-        <?php if ($search !== '' || $themeFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?>
+        <?php if ($search !== '' || $themeFilter !== '' || $subcategoryFilter !== '' || $subsubcategoryFilter !== '' || $favoritesOnly): ?>
             <p class="help"><?= e((string) $t['results']) ?> : <?= $totalArticles ?></p>
         <?php endif; ?>
     </section>
@@ -510,12 +513,12 @@ ob_start();
                     <strong><?= (int) $favoriteArticleCount ?></strong>
                 </a>
                 <?php endif; ?>
-                <a class="articles-category-item module-taxonomy-item<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                <a class="articles-category-item module-taxonomy-item<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                     <span><?= e((string) $t['all_categories']) ?></span>
                     <strong><?= (int) array_sum($themeCounts) ?></strong>
                 </a>
             <?php foreach ($visibleArticleCategories as $themeCode => $themeLabel): ?>
-                <a class="articles-category-item module-taxonomy-item<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                <a class="articles-category-item module-taxonomy-item<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                     <span><?= e((string) $themeLabel) ?></span>
                     <strong><?= (int) ($themeCounts[$themeCode] ?? 0) ?></strong>
                 </a>
@@ -523,10 +526,22 @@ ob_start();
                     <div class="module-taxonomy-children">
                         <?php foreach ($visibleArticleSubcategoriesByCategory[(string) $themeCode] as $subcategoryInfo): ?>
                             <?php $subCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
-                            <a class="articles-category-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode ? ' aria-current="page"' : '' ?>>
+                            <a class="articles-category-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                                 <span><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></span>
                                 <strong><?= (int) ($subcategoryInfo['total'] ?? 0) ?></strong>
                             </a>
+                            <?php $subsubParentRef = (string) $themeCode . ':' . $subCode; ?>
+                            <?php if (($visibleArticleSubsubcategoriesByParent[$subsubParentRef] ?? []) !== []): ?>
+                                <div class="module-taxonomy-children">
+                                    <?php foreach ($visibleArticleSubsubcategoriesByParent[$subsubParentRef] as $subsubcategoryInfo): ?>
+                                        <?php $subsubCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')); ?>
+                                        <a class="articles-category-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'subcategory' => $subCode, 'subsubcategory' => $subsubCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' aria-current="page"' : '' ?>>
+                                            <span><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubCode)) ?></span>
+                                            <strong><?= (int) ($subsubcategoryInfo['total'] ?? 0) ?></strong>
+                                        </a>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
@@ -535,7 +550,7 @@ ob_start();
         </aside>
 
         <div class="articles-content module-taxonomy-content">
-    <?php if ($themeFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?>
+    <?php if ($themeFilter !== '' || $subcategoryFilter !== '' || $subsubcategoryFilter !== '' || $favoritesOnly): ?>
         <div class="card">
             <p><a class="pill" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
         </div>
@@ -562,8 +577,16 @@ ob_start();
                                 break;
                             }
                         } ?>
+                        <?php $rowSubsubcategory = article_subsubcategory_code((string) ($row['subsubcategory'] ?? '')); ?>
+                        <?php $rowSubsubcategoryLabel = ''; ?>
+                        <?php foreach ($articleSubsubcategoriesByParent[$themeCode . ':' . $rowSubcategory] ?? [] as $subsubcategoryInfo) {
+                            if (article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')) === $rowSubsubcategory) {
+                                $rowSubsubcategoryLabel = (string) ($subsubcategoryInfo['label'] ?? $rowSubsubcategory);
+                                break;
+                            }
+                        } ?>
                         <article class="news-card feature-card">
-                            <span class="badge muted"><?= e((string) ($articleCategories[$themeCode] ?? (string) $t['theme_default'])) ?><?= $rowSubcategoryLabel !== '' ? ' / ' . e($rowSubcategoryLabel) : '' ?></span>
+                            <span class="badge muted"><?= e((string) ($articleCategories[$themeCode] ?? (string) $t['theme_default'])) ?><?= $rowSubcategoryLabel !== '' ? ' / ' . e($rowSubcategoryLabel) : '' ?><?= $rowSubsubcategoryLabel !== '' ? ' / ' . e($rowSubsubcategoryLabel) : '' ?></span>
                             <h3><a href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
                             <p class="help"><?= $articleDate !== null ? e(date('d/m/Y', strtotime($articleDate))) . ' · ' : '' ?><?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
                             <p><?= e(article_card_excerpt($row)) ?></p>
@@ -588,11 +611,11 @@ ob_start();
     <?php if ($maxPage > 1): ?>
         <div class="card actions">
             <?php if ($page > 1): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'page' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
+                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'subcategory' => $subcategoryFilter, 'subsubcategory' => $subsubcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'page' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
             <?php endif; ?>
             <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $maxPage ?></span>
             <?php if ($page < $maxPage): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'page' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'subcategory' => $subcategoryFilter, 'subsubcategory' => $subsubcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'page' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
             <?php endif; ?>
         </div>
     <?php endif; ?>

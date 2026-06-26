@@ -178,6 +178,7 @@ function editorial_retry_scheduled_article(int $id): string
 
 $knownCategories = article_categories($articleMessages);
 $articleSubcategoriesByCategory = article_subcategories_by_category();
+$articleSubsubcategoriesByParent = article_subsubcategories_by_parent();
 
 $articleStatusChoices = [
     'draft' => $t('draft'),
@@ -197,9 +198,10 @@ $proposalStatusLabels = [
 $proposalTypeLabels = [
     'category' => $t('proposal_type_category'),
     'content' => $t('proposal_type_content'),
+    'subsubcategory' => $t('proposal_type_subsubcategory'),
     'tag' => $t('proposal_type_tag'),
 ];
-$editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'subcategory' => '', 'scheduled_at' => null, 'moderation_note' => null];
+$editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'subcategory' => '', 'subsubcategory' => '', 'scheduled_at' => null, 'moderation_note' => null];
 $editing = $editingDefault;
 $editingId = (int) ($_GET['id'] ?? 0);
 
@@ -286,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 set_flash('success', $t('ok_saved'));
             }
-            redirect_url(route_url_clean('admin_articles', ['q' => (string) ($_GET['q'] ?? ''), 'status' => (string) ($_GET['status'] ?? ''), 'category' => (string) ($_GET['category'] ?? ''), 'subcategory' => (string) ($_GET['subcategory'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+            redirect_url(route_url_clean('admin_articles', ['q' => (string) ($_GET['q'] ?? ''), 'status' => (string) ($_GET['status'] ?? ''), 'category' => (string) ($_GET['category'] ?? ''), 'subcategory' => (string) ($_GET['subcategory'] ?? ''), 'subsubcategory' => (string) ($_GET['subsubcategory'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
         }
 
         if ($action === 'add_category') {
