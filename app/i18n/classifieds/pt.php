@@ -50,7 +50,7 @@ return array (
   'page' => 'Página',
   'status_draft' => 'Rascunho',
   'status_expired' => 'Expirada',
-  'publication_label' => 'Publicacao',
+  'publication_label' => 'Publicação',
   'published_30d' => 'Publicada (30 dias)',
   'renew_30d' => 'Renovar 30d',
   'renewed_ok' => 'Anuncio renovado por 30 dias.',

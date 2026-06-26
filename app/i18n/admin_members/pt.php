@@ -31,5 +31,5 @@ return array (
   'err_name' => 'Nome obrigatorio.',
   'err_password' => 'Palavra-passe invalida.',
   'err_exists' => 'Ja existe um membro ou conta para este indicativo.',
-  'auth_unavailable' => 'Autenticacao indisponivel.',
+  'auth_unavailable' => 'Autenticação indisponível.',
 );

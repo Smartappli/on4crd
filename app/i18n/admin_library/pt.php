@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Administracao da biblioteca',
+  'title' => 'Administração da biblioteca',
   'intro' => 'Publique documentos de membros em PDF, DOCX, texto, Markdown ou HTML, extraia seu conteúdo e organize-os por categoria.',
   'category_ph' => 'Categoria',
   'categories' => 'Categorias',
@@ -14,7 +14,7 @@ return array (
   'desc_ph' => 'Resumo ou palavras-chave',
   'upload' => 'Enviar documento',
   'open' => 'Abrir documento',
-  'preview' => 'Pre-visualizacao',
+  'preview' => 'Pré-visualização',
   'prev' => 'Anterior',
   'next' => 'Seguinte',
   'page' => 'Página',
