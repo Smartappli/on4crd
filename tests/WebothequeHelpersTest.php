@@ -59,9 +59,14 @@ final class WebothequeHelpersTest extends TestCase
     public function testSubcategoryReferencesAreNormalizedAndParsed(): void
     {
         self::assertSame('general:references', webotheque_subcategory_ref('', 'Références'));
+        self::assertSame('modes-numeriques:ft8:guides', webotheque_subsubcategory_ref('Modes numériques', 'FT8', 'Guides'));
         self::assertSame(
             ['category' => 'modes-numeriques', 'subcategory' => 'ft8'],
             webotheque_subcategory_ref_parts('Modes numériques:FT8')
+        );
+        self::assertSame(
+            ['category' => 'modes-numeriques', 'subcategory' => 'ft8', 'subsubcategory' => 'guides'],
+            webotheque_subsubcategory_ref_parts('Modes numériques:FT8:Guides')
         );
         self::assertSame(['category' => '', 'subcategory' => 'logiciels'], webotheque_subcategory_ref_parts('Logiciels'));
     }
@@ -74,7 +79,7 @@ final class WebothequeHelpersTest extends TestCase
             'antennes' => 'Antennes',
         ];
 
-        self::assertSame(['modes', ''], webotheque_taxonomy_from_input('modes', '', $categories));
+        self::assertSame(['modes', '', ''], webotheque_taxonomy_from_input('modes', '', $categories));
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('err_subcategory_category_mismatch');
@@ -128,6 +133,7 @@ final class WebothequeHelpersTest extends TestCase
 
         self::assertStringContainsString('<select name="category">', $memberHtml);
         self::assertStringContainsString('name="subcategory_ref"', $memberHtml);
+        self::assertStringContainsString('name="subsubcategory_ref"', $memberHtml);
         self::assertStringContainsString('<option value="modes">Modes</option>', $memberHtml);
         self::assertStringContainsString('name="tags"', $memberHtml);
         self::assertStringContainsString('name="proposal_contact"', $memberHtml);

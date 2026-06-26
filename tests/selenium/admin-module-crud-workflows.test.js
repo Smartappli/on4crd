@@ -202,6 +202,9 @@ if ($webIds !== []) {
     $placeholders = implode(',', array_fill(0, count($webIds), '?'));
     db()->prepare('DELETE FROM member_webotheque_links WHERE id IN (' . $placeholders . ')')->execute($webIds);
 }
+if (table_exists('member_webotheque_subsubcategories')) {
+    db()->prepare('DELETE FROM member_webotheque_subsubcategories WHERE category_code LIKE ? OR subcategory_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like, $like]);
+}
 if (table_exists('member_webotheque_subcategories')) {
     db()->prepare('DELETE FROM member_webotheque_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
 }
@@ -557,20 +560,27 @@ echo json_encode($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_TH
 `, { SELENIUM_TAXONOMY_AREA: area, SELENIUM_CATEGORY_CODE: categoryCode, SELENIUM_SUBCATEGORY_CODE: subcategoryCode });
 }
 
-function adminLibrarySubsubcategoryRecord(categoryCode, subcategoryCode, subsubcategoryCode) {
+function adminTaxonomySubsubcategoryRecord(area, categoryCode, subcategoryCode, subsubcategoryCode) {
   return seleniumJson(`
 require_once 'app/bootstrap.php';
+$area = preg_replace('/[^a-z0-9_]/', '', strtolower((string) getenv('SELENIUM_TAXONOMY_AREA')));
 $category = trim((string) getenv('SELENIUM_CATEGORY_CODE'));
 $subcategory = trim((string) getenv('SELENIUM_SUBCATEGORY_CODE'));
 $code = trim((string) getenv('SELENIUM_SUBSUBCATEGORY_CODE'));
 $row = null;
-if ($category !== '' && $subcategory !== '' && $code !== '' && table_exists('member_library_subsubcategories')) {
-    $stmt = db()->prepare('SELECT category_code, subcategory_code, code, label FROM member_library_subsubcategories WHERE category_code = ? AND subcategory_code = ? AND code = ? LIMIT 1');
-    $stmt->execute([$category, $subcategory, $code]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+if ($category !== '' && $subcategory !== '' && $code !== '') {
+    if ($area === 'library' && table_exists('member_library_subsubcategories')) {
+        $stmt = db()->prepare('SELECT category_code, subcategory_code, code, label FROM member_library_subsubcategories WHERE category_code = ? AND subcategory_code = ? AND code = ? LIMIT 1');
+        $stmt->execute([$category, $subcategory, $code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    } elseif ($area === 'webotheque' && table_exists('member_webotheque_subsubcategories')) {
+        $stmt = db()->prepare('SELECT category_code, subcategory_code, code, label FROM member_webotheque_subsubcategories WHERE category_code = ? AND subcategory_code = ? AND code = ? LIMIT 1');
+        $stmt->execute([$category, $subcategory, $code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
 }
 echo json_encode($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
-`, { SELENIUM_CATEGORY_CODE: categoryCode, SELENIUM_SUBCATEGORY_CODE: subcategoryCode, SELENIUM_SUBSUBCATEGORY_CODE: subsubcategoryCode });
+`, { SELENIUM_TAXONOMY_AREA: area, SELENIUM_CATEGORY_CODE: categoryCode, SELENIUM_SUBCATEGORY_CODE: subcategoryCode, SELENIUM_SUBSUBCATEGORY_CODE: subsubcategoryCode });
 }
 
 function writeTextFixture(title, token, prefix = 'admin') {
@@ -656,7 +666,7 @@ async function createUpdateDeleteAdminTaxonomy(driver, { area, route }, token) {
   assert.ok(subcategory, `La sous-thematique ${area} doit exister apres modification.`);
   assert.equal(subcategory.label, updatedSubcategoryLabel, `La sous-thematique ${area} doit etre modifiee.`);
 
-  if (area === 'library') {
+  if (area === 'library' || area === 'webotheque') {
     await visit(driver, route);
     const subsubcategoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_subsubcategory"]]'));
     await setOptionalNamedFieldValue(driver, subsubcategoryForm, 'subsubcategory_parent_ref', `${categoryCode}:${subcategoryCode}`);
@@ -664,26 +674,26 @@ async function createUpdateDeleteAdminTaxonomy(driver, { area, route }, token) {
     await setOptionalNamedFieldValue(driver, subsubcategoryForm, 'subsubcategory_label', subsubcategoryLabel);
     await submitForm(driver, subsubcategoryForm);
 
-    let subsubcategory = adminLibrarySubsubcategoryRecord(categoryCode, subcategoryCode, subsubcategoryCode);
-    assert.ok(subsubcategory, 'La sous-sous-thematique library doit etre creee.');
-    assert.equal(subsubcategory.label, subsubcategoryLabel, 'La sous-sous-thematique library doit avoir le libelle initial.');
+    let subsubcategory = adminTaxonomySubsubcategoryRecord(area, categoryCode, subcategoryCode, subsubcategoryCode);
+    assert.ok(subsubcategory, `La sous-sous-thematique ${area} doit etre creee.`);
+    assert.equal(subsubcategory.label, subsubcategoryLabel, `La sous-sous-thematique ${area} doit avoir le libelle initial.`);
 
     await visit(driver, route);
     const subsubcategoryUpdateForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_subsubcategory"] and .//input[@name="subsubcategory_category" and @value="${categoryCode}"] and .//input[@name="subsubcategory_parent" and @value="${subcategoryCode}"] and .//input[@name="subsubcategory_code" and @value="${subsubcategoryCode}"]]`));
     await setFieldValue(driver, await subsubcategoryUpdateForm.findElement(By.css('input[name="subsubcategory_label"]')), updatedSubsubcategoryLabel);
     await submitForm(driver, subsubcategoryUpdateForm);
 
-    subsubcategory = adminLibrarySubsubcategoryRecord(categoryCode, subcategoryCode, subsubcategoryCode);
-    assert.ok(subsubcategory, 'La sous-sous-thematique library doit exister apres modification.');
-    assert.equal(subsubcategory.label, updatedSubsubcategoryLabel, 'La sous-sous-thematique library doit etre modifiee.');
+    subsubcategory = adminTaxonomySubsubcategoryRecord(area, categoryCode, subcategoryCode, subsubcategoryCode);
+    assert.ok(subsubcategory, `La sous-sous-thematique ${area} doit exister apres modification.`);
+    assert.equal(subsubcategory.label, updatedSubsubcategoryLabel, `La sous-sous-thematique ${area} doit etre modifiee.`);
 
     await visit(driver, route);
     const subsubcategoryDeleteForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_subsubcategory"] and .//input[@name="subsubcategory_category" and @value="${categoryCode}"] and .//input[@name="subsubcategory_parent" and @value="${subcategoryCode}"] and .//input[@name="subsubcategory_code" and @value="${subsubcategoryCode}"]]`));
     const subsubcategoryDeleteButton = await subsubcategoryDeleteForm.findElement(By.css('button[name="action"][value="delete_subsubcategory"]'));
     await submitForm(driver, subsubcategoryDeleteForm, subsubcategoryDeleteButton);
 
-    subsubcategory = adminLibrarySubsubcategoryRecord(categoryCode, subcategoryCode, subsubcategoryCode);
-    assert.equal(subsubcategory, null, 'La sous-sous-thematique library doit etre supprimee.');
+    subsubcategory = adminTaxonomySubsubcategoryRecord(area, categoryCode, subcategoryCode, subsubcategoryCode);
+    assert.equal(subsubcategory, null, `La sous-sous-thematique ${area} doit etre supprimee.`);
   }
 
   await visit(driver, route);

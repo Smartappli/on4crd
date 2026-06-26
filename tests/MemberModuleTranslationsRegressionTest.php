@@ -84,7 +84,7 @@ final class MemberModuleTranslationsRegressionTest extends TestCase
             ],
             'webotheque' => [
                 'webotheque',
-                ['topics', 'subcategory_field', 'no_subcategory', 'favorite', 'favorites', 'taxonomy_title', 'add_category', 'add_subcategory', 'err_category_has_subcategories', 'err_subcategory_has_documents'],
+                ['topics', 'subcategory_field', 'subsubcategory_field', 'no_subcategory', 'no_subsubcategory', 'favorite', 'favorites', 'taxonomy_title', 'add_category', 'add_subcategory', 'add_subsubcategory', 'err_category_has_subcategories', 'err_subcategory_has_subsubcategories', 'err_subcategory_has_documents', 'err_subsubcategory_has_documents'],
             ],
             'albums' => [
                 'albums',

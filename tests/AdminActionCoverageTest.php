@@ -222,9 +222,9 @@ final class AdminActionCoverageTest extends TestCase
             'admin webotheque link and taxonomy actions' => [
                 'page' => 'pages/admin_webotheque.php',
                 'source_paths' => ['app/member_webotheque.php'],
-                'controller_snippets' => ['render_admin_webotheque_page();', "'add_link'", "'update_link'", "'delete_link'", "'update_category'", "'delete_subcategory'"],
+                'controller_snippets' => ['render_admin_webotheque_page();', "'add_link'", "'update_link'", "'delete_link'", "'update_category'", "'delete_subcategory'", "'add_subsubcategory'", "'update_subsubcategory'", "'delete_subsubcategory'"],
                 'selenium' => 'tests/selenium/admin-module-crud-workflows.test.js',
-                'selenium_snippets' => ['admin_webotheque', 'createWebothequeFromAdminRoute', 'update_link', 'delete_link', 'createUpdateDeleteAdminTaxonomy'],
+                'selenium_snippets' => ['admin_webotheque', 'createWebothequeFromAdminRoute', 'update_link', 'delete_link', 'createUpdateDeleteAdminTaxonomy', 'add_subsubcategory', 'update_subsubcategory', 'delete_subsubcategory'],
             ],
             'admin presentation and video document actions' => [
                 'page' => 'pages/admin_presentations.php',

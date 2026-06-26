@@ -431,6 +431,7 @@ Object.assign(routeContracts, {
       propose_domain: proof(publicCoverageFile, ['propose_domain']),
       propose_link: proof(publicCoverageFile, ['propose_link']),
       propose_subcategory: proof(publicCoverageFile, ['propose_subcategory', 'Web subcategory']),
+      propose_subsubcategory: proof(memberWorkflowFile, ['propose_subsubcategory', 'webotheque-subsubcategory-dialog']),
       propose_tag: proof(publicCoverageFile, ['propose_tag']),
       toggle_favorite_link: proof(publicCoverageFile, ['toggle_favorite_link']),
       update_link: proof(memberWorkflowFile, ['update_link']),

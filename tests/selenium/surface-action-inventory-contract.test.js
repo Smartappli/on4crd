@@ -187,7 +187,7 @@ const expectedMemberActions = {
   settings: ['toggle_newsletter', 'toggle_recommendation_signals', 'toggle_recommendations'],
   telechargements: [],
   videos: moduleDocumentMemberActions,
-  webotheque: ['delete_link', 'propose_category', 'propose_domain', 'propose_link', 'propose_subcategory', 'propose_tag', 'toggle_favorite_link', 'update_link'],
+  webotheque: ['delete_link', 'propose_category', 'propose_domain', 'propose_link', 'propose_subcategory', 'propose_subsubcategory', 'propose_tag', 'toggle_favorite_link', 'update_link'],
   widget_render: [],
   wiki_edit: [],
   wiki_propose: [],
@@ -220,7 +220,7 @@ const actionCoverage = {
   qsl: ['tests/selenium/member-qsl-workflow.test.js', ['create_manual', 'delete_background', 'delete_qsl', 'generate_batch', 'set_default_background']],
   settings: ['tests/selenium/member-account-dashboard-workflow.test.js', ['toggle_recommendations', 'toggle_recommendation_signals']],
   videos: ['tests/selenium/member-document-modules.test.js', ['videos', 'propose_document', 'update_document', 'delete_document']],
-  webotheque: ['tests/selenium/member-workflows.test.js', ['propose_link', 'update_link', 'delete_link']],
+  webotheque: ['tests/selenium/member-workflows.test.js', ['propose_subsubcategory', 'propose_link', 'update_link', 'delete_link']],
 };
 
 const implicitPostCoverage = {

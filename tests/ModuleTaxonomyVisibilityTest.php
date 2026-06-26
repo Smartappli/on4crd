@@ -36,6 +36,23 @@ final class ModuleTaxonomyVisibilityTest extends TestCase
                 ['radio:hf-band' => 3, 'radio:empty' => 0, 'empty:archive' => 0]
             )
         );
+
+        self::assertSame(
+            [
+                'radio:hf-band' => [
+                    ['category_code' => 'radio', 'subcategory_code' => 'hf-band', 'code' => 'guides', 'label' => 'Guides', 'total' => 2],
+                ],
+            ],
+            webotheque_visible_subsubcategories_by_parent(
+                [
+                    'radio:hf-band' => [
+                        ['category_code' => 'radio', 'subcategory_code' => 'hf-band', 'code' => 'guides', 'label' => 'Guides'],
+                        ['category_code' => 'radio', 'subcategory_code' => 'hf-band', 'code' => 'empty', 'label' => 'Empty'],
+                    ],
+                ],
+                ['radio:hf-band:guides' => 2, 'radio:hf-band:empty' => 0]
+            )
+        );
     }
 
     public function testAlbumsVisibleTaxonomyKeepsOnlyNonEmptyBranches(): void

@@ -101,6 +101,12 @@ if ($title !== '') {
         db()->prepare('DELETE FROM member_webotheque_links WHERE title = ?')->execute([$title]);
         db()->prepare('DELETE FROM member_webotheque_links WHERE title = ?')->execute([$title . ' updated']);
     }
+    if (table_exists('member_webotheque_subsubcategories')) {
+        db()->prepare('DELETE FROM member_webotheque_subsubcategories WHERE category_code LIKE ? OR subcategory_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like, $like]);
+    }
+    if (table_exists('member_webotheque_subcategories')) {
+        db()->prepare('DELETE FROM member_webotheque_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+    }
     if (table_exists('content_proposals')) {
         db()->prepare('DELETE FROM content_proposals WHERE title = ?')->execute([$title]);
         db()->prepare('DELETE FROM content_proposals WHERE title = ?')->execute([$title . ' updated']);
@@ -644,6 +650,8 @@ test('Selenium membre: creer, modifier et supprimer un lien webotheque', async (
 
   const title = `selenium-webotheque-${Date.now()}`;
   const updatedTitle = `${title} updated`;
+  const subcategoryTitle = `${title}-subcategory`;
+  const subsubcategoryTitle = `${title}-subsubcategory`;
   if (!(await ensureSeleniumRunnable(t))) {
     return;
   }
@@ -653,11 +661,30 @@ test('Selenium membre: creer, modifier et supprimer un lien webotheque', async (
     try {
       ensureSeleniumFixtures();
       await loginAsAdmin(driver, credentials.username, credentials.password);
+      await visit(driver, 'webotheque', { propose_subcategory: '1' });
+
+      const subcategoryForm = await driver.findElement(By.css('#webotheque-subcategory-dialog form.webotheque-proposal-form'));
+      await setInputValue(driver, await subcategoryForm.findElement(By.css('select[name="proposal_parent_category"]')), 'general');
+      await subcategoryForm.findElement(By.css('input[name="proposal_subcategory"]')).sendKeys(subcategoryTitle);
+      await setRichTextarea(driver, await subcategoryForm.findElement(By.css('textarea[name="proposal_details"]')), 'Sous-thematique webotheque Selenium.');
+      await submitForm(driver, subcategoryForm);
+
+      await visit(driver, 'webotheque', { propose_subsubcategory: '1' });
+
+      const subsubcategoryForm = await driver.findElement(By.css('#webotheque-subsubcategory-dialog form.webotheque-proposal-form'));
+      await setInputValue(driver, await subsubcategoryForm.findElement(By.css('select[name="proposal_parent_subcategory_ref"]')), `general:${subcategoryTitle}`);
+      await subsubcategoryForm.findElement(By.css('input[name="proposal_subsubcategory"]')).sendKeys(subsubcategoryTitle);
+      await setRichTextarea(driver, await subsubcategoryForm.findElement(By.css('textarea[name="proposal_details"]')), 'Sous-sous-thematique webotheque proposee par Selenium.');
+      await submitForm(driver, subsubcategoryForm);
+
       await visit(driver, 'webotheque', { propose_link: '1' });
 
       const createForm = await driver.findElement(By.css('#webotheque-link-dialog form.webotheque-proposal-form'));
       await createForm.findElement(By.css('input[name="title"]')).sendKeys(title);
       await createForm.findElement(By.css('input[name="url"]')).sendKeys(`https://example.org/${title}`);
+      await setInputValue(driver, await createForm.findElement(By.css('select[name="category"]')), 'general');
+      await setInputValue(driver, await createForm.findElement(By.css('select[name="subcategory_ref"]')), `general:${subcategoryTitle}`);
+      await setInputValue(driver, await createForm.findElement(By.css('select[name="subsubcategory_ref"]')), `general:${subcategoryTitle}:${subsubcategoryTitle}`);
       await setRichTextarea(driver, await createForm.findElement(By.css('textarea[name="description"]')), 'Lien webotheque Selenium.');
       await createForm.findElement(By.css('input[name="tags"]')).sendKeys('selenium, regression');
       await submitForm(driver, createForm);
