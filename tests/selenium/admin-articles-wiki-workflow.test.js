@@ -565,6 +565,8 @@ test('Selenium admin wiki: taxonomie, statut de page et proposition', async (t) 
   const pageTitle = `Selenium wiki ${suffix}`;
   const categoryLabel = `Selenium wiki theme ${suffix}`;
   const subcategoryLabel = `Selenium wiki sous theme ${suffix}`;
+  const subsubcategoryLabel = `Selenium wiki sous sous theme ${suffix}`;
+  const updatedSubsubcategoryLabel = `Selenium wiki sous sous theme updated ${suffix}`;
   const proposalTitle = `Selenium wiki proposition ${suffix}`;
   const proposalNote = `Moderation wiki Selenium ${suffix}`;
 
@@ -600,10 +602,33 @@ test('Selenium admin wiki: taxonomie, statut de page et proposition', async (t) 
       assert.equal(taxonomy.subcategory.category_code, categoryCode, 'La sous-thematique wiki doit etre rattachee a la thematique creee.');
       assert.equal(taxonomy.subcategory.label, subcategoryLabel, 'Le libelle de sous-thematique wiki doit etre persiste.');
 
-      setWikiPageTaxonomy(pageSlug, categoryCode, subcategoryCode);
+      const subsubcategoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_subsubcategory"]]'));
+      await selectValue(driver, await subsubcategoryForm.findElement(By.css('select[name="subsubcategory_parent_ref"]')), subcategoryRef);
+      await subsubcategoryForm.findElement(By.css('input[name="subsubcategory_label"]')).sendKeys(subsubcategoryLabel);
+      await submitForm(driver, subsubcategoryForm);
+
+      taxonomy = wikiTaxonomyByLabels(categoryLabel, subcategoryLabel, subsubcategoryLabel);
+      assert.ok(taxonomy.subsubcategory && taxonomy.subsubcategory.code, 'La sous-sous-thematique wiki doit etre creee.');
+      const subsubcategoryCode = taxonomy.subsubcategory.code;
+      assert.equal(taxonomy.subsubcategory.category_code, categoryCode, 'La sous-sous-thematique wiki doit etre rattachee a la thematique creee.');
+      assert.equal(taxonomy.subsubcategory.subcategory_code, subcategoryCode, 'La sous-sous-thematique wiki doit etre rattachee a la sous-thematique creee.');
+      assert.equal(taxonomy.subsubcategory.label, subsubcategoryLabel, 'Le libelle de sous-sous-thematique wiki doit etre persiste.');
+
+      const subsubcategoryUpdateForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_subsubcategory"] and .//input[@name="subsubcategory_category" and @value="${categoryCode}"] and .//input[@name="subsubcategory_parent" and @value="${subcategoryCode}"] and .//input[@name="subsubcategory_code" and @value="${subsubcategoryCode}"]]`));
+      await subsubcategoryUpdateForm.findElement(By.css('input[name="subsubcategory_label"]')).clear();
+      await subsubcategoryUpdateForm.findElement(By.css('input[name="subsubcategory_label"]')).sendKeys(updatedSubsubcategoryLabel);
+      await submitForm(driver, subsubcategoryUpdateForm);
+
+      taxonomy = wikiTaxonomyByLabels(categoryLabel, subcategoryLabel, updatedSubsubcategoryLabel);
+      assert.ok(taxonomy.subsubcategory && taxonomy.subsubcategory.code, 'La sous-sous-thematique wiki doit exister apres modification.');
+      assert.equal(taxonomy.subsubcategory.label, updatedSubsubcategoryLabel, 'Le libelle de sous-sous-thematique wiki doit etre modifie.');
+
+      setWikiPageTaxonomy(pageSlug, categoryCode, subcategoryCode, subsubcategoryCode);
       await visit(driver, 'admin_wiki');
       const subDeleteDisabled = await buttonDisabledByHidden(driver, 'delete_subcategory', 'subcategory_ref', subcategoryRef);
       assert.equal(subDeleteDisabled, true, 'La sous-thematique wiki utilisee ne doit pas etre supprimable.');
+      const subsubDeleteDisabled = await buttonDisabledByHidden(driver, 'delete_subsubcategory', 'subsubcategory_code', subsubcategoryCode);
+      assert.equal(subsubDeleteDisabled, true, 'La sous-sous-thematique wiki utilisee ne doit pas etre supprimable.');
 
       const pageStatusForm = await driver.findElement(By.xpath(
         `//tr[.//td[contains(normalize-space(.), ${xpathLiteral(pageTitle)})]]//form[.//select[@name="status"]]`,
@@ -620,10 +645,15 @@ test('Selenium admin wiki: taxonomie, statut de page et proposition', async (t) 
       assert.equal(Number(wikiPage.id), Number(fixture.pageId));
       assert.equal(wikiPage.category, categoryCode, 'La thematique wiki appliquee doit etre persistee.');
       assert.equal(wikiPage.subcategory, subcategoryCode, 'La sous-thematique wiki appliquee doit etre persistee.');
+      assert.equal(wikiPage.subsubcategory, subsubcategoryCode, 'La sous-sous-thematique wiki appliquee doit etre persistee.');
       assert.equal(wikiPage.proposal_kind, 'page', 'Le type de proposition wiki doit rester page.');
 
       setWikiPageTaxonomy(pageSlug, 'general', '');
       await visit(driver, 'admin_wiki');
+      await submitFormByHidden(driver, 'delete_subsubcategory', 'subsubcategory_code', subsubcategoryCode);
+      taxonomy = wikiTaxonomyByLabels(categoryLabel, subcategoryLabel, updatedSubsubcategoryLabel);
+      assert.equal(taxonomy.subsubcategory, null, 'La sous-sous-thematique wiki vide doit etre supprimee.');
+
       await submitFormByHidden(driver, 'delete_subcategory', 'subcategory_ref', subcategoryRef);
       taxonomy = wikiTaxonomyByLabels(categoryLabel, subcategoryLabel);
       assert.equal(taxonomy.subcategory, null, 'La sous-thematique wiki vide doit etre supprimee.');

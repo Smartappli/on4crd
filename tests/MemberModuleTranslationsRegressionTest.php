@@ -96,11 +96,11 @@ final class MemberModuleTranslationsRegressionTest extends TestCase
             ],
             'wiki' => [
                 'wiki',
-                ['themes', 'all_themes', 'subcategory_field', 'no_subcategory', 'favorites'],
+                ['themes', 'all_themes', 'subcategory_field', 'subsubcategory_field', 'no_subcategory', 'no_subsubcategory', 'favorites', 'err_subcategory_category_mismatch', 'err_subsubcategory_category_mismatch'],
             ],
             'admin_wiki' => [
                 'admin_wiki',
-                ['add_category', 'add_subcategory', 'err_category_has_subcategories', 'err_subcategory_has_documents'],
+                ['add_category', 'add_subcategory', 'add_subsubcategory', 'subcategory_saved', 'subsubcategory_saved', 'err_category_has_subcategories', 'err_subcategory_has_subsubcategories', 'err_subcategory_has_documents', 'err_subsubcategory_has_documents', 'proposal_type_subsubcategory'],
             ],
             'articles' => [
                 'articles',
@@ -129,7 +129,7 @@ final class MemberModuleTranslationsRegressionTest extends TestCase
             ],
             'admin_wiki' => [
                 'admin_wiki',
-                ['new_page', 'empty', 'status_pending', 'status_published', 'status_rejected', 'add_category', 'add_subcategory', 'category_saved', 'subcategory_saved', 'err_category_has_documents', 'err_category_has_subcategories', 'err_subcategory_has_documents'],
+                ['new_page', 'empty', 'status_pending', 'status_published', 'status_rejected', 'add_category', 'add_subcategory', 'add_subsubcategory', 'category_saved', 'subcategory_saved', 'subsubcategory_saved', 'err_category_has_documents', 'err_category_has_subcategories', 'err_subcategory_has_subsubcategories', 'err_subcategory_has_documents', 'err_subsubcategory_has_documents'],
             ],
         ];
     }
