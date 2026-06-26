@@ -105,4 +105,7 @@ Kontakt:',
   'invalid' => 'Nieprawidłowe żądanie.',
   'err_invalid_category' => 'Nieprawidłowa kategoria.',
   'err_subcategory_category_mismatch' => 'Wybrany podtemat nie należy do wybranego tematu.',
+  'subsubcategory_field' => 'Podpodtemat',
+  'no_subsubcategory' => 'Bez podpodtematu',
+  'err_subsubcategory_category_mismatch' => 'Wybrany podpodtemat nie należy do wybranego tematu.',
 );

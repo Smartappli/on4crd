@@ -105,4 +105,7 @@ Kontakt:',
   'invalid' => 'Neplatná požiadavka.',
   'err_invalid_category' => 'Neplatná kategória.',
   'err_subcategory_category_mismatch' => 'Vybraná podtéma nepatrí k vybranej téme.',
+  'subsubcategory_field' => 'Podpodtéma',
+  'no_subsubcategory' => 'Bez podpodtémy',
+  'err_subsubcategory_category_mismatch' => 'Vybraná podpodtéma nepatrí k vybranej téme.',
 );

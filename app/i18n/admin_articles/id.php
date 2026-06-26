@@ -112,4 +112,12 @@ return array (
   'previous' => 'Sebelumnya',
   'next' => 'Berikutnya',
   'error_field_too_long' => 'Salah satu bidang melebihi panjang yang diizinkan.',
+  'subsubcategory_field' => 'Sub-subtopik',
+  'no_subsubcategory' => 'Tanpa sub-subtopik',
+  'add_subsubcategory' => 'Tambah sub-subtopik',
+  'ok_subsubcategory_updated' => 'Sub-subtopik disimpan.',
+  'ok_subsubcategory_deleted' => 'Sub-subtopik dihapus.',
+  'err_subcategory_has_subsubcategories' => 'Hapus semua sub-subtopik dalam topik ini terlebih dahulu.',
+  'err_subsubcategory_has_documents' => 'Sub-subtopik ini masih berisi artikel.',
+  'proposal_type_subsubcategory' => 'Sub-subtopik',
 );

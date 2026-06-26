@@ -112,4 +112,12 @@ return array (
   'previous' => 'আগের',
   'next' => 'পরের',
   'error_field_too_long' => 'ক্ষেত্রগুলির একটি অনুমোদিত দৈর্ঘ্য অতিক্রম করেছে৷',
+  'subsubcategory_field' => 'উপ-উপবিষয়',
+  'no_subsubcategory' => 'কোনও উপ-উপবিষয় নেই',
+  'add_subsubcategory' => 'উপ-উপবিষয় যোগ করুন',
+  'ok_subsubcategory_updated' => 'উপ-উপবিষয় সংরক্ষিত হয়েছে।',
+  'ok_subsubcategory_deleted' => 'উপ-উপবিষয় মুছে ফেলা হয়েছে।',
+  'err_subcategory_has_subsubcategories' => 'প্রথমে এই বিষয়ের সব উপ-উপবিষয় মুছে ফেলুন।',
+  'err_subsubcategory_has_documents' => 'এই উপ-উপবিষয়ে এখনও নিবন্ধ আছে।',
+  'proposal_type_subsubcategory' => 'উপ-উপবিষয়',
 );

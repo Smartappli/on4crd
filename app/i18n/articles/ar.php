@@ -105,4 +105,7 @@ return array (
   'invalid' => 'طلب غير صالح.',
   'err_invalid_category' => 'فئة غير صالحة.',
   'err_subcategory_category_mismatch' => 'الموضوع الفرعي المحدد لا ينتمي إلى الموضوع المختار.',
+  'subsubcategory_field' => 'موضوع فرعي ثان',
+  'no_subsubcategory' => 'بدون موضوع فرعي ثان',
+  'err_subsubcategory_category_mismatch' => 'الموضوع الفرعي المحدد لا ينتمي إلى الموضوع المختار.',
 );

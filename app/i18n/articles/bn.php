@@ -105,4 +105,7 @@ return array (
   'invalid' => 'অবৈধ অনুরোধ।',
   'err_invalid_category' => 'অবৈধ বিভাগ',
   'err_subcategory_category_mismatch' => 'নির্বাচিত উপ-বিষয়টি নির্বাচিত বিষয়ের অন্তর্গত নয়।',
+  'subsubcategory_field' => 'উপ-উপবিষয়',
+  'no_subsubcategory' => 'কোনও উপ-উপবিষয় নেই',
+  'err_subsubcategory_category_mismatch' => 'নির্বাচিত উপ-বিষয়টি নির্বাচিত বিষয়ের অন্তর্গত নয়।',
 );

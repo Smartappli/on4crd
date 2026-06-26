@@ -112,4 +112,12 @@ return array (
   'previous' => 'Precedente',
   'next' => 'Successivo',
   'error_field_too_long' => 'Uno dei campi supera la lunghezza consentita.',
+  'subsubcategory_field' => 'Sotto-sottotema',
+  'no_subsubcategory' => 'Nessun sotto-sottotema',
+  'add_subsubcategory' => 'Aggiungi sotto-sottotema',
+  'ok_subsubcategory_updated' => 'Sotto-sottotema salvato.',
+  'ok_subsubcategory_deleted' => 'Sotto-sottotema eliminato.',
+  'err_subcategory_has_subsubcategories' => 'Elimina prima tutti i sotto-sottotemi di questo tema.',
+  'err_subsubcategory_has_documents' => 'Questo sotto-sottotema contiene ancora articoli.',
+  'proposal_type_subsubcategory' => 'Sotto-sottotema',
 );

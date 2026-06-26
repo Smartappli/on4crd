@@ -105,4 +105,7 @@ Kontaktas:',
   'invalid' => 'Netinkama užklausa.',
   'err_invalid_category' => 'Netinkama kategorija.',
   'err_subcategory_category_mismatch' => 'Pasirinkta potemė nepriklauso pasirinktai temai.',
+  'subsubcategory_field' => 'Po-potemė',
+  'no_subsubcategory' => 'Be po-potemės',
+  'err_subsubcategory_category_mismatch' => 'Pasirinkta po-potemė nepriklauso pasirinktai temai.',
 );

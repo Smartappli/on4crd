@@ -105,4 +105,7 @@ return array (
   'invalid' => 'Недопустимый запрос.',
   'err_invalid_category' => 'Неверная категория.',
   'err_subcategory_category_mismatch' => 'Выбранная подтема не относится к выбранной теме.',
+  'subsubcategory_field' => 'Подподтема',
+  'no_subsubcategory' => 'Без подподтемы',
+  'err_subsubcategory_category_mismatch' => 'Выбранная подподтема не относится к выбранной теме.',
 );

@@ -105,4 +105,7 @@ Contacto:',
   'invalid' => 'Pedido inválido.',
   'err_invalid_category' => 'Categoria inválida.',
   'err_subcategory_category_mismatch' => 'A subtemática selecionada não pertence à temática escolhida.',
+  'subsubcategory_field' => 'Subsubtema',
+  'no_subsubcategory' => 'Sem subsubtema',
+  'err_subsubcategory_category_mismatch' => 'A subtemática selecionada não pertence à temática escolhida.',
 );

@@ -105,4 +105,7 @@ Kontakt:',
   'invalid' => 'Vigane päring.',
   'err_invalid_category' => 'Kehtetu kategooria.',
   'err_subcategory_category_mismatch' => 'Valitud alateema ei kuulu valitud teema alla.',
+  'subsubcategory_field' => 'Alam-alamteema',
+  'no_subsubcategory' => 'Alam-alamteemata',
+  'err_subsubcategory_category_mismatch' => 'Valitud alam-alamteema ei kuulu valitud teema alla.',
 );

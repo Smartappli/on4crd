@@ -105,4 +105,7 @@ Kontaktinformācija:',
   'invalid' => 'Nederīgs pieprasījums.',
   'err_invalid_category' => 'Nederīga kategorija.',
   'err_subcategory_category_mismatch' => 'Izvēlētā apakštēma nepieder izvēlētajai tēmai.',
+  'subsubcategory_field' => 'Apakšapakštēma',
+  'no_subsubcategory' => 'Bez apakšapakštēmas',
+  'err_subsubcategory_category_mismatch' => 'Izvēlētā apakšapakštēma nepieder izvēlētajai tēmai.',
 );

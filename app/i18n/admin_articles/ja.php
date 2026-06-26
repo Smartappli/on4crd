@@ -112,4 +112,12 @@ return array (
   'previous' => '前へ',
   'next' => '次へ',
   'error_field_too_long' => 'フィールドの 1 つが許可された長さを超えています。',
+  'subsubcategory_field' => 'サブサブテーマ',
+  'no_subsubcategory' => 'サブサブテーマなし',
+  'add_subsubcategory' => 'サブサブテーマを追加',
+  'ok_subsubcategory_updated' => 'サブサブテーマを保存しました。',
+  'ok_subsubcategory_deleted' => 'サブサブテーマを削除しました。',
+  'err_subcategory_has_subsubcategories' => '先にこのトピック内のすべてのサブサブテーマを削除してください。',
+  'err_subsubcategory_has_documents' => 'このサブサブテーマにはまだ記事があります。',
+  'proposal_type_subsubcategory' => 'サブサブテーマ',
 );

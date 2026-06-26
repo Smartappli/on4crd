@@ -112,4 +112,12 @@ return array (
   'previous' => 'Anterior',
   'next' => 'Următor',
   'error_field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
+  'subsubcategory_field' => 'Sub-subtemă',
+  'no_subsubcategory' => 'Fără sub-subtemă',
+  'add_subsubcategory' => 'Adaugă sub-subtemă',
+  'ok_subsubcategory_updated' => 'Subtema a fost salvată.',
+  'ok_subsubcategory_deleted' => 'Subtema a fost ștearsă.',
+  'err_subcategory_has_subsubcategories' => 'Ștergeți mai întâi toate sub-subtemele din această temă.',
+  'err_subsubcategory_has_documents' => 'Această sub-subtemă conține încă articole.',
+  'proposal_type_subsubcategory' => 'Sub-subtemă',
 );

@@ -105,4 +105,7 @@ return array (
   'invalid' => '无效请求。',
   'err_invalid_category' => '类别无效。',
   'err_subcategory_category_mismatch' => '所选子主题不属于所选主题。',
+  'subsubcategory_field' => '子子主题',
+  'no_subsubcategory' => '无子子主题',
+  'err_subsubcategory_category_mismatch' => '所选子子主题不属于所选主题。',
 );

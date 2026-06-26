@@ -105,4 +105,7 @@ ON4CRD の技術記事を提案したいです。
   'invalid' => '無効なリクエストです。',
   'err_invalid_category' => '無効なカテゴリです。',
   'err_subcategory_category_mismatch' => '選択したサブテーマは選択したテーマに属していません。',
+  'subsubcategory_field' => 'サブサブテーマ',
+  'no_subsubcategory' => 'サブサブテーマなし',
+  'err_subsubcategory_category_mismatch' => '選択したサブテーマは選択したテーマに属していません。',
 );

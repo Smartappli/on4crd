@@ -112,4 +112,12 @@ return array (
   'previous' => 'Preċedenti',
   'next' => 'Wara',
   'error_field_too_long' => 'Wieħed mill-oqsma jaqbeż it-tul permess.',
+  'subsubcategory_field' => 'Sub-subtema',
+  'no_subsubcategory' => 'L-ebda sub-subtema',
+  'add_subsubcategory' => 'Żid sub-subtema',
+  'ok_subsubcategory_updated' => 'Sub-subtema ssejvjata.',
+  'ok_subsubcategory_deleted' => 'Sub-subtema mħassra.',
+  'err_subcategory_has_subsubcategories' => 'Ħassar l-ewwel is-sub-subtemi kollha f’din it-tema.',
+  'err_subsubcategory_has_documents' => 'Din is-sub-subtema għadha fiha artikli.',
+  'proposal_type_subsubcategory' => 'Sub-subtema',
 );

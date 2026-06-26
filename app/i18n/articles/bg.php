@@ -105,4 +105,7 @@ return array (
   'invalid' => 'Невалидна заявка.',
   'err_invalid_category' => 'Невалидна категория.',
   'err_subcategory_category_mismatch' => 'Избраната подтема не принадлежи към избраната тема.',
+  'subsubcategory_field' => 'Подподтема',
+  'no_subsubcategory' => 'Без подподтема',
+  'err_subsubcategory_category_mismatch' => 'Избраната подподтема не принадлежи към избраната тема.',
 );

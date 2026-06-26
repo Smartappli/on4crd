@@ -112,4 +112,12 @@ return array (
   'previous' => 'Zurück',
   'next' => 'Weiter',
   'error_field_too_long' => 'Eines der Felder überschreitet die zulässige Länge.',
+  'subsubcategory_field' => 'Unterunterthema',
+  'no_subsubcategory' => 'Kein Unterunterthema',
+  'add_subsubcategory' => 'Unterunterthema hinzufügen',
+  'ok_subsubcategory_updated' => 'Unterunterthema gespeichert.',
+  'ok_subsubcategory_deleted' => 'Unterunterthema gelöscht.',
+  'err_subcategory_has_subsubcategories' => 'Löschen Sie zuerst alle Unterunterthemen dieses Themas.',
+  'err_subsubcategory_has_documents' => 'Dieses Unterunterthema enthält noch Artikel.',
+  'proposal_type_subsubcategory' => 'Unterunterthema',
 );

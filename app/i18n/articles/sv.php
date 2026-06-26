@@ -105,4 +105,7 @@ Kontakt:',
   'invalid' => 'Ogiltig begäran.',
   'err_invalid_category' => 'Ogiltig kategori.',
   'err_subcategory_category_mismatch' => 'Det valda undertemat hör inte till det valda temat.',
+  'subsubcategory_field' => 'Underundertema',
+  'no_subsubcategory' => 'Inget underundertema',
+  'err_subsubcategory_category_mismatch' => 'Det valda undertemat hör inte till det valda temat.',
 );

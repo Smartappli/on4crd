@@ -105,4 +105,7 @@ Kontakt:',
   'invalid' => 'Ungültige Anfrage.',
   'err_invalid_category' => 'Ungültige Kategorie.',
   'err_subcategory_category_mismatch' => 'Das ausgewählte Unterthema gehört nicht zum gewählten Thema.',
+  'subsubcategory_field' => 'Unterunterthema',
+  'no_subsubcategory' => 'Kein Unterunterthema',
+  'err_subsubcategory_category_mismatch' => 'Das ausgewählte Unterunterthema gehört nicht zum gewählten Thema.',
 );

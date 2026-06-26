@@ -112,4 +112,12 @@ return array (
   'previous' => 'Iepriekšējais',
   'next' => 'Tālāk',
   'error_field_too_long' => 'Viens no laukiem pārsniedz atļauto garumu.',
+  'subsubcategory_field' => 'Apakšapakštēma',
+  'no_subsubcategory' => 'Bez apakšapakštēmas',
+  'add_subsubcategory' => 'Pievienot apakštēmu',
+  'ok_subsubcategory_updated' => 'Apakšapakštēma saglabāta.',
+  'ok_subsubcategory_deleted' => 'Apakšapakštēma dzēsta.',
+  'err_subcategory_has_subsubcategories' => 'Vispirms dzēsiet visas šīs tēmas apakšapakštēmas.',
+  'err_subsubcategory_has_documents' => 'Šajā apakšapakštēmā vēl ir raksti.',
+  'proposal_type_subsubcategory' => 'Apakšapakštēma',
 );

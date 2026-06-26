@@ -112,4 +112,12 @@ return array (
   'previous' => 'Edellinen',
   'next' => 'Seuraavaksi',
   'error_field_too_long' => 'Yksi kentistä ylittää sallitun pituuden.',
+  'subsubcategory_field' => 'Ali-alateema',
+  'no_subsubcategory' => 'Ei ali-alateemaa',
+  'add_subsubcategory' => 'Lisää ali-alateema',
+  'ok_subsubcategory_updated' => 'Ali-alateema tallennettu.',
+  'ok_subsubcategory_deleted' => 'Ali-alateema poistettu.',
+  'err_subcategory_has_subsubcategories' => 'Poista ensin kaikki tämän teeman ali-alateemat.',
+  'err_subsubcategory_has_documents' => 'Tämä alialateema sisältää edelleen artikkeleita.',
+  'proposal_type_subsubcategory' => 'Ali-alateema',
 );

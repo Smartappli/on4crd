@@ -112,4 +112,12 @@ return array (
   'previous' => 'Eelmine',
   'next' => 'Edasi',
   'error_field_too_long' => 'Üks väljadest ületab lubatud pikkuse.',
+  'subsubcategory_field' => 'Alam-alamteema',
+  'no_subsubcategory' => 'Alam-alamteemata',
+  'add_subsubcategory' => 'Lisa alam-alamteema',
+  'ok_subsubcategory_updated' => 'Alam-alamteema salvestatud.',
+  'ok_subsubcategory_deleted' => 'Alam-alamteema kustutatud.',
+  'err_subcategory_has_subsubcategories' => 'Kustutage esmalt kõik selle teema alam-alamteemad.',
+  'err_subsubcategory_has_documents' => 'See alamalamteema sisaldab veel artikleid.',
+  'proposal_type_subsubcategory' => 'Alam-alamteema',
 );

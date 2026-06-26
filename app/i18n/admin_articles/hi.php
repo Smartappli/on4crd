@@ -112,4 +112,12 @@ return array (
   'previous' => 'पिछला',
   'next' => 'अगला',
   'error_field_too_long' => 'फ़ील्ड में से एक की लंबाई अनुमत लंबाई से अधिक है.',
+  'subsubcategory_field' => 'उप-उपविषय',
+  'no_subsubcategory' => 'कोई उप-उपविषय नहीं',
+  'add_subsubcategory' => 'उप-उपविषय जोड़ें',
+  'ok_subsubcategory_updated' => 'उप-उपविषय सहेजा गया.',
+  'ok_subsubcategory_deleted' => 'उप-उपविषय हटा दिया गया.',
+  'err_subcategory_has_subsubcategories' => 'पहले इस विषय के सभी उप-उपविषय हटाएँ.',
+  'err_subsubcategory_has_documents' => 'इस उप-उपविषय में अभी भी लेख हैं।',
+  'proposal_type_subsubcategory' => 'उप-उपविषय',
 );

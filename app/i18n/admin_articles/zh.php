@@ -112,4 +112,12 @@ return array (
   'previous' => '上一页',
   'next' => '下一页',
   'error_field_too_long' => '其中一个字段超出了允许的长度。',
+  'subsubcategory_field' => '子子主题',
+  'no_subsubcategory' => '无子子主题',
+  'add_subsubcategory' => '添加子子主题',
+  'ok_subsubcategory_updated' => '子子主题已保存。',
+  'ok_subsubcategory_deleted' => '子子主题已删除。',
+  'err_subcategory_has_subsubcategories' => '请先删除此主题中的所有子子主题。',
+  'err_subsubcategory_has_documents' => '此子子主题仍包含文章。',
+  'proposal_type_subsubcategory' => '子子主题',
 );

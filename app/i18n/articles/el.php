@@ -105,4 +105,7 @@ return array (
   'invalid' => 'Μη έγκυρο αίτημα.',
   'err_invalid_category' => 'Μη έγκυρη κατηγορία.',
   'err_subcategory_category_mismatch' => 'Το επιλεγμένο υποθέμα δεν ανήκει στο επιλεγμένο θέμα.',
+  'subsubcategory_field' => 'Υπο-υποθεματική',
+  'no_subsubcategory' => 'Χωρίς υπο-υποθεματική',
+  'err_subsubcategory_category_mismatch' => 'Το επιλεγμένο υπο-υποθεματική δεν ανήκει στο επιλεγμένο θέμα.',
 );

@@ -112,4 +112,12 @@ return array (
   'previous' => 'السابق',
   'next' => 'التالي',
   'error_field_too_long' => 'يتجاوز أحد الحقول الطول المسموح به.',
+  'subsubcategory_field' => 'موضوع فرعي ثان',
+  'no_subsubcategory' => 'بدون موضوع فرعي ثان',
+  'add_subsubcategory' => 'إضافة موضوع فرعي ثان',
+  'ok_subsubcategory_updated' => 'تم حفظ الموضوع الفرعي.',
+  'ok_subsubcategory_deleted' => 'تم حذف الموضوع الفرعي.',
+  'err_subcategory_has_subsubcategories' => 'احذف أولاً كل الموضوعات الفرعية في هذا الموضوع.',
+  'err_subsubcategory_has_documents' => 'لا يزال هذا الموضوع الفرعي الثاني يحتوي على مقالات.',
+  'proposal_type_subsubcategory' => 'موضوع فرعي ثان',
 );

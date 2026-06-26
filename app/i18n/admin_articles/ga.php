@@ -112,4 +112,12 @@ return array (
   'previous' => 'Roimhe Seo',
   'next' => 'Ar aghaidh',
   'error_field_too_long' => 'Tá ceann de na réimsí níos mó ná an fad ceadaithe.',
+  'subsubcategory_field' => 'Fo-fho-théama',
+  'no_subsubcategory' => 'Gan fo-fho-théama',
+  'add_subsubcategory' => 'Cuir fo-fho-théama leis',
+  'ok_subsubcategory_updated' => 'Fo-fho-théama sábháilte.',
+  'ok_subsubcategory_deleted' => 'Fo-fho-théama scriosta.',
+  'err_subcategory_has_subsubcategories' => 'Scrios na fo-fho-théamaí uile sa téama seo ar dtús.',
+  'err_subsubcategory_has_documents' => 'Tá ailt fós san fho-fho-théama seo.',
+  'proposal_type_subsubcategory' => 'Fo-fho-théama',
 );

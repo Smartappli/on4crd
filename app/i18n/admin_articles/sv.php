@@ -112,4 +112,12 @@ return array (
   'previous' => 'Föregående',
   'next' => 'Nästa',
   'error_field_too_long' => 'Ett av fälten överskrider den tillåtna längden.',
+  'subsubcategory_field' => 'Underundertema',
+  'no_subsubcategory' => 'Inget underundertema',
+  'add_subsubcategory' => 'Lägg till underundertema',
+  'ok_subsubcategory_updated' => 'Underundertema sparat.',
+  'ok_subsubcategory_deleted' => 'Underundertema borttaget.',
+  'err_subcategory_has_subsubcategories' => 'Ta först bort alla underunderteman i detta ämne.',
+  'err_subsubcategory_has_documents' => 'Detta underundertema innehåller fortfarande artiklar.',
+  'proposal_type_subsubcategory' => 'Underundertema',
 );

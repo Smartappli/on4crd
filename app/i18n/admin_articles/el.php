@@ -112,4 +112,12 @@ return array (
   'previous' => 'Προηγούμενο',
   'next' => 'Επόμενο',
   'error_field_too_long' => 'Ένα από τα πεδία υπερβαίνει το επιτρεπόμενο μήκος.',
+  'subsubcategory_field' => 'Υπο-υποθεματική',
+  'no_subsubcategory' => 'Χωρίς υπο-υποθεματική',
+  'add_subsubcategory' => 'Προσθήκη υπο-υποθεματικήτος',
+  'ok_subsubcategory_updated' => 'Το υπο-υποθεματική αποθηκεύτηκε.',
+  'ok_subsubcategory_deleted' => 'Το υπο-υποθεματική διαγράφηκε.',
+  'err_subcategory_has_subsubcategories' => 'Διαγράψτε πρώτα όλα τα υπο-υποθεματικές αυτού του θέματος.',
+  'err_subsubcategory_has_documents' => 'Αυτή η υπο-υποθεματική εξακολουθεί να περιέχει άρθρα.',
+  'proposal_type_subsubcategory' => 'Υπο-υποθεματική',
 );

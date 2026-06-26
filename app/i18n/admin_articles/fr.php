@@ -112,4 +112,12 @@ return array (
   'previous' => 'Précédent',
   'next' => 'Suivant',
   'error_field_too_long' => 'Un des champs dépasse la longueur autorisée.',
+  'subsubcategory_field' => 'Sous-sous-thématique',
+  'no_subsubcategory' => 'Sans sous-sous-thématique',
+  'add_subsubcategory' => 'Ajouter une sous-sous-thématique',
+  'ok_subsubcategory_updated' => 'Sous-sous-thématique enregistrée.',
+  'ok_subsubcategory_deleted' => 'Sous-sous-thématique supprimée.',
+  'err_subcategory_has_subsubcategories' => 'Supprimez d’abord toutes les sous-sous-thématiques de cette sous-thématique.',
+  'err_subsubcategory_has_documents' => 'Cette sous-sous-thématique contient encore des articles.',
+  'proposal_type_subsubcategory' => 'Sous-sous-thématique',
 );

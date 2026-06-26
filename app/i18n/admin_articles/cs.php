@@ -112,4 +112,12 @@ return array (
   'previous' => 'Předchozí',
   'next' => 'Další',
   'error_field_too_long' => 'Jedno z polí přesahuje povolenou délku.',
+  'subsubcategory_field' => 'Podpodtéma',
+  'no_subsubcategory' => 'Bez podpodtématu',
+  'add_subsubcategory' => 'Přidat podpodtéma',
+  'ok_subsubcategory_updated' => 'Podpodtéma uloženo.',
+  'ok_subsubcategory_deleted' => 'Podpodtéma odstraněno.',
+  'err_subcategory_has_subsubcategories' => 'Nejprve odstraňte všechna podpodtémata tohoto tématu.',
+  'err_subsubcategory_has_documents' => 'Toto podpodtéma stále obsahuje články.',
+  'proposal_type_subsubcategory' => 'Podpodtéma',
 );

@@ -105,4 +105,7 @@ Kontakt:',
   'invalid' => 'Ugyldig anmodning.',
   'err_invalid_category' => 'Ugyldig kategori.',
   'err_subcategory_category_mismatch' => 'Det valgte underemne hører ikke til det valgte emne.',
+  'subsubcategory_field' => 'Underundertema',
+  'no_subsubcategory' => 'Intet underundertema',
+  'err_subsubcategory_category_mismatch' => 'Det valgte underundertema hører ikke til det valgte emne.',
 );

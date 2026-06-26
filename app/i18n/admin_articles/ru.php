@@ -112,4 +112,12 @@ return array (
   'previous' => 'Назад',
   'next' => 'Вперед',
   'error_field_too_long' => 'Одно из полей превышает допустимую длину.',
+  'subsubcategory_field' => 'Подподтема',
+  'no_subsubcategory' => 'Без подподтемы',
+  'add_subsubcategory' => 'Добавить подтему',
+  'ok_subsubcategory_updated' => 'Подподтема сохранена.',
+  'ok_subsubcategory_deleted' => 'Подподтема удалена.',
+  'err_subcategory_has_subsubcategories' => 'Сначала удалите все подподтемы этой темы.',
+  'err_subsubcategory_has_documents' => 'Эта подподтема всё ещё содержит статьи.',
+  'proposal_type_subsubcategory' => 'Подподтема',
 );

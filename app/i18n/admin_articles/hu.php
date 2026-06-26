@@ -112,4 +112,12 @@ return array (
   'previous' => 'Előző',
   'next' => 'Következő',
   'error_field_too_long' => 'Az egyik mező túllépi a megengedett hosszt.',
+  'subsubcategory_field' => 'Al-altéma',
+  'no_subsubcategory' => 'Nincs al-altéma',
+  'add_subsubcategory' => 'Al-altéma hozzáadása',
+  'ok_subsubcategory_updated' => 'Al-altéma mentve.',
+  'ok_subsubcategory_deleted' => 'Al-altéma törölve.',
+  'err_subcategory_has_subsubcategories' => 'Először törölje a téma összes altémáját.',
+  'err_subsubcategory_has_documents' => 'Ez az al-altéma még tartalmaz cikkeket.',
+  'proposal_type_subsubcategory' => 'Al-altéma',
 );

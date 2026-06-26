@@ -112,4 +112,12 @@ return array (
   'previous' => 'Предишен',
   'next' => 'Следваща',
   'error_field_too_long' => 'Едно от полетата надвишава разрешената дължина.',
+  'subsubcategory_field' => 'Подподтема',
+  'no_subsubcategory' => 'Без подподтема',
+  'add_subsubcategory' => 'Добавяне на подподтема',
+  'ok_subsubcategory_updated' => 'Подподтемата е запазена.',
+  'ok_subsubcategory_deleted' => 'Подподтемата е изтрита.',
+  'err_subcategory_has_subsubcategories' => 'Първо изтрийте всички подподтеми в тази тема.',
+  'err_subsubcategory_has_documents' => 'Тази подподтема все още съдържа статии.',
+  'proposal_type_subsubcategory' => 'Подподтема',
 );

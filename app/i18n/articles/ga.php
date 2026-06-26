@@ -105,4 +105,7 @@ Teagmháil:',
   'invalid' => 'Iarratas neamhbhailí.',
   'err_invalid_category' => 'Catagóir neamhbhailí.',
   'err_subcategory_category_mismatch' => 'Ní bhaineann an fofhothéama roghnaithe leis an téama roghnaithe.',
+  'subsubcategory_field' => 'Fo-fho-théama',
+  'no_subsubcategory' => 'Gan fo-fho-théama',
+  'err_subsubcategory_category_mismatch' => 'Ní bhaineann an fofhothéama roghnaithe leis an téama roghnaithe.',
 );

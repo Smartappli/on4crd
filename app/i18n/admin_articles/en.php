@@ -112,4 +112,12 @@ return array (
   'previous' => 'Previous',
   'next' => 'Next',
   'error_field_too_long' => 'One of the fields exceeds the allowed length.',
+  'subsubcategory_field' => 'Sub-subtopic',
+  'no_subsubcategory' => 'No sub-subtopic',
+  'add_subsubcategory' => 'Add sub-subtopic',
+  'ok_subsubcategory_updated' => 'Sub-subtopic saved.',
+  'ok_subsubcategory_deleted' => 'Sub-subtopic deleted.',
+  'err_subcategory_has_subsubcategories' => 'Delete all sub-subtopics in this subtopic first.',
+  'err_subsubcategory_has_documents' => 'This sub-subtopic still contains articles.',
+  'proposal_type_subsubcategory' => 'Sub-subtopic',
 );

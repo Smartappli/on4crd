@@ -105,4 +105,7 @@ Kuntatt:',
   'invalid' => 'Talba invalida.',
   'err_invalid_category' => 'Kategorija invalida.',
   'err_subcategory_category_mismatch' => 'Is-sottotema magħżula ma tappartjenix għat-tema magħżula.',
+  'subsubcategory_field' => 'Sub-subtema',
+  'no_subsubcategory' => 'L-ebda sub-subtema',
+  'err_subsubcategory_category_mismatch' => 'Is-sub-subtema magħżula ma tappartjenix għat-tema magħżula.',
 );

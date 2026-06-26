@@ -105,4 +105,7 @@ Yhteystiedot:',
   'invalid' => 'Virheellinen pyyntö.',
   'err_invalid_category' => 'Virheellinen luokka.',
   'err_subcategory_category_mismatch' => 'Valittu alateema ei kuulu valittuun teemaan.',
+  'subsubcategory_field' => 'Ali-alateema',
+  'no_subsubcategory' => 'Ei ali-alateemaa',
+  'err_subsubcategory_category_mismatch' => 'Valittu ali-alateema ei kuulu valittuun teemaan.',
 );

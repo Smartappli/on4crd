@@ -112,4 +112,12 @@ return array (
   'previous' => 'Prethodno',
   'next' => 'Dalje',
   'error_field_too_long' => 'Jedno od polja premašuje dopuštenu duljinu.',
+  'subsubcategory_field' => 'Podpodtema',
+  'no_subsubcategory' => 'Bez podpodteme',
+  'add_subsubcategory' => 'Dodaj podtemu',
+  'ok_subsubcategory_updated' => 'Podpodtema spremljena.',
+  'ok_subsubcategory_deleted' => 'Podpodtema izbrisana.',
+  'err_subcategory_has_subsubcategories' => 'Najprije izbrišite sve podpodteme u ovoj temi.',
+  'err_subsubcategory_has_documents' => 'Ova podpodtema još sadrži članke.',
+  'proposal_type_subsubcategory' => 'Podpodtema',
 );

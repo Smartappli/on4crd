@@ -112,4 +112,12 @@ return array (
   'previous' => 'Anterior',
   'next' => 'Seguinte',
   'error_field_too_long' => 'Um dos campos excede o comprimento permitido.',
+  'subsubcategory_field' => 'Subsubtema',
+  'no_subsubcategory' => 'Sem subsubtema',
+  'add_subsubcategory' => 'Adicionar subsubtema',
+  'ok_subsubcategory_updated' => 'Subsubtema guardado.',
+  'ok_subsubcategory_deleted' => 'Subsubtema eliminado.',
+  'err_subcategory_has_subsubcategories' => 'Elimine primeiro todos os subsubtemas deste tema.',
+  'err_subsubcategory_has_documents' => 'Este subsubtema ainda contém artigos.',
+  'proposal_type_subsubcategory' => 'Subsubtema',
 );

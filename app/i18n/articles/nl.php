@@ -105,4 +105,7 @@ Contact:',
   'invalid' => 'Ongeldig verzoek.',
   'err_invalid_category' => 'Ongeldige categorie.',
   'err_subcategory_category_mismatch' => 'Het gekozen subthema hoort niet bij het gekozen thema.',
+  'subsubcategory_field' => 'Subsubthema',
+  'no_subsubcategory' => 'Geen subsubthema',
+  'err_subsubcategory_category_mismatch' => 'Het gekozen subsubthema hoort niet bij het gekozen thema.',
 );

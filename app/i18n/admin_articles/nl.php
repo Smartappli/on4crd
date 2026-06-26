@@ -112,4 +112,12 @@ return array (
   'previous' => 'Vorige',
   'next' => 'Volgende',
   'error_field_too_long' => 'Eén van de velden overschrijdt de toegestane lengte.',
+  'subsubcategory_field' => 'Subsubthema',
+  'no_subsubcategory' => 'Geen subsubthema',
+  'add_subsubcategory' => 'Subsubthema toevoegen',
+  'ok_subsubcategory_updated' => 'Subsubthema opgeslagen.',
+  'ok_subsubcategory_deleted' => 'Subsubthema verwijderd.',
+  'err_subcategory_has_subsubcategories' => 'Verwijder eerst alle subsubthema’s in dit thema.',
+  'err_subsubcategory_has_documents' => 'Dit subsubthema bevat nog artikelen.',
+  'proposal_type_subsubcategory' => 'Subsubthema',
 );

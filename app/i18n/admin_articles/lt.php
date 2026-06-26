@@ -112,4 +112,12 @@ return array (
   'previous' => 'Ankstesnis',
   'next' => 'Kitas',
   'error_field_too_long' => 'Vienas iš laukų viršija leistiną ilgį.',
+  'subsubcategory_field' => 'Po-potemė',
+  'no_subsubcategory' => 'Be po-potemės',
+  'add_subsubcategory' => 'Pridėti potemę',
+  'ok_subsubcategory_updated' => 'Po-potemė išsaugota.',
+  'ok_subsubcategory_deleted' => 'Po-potemė ištrinta.',
+  'err_subcategory_has_subsubcategories' => 'Pirmiausia ištrinkite visas šios temos po-potemės.',
+  'err_subsubcategory_has_documents' => 'Šioje po-potemėje vis dar yra straipsnių.',
+  'proposal_type_subsubcategory' => 'Po-potemė',
 );

@@ -105,4 +105,7 @@ Kontakt:',
   'invalid' => 'Neveljavna zahteva.',
   'err_invalid_category' => 'Neveljavna kategorija.',
   'err_subcategory_category_mismatch' => 'Izbrana podtema ne spada k izbrani temi.',
+  'subsubcategory_field' => 'Podpodtema',
+  'no_subsubcategory' => 'Brez podpodteme',
+  'err_subsubcategory_category_mismatch' => 'Izbrana podpodtema ne spada k izbrani temi.',
 );
