@@ -39,7 +39,7 @@ return array (
   'cw_qrp_label' => 'QRG CW QRP:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
   'good_practice_value' => 'fógra glao-chomhartha + QTH + trácht atá á lorg',
-  'map_title' => 'Google Map - Club Raidió Durnal',
+  'map_title' => 'Léarscáil Google - Club Raidió Durnal',
   'address_title' => 'Seoladh',
   'contact_people' => 'Daoine teagmhála',
   'club_spotlight_title' => 'I gceannlínte an chlub',
