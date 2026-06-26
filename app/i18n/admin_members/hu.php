@@ -15,7 +15,7 @@ return array (
   'th_committee' => 'Bizottság',
   'th_actions' => 'Akciók',
   'save' => 'Mentés',
-  'err_callsign' => 'Mutató szükséges.',
+  'err_callsign' => 'Hívójel szükséges.',
   'err_email' => 'Érvénytelen e-mail-cím.',
   'err_locator' => 'Érvénytelen lokátor.',
   'search' => 'Tag keresése',
