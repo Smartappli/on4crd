@@ -100,7 +100,7 @@
   margin: 0;
 }
 
-[data-route="videos"] .member-document-propose-menu-panel {
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"]) .member-document-propose-menu-panel {
   top: auto;
   bottom: calc(100% + .45rem);
 }
@@ -221,7 +221,7 @@
     justify-content: flex-start;
   }
 
-  [data-route="presentations"] .member-document-propose-menu-panel {
+  :is([data-route="presentations"], [data-route="fichiers"]) .member-document-propose-menu-panel {
     right: auto;
     left: 0;
   }

@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $t = i18n_domain_locale('albums', $locale);
+$albumText = static function (string $key, string $fallback) use ($t): string {
+    return (string) ($t[$key] ?? $fallback);
+};
 set_page_meta(['title' => (string) $t['public_albums'], 'description' => (string) $t['meta_desc']]);
 $user = current_user();
 $canManageAlbums = has_permission('albums.manage');
@@ -321,6 +324,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect('my_requests');
     }
 
+    if ($action === 'propose_subsubcategory') {
+        $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_subsubcategory_name'] ?? ''), 160);
+        $albumCategoriesForPost = album_categories();
+        $parentSubcategoryRef = trim((string) ($_POST['proposal_parent_subcategory_ref'] ?? ''));
+        $parentSubcategoryParts = album_subcategory_ref_parts($parentSubcategoryRef);
+        [$parentCategory, $parentSubcategory] = album_taxonomy_from_input(
+            $parentSubcategoryParts['category'] !== '' ? $parentSubcategoryParts['category'] : (string) ($_POST['proposal_parent_category'] ?? 'general'),
+            $parentSubcategoryRef,
+            $albumCategoriesForPost
+        );
+        $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? ($user['email'] ?? '')), 220);
+        if ($proposalContact === '') {
+            $proposalContact = content_proposal_clean_single_line((string) ($user['callsign'] ?? ''), 220);
+        }
+        if ($proposalTitle === '' || $parentSubcategory === '') {
+            throw new RuntimeException((string) $t['invalid_request']);
+        }
+        $summary = content_proposal_details_text([
+            (string) $t['category_field'] => $parentCategory,
+            (string) $t['subcategory_field'] => $parentSubcategory,
+            $albumText('subsubcategory_field', "Sous-sous-th\xC3\xA9matique") => $proposalTitle,
+            (string) $t['description_label'] => (string) ($_POST['proposal_reason'] ?? ''),
+        ]);
+        $sourceRef = 'album_subcategory:' . $parentCategory . ':' . $parentSubcategory;
+        $proposalId = content_proposal_create((int) $user['id'], 'albums', 'subsubcategory', $proposalTitle, $summary, $proposalContact, $sourceRef);
+        content_proposal_notify_site($albumText('propose_subsubcategory_title', "Proposer une sous-sous-th\xC3\xA9matique"), [
+            'area' => 'albums',
+            'proposal_type' => 'subsubcategory',
+            'title' => $proposalTitle,
+            'summary' => $summary,
+            'contact' => $proposalContact,
+            'source_ref' => 'content_proposals#' . $proposalId . ' ' . $sourceRef,
+        ]);
+        set_flash('success', (string) $t['proposal_recorded']);
+        redirect('my_requests');
+    }
+
     throw new RuntimeException((string) $t['invalid_request']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -519,9 +559,12 @@ if ($user !== null) {
 $showAlbumProposalForm = $user !== null && (string) ($_GET['propose_album'] ?? '') === '1';
 $showAlbumCategoryProposalForm = $user !== null && (string) ($_GET['propose_category'] ?? '') === '1';
 $showAlbumSubcategoryProposalForm = $user !== null && (string) ($_GET['propose_subcategory'] ?? '') === '1';
+$showAlbumSubsubcategoryProposalForm = $user !== null && (string) ($_GET['propose_subsubcategory'] ?? '') === '1';
 $albumProposalUrl = $user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_album' => '1'])]);
 $albumCategoryProposalUrl = $user !== null ? route_url('albums', ['propose_category' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_category' => '1'])]);
 $albumSubcategoryProposalUrl = $user !== null ? route_url('albums', ['propose_subcategory' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_subcategory' => '1'])]);
+$albumSubsubcategoryProposalUrl = $user !== null ? route_url('albums', ['propose_subsubcategory' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_subsubcategory' => '1'])]);
+$albumProposeSubsubcategoryItemLabel = $albumText('propose_subsubcategory_item', "Une sous-sous-th\xC3\xA9matique");
 $featuredAlbumsTitle = (string) $t['featured_albums'];
 $featuredAlbumBadge = (string) $t['featured_album_badge'];
 $otherAlbumsTitle = (string) $t['other_albums'];
@@ -558,6 +601,7 @@ ob_start();
                         <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumProposalUrl) ?>"><?= e((string) $t['propose_album_item']) ?></a>
                         <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumCategoryProposalUrl) ?>"><?= e((string) $t['propose_category_item']) ?></a>
                         <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumSubcategoryProposalUrl) ?>"><?= e((string) $t['propose_subcategory_item']) ?></a>
+                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumSubsubcategoryProposalUrl) ?>"><?= e($albumProposeSubsubcategoryItemLabel) ?></a>
                     </div>
                 </details>
                 <?php if ($canManageAlbums): ?>
@@ -644,6 +688,42 @@ ob_start();
             <label><span><?= e((string) $t['contact_label']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">
                 <button class="button" type="submit"><?= e($canManageAlbums ? (string) $t['create_subcategory_submit'] : (string) $t['proposal_submit']) ?></button>
+                <a class="button secondary" href="<?= e(route_url('albums')) ?>"><?= e((string) $t['cancel']) ?></a>
+            </p>
+        </form>
+    </section>
+    <?php endif; ?>
+
+    <?php if ($showAlbumSubsubcategoryProposalForm): ?>
+    <section class="card" id="album-subsubcategory-proposal">
+        <h2><?= e($albumText('propose_subsubcategory_title', "Proposer une sous-sous-th\xC3\xA9matique")) ?></h2>
+        <p class="help"><?= e($albumText('subsubcategory_pending_help', "Votre sous-sous-th\xC3\xA9matique sera plac\xC3\xA9e dans vos contenus en attente de validation par un administrateur.")) ?></p>
+        <form method="post" class="stack">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="propose_subsubcategory">
+            <label><span><?= e($albumText('parent_subcategory_label', "Sous-th\xC3\xA9matique parente")) ?></span>
+                <?php $albumHasSubcategoryOptions = false; ?>
+                <select name="proposal_parent_subcategory_ref" required>
+                    <?php foreach ($albumSubcategoriesByCategory as $parentCode => $subcategories): ?>
+                        <optgroup label="<?= e((string) ($albumCategories[(string) $parentCode] ?? album_category_label_from_code((string) $parentCode))) ?>">
+                            <?php foreach ($subcategories as $subcategoryInfo): ?>
+                                <?php $subCode = album_subcategory_code((string) $subcategoryInfo['code']); ?>
+                                <?php if ($subCode === '') { continue; } ?>
+                                <?php $albumHasSubcategoryOptions = true; ?>
+                                <option value="<?= e(album_subcategory_ref((string) $parentCode, $subCode)) ?>"><?= e((string) $subcategoryInfo['label']) ?></option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                    <?php endforeach; ?>
+                    <?php if (!$albumHasSubcategoryOptions): ?>
+                        <option value="" disabled selected><?= e((string) $t['no_subcategory']) ?></option>
+                    <?php endif; ?>
+                </select>
+            </label>
+            <label><span><?= e($albumText('proposal_subsubcategory_name_label', "Nom de la sous-sous-th\xC3\xA9matique")) ?></span><input type="text" name="proposal_subsubcategory_name" maxlength="160" required></label>
+            <label><span><?= e((string) $t['description_label']) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
+            <label><span><?= e((string) $t['contact_label']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+            <p class="actions">
+                <button class="button" type="submit"><?= e((string) $t['proposal_submit']) ?></button>
                 <a class="button secondary" href="<?= e(route_url('albums')) ?>"><?= e((string) $t['cancel']) ?></a>
             </p>
         </form>
