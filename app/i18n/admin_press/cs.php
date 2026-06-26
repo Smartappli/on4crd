@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'contact_added' => 'Kontakt pro tisk přidán.',
   'release_added' => 'Tisková zpráva přidána.',
-  'contacts_title' => 'Stiskněte kontakty',
+  'contacts_title' => 'Tiskové kontakty',
   'releases_title' => 'Tiskové zprávy',
   'full_name' => 'Celé jméno',
   'role' => 'Role ve výboru',
@@ -23,6 +23,6 @@ return array (
   'th_date' => 'Datum',
   'th_file' => 'Soubor',
   'open' => 'otevřít',
-  'layout' => 'Stiskněte',
+  'layout' => 'Tisk',
   'meta_desc' => 'Správa tiskových kontaktů a tiskových zpráv.',
 );

@@ -33,7 +33,7 @@ return array (
   'relais_description' => 'Πρακτικές πληροφορίες για το ρελέ Radio Club Durnal και τις ραδιοπαραμέτρους του.',
   'schools_title' => 'Σχολεία και ραδιοπαιδαγωγική',
   'schools_description' => 'ON4CRD εκπαιδευτικοί πόροι για δασκάλους, σχολεία και εκπαιδευτικά έργα γύρω από το ραδιόφωνο.',
-  'press_title' => 'Πατήστε ON4CRD',
+  'press_title' => 'Τύπος ON4CRD',
   'press_description' => 'Κιτ τύπου, δημόσιες πληροφορίες και επαφές για δημοσιογράφους που ενδιαφέρονται για το ON4CRD.',
   'sponsoring_title' => 'Χορηγία ON4CRD',
   'sponsoring_description' => 'Λύσεις χορηγίας και συνεργασίας με το Radio Club Durnal ON4CRD.',

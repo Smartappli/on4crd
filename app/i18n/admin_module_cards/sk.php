@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Verejné technické články.',
   'admin_committee_title' => 'výboru',
   'admin_committee_desc' => 'Členovia výboru, úloha, poradie a životopis.',
-  'admin_press_title' => 'Stlačte tlačidlo',
+  'admin_press_title' => 'Tlač',
   'admin_press_desc' => 'Tlačové kontakty, dátumové správy a dokumenty na stiahnutie.',
   'admin_events_title' => 'Kalendár',
   'admin_events_desc' => 'Klubové udalosti a miestne súťaže zobrazené v živých miniaplikáciách.',

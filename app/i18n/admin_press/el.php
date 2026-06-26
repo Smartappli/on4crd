@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'contact_added' => 'Προστέθηκε η επαφή τύπου.',
   'release_added' => 'Προστέθηκε δελτίο τύπου.',
-  'contacts_title' => 'Πατήστε επαφές',
+  'contacts_title' => 'Επαφές Τύπου',
   'releases_title' => 'Δελτία τύπου',
   'full_name' => 'Πλήρες όνομα',
   'role' => 'Ρόλος',
@@ -23,6 +23,6 @@ return array (
   'th_date' => 'Ημερομηνία',
   'th_file' => 'Αρχείο',
   'open' => 'ανοιχτό',
-  'layout' => 'Πατήστε',
+  'layout' => 'Τύπος',
   'meta_desc' => 'Διαχείριση επαφών τύπου και δελτίων τύπου.',
 );

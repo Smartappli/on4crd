@@ -14,8 +14,8 @@ return array (
   'committee_title' => 'Kommitté — titel',
   'committee_intro' => 'Kommitté — inledning',
   'committee_mission' => 'Kommitté — uppdrag',
-  'press_title' => 'Tryck på — titel',
+  'press_title' => 'Press — titel',
   'press_intro' => 'Press — inledning',
-  'press_contact' => 'Tryck — kontakt',
+  'press_contact' => 'Press — kontakt',
   'meta_desc' => 'Hantering av flerspråkigt redaktionellt innehåll.',
 );

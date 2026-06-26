@@ -14,8 +14,8 @@ return array (
   'committee_title' => 'Επιτροπή — τίτλος',
   'committee_intro' => 'Επιτροπή — εισαγωγή',
   'committee_mission' => 'Επιτροπή — αποστολή',
-  'press_title' => 'Πατήστε — τίτλος',
-  'press_intro' => 'Πατήστε — εισαγωγή',
-  'press_contact' => 'Πατήστε — επαφή',
+  'press_title' => 'Τύπος — τίτλος',
+  'press_intro' => 'Τύπος — εισαγωγή',
+  'press_contact' => 'Τύπος — επαφή',
   'meta_desc' => 'Διαχείριση πολυγλωσσικού εκδοτικού περιεχομένου.',
 );

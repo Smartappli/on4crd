@@ -33,7 +33,7 @@ return array (
   'relais_description' => 'Informații practice despre releul Radio Club Durnal și parametrii acestuia radio.',
   'schools_title' => 'Școli și pedagogie radio',
   'schools_description' => 'ON4CRD resurse educaționale pentru profesori, școli și proiecte educaționale în jurul radioului.',
-  'press_title' => 'Apăsați ON4CRD',
+  'press_title' => 'Presă ON4CRD',
   'press_description' => 'Dosar de presă, informații publice și contacte pentru jurnaliștii interesați de ON4CRD.',
   'sponsoring_title' => 'Sponsorizare ON4CRD',
   'sponsoring_description' => 'Soluții de sponsorizare și parteneriat cu Radio Club Durnal ON4CRD.',

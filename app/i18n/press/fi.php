@@ -2,6 +2,6 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Paina',
+  'title' => 'Lehdistö',
   'body' => 'Lehdistöosio toimitetaan hallintomoduulin kautta.',
 );

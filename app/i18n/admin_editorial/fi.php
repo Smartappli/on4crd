@@ -14,8 +14,8 @@ return array (
   'committee_title' => 'Komitea – nimi',
   'committee_intro' => 'Komitea – johdanto',
   'committee_mission' => 'Komitea – tehtävä',
-  'press_title' => 'Paina — otsikko',
+  'press_title' => 'Lehdistö — otsikko',
   'press_intro' => 'Lehdistö - esittely',
-  'press_contact' => 'Paina — ota yhteyttä',
+  'press_contact' => 'Lehdistö — yhteystieto',
   'meta_desc' => 'Monikielisen toimituksellisen sisällön hallinta.',
 );

@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Δημόσια τεχνικά άρθρα.',
   'admin_committee_title' => 'Επιτροπή',
   'admin_committee_desc' => 'Μέλη της επιτροπής, ρόλος, σειρά και βιογραφικό.',
-  'admin_press_title' => 'Πατήστε',
+  'admin_press_title' => 'Τύπος',
   'admin_press_desc' => 'Επαφές τύπου, χρονολογημένες εκδόσεις και έγγραφα με δυνατότητα λήψης.',
   'admin_events_title' => 'Ατζέντα',
   'admin_events_desc' => 'Οι εκδηλώσεις συλλόγου και οι τοπικοί διαγωνισμοί εμφανίζονται σε στοιχεία σε πραγματικό χρόνο.',

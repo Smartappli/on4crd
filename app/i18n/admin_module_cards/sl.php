@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Javni tehnični članki.',
   'admin_committee_title' => 'odbor',
   'admin_committee_desc' => 'Člani komisije, vloga, vrstni red in življenjepis.',
-  'admin_press_title' => 'Pritisnite',
+  'admin_press_title' => 'Mediji',
   'admin_press_desc' => 'Stiki za medije, datirane objave in dokumenti, ki jih je mogoče prenesti.',
   'admin_events_title' => 'Dnevni red',
   'admin_events_desc' => 'Klubski dogodki in lokalna tekmovanja, prikazana v pripomočkih v živo.',

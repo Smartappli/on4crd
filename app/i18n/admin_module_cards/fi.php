@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Julkiset tekniset artikkelit.',
   'admin_committee_title' => 'komitea',
   'admin_committee_desc' => 'Toimikunnan jäsenet, rooli, järjestys ja elämäkerta.',
-  'admin_press_title' => 'Paina',
+  'admin_press_title' => 'Lehdistö',
   'admin_press_desc' => 'Lehdistöyhteystiedot, päivätyt tiedotteet ja ladattavat asiakirjat.',
   'admin_events_title' => 'Tapahtumakalenteri',
   'admin_events_desc' => 'Klubitapahtumat ja paikalliset kilpailut näkyvät reaaliaikaisissa komponenteissa.',

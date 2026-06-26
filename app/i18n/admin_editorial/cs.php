@@ -14,8 +14,8 @@ return array (
   'committee_title' => 'Výbor — titul',
   'committee_intro' => 'Výbor — úvod',
   'committee_mission' => 'Výbor — mise',
-  'press_title' => 'Stiskněte — titulek',
+  'press_title' => 'Tisk — titulek',
   'press_intro' => 'Tisk — úvod',
-  'press_contact' => 'Stiskněte — kontakt',
+  'press_contact' => 'Tisk — kontakt',
   'meta_desc' => 'Správa vícejazyčného redakčního obsahu.',
 );

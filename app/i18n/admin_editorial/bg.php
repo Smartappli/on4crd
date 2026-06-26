@@ -14,8 +14,8 @@ return array (
   'committee_title' => 'Комитет — заглавие',
   'committee_intro' => 'Комитет — въведение',
   'committee_mission' => 'Комитет — мисия',
-  'press_title' => 'Натиснете — заглавие',
+  'press_title' => 'Преса — заглавие',
   'press_intro' => 'Преса — въведение',
-  'press_contact' => 'Натиснете — контакт',
+  'press_contact' => 'Преса — контакт',
   'meta_desc' => 'Управление на многоезично редакционно съдържание.',
 );

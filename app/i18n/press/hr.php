@@ -2,6 +2,6 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Pritisnite',
+  'title' => 'Mediji',
   'body' => 'Tiskovni dio će se opskrbljivati putem administrativnog modula.',
 );

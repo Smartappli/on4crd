@@ -33,7 +33,7 @@ return array (
   'relais_description' => 'Praktične informacije o releju Radio kluba Durnal i njegovim radio parametrima.',
   'schools_title' => 'Škole i radio pedagogija',
   'schools_description' => 'ON4CRD obrazovni resursi za učitelje, škole i obrazovne projekte oko radija.',
-  'press_title' => 'Pritisnite ON4CRD',
+  'press_title' => 'Mediji ON4CRD',
   'press_description' => 'Press kit, informacije za javnost i kontakti za novinare zainteresirane za ON4CRD.',
   'sponsoring_title' => 'Sponzorstvo ON4CRD',
   'sponsoring_description' => 'Sponzorska i partnerska rješenja s Radio klubom Durnal ON4CRD.',

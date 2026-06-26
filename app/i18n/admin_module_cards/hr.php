@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Javni tehnički članci.',
   'admin_committee_title' => 'Povjerenstvo',
   'admin_committee_desc' => 'Članovi povjerenstva, uloga, redoslijed i biografija.',
-  'admin_press_title' => 'Pritisnite',
+  'admin_press_title' => 'Mediji',
   'admin_press_desc' => 'Kontakti za medije, datirana izdanja i dokumenti za preuzimanje.',
   'admin_events_title' => 'Dnevni red',
   'admin_events_desc' => 'Klupski događaji i lokalna natjecanja prikazani u komponentama u stvarnom vremenu.',

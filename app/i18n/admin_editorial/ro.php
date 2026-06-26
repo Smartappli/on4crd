@@ -14,8 +14,8 @@ return array (
   'committee_title' => 'Comitetul — titlu',
   'committee_intro' => 'Comitetul — introducere',
   'committee_mission' => 'Comitetul — misiune',
-  'press_title' => 'Apăsați — titlu',
+  'press_title' => 'Presă — titlu',
   'press_intro' => 'Apăsare – introducere',
-  'press_contact' => 'Apăsați — contact',
+  'press_contact' => 'Presă — contact',
   'meta_desc' => 'Gestionarea conținutului editorial multilingv.',
 );

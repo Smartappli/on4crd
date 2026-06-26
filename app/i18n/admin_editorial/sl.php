@@ -14,8 +14,8 @@ return array (
   'committee_title' => 'Odbor — naziv',
   'committee_intro' => 'Odbor — uvod',
   'committee_mission' => 'Odbor — poslanstvo',
-  'press_title' => 'Pritisnite — naslov',
+  'press_title' => 'Mediji — naslov',
   'press_intro' => 'Tisk — uvod',
-  'press_contact' => 'Pritisnite — stik',
+  'press_contact' => 'Mediji — stik',
   'meta_desc' => 'Upravljanje večjezične uredniške vsebine.',
 );

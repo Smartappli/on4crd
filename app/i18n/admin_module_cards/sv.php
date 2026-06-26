@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Offentliga tekniska artiklar.',
   'admin_committee_title' => 'kommittén',
   'admin_committee_desc' => 'Kommittéledamöter, roll, ordning och biografi.',
-  'admin_press_title' => 'Tryck',
+  'admin_press_title' => 'Pressrum',
   'admin_press_desc' => 'Presskontakter, daterade pressmeddelanden och nedladdningsbara dokument.',
   'admin_events_title' => 'Dagordning',
   'admin_events_desc' => 'Klubbevenemang och lokala tävlingar visas i realtidskomponenter.',

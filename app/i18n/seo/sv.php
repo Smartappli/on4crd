@@ -33,7 +33,7 @@ return array (
   'relais_description' => 'Praktisk information om Radio Club Durnal-reläet och dess radioparametrar.',
   'schools_title' => 'Skolor och radiopedagogik',
   'schools_description' => 'ON4CRD utbildningsresurser för lärare, skolor och utbildningsprojekt kring radio.',
-  'press_title' => 'Tryck på ON4CRD',
+  'press_title' => 'ON4CRD-press',
   'press_description' => 'Presskit, offentlig information och kontakter för journalister som är intresserade av ON4CRD.',
   'sponsoring_title' => 'Sponsring ON4CRD',
   'sponsoring_description' => 'Sponsring och partnerskapslösningar med Radio Club Durnal ON4CRD.',

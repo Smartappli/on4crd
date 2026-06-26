@@ -23,6 +23,6 @@ return array (
   'th_date' => 'Datum',
   'th_file' => 'Arkiv',
   'open' => 'öppna',
-  'layout' => 'Tryck',
+  'layout' => 'Pressrum',
   'meta_desc' => 'Hantering av presskontakter och pressmeddelanden.',
 );

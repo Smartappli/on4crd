@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Articole tehnice publice.',
   'admin_committee_title' => 'Comitetul',
   'admin_committee_desc' => 'Membrii comisiei, rol, ordine și biografie.',
-  'admin_press_title' => 'Apăsați',
+  'admin_press_title' => 'Presă',
   'admin_press_desc' => 'Contacte de presă, comunicate datate și documente descărcabile.',
   'admin_events_title' => 'Calendar',
   'admin_events_desc' => 'Evenimentele clubului și concursurile locale afișate în componente în timp real.',

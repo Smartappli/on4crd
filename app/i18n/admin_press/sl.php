@@ -23,6 +23,6 @@ return array (
   'th_date' => 'Datum',
   'th_file' => 'Datoteka',
   'open' => 'odprto',
-  'layout' => 'Pritisnite',
+  'layout' => 'Mediji',
   'meta_desc' => 'Upravljanje stikov z mediji in sporočil za javnost.',
 );

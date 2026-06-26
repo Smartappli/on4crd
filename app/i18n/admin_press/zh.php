@@ -23,6 +23,6 @@ return [
     'th_date' => '日期',
     'th_file' => '文件',
     'open' => '打开',
-    'layout' => '按',
+    'layout' => '媒体',
     'meta_desc' => '管理新闻联系人和新闻稿。',
 ];

@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Veřejné technické články.',
   'admin_committee_title' => 'výboru',
   'admin_committee_desc' => 'Členové výboru, role, pořadí a biografie.',
-  'admin_press_title' => 'Stiskněte',
+  'admin_press_title' => 'Tisk',
   'admin_press_desc' => 'Tiskové kontakty, datovaná vydání a dokumenty ke stažení.',
   'admin_events_title' => 'Kalendář',
   'admin_events_desc' => 'Klubové akce a místní soutěže zobrazené v živých widgetech.',

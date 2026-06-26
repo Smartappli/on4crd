@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'contact_added' => 'Contact de presă adăugat.',
   'release_added' => 'Comunicat de presă adăugat.',
-  'contacts_title' => 'Apăsați contacte',
+  'contacts_title' => 'Contacte de presă',
   'releases_title' => 'Comunicate de presă',
   'full_name' => 'Numele complet',
   'role' => 'Rol',
@@ -23,6 +23,6 @@ return array (
   'th_date' => 'Data',
   'th_file' => 'Fişier',
   'open' => 'deschide',
-  'layout' => 'Presa',
+  'layout' => 'Presă',
   'meta_desc' => 'Gestionarea contactelor de presa si comunicatelor de presa.',
 );

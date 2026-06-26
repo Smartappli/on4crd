@@ -14,7 +14,7 @@ return array (
   'admin_articles_desc' => 'Публични технически статии.',
   'admin_committee_title' => 'комитет',
   'admin_committee_desc' => 'Членове на комисията, роля, ред и биография.',
-  'admin_press_title' => 'Натиснете',
+  'admin_press_title' => 'Преса',
   'admin_press_desc' => 'Контакти с пресата, датирани издания и документи за изтегляне.',
   'admin_events_title' => 'Дневен ред',
   'admin_events_desc' => 'Клубни събития и местни състезания, показани в уиджети на живо.',
