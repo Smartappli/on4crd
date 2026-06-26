@@ -91,7 +91,7 @@ return array (
   'administer' => 'Kelola',
   'category_general' => 'Umum',
   'edit_document' => 'Sunting / Hapus',
-  'edit_document_title' => 'Sunting Dokumen',
+  'edit_document_title' => 'Sunting dokumen',
   'replace_document_file' => 'Mengajukan',
   'save_document' => 'Simpan',
   'delete_document_warning' => 'Hapus item ini secara permanen?',

@@ -91,7 +91,7 @@ return array (
   'administer' => 'Upravljaj',
   'category_general' => 'Splošno',
   'edit_document' => 'Uredi / Izbriši',
-  'edit_document_title' => 'Uredi Dokument',
+  'edit_document_title' => 'Uredi dokument',
   'replace_document_file' => 'Datoteka',
   'save_document' => 'Shrani',
   'delete_document_warning' => 'Želite trajno izbrisati ta element?',

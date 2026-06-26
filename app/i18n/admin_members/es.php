@@ -25,7 +25,7 @@ return array (
   'password_reset_force' => 'Forzar el próximo inicio de sesión',
   'password_reset_unavailable' => 'No disponible',
   'member_created' => 'Miembro creado.',
-  'create_title' => 'Anadir un miembro',
+  'create_title' => 'Añadir un miembro',
   'create_submit' => 'Crear miembro',
   'temporary_password' => 'Contrasena temporal',
   'err_name' => 'Nombre obligatorio.',

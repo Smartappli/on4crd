@@ -91,7 +91,7 @@ return array (
   'administer' => 'Forvalte',
   'category_general' => 'Generelt',
   'edit_document' => 'Rediger / Slet',
-  'edit_document_title' => 'Rediger Dokument',
+  'edit_document_title' => 'Rediger dokument',
   'replace_document_file' => 'Fil',
   'save_document' => 'Gem',
   'delete_document_warning' => 'Vil du slette dette element permanent?',

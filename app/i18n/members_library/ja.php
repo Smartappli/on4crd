@@ -91,7 +91,7 @@ return array (
   'administer' => '管理',
   'category_general' => '一般',
   'edit_document' => '編集 / 削除',
-  'edit_document_title' => '編集 資料',
+  'edit_document_title' => '資料を編集',
   'replace_document_file' => 'ファイル',
   'save_document' => '保存',
   'delete_document_warning' => 'この項目を完全に削除しますか？',

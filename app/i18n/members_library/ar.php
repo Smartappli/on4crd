@@ -91,7 +91,7 @@ return array (
   'administer' => 'إدارة',
   'category_general' => 'عام',
   'edit_document' => 'تعديل / حذف',
-  'edit_document_title' => 'تعديل مستند',
+  'edit_document_title' => 'تعديل المستند',
   'replace_document_file' => 'ملف',
   'save_document' => 'حفظ',
   'delete_document_warning' => 'حذف هذا العنصر نهائيا؟',

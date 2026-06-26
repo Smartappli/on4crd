@@ -91,7 +91,7 @@ return array (
   'administer' => 'Administrēt',
   'category_general' => 'Vispārīgi',
   'edit_document' => 'Rediģēt / Dzēst',
-  'edit_document_title' => 'Rediģēt Dokuments',
+  'edit_document_title' => 'Rediģēt dokumentu',
   'replace_document_file' => 'Fails',
   'save_document' => 'Saglabāt',
   'delete_document_warning' => 'Vai neatgriezeniski dzēst šo elementu?',

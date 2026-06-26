@@ -91,7 +91,7 @@ return array (
   'administer' => 'प्रशासित करें',
   'category_general' => 'सामान्य',
   'edit_document' => 'संपादन करना / हटाएं',
-  'edit_document_title' => 'संपादन करना दस्तावेज़',
+  'edit_document_title' => 'दस्तावेज़ संपादित करें',
   'replace_document_file' => 'फ़ाइल',
   'save_document' => 'सहेजें',
   'delete_document_warning' => 'यह आइटम स्थायी रूप से हटाएँ?',

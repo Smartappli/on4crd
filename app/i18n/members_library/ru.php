@@ -91,7 +91,7 @@ return array (
   'administer' => 'Администрировать',
   'category_general' => 'Общее',
   'edit_document' => 'Редактировать / Удалить',
-  'edit_document_title' => 'Редактировать Документ',
+  'edit_document_title' => 'Редактировать документ',
   'replace_document_file' => 'Файл',
   'save_document' => 'Сохранить',
   'delete_document_warning' => 'Удалить этот элемент навсегда?',

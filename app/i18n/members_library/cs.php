@@ -91,7 +91,7 @@ return array (
   'administer' => 'Spravovat',
   'category_general' => 'Obecné',
   'edit_document' => 'Upravit / Smazat',
-  'edit_document_title' => 'Upravit Dokument',
+  'edit_document_title' => 'Upravit dokument',
   'replace_document_file' => 'Soubor',
   'save_document' => 'Uložit',
   'delete_document_warning' => 'Trvale smazat tento prvek?',

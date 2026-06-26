@@ -91,7 +91,7 @@ return array (
   'administer' => '管理',
   'category_general' => '常规',
   'edit_document' => '编辑 / 删除',
-  'edit_document_title' => '编辑 文档',
+  'edit_document_title' => '编辑文档',
   'replace_document_file' => '文件',
   'save_document' => '保存',
   'delete_document_warning' => '永久删除此项目？',

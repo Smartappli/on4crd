@@ -91,7 +91,7 @@ return array (
   'administer' => 'Adminisztrálás',
   'category_general' => 'Általános',
   'edit_document' => 'Szerkesztés / Törölje',
-  'edit_document_title' => 'Szerkesztés dokumentum',
+  'edit_document_title' => 'Dokumentum szerkesztése',
   'replace_document_file' => 'Fájl',
   'save_document' => 'Mentés',
   'delete_document_warning' => 'Véglegesen törli ezt az elemet?',

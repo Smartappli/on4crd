@@ -91,7 +91,7 @@ return array (
   'administer' => 'Spravovať',
   'category_general' => 'Všeobecné',
   'edit_document' => 'Upraviť / Odstrániť',
-  'edit_document_title' => 'Upraviť Dokument',
+  'edit_document_title' => 'Upraviť dokument',
   'replace_document_file' => 'Súbor',
   'save_document' => 'Uložiť',
   'delete_document_warning' => 'Chcete natrvalo odstrániť tento prvok?',

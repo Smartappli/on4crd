@@ -31,5 +31,5 @@ return array (
   'err_name' => 'Name erforderlich.',
   'err_password' => 'Ungueltiges Passwort.',
   'err_exists' => 'Ein Mitglied oder Konto existiert bereits für dieses Rufzeichen.',
-  'auth_unavailable' => 'Authentifizierung nicht verfuegbar.',
+  'auth_unavailable' => 'Authentifizierung nicht verfügbar.',
 );

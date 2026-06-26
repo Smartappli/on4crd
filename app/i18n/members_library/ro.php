@@ -91,7 +91,7 @@ return array (
   'administer' => 'Administrează',
   'category_general' => 'Generală',
   'edit_document' => 'A modifica / ŞTERGE',
-  'edit_document_title' => 'A modifica Document',
+  'edit_document_title' => 'Editare document',
   'replace_document_file' => 'Fişier',
   'save_document' => 'Salvează',
   'delete_document_warning' => 'Ștergeți definitiv acest element?',

@@ -91,7 +91,7 @@ return array (
   'administer' => 'Amministra',
   'category_general' => 'Ġenerali',
   'edit_document' => 'Biex timmodifika / ĦaSsar',
-  'edit_document_title' => 'Biex timmodifika Dokument',
+  'edit_document_title' => 'Immodifika d-dokument',
   'replace_document_file' => 'Fajl',
   'save_document' => 'Issejvja',
   'delete_document_warning' => 'Tħassar dan l-element b\'mod permanenti?',

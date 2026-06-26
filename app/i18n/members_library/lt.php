@@ -91,7 +91,7 @@ return array (
   'administer' => 'Administruoti',
   'category_general' => 'Bendra',
   'edit_document' => 'Redaguoti / Ištrinti',
-  'edit_document_title' => 'Redaguoti dokumentas',
+  'edit_document_title' => 'Redaguoti dokumentą',
   'replace_document_file' => 'Failas',
   'save_document' => 'Išsaugoti',
   'delete_document_warning' => 'Visam laikui ištrinti šį elementą?',

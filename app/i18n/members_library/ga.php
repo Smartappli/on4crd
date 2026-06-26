@@ -91,7 +91,7 @@ return array (
   'administer' => 'Riar',
   'category_general' => 'Ginearálta',
   'edit_document' => 'Cuir in eagar / Scrios',
-  'edit_document_title' => 'Cuir in eagar Doiciméad',
+  'edit_document_title' => 'Cuir doiciméad in eagar',
   'replace_document_file' => 'Comhad',
   'save_document' => 'Sábháil',
   'delete_document_warning' => 'An bhfuil fonn ort an eilimint seo a scriosadh go buan?',

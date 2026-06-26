@@ -91,7 +91,7 @@ return array (
   'administer' => 'Hallinnoi',
   'category_general' => 'Yleinen',
   'edit_document' => 'Muokkaa / Poista',
-  'edit_document_title' => 'Muokkaa Asiakirja',
+  'edit_document_title' => 'Muokkaa asiakirjaa',
   'replace_document_file' => 'Tiedosto',
   'save_document' => 'Tallenna',
   'delete_document_warning' => 'Poistetaanko tämä elementti pysyvästi?',

@@ -91,7 +91,7 @@ return array (
   'administer' => 'Amministra',
   'category_general' => 'Generale',
   'edit_document' => 'Modifica / Elimina',
-  'edit_document_title' => 'Modifica Documento',
+  'edit_document_title' => 'Modifica documento',
   'replace_document_file' => 'Documento',
   'save_document' => 'Salva',
   'delete_document_warning' => 'Eliminare definitivamente questo elemento?',

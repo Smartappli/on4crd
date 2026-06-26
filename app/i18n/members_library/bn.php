@@ -91,7 +91,7 @@ return array (
   'administer' => 'প্রশাসন',
   'category_general' => 'সাধারণ',
   'edit_document' => 'সম্পাদনা করুন / মুছুন',
-  'edit_document_title' => 'সম্পাদনা করুন নথি',
+  'edit_document_title' => 'নথি সম্পাদনা করুন',
   'replace_document_file' => 'ফাইল',
   'save_document' => 'সংরক্ষণ',
   'delete_document_warning' => 'এই আইটেমটি স্থায়ীভাবে মুছে ফেলবেন?',

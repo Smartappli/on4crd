@@ -91,7 +91,7 @@ return array (
   'administer' => 'Administrera',
   'category_general' => 'Allmänt',
   'edit_document' => 'Redigera / Ta bort',
-  'edit_document_title' => 'Redigera Dokument',
+  'edit_document_title' => 'Redigera dokument',
   'replace_document_file' => 'Arkiv',
   'save_document' => 'Spara',
   'delete_document_warning' => 'Vill du ta bort det här elementet permanent?',

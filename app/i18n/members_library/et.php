@@ -91,7 +91,7 @@ return array (
   'administer' => 'Halda',
   'category_general' => 'Üldine',
   'edit_document' => 'Muuda / Kustuta',
-  'edit_document_title' => 'Muuda Dokument',
+  'edit_document_title' => 'Muuda dokumenti',
   'replace_document_file' => 'Fail',
   'save_document' => 'Salvesta',
   'delete_document_warning' => 'Kas kustutada see element jäädavalt?',

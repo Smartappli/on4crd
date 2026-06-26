@@ -91,7 +91,7 @@ return array (
   'administer' => 'Beheren',
   'category_general' => 'Algemeen',
   'edit_document' => 'Bewerken / Verwijderen',
-  'edit_document_title' => 'Bewerken Document',
+  'edit_document_title' => 'Document bewerken',
   'replace_document_file' => 'Bestand',
   'save_document' => 'Opslaan',
   'delete_document_warning' => 'Dit item permanent verwijderen?',

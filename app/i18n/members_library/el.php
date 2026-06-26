@@ -91,7 +91,7 @@ return array (
   'administer' => 'Διαχείριση',
   'category_general' => 'Γενικά',
   'edit_document' => 'Επεξεργασία / Διαγραφή',
-  'edit_document_title' => 'Επεξεργασία Έγγραφο',
+  'edit_document_title' => 'Επεξεργασία εγγράφου',
   'replace_document_file' => 'Αρχείο',
   'save_document' => 'Αποθήκευση',
   'delete_document_warning' => 'Να διαγραφεί οριστικά αυτό το στοιχείο;',

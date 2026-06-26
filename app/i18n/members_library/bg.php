@@ -91,7 +91,7 @@ return array (
   'administer' => 'Администриране',
   'category_general' => 'Общи',
   'edit_document' => 'Редактиране / Изтриване',
-  'edit_document_title' => 'Редактиране Документ',
+  'edit_document_title' => 'Редактиране на документ',
   'replace_document_file' => 'Файл',
   'save_document' => 'Запазване',
   'delete_document_warning' => 'Изтриване за постоянно на този елемент?',
