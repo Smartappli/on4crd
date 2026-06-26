@@ -36,7 +36,7 @@ return array (
   'impedance' => 'Impedanta (Ω)',
   'inductance' => 'Inductanță (µH)',
   'capacitance' => 'Capacitate (pF)',
-  'balun_calc' => 'Calcul balun',
+  'balun_calc' => 'Calculator balun',
   'source_imp' => 'Impedanța sursei (Ω)',
   'load_imp' => 'impedanta de sarcina (Ω)',
   'turns_ratio' => 'Raport de spire',

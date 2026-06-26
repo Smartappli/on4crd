@@ -87,7 +87,7 @@ return array (
   'dipole_total_length' => 'Beräknad total längd',
   'duty_cycle_calc' => 'Arbetscykel',
   'tx_time_sec' => 'Sändningstid (s)',
-  'period_sec' => 'Total period (s)',
+  'period_sec' => 'Totalperiod (s)',
   'duty_cycle_result' => 'Arbetscykel',
   'divider_calc' => 'Spänningsdelare',
   'vin_volts' => 'Ingångsspänning (V)',
