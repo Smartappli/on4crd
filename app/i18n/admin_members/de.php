@@ -30,6 +30,6 @@ return array (
   'temporary_password' => 'Temporaeres Passwort',
   'err_name' => 'Name erforderlich.',
   'err_password' => 'Ungueltiges Passwort.',
-  'err_exists' => 'Ein Mitglied oder Konto existiert bereits fuer dieses Rufzeichen.',
+  'err_exists' => 'Ein Mitglied oder Konto existiert bereits für dieses Rufzeichen.',
   'auth_unavailable' => 'Authentifizierung nicht verfuegbar.',
 );

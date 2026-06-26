@@ -59,7 +59,7 @@ return array (
   'proposal_close' => 'Cerca',
   'categories' => 'Secciones',
   'search' => 'investigar',
-  'news_count_label' => 'numero de noticias',
+  'news_count_label' => 'número de noticias',
   'proposal_recorded' => 'Propuesta guardada en tus contenidos.',
   'invalid' => 'Solicitud no válida.',
   'publish' => 'Publicar',

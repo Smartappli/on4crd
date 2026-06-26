@@ -57,7 +57,7 @@ return array (
   'adif_processing' => 'Procesando archivos ADIF...',
   'adif_import_error' => 'Error al importar ADIF.',
   'adif_imported_status' => '{imported} QSO importado(s) desde {files} archivo(s).',
-  'design_help' => 'Elige un tipo de fondo. El formulario se adapta automaticamente y la vista previa se actualiza en directo.',
+  'design_help' => 'Elige un tipo de fondo. El formulario se adapta automáticamente y la vista previa se actualiza en directo.',
   'label_solid' => 'Color solido',
   'label_palette' => 'Paleta predefinida',
   'bg_image_name' => 'Nombre del fondo de imagen',

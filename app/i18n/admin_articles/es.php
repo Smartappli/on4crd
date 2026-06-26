@@ -62,7 +62,7 @@ return array (
   'filter' => 'Filtrar',
   'reset_filter' => 'Reiniciar',
   'revisions' => 'Historial de versiones',
-  'scheduled_at' => 'Fecha de publicacion',
+  'scheduled_at' => 'Fecha de publicación',
   'ok_revision_restored' => 'Version restaurada.',
   'scheduled' => 'Programado',
   'rejected' => 'Rechazado',

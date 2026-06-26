@@ -42,7 +42,7 @@ return array (
   'edit' => 'Bearbeiten',
   'stats' => 'Statistiken',
   'pause' => 'Pausieren',
-  'back_to_pending' => 'Zurueck auf ausstehend setzen',
+  'back_to_pending' => 'Zurück auf ausstehend setzen',
   'draft' => 'Entwurf',
   'none_ads' => 'Keine Anzeigen gespeichert.',
   'detailed_stats' => 'Detaillierte Statistiken',
