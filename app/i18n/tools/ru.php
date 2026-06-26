@@ -87,7 +87,7 @@ return array (
   'dipole_total_length' => 'Предполагаемая общая длина',
   'duty_cycle_calc' => 'Скважность',
   'tx_time_sec' => 'Время передачи (с)',
-  'period_sec' => 'Общий период (ы)',
+  'period_sec' => 'Общий период (с)',
   'duty_cycle_result' => 'Скважность',
   'divider_calc' => 'Делитель напряжения',
   'vin_volts' => 'Входное напряжение (V)',
