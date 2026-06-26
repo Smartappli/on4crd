@@ -198,6 +198,7 @@ $proposalStatusLabels = [
 $proposalTypeLabels = [
     'category' => $t('proposal_type_category'),
     'content' => $t('proposal_type_content'),
+    'subcategory' => $t('proposal_type_subcategory'),
     'subsubcategory' => $t('proposal_type_subsubcategory'),
     'tag' => $t('proposal_type_tag'),
 ];
