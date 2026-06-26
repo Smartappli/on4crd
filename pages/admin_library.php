@@ -787,7 +787,7 @@ ob_start();
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $catOpt['code']) ?>">
-                    <span class="badge muted"><?= e((string) $catOpt['code']) ?></span>
+                    <span class="badge muted taxonomy-pill-category"><?= e((string) $catOpt['code']) ?></span>
                     <input type="text" name="category_label" value="<?= e((string) $catOpt['label']) ?>" maxlength="160" required>
                     <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                     <?php if ((string) $catOpt['code'] !== 'general'): ?><button class="button secondary small" type="submit" name="action" value="delete_category"><?= e((string) $t['delete']) ?></button><?php endif; ?>
@@ -818,7 +818,7 @@ ob_start();
                         <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_category" value="<?= e($parentCode) ?>">
                         <input type="hidden" name="subcategory_code" value="<?= e((string) $subcatOpt['code']) ?>">
-                        <span class="badge muted"><?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?> / <?= e((string) $subcatOpt['code']) ?></span>
+                        <span class="badge muted taxonomy-pill-subcategory"><?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?> / <?= e((string) $subcatOpt['code']) ?></span>
                         <input type="text" name="subcategory_label" value="<?= e((string) $subcatOpt['label']) ?>" maxlength="160" required>
                         <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                         <button class="button secondary small" type="submit" name="action" value="delete_subcategory"><?= e((string) $t['delete']) ?></button>
@@ -856,7 +856,7 @@ ob_start();
                         <input type="hidden" name="subsubcategory_category" value="<?= e($parentCategoryCode) ?>">
                         <input type="hidden" name="subsubcategory_parent" value="<?= e($parentSubcategoryCode) ?>">
                         <input type="hidden" name="subsubcategory_code" value="<?= e((string) $subsubcatOpt['code']) ?>">
-                        <span class="badge muted"><?= e((string) ($categoryLabels[$parentCategoryCode] ?? $parentCategoryCode)) ?> / <?= e((string) ($subcategoryLabels[$parentRef] ?? $parentSubcategoryCode)) ?> / <?= e((string) $subsubcatOpt['code']) ?></span>
+                        <span class="badge muted taxonomy-pill-subsubcategory"><?= e((string) ($categoryLabels[$parentCategoryCode] ?? $parentCategoryCode)) ?> / <?= e((string) ($subcategoryLabels[$parentRef] ?? $parentSubcategoryCode)) ?> / <?= e((string) $subsubcatOpt['code']) ?></span>
                         <input type="text" name="subsubcategory_label" value="<?= e((string) $subsubcatOpt['label']) ?>" maxlength="160" required>
                         <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                         <button class="button secondary small" type="submit" name="action" value="delete_subsubcategory"><?= e((string) $t['delete']) ?></button>

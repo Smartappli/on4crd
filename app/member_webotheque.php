@@ -2859,15 +2859,15 @@ function render_admin_webotheque_page(): void
 
         <?php if (count($categories) > 1): ?>
             <nav class="classifieds-category-strip webotheque-category-filter" aria-label="<?= e((string) $t['domain_field']) ?>">
-                <a class="classifieds-category-pill<?= $categoryFilter === '' && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search])) ?>"><?= e((string) $t['all_categories']) ?></a>
+                <a class="classifieds-category-pill taxonomy-pill-category<?= $categoryFilter === '' && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search])) ?>"><?= e((string) $t['all_categories']) ?></a>
                 <?php foreach ($visibleCategories as $code => $label): ?>
-                    <a class="classifieds-category-pill<?= $categoryFilter === $code && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
+                    <a class="classifieds-category-pill taxonomy-pill-category<?= $categoryFilter === $code && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
                     <?php foreach (($visibleSubcategoriesByCategory[(string) $code] ?? []) as $subcategoryInfo): ?>
                         <?php $subCode = webotheque_subcategory_code((string) $subcategoryInfo['code']); ?>
-                        <a class="classifieds-category-pill<?= $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode])) ?>"><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></a>
+                        <a class="classifieds-category-pill taxonomy-pill-subcategory<?= $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode])) ?>"><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></a>
                         <?php foreach (($visibleSubsubcategoriesByParent[(string) $code . ':' . $subCode] ?? []) as $subsubcategoryInfo): ?>
                             <?php $subsubCode = webotheque_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')); ?>
-                            <a class="classifieds-category-pill<?= $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode, 'subsubcategory' => $subsubCode])) ?>"><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubCode)) ?></a>
+                            <a class="classifieds-category-pill taxonomy-pill-subsubcategory<?= $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode, 'subsubcategory' => $subsubCode])) ?>"><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubCode)) ?></a>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>

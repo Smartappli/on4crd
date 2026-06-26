@@ -2394,7 +2394,7 @@ function render_admin_member_document_module_page(string $module): void
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="update_category">
                         <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
-                        <span class="pill"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
+                        <span class="pill taxonomy-pill-category"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
                         <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
                         <button class="button small" type="submit"><?= e((string) $labels['save_document']) ?></button>
                         <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
@@ -2409,7 +2409,7 @@ function render_admin_member_document_module_page(string $module): void
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_subcategory">
                             <input type="hidden" name="subcategory_ref" value="<?= e(member_document_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                            <span class="pill"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
+                            <span class="pill taxonomy-pill-subcategory"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
                             <input type="text" name="subcategory_label" value="<?= e((string) $subcategoryInfo['label']) ?>" maxlength="160" required>
                             <button class="button small" type="submit"><?= e((string) $labels['save_document']) ?></button>
                             <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
@@ -2421,12 +2421,12 @@ function render_admin_member_document_module_page(string $module): void
 
         <?php if ($visibleCategories !== []): ?>
             <nav class="classifieds-category-strip member-document-category-filter" aria-label="<?= e((string) $labels['category_field']) ?>">
-                <a class="classifieds-category-pill<?= $categoryFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean($adminRoute, ['q' => $search])) ?>"><?= e((string) $labels['all_categories']) ?></a>
+                <a class="classifieds-category-pill taxonomy-pill-category<?= $categoryFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean($adminRoute, ['q' => $search])) ?>"><?= e((string) $labels['all_categories']) ?></a>
                 <?php foreach ($visibleCategories as $code => $label): ?>
-                    <a class="classifieds-category-pill<?= $categoryFilter === $code && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean($adminRoute, ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
+                    <a class="classifieds-category-pill taxonomy-pill-category<?= $categoryFilter === $code && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean($adminRoute, ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
                     <?php foreach (($visibleSubcategoriesByCategory[(string) $code] ?? []) as $subcategoryInfo): ?>
                         <?php $subCode = member_document_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
-                        <a class="classifieds-category-pill<?= $categoryFilter === $code && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean($adminRoute, ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode])) ?>"><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></a>
+                        <a class="classifieds-category-pill taxonomy-pill-subcategory<?= $categoryFilter === $code && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean($adminRoute, ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode])) ?>"><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></a>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             </nav>
