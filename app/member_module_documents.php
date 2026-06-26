@@ -2413,7 +2413,11 @@ function render_admin_member_document_module_page(string $module): void
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_subcategory">
                             <input type="hidden" name="subcategory_ref" value="<?= e(member_document_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                            <span class="pill taxonomy-pill-subcategory"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
+                            <span class="taxonomy-badge-row">
+                                <span class="badge muted taxonomy-pill-category"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?></span>
+                                <span class="badge muted taxonomy-pill-subcategory"><?= e($subCode) ?></span>
+                                <span class="badge muted"><?= $subTotal ?></span>
+                            </span>
                             <input type="text" name="subcategory_label" value="<?= e((string) $subcategoryInfo['label']) ?>" maxlength="160" required>
                             <button class="button small" type="submit"><?= e((string) $labels['save_document']) ?></button>
                             <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
