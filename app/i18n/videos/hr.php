@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Prijedlog je spremljen u vašim sadržajima.',
   'content_validated_direct' => 'Dokument je predložen i izravno odobren. Po potrebi dodajte datoteku iz administracije knjižnice.',
   'proposal_file_field' => 'Datoteka',
-  'propose_presentation_item' => 'Dokument',
+  'propose_presentation_item' => 'Video',
   'administration' => 'Administriraj',
   'manage_menu' => 'Upravljaj',
   'manage_my_files' => 'Otvori dokument',

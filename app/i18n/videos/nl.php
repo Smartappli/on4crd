@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Voorstel opgeslagen in uw inhoud.',
   'content_validated_direct' => 'Document voorgesteld en direct goedgekeurd. Voeg het bestand zo nodig via bibliotheekbeheer toe.',
   'proposal_file_field' => 'Bestand',
-  'propose_presentation_item' => 'Een document',
+  'propose_presentation_item' => 'Een video',
   'administration' => 'Beheren',
   'manage_menu' => 'Beheren',
   'manage_my_files' => 'Document openen',

@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'प्रस्ताव आपकी सामग्री में सहेज दिया गया है।',
   'content_validated_direct' => 'दस्तावेज़ प्रस्तावित और सीधे स्वीकृत किया गया। आवश्यकता होने पर पुस्तकालय प्रशासन से फ़ाइल जोड़ें।',
   'proposal_file_field' => 'फ़ाइल',
-  'propose_presentation_item' => 'एक दस्तावेज़',
+  'propose_presentation_item' => 'एक वीडियो',
   'administration' => 'प्रशासित करें',
   'manage_menu' => 'प्रबंधित करें',
   'manage_my_files' => 'दस्तावेज़ खोलें',

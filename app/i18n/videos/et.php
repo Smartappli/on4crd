@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Ettepanek salvestati teie sisusse.',
   'content_validated_direct' => 'Dokument pakuti välja ja kinnitati otse. Lisage fail vajaduse korral teegi halduses.',
   'proposal_file_field' => 'Fail',
-  'propose_presentation_item' => 'Dokument',
+  'propose_presentation_item' => 'Video',
   'administration' => 'Halda',
   'manage_menu' => 'Halda',
   'manage_my_files' => 'Ava dokument',

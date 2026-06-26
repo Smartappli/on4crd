@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => '提案はあなたのコンテンツに保存されました。',
   'content_validated_direct' => 'ドキュメントが提案され、直接承認されました。必要に応じてライブラリ管理からファイルを追加してください。',
   'proposal_file_field' => 'ファイル',
-  'propose_presentation_item' => 'ドキュメント',
+  'propose_presentation_item' => '動画',
   'administration' => '管理',
   'manage_menu' => '管理',
   'manage_my_files' => '資料を開く',

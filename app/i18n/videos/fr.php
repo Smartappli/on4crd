@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Proposition enregistrée dans vos contenus.',
   'content_validated_direct' => 'Vidéo proposée et validée directement.',
   'proposal_file_field' => 'Fichier vidéo ou ressource',
-  'propose_presentation_item' => 'Un contenu',
+  'propose_presentation_item' => 'Une vidéo',
   'administration' => 'Administer',
   'manage_menu' => 'Gérer',
   'manage_my_files' => 'Télécharger le document',

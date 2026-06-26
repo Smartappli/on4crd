@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Предложението е запазено във вашето съдържание.',
   'content_validated_direct' => 'Документът е предложен и одобрен директно. Добавете файла от администрацията на библиотеката, ако е необходимо.',
   'proposal_file_field' => 'Файл',
-  'propose_presentation_item' => 'Документ',
+  'propose_presentation_item' => 'Видео',
   'administration' => 'Администриране',
   'manage_menu' => 'Управление',
   'manage_my_files' => 'Отворете документа',

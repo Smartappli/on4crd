@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Usulan disimpan di konten Anda.',
   'content_validated_direct' => 'Dokumen diusulkan dan langsung disetujui. Tambahkan berkas dari administrasi perpustakaan jika perlu.',
   'proposal_file_field' => 'Mengajukan',
-  'propose_presentation_item' => 'Sebuah dokumen',
+  'propose_presentation_item' => 'Sebuah video',
   'administration' => 'Kelola',
   'manage_menu' => 'Kelola',
   'manage_my_files' => 'Buka dokumen',

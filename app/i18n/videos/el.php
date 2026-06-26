@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Η πρόταση αποθηκεύτηκε στο περιεχόμενό σας.',
   'content_validated_direct' => 'Το έγγραφο προτάθηκε και εγκρίθηκε απευθείας. Προσθέστε το αρχείο από τη διαχείριση της βιβλιοθήκης αν χρειάζεται.',
   'proposal_file_field' => 'Αρχείο',
-  'propose_presentation_item' => 'Ένα έγγραφο',
+  'propose_presentation_item' => 'Ένα βίντεο',
   'administration' => 'Διαχείριση',
   'manage_menu' => 'Διαχείριση',
   'manage_my_files' => 'Άνοιγμα εγγράφου',

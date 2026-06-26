@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Návrh bol uložený vo vašom obsahu.',
   'content_validated_direct' => 'Dokument bol navrhnutý a priamo schválený. V prípade potreby pridajte súbor v administrácii knižnice.',
   'proposal_file_field' => 'Súbor',
-  'propose_presentation_item' => 'Dokument',
+  'propose_presentation_item' => 'Video',
   'administration' => 'Spravovať',
   'manage_menu' => 'Spravovať',
   'manage_my_files' => 'Otvorte dokument',

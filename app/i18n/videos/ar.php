@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'تم حفظ الاقتراح في محتواك.',
   'content_validated_direct' => 'تم اقتراح المستند واعتماده مباشرة. أضف الملف من إدارة المكتبة إذا لزم الأمر.',
   'proposal_file_field' => 'ملف',
-  'propose_presentation_item' => 'مستند',
+  'propose_presentation_item' => 'فيديو',
   'administration' => 'إدارة',
   'manage_menu' => 'إدارة',
   'manage_my_files' => 'فتح المستند',

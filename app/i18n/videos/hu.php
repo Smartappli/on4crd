@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'A javaslat mentve lett a tartalmai közé.',
   'content_validated_direct' => 'A dokumentum javasolva és közvetlenül jóváhagyva. Szükség esetén adja hozzá a fájlt a könyvtár adminisztrációjában.',
   'proposal_file_field' => 'Fájl',
-  'propose_presentation_item' => 'Dokumentum',
+  'propose_presentation_item' => 'Videó',
   'administration' => 'Adminisztrálás',
   'manage_menu' => 'Kezelés',
   'manage_my_files' => 'Nyissa meg a dokumentumot',

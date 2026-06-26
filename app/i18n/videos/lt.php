@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
   'content_validated_direct' => 'Dokumentas pasiūlytas ir patvirtintas tiesiogiai. Prireikus pridėkite failą bibliotekos administracijoje.',
   'proposal_file_field' => 'Failas',
-  'propose_presentation_item' => 'Dokumentą',
+  'propose_presentation_item' => 'Vaizdo įrašą',
   'administration' => 'Administruoti',
   'manage_menu' => 'Tvarkyti',
   'manage_my_files' => 'Atidaryti dokumentą',

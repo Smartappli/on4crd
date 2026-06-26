@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => '建议已保存到你的内容中。',
   'content_validated_direct' => '文档已提出并直接批准。如有需要，请从资料库管理中添加文件。',
   'proposal_file_field' => '文件',
-  'propose_presentation_item' => '一个文档',
+  'propose_presentation_item' => '一个视频',
   'administration' => '管理',
   'manage_menu' => '管理',
   'manage_my_files' => '打开文档',

@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Vorschlag in Ihren Inhalten gespeichert.',
   'content_validated_direct' => 'Dokument vorgeschlagen und direkt genehmigt. Fügen Sie die Datei bei Bedarf in der Bibliotheksverwaltung hinzu.',
   'proposal_file_field' => 'Datei',
-  'propose_presentation_item' => 'Ein Dokument',
+  'propose_presentation_item' => 'Ein Video',
   'administration' => 'Verwalten',
   'manage_menu' => 'Verwalten',
   'manage_my_files' => 'Dokument öffnen',

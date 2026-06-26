@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Förslaget har sparats i ditt innehåll.',
   'content_validated_direct' => 'Dokument föreslaget och direkt godkänt. Lägg till filen från biblioteksadministrationen vid behov.',
   'proposal_file_field' => 'Arkiv',
-  'propose_presentation_item' => 'Ett dokument',
+  'propose_presentation_item' => 'En video',
   'administration' => 'Administrera',
   'manage_menu' => 'Hantera',
   'manage_my_files' => 'Öppna dokumentet',

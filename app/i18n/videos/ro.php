@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
   'content_validated_direct' => 'Document propus și aprobat direct. Adăugați fișierul din administrarea bibliotecii dacă este necesar.',
   'proposal_file_field' => 'Fişier',
-  'propose_presentation_item' => 'Un material',
+  'propose_presentation_item' => 'Un videoclip',
   'administration' => 'Administrează',
   'manage_menu' => 'Gestionează',
   'manage_my_files' => 'Deschideți documentul',

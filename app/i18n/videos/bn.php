@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'প্রস্তাবটি আপনার কনটেন্টে সংরক্ষিত হয়েছে।',
   'content_validated_direct' => 'নথিটি প্রস্তাবিত ও সরাসরি অনুমোদিত হয়েছে। প্রয়োজন হলে লাইব্রেরি প্রশাসন থেকে ফাইল যোগ করুন।',
   'proposal_file_field' => 'ফাইল',
-  'propose_presentation_item' => 'একটি নথি',
+  'propose_presentation_item' => 'একটি ভিডিও',
   'administration' => 'প্রশাসন',
   'manage_menu' => 'পরিচালনা করুন',
   'manage_my_files' => 'নথি খুলুন',

@@ -948,9 +948,14 @@ test('Selenium membre: proposer une video, la valider et la retrouver dans video
 
       await loginAsMember(driver);
       await visit(driver, 'videos');
-      const proposeButton = await driver.findElement(By.css('[data-member-document-modal-open="member-document-proposal-dialog"]'));
+      const proposeMenu = await driver.findElement(By.css('.member-document-propose-menu summary'));
+      const proposeMenuLabel = (await proposeMenu.getText()).replace(/\s+/g, ' ').trim();
+      assert.match(proposeMenuLabel, /Propos/i, 'La page videos doit afficher un menu Proposer.');
+      await driver.executeScript('arguments[0].click();', proposeMenu);
+
+      const proposeButton = await driver.findElement(By.css('.member-document-propose-menu [data-member-document-modal-open="member-document-proposal-dialog"]'));
       const proposeLabel = (await proposeButton.getText()).replace(/\s+/g, ' ').trim();
-      assert.match(proposeLabel, /Propos(?:er|e).*vid/i, 'Le bouton principal videos doit proposer une video.');
+      assert.match(proposeLabel, /vid/i, 'Le menu videos doit contenir une entree video.');
       await driver.executeScript('arguments[0].click();', proposeButton);
 
       const form = await driver.findElement(By.css('#member-document-proposal-dialog form.member-document-dialog-form'));

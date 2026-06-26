@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Forslaget er gemt i dit indhold.',
   'content_validated_direct' => 'Dokument foreslået og godkendt direkte. Tilføj filen via biblioteksadministrationen om nødvendigt.',
   'proposal_file_field' => 'Fil',
-  'propose_presentation_item' => 'Et dokument',
+  'propose_presentation_item' => 'En video',
   'administration' => 'Forvalte',
   'manage_menu' => 'Administrer',
   'manage_my_files' => 'Åbn dokument',

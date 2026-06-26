@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Propozycja została zapisana w Twoich treściach.',
   'content_validated_direct' => 'Dokument zaproponowany i zatwierdzony bezpośrednio. W razie potrzeby dodaj plik w administracji biblioteki.',
   'proposal_file_field' => 'Plik',
-  'propose_presentation_item' => 'Dokument',
+  'propose_presentation_item' => 'Film',
   'administration' => 'Administruj',
   'manage_menu' => 'Zarządzaj',
   'manage_my_files' => 'Otwórz dokument',

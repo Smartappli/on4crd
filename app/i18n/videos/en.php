@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Proposal saved in your content area.',
   'content_validated_direct' => 'Video proposed and approved directly.',
   'proposal_file_field' => 'Video file or resource',
-  'propose_presentation_item' => 'Content',
+  'propose_presentation_item' => 'A video',
   'administration' => 'Administer',
   'manage_menu' => 'Manage',
   'manage_my_files' => 'Download document',

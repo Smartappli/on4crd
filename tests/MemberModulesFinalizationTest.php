@@ -412,6 +412,12 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame('Une présentation', $presentationLabels['propose_presentation_item']);
         self::assertSame('Administrer', $presentationLabels['administration']);
 
+        $videoLabels = member_document_module_labels('videos', 'fr');
+        self::assertSame('Proposer', $videoLabels['propose_menu']);
+        self::assertSame('Une vidéo', $videoLabels['propose_presentation_item']);
+        self::assertSame('Une thématique', $videoLabels['propose_category_item']);
+        self::assertSame('Une sous-thématique', $videoLabels['propose_subcategory_item']);
+
         $pvDefinition = member_document_module_definition('pv');
         self::assertSame(['formats'], $pvDefinition['hidden_stats'] ?? null);
         self::assertTrue((bool) ($pvDefinition['latest_document_cta'] ?? false));
@@ -444,7 +450,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function member_document_upsert_category(', $renderer);
         self::assertStringContainsString('function member_document_upsert_subcategory(', $renderer);
         self::assertStringContainsString("member_document_module_allows_member_management(\$moduleCode)", $renderer);
-        self::assertStringContainsString("\$canProposeTaxonomy = \$moduleCode === 'presentations';", $renderer);
+        self::assertStringContainsString("\$canProposeTaxonomy = in_array(\$moduleCode, ['presentations', 'videos'], true);", $renderer);
         self::assertStringContainsString("if (\$action === 'propose_category' && \$canProposeTaxonomy)", $renderer);
         self::assertStringContainsString("if (\$action === 'propose_subcategory' && \$canProposeTaxonomy)", $renderer);
         self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'category'", $renderer);

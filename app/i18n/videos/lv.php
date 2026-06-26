@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Priekšlikums saglabāts jūsu saturā.',
   'content_validated_direct' => 'Dokuments ierosināts un apstiprināts tieši. Ja nepieciešams, pievienojiet failu bibliotēkas administrācijā.',
   'proposal_file_field' => 'Fails',
-  'propose_presentation_item' => 'Dokumentu',
+  'propose_presentation_item' => 'Video',
   'administration' => 'Administrēt',
   'manage_menu' => 'Pārvaldīt',
   'manage_my_files' => 'Atvērt dokumentu',

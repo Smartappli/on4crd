@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Proposta guardada nos seus conteúdos.',
   'content_validated_direct' => 'Documento proposto e aprovado diretamente. Adicione o ficheiro pela administração da biblioteca se necessário.',
   'proposal_file_field' => 'Ficheiro',
-  'propose_presentation_item' => 'Um documento',
+  'propose_presentation_item' => 'Um vídeo',
   'administration' => 'Administrar',
   'manage_menu' => 'Gerir',
   'manage_my_files' => 'Abrir documento',

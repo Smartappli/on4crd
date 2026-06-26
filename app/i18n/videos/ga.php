@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Sábháladh an moladh i d’inneachar.',
   'content_validated_direct' => 'Moladh an doiciméad agus faomhadh é go díreach. Cuir an comhad leis ó riarachán na leabharlainne más gá.',
   'proposal_file_field' => 'Comhad',
-  'propose_presentation_item' => 'Cáipéis',
+  'propose_presentation_item' => 'Físeán',
   'administration' => 'Riar',
   'manage_menu' => 'Bainistigh',
   'manage_my_files' => 'Oscail doiciméad',

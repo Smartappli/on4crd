@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Ehdotus tallennettiin sisältöihisi.',
   'content_validated_direct' => 'Asiakirja ehdotettiin ja hyväksyttiin suoraan. Lisää tiedosto tarvittaessa kirjaston hallinnasta.',
   'proposal_file_field' => 'Tiedosto',
-  'propose_presentation_item' => 'Asiakirja',
+  'propose_presentation_item' => 'Video',
   'administration' => 'Hallinnoi',
   'manage_menu' => 'Hallitse',
   'manage_my_files' => 'Avaa asiakirja',

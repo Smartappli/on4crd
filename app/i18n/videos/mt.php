@@ -15,7 +15,7 @@ return array (
   'propose_content_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
   'content_validated_direct' => 'Id-dokument ġie propost u approvat direttament. Żid il-fajl mill-amministrazzjoni tal-librerija jekk meħtieġ.',
   'proposal_file_field' => 'Fajl',
-  'propose_presentation_item' => 'Dokument',
+  'propose_presentation_item' => 'Vidjo',
   'administration' => 'Amministra',
   'manage_menu' => 'Immaniġġja',
   'manage_my_files' => 'Dokument miftuħ',
