@@ -166,6 +166,7 @@ function ensure_wiki_tables(): bool
                 content LONGTEXT NOT NULL,
                 category VARCHAR(120) NOT NULL DEFAULT "general",
                 subcategory VARCHAR(120) NOT NULL DEFAULT "",
+                subsubcategory VARCHAR(120) NOT NULL DEFAULT "",
                 author_id INT DEFAULT NULL,
                 status ENUM("pending","published","rejected") NOT NULL DEFAULT "published",
                 proposal_kind VARCHAR(32) NOT NULL DEFAULT "page",
@@ -175,6 +176,8 @@ function ensure_wiki_tables(): bool
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 INDEX idx_wiki_category (category),
                 INDEX idx_wiki_subcategory (category, subcategory),
+                INDEX idx_wiki_subsubcategory (subsubcategory),
+                INDEX idx_wiki_category_subcategory_subsubcategory (category, subcategory, subsubcategory),
                 INDEX idx_wiki_status_updated (status, updated_at),
                 INDEX idx_wiki_updated (updated_at),
                 INDEX idx_wiki_proposal_kind (proposal_kind, status),
@@ -195,6 +198,9 @@ function ensure_wiki_tables(): bool
         if (!table_has_column('wiki_pages', 'subcategory')) {
             db()->exec('ALTER TABLE wiki_pages ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
         }
+        if (!table_has_column('wiki_pages', 'subsubcategory')) {
+            db()->exec('ALTER TABLE wiki_pages ADD COLUMN subsubcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER subcategory');
+        }
         if (!table_has_column('wiki_pages', 'created_at')) {
             db()->exec('ALTER TABLE wiki_pages ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER status');
         }
@@ -212,6 +218,7 @@ function ensure_wiki_tables(): bool
         }
         db()->exec('UPDATE wiki_pages SET category = "general" WHERE category IS NULL OR category = ""');
         db()->exec('UPDATE wiki_pages SET subcategory = "" WHERE subcategory IS NULL');
+        db()->exec('UPDATE wiki_pages SET subsubcategory = "" WHERE subsubcategory IS NULL');
         if ($addedCategory) {
             db()->exec('UPDATE wiki_pages SET category = LEFT(SUBSTRING_INDEX(slug, "-", 1), 120) WHERE slug IS NOT NULL AND slug <> "" AND slug <> "n-a"');
         }
@@ -221,6 +228,12 @@ function ensure_wiki_tables(): bool
         }
         if (!table_has_index('wiki_pages', 'idx_wiki_subcategory')) {
             db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_subcategory (category, subcategory)');
+        }
+        if (!table_has_index('wiki_pages', 'idx_wiki_subsubcategory')) {
+            db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_subsubcategory (subsubcategory)');
+        }
+        if (!table_has_index('wiki_pages', 'idx_wiki_category_subcategory_subsubcategory')) {
+            db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_category_subcategory_subsubcategory (category, subcategory, subsubcategory)');
         }
         if (!table_has_index('wiki_pages', 'idx_wiki_status_updated')) {
             db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_status_updated (status, updated_at)');
@@ -253,6 +266,7 @@ function ensure_wiki_tables(): bool
         }
         wiki_ensure_categories_table();
         wiki_ensure_subcategories_table();
+        wiki_ensure_subsubcategories_table();
 
         return true;
     } catch (Throwable $throwable) {
@@ -381,6 +395,13 @@ function wiki_subcategory_code(string $value): string
 }
 }
 
+if (!function_exists('wiki_subsubcategory_code')) {
+function wiki_subsubcategory_code(string $value): string
+{
+    return wiki_subcategory_code($value);
+}
+}
+
 if (!function_exists('wiki_subcategory_ref')) {
 function wiki_subcategory_ref(string $categoryCode, string $subcategoryCode): string
 {
@@ -401,8 +422,8 @@ function wiki_subcategory_ref_parts(string $value): array
     if ($value === '') {
         return ['category' => '', 'subcategory' => ''];
     }
-    $parts = explode(':', $value, 2);
-    if (count($parts) === 2) {
+    $parts = explode(':', $value);
+    if (count($parts) >= 2) {
         return [
             'category' => wiki_category_code($parts[0] !== '' ? $parts[0] : 'general'),
             'subcategory' => wiki_subcategory_code($parts[1]),
@@ -410,6 +431,52 @@ function wiki_subcategory_ref_parts(string $value): array
     }
 
     return ['category' => '', 'subcategory' => wiki_subcategory_code($value)];
+}
+}
+
+if (!function_exists('wiki_subsubcategory_ref')) {
+function wiki_subsubcategory_ref(string $categoryCode, string $subcategoryCode, string $subsubcategoryCode): string
+{
+    $categoryCode = wiki_category_code($categoryCode !== '' ? $categoryCode : 'general');
+    $subcategoryCode = wiki_subcategory_code($subcategoryCode);
+    $subsubcategoryCode = wiki_subsubcategory_code($subsubcategoryCode);
+
+    return $subcategoryCode !== '' && $subsubcategoryCode !== '' ? ($categoryCode . ':' . $subcategoryCode . ':' . $subsubcategoryCode) : '';
+}
+}
+
+if (!function_exists('wiki_subsubcategory_ref_parts')) {
+/**
+ * @return array{category:string,subcategory:string,subsubcategory:string}
+ */
+function wiki_subsubcategory_ref_parts(string $value): array
+{
+    $value = trim($value);
+    if ($value === '') {
+        return ['category' => '', 'subcategory' => '', 'subsubcategory' => ''];
+    }
+
+    $parts = explode(':', $value);
+    if (count($parts) >= 3) {
+        return [
+            'category' => wiki_category_code($parts[0] !== '' ? $parts[0] : 'general'),
+            'subcategory' => wiki_subcategory_code($parts[1]),
+            'subsubcategory' => wiki_subsubcategory_code($parts[2]),
+        ];
+    }
+    if (count($parts) === 2) {
+        return [
+            'category' => '',
+            'subcategory' => wiki_subcategory_code($parts[0]),
+            'subsubcategory' => wiki_subsubcategory_code($parts[1]),
+        ];
+    }
+
+    return [
+        'category' => '',
+        'subcategory' => '',
+        'subsubcategory' => wiki_subsubcategory_code($value),
+    ];
 }
 }
 
@@ -455,6 +522,30 @@ function wiki_ensure_subcategories_table(): bool
         )');
 
         return table_exists('wiki_subcategories');
+    } catch (Throwable) {
+        return false;
+    }
+}
+}
+
+if (!function_exists('wiki_ensure_subsubcategories_table')) {
+function wiki_ensure_subsubcategories_table(): bool
+{
+    try {
+        wiki_ensure_subcategories_table();
+        db()->exec('CREATE TABLE IF NOT EXISTS wiki_subsubcategories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category_code VARCHAR(120) NOT NULL,
+            subcategory_code VARCHAR(120) NOT NULL,
+            code VARCHAR(120) NOT NULL,
+            label VARCHAR(160) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 100,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_wiki_subsubcategory (category_code, subcategory_code, code),
+            INDEX idx_wiki_subsubcategory_parent (category_code, subcategory_code)
+        )');
+
+        return table_exists('wiki_subsubcategories');
     } catch (Throwable) {
         return false;
     }
@@ -587,19 +678,30 @@ function wiki_category_from_input(string $value, array $categories): string
 if (!function_exists('wiki_taxonomy_from_input')) {
 /**
  * @param array<string, string> $categories
- * @return array{category:string,subcategory:string}
+ * @return array{category:string,subcategory:string,subsubcategory:string}
  */
-function wiki_taxonomy_from_input(string $categoryInput, string $subcategoryRef, array $categories, string $fallbackCategory = 'general'): array
+function wiki_taxonomy_from_input(string $categoryInput, string $subcategoryRef, array $categories, string $fallbackCategory = 'general', string $subsubcategoryRef = ''): array
 {
     $category = wiki_category_from_input($categoryInput !== '' ? $categoryInput : $fallbackCategory, $categories);
     $subcategoryRef = trim($subcategoryRef);
+    $subsubcategoryRef = trim($subsubcategoryRef);
+    if ($subsubcategoryRef === '' && substr_count($subcategoryRef, ':') >= 2) {
+        $subsubcategoryRef = $subcategoryRef;
+    }
     if ($subcategoryRef === '') {
-        return [$category, ''];
+        if ($subsubcategoryRef === '') {
+            return [$category, '', ''];
+        }
+        $subsubcategoryParts = wiki_subsubcategory_ref_parts($subsubcategoryRef);
+        if ($subsubcategoryParts['category'] !== '') {
+            $category = wiki_category_from_input($subsubcategoryParts['category'], $categories);
+        }
+        $subcategoryRef = wiki_subcategory_ref($category, $subsubcategoryParts['subcategory']);
     }
 
     $parts = wiki_subcategory_ref_parts($subcategoryRef);
     if ($parts['subcategory'] === '') {
-        return [$category, ''];
+        return [$category, '', ''];
     }
 
     $refCategory = $parts['category'] !== '' ? wiki_category_from_input($parts['category'], $categories) : $category;
@@ -609,7 +711,29 @@ function wiki_taxonomy_from_input(string $categoryInput, string $subcategoryRef,
 
     foreach ((array) (wiki_subcategories_by_category()[$category] ?? []) as $knownSubcategory) {
         if (wiki_subcategory_code((string) ($knownSubcategory['code'] ?? '')) === $parts['subcategory']) {
-            return [$category, $parts['subcategory']];
+            $subcategory = $parts['subcategory'];
+            if ($subsubcategoryRef === '') {
+                return [$category, $subcategory, ''];
+            }
+
+            $subsubcategoryParts = wiki_subsubcategory_ref_parts($subsubcategoryRef);
+            if ($subsubcategoryParts['subsubcategory'] === '') {
+                return [$category, $subcategory, ''];
+            }
+            if (
+                ($subsubcategoryParts['category'] !== '' && $subsubcategoryParts['category'] !== $category)
+                || ($subsubcategoryParts['subcategory'] !== '' && $subsubcategoryParts['subcategory'] !== $subcategory)
+            ) {
+                throw new RuntimeException(wiki_i18n_text('err_subsubcategory_category_mismatch'));
+            }
+
+            foreach ((array) (wiki_subsubcategories_by_parent()[$category . ':' . $subcategory] ?? []) as $knownSubsubcategory) {
+                if (wiki_subsubcategory_code((string) ($knownSubsubcategory['code'] ?? '')) === $subsubcategoryParts['subsubcategory']) {
+                    return [$category, $subcategory, $subsubcategoryParts['subsubcategory']];
+                }
+            }
+
+            throw new RuntimeException(wiki_i18n_text('err_subsubcategory_category_mismatch'));
         }
     }
 
@@ -644,6 +768,57 @@ function wiki_subcategory_options(): array
     }
 
     return $options;
+}
+}
+
+if (!function_exists('wiki_subsubcategory_options')) {
+/**
+ * @return list<array{category_code:string,subcategory_code:string,code:string,label:string}>
+ */
+function wiki_subsubcategory_options(): array
+{
+    if (!wiki_ensure_subsubcategories_table()) {
+        return [];
+    }
+
+    try {
+        $rows = db()->query('SELECT category_code, subcategory_code, code, label FROM wiki_subsubcategories ORDER BY category_code ASC, subcategory_code ASC, sort_order ASC, label ASC')->fetchAll() ?: [];
+    } catch (Throwable) {
+        $rows = [];
+    }
+
+    $options = [];
+    foreach ($rows as $row) {
+        $categoryCode = wiki_category_code((string) ($row['category_code'] ?? 'general'));
+        $subcategoryCode = wiki_subcategory_code((string) ($row['subcategory_code'] ?? ''));
+        $code = wiki_subsubcategory_code((string) ($row['code'] ?? ''));
+        $label = content_proposal_clean_single_line((string) ($row['label'] ?? $code), 160);
+        if ($categoryCode !== '' && $subcategoryCode !== '' && $code !== '' && $label !== '') {
+            $options[] = [
+                'category_code' => $categoryCode,
+                'subcategory_code' => $subcategoryCode,
+                'code' => $code,
+                'label' => $label,
+            ];
+        }
+    }
+
+    return $options;
+}
+}
+
+if (!function_exists('wiki_subsubcategories_by_parent')) {
+/**
+ * @return array<string, list<array{category_code:string,subcategory_code:string,code:string,label:string}>>
+ */
+function wiki_subsubcategories_by_parent(): array
+{
+    $byParent = [];
+    foreach (wiki_subsubcategory_options() as $subsubcategory) {
+        $byParent[$subsubcategory['category_code'] . ':' . $subsubcategory['subcategory_code']][] = $subsubcategory;
+    }
+
+    return $byParent;
 }
 }
 
@@ -707,6 +882,31 @@ function wiki_visible_subcategories_by_category(array $subcategoriesByCategory, 
 }
 }
 
+if (!function_exists('wiki_visible_subsubcategories_by_parent')) {
+/**
+ * @param array<string, list<array<string, mixed>>> $subsubcategoriesByParent
+ * @param array<string, int> $countsBySubsubcategory
+ * @return array<string, list<array<string, mixed>>>
+ */
+function wiki_visible_subsubcategories_by_parent(array $subsubcategoriesByParent, array $countsBySubsubcategory): array
+{
+    $visible = [];
+    foreach ($subsubcategoriesByParent as $parentRef => $subsubcategories) {
+        foreach ($subsubcategories as $subsubcategory) {
+            $code = wiki_subsubcategory_code((string) ($subsubcategory['code'] ?? ''));
+            $count = (int) ($countsBySubsubcategory[(string) $parentRef . ':' . $code] ?? 0);
+            if ($code === '' || $count <= 0) {
+                continue;
+            }
+            $subsubcategory['total'] = $count;
+            $visible[(string) $parentRef][] = $subsubcategory;
+        }
+    }
+
+    return $visible;
+}
+}
+
 if (!function_exists('wiki_favorites_label')) {
 /**
  * @param array<string, mixed> $messages
@@ -760,13 +960,17 @@ if (!function_exists('render_wiki_taxonomy_fields')) {
  * @param array<string, string> $categories
  * @param array<string, mixed> $messages
  */
-function render_wiki_taxonomy_fields(array $categories, array $messages, string $selectedCategory = 'general', string $selectedSubcategory = ''): string
+function render_wiki_taxonomy_fields(array $categories, array $messages, string $selectedCategory = 'general', string $selectedSubcategory = '', string $selectedSubsubcategory = ''): string
 {
     $selectedCategory = wiki_category_code($selectedCategory !== '' ? $selectedCategory : 'general');
     $selectedSubcategory = wiki_subcategory_code($selectedSubcategory);
+    $selectedSubsubcategory = wiki_subsubcategory_code($selectedSubsubcategory);
     $subcategoriesByCategory = wiki_subcategories_by_category();
+    $subsubcategoriesByParent = wiki_subsubcategories_by_parent();
     $subcategoryLabel = (string) ($messages['subcategory_field'] ?? wiki_i18n_text('subcategory_field'));
     $noSubcategory = (string) ($messages['no_subcategory'] ?? wiki_i18n_text('no_subcategory'));
+    $subsubcategoryLabel = (string) ($messages['subsubcategory_field'] ?? wiki_i18n_text('subsubcategory_field'));
+    $noSubsubcategory = (string) ($messages['no_subsubcategory'] ?? wiki_i18n_text('no_subsubcategory'));
 
     $html = '<label>' . e((string) ($messages['themes'] ?? wiki_i18n_text('themes'))) . '<select name="category">';
     foreach ($categories as $categoryCode => $categoryLabel) {
@@ -785,6 +989,37 @@ function render_wiki_taxonomy_fields(array $categories, array $messages, string 
             $html .= '<option value="' . e(wiki_subcategory_ref((string) $parentCode, $code)) . '"'
                 . ($selectedCategory === (string) $parentCode && $selectedSubcategory === $code ? ' selected' : '')
                 . '>' . e((string) ($subcategory['label'] ?? $code)) . '</option>';
+        }
+        $html .= '</optgroup>';
+    }
+
+    $html .= '</select></label>'
+        . '<label>' . e($subsubcategoryLabel) . '<select name="subsubcategory_ref">'
+        . '<option value="">' . e($noSubsubcategory) . '</option>';
+    foreach ($subsubcategoriesByParent as $parentRef => $subsubcategories) {
+        $parentParts = wiki_subcategory_ref_parts((string) $parentRef);
+        $parentCategory = $parentParts['category'];
+        $parentSubcategory = $parentParts['subcategory'];
+        if ($parentCategory === '' || $parentSubcategory === '') {
+            continue;
+        }
+        $parentCategoryLabel = (string) ($categories[$parentCategory] ?? wiki_category_label_from_code($parentCategory));
+        $parentSubcategoryLabel = wiki_category_label_from_code($parentSubcategory);
+        foreach ($subcategoriesByCategory[$parentCategory] ?? [] as $subcategory) {
+            if (wiki_subcategory_code((string) ($subcategory['code'] ?? '')) === $parentSubcategory) {
+                $parentSubcategoryLabel = (string) ($subcategory['label'] ?? $parentSubcategory);
+                break;
+            }
+        }
+        $html .= '<optgroup label="' . e($parentCategoryLabel . ' / ' . $parentSubcategoryLabel) . '">';
+        foreach ($subsubcategories as $subsubcategory) {
+            $code = wiki_subsubcategory_code((string) ($subsubcategory['code'] ?? ''));
+            if ($code === '') {
+                continue;
+            }
+            $html .= '<option value="' . e(wiki_subsubcategory_ref($parentCategory, $parentSubcategory, $code)) . '"'
+                . ($selectedCategory === $parentCategory && $selectedSubcategory === $parentSubcategory && $selectedSubsubcategory === $code ? ' selected' : '')
+                . '>' . e((string) ($subsubcategory['label'] ?? $code)) . '</option>';
         }
         $html .= '</optgroup>';
     }

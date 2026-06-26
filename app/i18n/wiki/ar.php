@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'تمت إضافة الصفحة إلى المفضلة.',
   'favorite_removed_msg' => 'تمت إزالة الصفحة من المفضلة.',
   'err_subcategory_category_mismatch' => 'الموضوع الفرعي المحدد لا ينتمي إلى الموضوع المختار.',
+  'subsubcategory_field' => 'موضوع فرعي ثان',
+  'no_subsubcategory' => 'بدون موضوع فرعي ثان',
+  'err_subsubcategory_category_mismatch' => 'الموضوع الفرعي المحدد لا ينتمي إلى الموضوع المختار.',
   'category_general' => 'عام',
 );

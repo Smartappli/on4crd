@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Página añadida a favoritos.',
   'favorite_removed_msg' => 'Página eliminada de favoritos.',
   'err_subcategory_category_mismatch' => 'La subtemática seleccionada no pertenece a la temática elegida.',
+  'subsubcategory_field' => 'Subsubtema',
+  'no_subsubcategory' => 'Sin subsubtema',
+  'err_subsubcategory_category_mismatch' => 'La subtemática seleccionada no pertenece a la temática elegida.',
   'category_general' => 'Tema general',
 );

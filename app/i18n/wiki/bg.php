@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Страницата е добавена в любими.',
   'favorite_removed_msg' => 'Страницата е премахната от любими.',
   'err_subcategory_category_mismatch' => 'Избраната подтема не принадлежи към избраната тема.',
+  'subsubcategory_field' => 'Подподтема',
+  'no_subsubcategory' => 'Без подподтема',
+  'err_subsubcategory_category_mismatch' => 'Избраната подподтема не принадлежи към избраната тема.',
   'category_general' => 'Общи',
 );

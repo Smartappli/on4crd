@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Pagina toegevoegd aan favorieten.',
   'favorite_removed_msg' => 'Pagina verwijderd uit favorieten.',
   'err_subcategory_category_mismatch' => 'Het gekozen subthema hoort niet bij het gekozen thema.',
+  'subsubcategory_field' => 'Subsubthema',
+  'no_subsubcategory' => 'Geen subsubthema',
+  'err_subsubcategory_category_mismatch' => 'Het gekozen subsubthema hoort niet bij het gekozen thema.',
   'category_general' => 'Algemeen',
 );

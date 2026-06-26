@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Puslapis pridėtas prie mėgstamiausių.',
   'favorite_removed_msg' => 'Puslapis pašalintas iš mėgstamiausių.',
   'err_subcategory_category_mismatch' => 'Pasirinkta potemė nepriklauso pasirinktai temai.',
+  'subsubcategory_field' => 'Po-potemė',
+  'no_subsubcategory' => 'Be po-potemės',
+  'err_subsubcategory_category_mismatch' => 'Pasirinkta po-potemė nepriklauso pasirinktai temai.',
   'category_general' => 'Bendra',
 );

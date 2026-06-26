@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Stran dodana med priljubljene.',
   'favorite_removed_msg' => 'Stran odstranjena iz priljubljenih.',
   'err_subcategory_category_mismatch' => 'Izbrana podtema ne spada k izbrani temi.',
+  'subsubcategory_field' => 'Podpodtema',
+  'no_subsubcategory' => 'Brez podpodteme',
+  'err_subsubcategory_category_mismatch' => 'Izbrana podpodtema ne spada k izbrani temi.',
   'category_general' => 'Splošno',
 );

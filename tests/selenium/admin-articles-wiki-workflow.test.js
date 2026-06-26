@@ -305,6 +305,9 @@ if ($token !== '') {
     if (table_exists('content_proposals')) {
         db()->prepare('DELETE FROM content_proposals WHERE title LIKE ? OR summary LIKE ?')->execute([$like, $like]);
     }
+    if (table_exists('wiki_subsubcategories')) {
+        db()->prepare('DELETE FROM wiki_subsubcategories WHERE category_code LIKE ? OR subcategory_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like, $like]);
+    }
     if (table_exists('wiki_subcategories')) {
         db()->prepare('DELETE FROM wiki_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
     }
@@ -328,7 +331,7 @@ $memberId = (int) (db()->query('SELECT id FROM members ORDER BY id ASC LIMIT 1')
 if ($memberId <= 0) {
     throw new RuntimeException('Aucun membre disponible pour la fixture wiki Selenium.');
 }
-$stmt = db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, author_id, status, proposal_kind) VALUES (?, ?, ?, "general", "", ?, "pending", "page")');
+$stmt = db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, subsubcategory, author_id, status, proposal_kind) VALUES (?, ?, ?, "general", "", "", ?, "pending", "page")');
 $stmt->execute([$pageTitle, $pageSlug, '<p>Contenu wiki Selenium initial.</p>', $memberId]);
 $pageId = (int) db()->lastInsertId();
 $stmt = db()->prepare('INSERT INTO content_proposals (member_id, area, proposal_type, title, summary, contact, source_ref, status) VALUES (?, "wiki", "content", ?, ?, "selenium@example.test", NULL, "pending")');
@@ -342,14 +345,15 @@ echo json_encode(['pageId' => $pageId, 'proposalId' => (int) db()->lastInsertId(
   });
 }
 
-function wikiTaxonomyByLabels(categoryLabel, subcategoryLabel) {
+function wikiTaxonomyByLabels(categoryLabel, subcategoryLabel, subsubcategoryLabel = '') {
   return phpJson(`
 require_once 'app/bootstrap.php';
 require_once 'app/content_helpers.php';
 ensure_wiki_tables();
 $categoryLabel = (string) (getenv('SELENIUM_CATEGORY_LABEL') ?: '');
 $subcategoryLabel = (string) (getenv('SELENIUM_SUBCATEGORY_LABEL') ?: '');
-$result = ['category' => null, 'subcategory' => null];
+$subsubcategoryLabel = (string) (getenv('SELENIUM_SUBSUBCATEGORY_LABEL') ?: '');
+$result = ['category' => null, 'subcategory' => null, 'subsubcategory' => null];
 $stmt = db()->prepare('SELECT code, label, deleted_at FROM wiki_categories WHERE label = ? ORDER BY id DESC LIMIT 1');
 $stmt->execute([$categoryLabel]);
 $category = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
@@ -362,10 +366,19 @@ $subcategory = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 if (is_array($subcategory)) {
     $result['subcategory'] = $subcategory;
 }
+if ($subsubcategoryLabel !== '') {
+    $stmt = db()->prepare('SELECT category_code, subcategory_code, code, label FROM wiki_subsubcategories WHERE label = ? ORDER BY id DESC LIMIT 1');
+    $stmt->execute([$subsubcategoryLabel]);
+    $subsubcategory = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    if (is_array($subsubcategory)) {
+        $result['subsubcategory'] = $subsubcategory;
+    }
+}
 echo json_encode($result, JSON_THROW_ON_ERROR);
 `, {
     SELENIUM_CATEGORY_LABEL: categoryLabel,
     SELENIUM_SUBCATEGORY_LABEL: subcategoryLabel,
+    SELENIUM_SUBSUBCATEGORY_LABEL: subsubcategoryLabel,
   });
 }
 
@@ -387,13 +400,13 @@ require_once 'app/bootstrap.php';
 require_once 'app/content_helpers.php';
 ensure_wiki_tables();
 $slug = (string) (getenv('SELENIUM_SLUG') ?: '');
-$stmt = db()->prepare('SELECT id, author_id, title, slug, content, status, category, subcategory, proposal_kind FROM wiki_pages WHERE slug = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, author_id, title, slug, content, status, category, subcategory, subsubcategory, proposal_kind FROM wiki_pages WHERE slug = ? LIMIT 1');
 $stmt->execute([$slug]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_THROW_ON_ERROR);
 `, { SELENIUM_SLUG: slug });
 }
 
-function setWikiPageTaxonomy(slug, category, subcategory) {
+function setWikiPageTaxonomy(slug, category, subcategory, subsubcategory = '') {
   runSeleniumPhp(`
 require_once 'app/bootstrap.php';
 require_once 'app/content_helpers.php';
@@ -401,11 +414,13 @@ ensure_wiki_tables();
 $slug = (string) (getenv('SELENIUM_SLUG') ?: '');
 $category = (string) (getenv('SELENIUM_CATEGORY_CODE') ?: 'general');
 $subcategory = (string) (getenv('SELENIUM_SUBCATEGORY_CODE') ?: '');
-db()->prepare('UPDATE wiki_pages SET category = ?, subcategory = ?, updated_at = NOW() WHERE slug = ?')->execute([$category, $subcategory, $slug]);
+$subsubcategory = (string) (getenv('SELENIUM_SUBSUBCATEGORY_CODE') ?: '');
+db()->prepare('UPDATE wiki_pages SET category = ?, subcategory = ?, subsubcategory = ?, updated_at = NOW() WHERE slug = ?')->execute([$category, $subcategory, $subsubcategory, $slug]);
 `, {
     SELENIUM_SLUG: slug,
     SELENIUM_CATEGORY_CODE: category,
     SELENIUM_SUBCATEGORY_CODE: subcategory,
+    SELENIUM_SUBSUBCATEGORY_CODE: subsubcategory,
   });
 }
 

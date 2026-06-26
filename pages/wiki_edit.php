@@ -21,7 +21,7 @@ if (!ensure_wiki_tables()) {
 $user = require_login();
 $id = (int) ($_GET['id'] ?? 0);
 $wikiCategories = wiki_categories($wikiMessages);
-$page = ['id' => 0, 'title' => '', 'slug' => '', 'content' => '<p></p>', 'category' => 'general', 'subcategory' => '', 'updated_at' => null];
+$page = ['id' => 0, 'title' => '', 'slug' => '', 'content' => '<p></p>', 'category' => 'general', 'subcategory' => '', 'subsubcategory' => '', 'updated_at' => null];
 
 if ($id > 0) {
     $stmt = db()->prepare('SELECT * FROM wiki_pages WHERE id = ? LIMIT 1');
@@ -43,19 +43,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $slug = slugify((string) ($_POST['slug'] ?? $title));
         $category = wiki_category_from_input((string) ($_POST['category'] ?? 'general'), $wikiCategories);
         $subcategory = wiki_subcategory_code((string) ($page['subcategory'] ?? ''));
+        $subsubcategory = wiki_subsubcategory_code((string) ($page['subsubcategory'] ?? ''));
         if (array_key_exists('subcategory_ref', $_POST)) {
-            [$category, $subcategory] = wiki_taxonomy_from_input(
+            [$category, $subcategory, $subsubcategory] = wiki_taxonomy_from_input(
                 (string) ($_POST['category'] ?? 'general'),
                 trim((string) ($_POST['subcategory_ref'] ?? '')),
                 $wikiCategories,
-                (string) ($page['category'] ?? 'general')
+                (string) ($page['category'] ?? 'general'),
+                trim((string) ($_POST['subsubcategory_ref'] ?? ''))
             );
         }
 
         if ($title === '' || trim(strip_tags($content)) === '' || $slug === '') {
             throw new RuntimeException($t('content_label'));
         }
-        if (mb_strlen($title) > 190 || mb_strlen($slug) > 190 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($content) > 50000) {
+        if (mb_strlen($title) > 190 || mb_strlen($slug) > 190 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($subsubcategory) > 120 || mb_strlen($content) > 50000) {
             throw new RuntimeException(i18n_error_text('field_too_long', 'One of the fields exceeds the allowed length.'));
         }
 
@@ -67,9 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($id > 0) {
             db()->prepare('INSERT INTO wiki_revisions (wiki_page_id, member_id, content) VALUES (?, ?, ?)')->execute([$id, (int) $user['id'], (string) $page['content']]);
-            db()->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, subcategory = ?, author_id = ?, status = "published" WHERE id = ?')->execute([$title, $slug, $content, $category, $subcategory, (int) $user['id'], $id]);
+            db()->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, subcategory = ?, subsubcategory = ?, author_id = ?, status = "published" WHERE id = ?')->execute([$title, $slug, $content, $category, $subcategory, $subsubcategory, (int) $user['id'], $id]);
         } else {
-            db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, author_id, status) VALUES (?, ?, ?, ?, ?, ?, "published")')->execute([$title, $slug, $content, $category, $subcategory, (int) $user['id']]);
+            db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, subsubcategory, author_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, "published")')->execute([$title, $slug, $content, $category, $subcategory, $subsubcategory, (int) $user['id']]);
         }
 
         set_flash('success', $t('saved'));
@@ -96,7 +98,7 @@ ob_start();
         <div class="wiki-edit-grid">
             <label><?= e($t('title_label')) ?><input type="text" name="title" value="<?= e((string) $page['title']) ?>" maxlength="190" required></label>
             <label><?= e($t('slug_label')) ?><input type="text" name="slug" value="<?= e((string) $page['slug']) ?>" maxlength="190"></label>
-            <?= render_wiki_taxonomy_fields($wikiCategories, $wikiMessages, (string) ($page['category'] ?? 'general'), (string) ($page['subcategory'] ?? '')) ?>
+            <?= render_wiki_taxonomy_fields($wikiCategories, $wikiMessages, (string) ($page['category'] ?? 'general'), (string) ($page['subcategory'] ?? ''), (string) ($page['subsubcategory'] ?? '')) ?>
         </div>
         <label><?= e($t('content_label')) ?>
             <textarea name="content" rows="22" maxlength="50000" data-wysiwyg="full"><?= e((string) $page['content']) ?></textarea>

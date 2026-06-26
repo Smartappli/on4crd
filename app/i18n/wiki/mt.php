@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Paġna miżjuda mal-favoriti.',
   'favorite_removed_msg' => 'Paġna mneħħija mill-favoriti.',
   'err_subcategory_category_mismatch' => 'Is-sottotema magħżula ma tappartjenix għat-tema magħżula.',
+  'subsubcategory_field' => 'Sub-subtema',
+  'no_subsubcategory' => 'L-ebda sub-subtema',
+  'err_subsubcategory_category_mismatch' => 'Is-sub-subtema magħżula ma tappartjenix għat-tema magħżula.',
   'category_general' => 'Ġenerali',
 );

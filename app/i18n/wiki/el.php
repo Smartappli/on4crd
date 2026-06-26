@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Η σελίδα προστέθηκε στα αγαπημένα.',
   'favorite_removed_msg' => 'Η σελίδα αφαιρέθηκε από τα αγαπημένα.',
   'err_subcategory_category_mismatch' => 'Το επιλεγμένο υποθέμα δεν ανήκει στο επιλεγμένο θέμα.',
+  'subsubcategory_field' => 'Υπο-υποθεματική',
+  'no_subsubcategory' => 'Χωρίς υπο-υποθεματική',
+  'err_subsubcategory_category_mismatch' => 'Το επιλεγμένο υπο-υποθεματική δεν ανήκει στο επιλεγμένο θέμα.',
   'category_general' => 'Γενικά',
 );

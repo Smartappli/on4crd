@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Страница добавлена в избранное.',
   'favorite_removed_msg' => 'Страница удалена из избранного.',
   'err_subcategory_category_mismatch' => 'Выбранная подтема не относится к выбранной теме.',
+  'subsubcategory_field' => 'Подподтема',
+  'no_subsubcategory' => 'Без подподтемы',
+  'err_subsubcategory_category_mismatch' => 'Выбранная подподтема не относится к выбранной теме.',
   'category_general' => 'Общее',
 );

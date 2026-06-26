@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Sivu lisätty suosikkeihin.',
   'favorite_removed_msg' => 'Sivu poistettu suosikeista.',
   'err_subcategory_category_mismatch' => 'Valittu alateema ei kuulu valittuun teemaan.',
+  'subsubcategory_field' => 'Ali-alateema',
+  'no_subsubcategory' => 'Ei ali-alateemaa',
+  'err_subsubcategory_category_mismatch' => 'Valittu ali-alateema ei kuulu valittuun teemaan.',
   'category_general' => 'Yleinen',
 );

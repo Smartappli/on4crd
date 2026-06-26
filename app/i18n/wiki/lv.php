@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Lapa pievienota izlasei.',
   'favorite_removed_msg' => 'Lapa noņemta no izlases.',
   'err_subcategory_category_mismatch' => 'Izvēlētā apakštēma nepieder izvēlētajai tēmai.',
+  'subsubcategory_field' => 'Apakšapakštēma',
+  'no_subsubcategory' => 'Bez apakšapakštēmas',
+  'err_subsubcategory_category_mismatch' => 'Izvēlētā apakšapakštēma nepieder izvēlētajai tēmai.',
   'category_general' => 'Vispārīgi',
 );

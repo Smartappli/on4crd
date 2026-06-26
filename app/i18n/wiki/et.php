@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Leht lisatud lemmikutesse.',
   'favorite_removed_msg' => 'Leht eemaldatud lemmikutest.',
   'err_subcategory_category_mismatch' => 'Valitud alateema ei kuulu valitud teema alla.',
+  'subsubcategory_field' => 'Alam-alamteema',
+  'no_subsubcategory' => 'Alam-alamteemata',
+  'err_subsubcategory_category_mismatch' => 'Valitud alam-alamteema ei kuulu valitud teema alla.',
   'category_general' => 'Üldine',
 );

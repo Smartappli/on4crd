@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'पृष्ठ पसंदीदा में जोड़ा गया।',
   'favorite_removed_msg' => 'पृष्ठ पसंदीदा से हटाया गया।',
   'err_subcategory_category_mismatch' => 'चुना गया उप-विषय चुने गए विषय से संबंधित नहीं है।',
+  'subsubcategory_field' => 'उप-उपविषय',
+  'no_subsubcategory' => 'कोई उप-उपविषय नहीं',
+  'err_subsubcategory_category_mismatch' => 'चुना गया उप-विषय चुने गए विषय से संबंधित नहीं है।',
   'category_general' => 'सामान्य',
 );

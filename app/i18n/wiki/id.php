@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Halaman ditambahkan ke favorit.',
   'favorite_removed_msg' => 'Halaman dihapus dari favorit.',
   'err_subcategory_category_mismatch' => 'Subtema yang dipilih bukan bagian dari tema yang dipilih.',
+  'subsubcategory_field' => 'Sub-subtopik',
+  'no_subsubcategory' => 'Tanpa sub-subtopik',
+  'err_subsubcategory_category_mismatch' => 'Subtema yang dipilih bukan bagian dari tema yang dipilih.',
   'category_general' => 'Umum',
 );

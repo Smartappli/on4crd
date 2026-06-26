@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Stránka pridaná medzi obľúbené.',
   'favorite_removed_msg' => 'Stránka odstránená z obľúbených.',
   'err_subcategory_category_mismatch' => 'Vybraná podtéma nepatrí k vybranej téme.',
+  'subsubcategory_field' => 'Podpodtéma',
+  'no_subsubcategory' => 'Bez podpodtémy',
+  'err_subsubcategory_category_mismatch' => 'Vybraná podpodtéma nepatrí k vybranej téme.',
   'category_general' => 'Všeobecné',
 );

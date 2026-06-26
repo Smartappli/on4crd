@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Pagină adăugată la favorite.',
   'favorite_removed_msg' => 'Pagină eliminată din favorite.',
   'err_subcategory_category_mismatch' => 'Subtema selectată nu aparține temei alese.',
+  'subsubcategory_field' => 'Sub-subtemă',
+  'no_subsubcategory' => 'Fără sub-subtemă',
+  'err_subsubcategory_category_mismatch' => 'Subtema selectată nu aparține temei alese.',
   'category_general' => 'Generală',
 );

@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Leathanach curtha le ceanáin.',
   'favorite_removed_msg' => 'Leathanach bainte de cheanáin.',
   'err_subcategory_category_mismatch' => 'Ní bhaineann an fofhothéama roghnaithe leis an téama roghnaithe.',
+  'subsubcategory_field' => 'Fo-fho-théama',
+  'no_subsubcategory' => 'Gan fo-fho-théama',
+  'err_subsubcategory_category_mismatch' => 'Ní bhaineann an fofhothéama roghnaithe leis an téama roghnaithe.',
   'category_general' => 'Ginearálta',
 );

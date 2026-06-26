@@ -350,12 +350,17 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member_library_default_categories()', $contentHelpers);
         self::assertStringContainsString("content_proposal_accepted_categories('members_library'", $contentHelpers);
         self::assertStringContainsString('function wiki_subcategory_ref(', $contentHelpers);
+        self::assertStringContainsString('function wiki_subsubcategory_ref(', $contentHelpers);
         self::assertStringContainsString('function wiki_visible_categories(', $contentHelpers);
+        self::assertStringContainsString('function wiki_visible_subsubcategories_by_parent(', $contentHelpers);
         self::assertStringContainsString('function wiki_favorite_page_ids(', $contentHelpers);
         self::assertStringContainsString('idx_wiki_category_deleted', $contentHelpers);
+        self::assertStringContainsString('idx_wiki_subsubcategory_parent', $contentHelpers);
         self::assertStringContainsString('deleted_at IS NULL', $contentHelpers);
         self::assertStringContainsString('wiki_ensure_subcategories_table();', $contentHelpers);
+        self::assertStringContainsString('wiki_ensure_subsubcategories_table();', $contentHelpers);
         self::assertStringContainsString('subcategory VARCHAR(120) NOT NULL DEFAULT ""', $contentHelpers);
+        self::assertStringContainsString('subsubcategory VARCHAR(120) NOT NULL DEFAULT ""', $contentHelpers);
         self::assertStringContainsString("'qsl', 'qsl_preview', 'qsl_export', 'members_library', 'admin_library', 'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'fichiers', 'members_library', 'member_library_preview', 'member_document_preview', 'admin_articles'", $routeHelperLoader);

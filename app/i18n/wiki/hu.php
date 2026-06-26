@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Oldal hozzáadva a kedvencekhez.',
   'favorite_removed_msg' => 'Oldal eltávolítva a kedvencekből.',
   'err_subcategory_category_mismatch' => 'A kiválasztott altéma nem tartozik a kiválasztott témához.',
+  'subsubcategory_field' => 'Al-altéma',
+  'no_subsubcategory' => 'Nincs al-altéma',
+  'err_subsubcategory_category_mismatch' => 'A kiválasztott al-altéma nem tartozik a kiválasztott témához.',
   'category_general' => 'Általános',
 );

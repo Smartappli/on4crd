@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Page ajoutée aux favoris.',
   'favorite_removed_msg' => 'Page retirée des favoris.',
   'err_subcategory_category_mismatch' => 'La sous-thématique sélectionnée ne correspond pas à la thématique choisie.',
+  'subsubcategory_field' => 'Sous-sous-thématique',
+  'no_subsubcategory' => 'Sans sous-sous-thématique',
+  'err_subsubcategory_category_mismatch' => 'La sous-sous-thématique sélectionnée ne correspond pas à la thématique ou à la sous-thématique choisie.',
   'category_general' => 'Général',
 );

@@ -53,6 +53,23 @@ final class ModuleTaxonomyVisibilityTest extends TestCase
                 ['radio:hf-band:guides' => 2, 'radio:hf-band:empty' => 0]
             )
         );
+
+        self::assertSame(
+            [
+                'technique:antennes' => [
+                    ['category_code' => 'technique', 'subcategory_code' => 'antennes', 'code' => 'yagi', 'label' => 'Yagi', 'total' => 4],
+                ],
+            ],
+            wiki_visible_subsubcategories_by_parent(
+                [
+                    'technique:antennes' => [
+                        ['category_code' => 'technique', 'subcategory_code' => 'antennes', 'code' => 'yagi', 'label' => 'Yagi'],
+                        ['category_code' => 'technique', 'subcategory_code' => 'antennes', 'code' => 'empty', 'label' => 'Empty'],
+                    ],
+                ],
+                ['technique:antennes:yagi' => 4, 'technique:antennes:empty' => 0]
+            )
+        );
     }
 
     public function testAlbumsVisibleTaxonomyKeepsOnlyNonEmptyBranches(): void

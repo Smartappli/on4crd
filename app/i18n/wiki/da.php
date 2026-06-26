@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Side føjet til favoritter.',
   'favorite_removed_msg' => 'Side fjernet fra favoritter.',
   'err_subcategory_category_mismatch' => 'Det valgte underemne hører ikke til det valgte emne.',
+  'subsubcategory_field' => 'Underundertema',
+  'no_subsubcategory' => 'Intet underundertema',
+  'err_subsubcategory_category_mismatch' => 'Det valgte underundertema hører ikke til det valgte emne.',
   'category_general' => 'Generelt',
 );

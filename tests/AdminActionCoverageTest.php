@@ -178,9 +178,9 @@ final class AdminActionCoverageTest extends TestCase
             ],
             'admin wiki taxonomy and status actions' => [
                 'page' => 'pages/admin_wiki.php',
-                'controller_snippets' => ["'update_page_status'", "'add_category'", "'update_category'", "'delete_category'", "'add_subcategory'", "'update_subcategory'", "'delete_subcategory'", 'wiki_revisions'],
+                'controller_snippets' => ["'update_page_status'", "'add_category'", "'update_category'", "'delete_category'", "'add_subcategory'", "'update_subcategory'", "'delete_subcategory'", "'add_subsubcategory'", "'update_subsubcategory'", "'delete_subsubcategory'", 'wiki_revisions'],
                 'selenium' => 'tests/selenium/admin-articles-wiki-workflow.test.js',
-                'selenium_snippets' => ['admin_wiki', 'add_category', 'add_subcategory', 'pageStatusForm', 'delete_subcategory', 'delete_category'],
+                'selenium_snippets' => ['admin_wiki', 'add_category', 'add_subcategory', 'add_subsubcategory', 'update_subsubcategory', 'delete_subsubcategory', 'pageStatusForm', 'delete_subcategory', 'delete_category'],
             ],
             'admin taxonomy label update actions' => [
                 'page' => 'pages/admin_articles.php',

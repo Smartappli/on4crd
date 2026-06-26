@@ -326,6 +326,7 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
     content LONGTEXT NOT NULL,
     category VARCHAR(120) NOT NULL DEFAULT 'general',
     subcategory VARCHAR(120) NOT NULL DEFAULT '',
+    subsubcategory VARCHAR(120) NOT NULL DEFAULT '',
     author_id INT DEFAULT NULL,
     status ENUM('pending','published','rejected') NOT NULL DEFAULT 'published',
     proposal_kind VARCHAR(32) NOT NULL DEFAULT 'page',
@@ -335,6 +336,8 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_wiki_category (category),
     INDEX idx_wiki_subcategory (category, subcategory),
+    INDEX idx_wiki_subsubcategory (subsubcategory),
+    INDEX idx_wiki_category_subcategory_subsubcategory (category, subcategory, subsubcategory),
     INDEX idx_wiki_status_updated (status, updated_at),
     INDEX idx_wiki_updated (updated_at),
     INDEX idx_wiki_proposal_kind (proposal_kind, status),
@@ -360,6 +363,18 @@ CREATE TABLE IF NOT EXISTS wiki_subcategories (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uniq_wiki_subcategory (category_code, code),
     INDEX idx_wiki_subcategory_category (category_code)
+);
+
+CREATE TABLE IF NOT EXISTS wiki_subsubcategories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_code VARCHAR(120) NOT NULL,
+    subcategory_code VARCHAR(120) NOT NULL,
+    code VARCHAR(120) NOT NULL,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_wiki_subsubcategory (category_code, subcategory_code, code),
+    INDEX idx_wiki_subsubcategory_parent (category_code, subcategory_code)
 );
 
 CREATE TABLE IF NOT EXISTS member_library_documents (

@@ -92,10 +92,15 @@ final class MemberModuleRegressionContractsTest extends TestCase
             'pages/admin_wiki.php' => [
                 'SELECT COUNT(*) FROM wiki_subcategories WHERE category_code = ?',
                 'err_category_has_subcategories',
-                'UPDATE wiki_pages SET category = "general", subcategory = "" WHERE category = ?',
+                'UPDATE wiki_pages SET category = "general", subcategory = "", subsubcategory = "" WHERE category = ?',
+                'SELECT COUNT(*) FROM wiki_subsubcategories WHERE category_code = ? AND subcategory_code = ?',
+                'err_subcategory_has_subsubcategories',
                 'SELECT COUNT(*) FROM wiki_pages WHERE category = ? AND subcategory = ?',
                 'err_subcategory_has_documents',
                 'DELETE FROM wiki_subcategories WHERE category_code = ? AND code = ?',
+                'SELECT COUNT(*) FROM wiki_pages WHERE category = ? AND subcategory = ? AND subsubcategory = ?',
+                'err_subsubcategory_has_documents',
+                'DELETE FROM wiki_subsubcategories WHERE category_code = ? AND subcategory_code = ? AND code = ?',
             ],
             'pages/admin_articles.php' => [
                 'SELECT COUNT(*) FROM article_subcategories WHERE category_code = ?',
@@ -141,6 +146,7 @@ final class MemberModuleRegressionContractsTest extends TestCase
         foreach ([
             'CREATE TABLE IF NOT EXISTS wiki_categories',
             'CREATE TABLE IF NOT EXISTS wiki_subcategories',
+            'CREATE TABLE IF NOT EXISTS wiki_subsubcategories',
             'CREATE TABLE IF NOT EXISTS member_webotheque_categories',
             'CREATE TABLE IF NOT EXISTS member_webotheque_subcategories',
             'CREATE TABLE IF NOT EXISTS member_webotheque_subsubcategories',
@@ -153,6 +159,7 @@ final class MemberModuleRegressionContractsTest extends TestCase
             'subcategory VARCHAR(120) NOT NULL DEFAULT \'\'',
             'subsubcategory VARCHAR(120) NOT NULL DEFAULT \'\'',
             'idx_wiki_category_deleted',
+            'idx_wiki_subsubcategory_parent',
             'idx_webotheque_category_deleted',
             'idx_webotheque_subsubcategory_parent',
             'idx_member_module_category_deleted',

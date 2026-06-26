@@ -50,5 +50,8 @@ return array (
   'favorite_added_msg' => 'Page added to favorites.',
   'favorite_removed_msg' => 'Page removed from favorites.',
   'err_subcategory_category_mismatch' => 'The selected subtopic does not belong to the selected topic.',
+  'subsubcategory_field' => 'Sub-subtopic',
+  'no_subsubcategory' => 'No sub-subtopic',
+  'err_subsubcategory_category_mismatch' => 'The selected sub-subtopic does not match the chosen topic or subtopic.',
   'category_general' => 'General',
 );

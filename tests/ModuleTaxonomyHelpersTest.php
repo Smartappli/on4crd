@@ -53,9 +53,14 @@ final class ModuleTaxonomyHelpersTest extends TestCase
     public function testWikiTaxonomyReferencesAreNormalized(): void
     {
         self::assertSame('general:procedures', wiki_subcategory_ref('', 'Procédures'));
+        self::assertSame('general:procedures:antennes', wiki_subsubcategory_ref('', 'Procédures', 'Antennes'));
         self::assertSame(
             ['category' => 'technique', 'subcategory' => 'antennes'],
             wiki_subcategory_ref_parts('Technique:Antennes')
+        );
+        self::assertSame(
+            ['category' => 'technique', 'subcategory' => 'antennes', 'subsubcategory' => 'yagi'],
+            wiki_subsubcategory_ref_parts('Technique:Antennes:Yagi')
         );
         self::assertSame('Favoris', wiki_favorites_label(['favorite' => 'Favori'], 'fr'));
         self::assertSame('Favorites', wiki_favorites_label([], 'en'));
