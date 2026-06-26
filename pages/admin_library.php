@@ -953,9 +953,9 @@ ob_start();
         <article class="card admin-library-document">
             <p><input type="checkbox" form="bulk-delete-form" name="ids[]" value="<?= $documentId ?>"> <span class="help"><?= e((string) $t['select']) ?></span></p>
             <p>
-                <span class="badge muted"><?= e($documentCategoryLabel) ?></span>
-                <?php if ($documentSubcategoryLabel !== ''): ?><span class="badge muted"><?= e($documentSubcategoryLabel) ?></span><?php endif; ?>
-                <?php if ($documentSubsubcategoryLabel !== ''): ?><span class="badge muted"><?= e($documentSubsubcategoryLabel) ?></span><?php endif; ?>
+                <span class="badge muted taxonomy-pill-category"><?= e($documentCategoryLabel) ?></span>
+                <?php if ($documentSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($documentSubcategoryLabel) ?></span><?php endif; ?>
+                <?php if ($documentSubsubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($documentSubsubcategoryLabel) ?></span><?php endif; ?>
                 <span class="badge muted"><?= e(strtoupper($extension)) ?></span>
             </p>
             <h3><?= e((string) $document['title']) ?></h3>

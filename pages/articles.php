@@ -755,7 +755,11 @@ ob_start();
                             }
                         } ?>
                         <article class="news-card feature-card">
-                            <span class="badge muted"><?= e((string) ($articleCategories[$themeCode] ?? (string) $t['theme_default'])) ?><?= $rowSubcategoryLabel !== '' ? ' / ' . e($rowSubcategoryLabel) : '' ?><?= $rowSubsubcategoryLabel !== '' ? ' / ' . e($rowSubsubcategoryLabel) : '' ?></span>
+                            <div class="taxonomy-badge-row">
+                                <span class="badge muted taxonomy-pill-category"><?= e((string) ($articleCategories[$themeCode] ?? (string) $t['theme_default'])) ?></span>
+                                <?php if ($rowSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($rowSubcategoryLabel) ?></span><?php endif; ?>
+                                <?php if ($rowSubsubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($rowSubsubcategoryLabel) ?></span><?php endif; ?>
+                            </div>
                             <h3><a href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
                             <p class="help"><?= $articleDate !== null ? e(date('d/m/Y', strtotime($articleDate))) . ' · ' : '' ?><?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
                             <p><?= e(article_card_excerpt($row)) ?></p>

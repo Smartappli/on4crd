@@ -1442,7 +1442,11 @@ function render_member_document_module_cards(array $documents, array $labels, st
         if ($docTags !== '') {
             $html .= '<p class="help">' . e((string) $labels['tags']) . ': ' . e($docTags) . '</p>';
         }
-        $html .= '<p class="help">' . e((string) $labels['category_field']) . ': ' . e($docCategoryLabel) . ($docSubcategoryLabel !== '' ? ' / ' . e($docSubcategoryLabel) : '') . '</p>';
+        $html .= '<p class="help taxonomy-badge-row">'
+            . e((string) $labels['category_field']) . ': '
+            . '<span class="badge muted taxonomy-pill-category">' . e($docCategoryLabel) . '</span>'
+            . ($docSubcategoryLabel !== '' ? '<span class="badge muted taxonomy-pill-subcategory">' . e($docSubcategoryLabel) . '</span>' : '')
+            . '</p>';
         if ($docExtract !== '') {
             $html .= '<p class="help">' . e(mb_safe_strimwidth($docExtract, 0, 220, '...')) . '</p>';
         }
@@ -2452,7 +2456,11 @@ function render_admin_member_document_module_page(string $module): void
                             $docCategory = member_document_category_code((string) ($document['category'] ?? 'general'));
                             $docSubcategory = member_document_subcategory_code((string) ($document['subcategory'] ?? ''));
                             ?>
-                            <p class="help"><?= e((string) $labels['category_field']) ?>: <?= e((string) ($categories[$docCategory] ?? member_document_category_label_from_code($docCategory))) ?><?= $docSubcategory !== '' ? ' / ' . e(member_document_category_label_from_code($docSubcategory)) : '' ?></p>
+                            <p class="help taxonomy-badge-row">
+                                <?= e((string) $labels['category_field']) ?>:
+                                <span class="badge muted taxonomy-pill-category"><?= e((string) ($categories[$docCategory] ?? member_document_category_label_from_code($docCategory))) ?></span>
+                                <?php if ($docSubcategory !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e(member_document_category_label_from_code($docSubcategory)) ?></span><?php endif; ?>
+                            </p>
                             <?php if (trim((string) ($document['tags'] ?? '')) !== ''): ?><p class="help"><?= e((string) $labels['tags']) ?>: <?= e((string) $document['tags']) ?></p><?php endif; ?>
                             <p class="actions">
                                 <?php if ($documentDownloadUrl !== ''): ?><a class="button secondary" href="<?= e($documentDownloadUrl) ?>" target="_blank" rel="noopener"><?= e((string) $labels['open']) ?></a><?php endif; ?>

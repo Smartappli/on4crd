@@ -2959,6 +2959,20 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 }
 .badge { display:inline-block; padding:.28rem .7rem; border-radius:999px; background: var(--accent); color:#fff; font-size:.8rem; font-weight:700; margin-bottom:.6rem; }
 .badge.muted { background: var(--panel-2); color: var(--text); border:1px solid var(--border); }
+.taxonomy-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem;
+}
+.taxonomy-badge-row .badge,
+.taxonomy-badge-row .wiki-category-badge,
+.taxonomy-badge-row .wiki-category-link {
+  margin-bottom: 0;
+}
+.taxonomy-badge-row a.badge {
+  text-decoration: none;
+}
 .inner-card { margin-top: 1rem; }
 .member-links { display:flex; flex-wrap:wrap; gap:.5rem; }
 .ad-zone { margin-bottom: 1rem; }
@@ -3098,6 +3112,12 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .badge.taxonomy-pill-category,
 .badge.taxonomy-pill-subcategory,
 .badge.taxonomy-pill-subsubcategory,
+.wiki-category-badge.taxonomy-pill-category,
+.wiki-category-badge.taxonomy-pill-subcategory,
+.wiki-category-badge.taxonomy-pill-subsubcategory,
+.wiki-category-link.taxonomy-pill-category,
+.wiki-category-link.taxonomy-pill-subcategory,
+.wiki-category-link.taxonomy-pill-subsubcategory,
 .classifieds-category-pill.taxonomy-pill-category,
 .classifieds-category-pill.taxonomy-pill-subcategory,
 .classifieds-category-pill.taxonomy-pill-subsubcategory {

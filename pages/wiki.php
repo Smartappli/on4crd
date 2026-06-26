@@ -487,12 +487,12 @@ ob_start();
                         <div class="wiki-card-main">
                             <div class="wiki-card-kicker">
                                 <span class="wiki-slug">/<?= e((string) $row['slug']) ?></span>
-                                <a class="wiki-category-badge" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode])) ?>"><?= e($categoryLabel) ?></a>
+                                <a class="wiki-category-badge taxonomy-pill-category" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode])) ?>"><?= e($categoryLabel) ?></a>
                                 <?php if ($rowSubtheme !== ''): ?>
-                                    <a class="wiki-category-badge" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $rowSubtheme])) ?>"><?= e($rowSubthemeLabel) ?></a>
+                                    <a class="wiki-category-badge taxonomy-pill-subcategory" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $rowSubtheme])) ?>"><?= e($rowSubthemeLabel) ?></a>
                                 <?php endif; ?>
                                 <?php if ($rowSubtheme !== '' && $rowSubsubtheme !== ''): ?>
-                                    <a class="wiki-category-badge" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $rowSubtheme, 'subsubtheme' => $rowSubsubtheme])) ?>"><?= e($rowSubsubthemeLabel) ?></a>
+                                    <a class="wiki-category-badge taxonomy-pill-subsubcategory" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $rowSubtheme, 'subsubtheme' => $rowSubsubtheme])) ?>"><?= e($rowSubsubthemeLabel) ?></a>
                                 <?php endif; ?>
                             </div>
                             <h2><a href="<?= e(route_url('wiki_view', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title']) ?></a></h2>

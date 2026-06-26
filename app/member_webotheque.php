@@ -1616,7 +1616,12 @@ function render_webotheque_cards(array $links, array $t, array $categories = [],
         if ($description !== '') {
             $html .= '<p>' . e($description) . '</p>';
         }
-        $html .= '<p class="help">' . e((string) $t['domain_field']) . ': ' . e($categoryLabel) . ($subcategoryLabel !== '' ? ' / ' . e($subcategoryLabel) : '') . ($subsubcategoryLabel !== '' ? ' / ' . e($subsubcategoryLabel) : '') . '</p>';
+        $html .= '<p class="help taxonomy-badge-row">'
+            . e((string) $t['domain_field']) . ': '
+            . '<span class="badge muted taxonomy-pill-category">' . e($categoryLabel) . '</span>'
+            . ($subcategoryLabel !== '' ? '<span class="badge muted taxonomy-pill-subcategory">' . e($subcategoryLabel) . '</span>' : '')
+            . ($subsubcategoryLabel !== '' ? '<span class="badge muted taxonomy-pill-subsubcategory">' . e($subsubcategoryLabel) . '</span>' : '')
+            . '</p>';
         if ($tags !== '') {
             $html .= '<p class="help">' . e((string) $t['tags']) . ': ' . e($tags) . '</p>';
         }

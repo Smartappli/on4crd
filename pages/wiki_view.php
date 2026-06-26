@@ -287,9 +287,9 @@ ob_start();
             <h1><?= e((string) $row['title']) ?></h1>
             <p class="help">
                 <?= e(date('d/m/Y H:i', $updatedAt)) ?>
-                &middot; <a class="wiki-category-link" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode])) ?>"><?= e($categoryLabel) ?></a>
-                <?php if ($subcategoryCode !== ''): ?> &middot; <a class="wiki-category-link" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $subcategoryCode])) ?>"><?= e($subcategoryLabel) ?></a><?php endif; ?>
-                <?php if ($subcategoryCode !== '' && $subsubcategoryCode !== ''): ?> &middot; <a class="wiki-category-link" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $subcategoryCode, 'subsubtheme' => $subsubcategoryCode])) ?>"><?= e($subsubcategoryLabel) ?></a><?php endif; ?>
+                &middot; <a class="wiki-category-link taxonomy-pill-category" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode])) ?>"><?= e($categoryLabel) ?></a>
+                <?php if ($subcategoryCode !== ''): ?> &middot; <a class="wiki-category-link taxonomy-pill-subcategory" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $subcategoryCode])) ?>"><?= e($subcategoryLabel) ?></a><?php endif; ?>
+                <?php if ($subcategoryCode !== '' && $subsubcategoryCode !== ''): ?> &middot; <a class="wiki-category-link taxonomy-pill-subsubcategory" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $subcategoryCode, 'subsubtheme' => $subsubcategoryCode])) ?>"><?= e($subsubcategoryLabel) ?></a><?php endif; ?>
                 <?php if ($author !== ''): ?> · <?= e($author) ?><?php endif; ?>
                 <?php if (!$isPublished): ?> · <span class="badge muted"><?= e($wikiStatus) ?></span><?php endif; ?>
             </p>

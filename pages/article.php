@@ -164,10 +164,12 @@ ob_start();
         </form>
     <?php endif; ?>
     <h1><?= e((string) $row['title_localized']) ?></h1>
-    <p class="help">
-        <?= e($categoryLabel) ?><?= $subcategoryLabel !== '' ? ' / ' . e($subcategoryLabel) : '' ?><?= $subsubcategoryLabel !== '' ? ' / ' . e($subsubcategoryLabel) : '' ?> ·
-        <?= e($articleDisplayDate) ?> ·
-        <?= $readingMinutes ?> <?= e((string) $t['reading_minutes']) ?>
+    <p class="help taxonomy-badge-row">
+        <a class="badge muted taxonomy-pill-category" href="<?= e(route_url_clean('articles', ['theme' => $category])) ?>"><?= e($categoryLabel) ?></a>
+        <?php if ($subcategoryLabel !== ''): ?><a class="badge muted taxonomy-pill-subcategory" href="<?= e(route_url_clean('articles', ['theme' => $category, 'subcategory' => $subcategory])) ?>"><?= e($subcategoryLabel) ?></a><?php endif; ?>
+        <?php if ($subsubcategoryLabel !== ''): ?><a class="badge muted taxonomy-pill-subsubcategory" href="<?= e(route_url_clean('articles', ['theme' => $category, 'subcategory' => $subcategory, 'subsubcategory' => $subsubcategory])) ?>"><?= e($subsubcategoryLabel) ?></a><?php endif; ?>
+        <span><?= e($articleDisplayDate) ?></span>
+        <span><?= $readingMinutes ?> <?= e((string) $t['reading_minutes']) ?></span>
     </p>
     <?php if (trim((string) ($row['excerpt_localized'] ?? '')) !== ''): ?>
         <p class="lead"><?= e((string) $row['excerpt_localized']) ?></p>

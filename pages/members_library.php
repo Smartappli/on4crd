@@ -1034,7 +1034,12 @@ ob_start();
                 <?php $canEditDocument = $canManageLibrary || (int) ($document['member_id'] ?? 0) === (int) ($user['id'] ?? 0); ?>
                 <?php $editDialogId = 'members-library-edit-dialog-' . $docId; ?>
                 <article class="news-card feature-card members-library-document-card">
-                    <span class="badge muted"><?= e($docCategoryLabel) ?><?php if ($docSubcategoryLabel !== ''): ?> / <?= e($docSubcategoryLabel) ?><?php endif; ?><?php if ($docSubsubcategoryLabel !== ''): ?> / <?= e($docSubsubcategoryLabel) ?><?php endif; ?> / <?= e(strtoupper($extension)) ?></span>
+                    <div class="taxonomy-badge-row">
+                        <span class="badge muted taxonomy-pill-category"><?= e($docCategoryLabel) ?></span>
+                        <?php if ($docSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($docSubcategoryLabel) ?></span><?php endif; ?>
+                        <?php if ($docSubsubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($docSubsubcategoryLabel) ?></span><?php endif; ?>
+                        <span class="badge muted"><?= e(strtoupper($extension)) ?></span>
+                    </div>
                     <h3><?= e($docTitle) ?></h3>
                     <?php if ($docDescription !== ''): ?><p><?= e($docDescription) ?></p><?php endif; ?>
                     <?php if ($docTags !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e($docTags) ?></p><?php endif; ?>
