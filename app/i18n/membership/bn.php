@@ -10,7 +10,7 @@ return array (
   'how_text' => 'প্রথমে, CRD সেকশনের CM (ক্লাব সভাপতি) এর কাছে ইমেইল (crdurnal@gmail.com) করে আবেদন পাঠান।',
   'postal_title' => 'ডাকযোগে আবেদন',
   'contact_item_1' => 'রেডিও ক্লাব ডুরনাল - বোক এরিনা',
-  'contact_item_2' => 'Rue des Ecoles, 5530 Purnode',
+  'contact_item_2' => 'Rue des Écoles, 5530 Purnode',
   'required_title' => 'আবেদনে আবশ্যিক তথ্য',
   'required_item_1' => 'কল সাইন (যদি থাকে) এবং প্রথম লাইসেন্সের তারিখ।',
   'required_item_2' => 'নাম ও পদবি।',

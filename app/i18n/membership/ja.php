@@ -10,7 +10,7 @@ return array (
   'how_text' => 'まず、CRDセクションのCM（クラブ会長）へメール（crdurnal@gmail.com）で申請してください。',
   'postal_title' => '郵送での申請',
   'contact_item_1' => 'ラジオ クラブ ダーナル - ボック アリーナ',
-  'contact_item_2' => 'Rue des Ecoles, 5530 Purnode',
+  'contact_item_2' => 'Rue des Écoles, 5530 Purnode',
   'required_title' => '申請に必要な情報',
   'required_item_1' => 'コールサイン（割当済みの場合）と最初の免許日。',
   'required_item_2' => '姓と名。',

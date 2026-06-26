@@ -123,7 +123,7 @@ return array (
   'page_title' => 'Beranda',
   'club_name' => 'Radio Club Durnal',
   'venue_line_1' => 'Arena Bocq',
-  'venue_line_2' => 'Rue des Ecoles',
+  'venue_line_2' => 'Rue des Écoles',
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Iklan mitra',
   'alt_hero_illustration' => 'Ilustrasi ON4CRD',

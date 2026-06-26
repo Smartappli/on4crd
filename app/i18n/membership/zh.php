@@ -10,7 +10,7 @@ return array (
   'how_text' => '首先，请通过电子邮件（crdurnal@gmail.com）向 CRD 分会的 CM（俱乐部主席）提交申请。',
   'postal_title' => '邮寄申请',
   'contact_item_1' => '杜纳尔无线电俱乐部 - 博克竞技场',
-  'contact_item_2' => 'Rue des Ecoles, 5530 Purnode',
+  'contact_item_2' => 'Rue des Écoles, 5530 Purnode',
   'required_title' => '申请中必须提供的信息',
   'required_item_1' => '呼号（如已分配）及首次执照日期。',
   'required_item_2' => '姓和名。',

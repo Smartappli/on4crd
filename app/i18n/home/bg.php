@@ -39,7 +39,7 @@ return array (
   'cw_qrp_label' => 'QRG CW QRP:',
   'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'обяви позивна + QTH + търсен трафик',
-  'map_title' => 'Google Map - Радиоклуб Дюрнал',
+  'map_title' => 'Карта Google - Радиоклуб Дюрнал',
   'address_title' => 'Адрес',
   'contact_people' => 'Лица за контакт',
   'club_spotlight_title' => 'В клубните заглавия',

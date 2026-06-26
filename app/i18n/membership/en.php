@@ -8,7 +8,7 @@ return [
     'how_text' => 'First, submit a request by email (crdurnal@gmail.com) to the CM (club president) of the CRD section.',
     'postal_title' => 'Postal request',
     'contact_item_1' => 'Radio Club Durnal - Bocq Arena',
-    'contact_item_2' => 'Rue des Ecoles, 5530 Purnode',
+    'contact_item_2' => 'Rue des Écoles, 5530 Purnode',
     'required_title' => 'Required information in your request',
     'required_item_1' => 'Call sign (if assigned) and date of your first license.',
     'required_item_2' => 'Last name and first name.',

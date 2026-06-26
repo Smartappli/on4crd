@@ -39,7 +39,7 @@ return array (
   'cw_qrp_label' => 'Frecuencias CW QRP:',
   'cw_qrp_value' => '7.030MHz • 14.060MHz',
   'good_practice_value' => 'anunciar indicativo + QTH + tráfico solicitado',
-  'map_title' => 'Google Map - Radio Club Durnal',
+  'map_title' => 'Mapa de Google - Radio Club Durnal',
   'address_title' => 'Dirección',
   'contact_people' => 'Personas de contacto',
   'club_spotlight_title' => 'Destacados del club',

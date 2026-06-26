@@ -39,7 +39,7 @@ return array (
   'cw_qrp_label' => 'QRG CW QRP:',
   'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'teatage kutsung + QTH + liiklus otsitud',
-  'map_title' => 'Google Map - Radio Club Durnal',
+  'map_title' => 'Google’i kaart - Radio Club Durnal',
   'address_title' => 'Aadress',
   'contact_people' => 'Kontaktisikud',
   'club_spotlight_title' => 'Klubi pealkirjades',

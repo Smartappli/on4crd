@@ -123,7 +123,7 @@ return array (
   'page_title' => 'Dom',
   'club_name' => 'Klub Radiowy Durnal',
   'venue_line_1' => 'Bocq Arena',
-  'venue_line_2' => 'Rue des Ecoles',
+  'venue_line_2' => 'Rue des Écoles',
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Reklama partnera',
   'alt_hero_illustration' => 'Ilustracja ON4CRD',
