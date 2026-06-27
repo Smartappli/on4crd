@@ -1,4 +1,7 @@
 const test = require('node:test');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const {
   By,
   assert,
@@ -13,6 +16,15 @@ const {
   ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
+
+const crc32Table = new Uint32Array(256);
+for (let index = 0; index < 256; index += 1) {
+  let value = index;
+  for (let bit = 0; bit < 8; bit += 1) {
+    value = (value & 1) ? (0xedb88320 ^ (value >>> 1)) : (value >>> 1);
+  }
+  crc32Table[index] = value >>> 0;
+}
 
 async function submitForm(driver, form, submitterSelector = null) {
   await driver.executeScript(`
