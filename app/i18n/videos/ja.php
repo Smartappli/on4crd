@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => '文書',
   'admin_page_title' => '管理',
   'admin_intro' => 'メンバードキュメントを PDF、DOCX、テキスト、Markdown、または HTML で公開し、コンテンツを抽出してカテゴリ別に整理します。',
+  'propose_subsubcategory_item' => 'サブサブテーマ',
 );

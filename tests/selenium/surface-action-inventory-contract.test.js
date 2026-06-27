@@ -91,6 +91,7 @@ const moduleDocumentMemberActions = [
   'propose_category',
   'propose_document',
   'propose_subcategory',
+  'propose_subsubcategory',
   'toggle_favorite_document',
   'update_document',
 ];
@@ -99,7 +100,7 @@ const expectedPublicActions = {
   'ad_click': [],
   'ai-index.json': [],
   album: ['toggle_favorite', 'upload_album_photos'],
-  albums: ['delete_album', 'propose_album', 'propose_category', 'propose_subcategory', 'toggle_favorite_album', 'update_album'],
+  albums: ['delete_album', 'propose_album', 'propose_category', 'propose_subcategory', 'propose_subsubcategory', 'toggle_favorite_album', 'update_album'],
   article: ['toggle_favorite'],
   articles: ['propose_category', 'propose_subcategory', 'propose_subsubcategory', 'propose_tag', 'toggle_favorite_article'],
   auction_view: [],

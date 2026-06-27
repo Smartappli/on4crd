@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Doiciméid',
   'admin_page_title' => 'Riarachán',
   'admin_intro' => 'Foilsigh doiciméid na mball mar PDF, DOCX, téacs, Markdown nó HTML, bain a bhfuil iontu agus cuir i gcatagóir iad.',
+  'propose_subsubcategory_item' => 'Fo-ábhar',
 );

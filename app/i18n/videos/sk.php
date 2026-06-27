@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'dokumenty',
   'admin_page_title' => 'Administrácia',
   'admin_intro' => 'Publikovať členské dokumenty ako PDF, DOCX, text, Markdown alebo HTML, extrahovať ich obsah a kategorizovať ich.',
+  'propose_subsubcategory_item' => 'Podtému',
 );

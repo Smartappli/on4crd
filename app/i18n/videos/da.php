@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Dokumenter',
   'admin_page_title' => 'Administrering',
   'admin_intro' => 'Udgiv medlemsdokumenter som PDF, DOCX, tekst, Markdown eller HTML, udtræk deres indhold og kategoriser dem.',
+  'propose_subsubcategory_item' => 'Et underundertema',
 );

@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Dokumentai',
   'admin_page_title' => 'Administravimas',
   'admin_intro' => 'Paskelbkite narių dokumentus kaip PDF, DOCX, tekstą, Markdown arba HTML, išskleiskite jų turinį ir suskirstykite juos į kategorijas.',
+  'propose_subsubcategory_item' => 'Potemę',
 );

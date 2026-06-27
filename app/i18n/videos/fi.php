@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Asiakirjat',
   'admin_page_title' => 'Hallinto',
   'admin_intro' => 'Julkaise jäsenasiakirjat muodossa PDF, DOCX, teksti, Markdown tai HTML, pura niiden sisältö ja luokittele ne.',
+  'propose_subsubcategory_item' => 'Ala-aihe',
 );

@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Documente',
   'admin_page_title' => 'Administrare',
   'admin_intro' => 'Publicați documentele membrilor ca PDF, DOCX, text, Markdown sau HTML, extrageți-le conținutul și clasificați-le.',
+  'propose_subsubcategory_item' => 'O subtematică',
 );

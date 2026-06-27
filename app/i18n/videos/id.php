@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Dokumen',
   'admin_page_title' => 'Administrasi',
   'admin_intro' => 'Publikasikan dokumen anggota dalam PDF, DOCX, teks, Markdown atau HTML, ekstrak kontennya, dan atur berdasarkan kategori.',
+  'propose_subsubcategory_item' => 'Sebuah sub-subtopik',
 );

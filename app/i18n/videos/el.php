@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Έγγραφα',
   'admin_page_title' => 'Διοίκηση',
   'admin_intro' => 'Δημοσιεύστε έγγραφα μελών ως PDF, DOCX, κείμενο, Markdown ή HTML, εξάγετε το περιεχόμενό τους και κατηγοριοποιήστε τα.',
+  'propose_subsubcategory_item' => 'Μια υποθεματική',
 );

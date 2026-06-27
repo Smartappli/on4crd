@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Dokumendid',
   'admin_page_title' => 'Administreerimine',
   'admin_intro' => 'Avaldage liikmedokumendid kujul PDF, DOCX, tekst, Markdown või HTML, eraldage nende sisu ja liigitage need kategooriatesse.',
+  'propose_subsubcategory_item' => 'Alam-alamteema',
 );

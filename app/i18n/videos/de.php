@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Dokumente',
   'admin_page_title' => 'Verwaltung',
   'admin_intro' => 'Veröffentlichen Sie Mitgliederdokumente im PDF-, DOCX-, Text-, Markdown- oder HTML-Format, extrahieren Sie deren Inhalt und organisieren Sie sie nach Kategorien.',
+  'propose_subsubcategory_item' => 'Ein Unterunterthema',
 );

@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Dokumenti',
   'admin_page_title' => 'Administrācija',
   'admin_intro' => 'Publicējiet dalībnieku dokumentus kā PDF, DOCX, tekstu, Markdown vai HTML, izņemiet to saturu un klasificējiet tos kategorijās.',
+  'propose_subsubcategory_item' => 'Apakštēmu',
 );

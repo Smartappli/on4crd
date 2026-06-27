@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'Dokumentumok',
   'admin_page_title' => 'Adminisztráció',
   'admin_intro' => 'Tegye közzé a tagok dokumentumait PDF, DOCX, szöveg, Markdown vagy HTML néven, bontsa ki tartalmukat és kategorizálja őket.',
+  'propose_subsubcategory_item' => 'Al-altéma',
 );

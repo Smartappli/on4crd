@@ -36,4 +36,5 @@ return array (
   'admin_eyebrow' => 'নথি',
   'admin_page_title' => 'প্রশাসন',
   'admin_intro' => 'সদস্যদের নথিগুলি PDF, DOCX, পাঠ্য, মার্কডাউন বা HTML-এ প্রকাশ করুন, তাদের বিষয়বস্তু বের করুন এবং বিভাগ অনুসারে সংগঠিত করুন।',
+  'propose_subsubcategory_item' => 'একটি উপ-উপবিষয়',
 );
