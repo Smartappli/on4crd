@@ -166,6 +166,78 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringNotContainsString('<script', $html);
     }
 
+    public function testArticleExtractDocxHtmlPreservesRichDocumentStructure(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'docx-rich-');
+        self::assertIsString($tmp);
+
+        $documentXml = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <w:body>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
+      <w:r><w:t>Titre importe</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:r><w:rPr><w:b/><w:i/></w:rPr><w:t>Texte fort</w:t></w:r>
+      <w:r><w:t> et </w:t></w:r>
+      <w:hyperlink r:id="rId1"><w:r><w:t>lien fiable</w:t></w:r></w:hyperlink>
+      <w:r><w:br/><w:t>Suite</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr>
+      <w:r><w:t>Element de liste</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:hyperlink r:id="rId2"><w:r><w:t>Lien bloque</w:t></w:r></w:hyperlink>
+    </w:p>
+    <w:tbl>
+      <w:tr>
+        <w:tc><w:p><w:r><w:t>Cellule A</w:t></w:r></w:p></w:tc>
+        <w:tc>
+          <w:tcPr><w:gridSpan w:val="2"/></w:tcPr>
+          <w:p><w:r><w:t>Cellule B</w:t></w:r></w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+  </w:body>
+</w:document>
+XML;
+        $relationshipsXml = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://example.test/docx" TargetMode="External"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="javascript:alert(1)" TargetMode="External"/>
+</Relationships>
+XML;
+
+        file_put_contents($tmp, self::zipFixture([
+            '[Content_Types].xml' => '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+            '_rels/.rels' => '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId0" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
+            'word/document.xml' => $documentXml,
+            'word/_rels/document.xml.rels' => $relationshipsXml,
+        ]));
+
+        try {
+            $html = article_extract_docx_html($tmp);
+
+            self::assertStringContainsString('<h2>Titre importe</h2>', $html);
+            self::assertStringContainsString('<strong><em>Texte fort</em></strong>', $html);
+            self::assertStringContainsString('<a href="https://example.test/docx">lien fiable</a>', $html);
+            self::assertStringContainsString('<br>', $html);
+            self::assertStringContainsString('<ul>', $html);
+            self::assertStringContainsString('<li>Element de liste</li>', $html);
+            self::assertStringContainsString('<table>', $html);
+            self::assertStringContainsString('<td>Cellule A</td>', $html);
+            self::assertStringContainsString('<td colspan="2">Cellule B</td>', $html);
+            self::assertStringContainsString('Lien bloque', $html);
+            self::assertStringNotContainsString('javascript:', $html);
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
     public function testUploadSignatureValidatorAcceptsDocxZipHeader(): void
     {
         $tmp = tempnam(sys_get_temp_dir(), 'docx-sig-');
@@ -867,6 +939,80 @@ final class FunctionHelpersExtendedTest extends TestCase
 
         self::assertTrue(article_is_duplicate_slug_error($exception));
         self::assertFalse(article_is_duplicate_slug_error(new RuntimeException('Duplicate entry')));
+    }
+
+    /**
+     * @param array<string,string> $entries
+     */
+    private static function zipFixture(array $entries): string
+    {
+        $localParts = [];
+        $centralParts = [];
+        $offset = 0;
+
+        foreach ($entries as $name => $content) {
+            $nameBytes = $name;
+            $compressed = gzdeflate($content);
+            self::assertIsString($compressed);
+            $crc = crc32($content);
+            $method = 8;
+
+            $localHeader = pack(
+                'VvvvvvVVVvv',
+                0x04034b50,
+                20,
+                0,
+                $method,
+                0,
+                0,
+                $crc,
+                strlen($compressed),
+                strlen($content),
+                strlen($nameBytes),
+                0
+            );
+            $localParts[] = $localHeader . $nameBytes . $compressed;
+
+            $centralParts[] = pack(
+                'VvvvvvvVVVvvvvvVV',
+                0x02014b50,
+                20,
+                20,
+                0,
+                $method,
+                0,
+                0,
+                $crc,
+                strlen($compressed),
+                strlen($content),
+                strlen($nameBytes),
+                0,
+                0,
+                0,
+                0,
+                0,
+                $offset
+            ) . $nameBytes;
+
+            $offset += strlen($localHeader) + strlen($nameBytes) + strlen($compressed);
+        }
+
+        $centralDirectory = implode('', $centralParts);
+        $localData = implode('', $localParts);
+        $entryCount = count($entries);
+        $endRecord = pack(
+            'VvvvvVVv',
+            0x06054b50,
+            0,
+            0,
+            $entryCount,
+            $entryCount,
+            strlen($centralDirectory),
+            strlen($localData),
+            0
+        );
+
+        return $localData . $centralDirectory . $endRecord;
     }
 
 }
