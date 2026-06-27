@@ -9,9 +9,14 @@ final class ModuleTaxonomyHelpersTest extends TestCase
     public function testSharedDocumentTaxonomyReferencesAreNormalized(): void
     {
         self::assertSame('general:cours', member_document_subcategory_ref('', 'Cours'));
+        self::assertSame('general:cours:video', member_document_subsubcategory_ref('', 'Cours', 'Video'));
         self::assertSame(
             ['category' => 'formation', 'subcategory' => 'examens'],
             member_document_subcategory_ref_parts('Formation:Examens')
+        );
+        self::assertSame(
+            ['category' => 'formation', 'subcategory' => 'examens', 'subsubcategory' => 'video'],
+            member_document_subsubcategory_ref_parts('Formation:Examens:Video')
         );
         self::assertSame('Favoris', member_document_favorites_label(['favorite' => 'Favori'], 'fr'));
         self::assertSame('Favorites', member_document_favorites_label([], 'en'));

@@ -417,6 +417,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame('Une vidéo', $videoLabels['propose_presentation_item']);
         self::assertSame('Une thématique', $videoLabels['propose_category_item']);
         self::assertSame('Une sous-thématique', $videoLabels['propose_subcategory_item']);
+        self::assertSame('Une sous sous thématique', $videoLabels['propose_subsubcategory_item']);
 
         $pvDefinition = member_document_module_definition('pv');
         self::assertSame(['formats'], $pvDefinition['hidden_stats'] ?? null);
@@ -449,20 +450,28 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function member_document_apply_accepted_proposal(array $proposal, string $moduleCode): ?int', $renderer);
         self::assertStringContainsString('function member_document_upsert_category(', $renderer);
         self::assertStringContainsString('function member_document_upsert_subcategory(', $renderer);
+        self::assertStringContainsString('function member_document_upsert_subsubcategory(', $renderer);
+        self::assertStringContainsString('member_module_subsubcategories', $renderer);
         self::assertStringContainsString("member_document_module_allows_member_management(\$moduleCode)", $renderer);
         self::assertStringContainsString("\$canProposeTaxonomy = in_array(\$moduleCode, ['presentations', 'videos'], true);", $renderer);
+        self::assertStringContainsString("\$canProposeSubsubcategory = \$moduleCode === 'videos' && \$canProposeTaxonomy;", $renderer);
         self::assertStringContainsString("\$showProposeDropdown = \$canProposeTaxonomy || (\$moduleCode === 'videos' && \$canProposeDocument);", $renderer);
         self::assertStringContainsString("elseif (\$showProposeDropdown)", $renderer);
         self::assertStringContainsString("if (\$action === 'propose_category' && \$canProposeTaxonomy)", $renderer);
         self::assertStringContainsString("if (\$action === 'propose_subcategory' && \$canProposeTaxonomy)", $renderer);
+        self::assertStringContainsString("if (\$action === 'propose_subsubcategory' && \$canProposeSubsubcategory)", $renderer);
         self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'category'", $renderer);
         self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'subcategory'", $renderer);
+        self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'subsubcategory'", $renderer);
         self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'content', \$titleInput, \$proposalSummary", $renderer);
         self::assertStringContainsString("if (\$proposalType === 'category')", $renderer);
         self::assertStringContainsString("if (\$proposalType === 'subcategory')", $renderer);
+        self::assertStringContainsString("if (\$proposalType === 'subsubcategory')", $renderer);
         self::assertStringContainsString('member-document-propose-menu', $renderer);
         self::assertStringContainsString('member-document-category-dialog', $renderer);
         self::assertStringContainsString('member-document-subcategory-dialog', $renderer);
+        self::assertStringContainsString('member-document-subsubcategory-dialog', $renderer);
+        self::assertStringContainsString("route_url(\$routeName, ['propose_subsubcategory' => '1'])", $renderer);
         self::assertStringContainsString('data-member-document-modal-open', $renderer);
         self::assertStringContainsString('function member_document_upload_max_bytes(', $renderer);
         self::assertStringContainsString('1024 * 1024 * 1024', $renderer);

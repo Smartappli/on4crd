@@ -16,6 +16,7 @@ return array (
   'content_validated_direct' => 'Vidéo proposée et validée directement.',
   'proposal_file_field' => 'Fichier vidéo ou ressource',
   'propose_presentation_item' => 'Une vidéo',
+  'propose_subsubcategory_item' => 'Une sous sous thématique',
   'administration' => 'Administer',
   'manage_menu' => 'Gérer',
   'manage_my_files' => 'Télécharger le document',

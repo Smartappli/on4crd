@@ -292,6 +292,13 @@ function member_document_subcategory_code(string $value): string
 }
 }
 
+if (!function_exists('member_document_subsubcategory_code')) {
+function member_document_subsubcategory_code(string $value): string
+{
+    return member_document_subcategory_code($value);
+}
+}
+
 if (!function_exists('member_document_subcategory_ref')) {
 function member_document_subcategory_ref(string $categoryCode, string $subcategoryCode): string
 {
@@ -322,6 +329,41 @@ function member_document_subcategory_ref_parts(string $value): array
     }
 
     return ['category' => '', 'subcategory' => member_document_subcategory_code($value)];
+}
+}
+
+if (!function_exists('member_document_subsubcategory_ref')) {
+function member_document_subsubcategory_ref(string $categoryCode, string $subcategoryCode, string $subsubcategoryCode): string
+{
+    $categoryCode = member_document_category_code($categoryCode !== '' ? $categoryCode : 'general');
+    $subcategoryCode = member_document_subcategory_code($subcategoryCode);
+    $subsubcategoryCode = member_document_subsubcategory_code($subsubcategoryCode);
+
+    return $subcategoryCode !== '' && $subsubcategoryCode !== '' ? ($categoryCode . ':' . $subcategoryCode . ':' . $subsubcategoryCode) : '';
+}
+}
+
+if (!function_exists('member_document_subsubcategory_ref_parts')) {
+/**
+ * @return array{category:string,subcategory:string,subsubcategory:string}
+ */
+function member_document_subsubcategory_ref_parts(string $value): array
+{
+    $value = trim($value);
+    if ($value === '') {
+        return ['category' => '', 'subcategory' => '', 'subsubcategory' => ''];
+    }
+
+    $parts = explode(':', $value);
+    if (count($parts) >= 3) {
+        return [
+            'category' => member_document_category_code($parts[0] !== '' ? $parts[0] : 'general'),
+            'subcategory' => member_document_subcategory_code($parts[1]),
+            'subsubcategory' => member_document_subsubcategory_code($parts[2]),
+        ];
+    }
+
+    return ['category' => '', 'subcategory' => '', 'subsubcategory' => member_document_subsubcategory_code($value)];
 }
 }
 
@@ -530,6 +572,44 @@ function member_document_ensure_subcategories_table(string $moduleCode): bool
 }
 }
 
+if (!function_exists('member_document_ensure_subsubcategories_table')) {
+function member_document_ensure_subsubcategories_table(string $moduleCode): bool
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    if ($moduleCode === '') {
+        return false;
+    }
+
+    try {
+        member_document_ensure_subcategories_table($moduleCode);
+        db()->exec('CREATE TABLE IF NOT EXISTS member_module_subsubcategories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            module_code VARCHAR(80) NOT NULL,
+            category_code VARCHAR(120) NOT NULL,
+            subcategory_code VARCHAR(120) NOT NULL,
+            code VARCHAR(120) NOT NULL,
+            label VARCHAR(160) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 100,
+            deleted_at TIMESTAMP NULL DEFAULT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_member_module_subsubcategory (module_code, category_code, subcategory_code, code),
+            INDEX idx_member_module_subsubcategory_parent (module_code, category_code, subcategory_code),
+            INDEX idx_member_module_subsubcategory_deleted (module_code, deleted_at)
+        )');
+        if (!table_has_column('member_module_subsubcategories', 'deleted_at')) {
+            db()->exec('ALTER TABLE member_module_subsubcategories ADD COLUMN deleted_at TIMESTAMP NULL DEFAULT NULL AFTER sort_order');
+        }
+        if (!table_has_index('member_module_subsubcategories', 'idx_member_module_subsubcategory_deleted')) {
+            db()->exec('ALTER TABLE member_module_subsubcategories ADD INDEX idx_member_module_subsubcategory_deleted (module_code, deleted_at)');
+        }
+
+        return table_exists('member_module_subsubcategories');
+    } catch (Throwable) {
+        return false;
+    }
+}
+}
+
 if (!function_exists('member_document_categories')) {
 /**
  * @return array<string, string>
@@ -656,6 +736,37 @@ function member_document_upsert_subcategory(string $moduleCode, array $categorie
         ->execute([$moduleCode, $category, $code, $label]);
 
     return ['category' => $category, 'subcategory' => $code];
+}
+}
+
+if (!function_exists('member_document_upsert_subsubcategory')) {
+/**
+ * @param array<string, string> $categories
+ * @return array{category:string,subcategory:string,subsubcategory:string}
+ */
+function member_document_upsert_subsubcategory(string $moduleCode, array $categories, string $categoryInput, string $subcategoryInput, string $label): array
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    if (!member_document_ensure_subsubcategories_table($moduleCode)) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    [$category, $subcategory] = member_document_taxonomy_from_input(
+        $moduleCode,
+        $categoryInput !== '' ? $categoryInput : 'general',
+        member_document_subcategory_ref($categoryInput !== '' ? $categoryInput : 'general', $subcategoryInput),
+        $categories
+    );
+    $label = content_proposal_clean_single_line($label, 160);
+    $code = member_document_subsubcategory_code($label);
+    if ($moduleCode === '' || $subcategory === '' || $label === '' || $code === '') {
+        throw new RuntimeException('err_subsubcategory_required');
+    }
+
+    db()->prepare('INSERT INTO member_module_subsubcategories (module_code, category_code, subcategory_code, code, label, deleted_at) VALUES (?, ?, ?, ?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+        ->execute([$moduleCode, $category, $subcategory, $code, $label]);
+
+    return ['category' => $category, 'subcategory' => $subcategory, 'subsubcategory' => $code];
 }
 }
 
@@ -1203,6 +1314,15 @@ function member_document_apply_accepted_proposal(array $proposal, string $module
         return null;
     }
 
+    if ($proposalType === 'subsubcategory') {
+        $categories = member_document_categories($moduleCode);
+        $category = member_document_proposal_detail($summary, ['Category', 'Thématique', 'Thematique', 'Topic']);
+        $subcategory = member_document_proposal_detail($summary, ['Subcategory', 'Sous-thématique', 'Sous-thematique', 'Subtopic']);
+        member_document_upsert_subsubcategory($moduleCode, $categories, $category !== '' ? $category : 'general', $subcategory, (string) ($proposal['title'] ?? ''));
+
+        return null;
+    }
+
     if ($proposalType !== 'content') {
         return null;
     }
@@ -1583,12 +1703,16 @@ function render_member_document_module_page(string $module): void
     $canManageDocuments = member_document_current_user_is_administrator();
     $canProposeDocument = member_document_module_allows_member_management($moduleCode);
     $canProposeTaxonomy = in_array($moduleCode, ['presentations', 'videos'], true);
+    $canProposeSubsubcategory = $moduleCode === 'videos' && $canProposeTaxonomy;
     $proposalContactDefault = trim((string) ($user['email'] ?? ''));
     if ($proposalContactDefault === '') {
         $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
     }
     $categories = member_document_categories($moduleCode);
     member_document_ensure_subcategories_table($moduleCode);
+    if ($canProposeSubsubcategory) {
+        member_document_ensure_subsubcategories_table($moduleCode);
+    }
     $returnUrl = static function () use ($definition, $moduleCode): string {
         return route_url_clean((string) ($definition['route'] ?? $moduleCode), [
             'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
@@ -1686,6 +1810,49 @@ function render_member_document_module_page(string $module): void
                 content_proposal_notify_site((string) $labels['propose_subcategory_subject'], [
                     'area' => $moduleCode,
                     'proposal_type' => 'subcategory',
+                    'title' => $proposalTitle,
+                    'summary' => $proposalSummary,
+                    'contact' => $proposalContact,
+                    'source_ref' => 'content_proposals#' . $proposalId,
+                ]);
+                set_flash('success', (string) $labels['proposal_recorded']);
+                redirect('my_requests');
+            }
+            if ($action === 'propose_subsubcategory' && $canProposeSubsubcategory) {
+                $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_subsubcategory_name'] ?? $_POST['proposal_subsubcategory'] ?? ''), 160);
+                $parentParts = member_document_subcategory_ref_parts((string) ($_POST['proposal_parent_subcategory_ref'] ?? ''));
+                [$proposalCategory, $proposalSubcategory] = member_document_taxonomy_from_input(
+                    $moduleCode,
+                    $parentParts['category'] !== '' ? $parentParts['category'] : 'general',
+                    member_document_subcategory_ref($parentParts['category'] !== '' ? $parentParts['category'] : 'general', $parentParts['subcategory']),
+                    $categories
+                );
+                $proposalReason = content_proposal_clean_multiline((string) ($_POST['proposal_reason'] ?? $_POST['proposal_details'] ?? ''), 1600);
+                $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? $proposalContactDefault), 220);
+                if ($proposalContact === '') {
+                    $proposalContact = $proposalContactDefault;
+                }
+                if ($proposalTitle === '' || $proposalSubcategory === '') {
+                    throw new RuntimeException('err_subsubcategory_required');
+                }
+
+                $proposalSummary = content_proposal_details_text([
+                    (string) $labels['category_field'] => $proposalCategory,
+                    (string) $labels['subcategory_field'] => $proposalSubcategory,
+                    (string) $labels['subsubcategory_field'] => $proposalTitle,
+                    (string) $labels['propose_subsubcategory_reason'] => $proposalReason,
+                ]);
+                $proposalStatus = $canManageDocuments ? 'accepted' : 'pending';
+                $proposalId = content_proposal_create((int) $user['id'], $moduleCode, 'subsubcategory', $proposalTitle, $proposalSummary, $proposalContact, '', $proposalStatus);
+                if ($canManageDocuments) {
+                    $saved = member_document_upsert_subsubcategory($moduleCode, $categories, $proposalCategory, $proposalSubcategory, $proposalTitle);
+                    set_flash('success', (string) $labels['subsubcategory_created_direct']);
+                    redirect_url(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['category' => $saved['category'], 'subcategory' => $saved['subcategory']]));
+                }
+
+                content_proposal_notify_site((string) $labels['propose_subsubcategory_subject'], [
+                    'area' => $moduleCode,
+                    'proposal_type' => 'subsubcategory',
                     'title' => $proposalTitle,
                     'summary' => $proposalSummary,
                     'contact' => $proposalContact,
@@ -1884,6 +2051,7 @@ function render_member_document_module_page(string $module): void
     $showDocumentProposalForm = $canProposeDocument && (string) ($_GET['propose_document'] ?? $_GET['propose_video'] ?? '') === '1';
     $showCategoryProposalForm = $canProposeTaxonomy && (string) ($_GET['propose_category'] ?? '') === '1';
     $showSubcategoryProposalForm = $canProposeTaxonomy && (string) ($_GET['propose_subcategory'] ?? '') === '1';
+    $showSubsubcategoryProposalForm = $canProposeSubsubcategory && (string) ($_GET['propose_subsubcategory'] ?? '') === '1';
     $showProposeDropdown = $canProposeTaxonomy || ($moduleCode === 'videos' && $canProposeDocument);
     $primaryActionHref = '#member-document-list';
     $primaryActionAttributes = '';
@@ -1933,6 +2101,9 @@ function render_member_document_module_page(string $module): void
                                 <?php if ($canProposeTaxonomy): ?>
                                     <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_category' => '1'])) ?>" data-member-document-modal-open="member-document-category-dialog" aria-haspopup="dialog" aria-controls="member-document-category-dialog"><?= e((string) $labels['propose_category_item']) ?></a>
                                     <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_subcategory' => '1'])) ?>" data-member-document-modal-open="member-document-subcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subcategory-dialog"><?= e((string) $labels['propose_subcategory_item']) ?></a>
+                                <?php endif; ?>
+                                <?php if ($canProposeSubsubcategory): ?>
+                                    <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_subsubcategory' => '1'])) ?>" data-member-document-modal-open="member-document-subsubcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subsubcategory-dialog"><?= e((string) $labels['propose_subsubcategory_item']) ?></a>
                                 <?php endif; ?>
                                 <?php if ($moduleCode !== 'videos'): ?>
                                     <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_document' => '1'])) ?>" data-member-document-modal-open="member-document-proposal-dialog" aria-haspopup="dialog" aria-controls="member-document-proposal-dialog"><?= e((string) $labels['propose_presentation_item']) ?></a>
@@ -2005,6 +2176,49 @@ function render_member_document_module_page(string $module): void
                     </form>
                 </div>
             </dialog>
+
+            <?php if ($canProposeSubsubcategory): ?>
+                <dialog class="member-document-dialog" id="member-document-subsubcategory-dialog" aria-labelledby="member-document-subsubcategory-title"<?= $showSubsubcategoryProposalForm ? ' open data-member-document-auto-open' : '' ?>>
+                    <div class="member-document-dialog-card">
+                        <div class="member-document-dialog-header module-dialog-header">
+                            <div>
+                                <p class="module-dialog-eyebrow"><?= e((string) $labels['documents']) ?></p>
+                                <h2 id="member-document-subsubcategory-title"><?= e((string) $labels['propose_subsubcategory']) ?></h2>
+                                <p class="help"><?= e($canManageDocuments ? (string) $labels['subsubcategory_direct_help'] : (string) $labels['propose_subsubcategory_intro']) ?></p>
+                            </div>
+                            <button class="member-document-dialog-close module-dialog-close" type="button" data-member-document-modal-close aria-label="<?= e((string) $labels['modal_close']) ?>">&times;</button>
+                        </div>
+                        <form method="post" class="member-document-dialog-form module-dialog-form">
+                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                            <input type="hidden" name="action" value="propose_subsubcategory">
+                            <label>
+                                <span><?= e((string) $labels['propose_subsubcategory_parent']) ?></span>
+                                <select name="proposal_parent_subcategory_ref" required>
+                                    <option value=""><?= e((string) $labels['no_subcategory']) ?></option>
+                                    <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>
+                                        <?php $parentLabel = (string) ($categories[(string) $parentCode] ?? member_document_category_label_from_code((string) $parentCode)); ?>
+                                        <optgroup label="<?= e($parentLabel) ?>">
+                                            <?php foreach ($subcategories as $subcategory): ?>
+                                                <?php $subCode = member_document_subcategory_code((string) ($subcategory['code'] ?? '')); ?>
+                                                <?php if ($subCode !== ''): ?>
+                                                    <option value="<?= e(member_document_subcategory_ref((string) $parentCode, $subCode)) ?>"<?= $categoryFilter === (string) $parentCode && $subcategoryFilter === $subCode ? ' selected' : '' ?>><?= e((string) ($subcategory['label'] ?? $subCode)) ?></option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </optgroup>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                            <label><span><?= e((string) $labels['propose_subsubcategory_name']) ?></span><input type="text" name="proposal_subsubcategory_name" maxlength="160" required></label>
+                            <label><span><?= e((string) $labels['propose_subsubcategory_reason']) ?></span><textarea name="proposal_reason" rows="4" maxlength="1600"></textarea></label>
+                            <label><span><?= e((string) $labels['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+                            <p class="member-document-dialog-actions module-dialog-actions">
+                                <button class="button" type="submit"><?= e((string) $labels['propose_subsubcategory']) ?></button>
+                                <button class="button secondary" type="button" data-member-document-modal-close><?= e((string) $labels['cancel']) ?></button>
+                            </p>
+                        </form>
+                    </div>
+                </dialog>
+            <?php endif; ?>
         <?php endif; ?>
 
         <?php if ($canProposeDocument): ?>
