@@ -42,16 +42,20 @@ final class FunctionHelpersExtendedTest extends TestCase
 
     public function testArticleSanitizeContentStripsUnsupportedTagsAndAttributes(): void
     {
-        $html = '<p id="intro" style="position:fixed">Intro</p><form><input name="token" value="secret"><button>Send</button></form><a href="javascript:alert(1)" onclick="evil()">Bad</a><a href="/articles" target="_blank" class="external">OK</a>';
+        $html = '<p id="intro" style="position:fixed">Intro</p><form><input name="token" value="secret"><button>Send</button></form><a href="javascript:alert(1)" onclick="evil()">Bad</a><a href="/articles" target="_blank" class="external">OK</a><p><s class="bad">Barre</s><sup data-x="1">2</sup><sub>i</sub></p>';
 
         $clean = article_sanitize_content($html);
 
         self::assertStringContainsString('<p>Intro</p>', $clean);
         self::assertStringContainsString('Send', $clean);
         self::assertStringContainsString('rel="noopener noreferrer"', $clean);
+        self::assertStringContainsString('<s>Barre</s>', $clean);
+        self::assertStringContainsString('<sup>2</sup>', $clean);
+        self::assertStringContainsString('<sub>i</sub>', $clean);
         self::assertStringNotContainsString('style=', $clean);
         self::assertStringNotContainsString('id=', $clean);
         self::assertStringNotContainsString('class=', $clean);
+        self::assertStringNotContainsString('data-x=', $clean);
         self::assertStringNotContainsString('<form', $clean);
         self::assertStringNotContainsString('<input', $clean);
         self::assertStringNotContainsString('<button', $clean);
@@ -186,6 +190,13 @@ final class FunctionHelpersExtendedTest extends TestCase
       <w:r><w:br/><w:t>Suite</w:t></w:r>
     </w:p>
     <w:p>
+      <w:r><w:rPr><w:strike/></w:rPr><w:t>Texte barre</w:t></w:r>
+      <w:r><w:t> </w:t></w:r>
+      <w:r><w:rPr><w:vertAlign w:val="superscript"/></w:rPr><w:t>exposant</w:t></w:r>
+      <w:r><w:t> </w:t></w:r>
+      <w:r><w:rPr><w:vertAlign w:val="subscript"/></w:rPr><w:t>indice</w:t></w:r>
+    </w:p>
+    <w:p>
       <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr>
       <w:r><w:t>Element de liste</w:t></w:r>
     </w:p>
@@ -259,6 +270,9 @@ XML;
             self::assertStringContainsString('<strong><em>Texte fort</em></strong>', $html);
             self::assertStringContainsString('<a href="https://example.test/docx">lien fiable</a>', $html);
             self::assertStringContainsString('<br>', $html);
+            self::assertStringContainsString('<s>Texte barre</s>', $html);
+            self::assertStringContainsString('<sup>exposant</sup>', $html);
+            self::assertStringContainsString('<sub>indice</sub>', $html);
             self::assertStringContainsString('<ul>', $html);
             self::assertStringContainsString('<li>Element de liste</li>', $html);
             self::assertStringContainsString('<ol>', $html);

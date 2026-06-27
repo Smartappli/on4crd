@@ -51,7 +51,7 @@
   };
 
   const importedHtmlAllowedTags = new Set([
-    'p', 'br', 'strong', 'b', 'em', 'i', 'u', 'ul', 'ol', 'li', 'h2', 'h3', 'h4',
+    'p', 'br', 'strong', 'b', 'em', 'i', 's', 'sub', 'sup', 'u', 'ul', 'ol', 'li', 'h2', 'h3', 'h4',
     'blockquote', 'pre', 'code', 'a', 'img', 'figure', 'figcaption', 'table',
     'thead', 'tbody', 'tr', 'th', 'td', 'hr',
   ]);

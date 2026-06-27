@@ -217,6 +217,13 @@ function createRichDocxFixture(token) {
       <w:r><w:br/><w:t>Suite importee</w:t></w:r>
     </w:p>
     <w:p>
+      <w:r><w:rPr><w:strike/></w:rPr><w:t>Texte barre ${escapeXml(safeToken)}</w:t></w:r>
+      <w:r><w:t> </w:t></w:r>
+      <w:r><w:rPr><w:vertAlign w:val="superscript"/></w:rPr><w:t>exposant</w:t></w:r>
+      <w:r><w:t> </w:t></w:r>
+      <w:r><w:rPr><w:vertAlign w:val="subscript"/></w:rPr><w:t>indice</w:t></w:r>
+    </w:p>
+    <w:p>
       <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr>
       <w:r><w:t>Element de liste ${escapeXml(safeToken)}</w:t></w:r>
     </w:p>
@@ -396,6 +403,7 @@ async function assertArticleDocxWysiwygImport(driver, token) {
       convertToHtml: async () => ({
         value: '<h2>' + expected + '</h2>'
           + '<p><strong>Gras</strong> <a href="https://example.test/import-docx" target="_blank">Lien fiable</a></p>'
+          + '<p><s>Barre</s> <sup>2</sup> <sub>i</sub></p>'
           + '<table><tbody><tr><td colspan="2">Cellule conservee</td></tr></tbody></table>',
       }),
     };
@@ -416,6 +424,9 @@ async function assertArticleDocxWysiwygImport(driver, token) {
   assert.match(safeImport, /<strong>Gras<\/strong>/, 'Le gras importe doit etre conserve.');
   assert.match(safeImport, /href="https:\/\/example\.test\/import-docx"/, 'Le lien HTTPS importe doit etre conserve.');
   assert.match(safeImport, /rel="noopener noreferrer"/, 'Le lien target blank importe doit etre protege.');
+  assert.match(safeImport, /<s>Barre<\/s>/, 'Le texte barre importe doit etre conserve.');
+  assert.match(safeImport, /<sup>2<\/sup>/, 'L exposant importe doit etre conserve.');
+  assert.match(safeImport, /<sub>i<\/sub>/, 'L indice importe doit etre conserve.');
   assert.match(safeImport, /colspan="2"/, 'Le colspan valide importe doit etre conserve.');
 
   const unsafeText = `Import DOCX dangereux ${token}`;
@@ -518,6 +529,9 @@ async function assertArticleServerDocxPreviewImport(driver, token) {
 
   assert.match(preview, /<h2>Import serveur/, 'Le DOCX serveur doit conserver le titre en previsualisation.');
   assert.match(preview, /<strong><em>Texte fort/, 'Le DOCX serveur doit conserver gras et italique.');
+  assert.match(preview, /<s>Texte barre/, 'Le DOCX serveur doit conserver le texte barre.');
+  assert.match(preview, /<sup>exposant<\/sup>/, 'Le DOCX serveur doit conserver les exposants.');
+  assert.match(preview, /<sub>indice<\/sub>/, 'Le DOCX serveur doit conserver les indices.');
   assert.match(preview, new RegExp(`href="https://example\\.test/docx-server-${token}"`), 'Le DOCX serveur doit conserver le lien HTTPS.');
   assert.match(preview, /<ul>/, 'Le DOCX serveur doit conserver la liste.');
   assert.match(preview, /<ol>/, 'Le DOCX serveur doit conserver la liste numerotee.');

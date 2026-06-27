@@ -675,6 +675,15 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $imageDat
         return '';
     }
 
+    $verticalAlignment = article_docx_run_vertical_alignment($run, $xpath);
+    if ($verticalAlignment === 'superscript') {
+        $html = '<sup>' . $html . '</sup>';
+    } elseif ($verticalAlignment === 'subscript') {
+        $html = '<sub>' . $html . '</sub>';
+    }
+    if (article_docx_run_property_enabled($run, $xpath, 'strike') || article_docx_run_property_enabled($run, $xpath, 'dstrike')) {
+        $html = '<s>' . $html . '</s>';
+    }
     if (article_docx_run_property_enabled($run, $xpath, 'u')) {
         $html = '<u>' . $html . '</u>';
     }
@@ -686,6 +695,20 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $imageDat
     }
 
     return $html;
+}
+}
+
+if (!function_exists('article_docx_run_vertical_alignment')) {
+function article_docx_run_vertical_alignment(DOMElement $run, DOMXPath $xpath): string
+{
+    $nodes = $xpath->query('./*[local-name()="rPr"]/*[local-name()="vertAlign"]', $run);
+    $node = $nodes instanceof DOMNodeList ? $nodes->item(0) : null;
+    if (!$node instanceof DOMElement) {
+        return '';
+    }
+
+    $value = strtolower(article_docx_attribute($node, 'val'));
+    return in_array($value, ['superscript', 'subscript'], true) ? $value : '';
 }
 }
 
