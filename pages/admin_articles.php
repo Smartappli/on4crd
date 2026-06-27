@@ -136,6 +136,14 @@ function article_assert_docx_document(string $path): void
         if (!$hasContentTypes || !$hasDocument) {
             throw new RuntimeException($tm('invalid_doc'));
         }
+        return;
+    }
+
+    if (!function_exists('article_docx_part_contents')
+        || article_docx_part_contents($path, '[Content_Types].xml') === ''
+        || article_docx_part_contents($path, 'word/document.xml') === ''
+    ) {
+        throw new RuntimeException($tm('invalid_doc'));
     }
 }
 
