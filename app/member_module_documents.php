@@ -1510,6 +1510,41 @@ function render_member_document_taxonomy_fields(string $moduleCode, array $categ
 }
 }
 
+if (!function_exists('render_member_document_propose_menu')) {
+/**
+ * @param array<string, string> $labels
+ */
+function render_member_document_propose_menu(string $moduleCode, string $routeName, array $labels, bool $canProposeDocument, bool $canProposeTaxonomy, bool $canProposeSubsubcategory): string
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    $items = [];
+
+    if ($canProposeDocument) {
+        $documentQueryKey = $moduleCode === 'videos' ? 'propose_video' : 'propose_document';
+        $items[] = '<a class="member-document-propose-menu-item" role="menuitem" href="' . e(route_url($routeName, [$documentQueryKey => '1'])) . '" data-member-document-modal-open="member-document-proposal-dialog" aria-haspopup="dialog" aria-controls="member-document-proposal-dialog">' . e((string) $labels['propose_presentation_item']) . '</a>';
+    }
+
+    if ($canProposeTaxonomy) {
+        $items[] = '<a class="member-document-propose-menu-item" role="menuitem" href="' . e(route_url($routeName, ['propose_category' => '1'])) . '" data-member-document-modal-open="member-document-category-dialog" aria-haspopup="dialog" aria-controls="member-document-category-dialog">' . e((string) $labels['propose_category_item']) . '</a>';
+        $items[] = '<a class="member-document-propose-menu-item" role="menuitem" href="' . e(route_url($routeName, ['propose_subcategory' => '1'])) . '" data-member-document-modal-open="member-document-subcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subcategory-dialog">' . e((string) $labels['propose_subcategory_item']) . '</a>';
+    }
+
+    if ($canProposeSubsubcategory) {
+        $items[] = '<a class="member-document-propose-menu-item" role="menuitem" href="' . e(route_url($routeName, ['propose_subsubcategory' => '1'])) . '" data-member-document-modal-open="member-document-subsubcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subsubcategory-dialog">' . e((string) $labels['propose_subsubcategory_item']) . '</a>';
+    }
+
+    if ($items === []) {
+        return '';
+    }
+
+    return '<details class="member-document-propose-menu">'
+        . '<summary class="button" aria-haspopup="menu">' . e((string) $labels['propose_menu']) . '</summary>'
+        . '<div class="member-document-propose-menu-panel" role="menu">'
+        . implode('', $items)
+        . '</div></details>';
+}
+}
+
 if (!function_exists('render_member_document_module_cards')) {
 function render_member_document_module_cards(array $documents, array $labels, string $moduleCode = '', ?array $viewer = null, bool $canManage = false, array $returnQuery = []): string
 {
@@ -1703,7 +1738,7 @@ function render_member_document_module_page(string $module): void
     $canManageDocuments = member_document_current_user_is_administrator();
     $canProposeDocument = member_document_module_allows_member_management($moduleCode);
     $canProposeTaxonomy = in_array($moduleCode, ['presentations', 'videos'], true);
-    $canProposeSubsubcategory = $moduleCode === 'videos' && $canProposeTaxonomy;
+    $canProposeSubsubcategory = in_array($moduleCode, ['presentations', 'videos'], true) && $canProposeTaxonomy;
     $proposalContactDefault = trim((string) ($user['email'] ?? ''));
     if ($proposalContactDefault === '') {
         $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
@@ -2053,6 +2088,8 @@ function render_member_document_module_page(string $module): void
     $showSubcategoryProposalForm = $canProposeTaxonomy && (string) ($_GET['propose_subcategory'] ?? '') === '1';
     $showSubsubcategoryProposalForm = $canProposeSubsubcategory && (string) ($_GET['propose_subsubcategory'] ?? '') === '1';
     $showProposeDropdown = $canProposeTaxonomy || ($moduleCode === 'videos' && $canProposeDocument);
+    $showPreHeaderProposeDropdown = $moduleCode === 'videos' && $showProposeDropdown;
+    $showHeroProposeDropdown = $showProposeDropdown && !$showPreHeaderProposeDropdown;
     $primaryActionHref = '#member-document-list';
     $primaryActionAttributes = '';
     $primaryActionLabel = (string) $labels['view_content'];
@@ -2068,10 +2105,19 @@ function render_member_document_module_page(string $module): void
             $primaryActionAttributes = ' target="_blank" rel="noopener"';
         }
     }
+    $showHeroPrimaryAction = $moduleCode !== 'fichiers' && !$showHeroProposeDropdown && !$showPreHeaderProposeDropdown;
+    $showHeroAdminLink = $canManageDocuments && $moduleCode !== 'fichiers';
+    $showHeroActions = $moduleCode === 'fichiers' || $showHeroProposeDropdown || $showHeroPrimaryAction || $showHeroAdminLink;
 
     ob_start();
     ?>
     <div class="stack member-document-module">
+        <?php if ($showPreHeaderProposeDropdown): ?>
+            <div class="actions member-document-preheader-actions">
+                <?= render_member_document_propose_menu($moduleCode, $routeName, $labels, $canProposeDocument, $canProposeTaxonomy, $canProposeSubsubcategory) ?>
+            </div>
+        <?php endif; ?>
+
         <section class="page-hero member-document-hero member-module-hero">
             <div class="member-document-hero-copy">
                 <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
@@ -2080,6 +2126,7 @@ function render_member_document_module_page(string $module): void
             </div>
             <div class="member-document-hero-side">
                 <?= render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats) ?>
+                <?php if ($showHeroActions): ?>
                 <div class="actions member-document-hero-actions">
                     <?php if ($moduleCode === 'fichiers'): ?>
                         <details class="member-document-propose-menu member-document-manage-menu">
@@ -2091,32 +2138,16 @@ function render_member_document_module_page(string $module): void
                                 <?php endif; ?>
                             </div>
                         </details>
-                    <?php elseif ($showProposeDropdown): ?>
-                        <details class="member-document-propose-menu">
-                            <summary class="button" aria-haspopup="menu"><?= e((string) $labels['propose_menu']) ?></summary>
-                            <div class="member-document-propose-menu-panel" role="menu">
-                                <?php if ($moduleCode === 'videos'): ?>
-                                    <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_video' => '1'])) ?>" data-member-document-modal-open="member-document-proposal-dialog" aria-haspopup="dialog" aria-controls="member-document-proposal-dialog"><?= e((string) $labels['propose_presentation_item']) ?></a>
-                                <?php endif; ?>
-                                <?php if ($canProposeTaxonomy): ?>
-                                    <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_category' => '1'])) ?>" data-member-document-modal-open="member-document-category-dialog" aria-haspopup="dialog" aria-controls="member-document-category-dialog"><?= e((string) $labels['propose_category_item']) ?></a>
-                                    <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_subcategory' => '1'])) ?>" data-member-document-modal-open="member-document-subcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subcategory-dialog"><?= e((string) $labels['propose_subcategory_item']) ?></a>
-                                <?php endif; ?>
-                                <?php if ($canProposeSubsubcategory): ?>
-                                    <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_subsubcategory' => '1'])) ?>" data-member-document-modal-open="member-document-subsubcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subsubcategory-dialog"><?= e((string) $labels['propose_subsubcategory_item']) ?></a>
-                                <?php endif; ?>
-                                <?php if ($moduleCode !== 'videos'): ?>
-                                    <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_document' => '1'])) ?>" data-member-document-modal-open="member-document-proposal-dialog" aria-haspopup="dialog" aria-controls="member-document-proposal-dialog"><?= e((string) $labels['propose_presentation_item']) ?></a>
-                                <?php endif; ?>
-                            </div>
-                        </details>
-                    <?php else: ?>
+                    <?php elseif ($showHeroProposeDropdown): ?>
+                        <?= render_member_document_propose_menu($moduleCode, $routeName, $labels, $canProposeDocument, $canProposeTaxonomy, $canProposeSubsubcategory) ?>
+                    <?php elseif ($showHeroPrimaryAction): ?>
                         <a class="button" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e($primaryActionLabel) ?></a>
                     <?php endif; ?>
-                    <?php if ($canManageDocuments): ?>
+                    <?php if ($showHeroAdminLink): ?>
                         <a class="button secondary" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) ($moduleCode === 'fichiers' ? $labels['administer'] : $labels['administration'])) ?></a>
                     <?php endif; ?>
                 </div>
+                <?php endif; ?>
             </div>
         </section>
 

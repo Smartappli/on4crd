@@ -16,6 +16,8 @@ return array (
   'content_validated_direct' => 'Présentation proposée et validée directement.',
   'proposal_file_field' => 'Fichier de présentation',
   'propose_presentation_item' => 'Une présentation',
+  'propose_subcategory_item' => 'Une sous thématique',
+  'propose_subsubcategory_item' => 'Une sous sous thématique',
   'administration' => 'Administrer',
   'manage_menu' => 'Gérer',
   'manage_my_files' => 'Télécharger le document',
