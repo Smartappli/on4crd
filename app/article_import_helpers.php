@@ -844,7 +844,8 @@ if (!function_exists('article_docx_table_html')) {
  */
 function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $relationships, array $imageDataUris = []): string
 {
-    $rows = [];
+    $headRows = [];
+    $bodyRows = [];
     $rowNodes = $xpath->query('./*[local-name()="tr"]', $table);
     if (!$rowNodes instanceof DOMNodeList) {
         return '';
@@ -855,6 +856,8 @@ function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $rela
             continue;
         }
 
+        $isHeaderRow = article_docx_table_row_is_header($rowNode, $xpath);
+        $cellTag = $isHeaderRow ? 'th' : 'td';
         $cells = [];
         $cellNodes = $xpath->query('./*[local-name()="tc"]', $rowNode);
         if (!$cellNodes instanceof DOMNodeList) {
@@ -888,16 +891,49 @@ function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $rela
                     $attributes = ' colspan="' . $gridSpan . '"';
                 }
             }
+            if ($isHeaderRow) {
+                $attributes .= ' scope="col"';
+            }
 
-            $cells[] = '<td' . $attributes . '>' . implode('<br>', $paragraphs) . '</td>';
+            $cells[] = '<' . $cellTag . $attributes . '>' . implode('<br>', $paragraphs) . '</' . $cellTag . '>';
         }
 
         if ($cells !== []) {
-            $rows[] = '<tr>' . implode('', $cells) . '</tr>';
+            if ($isHeaderRow) {
+                $headRows[] = '<tr>' . implode('', $cells) . '</tr>';
+            } else {
+                $bodyRows[] = '<tr>' . implode('', $cells) . '</tr>';
+            }
         }
     }
 
-    return $rows === [] ? '' : '<table><tbody>' . implode('', $rows) . '</tbody></table>';
+    if ($headRows === [] && $bodyRows === []) {
+        return '';
+    }
+
+    $html = '<table>';
+    if ($headRows !== []) {
+        $html .= '<thead>' . implode('', $headRows) . '</thead>';
+    }
+    if ($bodyRows !== []) {
+        $html .= '<tbody>' . implode('', $bodyRows) . '</tbody>';
+    }
+
+    return $html . '</table>';
+}
+}
+
+if (!function_exists('article_docx_table_row_is_header')) {
+function article_docx_table_row_is_header(DOMElement $row, DOMXPath $xpath): bool
+{
+    $nodes = $xpath->query('./*[local-name()="trPr"]/*[local-name()="tblHeader"]', $row);
+    $node = $nodes instanceof DOMNodeList ? $nodes->item(0) : null;
+    if (!$node instanceof DOMElement) {
+        return false;
+    }
+
+    $value = strtolower(article_docx_attribute($node, 'val'));
+    return !in_array($value, ['0', 'false', 'none', 'off'], true);
 }
 }
 

@@ -62,7 +62,7 @@
   const importedHtmlAllowedAttributes = {
     a: new Set(['href', 'title', 'target', 'rel']),
     img: new Set(['src', 'alt', 'title', 'width', 'height', 'loading']),
-    th: new Set(['colspan', 'rowspan']),
+    th: new Set(['colspan', 'rowspan', 'scope']),
     td: new Set(['colspan', 'rowspan']),
   };
 
@@ -172,6 +172,14 @@
       if (tag === 'td' || tag === 'th') {
         sanitizeIntegerAttribute(element, 'colspan', 20);
         sanitizeIntegerAttribute(element, 'rowspan', 20);
+        if (tag === 'th' && element.hasAttribute('scope')) {
+          const scope = (element.getAttribute('scope') || '').toLowerCase().trim();
+          if (!['col', 'row', 'colgroup', 'rowgroup'].includes(scope)) {
+            element.removeAttribute('scope');
+          } else {
+            element.setAttribute('scope', scope);
+          }
+        }
       }
     };
 

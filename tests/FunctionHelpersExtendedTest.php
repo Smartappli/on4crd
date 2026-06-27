@@ -42,7 +42,7 @@ final class FunctionHelpersExtendedTest extends TestCase
 
     public function testArticleSanitizeContentStripsUnsupportedTagsAndAttributes(): void
     {
-        $html = '<p id="intro" style="position:fixed">Intro</p><form><input name="token" value="secret"><button>Send</button></form><a href="javascript:alert(1)" onclick="evil()">Bad</a><a href="/articles" target="_blank" class="external">OK</a><p><s class="bad">Barre</s><sup data-x="1">2</sup><sub>i</sub></p>';
+        $html = '<p id="intro" style="position:fixed">Intro</p><form><input name="token" value="secret"><button>Send</button></form><a href="javascript:alert(1)" onclick="evil()">Bad</a><a href="/articles" target="_blank" class="external">OK</a><p><s class="bad">Barre</s><sup data-x="1">2</sup><sub>i</sub></p><table><tr><th scope="bad">Bad</th><th scope="COL">Head</th></tr></table>';
 
         $clean = article_sanitize_content($html);
 
@@ -52,10 +52,13 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('<s>Barre</s>', $clean);
         self::assertStringContainsString('<sup>2</sup>', $clean);
         self::assertStringContainsString('<sub>i</sub>', $clean);
+        self::assertStringContainsString('<th>Bad</th>', $clean);
+        self::assertStringContainsString('<th scope="col">Head</th>', $clean);
         self::assertStringNotContainsString('style=', $clean);
         self::assertStringNotContainsString('id=', $clean);
         self::assertStringNotContainsString('class=', $clean);
         self::assertStringNotContainsString('data-x=', $clean);
+        self::assertStringNotContainsString('scope="bad"', $clean);
         self::assertStringNotContainsString('<form', $clean);
         self::assertStringNotContainsString('<input', $clean);
         self::assertStringNotContainsString('<button', $clean);
@@ -220,6 +223,11 @@ final class FunctionHelpersExtendedTest extends TestCase
     </w:p>
     <w:tbl>
       <w:tr>
+        <w:trPr><w:tblHeader/></w:trPr>
+        <w:tc><w:p><w:r><w:t>Colonne A</w:t></w:r></w:p></w:tc>
+        <w:tc><w:p><w:r><w:t>Colonne B</w:t></w:r></w:p></w:tc>
+      </w:tr>
+      <w:tr>
         <w:tc><w:p><w:r><w:t>Cellule A</w:t></w:r></w:p></w:tc>
         <w:tc>
           <w:tcPr><w:gridSpan w:val="2"/></w:tcPr>
@@ -282,6 +290,10 @@ XML;
             self::assertStringContainsString('width="10"', $html);
             self::assertStringContainsString('height="20"', $html);
             self::assertStringContainsString('<table>', $html);
+            self::assertStringContainsString('<thead>', $html);
+            self::assertStringContainsString('<th scope="col">Colonne A</th>', $html);
+            self::assertStringContainsString('<th scope="col">Colonne B</th>', $html);
+            self::assertStringContainsString('<tbody>', $html);
             self::assertStringContainsString('<td>Cellule A</td>', $html);
             self::assertStringContainsString('<td colspan="2">Cellule B</td>', $html);
             self::assertStringContainsString('Lien bloque', $html);

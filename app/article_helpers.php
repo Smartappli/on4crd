@@ -938,7 +938,7 @@ function article_sanitize_content(string $html): string
     $allowedAttributes = [
         'a' => ['href' => true, 'title' => true, 'target' => true, 'rel' => true],
         'img' => ['src' => true, 'alt' => true, 'title' => true, 'width' => true, 'height' => true, 'loading' => true],
-        'th' => ['colspan' => true, 'rowspan' => true],
+        'th' => ['colspan' => true, 'rowspan' => true, 'scope' => true],
         'td' => ['colspan' => true, 'rowspan' => true],
     ];
 
@@ -1045,6 +1045,14 @@ function article_sanitize_content(string $html): string
                     $node->removeAttribute($span);
                 } else {
                     $node->setAttribute($span, (string) $value);
+                }
+            }
+            if ($tag === 'th' && $node->hasAttribute('scope')) {
+                $scope = strtolower(trim($node->getAttribute('scope')));
+                if (!in_array($scope, ['col', 'row', 'colgroup', 'rowgroup'], true)) {
+                    $node->removeAttribute('scope');
+                } else {
+                    $node->setAttribute('scope', $scope);
                 }
             }
         }
