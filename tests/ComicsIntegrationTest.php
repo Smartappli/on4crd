@@ -82,7 +82,7 @@ final class ComicsIntegrationTest extends TestCase
         $helperMap = app_route_helper_map();
 
         self::assertArrayHasKey('comics_helpers.php', $helperMap);
-        foreach (['comics', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld'] as $route) {
+        foreach (['comics', 'sitemap.xml', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld'] as $route) {
             self::assertContains($route, $helperMap['comics_helpers.php']);
         }
     }
@@ -94,6 +94,7 @@ final class ComicsIntegrationTest extends TestCase
             __DIR__ . '/../pages/ai_index.php',
             __DIR__ . '/../pages/llms.php',
             __DIR__ . '/../pages/knowledge_graph.php',
+            __DIR__ . '/../pages/sitemap.php',
         ];
 
         foreach ($paths as $path) {

@@ -110,7 +110,9 @@ final class SeoHelpersTest extends TestCase
         $sitemap = file_get_contents(__DIR__ . '/../pages/sitemap.php');
         self::assertIsString($sitemap);
         self::assertStringContainsString('xmlns:xhtml="http://www.w3.org/1999/xhtml"', $sitemap);
+        self::assertStringContainsString('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"', $sitemap);
         self::assertStringContainsString('<xhtml:link rel="alternate"', $sitemap);
+        self::assertStringContainsString('<image:image>', $sitemap);
 
         $aiIndex = file_get_contents(__DIR__ . '/../pages/ai_index.php');
         self::assertIsString($aiIndex);

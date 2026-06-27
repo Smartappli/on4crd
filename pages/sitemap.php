@@ -33,10 +33,10 @@ if (!in_array($requestedLocale, $supportedLocales, true)) {
     return;
 }
 
-$xml = cache_remember('seo_sitemap_xml_v12_' . $requestedLocale, 300, static function () use ($requestedLocale): string {
-    /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
+$xml = cache_remember('seo_sitemap_xml_v13_' . $requestedLocale, 300, static function () use ($requestedLocale): string {
+    /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>,images:list<array{loc:string,title:string,caption:string}>}> $entries */
     $entries = [];
-    $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries, $requestedLocale): void {
+    $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null, array $images = []) use (&$entries, $requestedLocale): void {
         $alternates = [];
         $defaultLocale = (string) config('app.default_locale', 'fr');
         foreach (supported_locales() as $locale) {
@@ -50,6 +50,7 @@ $xml = cache_remember('seo_sitemap_xml_v12_' . $requestedLocale, 300, static fun
             'priority' => $priority,
             'changefreq' => $changefreq,
             'alternates' => $alternates,
+            'images' => $images,
         ];
     };
 
@@ -98,7 +99,20 @@ $xml = cache_remember('seo_sitemap_xml_v12_' . $requestedLocale, 300, static fun
             continue;
         }
 
-        $addEntry((string) $row['route'], (string) $row['priority'], (string) $row['changefreq']);
+        $images = [];
+        if ((string) $row['route'] === 'comics') {
+            $comicsCollection = comics_public_collection($requestedLocale);
+            $images = array_map(
+                static fn(array $board): array => [
+                    'loc' => (string) $board['url'],
+                    'title' => (string) $board['title'],
+                    'caption' => (string) $board['text'],
+                ],
+                $comicsCollection['boards']
+            );
+        }
+
+        $addEntry((string) $row['route'], (string) $row['priority'], (string) $row['changefreq'], [], null, $images);
     }
 
     if (module_enabled('news') && table_exists('news_posts')) {
@@ -190,12 +204,19 @@ $xml = cache_remember('seo_sitemap_xml_v12_' . $requestedLocale, 300, static fun
     $entries = array_values(array_unique($entries, SORT_REGULAR));
 
     $buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    $buffer .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">';
+    $buffer .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
     foreach ($entries as $entry) {
         $buffer .= '<url>';
         $buffer .= '<loc>' . e((string) $entry['loc']) . '</loc>';
         foreach ((array) ($entry['alternates'] ?? []) as $hreflang => $href) {
             $buffer .= '<xhtml:link rel="alternate" hreflang="' . e((string) $hreflang) . '" href="' . e((string) $href) . '"/>';
+        }
+        foreach ((array) ($entry['images'] ?? []) as $image) {
+            $buffer .= '<image:image>';
+            $buffer .= '<image:loc>' . e((string) ($image['loc'] ?? '')) . '</image:loc>';
+            $buffer .= '<image:title>' . e((string) ($image['title'] ?? '')) . '</image:title>';
+            $buffer .= '<image:caption>' . e((string) ($image['caption'] ?? '')) . '</image:caption>';
+            $buffer .= '</image:image>';
         }
         $buffer .= '<lastmod>' . e((string) $entry['lastmod']) . '</lastmod>';
         $buffer .= '<changefreq>' . e((string) $entry['changefreq']) . '</changefreq>';
