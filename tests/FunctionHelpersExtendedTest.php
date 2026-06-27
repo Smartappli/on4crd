@@ -190,6 +190,10 @@ final class FunctionHelpersExtendedTest extends TestCase
       <w:r><w:t>Element de liste</w:t></w:r>
     </w:p>
     <w:p>
+      <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr></w:pPr>
+      <w:r><w:t>Element numerote</w:t></w:r>
+    </w:p>
+    <w:p>
       <w:hyperlink r:id="rId2"><w:r><w:t>Lien bloque</w:t></w:r></w:hyperlink>
     </w:p>
     <w:tbl>
@@ -211,12 +215,26 @@ XML;
   <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="javascript:alert(1)" TargetMode="External"/>
 </Relationships>
 XML;
+        $numberingXml = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:abstractNum w:abstractNumId="0">
+    <w:lvl w:ilvl="0"><w:numFmt w:val="bullet"/></w:lvl>
+  </w:abstractNum>
+  <w:abstractNum w:abstractNumId="1">
+    <w:lvl w:ilvl="0"><w:numFmt w:val="decimal"/></w:lvl>
+  </w:abstractNum>
+  <w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num>
+  <w:num w:numId="2"><w:abstractNumId w:val="1"/></w:num>
+</w:numbering>
+XML;
 
         file_put_contents($tmp, self::zipFixture([
-            '[Content_Types].xml' => '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+            '[Content_Types].xml' => '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/></Types>',
             '_rels/.rels' => '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId0" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
             'word/document.xml' => $documentXml,
             'word/_rels/document.xml.rels' => $relationshipsXml,
+            'word/numbering.xml' => $numberingXml,
         ]));
 
         try {
@@ -228,6 +246,8 @@ XML;
             self::assertStringContainsString('<br>', $html);
             self::assertStringContainsString('<ul>', $html);
             self::assertStringContainsString('<li>Element de liste</li>', $html);
+            self::assertStringContainsString('<ol>', $html);
+            self::assertStringContainsString('<li>Element numerote</li>', $html);
             self::assertStringContainsString('<table>', $html);
             self::assertStringContainsString('<td>Cellule A</td>', $html);
             self::assertStringContainsString('<td colspan="2">Cellule B</td>', $html);
