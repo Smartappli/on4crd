@@ -945,6 +945,7 @@ ob_start();
             <label><?= e($t('import_document')) ?><input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
             <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4"><?= e((string) $editing['excerpt']) ?></textarea></label>
             <label><?= e($t('content_simple_html')) ?><textarea name="content" rows="16" data-wysiwyg="full"><?= e((string) $editing['content']) ?></textarea></label>
+            <p class="help"><?= e($t('editor_tip')) ?></p>
             <label><?= e($t('status')) ?>
                 <select name="status">
                     <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
