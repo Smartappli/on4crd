@@ -74,6 +74,9 @@ final class ComicsIntegrationTest extends TestCase
             self::assertFileExists($path, sprintf('Missing comics asset %s.', (string) $board['image']));
             self::assertSame('image/png', $board['type']);
             self::assertStringContainsString('/assets/comics/', (string) $board['url']);
+            self::assertSame(1055, $board['width']);
+            self::assertSame(1491, $board['height']);
+            self::assertGreaterThan(0, $board['content_size']);
         }
     }
 
