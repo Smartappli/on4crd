@@ -77,6 +77,15 @@ final class ComicsIntegrationTest extends TestCase
             self::assertSame(1055, $board['width']);
             self::assertSame(1491, $board['height']);
             self::assertGreaterThan(0, $board['content_size']);
+
+            $thumbnailPath = __DIR__ . '/../' . (string) $board['thumbnail'];
+            self::assertFileExists($thumbnailPath, sprintf('Missing comics thumbnail %s.', (string) $board['thumbnail']));
+            self::assertSame('image/jpeg', $board['thumbnail_type']);
+            self::assertStringContainsString('-thumb.jpg', (string) $board['thumbnail_url']);
+            self::assertSame(420, $board['thumbnail_width']);
+            self::assertSame(594, $board['thumbnail_height']);
+            self::assertGreaterThan(0, $board['thumbnail_content_size']);
+            self::assertLessThan($board['content_size'], $board['thumbnail_content_size']);
         }
     }
 
