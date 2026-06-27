@@ -11,6 +11,7 @@ $url = static function (string $route, array $query = []): string {
 };
 
 $homeUrl = $url('home');
+$comicsCollection = comics_public_collection((string) config('app.default_locale', 'fr'));
 $graph = [
     '@context' => 'https://schema.org',
     '@graph' => [
@@ -100,7 +101,7 @@ foreach ([
     ['route' => 'tools', 'name' => 'Outils radioamateurs ON4CRD', 'about' => 'outils de calcul radioamateur'],
     ['route' => 'membership', 'name' => 'Adhesion ON4CRD', 'about' => 'adhesion au Radio Club Durnal'],
     ['route' => 'donation', 'name' => 'Don ON4CRD', 'about' => 'soutien financier au Radio Club Durnal'],
-    ['route' => 'comics', 'name' => 'Comics ON4CRD', 'about' => 'planches BD A4 de pedagogie radioamateur', 'type' => 'CollectionPage'],
+    ['route' => 'comics', 'name' => (string) $comicsCollection['title'], 'about' => (string) $comicsCollection['description'], 'type' => 'CollectionPage'],
     ['route' => 'code_q', 'name' => 'Code Q radioamateur ON4CRD', 'about' => 'codes Q utiles en trafic radioamateur'],
     ['route' => 'code_cw', 'name' => 'Code CW et Morse ON4CRD', 'about' => 'apprentissage du code Morse CW'],
     ['route' => 'bandplan_on3', 'name' => 'Plan de bandes ON3 ON4CRD', 'about' => 'plan de bandes belge ON3'],
@@ -122,24 +123,21 @@ foreach ([
     ];
 }
 
-foreach ([
-    ['name' => 'Les 10 commandements du radio amateur', 'path' => 'assets/comics/les-10-commandements-radio-amateur.png'],
-    ['name' => 'Ma premiere fois', 'path' => 'assets/comics/ma-premiere-fois-premier-qso.png'],
-    ['name' => 'La decouverte de la loi d Ohm', 'path' => 'assets/comics/decouverte-loi-ohm.png'],
-] as $comic) {
-    $assetUrl = asset_url((string) $comic['path']);
+foreach ($comicsCollection['boards'] as $comic) {
+    $assetUrl = (string) $comic['url'];
     $graph['@graph'][] = [
         '@type' => 'CreativeWork',
         '@id' => $assetUrl . '#creativework',
-        'name' => (string) $comic['name'],
+        'name' => (string) $comic['title'],
+        'description' => (string) $comic['text'],
         'url' => $assetUrl,
         'image' => $assetUrl,
-        'encodingFormat' => 'image/png',
+        'encodingFormat' => (string) $comic['type'],
         'isPartOf' => ['@id' => $url('comics') . '#webpage'],
         'publisher' => ['@id' => $homeUrl . '#organization'],
         'about' => [
             '@type' => 'Thing',
-            'name' => 'pedagogie radioamateur',
+            'name' => 'pédagogie radioamateur',
         ],
     ];
 }

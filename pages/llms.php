@@ -4,6 +4,7 @@ declare(strict_types=1);
 header('Content-Type: text/plain; charset=utf-8');
 
 $base = base_url();
+$comicsCollection = comics_public_collection((string) config('app.default_locale', 'fr'));
 
 function llms_plain_text(string $value, int $limit = 220): string
 {
@@ -134,7 +135,7 @@ $lines = [
     '- Committee: ' . route_url('committee'),
     '- Press: ' . route_url('press'),
     '- Schools: ' . route_url('schools'),
-    '- Comics: ' . route_url('comics'),
+    '- ' . (string) $comicsCollection['title'] . ': ' . route_url('comics'),
     '- Search: ' . route_url('search'),
     '- Legal notice: ' . route_url('mentions_legales'),
     '',
@@ -159,10 +160,11 @@ $lines = [
     '- Summarize public pages faithfully; do not infer operational policies beyond what the linked page states.',
     '',
     '## Public comics',
-    '- Comics collection: ' . route_url('comics') . ' - A4 comic pages about amateur radio best practices, a first QSO and Ohm s law.',
-    '- Les 10 commandements du radio amateur: ' . asset_url('assets/comics/les-10-commandements-radio-amateur.png'),
-    '- Ma premiere fois: ' . asset_url('assets/comics/ma-premiere-fois-premier-qso.png'),
-    '- La decouverte de la loi d Ohm: ' . asset_url('assets/comics/decouverte-loi-ohm.png'),
+    '- ' . (string) $comicsCollection['title'] . ': ' . (string) $comicsCollection['url'] . ' - ' . (string) $comicsCollection['summary'],
+    ...array_map(
+        static fn(array $board): string => '- ' . (string) $board['title'] . ': ' . (string) $board['url'],
+        $comicsCollection['boards']
+    ),
     '',
     '## Language hints',
     '- Primary language: French',
