@@ -287,6 +287,17 @@ async function assertArticleDocxWysiwygImport(driver, token) {
     return editor.textContent.includes(expected) && textarea.value.includes(expected) ? true : null;
   `, importedText), timeoutMs);
   assert.equal(imported, true, 'Le DOCX importe doit remplir l editeur WYSIWYG et le textarea article.');
+
+  const restored = await driver.executeScript(`
+    const textarea = document.querySelector('textarea[name="content"]');
+    const wrapper = textarea ? textarea.previousElementSibling : null;
+    const importButton = wrapper
+      ? Array.from(wrapper.querySelectorAll('.wysiwyg-toolbar button'))
+        .find((button) => button.textContent.trim() === 'Importer Word')
+      : null;
+    return importButton ? !importButton.disabled : false;
+  `);
+  assert.equal(restored, true, 'Le bouton Importer Word doit etre restaure apres conversion.');
 }
 
 async function submitProposalStatus(driver, title, status, note) {

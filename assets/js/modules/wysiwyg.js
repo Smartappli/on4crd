@@ -209,6 +209,7 @@
       importButton.className = 'ghost small';
       importButton.textContent = 'Importer Word';
       importButton.title = 'Importer un document Word (.docx)';
+      const importButtonLabel = importButton.textContent;
 
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
@@ -223,9 +224,12 @@
         const extension = file.name.toLowerCase();
         if (extension.endsWith('.doc')) {
           window.alert('Le format .doc n est pas supporte directement. Merci d enregistrer en .docx puis de reimporter.');
+          fileInput.value = '';
           return;
         }
 
+        importButton.disabled = true;
+        importButton.textContent = 'Import...';
         try {
           const mammoth = await loadMammoth();
           if (!mammoth) {
@@ -239,6 +243,8 @@
           window.alert('Import Word impossible pour le moment.');
         } finally {
           fileInput.value = '';
+          importButton.disabled = false;
+          importButton.textContent = importButtonLabel;
         }
       });
 
