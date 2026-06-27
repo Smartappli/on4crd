@@ -64,12 +64,17 @@ function comics_public_boards(?string $locale = null): array
 
 if (!function_exists('comics_public_collection')) {
 /**
- * @return array{locale:string,title:string,layout:string,description:string,summary:string,keywords:list<string>,url:string,boards:list<array{key:string,image:string,url:string,title:string,text:string,type:string}>}
+ * @return array{locale:string,title:string,layout:string,description:string,summary:string,keywords:list<string>,url:string,available_languages:list<string>,alternate_urls:array<string,string>,boards:list<array{key:string,image:string,url:string,title:string,text:string,type:string}>}
  */
 function comics_public_collection(?string $locale = null): array
 {
     $locale = comics_public_locale($locale);
     $t = comics_public_i18n($locale);
+    $supportedLocales = supported_locales();
+    $alternateUrls = [];
+    foreach ($supportedLocales as $supportedLocale) {
+        $alternateUrls[$supportedLocale] = route_url_with_locale('comics', $supportedLocale);
+    }
 
     return [
         'locale' => $locale,
@@ -79,6 +84,8 @@ function comics_public_collection(?string $locale = null): array
         'summary' => (string) $t['ai_summary'],
         'keywords' => array_values(array_filter(array_map('trim', explode(',', (string) $t['keywords'])))),
         'url' => route_url('comics'),
+        'available_languages' => $supportedLocales,
+        'alternate_urls' => $alternateUrls,
         'boards' => comics_public_boards($locale),
     ];
 }
