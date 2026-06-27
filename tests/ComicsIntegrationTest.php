@@ -99,6 +99,46 @@ final class ComicsIntegrationTest extends TestCase
         }
     }
 
+    public function testComicsPageIncludesProgressiveViewerAndDownloadControls(): void
+    {
+        $pageSource = file_get_contents(__DIR__ . '/../pages/comics.php');
+        self::assertIsString($pageSource);
+        foreach (['data-comics-viewer-open', 'data-comics-viewer-download', 'download_board_prefix', 'download_board_label', 'viewer_close'] as $snippet) {
+            self::assertStringContainsString($snippet, $pageSource);
+        }
+
+        $jsPath = __DIR__ . '/../assets/js/modules/comics.js';
+        self::assertFileExists($jsPath);
+        $jsSource = file_get_contents($jsPath);
+        self::assertIsString($jsSource);
+        self::assertStringContainsString('showModal', $jsSource);
+        self::assertStringContainsString('event.preventDefault()', $jsSource);
+
+        $cssPath = __DIR__ . '/../assets/css/modules/comics.css';
+        self::assertFileExists($cssPath);
+        $cssSource = file_get_contents($cssPath);
+        self::assertIsString($cssSource);
+        self::assertStringContainsString('.comics-viewer', $cssSource);
+        self::assertStringContainsString('.comics-card-action', $cssSource);
+    }
+
+    public function testComicsRoutePreloadsGeneratedThumbnailAsset(): void
+    {
+        $hrefs = [];
+        foreach (module_preload_assets_for_route('comics') as $asset) {
+            if (is_array($asset)) {
+                $hrefs[] = (string) ($asset['href'] ?? '');
+                continue;
+            }
+
+            $hrefs[] = (string) $asset;
+        }
+
+        $preloadHtml = implode("\n", $hrefs);
+        self::assertStringContainsString('les-10-commandements-radio-amateur-thumb.jpg', $preloadHtml);
+        self::assertStringNotContainsString('les-10-commandements-radio-amateur.png', $preloadHtml);
+    }
+
     public function testComicsGeoPagesUseSharedCollectionAndNoLegacyHardcodedLabels(): void
     {
         $paths = [
