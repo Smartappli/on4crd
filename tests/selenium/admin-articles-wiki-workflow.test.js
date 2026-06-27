@@ -416,6 +416,48 @@ async function assertArticleDocxWysiwygImport(driver, token) {
   `, unsafeText), timeoutMs);
   assert.equal(sanitized.executed, false, 'Le HTML importe ne doit pas executer de script.');
   assert.doesNotMatch(sanitized.html, /onclick|<script|javascript:|image\/svg|colspan="99"/i, 'Le HTML importe doit etre nettoye avant insertion.');
+
+  const preservedText = `Contenu conserve ${token}`;
+  await driver.executeScript(`
+    const expected = arguments[0];
+    const textarea = document.querySelector('textarea[name="content"]');
+    const wrapper = textarea ? textarea.previousElementSibling : null;
+    const editor = wrapper ? wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (textarea && editor) {
+      editor.innerHTML = '<p>' + expected + '</p>';
+      textarea.value = editor.innerHTML;
+    }
+    window.__wysiwygLastAlert = '';
+    window.alert = (message) => { window.__wysiwygLastAlert = String(message || ''); };
+    window.mammoth = {
+      convertToHtml: async () => ({ value: '<script>window.__wysiwygUnsafeExecuted=true</script>' }),
+    };
+  `, preservedText);
+  await fileInput.sendKeys(fixturePath);
+
+  const emptyImportPreserved = await driver.wait(async () => driver.executeScript(`
+    const expected = arguments[0];
+    const textarea = document.querySelector('textarea[name="content"]');
+    const wrapper = textarea ? textarea.previousElementSibling : null;
+    const editor = wrapper ? wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    const importButton = wrapper
+      ? Array.from(wrapper.querySelectorAll('.wysiwyg-toolbar button'))
+        .find((button) => button.textContent.trim() === 'Importer Word')
+      : null;
+    if (!textarea || !editor || !importButton || importButton.disabled) {
+      return null;
+    }
+    return {
+      editorText: editor.textContent,
+      textarea: textarea.value,
+      alert: window.__wysiwygLastAlert || '',
+      executed: window.__wysiwygUnsafeExecuted === true,
+    };
+  `, preservedText), timeoutMs);
+  assert.match(emptyImportPreserved.editorText, new RegExp(preservedText), 'Un import DOCX vide ne doit pas vider l editeur.');
+  assert.match(emptyImportPreserved.textarea, new RegExp(preservedText), 'Un import DOCX vide ne doit pas vider le textarea.');
+  assert.match(emptyImportPreserved.alert, /Import Word impossible/, 'Un import DOCX vide doit signaler l echec.');
+  assert.equal(emptyImportPreserved.executed, false, 'Un import DOCX vide ne doit pas executer le HTML supprime.');
 }
 
 async function assertArticleServerDocxPreviewImport(driver, token) {
