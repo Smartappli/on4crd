@@ -139,34 +139,6 @@ foreach ([
 
 foreach ($comicsCollection['boards'] as $comic) {
     $graph['@graph'][] = comics_public_creative_work($comic, (string) $comicsCollection['locale'], $url('comics') . '#webpage', $homeUrl . '#organization');
-    continue;
-    $assetUrl = (string) $comic['url'];
-    $graph['@graph'][] = [
-        '@type' => 'CreativeWork',
-        '@id' => $assetUrl . '#creativework',
-        'name' => (string) $comic['title'],
-        'description' => (string) $comic['text'],
-        'url' => $assetUrl,
-        'image' => [
-            '@type' => 'ImageObject',
-            'url' => $assetUrl,
-            'contentUrl' => $assetUrl,
-            'encodingFormat' => (string) $comic['type'],
-            'width' => (int) $comic['width'],
-            'height' => (int) $comic['height'],
-            'contentSize' => (int) $comic['content_size'],
-            'caption' => (string) $comic['title'],
-        ],
-        'thumbnailUrl' => (string) $comic['thumbnail_url'],
-        'encodingFormat' => (string) $comic['type'],
-        'inLanguage' => (string) $comicsCollection['locale'],
-        'isPartOf' => ['@id' => $url('comics') . '#webpage'],
-        'publisher' => ['@id' => $homeUrl . '#organization'],
-        'about' => [
-            '@type' => 'Thing',
-            'name' => 'pédagogie radioamateur',
-        ],
-    ];
 }
 
 echo json_encode($graph, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "\n";
