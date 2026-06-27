@@ -213,4 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Radio Club Durnal ON4CRD 的管理界面。',
   'admin_wiki_title' => 'ON4CRD 管理',
   'admin_wiki_description' => 'Radio Club Durnal ON4CRD 的管理界面。',
+  'comics_title' => 'ON4CRD Manhua pages',
+  'comics_description' => 'A4 manhua ON4CRD about radio best practices, first QSO and Ohm law for ZH.',
 );

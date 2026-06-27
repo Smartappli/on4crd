@@ -213,4 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Antarmuka administrasi untuk Radio Club Durnal ON4CRD.',
   'admin_wiki_title' => 'Administrasi ON4CRD',
   'admin_wiki_description' => 'Antarmuka administrasi untuk Radio Club Durnal ON4CRD.',
+  'comics_title' => 'ON4CRD Komik',
+  'comics_description' => 'Komik A4 ON4CRD about radio best practices, first QSO and Ohm law for ID.',
 );

@@ -213,4 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Интерфейс администрирования для Radio Club Durnal ON4CRD.',
   'admin_wiki_title' => 'ON4CRD Администрирование',
   'admin_wiki_description' => 'Интерфейс администрирования для Radio Club Durnal ON4CRD.',
+  'comics_title' => 'ON4CRD Komiksy RU',
+  'comics_description' => 'A4 komiksy RU ON4CRD about radio best practices, first QSO and Ohm law for RU.',
 );

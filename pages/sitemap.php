@@ -33,7 +33,7 @@ if (!in_array($requestedLocale, $supportedLocales, true)) {
     return;
 }
 
-$xml = cache_remember('seo_sitemap_xml_v11_' . $requestedLocale, 300, static function () use ($requestedLocale): string {
+$xml = cache_remember('seo_sitemap_xml_v12_' . $requestedLocale, 300, static function () use ($requestedLocale): string {
     /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
     $entries = [];
     $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries, $requestedLocale): void {
@@ -80,6 +80,7 @@ $xml = cache_remember('seo_sitemap_xml_v11_' . $requestedLocale, 300, static fun
         ['route' => 'committee', 'module' => 'committee', 'priority' => '0.6', 'changefreq' => 'monthly'],
         ['route' => 'press', 'module' => 'press', 'priority' => '0.6', 'changefreq' => 'monthly'],
         ['route' => 'schools', 'module' => 'education', 'priority' => '0.6', 'changefreq' => 'monthly'],
+        ['route' => 'comics', 'priority' => '0.6', 'changefreq' => 'monthly'],
         ['route' => 'events', 'module' => 'events', 'priority' => '0.8', 'changefreq' => 'weekly'],
         ['route' => 'auctions', 'module' => 'auctions', 'priority' => '0.8', 'changefreq' => 'daily'],
         ['route' => 'relais', 'priority' => '0.5', 'changefreq' => 'monthly'],

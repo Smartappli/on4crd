@@ -170,4 +170,4 @@ ob_start();
     </div>
 </section>
 <?php
-echo render_layout((string) ob_get_clean(), (string) $t['layout']);
+echo render_layout((string) ob_get_clean(), (string) $t['meta_title']);

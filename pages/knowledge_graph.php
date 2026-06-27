@@ -67,6 +67,7 @@ $graph = [
                 ['@id' => $url('tools') . '#webpage'],
                 ['@id' => $url('membership') . '#webpage'],
                 ['@id' => $url('donation') . '#webpage'],
+                ['@id' => $url('comics') . '#webpage'],
                 ['@id' => $url('llms.txt') . '#dataset'],
                 ['@id' => $url('ai-index.json') . '#dataset'],
             ],
@@ -99,6 +100,7 @@ foreach ([
     ['route' => 'tools', 'name' => 'Outils radioamateurs ON4CRD', 'about' => 'outils de calcul radioamateur'],
     ['route' => 'membership', 'name' => 'Adhesion ON4CRD', 'about' => 'adhesion au Radio Club Durnal'],
     ['route' => 'donation', 'name' => 'Don ON4CRD', 'about' => 'soutien financier au Radio Club Durnal'],
+    ['route' => 'comics', 'name' => 'Comics ON4CRD', 'about' => 'planches BD A4 de pedagogie radioamateur', 'type' => 'CollectionPage'],
     ['route' => 'code_q', 'name' => 'Code Q radioamateur ON4CRD', 'about' => 'codes Q utiles en trafic radioamateur'],
     ['route' => 'code_cw', 'name' => 'Code CW et Morse ON4CRD', 'about' => 'apprentissage du code Morse CW'],
     ['route' => 'bandplan_on3', 'name' => 'Plan de bandes ON3 ON4CRD', 'about' => 'plan de bandes belge ON3'],
@@ -107,7 +109,7 @@ foreach ([
 ] as $page) {
     $pageUrl = $url((string) $page['route']);
     $graph['@graph'][] = [
-        '@type' => 'WebPage',
+        '@type' => (string) ($page['type'] ?? 'WebPage'),
         '@id' => $pageUrl . '#webpage',
         'name' => (string) $page['name'],
         'url' => $pageUrl,
@@ -117,6 +119,28 @@ foreach ([
             'name' => (string) $page['about'],
         ],
         'publisher' => ['@id' => $homeUrl . '#organization'],
+    ];
+}
+
+foreach ([
+    ['name' => 'Les 10 commandements du radio amateur', 'path' => 'assets/comics/les-10-commandements-radio-amateur.png'],
+    ['name' => 'Ma premiere fois', 'path' => 'assets/comics/ma-premiere-fois-premier-qso.png'],
+    ['name' => 'La decouverte de la loi d Ohm', 'path' => 'assets/comics/decouverte-loi-ohm.png'],
+] as $comic) {
+    $assetUrl = asset_url((string) $comic['path']);
+    $graph['@graph'][] = [
+        '@type' => 'CreativeWork',
+        '@id' => $assetUrl . '#creativework',
+        'name' => (string) $comic['name'],
+        'url' => $assetUrl,
+        'image' => $assetUrl,
+        'encodingFormat' => 'image/png',
+        'isPartOf' => ['@id' => $url('comics') . '#webpage'],
+        'publisher' => ['@id' => $homeUrl . '#organization'],
+        'about' => [
+            '@type' => 'Thing',
+            'name' => 'pedagogie radioamateur',
+        ],
     ];
 }
 

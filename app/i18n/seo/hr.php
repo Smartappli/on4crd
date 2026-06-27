@@ -213,4 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Administrativno sučelje za Radio Club Durnal ON4CRD.',
   'admin_wiki_title' => 'ON4CRD administracija',
   'admin_wiki_description' => 'Administrativno sučelje za Radio Club Durnal ON4CRD.',
+  'comics_title' => 'ON4CRD Stripovi',
+  'comics_description' => 'A4 stripovi ON4CRD about radio best practices, first QSO and Ohm law for HR.',
 );

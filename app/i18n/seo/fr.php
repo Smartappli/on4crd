@@ -33,6 +33,8 @@ return array (
   'relais_description' => 'Informations pratiques sur le relais du Radio Club Durnal et ses paramètres radio.',
   'schools_title' => 'Écoles et pédagogie radio',
   'schools_description' => 'Ressources pédagogiques ON4CRD pour enseignants, écoles et projets éducatifs autour de la radio.',
+  'comics_title' => 'Comics radioamateurs ON4CRD',
+  'comics_description' => 'Planches BD A4 ON4CRD sur les bonnes pratiques radioamateurs, le premier QSO et la loi d Ohm.',
   'press_title' => 'Presse ON4CRD',
   'press_description' => 'Dossier presse, informations publiques et contacts pour les journalistes intéressés par ON4CRD.',
   'sponsoring_title' => 'Sponsoring ON4CRD',

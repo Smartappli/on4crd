@@ -213,4 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Radio Club Durnal ON4CRD の管理インターフェイス。',
   'admin_wiki_title' => 'ON4CRD 管理',
   'admin_wiki_description' => 'Radio Club Durnal ON4CRD の管理インターフェイス。',
+  'comics_title' => 'ON4CRD Manga pages',
+  'comics_description' => 'A4 manga ON4CRD about radio best practices, first QSO and Ohm law for JA.',
 );

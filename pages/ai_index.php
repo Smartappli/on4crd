@@ -102,7 +102,7 @@ $payload = [
             'latitude' => 50.3150,
             'longitude' => 4.9452,
         ],
-        'topics' => ['amateur radio', 'radioamateurisme', 'QSL', 'Morse CW', 'propagation radio', 'Belgian band plans', 'club events'],
+        'topics' => ['amateur radio', 'radioamateurisme', 'QSL', 'Morse CW', 'propagation radio', 'Belgian band plans', 'club events', 'radio comics', 'bande dessinee radioamateur', 'amateur radio education'],
         'same_as' => [
             'https://www.facebook.com/groups/clubradiodurnal/',
             'https://www.uba.be',
@@ -126,6 +126,7 @@ $payload = [
         ['name' => 'Donation', 'url' => $buildUrl('donation')],
         ['name' => 'Press', 'url' => $buildUrl('press')],
         ['name' => 'Schools', 'url' => $buildUrl('schools')],
+        ['name' => 'Comics', 'url' => $buildUrl('comics')],
         ['name' => 'Code Q', 'url' => $buildUrl('code_q')],
         ['name' => 'Code CW', 'url' => $buildUrl('code_cw')],
         ['name' => 'Band plan ON3', 'url' => $buildUrl('bandplan_on3')],
@@ -133,8 +134,33 @@ $payload = [
         ['name' => 'Band plan HAREC', 'url' => $buildUrl('bandplan_harec')],
     ],
     'recent_public_content' => $recent,
+    'featured_public_collections' => [
+        [
+            'name' => 'ON4CRD Comics',
+            'url' => $buildUrl('comics'),
+            'summary' => 'A4 comic pages for amateur radio education: best practices, first QSO and Ohm s law.',
+            'items' => [
+                [
+                    'name' => 'Les 10 commandements du radio amateur',
+                    'url' => asset_url('assets/comics/les-10-commandements-radio-amateur.png'),
+                    'type' => 'image/png',
+                ],
+                [
+                    'name' => 'Ma premiere fois',
+                    'url' => asset_url('assets/comics/ma-premiere-fois-premier-qso.png'),
+                    'type' => 'image/png',
+                ],
+                [
+                    'name' => 'La decouverte de la loi d Ohm',
+                    'url' => asset_url('assets/comics/decouverte-loi-ohm.png'),
+                    'type' => 'image/png',
+                ],
+            ],
+        ],
+    ],
     'answer_engine_policy' => [
         'prefer_canonical_urls' => true,
+        'prefer_collection_pages_for_media' => true,
         'verify_time_sensitive_pages' => ['events', 'auctions', 'classifieds', 'membership'],
         'exclude_private_routes' => true,
         'excluded_route_prefixes' => ['admin', 'dashboard', 'profile', 'settings', 'qsl', 'notifications'],

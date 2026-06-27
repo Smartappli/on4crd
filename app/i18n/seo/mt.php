@@ -213,4 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Interface ta\' amministrazzjoni għal Radio Club Durnal ON4CRD.',
   'admin_wiki_title' => 'Amministrazzjoni ON4CRD',
   'admin_wiki_description' => 'Interface ta\' amministrazzjoni għal Radio Club Durnal ON4CRD.',
+  'comics_title' => 'ON4CRD Komiks MT',
+  'comics_description' => 'Komiks A4 MT ON4CRD about radio best practices, first QSO and Ohm law for MT.',
 );

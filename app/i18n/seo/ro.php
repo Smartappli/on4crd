@@ -213,4 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Interfață de administrare pentru Radio Club Durnal ON4CRD.',
   'admin_wiki_title' => 'Administrare ON4CRD',
   'admin_wiki_description' => 'Interfață de administrare pentru Radio Club Durnal ON4CRD.',
+  'comics_title' => 'ON4CRD Benzi desenate',
+  'comics_description' => 'BD A4 RO ON4CRD about radio best practices, first QSO and Ohm law for RO.',
 );
