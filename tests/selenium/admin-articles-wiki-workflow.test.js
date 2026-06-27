@@ -171,6 +171,61 @@ function createDocxFixture(token) {
   return filePath;
 }
 
+function createRichDocxFixture(token) {
+  const safeToken = String(token).replace(/[^A-Za-z0-9_.-]/g, '-');
+  const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+</Types>`;
+  const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId0" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`;
+  const documentRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://example.test/docx-server-${safeToken}" TargetMode="External"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="javascript:alert(1)" TargetMode="External"/>
+</Relationships>`;
+  const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <w:body>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
+      <w:r><w:t>Import serveur ${escapeXml(safeToken)}</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:r><w:rPr><w:b/><w:i/></w:rPr><w:t>Texte fort ${escapeXml(safeToken)}</w:t></w:r>
+      <w:r><w:t> et </w:t></w:r>
+      <w:hyperlink r:id="rId1"><w:r><w:t>lien fiable</w:t></w:r></w:hyperlink>
+      <w:r><w:br/><w:t>Suite importee</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr>
+      <w:r><w:t>Element de liste ${escapeXml(safeToken)}</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:hyperlink r:id="rId2"><w:r><w:t>Lien bloque</w:t></w:r></w:hyperlink>
+    </w:p>
+    <w:tbl>
+      <w:tr>
+        <w:tc><w:p><w:r><w:t>Cellule A ${escapeXml(safeToken)}</w:t></w:r></w:p></w:tc>
+        <w:tc><w:tcPr><w:gridSpan w:val="2"/></w:tcPr><w:p><w:r><w:t>Cellule B</w:t></w:r></w:p></w:tc>
+      </w:tr>
+    </w:tbl>
+  </w:body>
+</w:document>`;
+  const filePath = path.join(os.tmpdir(), `${safeToken}-rich.docx`);
+  fs.writeFileSync(filePath, zipStore({
+    '[Content_Types].xml': contentTypes,
+    '_rels/.rels': rels,
+    'word/document.xml': documentXml,
+    'word/_rels/document.xml.rels': documentRels,
+  }));
+  return filePath;
+}
+
 function escapeXml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -361,6 +416,40 @@ async function assertArticleDocxWysiwygImport(driver, token) {
   `, unsafeText), timeoutMs);
   assert.equal(sanitized.executed, false, 'Le HTML importe ne doit pas executer de script.');
   assert.doesNotMatch(sanitized.html, /onclick|<script|javascript:|image\/svg|colspan="99"/i, 'Le HTML importe doit etre nettoye avant insertion.');
+}
+
+async function assertArticleServerDocxPreviewImport(driver, token) {
+  const fixturePath = createRichDocxFixture(token);
+  const title = `Selenium article import serveur ${token}`;
+  const slug = `selenium-article-import-serveur-${token}`;
+
+  const form = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save_article"]]'));
+  await setFieldValue(driver, await form.findElement(By.css('input[name="title"]')), title);
+  await setFieldValue(driver, await form.findElement(By.css('input[name="slug"]')), slug);
+  await setFieldValue(driver, await form.findElement(By.css('textarea[name="excerpt"]')), '');
+  await setFieldValue(driver, await form.findElement(By.css('textarea[name="content"]')), '<p>Ce contenu doit etre remplace par le DOCX serveur.</p>');
+  await selectValue(driver, await form.findElement(By.css('select[name="status"]')), 'draft');
+  await form.findElement(By.css('input[name="article_document"][accept*=".docx"]')).sendKeys(fixturePath);
+  await submitForm(driver, form, 'button[name="action"][value="preview_article"]');
+
+  const preview = await driver.wait(async () => driver.executeScript(`
+    const expected = arguments[0];
+    const article = document.querySelector('article.feature-card');
+    if (!article || !article.textContent.includes(expected)) {
+      return null;
+    }
+    return article.innerHTML;
+  `, `Import serveur ${token}`), timeoutMs);
+
+  assert.match(preview, /<h2>Import serveur/, 'Le DOCX serveur doit conserver le titre en previsualisation.');
+  assert.match(preview, /<strong><em>Texte fort/, 'Le DOCX serveur doit conserver gras et italique.');
+  assert.match(preview, new RegExp(`href="https://example\\.test/docx-server-${token}"`), 'Le DOCX serveur doit conserver le lien HTTPS.');
+  assert.match(preview, /<ul>/, 'Le DOCX serveur doit conserver la liste.');
+  assert.match(preview, /<table>/, 'Le DOCX serveur doit conserver le tableau.');
+  assert.match(preview, /colspan="2"/, 'Le DOCX serveur doit conserver le colspan valide.');
+  assert.match(preview, /Lien bloque/, 'Le texte du lien dangereux doit rester lisible.');
+  assert.doesNotMatch(preview, /javascript:|Ce contenu doit etre remplace/i, 'Le preview DOCX serveur doit nettoyer les liens dangereux et remplacer le contenu manuel.');
+  assert.equal(articleRecordBySlug(slug), null, 'La previsualisation DOCX serveur ne doit pas creer l article.');
 }
 
 async function submitProposalStatus(driver, title, status, note) {
@@ -716,6 +805,7 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
       await loginAsAdmin(driver, credentials.username, credentials.password);
       await visit(driver, 'admin_articles');
       await assertArticleDocxWysiwygImport(driver, token);
+      await assertArticleServerDocxPreviewImport(driver, token);
 
       const categoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_category"]]'));
       await categoryForm.findElement(By.css('input[name="category_label"]')).sendKeys(categoryLabel);
