@@ -162,7 +162,10 @@ $lines = [
     '## Public comics',
     '- ' . (string) $comicsCollection['title'] . ': ' . (string) $comicsCollection['url'] . ' - ' . (string) $comicsCollection['summary'],
     ...array_map(
-        static fn(array $board): string => '- ' . (string) $board['title'] . ': ' . (string) $board['url'],
+        static fn(array $board): string => '- ' . (string) $board['title'] . ': ' . (string) $board['url']
+            . ' - PNG A4 ' . (int) $board['width'] . 'x' . (int) $board['height']
+            . '; thumbnail JPEG ' . (int) $board['thumbnail_width'] . 'x' . (int) $board['thumbnail_height']
+            . ': ' . (string) $board['thumbnail_url'],
         $comicsCollection['boards']
     ),
     '',

@@ -89,6 +89,34 @@ final class ComicsIntegrationTest extends TestCase
         }
     }
 
+    public function testComicsStructuredDataHelpersExposeFullImageAndThumbnailObjects(): void
+    {
+        $board = comics_public_collection('fr')['boards'][0];
+        $image = comics_public_image_object($board);
+        $thumbnail = comics_public_image_object($board, true);
+        $work = comics_public_creative_work($board, 'fr', 'https://example.test/comics#collection', 'https://example.test/#organization');
+
+        self::assertSame('ImageObject', $image['@type']);
+        self::assertStringContainsString('.png', (string) $image['url']);
+        self::assertSame('image/png', $image['encodingFormat']);
+        self::assertSame(1055, $image['width']);
+        self::assertSame(1491, $image['height']);
+
+        self::assertSame('ImageObject', $thumbnail['@type']);
+        self::assertStringContainsString('-thumb.jpg', (string) $thumbnail['url']);
+        self::assertSame('image/jpeg', $thumbnail['encodingFormat']);
+        self::assertSame(420, $thumbnail['width']);
+        self::assertSame(594, $thumbnail['height']);
+
+        self::assertSame('CreativeWork', $work['@type']);
+        self::assertSame($image, $work['image']);
+        self::assertSame($thumbnail, $work['thumbnail']);
+        self::assertSame((string) $thumbnail['url'], $work['thumbnailUrl']);
+        self::assertSame(['@id' => 'https://example.test/comics#collection'], $work['isPartOf']);
+        self::assertSame(['@id' => 'https://example.test/#organization'], $work['publisher']);
+        self::assertSame(['@id' => 'https://example.test/#organization'], $work['creator']);
+    }
+
     public function testComicsHelperIsLoadedForPageAndDiscoveryRoutes(): void
     {
         $helperMap = app_route_helper_map();
