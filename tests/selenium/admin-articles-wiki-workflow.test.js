@@ -201,7 +201,7 @@ function createRichDocxFixture(token) {
   <w:num w:numId="2"><w:abstractNumId w:val="1"/></w:num>
 </w:numbering>`;
   const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
   <w:body>
     <w:p>
       <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
@@ -222,6 +222,17 @@ function createRichDocxFixture(token) {
       <w:r><w:t>Element numerote ${escapeXml(safeToken)}</w:t></w:r>
     </w:p>
     <w:p>
+      <w:r>
+        <w:drawing>
+          <wp:inline>
+            <wp:extent cx="95250" cy="190500"/>
+            <wp:docPr id="1" name="Image Word" descr="Image DOCX ${escapeXml(safeToken)}"/>
+            <a:graphic><a:graphicData><a:blip r:embed="rId3"/></a:graphicData></a:graphic>
+          </wp:inline>
+        </w:drawing>
+      </w:r>
+    </w:p>
+    <w:p>
       <w:hyperlink r:id="rId2"><w:r><w:t>Lien bloque</w:t></w:r></w:hyperlink>
     </w:p>
     <w:tbl>
@@ -232,6 +243,7 @@ function createRichDocxFixture(token) {
     </w:tbl>
   </w:body>
 </w:document>`;
+  const pngBytes = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=', 'base64');
   const filePath = path.join(os.tmpdir(), `${safeToken}-rich.docx`);
   fs.writeFileSync(filePath, zipStore({
     '[Content_Types].xml': contentTypes,
@@ -239,6 +251,7 @@ function createRichDocxFixture(token) {
     'word/document.xml': documentXml,
     'word/_rels/document.xml.rels': documentRels,
     'word/numbering.xml': numberingXml,
+    'word/media/image1.png': pngBytes,
   }));
   return filePath;
 }
