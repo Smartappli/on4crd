@@ -93,7 +93,7 @@
   aspect-ratio: 210 / 297;
   border: 1px solid color-mix(in srgb, var(--border) 72%, #111827);
   border-radius: 6px;
-  background-image: url("../../img/comics-a4-thumbnails.png");
+  background-image: url("../../comics/comics-a4-thumbnails.png");
   background-repeat: no-repeat;
   background-size: 330% 230%;
   box-shadow: inset 0 0 0 8px rgb(255 255 255 / .18);

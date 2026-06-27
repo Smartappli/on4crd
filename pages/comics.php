@@ -17,7 +17,7 @@ set_page_meta([
     'title' => (string) $t['meta_title'],
     'description' => (string) $t['meta_desc'],
     'schema_type' => 'CollectionPage',
-    'image' => asset_url('assets/img/comics-a4-thumbnails.png'),
+    'image' => asset_url('assets/comics/comics-a4-thumbnails.png'),
     'image_alt' => (string) $t['hero_image_alt'],
     'tags' => ['comics', 'bd', 'a4', 'radioamateur'],
     'json_ld' => [
@@ -26,7 +26,7 @@ set_page_meta([
         'name' => (string) $t['meta_title'],
         'description' => (string) $t['meta_desc'],
         'url' => route_url('comics'),
-        'image' => asset_url('assets/img/comics-a4-thumbnails.png'),
+        'image' => asset_url('assets/comics/comics-a4-thumbnails.png'),
         'mainEntity' => [
             '@type' => 'ItemList',
             'itemListElement' => array_map(
@@ -52,7 +52,7 @@ ob_start();
         <p class="comics-lead"><?= e((string) $t['lead']) ?></p>
     </div>
     <figure class="comics-hero-media">
-        <img src="<?= e(asset_url('assets/img/comics-a4-thumbnails.png')) ?>" alt="<?= e((string) $t['hero_image_alt']) ?>" loading="eager" decoding="async">
+        <img src="<?= e(asset_url('assets/comics/comics-a4-thumbnails.png')) ?>" alt="<?= e((string) $t['hero_image_alt']) ?>" loading="eager" decoding="async">
     </figure>
 </section>
 

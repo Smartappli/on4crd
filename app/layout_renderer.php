@@ -199,7 +199,7 @@ function module_preload_assets_for_route(string $route): array
         'chatbot' => 'assets/img/module-hero-chatbot.png',
         'classifieds' => 'assets/img/module-hero-classifieds.png',
         'classifieds_manage' => 'assets/img/module-hero-classifieds.png',
-        'comics' => 'assets/img/comics-a4-thumbnails.png',
+        'comics' => 'assets/comics/comics-a4-thumbnails.png',
         'directory' => 'assets/img/module-hero-directory.png',
         'events' => 'assets/img/module-hero-events.png',
         'fichiers' => 'assets/img/module-hero-files.png',
@@ -275,7 +275,6 @@ function render_layout_impl(string $content, string $title = ''): string
     $navPrimaryItems = [
         ['label' => (string) $layoutI18n['nav_home'], 'route' => 'home', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_news'], 'route' => 'news', 'module' => 'news'],
-        ['label' => 'Acedemy', 'url' => 'https://ham.academy', 'module' => ''],
         ['label' => 'Comics', 'route' => 'comics', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
@@ -718,8 +717,8 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<link rel="stylesheet" href="' . e(asset_url('assets/css/tailwind-local.css')) . '">'
         . '</head><body data-route="' . e($currentRoute) . '" data-sw-url="' . e(base_url('sw.js')) . '">'
         . '<a class="skip-link" href="#main-content">' . e((string) $layoutI18n['skip_to_content']) . '</a>'
-        . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><a class="brand" href="' . e(route_url('home')) . '">'
-        . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
+        . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><div class="brand-stack"><a class="brand" href="' . e(route_url('home')) . '">'
+        . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a><a class="brand-academy-link" href="https://ham.academy" target="_blank" rel="noopener noreferrer">Ham Academy</a></div></div>'
         . '<button class="menu-toggle button secondary" type="button" aria-controls="main-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span class="menu-label">Menu</span></button>'
         . '<button class="nav-backdrop" type="button" aria-label="' . e((string) $layoutI18n['close_menu']) . '" hidden></button>'
         . '<nav id="main-nav" class="nav" aria-label="' . e((string) $layoutI18n['main_navigation']) . '">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'

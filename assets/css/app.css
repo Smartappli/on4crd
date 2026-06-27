@@ -137,9 +137,19 @@ textarea:focus-visible {
   object-fit: cover;
   display: block;
 }
+.brand-stack { display: inline-flex; flex-direction: column; gap: .12rem; min-width: 0; }
 .brand { display: inline-flex; flex-direction: column; gap: .05rem; color: var(--text); }
 .brand-title { font-size: 1.1rem; font-weight: 800; }
 .brand-subtitle { color: var(--muted); font-size: .82rem; }
+.brand-academy-link {
+  align-self: flex-start;
+  color: var(--accent-strong);
+  font-size: .82rem;
+  font-weight: 760;
+}
+.brand-academy-link:hover {
+  color: var(--accent);
+}
 .nav { display: flex; flex-direction: column; gap: .35rem; align-items: flex-start; }
 .nav-row { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
 .nav a {

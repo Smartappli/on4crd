@@ -113,6 +113,7 @@ const expectedPublicActions = {
   code_q: [],
   committee: [],
   conditions_utilisation: [],
+  comics: [],
   directory: [],
   donation: [],
   errors: [],
