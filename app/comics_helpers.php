@@ -26,7 +26,7 @@ function comics_public_i18n(?string $locale = null): array
 
 if (!function_exists('comics_public_boards')) {
 /**
- * @return list<array{key:string,image:string,url:string,title:string,text:string,type:string}>
+ * @return list<array{key:string,image:string,url:string,title:string,text:string,type:string,width:int,height:int,content_size:int}>
  */
 function comics_public_boards(?string $locale = null): array
 {
@@ -52,19 +52,25 @@ function comics_public_boards(?string $locale = null): array
         ],
     ];
 
-    return array_map(
-        static fn(array $board): array => $board + [
-            'url' => asset_url((string) $board['image']),
+    return array_map(static function (array $board): array {
+        $path = (string) $board['image'];
+        $absolutePath = dirname(__DIR__) . '/' . $path;
+        $size = is_file($absolutePath) ? @getimagesize($absolutePath) : false;
+
+        return $board + [
+            'url' => asset_url($path),
             'type' => 'image/png',
-        ],
-        $boards
-    );
+            'width' => is_array($size) ? (int) ($size[0] ?? 0) : 0,
+            'height' => is_array($size) ? (int) ($size[1] ?? 0) : 0,
+            'content_size' => is_file($absolutePath) ? (int) filesize($absolutePath) : 0,
+        ];
+    }, $boards);
 }
 }
 
 if (!function_exists('comics_public_collection')) {
 /**
- * @return array{locale:string,title:string,layout:string,description:string,summary:string,keywords:list<string>,url:string,available_languages:list<string>,alternate_urls:array<string,string>,boards:list<array{key:string,image:string,url:string,title:string,text:string,type:string}>}
+ * @return array{locale:string,title:string,layout:string,description:string,summary:string,keywords:list<string>,url:string,available_languages:list<string>,alternate_urls:array<string,string>,boards:list<array{key:string,image:string,url:string,title:string,text:string,type:string,width:int,height:int,content_size:int}>}
  */
 function comics_public_collection(?string $locale = null): array
 {
