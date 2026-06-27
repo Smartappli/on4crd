@@ -5,19 +5,32 @@ $locale = current_locale();
 $t = i18n_domain_locale('comics', $locale);
 
 $boards = [
-    ['key' => 'field', 'title' => (string) $t['board_field_title'], 'text' => (string) $t['board_field_text']],
-    ['key' => 'station', 'title' => (string) $t['board_station_title'], 'text' => (string) $t['board_station_text']],
-    ['key' => 'event', 'title' => (string) $t['board_event_title'], 'text' => (string) $t['board_event_text']],
-    ['key' => 'night', 'title' => (string) $t['board_night_title'], 'text' => (string) $t['board_night_text']],
-    ['key' => 'map', 'title' => (string) $t['board_map_title'], 'text' => (string) $t['board_map_text']],
-    ['key' => 'antenna', 'title' => (string) $t['board_antenna_title'], 'text' => (string) $t['board_antenna_text']],
+    [
+        'key' => 'commandments',
+        'image' => 'assets/comics/les-10-commandements-radio-amateur.png',
+        'title' => (string) $t['board_commandments_title'],
+        'text' => (string) $t['board_commandments_text'],
+    ],
+    [
+        'key' => 'first_qso',
+        'image' => 'assets/comics/ma-premiere-fois-premier-qso.png',
+        'title' => (string) $t['board_first_qso_title'],
+        'text' => (string) $t['board_first_qso_text'],
+    ],
+    [
+        'key' => 'ohm',
+        'image' => 'assets/comics/decouverte-loi-ohm.png',
+        'title' => (string) $t['board_ohm_title'],
+        'text' => (string) $t['board_ohm_text'],
+    ],
 ];
+$heroImagePath = (string) $boards[0]['image'];
 
 set_page_meta([
     'title' => (string) $t['meta_title'],
     'description' => (string) $t['meta_desc'],
     'schema_type' => 'CollectionPage',
-    'image' => asset_url('assets/comics/comics-a4-thumbnails.png'),
+    'image' => asset_url($heroImagePath),
     'image_alt' => (string) $t['hero_image_alt'],
     'tags' => ['comics', 'bd', 'a4', 'radioamateur'],
     'json_ld' => [
@@ -26,7 +39,7 @@ set_page_meta([
         'name' => (string) $t['meta_title'],
         'description' => (string) $t['meta_desc'],
         'url' => route_url('comics'),
-        'image' => asset_url('assets/comics/comics-a4-thumbnails.png'),
+        'image' => asset_url($heroImagePath),
         'mainEntity' => [
             '@type' => 'ItemList',
             'itemListElement' => array_map(
@@ -52,7 +65,11 @@ ob_start();
         <p class="comics-lead"><?= e((string) $t['lead']) ?></p>
     </div>
     <figure class="comics-hero-media">
-        <img src="<?= e(asset_url('assets/comics/comics-a4-thumbnails.png')) ?>" alt="<?= e((string) $t['hero_image_alt']) ?>" loading="eager" decoding="async">
+        <div class="comics-hero-strip" aria-label="<?= e((string) $t['hero_image_alt']) ?>">
+            <?php foreach ($boards as $board): ?>
+                <img src="<?= e(asset_url((string) $board['image'])) ?>" alt="<?= e((string) $board['title']) ?>" loading="eager" decoding="async">
+            <?php endforeach; ?>
+        </div>
     </figure>
 </section>
 
@@ -65,9 +82,11 @@ ob_start();
         <span class="comics-format"><?= e((string) $t['format_label']) ?></span>
     </div>
     <div class="comics-grid">
-        <?php foreach ($boards as $index => $board): ?>
+        <?php foreach ($boards as $board): ?>
             <article class="comics-card">
-                <span class="comics-thumb comics-thumb-<?= e((string) ($index + 1)) ?>" role="img" aria-label="<?= e((string) $board['title']) ?>"></span>
+                <a class="comics-thumb-link" href="<?= e(asset_url((string) $board['image'])) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e((string) $t['open_board_prefix'] . ' ' . (string) $board['title']) ?>">
+                    <img class="comics-thumb-img" src="<?= e(asset_url((string) $board['image'])) ?>" alt="<?= e((string) $board['title']) ?>" loading="lazy" decoding="async">
+                </a>
                 <div class="comics-card-copy">
                     <h3><?= e((string) $board['title']) ?></h3>
                     <p><?= e((string) $board['text']) ?></p>

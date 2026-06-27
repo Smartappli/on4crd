@@ -199,7 +199,7 @@ function module_preload_assets_for_route(string $route): array
         'chatbot' => 'assets/img/module-hero-chatbot.png',
         'classifieds' => 'assets/img/module-hero-classifieds.png',
         'classifieds_manage' => 'assets/img/module-hero-classifieds.png',
-        'comics' => 'assets/comics/comics-a4-thumbnails.png',
+        'comics' => 'assets/comics/les-10-commandements-radio-amateur.png',
         'directory' => 'assets/img/module-hero-directory.png',
         'events' => 'assets/img/module-hero-events.png',
         'fichiers' => 'assets/img/module-hero-files.png',
