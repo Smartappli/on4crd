@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Képzések',
   'category_sorties' => 'Kirándulások',
   'category_radio' => 'Rádióamatőr tevékenység',
+  'subsubcategory_field' => 'Al-altéma',
+  'propose_subsubcategory_item' => 'Al-altéma',
+  'propose_subsubcategory_title' => 'Al-altéma javaslata',
+  'subsubcategory_pending_help' => 'Adja meg a hozzáadandó altémát és a szülőtémáját.',
+  'parent_subcategory_label' => 'Altéma',
+  'proposal_subsubcategory_name_label' => 'Al-altéma neve',
 );

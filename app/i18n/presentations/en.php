@@ -36,4 +36,6 @@ return array (
   'admin_eyebrow' => 'Documents',
   'admin_page_title' => 'Administration',
   'admin_intro' => 'Publish member documents in PDF, DOC, DOCX, text, Markdown or HTML, extract their content, and organize them by category.',
+  'propose_subcategory_item' => 'A subtopic',
+  'propose_subsubcategory_item' => 'A sub-subtopic',
 );

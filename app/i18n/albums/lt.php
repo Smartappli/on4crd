@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Mokymai',
   'category_sorties' => 'Išvykos',
   'category_radio' => 'Radijo mėgėjai',
+  'subsubcategory_field' => 'Po-potemė',
+  'propose_subsubcategory_item' => 'Potemę',
+  'propose_subsubcategory_title' => 'Pasiūlyti potemę',
+  'subsubcategory_pending_help' => 'Nurodykite pridedamą potemę ir jos pagrindinę temą.',
+  'parent_subcategory_label' => 'Potemė',
+  'proposal_subsubcategory_name_label' => 'Po-potemės pavadinimas',
 );

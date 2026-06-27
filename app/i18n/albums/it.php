@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Formazione',
   'category_sorties' => 'Uscite',
   'category_radio' => 'Radioamatori',
+  'subsubcategory_field' => 'Sotto-sottotema',
+  'propose_subsubcategory_item' => 'Un sottoargomento',
+  'propose_subsubcategory_title' => 'Proporre un sottoargomento',
+  'subsubcategory_pending_help' => 'Indica il sottoargomento da aggiungere e il suo tema principale.',
+  'parent_subcategory_label' => 'Sottotema',
+  'proposal_subsubcategory_name_label' => 'Nome del sottoargomento',
 );

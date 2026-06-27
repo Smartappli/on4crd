@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Formações',
   'category_sorties' => 'Saídas',
   'category_radio' => 'Radioamadorismo',
+  'subsubcategory_field' => 'Subsubtema',
+  'propose_subsubcategory_item' => 'Um subtópico',
+  'propose_subsubcategory_title' => 'Propor um subtópico',
+  'subsubcategory_pending_help' => 'Indique o subtópico a adicionar e o seu tema principal.',
+  'parent_subcategory_label' => 'Subtema',
+  'proposal_subsubcategory_name_label' => 'Nome do subtópico',
 );

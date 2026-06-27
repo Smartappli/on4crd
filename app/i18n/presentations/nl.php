@@ -36,4 +36,6 @@ return array (
   'admin_eyebrow' => 'Documenten',
   'admin_page_title' => 'Beheer',
   'admin_intro' => 'Publiceer liddocumenten in PDF, DOCX, tekst, Markdown of HTML, extraheer de inhoud ervan en organiseer ze op categorie.',
+  'propose_subcategory_item' => 'Een subonderwerp',
+  'propose_subsubcategory_item' => 'Een subonderwerp',
 );

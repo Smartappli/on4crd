@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Training',
   'category_sorties' => 'Outings',
   'category_radio' => 'Amateur radio',
+  'subsubcategory_field' => 'Sub-subtopic',
+  'propose_subsubcategory_item' => 'A sub-subtopic',
+  'propose_subsubcategory_title' => 'Propose a sub-subtopic',
+  'subsubcategory_pending_help' => 'Enter the sub-subtopic to add and its parent subtopic.',
+  'parent_subcategory_label' => 'Parent subtopic',
+  'proposal_subsubcategory_name_label' => 'Sub-subtopic name',
 );

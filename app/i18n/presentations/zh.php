@@ -36,4 +36,6 @@ return array (
   'admin_eyebrow' => '文档',
   'admin_page_title' => '管理',
   'admin_intro' => '以 PDF、DOCX、文本、Markdown 或 HTML 格式发布成员文档，提取其内容并按类别组织它们。',
+  'propose_subcategory_item' => '一个子主题',
+  'propose_subsubcategory_item' => '一个子子主题',
 );

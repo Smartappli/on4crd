@@ -36,4 +36,6 @@ return array (
   'admin_eyebrow' => 'Dokumenti',
   'admin_page_title' => 'administracija',
   'admin_intro' => 'Objavite dokumente članova kao PDF, DOCX, tekst, Markdown ili HTML, izdvojite njihov sadržaj i kategorizirajte ih.',
+  'propose_subcategory_item' => 'Podtemu',
+  'propose_subsubcategory_item' => 'Podtemu',
 );

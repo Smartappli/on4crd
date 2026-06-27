@@ -36,4 +36,6 @@ return array (
   'admin_eyebrow' => 'المستندات',
   'admin_page_title' => 'الإدارة',
   'admin_intro' => 'انشر مستندات الأعضاء بصيغة PDF أو DOCX أو نص أو Markdown أو HTML، واستخرج محتواها ونظمها حسب الفئة.',
+  'propose_subcategory_item' => 'موضوع فرعي',
+  'propose_subsubcategory_item' => 'موضوع فرعي ثان',
 );

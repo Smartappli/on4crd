@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Izobraževanja',
   'category_sorties' => 'Izleti',
   'category_radio' => 'Radioamaterstvo',
+  'subsubcategory_field' => 'Podpodtema',
+  'propose_subsubcategory_item' => 'Podtemo',
+  'propose_subsubcategory_title' => 'Predlagaj podtemo',
+  'subsubcategory_pending_help' => 'Navedite podtemo za dodajanje in njeno nadrejeno temo.',
+  'parent_subcategory_label' => 'Podtema',
+  'proposal_subsubcategory_name_label' => 'Ime podpodteme',
 );

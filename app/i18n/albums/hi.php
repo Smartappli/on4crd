@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'प्रशिक्षण',
   'category_sorties' => 'भ्रमण',
   'category_radio' => 'रेडियो शौकिया',
+  'subsubcategory_field' => 'उप-उपविषय',
+  'propose_subsubcategory_item' => 'एक उप-उपविषय',
+  'propose_subsubcategory_title' => 'उप-उपविषय प्रस्तावित करें',
+  'subsubcategory_pending_help' => 'जोड़े जाने वाले उप-उपविषय और उसके मुख्य विषय को बताएं।',
+  'parent_subcategory_label' => 'उपविषय',
+  'proposal_subsubcategory_name_label' => 'उप-उपविषय का नाम',
 );

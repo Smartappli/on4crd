@@ -36,4 +36,6 @@ return array (
   'admin_eyebrow' => 'Документи',
   'admin_page_title' => 'Администрация',
   'admin_intro' => 'Публикувайте документи на членове като PDF, DOCX, текст, Markdown или HTML, извличайте съдържанието им и ги категоризирайте.',
+  'propose_subcategory_item' => 'Подтема',
+  'propose_subsubcategory_item' => 'Подподтема',
 );

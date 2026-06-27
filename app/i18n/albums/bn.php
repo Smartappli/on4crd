@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'প্রশিক্ষণ',
   'category_sorties' => 'বাহিরে কার্যক্রম',
   'category_radio' => 'অ্যামেচার রেডিও',
+  'subsubcategory_field' => 'উপ-উপবিষয়',
+  'propose_subsubcategory_item' => 'একটি উপ-উপবিষয়',
+  'propose_subsubcategory_title' => 'উপ-উপবিষয় প্রস্তাব করুন',
+  'subsubcategory_pending_help' => 'যোগ করতে চাওয়া উপ-উপবিষয় এবং তার মূল বিষয় উল্লেখ করুন।',
+  'parent_subcategory_label' => 'উপবিষয়',
+  'proposal_subsubcategory_name_label' => 'উপ-উপবিষয়ের নাম',
 );

@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Koolitused',
   'category_sorties' => 'Väljasõidud',
   'category_radio' => 'Raadioamatöörlus',
+  'subsubcategory_field' => 'Alam-alamteema',
+  'propose_subsubcategory_item' => 'Alam-alamteema',
+  'propose_subsubcategory_title' => 'Paku alam-alamteemat',
+  'subsubcategory_pending_help' => 'Märkige lisatav alam-alamteema ja selle ülemteema.',
+  'parent_subcategory_label' => 'Alateema',
+  'proposal_subsubcategory_name_label' => 'Alam-alamteema nimi',
 );

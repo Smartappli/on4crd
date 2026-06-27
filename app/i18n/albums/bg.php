@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Обучения',
   'category_sorties' => 'Излети',
   'category_radio' => 'Радиолюбителство',
+  'subsubcategory_field' => 'Подподтема',
+  'propose_subsubcategory_item' => 'Подподтема',
+  'propose_subsubcategory_title' => 'Предложи подподтема',
+  'subsubcategory_pending_help' => 'Посочете подподтемата за добавяне и нейната родителска тема.',
+  'parent_subcategory_label' => 'Подтема',
+  'proposal_subsubcategory_name_label' => 'Име на подподтемата',
 );

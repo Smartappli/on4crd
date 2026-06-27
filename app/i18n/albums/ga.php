@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Oiliúint',
   'category_sorties' => 'Turais',
   'category_radio' => 'Raidió amaitéarach',
+  'subsubcategory_field' => 'Fo-fho-théama',
+  'propose_subsubcategory_item' => 'Fo-ábhar',
+  'propose_subsubcategory_title' => 'Mol fo-ábhar',
+  'subsubcategory_pending_help' => 'Luaigh an fo-ábhar le cur leis agus a ábhar tuismitheora.',
+  'parent_subcategory_label' => 'Fo-théama',
+  'proposal_subsubcategory_name_label' => 'Ainm an fho-ábhair',
 );

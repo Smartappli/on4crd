@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'تدريبات',
   'category_sorties' => 'خرجات',
   'category_radio' => 'هواة الراديو',
+  'subsubcategory_field' => 'موضوع فرعي ثان',
+  'propose_subsubcategory_item' => 'موضوع فرعي ثان',
+  'propose_subsubcategory_title' => 'اقتراح موضوع فرعي ثان',
+  'subsubcategory_pending_help' => 'اذكر الموضوع الفرعي المطلوب إضافته والموضوع الأصل.',
+  'parent_subcategory_label' => 'موضوع فرعي',
+  'proposal_subsubcategory_name_label' => 'اسم الموضوع الفرعي',
 );

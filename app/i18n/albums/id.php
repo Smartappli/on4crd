@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Pelatihan',
   'category_sorties' => 'Kegiatan luar',
   'category_radio' => 'Radio amatir',
+  'subsubcategory_field' => 'Sub-subtopik',
+  'propose_subsubcategory_item' => 'Sebuah sub-subtopik',
+  'propose_subsubcategory_title' => 'Usulkan sub-subtopik',
+  'subsubcategory_pending_help' => 'Sebutkan sub-subtopik yang akan ditambahkan dan topik induknya.',
+  'parent_subcategory_label' => 'Subtopik',
+  'proposal_subsubcategory_name_label' => 'Nama sub-subtopik',
 );

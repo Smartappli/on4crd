@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Szkolenia',
   'category_sorties' => 'Wyjazdy',
   'category_radio' => 'Krótkofalarstwo',
+  'subsubcategory_field' => 'Podpodtemat',
+  'propose_subsubcategory_item' => 'Podpodtemat',
+  'propose_subsubcategory_title' => 'Zaproponuj podpodtemat',
+  'subsubcategory_pending_help' => 'Wskaż podpodtemat do dodania oraz jego temat nadrzędny.',
+  'parent_subcategory_label' => 'Podtemat',
+  'proposal_subsubcategory_name_label' => 'Nazwa podpodtematu',
 );

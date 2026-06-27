@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Formaciones',
   'category_sorties' => 'Salidas',
   'category_radio' => 'Radioafición',
+  'subsubcategory_field' => 'Subsubtema',
+  'propose_subsubcategory_item' => 'Un subsubtema',
+  'propose_subsubcategory_title' => 'Proponer un subsubtema',
+  'subsubcategory_pending_help' => 'Indica el subsubtema que se debe añadir y su temática principal.',
+  'parent_subcategory_label' => 'Subtema',
+  'proposal_subsubcategory_name_label' => 'Nombre del subsubtema',
 );

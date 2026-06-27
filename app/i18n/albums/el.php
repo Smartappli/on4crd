@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Εκπαιδεύσεις',
   'category_sorties' => 'Εκδρομές',
   'category_radio' => 'Ραδιοερασιτεχνισμός',
+  'subsubcategory_field' => 'Υπο-υποθεματική',
+  'propose_subsubcategory_item' => 'Μια υποθεματική',
+  'propose_subsubcategory_title' => 'Πρόταση υποθεματικής',
+  'subsubcategory_pending_help' => 'Υποδείξτε την υποθεματική που θα προστεθεί και τη γονική θεματική της.',
+  'parent_subcategory_label' => 'Υποθέμα',
+  'proposal_subsubcategory_name_label' => 'Όνομα υποθεματικής',
 );

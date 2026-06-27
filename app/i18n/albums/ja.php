@@ -91,4 +91,10 @@ return array (
   'category_formations' => '研修',
   'category_sorties' => '外出',
   'category_radio' => 'アマチュア無線',
+  'subsubcategory_field' => 'サブサブテーマ',
+  'propose_subsubcategory_item' => 'サブサブテーマ',
+  'propose_subsubcategory_title' => 'サブサブテーマを提案',
+  'subsubcategory_pending_help' => '追加するサブサブテーマとその親トピックを指定してください。',
+  'parent_subcategory_label' => 'サブトピック',
+  'proposal_subsubcategory_name_label' => 'サブサブテーマ名',
 );

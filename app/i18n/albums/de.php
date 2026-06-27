@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Schulungen',
   'category_sorties' => 'Ausflüge',
   'category_radio' => 'Amateurfunk',
+  'subsubcategory_field' => 'Unterunterthema',
+  'propose_subsubcategory_item' => 'Ein Unterunterthema',
+  'propose_subsubcategory_title' => 'Ein Unterunterthema vorschlagen',
+  'subsubcategory_pending_help' => 'Geben Sie das hinzuzufügende Unterunterthema und das übergeordnete Thema an.',
+  'parent_subcategory_label' => 'Unterthema',
+  'proposal_subsubcategory_name_label' => 'Name des Unterunterthemas',
 );

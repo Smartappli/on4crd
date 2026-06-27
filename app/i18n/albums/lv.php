@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Apmācības',
   'category_sorties' => 'Izbraukumi',
   'category_radio' => 'Radioamatierisms',
+  'subsubcategory_field' => 'Apakšapakštēma',
+  'propose_subsubcategory_item' => 'Apakštēmu',
+  'propose_subsubcategory_title' => 'Ieteikt apakštēmu',
+  'subsubcategory_pending_help' => 'Norādiet pievienojamo apakštēmu un tās vecāktēmu.',
+  'parent_subcategory_label' => 'Apakštēma',
+  'proposal_subsubcategory_name_label' => 'Apakšapakštēmas nosaukums',
 );

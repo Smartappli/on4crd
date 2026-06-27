@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Školení',
   'category_sorties' => 'Výjezdy',
   'category_radio' => 'Radioamatérství',
+  'subsubcategory_field' => 'Podpodtéma',
+  'propose_subsubcategory_item' => 'Podpodtéma',
+  'propose_subsubcategory_title' => 'Navrhnout podpodtéma',
+  'subsubcategory_pending_help' => 'Uveďte podpodtéma, které chcete přidat, a jeho nadřazené téma.',
+  'parent_subcategory_label' => 'Podtéma',
+  'proposal_subsubcategory_name_label' => 'Název podpodtématu',
 );

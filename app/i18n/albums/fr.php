@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Formations',
   'category_sorties' => 'Sorties',
   'category_radio' => 'Radioamateur',
+  'subsubcategory_field' => 'Sous-sous-thématique',
+  'propose_subsubcategory_item' => 'Une sous-sous-thématique',
+  'propose_subsubcategory_title' => 'Proposer une sous-sous-thématique',
+  'subsubcategory_pending_help' => 'Indiquez la sous-sous-thématique à ajouter et la sous-thématique parente.',
+  'parent_subcategory_label' => 'Sous-thématique parente',
+  'proposal_subsubcategory_name_label' => 'Nom de la sous-sous-thématique',
 );

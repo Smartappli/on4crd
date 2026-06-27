@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Formări',
   'category_sorties' => 'Ieșiri',
   'category_radio' => 'Radioamatorism',
+  'subsubcategory_field' => 'Sub-subtemă',
+  'propose_subsubcategory_item' => 'O subtematică',
+  'propose_subsubcategory_title' => 'Propune o subtematică',
+  'subsubcategory_pending_help' => 'Indică subtematica de adăugat și tematica părinte.',
+  'parent_subcategory_label' => 'Subtemă',
+  'proposal_subsubcategory_name_label' => 'Numele subtematicii',
 );

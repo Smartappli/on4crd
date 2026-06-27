@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Taħriġ',
   'category_sorties' => 'Ħarġiet',
   'category_radio' => 'Radju dilettanti',
+  'subsubcategory_field' => 'Sub-subtema',
+  'propose_subsubcategory_item' => 'Sotto-suġġett',
+  'propose_subsubcategory_title' => 'Ipproponi sotto-suġġett',
+  'subsubcategory_pending_help' => 'Indika s-sotto-suġġett li għandu jiżdied u s-suġġett ewlieni tiegħu.',
+  'parent_subcategory_label' => 'Sottotema',
+  'proposal_subsubcategory_name_label' => 'Isem is-sotto-suġġett',
 );

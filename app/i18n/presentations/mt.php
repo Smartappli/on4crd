@@ -36,4 +36,6 @@ return array (
   'admin_eyebrow' => 'Dokumenti',
   'admin_page_title' => 'Amministrazzjoni',
   'admin_intro' => 'Ippubblika d-dokumenti tal-membri bħala PDF, DOCX, test, Markdown jew HTML, estratt il-kontenut tagħhom u kkategorizzahom.',
+  'propose_subcategory_item' => 'Sotto-suġġett',
+  'propose_subsubcategory_item' => 'Sotto-suġġett',
 );

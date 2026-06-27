@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Utbildningar',
   'category_sorties' => 'Utflykter',
   'category_radio' => 'Amatörradio',
+  'subsubcategory_field' => 'Underundertema',
+  'propose_subsubcategory_item' => 'Ett underundertema',
+  'propose_subsubcategory_title' => 'Föreslå ett underundertema',
+  'subsubcategory_pending_help' => 'Ange underundertemat som ska läggas till och dess överordnade ämne.',
+  'parent_subcategory_label' => 'Underämne',
+  'proposal_subsubcategory_name_label' => 'Namn på underundertema',
 );

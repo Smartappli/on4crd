@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Edukacije',
   'category_sorties' => 'Izleti',
   'category_radio' => 'Radioamaterizam',
+  'subsubcategory_field' => 'Podpodtema',
+  'propose_subsubcategory_item' => 'Podtemu',
+  'propose_subsubcategory_title' => 'Predloži podtemu',
+  'subsubcategory_pending_help' => 'Navedite podtemu koju treba dodati i njezinu nadređenu temu.',
+  'parent_subcategory_label' => 'Podtema',
+  'proposal_subsubcategory_name_label' => 'Naziv podpodteme',
 );

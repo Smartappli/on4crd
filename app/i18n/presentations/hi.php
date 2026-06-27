@@ -36,4 +36,6 @@ return array (
   'admin_eyebrow' => 'दस्तावेज',
   'admin_page_title' => 'प्रशासन',
   'admin_intro' => 'सदस्य दस्तावेज़ों को PDF, DOCX, टेक्स्ट, मार्कडाउन या HTML में प्रकाशित करें, उनकी सामग्री निकालें और उन्हें श्रेणी के अनुसार व्यवस्थित करें।',
+  'propose_subcategory_item' => 'एक उपविषय',
+  'propose_subsubcategory_item' => 'एक उप-उपविषय',
 );

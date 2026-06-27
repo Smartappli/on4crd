@@ -36,4 +36,6 @@ return array (
   'admin_eyebrow' => 'Dokument',
   'admin_page_title' => 'Administrering',
   'admin_intro' => 'Publicera medlemsdokument som PDF, DOCX, text, Markdown eller HTML, extrahera deras innehåll och kategorisera dem.',
+  'propose_subcategory_item' => 'Ett underämne',
+  'propose_subsubcategory_item' => 'Ett underundertema',
 );

@@ -91,4 +91,10 @@ return array (
   'category_formations' => '培训',
   'category_sorties' => '外出活动',
   'category_radio' => '业余无线电',
+  'subsubcategory_field' => '子子主题',
+  'propose_subsubcategory_item' => '一个子子主题',
+  'propose_subsubcategory_title' => '建议子子主题',
+  'subsubcategory_pending_help' => '说明要添加的子子主题及其父主题。',
+  'parent_subcategory_label' => '子主题',
+  'proposal_subsubcategory_name_label' => '子子主题名称',
 );

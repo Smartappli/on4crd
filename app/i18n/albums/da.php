@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Kurser',
   'category_sorties' => 'Udflugter',
   'category_radio' => 'Amatørradio',
+  'subsubcategory_field' => 'Underundertema',
+  'propose_subsubcategory_item' => 'Et underundertema',
+  'propose_subsubcategory_title' => 'Foreslå et underundertema',
+  'subsubcategory_pending_help' => 'Angiv det underundertema, der skal tilføjes, og dets overordnede tema.',
+  'parent_subcategory_label' => 'Underemne',
+  'proposal_subsubcategory_name_label' => 'Navn på underundertema',
 );

@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Opleidingen',
   'category_sorties' => 'Uitstappen',
   'category_radio' => 'Radioamateurisme',
+  'subsubcategory_field' => 'Subsubthema',
+  'propose_subsubcategory_item' => 'Een subonderwerp',
+  'propose_subsubcategory_title' => 'Een subonderwerp voorstellen',
+  'subsubcategory_pending_help' => 'Geef het toe te voegen subonderwerp en het bovenliggende thema op.',
+  'parent_subcategory_label' => 'Subthema',
+  'proposal_subsubcategory_name_label' => 'Naam van het subonderwerp',
 );

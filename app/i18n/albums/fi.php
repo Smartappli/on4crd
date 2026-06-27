@@ -91,4 +91,10 @@ return array (
   'category_formations' => 'Koulutukset',
   'category_sorties' => 'Retket',
   'category_radio' => 'Radioamatööritoiminta',
+  'subsubcategory_field' => 'Ali-alateema',
+  'propose_subsubcategory_item' => 'Ala-aihe',
+  'propose_subsubcategory_title' => 'Ehdota ala-aihetta',
+  'subsubcategory_pending_help' => 'Ilmoita lisättävä ala-aihe ja sen pääaihe.',
+  'parent_subcategory_label' => 'Alateema',
+  'proposal_subsubcategory_name_label' => 'Ala-aiheen nimi',
 );
