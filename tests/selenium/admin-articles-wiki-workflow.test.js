@@ -252,8 +252,12 @@ function createRichDocxFixture(token) {
         <w:tc><w:p><w:r><w:t>Colonne B</w:t></w:r></w:p></w:tc>
       </w:tr>
       <w:tr>
-        <w:tc><w:p><w:r><w:t>Cellule A ${escapeXml(safeToken)}</w:t></w:r></w:p></w:tc>
+        <w:tc><w:tcPr><w:vMerge w:val="restart"/></w:tcPr><w:p><w:r><w:t>Cellule A ${escapeXml(safeToken)}</w:t></w:r></w:p></w:tc>
         <w:tc><w:tcPr><w:gridSpan w:val="2"/></w:tcPr><w:p><w:r><w:t>Cellule B</w:t></w:r></w:p></w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc><w:tcPr><w:vMerge/></w:tcPr><w:p/></w:tc>
+        <w:tc><w:p><w:r><w:t>Cellule C</w:t></w:r></w:p></w:tc>
       </w:tr>
     </w:tbl>
   </w:body>
@@ -409,7 +413,7 @@ async function assertArticleDocxWysiwygImport(driver, token) {
         value: '<h2>' + expected + '</h2>'
           + '<p><strong>Gras</strong> <a href="https://example.test/import-docx" target="_blank">Lien fiable</a></p>'
           + '<p><s>Barre</s> <sup>2</sup> <sub>i</sub></p>'
-          + '<table><thead><tr><th scope="COL">Entete</th></tr></thead><tbody><tr><td colspan="2">Cellule conservee</td></tr></tbody></table>',
+          + '<table><thead><tr><th scope="COL">Entete</th></tr></thead><tbody><tr><td rowspan="2">Fusion verticale</td><td colspan="2">Cellule conservee</td></tr><tr><td>Suite</td></tr></tbody></table>',
       }),
     };
   `, safeText);
@@ -434,6 +438,7 @@ async function assertArticleDocxWysiwygImport(driver, token) {
   assert.match(safeImport, /<sub>i<\/sub>/, 'L indice importe doit etre conserve.');
   assert.match(safeImport, /<th scope="col">Entete<\/th>/, 'L entete de tableau importe doit etre conserve.');
   assert.match(safeImport, /colspan="2"/, 'Le colspan valide importe doit etre conserve.');
+  assert.match(safeImport, /rowspan="2"/, 'Le rowspan valide importe doit etre conserve.');
 
   const unsafeText = `Import DOCX dangereux ${token}`;
   await driver.executeScript(`
@@ -551,6 +556,7 @@ async function assertArticleServerDocxPreviewImport(driver, token) {
   assert.match(preview, /<th scope="col">Colonne A/, 'Le DOCX serveur doit convertir les cellules d entete en th.');
   assert.match(preview, /<tbody>/, 'Le DOCX serveur doit conserver le corps de tableau.');
   assert.match(preview, /colspan="2"/, 'Le DOCX serveur doit conserver le colspan valide.');
+  assert.match(preview, /rowspan="2"/, 'Le DOCX serveur doit conserver le rowspan valide.');
   assert.match(preview, /Lien bloque/, 'Le texte du lien dangereux doit rester lisible.');
   assert.doesNotMatch(preview, /javascript:|Ce contenu doit etre remplace/i, 'Le preview DOCX serveur doit nettoyer les liens dangereux et remplacer le contenu manuel.');
   assert.equal(articleRecordBySlug(slug), null, 'La previsualisation DOCX serveur ne doit pas creer l article.');
