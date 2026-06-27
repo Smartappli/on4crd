@@ -151,6 +151,7 @@ function createDocxFixture(token) {
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
   <Default Extension="xml" ContentType="application/xml"/>
   <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>
 </Types>`;
   const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
@@ -188,6 +189,17 @@ function createRichDocxFixture(token) {
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://example.test/docx-server-${safeToken}" TargetMode="External"/>
   <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="javascript:alert(1)" TargetMode="External"/>
 </Relationships>`;
+  const numberingXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:abstractNum w:abstractNumId="0">
+    <w:lvl w:ilvl="0"><w:numFmt w:val="bullet"/></w:lvl>
+  </w:abstractNum>
+  <w:abstractNum w:abstractNumId="1">
+    <w:lvl w:ilvl="0"><w:numFmt w:val="decimal"/></w:lvl>
+  </w:abstractNum>
+  <w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num>
+  <w:num w:numId="2"><w:abstractNumId w:val="1"/></w:num>
+</w:numbering>`;
   const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
   <w:body>
@@ -206,6 +218,10 @@ function createRichDocxFixture(token) {
       <w:r><w:t>Element de liste ${escapeXml(safeToken)}</w:t></w:r>
     </w:p>
     <w:p>
+      <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr></w:pPr>
+      <w:r><w:t>Element numerote ${escapeXml(safeToken)}</w:t></w:r>
+    </w:p>
+    <w:p>
       <w:hyperlink r:id="rId2"><w:r><w:t>Lien bloque</w:t></w:r></w:hyperlink>
     </w:p>
     <w:tbl>
@@ -222,6 +238,7 @@ function createRichDocxFixture(token) {
     '_rels/.rels': rels,
     'word/document.xml': documentXml,
     'word/_rels/document.xml.rels': documentRels,
+    'word/numbering.xml': numberingXml,
   }));
   return filePath;
 }
@@ -487,6 +504,7 @@ async function assertArticleServerDocxPreviewImport(driver, token) {
   assert.match(preview, /<strong><em>Texte fort/, 'Le DOCX serveur doit conserver gras et italique.');
   assert.match(preview, new RegExp(`href="https://example\\.test/docx-server-${token}"`), 'Le DOCX serveur doit conserver le lien HTTPS.');
   assert.match(preview, /<ul>/, 'Le DOCX serveur doit conserver la liste.');
+  assert.match(preview, /<ol>/, 'Le DOCX serveur doit conserver la liste numerotee.');
   assert.match(preview, /<table>/, 'Le DOCX serveur doit conserver le tableau.');
   assert.match(preview, /colspan="2"/, 'Le DOCX serveur doit conserver le colspan valide.');
   assert.match(preview, /Lien bloque/, 'Le texte du lien dangereux doit rester lisible.');
