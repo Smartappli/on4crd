@@ -178,7 +178,9 @@ function createRichDocxFixture(token) {
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
   <Default Extension="xml" ContentType="application/xml"/>
+  <Default Extension="png" ContentType="image/png"/>
   <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>
 </Types>`;
   const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
@@ -188,6 +190,7 @@ function createRichDocxFixture(token) {
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://example.test/docx-server-${safeToken}" TargetMode="External"/>
   <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="javascript:alert(1)" TargetMode="External"/>
+  <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image1.png"/>
 </Relationships>`;
   const numberingXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
@@ -518,6 +521,11 @@ async function assertArticleServerDocxPreviewImport(driver, token) {
   assert.match(preview, new RegExp(`href="https://example\\.test/docx-server-${token}"`), 'Le DOCX serveur doit conserver le lien HTTPS.');
   assert.match(preview, /<ul>/, 'Le DOCX serveur doit conserver la liste.');
   assert.match(preview, /<ol>/, 'Le DOCX serveur doit conserver la liste numerotee.');
+  assert.match(preview, /<img[^>]+src="data:image\/png;base64,/, 'Le DOCX serveur doit conserver les images PNG integrees.');
+  assert.match(preview, /alt="Image DOCX/, 'Le DOCX serveur doit conserver le texte alternatif de l image.');
+  assert.match(preview, /width="10"/, 'Le DOCX serveur doit conserver la largeur image valide.');
+  assert.match(preview, /height="20"/, 'Le DOCX serveur doit conserver la hauteur image valide.');
+  assert.match(preview, /loading="lazy"/, 'Le DOCX serveur doit charger les images importees paresseusement.');
   assert.match(preview, /<table>/, 'Le DOCX serveur doit conserver le tableau.');
   assert.match(preview, /colspan="2"/, 'Le DOCX serveur doit conserver le colspan valide.');
   assert.match(preview, /Lien bloque/, 'Le texte du lien dangereux doit rester lisible.');
