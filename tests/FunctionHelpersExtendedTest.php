@@ -228,11 +228,18 @@ final class FunctionHelpersExtendedTest extends TestCase
         <w:tc><w:p><w:r><w:t>Colonne B</w:t></w:r></w:p></w:tc>
       </w:tr>
       <w:tr>
-        <w:tc><w:p><w:r><w:t>Cellule A</w:t></w:r></w:p></w:tc>
+        <w:tc>
+          <w:tcPr><w:vMerge w:val="restart"/></w:tcPr>
+          <w:p><w:r><w:t>Cellule A</w:t></w:r></w:p>
+        </w:tc>
         <w:tc>
           <w:tcPr><w:gridSpan w:val="2"/></w:tcPr>
           <w:p><w:r><w:t>Cellule B</w:t></w:r></w:p>
         </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc><w:tcPr><w:vMerge/></w:tcPr><w:p/></w:tc>
+        <w:tc><w:p><w:r><w:t>Cellule C</w:t></w:r></w:p></w:tc>
       </w:tr>
     </w:tbl>
   </w:body>
@@ -294,8 +301,9 @@ XML;
             self::assertStringContainsString('<th scope="col">Colonne A</th>', $html);
             self::assertStringContainsString('<th scope="col">Colonne B</th>', $html);
             self::assertStringContainsString('<tbody>', $html);
-            self::assertStringContainsString('<td>Cellule A</td>', $html);
+            self::assertStringContainsString('<td rowspan="2">Cellule A</td>', $html);
             self::assertStringContainsString('<td colspan="2">Cellule B</td>', $html);
+            self::assertStringContainsString('<td>Cellule C</td>', $html);
             self::assertStringContainsString('Lien bloque', $html);
             self::assertStringNotContainsString('javascript:', $html);
         } finally {

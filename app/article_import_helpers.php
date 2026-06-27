@@ -846,6 +846,7 @@ function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $rela
 {
     $headRows = [];
     $bodyRows = [];
+    $verticalMergeColumns = [];
     $rowNodes = $xpath->query('./*[local-name()="tr"]', $table);
     if (!$rowNodes instanceof DOMNodeList) {
         return '';
@@ -859,6 +860,7 @@ function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $rela
         $isHeaderRow = article_docx_table_row_is_header($rowNode, $xpath);
         $cellTag = $isHeaderRow ? 'th' : 'td';
         $cells = [];
+        $columnIndex = 0;
         $cellNodes = $xpath->query('./*[local-name()="tc"]', $rowNode);
         if (!$cellNodes instanceof DOMNodeList) {
             continue;
@@ -866,6 +868,16 @@ function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $rela
 
         foreach ($cellNodes as $cellNode) {
             if (!$cellNode instanceof DOMElement) {
+                continue;
+            }
+
+            $gridSpan = article_docx_table_cell_grid_span($cellNode, $xpath);
+            $mergeState = article_docx_table_cell_vertical_merge_state($cellNode, $xpath);
+            if ($mergeState === 'continue') {
+                if (isset($verticalMergeColumns[$columnIndex])) {
+                    $verticalMergeColumns[$columnIndex]['cell']['rowspan']++;
+                }
+                $columnIndex += $gridSpan;
                 continue;
             }
 
@@ -882,27 +894,33 @@ function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $rela
                 }
             }
 
-            $attributes = '';
-            $gridSpanNodes = $xpath->query('./*[local-name()="tcPr"]/*[local-name()="gridSpan"]', $cellNode);
-            $gridSpanNode = $gridSpanNodes instanceof DOMNodeList ? $gridSpanNodes->item(0) : null;
-            if ($gridSpanNode instanceof DOMElement) {
-                $gridSpan = (int) article_docx_attribute($gridSpanNode, 'val');
-                if ($gridSpan > 1 && $gridSpan <= 20) {
-                    $attributes = ' colspan="' . $gridSpan . '"';
+            $cell = [
+                'tag' => $cellTag,
+                'content' => implode('<br>', $paragraphs),
+                'colspan' => $gridSpan,
+                'rowspan' => 1,
+                'header' => $isHeaderRow,
+            ];
+            $cells[] = &$cell;
+
+            if ($mergeState === 'restart') {
+                for ($i = 0; $i < $gridSpan; $i++) {
+                    $verticalMergeColumns[$columnIndex + $i] = ['cell' => &$cell];
+                }
+            } else {
+                for ($i = 0; $i < $gridSpan; $i++) {
+                    unset($verticalMergeColumns[$columnIndex + $i]);
                 }
             }
-            if ($isHeaderRow) {
-                $attributes .= ' scope="col"';
-            }
-
-            $cells[] = '<' . $cellTag . $attributes . '>' . implode('<br>', $paragraphs) . '</' . $cellTag . '>';
+            unset($cell);
+            $columnIndex += $gridSpan;
         }
 
         if ($cells !== []) {
             if ($isHeaderRow) {
-                $headRows[] = '<tr>' . implode('', $cells) . '</tr>';
+                $headRows[] = $cells;
             } else {
-                $bodyRows[] = '<tr>' . implode('', $cells) . '</tr>';
+                $bodyRows[] = $cells;
             }
         }
     }
@@ -913,13 +931,81 @@ function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $rela
 
     $html = '<table>';
     if ($headRows !== []) {
-        $html .= '<thead>' . implode('', $headRows) . '</thead>';
+        $html .= '<thead>' . article_docx_table_rows_html($headRows) . '</thead>';
     }
     if ($bodyRows !== []) {
-        $html .= '<tbody>' . implode('', $bodyRows) . '</tbody>';
+        $html .= '<tbody>' . article_docx_table_rows_html($bodyRows) . '</tbody>';
     }
 
     return $html . '</table>';
+}
+}
+
+if (!function_exists('article_docx_table_cell_grid_span')) {
+function article_docx_table_cell_grid_span(DOMElement $cell, DOMXPath $xpath): int
+{
+    $gridSpanNodes = $xpath->query('./*[local-name()="tcPr"]/*[local-name()="gridSpan"]', $cell);
+    $gridSpanNode = $gridSpanNodes instanceof DOMNodeList ? $gridSpanNodes->item(0) : null;
+    if (!$gridSpanNode instanceof DOMElement) {
+        return 1;
+    }
+
+    $gridSpan = (int) article_docx_attribute($gridSpanNode, 'val');
+    return $gridSpan > 1 && $gridSpan <= 20 ? $gridSpan : 1;
+}
+}
+
+if (!function_exists('article_docx_table_cell_vertical_merge_state')) {
+function article_docx_table_cell_vertical_merge_state(DOMElement $cell, DOMXPath $xpath): string
+{
+    $mergeNodes = $xpath->query('./*[local-name()="tcPr"]/*[local-name()="vMerge"]', $cell);
+    $mergeNode = $mergeNodes instanceof DOMNodeList ? $mergeNodes->item(0) : null;
+    if (!$mergeNode instanceof DOMElement) {
+        return '';
+    }
+
+    $value = strtolower(article_docx_attribute($mergeNode, 'val'));
+    return $value === 'restart' ? 'restart' : 'continue';
+}
+}
+
+if (!function_exists('article_docx_table_rows_html')) {
+/**
+ * @param list<list<array{tag:string,content:string,colspan:int,rowspan:int,header:bool}>> $rows
+ */
+function article_docx_table_rows_html(array $rows): string
+{
+    $html = '';
+    foreach ($rows as $cells) {
+        $html .= article_docx_table_row_html($cells);
+    }
+
+    return $html;
+}
+}
+
+if (!function_exists('article_docx_table_row_html')) {
+/**
+ * @param list<array{tag:string,content:string,colspan:int,rowspan:int,header:bool}> $cells
+ */
+function article_docx_table_row_html(array $cells): string
+{
+    $html = '';
+    foreach ($cells as $cell) {
+        $attributes = '';
+        if ($cell['colspan'] > 1) {
+            $attributes .= ' colspan="' . $cell['colspan'] . '"';
+        }
+        if ($cell['rowspan'] > 1) {
+            $attributes .= ' rowspan="' . $cell['rowspan'] . '"';
+        }
+        if ($cell['header']) {
+            $attributes .= ' scope="col"';
+        }
+        $html .= '<' . $cell['tag'] . $attributes . '>' . $cell['content'] . '</' . $cell['tag'] . '>';
+    }
+
+    return '<tr>' . $html . '</tr>';
 }
 }
 
