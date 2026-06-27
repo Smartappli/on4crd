@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Import obsahu dokumentu (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Shrnutí',
   'content_simple_html' => 'Obsah (HTML jednoduché)',
+  'editor_tip' => 'Tip: Použijte tlačítko Import Word (formát .docx) na liště editoru.',
   'moderation_note' => 'Poznámka moderace',
   'moderation_note_help' => 'Viditelné pro navrhovatele, pokud je článek odmítnut.',
   'moderation_note_rejected_default' => 'Odmítnuto moderací.',

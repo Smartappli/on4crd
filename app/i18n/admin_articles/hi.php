@@ -25,6 +25,7 @@ return array (
   'import_document' => 'दस्तावेज़ की सामग्री आयात करें (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'सारांश',
   'content_simple_html' => 'सामग्री (सरल HTML)',
+  'editor_tip' => 'युक्ति: संपादक टूलबार में आयात वर्ड बटन (.docx प्रारूप) का उपयोग करें।',
   'moderation_note' => 'मॉडरेशन नोट',
   'moderation_note_help' => 'लेख अस्वीकृत होने पर प्रस्तावक को दिखाई देगा।',
   'moderation_note_rejected_default' => 'मॉडरेशन द्वारा अस्वीकृत।',

@@ -25,6 +25,7 @@ return array (
   'import_document' => 'Importar conteúdo de documento (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Resumo',
   'content_simple_html' => 'Conteúdo (HTML simples)',
+  'editor_tip' => 'Dica: use o botão Importar Word (formato .docx) na barra do editor.',
   'moderation_note' => 'Nota de moderação',
   'moderation_note_help' => 'Visível para quem submeteu se o artigo for recusado.',
   'moderation_note_rejected_default' => 'Recusado pela moderação.',

@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Importējiet dokumenta saturu (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Kopsavilkums',
   'content_simple_html' => 'Saturs (HTML vienkāršs)',
+  'editor_tip' => 'Padoms: izmantojiet redaktora joslas pogu Importēt Word (.docx formātā).',
   'moderation_note' => 'Moderācijas piezīme',
   'moderation_note_help' => 'Redzams iesniedzējam, ja raksts tiek noraidīts.',
   'moderation_note_rejected_default' => 'Noraidīts moderācijā.',

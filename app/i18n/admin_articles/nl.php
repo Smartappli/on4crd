@@ -25,6 +25,7 @@ return array (
   'import_document' => 'Documentinhoud importeren (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Samenvatting',
   'content_simple_html' => 'Inhoud (eenvoudige HTML)',
+  'editor_tip' => 'Tip: gebruik de knop Word importeren (.docx) in de editorwerkbalk.',
   'moderation_note' => 'Moderatienotitie',
   'moderation_note_help' => 'Zichtbaar voor de indiener als het artikel wordt geweigerd.',
   'moderation_note_rejected_default' => 'Geweigerd door moderatie.',

@@ -25,6 +25,7 @@ return array (
   'import_document' => 'استيراد محتوى مستند (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'الملخص',
   'content_simple_html' => 'المحتوى (HTML بسيط)',
+  'editor_tip' => 'نصيحة: استخدم زر استيراد Word (.docx) في شريط أدوات المحرر.',
   'moderation_note' => 'ملاحظة الإشراف',
   'moderation_note_help' => 'تظهر لمقدم الطلب إذا تم رفض المقال.',
   'moderation_note_rejected_default' => 'مرفوض من قبل الإشراف.',

@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Importuj zawartość dokumentu (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Podsumowanie',
   'content_simple_html' => 'Treść (prosta HTML)',
+  'editor_tip' => 'Wskazówka: użyj przycisku Importuj słowo (format .docx) na pasku edytora.',
   'moderation_note' => 'Notatka moderacyjna',
   'moderation_note_help' => 'Widoczne dla zgłaszającego, jeśli artykuł zostanie odrzucony.',
   'moderation_note_rejected_default' => 'Odrzucone przez moderację.',

@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Importálja a dokumentum tartalmát (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Összegzés',
   'content_simple_html' => 'Tartalom (HTML egyszerű)',
+  'editor_tip' => 'Tipp: Használja a Word importálása (.docx formátum) gombot a szerkesztősávon.',
   'moderation_note' => 'Moderációs megjegyzés',
   'moderation_note_help' => 'Látható a beküldőnek, ha a cikk elutasításra kerül.',
   'moderation_note_rejected_default' => 'Moderáció által elutasítva.',

@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Импортиране на съдържанието на документ (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Резюме',
   'content_simple_html' => 'Съдържание (HTML просто)',
+  'editor_tip' => 'Съвет: Използвайте бутона Импортиране на Word (.docx формат) в лентата на редактора.',
   'moderation_note' => 'Бележка за модерация',
   'moderation_note_help' => 'Видимо за подателя, ако статията бъде отхвърлена.',
   'moderation_note_rejected_default' => 'Отхвърлено от модерация.',

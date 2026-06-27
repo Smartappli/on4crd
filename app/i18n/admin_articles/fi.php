@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Tuo asiakirjan sisältö (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Yhteenveto',
   'content_simple_html' => 'Sisältö (HTML yksinkertainen)',
+  'editor_tip' => 'Vihje: Käytä muokkauspalkin Import Word (.docx-muoto) -painiketta.',
   'moderation_note' => 'Moderointihuomautus',
   'moderation_note_help' => 'Näkyy lähettäjälle, jos artikkeli hylätään.',
   'moderation_note_rejected_default' => 'Hylätty moderoinnissa.',

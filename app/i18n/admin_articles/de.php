@@ -25,6 +25,7 @@ return array (
   'import_document' => 'Dokumentinhalt importieren (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Zusammenfassung',
   'content_simple_html' => 'Inhalt (einfaches HTML)',
+  'editor_tip' => 'Tipp: Verwenden Sie die Schaltfläche Word importieren (.docx) in der Editorleiste.',
   'moderation_note' => 'Moderationsnotiz',
   'moderation_note_help' => 'Sichtbar für den Einreicher, wenn der Artikel abgelehnt wird.',
   'moderation_note_rejected_default' => 'Durch Moderation abgelehnt.',

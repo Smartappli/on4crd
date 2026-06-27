@@ -25,6 +25,7 @@ return array (
   'import_document' => 'Import document content (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Summary',
   'content_simple_html' => 'Content (simple HTML)',
+  'editor_tip' => 'Tip: use the Import Word button (.docx format) in the editor toolbar.',
   'moderation_note' => 'Moderation note',
   'moderation_note_help' => 'Visible to the submitter if the article is rejected.',
   'moderation_note_rejected_default' => 'Rejected by moderation.',

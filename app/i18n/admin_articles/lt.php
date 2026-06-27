@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Importuokite dokumento turinį (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Santrauka',
   'content_simple_html' => 'Turinys (HTML paprastas)',
+  'editor_tip' => 'Patarimas: redaktoriaus juostoje naudokite mygtuką Importuoti Word (.docx formatu).',
   'moderation_note' => 'Moderavimo pastaba',
   'moderation_note_help' => 'Matoma teikėjui, jei straipsnis atmetamas.',
   'moderation_note_rejected_default' => 'Atmesta moderavimo metu.',

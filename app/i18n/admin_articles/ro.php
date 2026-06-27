@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Importați conținutul unui document (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Rezumat',
   'content_simple_html' => 'Conținut (HTML simplu)',
+  'editor_tip' => 'Sfat: Folosiți butonul Import Word (format .docx) din bara editorului.',
   'moderation_note' => 'Notă de moderare',
   'moderation_note_help' => 'Vizibil pentru autorul propunerii dacă articolul este respins.',
   'moderation_note_rejected_default' => 'Respins de moderare.',

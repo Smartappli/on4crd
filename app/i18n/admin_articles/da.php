@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Importer indholdet af et dokument (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Resumé',
   'content_simple_html' => 'Indhold (HTML enkelt)',
+  'editor_tip' => 'Tip: Brug knappen Importer Word (.docx-format) i redigeringslinjen.',
   'moderation_note' => 'Moderationsnote',
   'moderation_note_help' => 'Synlig for indsenderen, hvis artiklen afvises.',
   'moderation_note_rejected_default' => 'Afvist af moderation.',

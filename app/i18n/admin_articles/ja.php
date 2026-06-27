@@ -25,6 +25,7 @@ return array (
   'import_document' => '文書の内容をインポート (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'まとめ',
   'content_simple_html' => 'コンテンツ (単純な HTML)',
+  'editor_tip' => 'ヒント: エディターのツールバーにある [Word のインポート] ボタン (.docx 形式) を使用します。',
   'moderation_note' => 'モデレーションメモ',
   'moderation_note_help' => '記事が却下された場合に投稿者へ表示されます。',
   'moderation_note_rejected_default' => 'モデレーションにより却下されました。',

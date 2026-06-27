@@ -25,6 +25,7 @@ return array (
   'import_document' => 'Importa contenuto documento (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Riepilogo',
   'content_simple_html' => 'Contenuto (HTML semplice)',
+  'editor_tip' => 'Suggerimento: usa il pulsante Importa Word (formato .docx) nella barra dell’editor.',
   'moderation_note' => 'Nota di moderazione',
   'moderation_note_help' => 'Visibile al proponente se l’articolo viene rifiutato.',
   'moderation_note_rejected_default' => 'Rifiutato dalla moderazione.',

@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Importera innehållet i ett dokument (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Sammanfattning',
   'content_simple_html' => 'Innehåll (HTML enkelt)',
+  'editor_tip' => 'Tips: Använd knappen Importera Word (.docx-format) i redigeringsfältet.',
   'moderation_note' => 'Modereringsanteckning',
   'moderation_note_help' => 'Synligt för inskickaren om artikeln avvisas.',
   'moderation_note_rejected_default' => 'Avvisad av moderering.',

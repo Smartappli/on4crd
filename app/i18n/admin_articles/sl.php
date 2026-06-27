@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Uvozi vsebino dokumenta (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Povzetek',
   'content_simple_html' => 'Vsebina (HTML preprosto)',
+  'editor_tip' => 'Namig: uporabite gumb Uvozi Word (format .docx) v urejevalniku.',
   'moderation_note' => 'Opomba moderiranja',
   'moderation_note_help' => 'Vidno predlagatelju, če je članek zavrnjen.',
   'moderation_note_rejected_default' => 'Zavrnjeno pri moderiranju.',

@@ -25,6 +25,7 @@ return array (
   'import_document' => 'Импортировать содержимое документа (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Краткое содержание',
   'content_simple_html' => 'Контент (простой HTML)',
+  'editor_tip' => 'Совет: используйте кнопку «Импортировать Word» (формат .docx) на панели инструментов редактора.',
   'moderation_note' => 'Заметка модерации',
   'moderation_note_help' => 'Видно отправителю, если статья отклонена.',
   'moderation_note_rejected_default' => 'Отклонено модерацией.',

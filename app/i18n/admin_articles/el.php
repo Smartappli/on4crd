@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Εισαγωγή των περιεχομένων ενός εγγράφου (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Περίληψη',
   'content_simple_html' => 'Περιεχόμενο (HTML απλό)',
+  'editor_tip' => 'Συμβουλή: Χρησιμοποιήστε το κουμπί Εισαγωγή Word (μορφή .docx) στη γραμμή επεξεργασίας.',
   'moderation_note' => 'Σημείωση συντονισμού',
   'moderation_note_help' => 'Ορατό στον υποβάλλοντα αν το άρθρο απορριφθεί.',
   'moderation_note_rejected_default' => 'Απορρίφθηκε από τη συντονιστική ομάδα.',

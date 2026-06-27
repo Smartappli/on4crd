@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Import obsahu dokumentu (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Zhrnutie',
   'content_simple_html' => 'Obsah (jednoduché HTML)',
+  'editor_tip' => 'Tip: Použite tlačidlo Importovať Word (formát .docx) na paneli editora.',
   'moderation_note' => 'Poznámka moderovania',
   'moderation_note_help' => 'Viditeľné pre odosielateľa, ak je článok zamietnutý.',
   'moderation_note_rejected_default' => 'Zamietnuté moderovaním.',

@@ -25,6 +25,7 @@ return array (
   'import_document' => 'Impor isi dokumen (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Ringkasan',
   'content_simple_html' => 'Konten (HTML sederhana)',
+  'editor_tip' => 'Tip: gunakan tombol Impor Word (format .docx) di toolbar editor.',
   'moderation_note' => 'Catatan moderasi',
   'moderation_note_help' => 'Terlihat oleh pengusul jika artikel ditolak.',
   'moderation_note_rejected_default' => 'Ditolak oleh moderasi.',

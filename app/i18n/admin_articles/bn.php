@@ -25,6 +25,7 @@ return array (
   'import_document' => 'একটি নথির কনটেন্ট আমদানি করুন (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'সারাংশ',
   'content_simple_html' => 'বিষয়বস্তু (সহজ HTML)',
+  'editor_tip' => 'পরামর্শ: এডিটর টুলবারে ইমপোর্ট ওয়ার্ড বোতাম (.docx ফরম্যাট) ব্যবহার করুন।',
   'moderation_note' => 'মডারেশন নোট',
   'moderation_note_help' => 'নিবন্ধ প্রত্যাখ্যাত হলে প্রস্তাবকারী এটি দেখবেন।',
   'moderation_note_rejected_default' => 'মডারেশন দ্বারা প্রত্যাখ্যাত।',

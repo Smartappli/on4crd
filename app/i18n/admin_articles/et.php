@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Importige dokumendi sisu (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Kokkuvõte',
   'content_simple_html' => 'Sisu (HTML lihtne)',
+  'editor_tip' => 'Näpunäide. Kasutage redaktoriribal nuppu Import Word (.docx-vormingus).',
   'moderation_note' => 'Modereerimise märkus',
   'moderation_note_help' => 'Esitajale nähtav, kui artikkel tagasi lükatakse.',
   'moderation_note_rejected_default' => 'Modereerimise poolt tagasi lükatud.',

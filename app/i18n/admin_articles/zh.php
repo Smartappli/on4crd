@@ -25,6 +25,7 @@ return array (
   'import_document' => '导入文档内容（PDF, DOCX, TXT, MD, HTML）',
   'excerpt' => '概括',
   'content_simple_html' => '内容（简单 HTML）',
+  'editor_tip' => '提示：使用编辑器工具栏中的“导入 Word”按钮（.docx 格式）。',
   'moderation_note' => '审核备注',
   'moderation_note_help' => '如果文章被拒绝，提交者可见。',
   'moderation_note_rejected_default' => '已被审核拒绝。',

@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Iompórtáil a dhéanamh ar a bhfuil i ndoiciméad (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Achoimre',
   'content_simple_html' => 'Ábhar (HTML simplí)',
+  'editor_tip' => 'Leid: Úsáid an cnaipe Iompórtáil Word (formáid .docx) sa bharra eagarthóireachta.',
   'moderation_note' => 'Nóta modhnóireachta',
   'moderation_note_help' => 'Infheicthe don mholtóir má dhiúltaítear don alt.',
   'moderation_note_rejected_default' => 'Diúltaithe ag modhnóireacht.',

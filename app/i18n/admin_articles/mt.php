@@ -27,6 +27,7 @@ return array (
   'import_document' => 'Importa l-kontenut ta’ dokument (PDF, DOCX, TXT, MD, HTML)',
   'excerpt' => 'Sommarju',
   'content_simple_html' => 'Kontenut (HTML sempliċi)',
+  'editor_tip' => 'Tip: Uża l-buttuna Importa Kelma (format .docx) fil-bar tal-editur.',
   'moderation_note' => 'Nota ta’ moderazzjoni',
   'moderation_note_help' => 'Viżibbli għal min ressaq jekk l-artiklu jiġi miċħud.',
   'moderation_note_rejected_default' => 'Miċħud mill-moderazzjoni.',
