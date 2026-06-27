@@ -7,6 +7,7 @@ $collection = comics_public_collection($locale);
 $boards = $collection['boards'];
 $comicsUrl = route_url('comics');
 $homeUrl = route_url('home');
+$organizationId = $homeUrl . '#organization';
 $keywords = $collection['keywords'];
 $boardListItems = array_map(
     static fn(array $board, int $index): array => [
@@ -15,35 +16,7 @@ $boardListItems = array_map(
         'url' => (string) $board['url'],
         'name' => (string) $board['title'],
         'description' => (string) $board['text'],
-        'item' => [
-            '@type' => 'CreativeWork',
-            'name' => (string) $board['title'],
-            'description' => (string) $board['text'],
-            'url' => (string) $board['url'],
-            'image' => [
-                '@type' => 'ImageObject',
-                'url' => (string) $board['url'],
-                'contentUrl' => (string) $board['url'],
-                'encodingFormat' => (string) $board['type'],
-                'width' => (int) $board['width'],
-                'height' => (int) $board['height'],
-                'contentSize' => (int) $board['content_size'],
-                'caption' => (string) $board['title'],
-            ],
-            'thumbnailUrl' => (string) $board['thumbnail_url'],
-            'encodingFormat' => (string) $board['type'],
-            'inLanguage' => $locale,
-            'isPartOf' => ['@id' => $comicsUrl . '#collection'],
-            'creator' => [
-                '@type' => 'Organization',
-                'name' => 'Radio Club Durnal ON4CRD',
-                'url' => $homeUrl,
-            ],
-            'about' => [
-                ['@type' => 'Thing', 'name' => 'radioamateurisme'],
-                ['@type' => 'Thing', 'name' => 'amateur radio education'],
-            ],
-        ],
+        'item' => comics_public_creative_work($board, $locale, $comicsUrl . '#collection', $organizationId),
     ],
     $boards,
     array_keys($boards)
@@ -79,6 +52,7 @@ set_page_meta([
             ],
             'publisher' => [
                 '@type' => 'Organization',
+                '@id' => $organizationId,
                 'name' => 'Radio Club Durnal ON4CRD',
                 'url' => $homeUrl,
             ],
@@ -87,16 +61,7 @@ set_page_meta([
                 ['@type' => 'Thing', 'name' => 'bande dessinée radioamateur'],
                 ['@type' => 'Thing', 'name' => 'éducation radioamateur'],
             ],
-            'primaryImageOfPage' => [
-                '@type' => 'ImageObject',
-                'url' => (string) $boards[0]['url'],
-                'contentUrl' => (string) $boards[0]['url'],
-                'encodingFormat' => (string) $boards[0]['type'],
-                'width' => (int) $boards[0]['width'],
-                'height' => (int) $boards[0]['height'],
-                'contentSize' => (int) $boards[0]['content_size'],
-                'caption' => (string) $boards[0]['title'],
-            ],
+            'primaryImageOfPage' => comics_public_image_object($boards[0]),
             'mainEntity' => [
                 '@type' => 'ItemList',
                 '@id' => $comicsUrl . '#collection',
