@@ -25,33 +25,107 @@ $boards = [
     ],
 ];
 $heroImagePath = (string) $boards[0]['image'];
+$comicsUrl = route_url('comics');
+$homeUrl = route_url('home');
+$keywords = array_values(array_filter(array_map('trim', explode(',', (string) $t['keywords']))));
+$boardListItems = array_map(
+    static fn(array $board, int $index): array => [
+        '@type' => 'ListItem',
+        'position' => $index + 1,
+        'url' => asset_url((string) $board['image']),
+        'name' => (string) $board['title'],
+        'description' => (string) $board['text'],
+        'item' => [
+            '@type' => 'CreativeWork',
+            'name' => (string) $board['title'],
+            'description' => (string) $board['text'],
+            'url' => asset_url((string) $board['image']),
+            'image' => asset_url((string) $board['image']),
+            'encodingFormat' => 'image/png',
+            'inLanguage' => $locale,
+            'isPartOf' => ['@id' => $comicsUrl . '#collection'],
+            'creator' => [
+                '@type' => 'Organization',
+                'name' => 'Radio Club Durnal ON4CRD',
+                'url' => $homeUrl,
+            ],
+            'about' => [
+                ['@type' => 'Thing', 'name' => 'radioamateurisme'],
+                ['@type' => 'Thing', 'name' => 'amateur radio education'],
+            ],
+        ],
+    ],
+    $boards,
+    array_keys($boards)
+);
 
 set_page_meta([
     'title' => (string) $t['meta_title'],
     'description' => (string) $t['meta_desc'],
     'schema_type' => 'CollectionPage',
+    'content_type' => 'public_comics_collection',
+    'ai_summary' => (string) $t['ai_summary'],
     'image' => asset_url($heroImagePath),
     'image_alt' => (string) $t['hero_image_alt'],
-    'tags' => ['comics', 'bd', 'a4', 'radioamateur'],
+    'keywords' => $keywords,
+    'tags' => array_merge(['comics', 'bd', 'a4', 'radioamateur'], $keywords),
+    'section' => 'Comics',
+    'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => [
-        '@context' => 'https://schema.org',
-        '@type' => 'CollectionPage',
-        'name' => (string) $t['meta_title'],
-        'description' => (string) $t['meta_desc'],
-        'url' => route_url('comics'),
-        'image' => asset_url($heroImagePath),
-        'mainEntity' => [
-            '@type' => 'ItemList',
-            'itemListElement' => array_map(
-                static fn(array $board, int $index): array => [
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'CollectionPage',
+            '@id' => $comicsUrl . '#webpage',
+            'name' => (string) $t['meta_title'],
+            'description' => (string) $t['meta_desc'],
+            'url' => $comicsUrl,
+            'inLanguage' => $locale,
+            'keywords' => $keywords,
+            'isPartOf' => [
+                '@type' => 'WebSite',
+                '@id' => $homeUrl . '#website',
+                'name' => 'ON4CRD.be',
+                'url' => $homeUrl,
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Radio Club Durnal ON4CRD',
+                'url' => $homeUrl,
+            ],
+            'about' => [
+                ['@type' => 'Thing', 'name' => 'radioamateurisme'],
+                ['@type' => 'Thing', 'name' => 'bande dessinee radioamateur'],
+                ['@type' => 'Thing', 'name' => 'education radioamateur'],
+            ],
+            'primaryImageOfPage' => [
+                '@type' => 'ImageObject',
+                'url' => asset_url($heroImagePath),
+                'caption' => (string) $t['board_commandments_title'],
+            ],
+            'mainEntity' => [
+                '@type' => 'ItemList',
+                '@id' => $comicsUrl . '#collection',
+                'numberOfItems' => count($boards),
+                'itemListElement' => $boardListItems,
+            ],
+        ],
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                [
                     '@type' => 'ListItem',
-                    'position' => $index + 1,
-                    'name' => (string) $board['title'],
-                    'description' => (string) $board['text'],
+                    'position' => 1,
+                    'name' => 'ON4CRD.be',
+                    'item' => $homeUrl,
                 ],
-                $boards,
-                array_keys($boards)
-            ),
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => (string) $t['layout'],
+                    'item' => $comicsUrl,
+                ],
+            ],
         ],
     ],
 ]);
