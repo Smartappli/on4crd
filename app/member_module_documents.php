@@ -1884,6 +1884,7 @@ function render_member_document_module_page(string $module): void
     $showDocumentProposalForm = $canProposeDocument && (string) ($_GET['propose_document'] ?? $_GET['propose_video'] ?? '') === '1';
     $showCategoryProposalForm = $canProposeTaxonomy && (string) ($_GET['propose_category'] ?? '') === '1';
     $showSubcategoryProposalForm = $canProposeTaxonomy && (string) ($_GET['propose_subcategory'] ?? '') === '1';
+    $showProposeDropdown = $canProposeTaxonomy || ($moduleCode === 'videos' && $canProposeDocument);
     $primaryActionHref = '#member-document-list';
     $primaryActionAttributes = '';
     $primaryActionLabel = (string) $labels['view_content'];
@@ -1922,15 +1923,17 @@ function render_member_document_module_page(string $module): void
                                 <?php endif; ?>
                             </div>
                         </details>
-                    <?php elseif ($canProposeTaxonomy): ?>
+                    <?php elseif ($showProposeDropdown): ?>
                         <details class="member-document-propose-menu">
                             <summary class="button" aria-haspopup="menu"><?= e((string) $labels['propose_menu']) ?></summary>
                             <div class="member-document-propose-menu-panel" role="menu">
                                 <?php if ($moduleCode === 'videos'): ?>
                                     <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_video' => '1'])) ?>" data-member-document-modal-open="member-document-proposal-dialog" aria-haspopup="dialog" aria-controls="member-document-proposal-dialog"><?= e((string) $labels['propose_presentation_item']) ?></a>
                                 <?php endif; ?>
-                                <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_category' => '1'])) ?>" data-member-document-modal-open="member-document-category-dialog" aria-haspopup="dialog" aria-controls="member-document-category-dialog"><?= e((string) $labels['propose_category_item']) ?></a>
-                                <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_subcategory' => '1'])) ?>" data-member-document-modal-open="member-document-subcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subcategory-dialog"><?= e((string) $labels['propose_subcategory_item']) ?></a>
+                                <?php if ($canProposeTaxonomy): ?>
+                                    <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_category' => '1'])) ?>" data-member-document-modal-open="member-document-category-dialog" aria-haspopup="dialog" aria-controls="member-document-category-dialog"><?= e((string) $labels['propose_category_item']) ?></a>
+                                    <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_subcategory' => '1'])) ?>" data-member-document-modal-open="member-document-subcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subcategory-dialog"><?= e((string) $labels['propose_subcategory_item']) ?></a>
+                                <?php endif; ?>
                                 <?php if ($moduleCode !== 'videos'): ?>
                                     <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_document' => '1'])) ?>" data-member-document-modal-open="member-document-proposal-dialog" aria-haspopup="dialog" aria-controls="member-document-proposal-dialog"><?= e((string) $labels['propose_presentation_item']) ?></a>
                                 <?php endif; ?>

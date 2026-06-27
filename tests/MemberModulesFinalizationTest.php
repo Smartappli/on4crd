@@ -451,6 +451,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function member_document_upsert_subcategory(', $renderer);
         self::assertStringContainsString("member_document_module_allows_member_management(\$moduleCode)", $renderer);
         self::assertStringContainsString("\$canProposeTaxonomy = in_array(\$moduleCode, ['presentations', 'videos'], true);", $renderer);
+        self::assertStringContainsString("\$showProposeDropdown = \$canProposeTaxonomy || (\$moduleCode === 'videos' && \$canProposeDocument);", $renderer);
+        self::assertStringContainsString("elseif (\$showProposeDropdown)", $renderer);
         self::assertStringContainsString("if (\$action === 'propose_category' && \$canProposeTaxonomy)", $renderer);
         self::assertStringContainsString("if (\$action === 'propose_subcategory' && \$canProposeTaxonomy)", $renderer);
         self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'category'", $renderer);
