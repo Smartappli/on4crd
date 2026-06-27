@@ -2937,12 +2937,25 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   font-weight: 750;
   line-height: 1.2;
   text-decoration: none;
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--module-taxonomy-color) 58%, transparent);
 }
 .module-taxonomy-children > .module-taxonomy-item {
   --module-taxonomy-color: #15803d;
 }
 .module-taxonomy-children .module-taxonomy-children > .module-taxonomy-item {
   --module-taxonomy-color: #dc2626;
+}
+.module-taxonomy-item.taxonomy-pill-category {
+  --module-taxonomy-color: #2563eb;
+  --taxonomy-pill-color: #2563eb;
+}
+.module-taxonomy-item.taxonomy-pill-subcategory {
+  --module-taxonomy-color: #15803d;
+  --taxonomy-pill-color: #15803d;
+}
+.module-taxonomy-item.taxonomy-pill-subsubcategory {
+  --module-taxonomy-color: #dc2626;
+  --taxonomy-pill-color: #dc2626;
 }
 .module-taxonomy-item:hover,
 .module-taxonomy-item.is-active {

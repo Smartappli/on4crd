@@ -765,7 +765,7 @@ ob_start();
                     <strong><?= (int) array_sum($albumCategoryCounts) ?></strong>
                 </a>
                 <?php foreach ($visibleAlbumCategories as $categoryCode => $categoryLabel): ?>
-                    <a class="albums-category-item module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('albums', ['category' => (string) $categoryCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                    <a class="albums-category-item module-taxonomy-item taxonomy-pill-category<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('albums', ['category' => (string) $categoryCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                         <span><?= e((string) $categoryLabel) ?></span>
                         <strong><?= (int) ($albumCategoryCounts[$categoryCode] ?? 0) ?></strong>
                     </a>
@@ -773,7 +773,7 @@ ob_start();
                         <div class="albums-subcategory-list module-taxonomy-children">
                             <?php foreach ($visibleAlbumSubcategoriesByCategory[(string) $categoryCode] as $subcategoryInfo): ?>
                                 <?php $subCode = album_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
-                                <a class="albums-subcategory-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('albums', ['category' => (string) $categoryCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' aria-current="page"' : '' ?>>
+                                <a class="albums-subcategory-item module-taxonomy-item module-taxonomy-subitem taxonomy-pill-subcategory<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('albums', ['category' => (string) $categoryCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' aria-current="page"' : '' ?>>
                                     <span><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></span>
                                     <strong><?= (int) ($subcategoryInfo['total'] ?? 0) ?></strong>
                                 </a>

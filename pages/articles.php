@@ -687,7 +687,7 @@ ob_start();
                     <strong><?= (int) array_sum($themeCounts) ?></strong>
                 </a>
             <?php foreach ($visibleArticleCategories as $themeCode => $themeLabel): ?>
-                <a class="articles-category-item module-taxonomy-item<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                <a class="articles-category-item module-taxonomy-item taxonomy-pill-category<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                     <span><?= e((string) $themeLabel) ?></span>
                     <strong><?= (int) ($themeCounts[$themeCode] ?? 0) ?></strong>
                 </a>
@@ -695,7 +695,7 @@ ob_start();
                     <div class="module-taxonomy-children">
                         <?php foreach ($visibleArticleSubcategoriesByCategory[(string) $themeCode] as $subcategoryInfo): ?>
                             <?php $subCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
-                            <a class="articles-category-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                            <a class="articles-category-item module-taxonomy-item module-taxonomy-subitem taxonomy-pill-subcategory<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                                 <span><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></span>
                                 <strong><?= (int) ($subcategoryInfo['total'] ?? 0) ?></strong>
                             </a>
@@ -704,7 +704,7 @@ ob_start();
                                 <div class="module-taxonomy-children">
                                     <?php foreach ($visibleArticleSubsubcategoriesByParent[$subsubParentRef] as $subsubcategoryInfo): ?>
                                         <?php $subsubCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')); ?>
-                                        <a class="articles-category-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'subcategory' => $subCode, 'subsubcategory' => $subsubCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' aria-current="page"' : '' ?>>
+                                        <a class="articles-category-item module-taxonomy-item module-taxonomy-subitem taxonomy-pill-subsubcategory<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'subcategory' => $subCode, 'subsubcategory' => $subsubCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' aria-current="page"' : '' ?>>
                                             <span><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubCode)) ?></span>
                                             <strong><?= (int) ($subsubcategoryInfo['total'] ?? 0) ?></strong>
                                         </a>

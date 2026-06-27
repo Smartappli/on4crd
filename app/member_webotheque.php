@@ -2360,7 +2360,7 @@ function render_webotheque_page(): void
                         <strong><?= (int) array_sum(array_map('intval', (array) ($stats['by_category'] ?? []))) ?></strong>
                     </a>
                     <?php foreach ($visibleCategories as $code => $label): ?>
-                        <a class="webotheque-domain-item module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code])) ?>"<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                        <a class="webotheque-domain-item module-taxonomy-item taxonomy-pill-category<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code])) ?>"<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === '' && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                             <span><?= e((string) $label) ?></span>
                             <strong><?= (int) ($stats['by_category'][$code] ?? 0) ?></strong>
                         </a>
@@ -2368,7 +2368,7 @@ function render_webotheque_page(): void
                             <div class="module-taxonomy-children">
                                 <?php foreach ($visibleSubcategoriesByCategory[(string) $code] as $subcategoryInfo): ?>
                                     <?php $subCode = webotheque_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
-                                    <a class="webotheque-domain-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode])) ?>"<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                                    <a class="webotheque-domain-item module-taxonomy-item module-taxonomy-subitem taxonomy-pill-subcategory<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode])) ?>"<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                                         <span><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></span>
                                         <strong><?= (int) ($subcategoryInfo['total'] ?? 0) ?></strong>
                                     </a>
@@ -2377,7 +2377,7 @@ function render_webotheque_page(): void
                                         <div class="module-taxonomy-children">
                                             <?php foreach ($visibleSubsubcategoriesByParent[$subsubKey] as $subsubcategoryInfo): ?>
                                                 <?php $subsubCode = webotheque_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')); ?>
-                                                <a class="webotheque-domain-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode, 'subsubcategory' => $subsubCode])) ?>"<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' aria-current="page"' : '' ?>>
+                                                <a class="webotheque-domain-item module-taxonomy-item module-taxonomy-subitem taxonomy-pill-subsubcategory<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode, 'subsubcategory' => $subsubCode])) ?>"<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === $subCode && $subsubcategoryFilter === $subsubCode ? ' aria-current="page"' : '' ?>>
                                                     <span><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubCode)) ?></span>
                                                     <strong><?= (int) ($subsubcategoryInfo['total'] ?? 0) ?></strong>
                                                 </a>

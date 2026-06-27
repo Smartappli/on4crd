@@ -408,7 +408,7 @@ ob_start();
                     <strong><?= (int) ($wikiThemes !== [] ? array_sum($wikiThemes) : $totalPagesCount) ?></strong>
                 </a>
                 <?php foreach ($visibleWikiThemes as $themeCode => $themeLabel): ?>
-                    <a class="wiki-theme-item module-taxonomy-item<?= !$favoritesOnly && $themeCode === $theme && $subtheme === '' && $subsubtheme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeCode === $theme && $subtheme === '' && $subsubtheme === '' ? ' aria-current="page"' : '' ?>>
+                    <a class="wiki-theme-item module-taxonomy-item taxonomy-pill-category<?= !$favoritesOnly && $themeCode === $theme && $subtheme === '' && $subsubtheme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeCode === $theme && $subtheme === '' && $subsubtheme === '' ? ' aria-current="page"' : '' ?>>
                         <span><?= e((string) ($wikiCategoryLabels[$themeCode] ?? wiki_category_label_from_code($themeCode))) ?></span>
                         <strong><?= (int) ($wikiThemes[$themeCode] ?? 0) ?></strong>
                     </a>
@@ -416,7 +416,7 @@ ob_start();
                         <div class="module-taxonomy-children">
                             <?php foreach ($visibleWikiSubthemes[(string) $themeCode] as $subthemeInfo): ?>
                                 <?php $subCode = wiki_subcategory_code((string) ($subthemeInfo['code'] ?? '')); ?>
-                                <a class="wiki-theme-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode && $subsubtheme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'subtheme' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode && $subsubtheme === '' ? ' aria-current="page"' : '' ?>>
+                                <a class="wiki-theme-item module-taxonomy-item module-taxonomy-subitem taxonomy-pill-subcategory<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode && $subsubtheme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'subtheme' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode && $subsubtheme === '' ? ' aria-current="page"' : '' ?>>
                                     <span><?= e((string) ($subthemeInfo['label'] ?? $subCode)) ?></span>
                                     <strong><?= (int) ($subthemeInfo['total'] ?? 0) ?></strong>
                                 </a>
@@ -425,7 +425,7 @@ ob_start();
                                     <div class="module-taxonomy-children">
                                         <?php foreach ($visibleWikiSubsubthemes[$subsubParentRef] as $subsubthemeInfo): ?>
                                             <?php $subsubCode = wiki_subsubcategory_code((string) ($subsubthemeInfo['code'] ?? '')); ?>
-                                            <a class="wiki-theme-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode && $subsubtheme === $subsubCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'subtheme' => $subCode, 'subsubtheme' => $subsubCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode && $subsubtheme === $subsubCode ? ' aria-current="page"' : '' ?>>
+                                            <a class="wiki-theme-item module-taxonomy-item module-taxonomy-subitem taxonomy-pill-subsubcategory<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode && $subsubtheme === $subsubCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'subtheme' => $subCode, 'subsubtheme' => $subsubCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode && $subsubtheme === $subsubCode ? ' aria-current="page"' : '' ?>>
                                                 <span><?= e((string) ($subsubthemeInfo['label'] ?? $subsubCode)) ?></span>
                                                 <strong><?= (int) ($subsubthemeInfo['total'] ?? 0) ?></strong>
                                             </a>

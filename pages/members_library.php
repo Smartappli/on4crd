@@ -974,7 +974,7 @@ ob_start();
                 <?php endif; ?>
                 <?php foreach ($visibleCategories as $cat): ?>
                     <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
-                    <a class="members-library-category-item module-taxonomy-item<?= !$favoritesOnly && $catName === $category && $subcategory === '' && $subsubcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
+                    <a class="members-library-category-item module-taxonomy-item taxonomy-pill-category<?= !$favoritesOnly && $catName === $category && $subcategory === '' && $subsubcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
                         <span><?= e((string) ($cat['label'] ?? $catName)) ?></span>
                         <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
                     </a>
@@ -982,7 +982,7 @@ ob_start();
                         <div class="members-library-subcategory-list module-taxonomy-children">
                             <?php foreach ($visibleSubcategoriesByCategory[$catName] as $subcatInfo): ?>
                                 <?php $subcatCode = (string) ($subcatInfo['code'] ?? ''); if ($subcatCode === '') { continue; } ?>
-                                <a class="members-library-subcategory-item module-taxonomy-item<?= !$favoritesOnly && $catName === $category && $subcatCode === $subcategory && $subsubcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'q' => $search, 'tag' => $tag])) ?>">
+                                <a class="members-library-subcategory-item module-taxonomy-item taxonomy-pill-subcategory<?= !$favoritesOnly && $catName === $category && $subcatCode === $subcategory && $subsubcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'q' => $search, 'tag' => $tag])) ?>">
                                     <span><?= e((string) ($subcatInfo['label'] ?? $subcatCode)) ?></span>
                                     <strong><?= (int) ($subcatInfo['total'] ?? 0) ?></strong>
                                 </a>
@@ -991,7 +991,7 @@ ob_start();
                                     <div class="members-library-subsubcategory-list module-taxonomy-children">
                                         <?php foreach ($visibleSubsubcategoriesByParent[$subsubParentRef] as $subsubcatInfo): ?>
                                             <?php $subsubcatCode = (string) ($subsubcatInfo['code'] ?? ''); if ($subsubcatCode === '') { continue; } ?>
-                                            <a class="members-library-subsubcategory-item module-taxonomy-item<?= !$favoritesOnly && $catName === $category && $subcatCode === $subcategory && $subsubcatCode === $subsubcategory ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'subsubcategory' => $subsubcatCode, 'q' => $search, 'tag' => $tag])) ?>">
+                                            <a class="members-library-subsubcategory-item module-taxonomy-item taxonomy-pill-subsubcategory<?= !$favoritesOnly && $catName === $category && $subcatCode === $subcategory && $subsubcatCode === $subsubcategory ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'subsubcategory' => $subsubcatCode, 'q' => $search, 'tag' => $tag])) ?>">
                                                 <span><?= e((string) ($subsubcatInfo['label'] ?? $subsubcatCode)) ?></span>
                                                 <strong><?= (int) ($subsubcatInfo['total'] ?? 0) ?></strong>
                                             </a>
