@@ -298,6 +298,67 @@ async function assertArticleDocxWysiwygImport(driver, token) {
     return importButton ? !importButton.disabled : false;
   `);
   assert.equal(restored, true, 'Le bouton Importer Word doit etre restaure apres conversion.');
+
+  const safeText = `Import DOCX propre ${token}`;
+  await driver.executeScript(`
+    const expected = arguments[0];
+    window.mammoth = {
+      convertToHtml: async () => ({
+        value: '<h2>' + expected + '</h2>'
+          + '<p><strong>Gras</strong> <a href="https://example.test/import-docx" target="_blank">Lien fiable</a></p>'
+          + '<table><tbody><tr><td colspan="2">Cellule conservee</td></tr></tbody></table>',
+      }),
+    };
+  `, safeText);
+  await fileInput.sendKeys(fixturePath);
+
+  const safeImport = await driver.wait(async () => driver.executeScript(`
+    const expected = arguments[0];
+    const textarea = document.querySelector('textarea[name="content"]');
+    const wrapper = textarea ? textarea.previousElementSibling : null;
+    const editor = wrapper ? wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (!textarea || !editor || !editor.textContent.includes(expected) || !textarea.value.includes(expected)) {
+      return null;
+    }
+    return editor.innerHTML;
+  `, safeText), timeoutMs);
+  assert.match(safeImport, /<h2>Import DOCX propre/, 'Le titre importe doit etre conserve.');
+  assert.match(safeImport, /<strong>Gras<\/strong>/, 'Le gras importe doit etre conserve.');
+  assert.match(safeImport, /href="https:\/\/example\.test\/import-docx"/, 'Le lien HTTPS importe doit etre conserve.');
+  assert.match(safeImport, /rel="noopener noreferrer"/, 'Le lien target blank importe doit etre protege.');
+  assert.match(safeImport, /colspan="2"/, 'Le colspan valide importe doit etre conserve.');
+
+  const unsafeText = `Import DOCX dangereux ${token}`;
+  await driver.executeScript(`
+    const expected = arguments[0];
+    window.__wysiwygUnsafeExecuted = false;
+    window.mammoth = {
+      convertToHtml: async () => ({
+        value: '<p onclick="window.__wysiwygUnsafeExecuted=true">' + expected + '</p>'
+          + '<script>window.__wysiwygUnsafeExecuted=true</script>'
+          + '<a href="javascript:window.__wysiwygUnsafeExecuted=true" target="_blank">Lien</a>'
+          + '<img src="data:image/svg+xml;base64,PHN2Zy8+">'
+          + '<table><tbody><tr><td colspan="99" onclick="evil()">Cellule</td></tr></tbody></table>',
+      }),
+    };
+  `, unsafeText);
+  await fileInput.sendKeys(fixturePath);
+
+  const sanitized = await driver.wait(async () => driver.executeScript(`
+    const expected = arguments[0];
+    const textarea = document.querySelector('textarea[name="content"]');
+    const wrapper = textarea ? textarea.previousElementSibling : null;
+    const editor = wrapper ? wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (!textarea || !editor || !editor.textContent.includes(expected) || !textarea.value.includes(expected)) {
+      return null;
+    }
+    return {
+      html: editor.innerHTML,
+      executed: window.__wysiwygUnsafeExecuted === true,
+    };
+  `, unsafeText), timeoutMs);
+  assert.equal(sanitized.executed, false, 'Le HTML importe ne doit pas executer de script.');
+  assert.doesNotMatch(sanitized.html, /onclick|<script|javascript:|image\/svg|colspan="99"/i, 'Le HTML importe doit etre nettoye avant insertion.');
 }
 
 async function submitProposalStatus(driver, title, status, note) {
