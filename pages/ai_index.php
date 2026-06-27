@@ -93,6 +93,9 @@ $comicsItems = array_map(
         'name' => (string) $board['title'],
         'url' => (string) $board['url'],
         'type' => (string) $board['type'],
+        'width' => (int) $board['width'],
+        'height' => (int) $board['height'],
+        'content_size' => (int) $board['content_size'],
     ],
     $comicsCollection['boards']
 );
