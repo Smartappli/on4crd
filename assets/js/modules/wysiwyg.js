@@ -367,7 +367,10 @@
           const arrayBuffer = await file.arrayBuffer();
           const result = await mammoth.convertToHtml({ arrayBuffer });
           const importedHtml = sanitizeImportedHtml(result.value);
-          editor.innerHTML = importedHtml !== '' ? importedHtml : '<p><br></p>';
+          if (importedHtml === '') {
+            throw new Error('Aucun contenu Word exploitable.');
+          }
+          editor.innerHTML = importedHtml;
           sync();
         } catch (error) {
           window.alert('Import Word impossible pour le moment.');
