@@ -131,6 +131,85 @@ async function submitFormByHidden(driver, action, hiddenName, hiddenValue) {
   await assertNoServerError(driver);
 }
 
+function createDocxFixture(token) {
+  return runSeleniumPhp(`
+$token = preg_replace('/[^A-Za-z0-9_.-]/', '-', (string) (getenv('SELENIUM_TOKEN') ?: 'docx'));
+$path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $token . '.docx';
+if (!class_exists('ZipArchive')) {
+    echo '';
+    return;
+}
+$zip = new ZipArchive();
+if ($zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+    echo '';
+    return;
+}
+$contentTypes = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+</Types>
+XML;
+$rels = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>
+XML;
+$documentText = 'Import DOCX Selenium ' . $token;
+$document = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    . '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+    . '<w:body><w:p><w:r><w:t>' . htmlspecialchars($documentText, ENT_XML1 | ENT_COMPAT, 'UTF-8') . '</w:t></w:r></w:p></w:body>'
+    . '</w:document>';
+$zip->addFromString('[Content_Types].xml', $contentTypes);
+$zip->addFromString('_rels/.rels', $rels);
+$zip->addFromString('word/document.xml', $document);
+$zip->close();
+echo $path;
+`, { SELENIUM_TOKEN: token }).trim();
+}
+
+async function assertArticleDocxWysiwygImport(driver, token) {
+  const fixturePath = createDocxFixture(token);
+  assert.notEqual(fixturePath, '', 'Un fichier DOCX de test doit pouvoir etre genere.');
+
+  const controlsReady = await driver.wait(async () => driver.executeScript(`
+    const textarea = document.querySelector('textarea[name="content"][data-wysiwyg="full"]');
+    const wrapper = textarea ? textarea.previousElementSibling : null;
+    if (!textarea || !wrapper || !wrapper.classList.contains('wysiwyg')) {
+      return null;
+    }
+    const importButton = Array.from(wrapper.querySelectorAll('.wysiwyg-toolbar button'))
+      .find((button) => button.textContent.trim() === 'Importer Word');
+    const fileInput = wrapper.querySelector('.wysiwyg-toolbar input[type="file"][accept*=".docx"]');
+    const editor = wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]');
+    return importButton && fileInput && editor ? true : null;
+  `), timeoutMs);
+  assert.equal(controlsReady, true, 'Le WYSIWYG article doit exposer le bouton Importer Word.');
+
+  const fileInput = await driver.findElement(By.css('.wysiwyg-toolbar input[type="file"][accept*=".docx"]'));
+  await driver.executeScript(`
+    const input = arguments[0];
+    input.hidden = false;
+    input.style.display = 'block';
+  `, fileInput);
+  await fileInput.sendKeys(fixturePath);
+
+  const importedText = `Import DOCX Selenium ${token}`;
+  const imported = await driver.wait(async () => driver.executeScript(`
+    const expected = arguments[0];
+    const editor = document.querySelector('.wysiwyg-editor[contenteditable="true"]');
+    const textarea = document.querySelector('textarea[name="content"]');
+    if (!editor || !textarea) {
+      return null;
+    }
+    return editor.textContent.includes(expected) && textarea.value.includes(expected) ? true : null;
+  `, importedText), timeoutMs);
+  assert.equal(imported, true, 'Le DOCX importe doit remplir l editeur WYSIWYG et le textarea article.');
+}
+
 async function submitProposalStatus(driver, title, status, note) {
   const form = await driver.findElement(By.xpath(
     `//article[contains(@class,"article-item")][.//h3[contains(normalize-space(.), ${xpathLiteral(title)})]]//form[.//input[@name="action" and @value="update_proposal_status"]]`,
@@ -483,6 +562,7 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
       const proposal = createContentProposal('articles', proposalTitle, `Resume proposition ${token}`);
       await loginAsAdmin(driver, credentials.username, credentials.password);
       await visit(driver, 'admin_articles');
+      await assertArticleDocxWysiwygImport(driver, token);
 
       const categoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_category"]]'));
       await categoryForm.findElement(By.css('input[name="category_label"]')).sendKeys(categoryLabel);
