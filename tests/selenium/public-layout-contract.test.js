@@ -33,6 +33,7 @@ const layoutRoutes = [
   ['committee', {}],
   ['press', {}],
   ['schools', {}],
+  ['comics', {}],
   ['relais', {}],
   ['code_q', {}],
   ['code_cw', {}],
@@ -85,7 +86,7 @@ test('Selenium layout: navigation, preferences, idee et footer sont disponibles 
       return;
     }
 
-    const expectedNavFragments = ['route=news', 'route=events', 'route=tools', 'route=search', 'route=directory'];
+    const expectedNavFragments = ['route=news', 'route=comics', 'route=events', 'route=tools', 'route=search', 'route=directory'];
     const navHrefs = await driver.executeScript(
       'return Array.from(document.querySelectorAll(".nav a[href]")).map((link) => link.getAttribute("href") || "");',
     );

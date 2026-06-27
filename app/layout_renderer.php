@@ -199,6 +199,7 @@ function module_preload_assets_for_route(string $route): array
         'chatbot' => 'assets/img/module-hero-chatbot.png',
         'classifieds' => 'assets/img/module-hero-classifieds.png',
         'classifieds_manage' => 'assets/img/module-hero-classifieds.png',
+        'comics' => 'assets/img/comics-a4-thumbnails.png',
         'directory' => 'assets/img/module-hero-directory.png',
         'events' => 'assets/img/module-hero-events.png',
         'fichiers' => 'assets/img/module-hero-files.png',
@@ -274,7 +275,8 @@ function render_layout_impl(string $content, string $title = ''): string
     $navPrimaryItems = [
         ['label' => (string) $layoutI18n['nav_home'], 'route' => 'home', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_news'], 'route' => 'news', 'module' => 'news'],
-        ['label' => 'Ham Academy', 'url' => 'https://ham.academy', 'module' => ''],
+        ['label' => 'Acedemy', 'url' => 'https://ham.academy', 'module' => ''],
+        ['label' => 'Comics', 'route' => 'comics', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
         ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],

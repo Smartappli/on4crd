@@ -36,6 +36,7 @@ const publicPageRoutes = [
   ['committee', {}],
   ['press', {}],
   ['schools', {}],
+  ['comics', {}],
   ['events', {}],
   ['auctions', {}],
   ['relais', {}],

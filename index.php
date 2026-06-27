@@ -281,7 +281,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route], $route);
 }
 
-$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'donation', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'gdpr', 'search', 'idea_submit', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'errors', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
+$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'donation', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'gdpr', 'search', 'idea_submit', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'comics', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'errors', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
 if (!isset($routeModules[$route]) && !in_array($route, $publicRoutes, true)) {
     http_response_code(404);
     render_localized_not_found();
@@ -352,6 +352,7 @@ switch ($route) {
     case 'committee': $dispatchPage('pages/committee.php'); break;
     case 'press': $dispatchPage('pages/press.php'); break;
     case 'schools': $dispatchPage('pages/schools.php'); break;
+    case 'comics': $dispatchPage('pages/comics.php'); break;
     case 'relais': $dispatchPage('pages/relais.php'); break;
     case 'events': $dispatchPage('pages/events.php'); break;
     case 'events_feed': $dispatchPage('pages/events_feed.php'); break;

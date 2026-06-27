@@ -33,6 +33,7 @@ const coveredRoutes = new Set([
   'committee',
   'press',
   'schools',
+  'comics',
   'events',
   'events_feed',
   'event_view',
