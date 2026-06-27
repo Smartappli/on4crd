@@ -245,6 +245,7 @@ function render_layout_impl(string $content, string $title = ''): string
         $currentLocale = 'fr';
     }
     $layoutI18n = i18n_domain_locale('layout', $currentLocale);
+    $comicsI18n = i18n_domain_locale('comics', $currentLocale);
     $ideaI18n = i18n_domain_locale('idea', $currentLocale);
     $ideaText = static fn(string $key): string => (string) ($ideaI18n[$key] ?? $key);
     $currentAccent = strtolower((string) ($_SESSION['accent'] ?? 'blue'));
@@ -275,7 +276,7 @@ function render_layout_impl(string $content, string $title = ''): string
     $navPrimaryItems = [
         ['label' => (string) $layoutI18n['nav_home'], 'route' => 'home', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_news'], 'route' => 'news', 'module' => 'news'],
-        ['label' => 'Comics', 'route' => 'comics', 'module' => ''],
+        ['label' => (string) ($comicsI18n['layout'] ?? 'Comics'), 'route' => 'comics', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
         ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],

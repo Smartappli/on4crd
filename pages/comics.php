@@ -49,7 +49,7 @@ set_page_meta([
     'image_alt' => (string) $t['hero_image_alt'],
     'keywords' => $keywords,
     'tags' => array_merge(['comics', 'bd', 'a4', 'radioamateur'], $keywords),
-    'section' => 'Comics',
+    'section' => (string) $collection['layout'],
     'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         [
@@ -74,8 +74,8 @@ set_page_meta([
             ],
             'about' => [
                 ['@type' => 'Thing', 'name' => 'radioamateurisme'],
-                ['@type' => 'Thing', 'name' => 'bande dessinee radioamateur'],
-                ['@type' => 'Thing', 'name' => 'education radioamateur'],
+                ['@type' => 'Thing', 'name' => 'bande dessinée radioamateur'],
+                ['@type' => 'Thing', 'name' => 'éducation radioamateur'],
             ],
             'primaryImageOfPage' => [
                 '@type' => 'ImageObject',
