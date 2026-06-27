@@ -100,7 +100,9 @@ function article_extract_docx_html(string $path): string
     }
 
     $xpath = new DOMXPath($dom);
-    $relationships = article_docx_relationship_targets(article_docx_part_contents($path, 'word/_rels/document.xml.rels'));
+    $relationshipsXml = article_docx_part_contents($path, 'word/_rels/document.xml.rels');
+    $relationships = article_docx_relationship_targets($relationshipsXml);
+    $imageDataUris = article_docx_image_data_uris($path, $relationshipsXml);
     $numberingFormats = article_docx_numbering_formats(article_docx_part_contents($path, 'word/numbering.xml'));
     $bodyNodes = $xpath->query('/*[local-name()="document"]/*[local-name()="body"]/*');
     if (!$bodyNodes instanceof DOMNodeList) {
@@ -120,7 +122,7 @@ function article_extract_docx_html(string $path): string
                 $html[] = '</' . $openListTag . '>';
                 $openListTag = null;
             }
-            $table = article_docx_table_html($block, $xpath, $relationships);
+            $table = article_docx_table_html($block, $xpath, $relationships, $imageDataUris);
             if ($table !== '') {
                 $html[] = $table;
             }
@@ -131,7 +133,7 @@ function article_extract_docx_html(string $path): string
             continue;
         }
 
-        $inlineHtml = article_docx_inline_html($block, $xpath, $relationships);
+        $inlineHtml = article_docx_inline_html($block, $xpath, $relationships, $imageDataUris);
         if (article_docx_html_is_empty($inlineHtml)) {
             if ($openListTag !== null) {
                 $html[] = '</' . $openListTag . '>';
@@ -453,6 +455,101 @@ function article_docx_relationship_targets(string $xml): array
 }
 }
 
+if (!function_exists('article_docx_image_data_uris')) {
+/**
+ * @return array<string,string>
+ */
+function article_docx_image_data_uris(string $path, string $relationshipsXml): array
+{
+    if ($relationshipsXml === '' || !is_file($path)) {
+        return [];
+    }
+
+    $dom = new DOMDocument();
+    $previousUseInternalErrors = libxml_use_internal_errors(true);
+    $loaded = $dom->loadXML($relationshipsXml);
+    libxml_clear_errors();
+    libxml_use_internal_errors($previousUseInternalErrors);
+    if (!$loaded) {
+        return [];
+    }
+
+    $xpath = new DOMXPath($dom);
+    $nodes = $xpath->query('//*[local-name()="Relationship"]');
+    if (!$nodes instanceof DOMNodeList) {
+        return [];
+    }
+
+    $images = [];
+    foreach ($nodes as $node) {
+        if (!$node instanceof DOMElement) {
+            continue;
+        }
+
+        $id = trim($node->getAttribute('Id'));
+        $type = trim($node->getAttribute('Type'));
+        $target = trim($node->getAttribute('Target'));
+        $targetMode = strtolower(trim($node->getAttribute('TargetMode')));
+        if ($id === '' || $target === '' || $targetMode === 'external' || !str_ends_with($type, '/image')) {
+            continue;
+        }
+
+        $partName = article_docx_relationship_part_name('word', $target);
+        $mimeType = article_docx_image_mime_type($partName);
+        if ($partName === '' || $mimeType === '') {
+            continue;
+        }
+
+        $bytes = article_docx_part_contents($path, $partName);
+        if ($bytes === '' || strlen($bytes) > 5 * 1024 * 1024) {
+            continue;
+        }
+
+        $images[$id] = 'data:' . $mimeType . ';base64,' . base64_encode($bytes);
+    }
+
+    return $images;
+}
+}
+
+if (!function_exists('article_docx_relationship_part_name')) {
+function article_docx_relationship_part_name(string $baseDirectory, string $target): string
+{
+    $target = trim(str_replace('\\', '/', $target));
+    if ($target === '' || preg_match('/^[a-z][a-z0-9+.-]*:/i', $target) === 1) {
+        return '';
+    }
+
+    $path = str_starts_with($target, '/') ? ltrim($target, '/') : trim($baseDirectory, '/') . '/' . $target;
+    $parts = [];
+    foreach (explode('/', $path) as $segment) {
+        if ($segment === '' || $segment === '.') {
+            continue;
+        }
+        if ($segment === '..') {
+            array_pop($parts);
+            continue;
+        }
+        $parts[] = $segment;
+    }
+
+    return implode('/', $parts);
+}
+}
+
+if (!function_exists('article_docx_image_mime_type')) {
+function article_docx_image_mime_type(string $partName): string
+{
+    return match (strtolower(pathinfo($partName, PATHINFO_EXTENSION))) {
+        'png' => 'image/png',
+        'jpg', 'jpeg' => 'image/jpeg',
+        'gif' => 'image/gif',
+        'webp' => 'image/webp',
+        default => '',
+    };
+}
+}
+
 if (!function_exists('article_docx_attribute')) {
 function article_docx_attribute(DOMElement $element, string $localName): string
 {
@@ -482,8 +579,9 @@ function article_docx_paragraph_style(DOMElement $paragraph, DOMXPath $xpath): s
 if (!function_exists('article_docx_inline_html')) {
 /**
  * @param array<string,string> $relationships
+ * @param array<string,string> $imageDataUris
  */
-function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $relationships): string
+function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $relationships, array $imageDataUris = []): string
 {
     $html = '';
     foreach ($container->childNodes as $child) {
@@ -503,11 +601,11 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
             continue;
         }
         if ($localName === 'r') {
-            $html .= article_docx_run_html($child, $xpath);
+            $html .= article_docx_run_html($child, $xpath, $imageDataUris);
             continue;
         }
         if ($localName === 'hyperlink') {
-            $inner = article_docx_inline_html($child, $xpath, $relationships);
+            $inner = article_docx_inline_html($child, $xpath, $relationships, $imageDataUris);
             if (article_docx_html_is_empty($inner)) {
                 continue;
             }
@@ -533,7 +631,7 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
             continue;
         }
 
-        $html .= article_docx_inline_html($child, $xpath, $relationships);
+        $html .= article_docx_inline_html($child, $xpath, $relationships, $imageDataUris);
     }
 
     return trim((string) preg_replace('/[ \t\r\n]+/u', ' ', $html));
@@ -541,7 +639,10 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
 }
 
 if (!function_exists('article_docx_run_html')) {
-function article_docx_run_html(DOMElement $run, DOMXPath $xpath): string
+/**
+ * @param array<string,string> $imageDataUris
+ */
+function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $imageDataUris = []): string
 {
     $html = '';
     foreach ($run->childNodes as $child) {
@@ -563,6 +664,10 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath): string
         }
         if ($localName === 'br') {
             $html .= '<br>';
+            continue;
+        }
+        if ($localName === 'drawing' || $localName === 'pict') {
+            $html .= article_docx_run_image_html($child, $xpath, $imageDataUris);
         }
     }
 
@@ -584,6 +689,117 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath): string
 }
 }
 
+if (!function_exists('article_docx_run_image_html')) {
+/**
+ * @param array<string,string> $imageDataUris
+ */
+function article_docx_run_image_html(DOMElement $container, DOMXPath $xpath, array $imageDataUris): string
+{
+    if ($imageDataUris === []) {
+        return '';
+    }
+
+    $imageNodes = $xpath->query('.//*[local-name()="blip" or local-name()="imagedata"]', $container);
+    if (!$imageNodes instanceof DOMNodeList || $imageNodes->length === 0) {
+        return '';
+    }
+
+    $html = [];
+    foreach ($imageNodes as $imageNode) {
+        if (!$imageNode instanceof DOMElement) {
+            continue;
+        }
+
+        $relationshipId = article_docx_attribute($imageNode, 'embed');
+        if ($relationshipId === '') {
+            $relationshipId = article_docx_attribute($imageNode, 'id');
+        }
+        if ($relationshipId === '' || !isset($imageDataUris[$relationshipId])) {
+            continue;
+        }
+
+        $attributes = [
+            'src' => $imageDataUris[$relationshipId],
+            'alt' => article_docx_image_alt_text($container, $xpath),
+            'loading' => 'lazy',
+        ];
+        $dimensions = article_docx_image_dimensions($container, $xpath);
+        $attributes = array_merge($attributes, $dimensions);
+
+        $imageHtml = '<img';
+        foreach ($attributes as $name => $value) {
+            $imageHtml .= ' ' . $name . '="' . e((string) $value) . '"';
+        }
+        $imageHtml .= '>';
+        $html[] = $imageHtml;
+    }
+
+    return implode('', $html);
+}
+}
+
+if (!function_exists('article_docx_image_alt_text')) {
+function article_docx_image_alt_text(DOMElement $container, DOMXPath $xpath): string
+{
+    $propertyNodes = $xpath->query('.//*[local-name()="docPr" or local-name()="cNvPr"]', $container);
+    if (!$propertyNodes instanceof DOMNodeList) {
+        return '';
+    }
+
+    foreach ($propertyNodes as $propertyNode) {
+        if (!$propertyNode instanceof DOMElement) {
+            continue;
+        }
+
+        foreach (['descr', 'title', 'name'] as $attributeName) {
+            $value = trim(article_docx_attribute($propertyNode, $attributeName));
+            if ($value !== '') {
+                return $value;
+            }
+        }
+    }
+
+    return '';
+}
+}
+
+if (!function_exists('article_docx_image_dimensions')) {
+/**
+ * @return array{width?:string,height?:string}
+ */
+function article_docx_image_dimensions(DOMElement $container, DOMXPath $xpath): array
+{
+    $extentNodes = $xpath->query('.//*[local-name()="extent"]', $container);
+    $extentNode = $extentNodes instanceof DOMNodeList ? $extentNodes->item(0) : null;
+    if (!$extentNode instanceof DOMElement) {
+        return [];
+    }
+
+    $width = article_docx_emu_to_pixels(article_docx_attribute($extentNode, 'cx'));
+    $height = article_docx_emu_to_pixels(article_docx_attribute($extentNode, 'cy'));
+    $dimensions = [];
+    if ($width > 0 && $width <= 2000) {
+        $dimensions['width'] = (string) $width;
+    }
+    if ($height > 0 && $height <= 2000) {
+        $dimensions['height'] = (string) $height;
+    }
+
+    return $dimensions;
+}
+}
+
+if (!function_exists('article_docx_emu_to_pixels')) {
+function article_docx_emu_to_pixels(string $value): int
+{
+    if (!preg_match('/^\d+$/', $value)) {
+        return 0;
+    }
+
+    return (int) round(((int) $value) / 9525);
+}
+}
+
 if (!function_exists('article_docx_run_property_enabled')) {
 function article_docx_run_property_enabled(DOMElement $run, DOMXPath $xpath, string $property): bool
 {
@@ -601,8 +817,9 @@ function article_docx_run_property_enabled(DOMElement $run, DOMXPath $xpath, str
 if (!function_exists('article_docx_table_html')) {
 /**
  * @param array<string,string> $relationships
+ * @param array<string,string> $imageDataUris
  */
-function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $relationships): string
+function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $relationships, array $imageDataUris = []): string
 {
     $rows = [];
     $rowNodes = $xpath->query('./*[local-name()="tr"]', $table);
@@ -631,7 +848,7 @@ function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $rela
             if ($paragraphNodes instanceof DOMNodeList) {
                 foreach ($paragraphNodes as $paragraphNode) {
                     if ($paragraphNode instanceof DOMElement) {
-                        $inline = article_docx_inline_html($paragraphNode, $xpath, $relationships);
+                        $inline = article_docx_inline_html($paragraphNode, $xpath, $relationships, $imageDataUris);
                         if (!article_docx_html_is_empty($inline)) {
                             $paragraphs[] = $inline;
                         }
