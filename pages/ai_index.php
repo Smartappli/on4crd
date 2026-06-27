@@ -87,6 +87,16 @@ if (module_enabled('wiki') && table_exists('wiki_pages')) {
     }
 }
 
+$comicsCollection = comics_public_collection((string) config('app.default_locale', 'fr'));
+$comicsItems = array_map(
+    static fn(array $board): array => [
+        'name' => (string) $board['title'],
+        'url' => (string) $board['url'],
+        'type' => (string) $board['type'],
+    ],
+    $comicsCollection['boards']
+);
+
 $payload = [
     'schema_version' => '1.1',
     'generated_at' => gmdate('c'),
@@ -102,7 +112,7 @@ $payload = [
             'latitude' => 50.3150,
             'longitude' => 4.9452,
         ],
-        'topics' => ['amateur radio', 'radioamateurisme', 'QSL', 'Morse CW', 'propagation radio', 'Belgian band plans', 'club events', 'radio comics', 'bande dessinee radioamateur', 'amateur radio education'],
+        'topics' => ['amateur radio', 'radioamateurisme', 'QSL', 'Morse CW', 'propagation radio', 'Belgian band plans', 'club events', 'radio comics', 'BD radioamateur', 'bande dessinée radioamateur', 'amateur radio education'],
         'same_as' => [
             'https://www.facebook.com/groups/clubradiodurnal/',
             'https://www.uba.be',
@@ -126,7 +136,7 @@ $payload = [
         ['name' => 'Donation', 'url' => $buildUrl('donation')],
         ['name' => 'Press', 'url' => $buildUrl('press')],
         ['name' => 'Schools', 'url' => $buildUrl('schools')],
-        ['name' => 'Comics', 'url' => $buildUrl('comics')],
+        ['name' => (string) $comicsCollection['title'], 'url' => $buildUrl('comics')],
         ['name' => 'Code Q', 'url' => $buildUrl('code_q')],
         ['name' => 'Code CW', 'url' => $buildUrl('code_cw')],
         ['name' => 'Band plan ON3', 'url' => $buildUrl('bandplan_on3')],
@@ -136,26 +146,10 @@ $payload = [
     'recent_public_content' => $recent,
     'featured_public_collections' => [
         [
-            'name' => 'ON4CRD Comics',
-            'url' => $buildUrl('comics'),
-            'summary' => 'A4 comic pages for amateur radio education: best practices, first QSO and Ohm s law.',
-            'items' => [
-                [
-                    'name' => 'Les 10 commandements du radio amateur',
-                    'url' => asset_url('assets/comics/les-10-commandements-radio-amateur.png'),
-                    'type' => 'image/png',
-                ],
-                [
-                    'name' => 'Ma premiere fois',
-                    'url' => asset_url('assets/comics/ma-premiere-fois-premier-qso.png'),
-                    'type' => 'image/png',
-                ],
-                [
-                    'name' => 'La decouverte de la loi d Ohm',
-                    'url' => asset_url('assets/comics/decouverte-loi-ohm.png'),
-                    'type' => 'image/png',
-                ],
-            ],
+            'name' => (string) $comicsCollection['title'],
+            'url' => (string) $comicsCollection['url'],
+            'summary' => (string) $comicsCollection['summary'],
+            'items' => $comicsItems,
         ],
     ],
     'answer_engine_policy' => [
