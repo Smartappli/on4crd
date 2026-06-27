@@ -278,9 +278,10 @@ async function assertArticleDocxWysiwygImport(driver, token) {
   const importedText = `Import DOCX Selenium ${token}`;
   const imported = await driver.wait(async () => driver.executeScript(`
     const expected = arguments[0];
-    const editor = document.querySelector('.wysiwyg-editor[contenteditable="true"]');
     const textarea = document.querySelector('textarea[name="content"]');
-    if (!editor || !textarea) {
+    const wrapper = textarea ? textarea.previousElementSibling : null;
+    const editor = wrapper ? wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (!textarea || !editor) {
       return null;
     }
     return editor.textContent.includes(expected) && textarea.value.includes(expected) ? true : null;
