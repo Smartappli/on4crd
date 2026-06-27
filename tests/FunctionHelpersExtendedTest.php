@@ -173,7 +173,7 @@ final class FunctionHelpersExtendedTest extends TestCase
 
         $documentXml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
   <w:body>
     <w:p>
       <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
@@ -192,6 +192,17 @@ final class FunctionHelpersExtendedTest extends TestCase
     <w:p>
       <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr></w:pPr>
       <w:r><w:t>Element numerote</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:drawing>
+          <wp:inline>
+            <wp:extent cx="95250" cy="190500"/>
+            <wp:docPr id="1" name="Image Word" descr="Image importee"/>
+            <a:graphic><a:graphicData><a:blip r:embed="rId3"/></a:graphicData></a:graphic>
+          </wp:inline>
+        </w:drawing>
+      </w:r>
     </w:p>
     <w:p>
       <w:hyperlink r:id="rId2"><w:r><w:t>Lien bloque</w:t></w:r></w:hyperlink>
@@ -213,6 +224,7 @@ XML;
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://example.test/docx" TargetMode="External"/>
   <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="javascript:alert(1)" TargetMode="External"/>
+  <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image1.png"/>
 </Relationships>
 XML;
         $numberingXml = <<<'XML'
@@ -228,13 +240,16 @@ XML;
   <w:num w:numId="2"><w:abstractNumId w:val="1"/></w:num>
 </w:numbering>
 XML;
+        $pngBytes = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=', true);
+        self::assertIsString($pngBytes);
 
         file_put_contents($tmp, self::zipFixture([
-            '[Content_Types].xml' => '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/></Types>',
+            '[Content_Types].xml' => '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/></Types>',
             '_rels/.rels' => '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId0" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
             'word/document.xml' => $documentXml,
             'word/_rels/document.xml.rels' => $relationshipsXml,
             'word/numbering.xml' => $numberingXml,
+            'word/media/image1.png' => $pngBytes,
         ]));
 
         try {
@@ -248,6 +263,10 @@ XML;
             self::assertStringContainsString('<li>Element de liste</li>', $html);
             self::assertStringContainsString('<ol>', $html);
             self::assertStringContainsString('<li>Element numerote</li>', $html);
+            self::assertStringContainsString('<img src="data:image/png;base64,', $html);
+            self::assertStringContainsString('alt="Image importee"', $html);
+            self::assertStringContainsString('width="10"', $html);
+            self::assertStringContainsString('height="20"', $html);
             self::assertStringContainsString('<table>', $html);
             self::assertStringContainsString('<td>Cellule A</td>', $html);
             self::assertStringContainsString('<td colspan="2">Cellule B</td>', $html);

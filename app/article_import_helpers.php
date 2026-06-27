@@ -894,7 +894,13 @@ function article_docx_safe_href(string $href): string
 if (!function_exists('article_docx_html_is_empty')) {
 function article_docx_html_is_empty(string $html): bool
 {
-    return trim(html_entity_decode(strip_tags(str_replace('<br>', '', $html)), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')) === '';
+    $withoutBreaks = str_replace('<br>', '', $html);
+    $text = trim(html_entity_decode(strip_tags($withoutBreaks), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+    if ($text !== '') {
+        return false;
+    }
+
+    return preg_match('/<img\b[^>]*\bsrc=/i', $html) !== 1;
 }
 }
 
