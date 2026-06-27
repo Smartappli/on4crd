@@ -50,6 +50,135 @@
     document.execCommand(command, false, value);
   };
 
+  const importedHtmlAllowedTags = new Set([
+    'p', 'br', 'strong', 'b', 'em', 'i', 'u', 'ul', 'ol', 'li', 'h2', 'h3', 'h4',
+    'blockquote', 'pre', 'code', 'a', 'img', 'figure', 'figcaption', 'table',
+    'thead', 'tbody', 'tr', 'th', 'td', 'hr',
+  ]);
+  const importedHtmlBlockedTags = new Set([
+    'script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button',
+    'textarea', 'select', 'option', 'meta', 'link',
+  ]);
+  const importedHtmlAllowedAttributes = {
+    a: new Set(['href', 'title', 'target', 'rel']),
+    img: new Set(['src', 'alt', 'title', 'width', 'height', 'loading']),
+    th: new Set(['colspan', 'rowspan']),
+    td: new Set(['colspan', 'rowspan']),
+  };
+
+  const sanitizeImportedUrl = (value, allowImageData = false) => {
+    const raw = String(value || '').trim().replace(/[\u0000-\u001f\u007f]+/g, '');
+    if (raw === '') return '';
+    if (allowImageData && /^data:image\/(?:png|jpe?g|gif|webp);base64,[a-z0-9+/=\s]+$/i.test(raw)) {
+      return raw.replace(/\s+/g, '');
+    }
+    if (raw.startsWith('#')) return raw;
+    try {
+      const parsed = new URL(raw, window.location.href);
+      const protocol = parsed.protocol.toLowerCase();
+      if (protocol === 'http:' || protocol === 'https:' || protocol === 'mailto:' || protocol === 'tel:') {
+        return raw;
+      }
+    } catch (error) {
+      return '';
+    }
+    return '';
+  };
+
+  const sanitizeIntegerAttribute = (element, attributeName, maxValue) => {
+    if (!element.hasAttribute(attributeName)) return;
+    const raw = element.getAttribute(attributeName) || '';
+    if (!/^\d+$/.test(raw)) {
+      element.removeAttribute(attributeName);
+      return;
+    }
+    const value = Number(raw);
+    if (!Number.isInteger(value) || value <= 0 || value > maxValue) {
+      element.removeAttribute(attributeName);
+      return;
+    }
+    element.setAttribute(attributeName, String(value));
+  };
+
+  const unwrapImportedElement = (element) => {
+    const parent = element.parentNode;
+    if (!parent) return;
+    while (element.firstChild) {
+      parent.insertBefore(element.firstChild, element);
+    }
+    parent.removeChild(element);
+  };
+
+  const sanitizeImportedHtml = (html) => {
+    const template = document.createElement('template');
+    template.innerHTML = String(html || '');
+
+    const sanitizeNode = (node) => {
+      if (node.nodeType === Node.COMMENT_NODE) {
+        node.parentNode && node.parentNode.removeChild(node);
+        return;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+      const element = node;
+      const tag = element.tagName.toLowerCase();
+      if (importedHtmlBlockedTags.has(tag)) {
+        element.parentNode && element.parentNode.removeChild(element);
+        return;
+      }
+
+      Array.from(element.childNodes).forEach(sanitizeNode);
+
+      if (!importedHtmlAllowedTags.has(tag)) {
+        unwrapImportedElement(element);
+        return;
+      }
+
+      const allowedAttributes = importedHtmlAllowedAttributes[tag] || new Set();
+      Array.from(element.attributes).forEach((attribute) => {
+        if (!allowedAttributes.has(attribute.name.toLowerCase())) {
+          element.removeAttribute(attribute.name);
+        }
+      });
+
+      if (tag === 'a') {
+        const href = element.hasAttribute('href') ? sanitizeImportedUrl(element.getAttribute('href')) : '';
+        if (href === '') {
+          element.removeAttribute('href');
+        } else {
+          element.setAttribute('href', href);
+        }
+        const target = (element.getAttribute('target') || '').toLowerCase().trim();
+        if (target !== '' && target !== '_blank' && target !== '_self') {
+          element.removeAttribute('target');
+        }
+        if (target === '_blank') {
+          element.setAttribute('rel', 'noopener noreferrer');
+        }
+      }
+
+      if (tag === 'img') {
+        const src = element.hasAttribute('src') ? sanitizeImportedUrl(element.getAttribute('src'), true) : '';
+        if (src === '') {
+          element.parentNode && element.parentNode.removeChild(element);
+          return;
+        }
+        element.setAttribute('src', src);
+        element.setAttribute('loading', 'lazy');
+        sanitizeIntegerAttribute(element, 'width', 2000);
+        sanitizeIntegerAttribute(element, 'height', 2000);
+      }
+
+      if (tag === 'td' || tag === 'th') {
+        sanitizeIntegerAttribute(element, 'colspan', 20);
+        sanitizeIntegerAttribute(element, 'rowspan', 20);
+      }
+    };
+
+    Array.from(template.content.childNodes).forEach(sanitizeNode);
+    return template.innerHTML.trim();
+  };
+
   let mammothLoader = null;
   const loadMammoth = async () => {
     if (window.mammoth) return window.mammoth;
@@ -237,7 +366,8 @@
           }
           const arrayBuffer = await file.arrayBuffer();
           const result = await mammoth.convertToHtml({ arrayBuffer });
-          editor.innerHTML = result.value || '<p><br></p>';
+          const importedHtml = sanitizeImportedHtml(result.value);
+          editor.innerHTML = importedHtml !== '' ? importedHtml : '<p><br></p>';
           sync();
         } catch (error) {
           window.alert('Import Word impossible pour le moment.');
