@@ -370,6 +370,9 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
     $html = '';
     foreach ($container->childNodes as $child) {
         if ($child instanceof DOMText) {
+            if (trim($child->textContent) === '') {
+                continue;
+            }
             $html .= e($child->textContent);
             continue;
         }
@@ -415,7 +418,7 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
         $html .= article_docx_inline_html($child, $xpath, $relationships);
     }
 
-    return trim((string) preg_replace('/[ \t]+/u', ' ', $html));
+    return trim((string) preg_replace('/[ \t\r\n]+/u', ' ', $html));
 }
 }
 
