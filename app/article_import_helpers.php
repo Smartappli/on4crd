@@ -85,26 +85,7 @@ function article_extract_docx_html(string $path): string
         return '';
     }
 
-    $xml = '';
-    if (class_exists('ZipArchive')) {
-        $zip = new ZipArchive();
-        if ($zip->open($path) === true) {
-            $documentXml = $zip->getFromName('word/document.xml');
-            $zip->close();
-            if (is_string($documentXml)) {
-                $xml = $documentXml;
-            }
-        }
-    } else {
-        $unzip = article_find_binary('unzip');
-        if ($unzip !== '') {
-            $output = @shell_exec(escapeshellarg($unzip) . ' -p ' . escapeshellarg($path) . ' word/document.xml');
-            if (is_string($output)) {
-                $xml = $output;
-            }
-        }
-    }
-
+    $xml = article_docx_part_contents($path, 'word/document.xml');
     if ($xml === '') {
         return '';
     }
@@ -119,38 +100,38 @@ function article_extract_docx_html(string $path): string
     }
 
     $xpath = new DOMXPath($dom);
-    $paragraphs = $xpath->query('//*[local-name()="p"]');
-    if (!$paragraphs instanceof DOMNodeList) {
+    $relationships = article_docx_relationship_targets(article_docx_part_contents($path, 'word/_rels/document.xml.rels'));
+    $bodyNodes = $xpath->query('/*[local-name()="document"]/*[local-name()="body"]/*');
+    if (!$bodyNodes instanceof DOMNodeList) {
         return '';
     }
 
     $html = [];
     $listOpen = false;
-    foreach ($paragraphs as $paragraph) {
-        if (!$paragraph instanceof DOMElement) {
+    foreach ($bodyNodes as $block) {
+        if (!$block instanceof DOMElement) {
             continue;
         }
 
-        $text = '';
-        $runs = $xpath->query('.//*[local-name()="t" or local-name()="tab" or local-name()="br"]', $paragraph);
-        if ($runs instanceof DOMNodeList) {
-            foreach ($runs as $run) {
-                if (!$run instanceof DOMNode) {
-                    continue;
-                }
-                $localName = $run->localName;
-                if ($localName === 'tab') {
-                    $text .= ' ';
-                } elseif ($localName === 'br') {
-                    $text .= "\n";
-                } else {
-                    $text .= $run->textContent;
-                }
+        $localName = $block->localName;
+        if ($localName === 'tbl') {
+            if ($listOpen) {
+                $html[] = '</ul>';
+                $listOpen = false;
             }
+            $table = article_docx_table_html($block, $xpath, $relationships);
+            if ($table !== '') {
+                $html[] = $table;
+            }
+            continue;
         }
 
-        $text = trim((string) preg_replace('/[ \t]+/u', ' ', $text));
-        if ($text === '') {
+        if ($localName !== 'p') {
+            continue;
+        }
+
+        $inlineHtml = article_docx_inline_html($block, $xpath, $relationships);
+        if (article_docx_html_is_empty($inlineHtml)) {
             if ($listOpen) {
                 $html[] = '</ul>';
                 $listOpen = false;
@@ -158,13 +139,8 @@ function article_extract_docx_html(string $path): string
             continue;
         }
 
-        $style = '';
-        $styleNodes = $xpath->query('.//*[local-name()="pStyle"]', $paragraph);
-        $styleNode = $styleNodes instanceof DOMNodeList ? $styleNodes->item(0) : null;
-        if ($styleNode instanceof DOMElement) {
-            $style = strtolower($styleNode->getAttribute('w:val') ?: $styleNode->getAttribute('val'));
-        }
-        $numNodes = $xpath->query('.//*[local-name()="numPr"]', $paragraph);
+        $style = article_docx_paragraph_style($block, $xpath);
+        $numNodes = $xpath->query('./*[local-name()="pPr"]/*[local-name()="numPr"]', $block);
         $isList = $numNodes instanceof DOMNodeList && $numNodes->length > 0;
 
         if ($isList) {
@@ -172,7 +148,7 @@ function article_extract_docx_html(string $path): string
                 $html[] = '<ul>';
                 $listOpen = true;
             }
-            $html[] = '<li>' . e($text) . '</li>';
+            $html[] = '<li>' . $inlineHtml . '</li>';
             continue;
         }
 
@@ -184,9 +160,9 @@ function article_extract_docx_html(string $path): string
         if (str_contains($style, 'heading') || str_contains($style, 'titre')) {
             $level = preg_match('/([1-6])/', $style, $matches) ? (int) $matches[1] + 1 : 2;
             $level = min(4, max(2, $level));
-            $html[] = '<h' . $level . '>' . e($text) . '</h' . $level . '>';
+            $html[] = '<h' . $level . '>' . $inlineHtml . '</h' . $level . '>';
         } else {
-            $html[] = '<p>' . nl2br(e($text)) . '</p>';
+            $html[] = '<p>' . $inlineHtml . '</p>';
         }
     }
 
@@ -195,6 +171,392 @@ function article_extract_docx_html(string $path): string
     }
 
     return sanitize_rich_html(implode("\n", $html));
+}
+}
+
+if (!function_exists('article_docx_part_contents')) {
+function article_docx_part_contents(string $path, string $partName): string
+{
+    $partName = ltrim(str_replace('\\', '/', $partName), '/');
+    if ($partName === '' || !is_file($path)) {
+        return '';
+    }
+
+    if (class_exists('ZipArchive')) {
+        $zip = new ZipArchive();
+        if ($zip->open($path) === true) {
+            $contents = $zip->getFromName($partName);
+            $zip->close();
+            if (is_string($contents)) {
+                return $contents;
+            }
+        }
+    }
+
+    $contents = article_zip_entry_contents($path, $partName);
+    if ($contents !== '') {
+        return $contents;
+    }
+
+    $unzip = article_find_binary('unzip');
+    if ($unzip === '') {
+        return '';
+    }
+
+    $output = @shell_exec(escapeshellarg($unzip) . ' -p ' . escapeshellarg($path) . ' ' . escapeshellarg($partName));
+    return is_string($output) ? $output : '';
+}
+}
+
+if (!function_exists('article_zip_entry_contents')) {
+function article_zip_entry_contents(string $path, string $entryName): string
+{
+    $entryName = ltrim(str_replace('\\', '/', $entryName), '/');
+    $zip = is_file($path) ? file_get_contents($path) : false;
+    if (!is_string($zip) || $zip === '' || $entryName === '') {
+        return '';
+    }
+
+    $length = strlen($zip);
+    $tailLength = min($length, 22 + 0xffff);
+    $tail = substr($zip, $length - $tailLength);
+    $eocdTailOffset = strrpos($tail, "PK\x05\x06");
+    if ($eocdTailOffset === false) {
+        return '';
+    }
+
+    $eocdOffset = $length - $tailLength + $eocdTailOffset;
+    if ($eocdOffset + 22 > $length) {
+        return '';
+    }
+
+    $centralDirectorySize = article_unpack_uint32(substr($zip, $eocdOffset + 12, 4));
+    $centralDirectoryOffset = article_unpack_uint32(substr($zip, $eocdOffset + 16, 4));
+    if ($centralDirectoryOffset < 0 || $centralDirectorySize < 0 || $centralDirectoryOffset + $centralDirectorySize > $length) {
+        return '';
+    }
+
+    $position = $centralDirectoryOffset;
+    $end = $centralDirectoryOffset + $centralDirectorySize;
+    while ($position + 46 <= $end && substr($zip, $position, 4) === "PK\x01\x02") {
+        $method = article_unpack_uint16(substr($zip, $position + 10, 2));
+        $compressedSize = article_unpack_uint32(substr($zip, $position + 20, 4));
+        $fileNameLength = article_unpack_uint16(substr($zip, $position + 28, 2));
+        $extraLength = article_unpack_uint16(substr($zip, $position + 30, 2));
+        $commentLength = article_unpack_uint16(substr($zip, $position + 32, 2));
+        $localHeaderOffset = article_unpack_uint32(substr($zip, $position + 42, 4));
+        $fileName = substr($zip, $position + 46, $fileNameLength);
+
+        if ($fileName === $entryName) {
+            if ($localHeaderOffset + 30 > $length || substr($zip, $localHeaderOffset, 4) !== "PK\x03\x04") {
+                return '';
+            }
+
+            $localNameLength = article_unpack_uint16(substr($zip, $localHeaderOffset + 26, 2));
+            $localExtraLength = article_unpack_uint16(substr($zip, $localHeaderOffset + 28, 2));
+            $dataOffset = $localHeaderOffset + 30 + $localNameLength + $localExtraLength;
+            if ($dataOffset < 0 || $dataOffset + $compressedSize > $length) {
+                return '';
+            }
+
+            $compressed = substr($zip, $dataOffset, $compressedSize);
+            if ($method === 0) {
+                return $compressed;
+            }
+            if ($method === 8) {
+                $inflated = @gzinflate($compressed);
+                return is_string($inflated) ? $inflated : '';
+            }
+
+            return '';
+        }
+
+        $position += 46 + $fileNameLength + $extraLength + $commentLength;
+    }
+
+    return '';
+}
+}
+
+if (!function_exists('article_unpack_uint16')) {
+function article_unpack_uint16(string $bytes): int
+{
+    $value = unpack('v', $bytes);
+    return is_array($value) ? (int) $value[1] : 0;
+}
+}
+
+if (!function_exists('article_unpack_uint32')) {
+function article_unpack_uint32(string $bytes): int
+{
+    $value = unpack('V', $bytes);
+    return is_array($value) ? (int) $value[1] : 0;
+}
+}
+
+if (!function_exists('article_docx_relationship_targets')) {
+/**
+ * @return array<string,string>
+ */
+function article_docx_relationship_targets(string $xml): array
+{
+    if ($xml === '') {
+        return [];
+    }
+
+    $dom = new DOMDocument();
+    $previousUseInternalErrors = libxml_use_internal_errors(true);
+    $loaded = $dom->loadXML($xml);
+    libxml_clear_errors();
+    libxml_use_internal_errors($previousUseInternalErrors);
+    if (!$loaded) {
+        return [];
+    }
+
+    $xpath = new DOMXPath($dom);
+    $nodes = $xpath->query('//*[local-name()="Relationship"]');
+    if (!$nodes instanceof DOMNodeList) {
+        return [];
+    }
+
+    $targets = [];
+    foreach ($nodes as $node) {
+        if (!$node instanceof DOMElement) {
+            continue;
+        }
+        $id = trim($node->getAttribute('Id'));
+        $target = trim($node->getAttribute('Target'));
+        if ($id !== '' && $target !== '') {
+            $targets[$id] = $target;
+        }
+    }
+
+    return $targets;
+}
+}
+
+if (!function_exists('article_docx_attribute')) {
+function article_docx_attribute(DOMElement $element, string $localName): string
+{
+    foreach ($element->attributes as $attribute) {
+        if ($attribute->localName === $localName || $attribute->name === $localName) {
+            return (string) $attribute->value;
+        }
+    }
+
+    return '';
+}
+}
+
+if (!function_exists('article_docx_paragraph_style')) {
+function article_docx_paragraph_style(DOMElement $paragraph, DOMXPath $xpath): string
+{
+    $styleNodes = $xpath->query('./*[local-name()="pPr"]/*[local-name()="pStyle"]', $paragraph);
+    $styleNode = $styleNodes instanceof DOMNodeList ? $styleNodes->item(0) : null;
+    if (!$styleNode instanceof DOMElement) {
+        return '';
+    }
+
+    return strtolower(article_docx_attribute($styleNode, 'val'));
+}
+}
+
+if (!function_exists('article_docx_inline_html')) {
+/**
+ * @param array<string,string> $relationships
+ */
+function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $relationships): string
+{
+    $html = '';
+    foreach ($container->childNodes as $child) {
+        if ($child instanceof DOMText) {
+            $html .= e($child->textContent);
+            continue;
+        }
+        if (!$child instanceof DOMElement) {
+            continue;
+        }
+
+        $localName = $child->localName;
+        if ($localName === 'pPr' || $localName === 'rPr') {
+            continue;
+        }
+        if ($localName === 'r') {
+            $html .= article_docx_run_html($child, $xpath);
+            continue;
+        }
+        if ($localName === 'hyperlink') {
+            $inner = article_docx_inline_html($child, $xpath, $relationships);
+            if (article_docx_html_is_empty($inner)) {
+                continue;
+            }
+
+            $href = '';
+            $relationshipId = article_docx_attribute($child, 'id');
+            if ($relationshipId !== '' && isset($relationships[$relationshipId])) {
+                $href = article_docx_safe_href($relationships[$relationshipId]);
+            } else {
+                $anchor = preg_replace('/[^a-z0-9_.:-]+/i', '-', article_docx_attribute($child, 'anchor')) ?? '';
+                $href = $anchor !== '' ? article_docx_safe_href('#' . trim($anchor, '-')) : '';
+            }
+
+            $html .= $href !== '' ? '<a href="' . e($href) . '">' . $inner . '</a>' : $inner;
+            continue;
+        }
+        if ($localName === 'tab') {
+            $html .= ' ';
+            continue;
+        }
+        if ($localName === 'br') {
+            $html .= '<br>';
+            continue;
+        }
+
+        $html .= article_docx_inline_html($child, $xpath, $relationships);
+    }
+
+    return trim((string) preg_replace('/[ \t]+/u', ' ', $html));
+}
+}
+
+if (!function_exists('article_docx_run_html')) {
+function article_docx_run_html(DOMElement $run, DOMXPath $xpath): string
+{
+    $html = '';
+    foreach ($run->childNodes as $child) {
+        if (!$child instanceof DOMElement) {
+            continue;
+        }
+
+        $localName = $child->localName;
+        if ($localName === 'rPr') {
+            continue;
+        }
+        if ($localName === 't' || $localName === 'delText') {
+            $html .= e($child->textContent);
+            continue;
+        }
+        if ($localName === 'tab') {
+            $html .= ' ';
+            continue;
+        }
+        if ($localName === 'br') {
+            $html .= '<br>';
+        }
+    }
+
+    if (article_docx_html_is_empty($html)) {
+        return '';
+    }
+
+    if (article_docx_run_property_enabled($run, $xpath, 'u')) {
+        $html = '<u>' . $html . '</u>';
+    }
+    if (article_docx_run_property_enabled($run, $xpath, 'i')) {
+        $html = '<em>' . $html . '</em>';
+    }
+    if (article_docx_run_property_enabled($run, $xpath, 'b')) {
+        $html = '<strong>' . $html . '</strong>';
+    }
+
+    return $html;
+}
+}
+
+if (!function_exists('article_docx_run_property_enabled')) {
+function article_docx_run_property_enabled(DOMElement $run, DOMXPath $xpath, string $property): bool
+{
+    $nodes = $xpath->query('./*[local-name()="rPr"]/*[local-name()="' . $property . '"]', $run);
+    $node = $nodes instanceof DOMNodeList ? $nodes->item(0) : null;
+    if (!$node instanceof DOMElement) {
+        return false;
+    }
+
+    $value = strtolower(article_docx_attribute($node, 'val'));
+    return !in_array($value, ['0', 'false', 'none', 'off'], true);
+}
+}
+
+if (!function_exists('article_docx_table_html')) {
+/**
+ * @param array<string,string> $relationships
+ */
+function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $relationships): string
+{
+    $rows = [];
+    $rowNodes = $xpath->query('./*[local-name()="tr"]', $table);
+    if (!$rowNodes instanceof DOMNodeList) {
+        return '';
+    }
+
+    foreach ($rowNodes as $rowNode) {
+        if (!$rowNode instanceof DOMElement) {
+            continue;
+        }
+
+        $cells = [];
+        $cellNodes = $xpath->query('./*[local-name()="tc"]', $rowNode);
+        if (!$cellNodes instanceof DOMNodeList) {
+            continue;
+        }
+
+        foreach ($cellNodes as $cellNode) {
+            if (!$cellNode instanceof DOMElement) {
+                continue;
+            }
+
+            $paragraphs = [];
+            $paragraphNodes = $xpath->query('./*[local-name()="p"]', $cellNode);
+            if ($paragraphNodes instanceof DOMNodeList) {
+                foreach ($paragraphNodes as $paragraphNode) {
+                    if ($paragraphNode instanceof DOMElement) {
+                        $inline = article_docx_inline_html($paragraphNode, $xpath, $relationships);
+                        if (!article_docx_html_is_empty($inline)) {
+                            $paragraphs[] = $inline;
+                        }
+                    }
+                }
+            }
+
+            $attributes = '';
+            $gridSpanNodes = $xpath->query('./*[local-name()="tcPr"]/*[local-name()="gridSpan"]', $cellNode);
+            $gridSpanNode = $gridSpanNodes instanceof DOMNodeList ? $gridSpanNodes->item(0) : null;
+            if ($gridSpanNode instanceof DOMElement) {
+                $gridSpan = (int) article_docx_attribute($gridSpanNode, 'val');
+                if ($gridSpan > 1 && $gridSpan <= 20) {
+                    $attributes = ' colspan="' . $gridSpan . '"';
+                }
+            }
+
+            $cells[] = '<td' . $attributes . '>' . implode('<br>', $paragraphs) . '</td>';
+        }
+
+        if ($cells !== []) {
+            $rows[] = '<tr>' . implode('', $cells) . '</tr>';
+        }
+    }
+
+    return $rows === [] ? '' : '<table><tbody>' . implode('', $rows) . '</tbody></table>';
+}
+}
+
+if (!function_exists('article_docx_safe_href')) {
+function article_docx_safe_href(string $href): string
+{
+    try {
+        $safe = sanitize_href_attribute($href);
+    } catch (Throwable) {
+        return '';
+    }
+
+    return $safe ?? '';
+}
+}
+
+if (!function_exists('article_docx_html_is_empty')) {
+function article_docx_html_is_empty(string $html): bool
+{
+    return trim(html_entity_decode(strip_tags(str_replace('<br>', '', $html)), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')) === '';
 }
 }
 
