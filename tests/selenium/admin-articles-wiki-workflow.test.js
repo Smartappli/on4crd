@@ -263,9 +263,11 @@ async function assertArticleDocxWysiwygImport(driver, token) {
       .find((button) => button.textContent.trim() === 'Importer Word');
     const fileInput = wrapper.querySelector('.wysiwyg-toolbar input[type="file"][accept*=".docx"]');
     const editor = wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]');
-    return importButton && fileInput && editor ? true : null;
+    const help = Array.from(document.querySelectorAll('p.help'))
+      .some((item) => item.textContent.includes('Importer Word') && item.textContent.includes('format .docx'));
+    return importButton && fileInput && editor && help ? true : null;
   `), timeoutMs);
-  assert.equal(controlsReady, true, 'Le WYSIWYG article doit exposer le bouton Importer Word.');
+  assert.equal(controlsReady, true, 'Le WYSIWYG article doit exposer le bouton Importer Word et son aide.');
 
   const fileInput = await driver.findElement(By.css('.wysiwyg-toolbar input[type="file"][accept*=".docx"]'));
   await driver.executeScript(`
