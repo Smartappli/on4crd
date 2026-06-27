@@ -138,6 +138,8 @@ foreach ([
 }
 
 foreach ($comicsCollection['boards'] as $comic) {
+    $graph['@graph'][] = comics_public_creative_work($comic, (string) $comicsCollection['locale'], $url('comics') . '#webpage', $homeUrl . '#organization');
+    continue;
     $assetUrl = (string) $comic['url'];
     $graph['@graph'][] = [
         '@type' => 'CreativeWork',
