@@ -100,9 +100,14 @@
   margin: 0;
 }
 
-:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"]) .member-document-propose-menu-panel {
+:is([data-route="presentations"], [data-route="fichiers"]) .member-document-propose-menu-panel {
   top: auto;
   bottom: calc(100% + .45rem);
+}
+
+[data-route="videos"] .member-document-propose-menu-panel {
+  top: calc(100% + .45rem);
+  bottom: auto;
 }
 
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-search-panel {
@@ -221,7 +226,7 @@
     justify-content: flex-start;
   }
 
-  :is([data-route="presentations"], [data-route="fichiers"]) .member-document-propose-menu-panel {
+  :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"]) .member-document-propose-menu-panel {
     right: auto;
     left: 0;
   }
