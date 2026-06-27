@@ -15,7 +15,7 @@ return array (
   'gallery_title' => 'Tillgängliga sidor',
   'format_label' => 'Stående A4-format',
   'open_board_prefix' => 'Öppna sidan',
-  'viewer_close' => 'St?ng',
+  'viewer_close' => 'Stäng',
   'download_board_prefix' => 'Ladda ner sidan',
   'download_board_label' => 'A4 PNG',
   'board_commandments_title' => 'Radioamatörens 10 budord',

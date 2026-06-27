@@ -15,7 +15,7 @@ return array (
   'gallery_title' => 'Verfügbare Seiten',
   'format_label' => 'A4-Hochformat',
   'open_board_prefix' => 'Comicseite öffnen',
-  'viewer_close' => 'Schlie?en',
+  'viewer_close' => 'Schließen',
   'download_board_prefix' => 'Comicseite herunterladen',
   'download_board_label' => 'PNG A4',
   'board_commandments_title' => 'Die 10 Gebote des Funkamateurs',

@@ -16,7 +16,7 @@ return array (
   'format_label' => 'Format A4 portrait',
   'open_board_prefix' => 'Ouvrir la planche',
   'viewer_close' => 'Fermer',
-  'download_board_prefix' => 'T?l?charger la planche',
+  'download_board_prefix' => 'Télécharger la planche',
   'download_board_label' => 'PNG A4',
   'board_commandments_title' => 'Les 10 commandements du radioamateur',
   'board_commandments_text' => 'Les bonnes pratiques radioamateurs présentées comme dix règles faciles à retenir.',

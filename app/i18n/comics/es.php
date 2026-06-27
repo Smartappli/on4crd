@@ -16,7 +16,7 @@ return array (
   'format_label' => 'Formato A4 vertical',
   'open_board_prefix' => 'Abrir la página',
   'viewer_close' => 'Cerrar',
-  'download_board_prefix' => 'Descargar la p?gina',
+  'download_board_prefix' => 'Descargar la página',
   'download_board_label' => 'PNG A4',
   'board_commandments_title' => 'Los 10 mandamientos del radioaficionado',
   'board_commandments_text' => 'Buenas prácticas de radioaficionados presentadas como diez reglas fáciles de recordar.',
