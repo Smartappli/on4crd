@@ -144,43 +144,109 @@ async function submitFormByHidden(driver, action, hiddenName, hiddenValue) {
 }
 
 function createDocxFixture(token) {
-  return runSeleniumPhp(`
-$token = preg_replace('/[^A-Za-z0-9_.-]/', '-', (string) (getenv('SELENIUM_TOKEN') ?: 'docx'));
-$path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $token . '.docx';
-if (!class_exists('ZipArchive')) {
-    echo '';
-    return;
-}
-$zip = new ZipArchive();
-if ($zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-    echo '';
-    return;
-}
-$contentTypes = <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+  const safeToken = String(token).replace(/[^A-Za-z0-9_.-]/g, '-');
+  const documentText = `Import DOCX Selenium ${safeToken}`;
+  const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
   <Default Extension="xml" ContentType="application/xml"/>
   <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-</Types>
-XML;
-$rels = <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+</Types>`;
+  const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-</Relationships>
-XML;
-$documentText = 'Import DOCX Selenium ' . $token;
-$document = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    . '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
-    . '<w:body><w:p><w:r><w:t>' . htmlspecialchars($documentText, ENT_XML1 | ENT_COMPAT, 'UTF-8') . '</w:t></w:r></w:p></w:body>'
-    . '</w:document>';
-$zip->addFromString('[Content_Types].xml', $contentTypes);
-$zip->addFromString('_rels/.rels', $rels);
-$zip->addFromString('word/document.xml', $document);
-$zip->close();
-echo $path;
-`, { SELENIUM_TOKEN: token }).trim();
+</Relationships>`;
+  const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:r><w:t>${escapeXml(documentText)}</w:t></w:r></w:p>
+  </w:body>
+</w:document>`;
+  const filePath = path.join(os.tmpdir(), `${safeToken}.docx`);
+  fs.writeFileSync(filePath, zipStore({
+    '[Content_Types].xml': contentTypes,
+    '_rels/.rels': rels,
+    'word/document.xml': documentXml,
+  }));
+  return filePath;
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function zipStore(entries) {
+  const localParts = [];
+  const centralParts = [];
+  let offset = 0;
+
+  for (const [name, content] of Object.entries(entries)) {
+    const nameBuffer = Buffer.from(name, 'utf8');
+    const contentBuffer = Buffer.from(content, 'utf8');
+    const crc = crc32(contentBuffer);
+
+    const localHeader = Buffer.alloc(30);
+    localHeader.writeUInt32LE(0x04034b50, 0);
+    localHeader.writeUInt16LE(20, 4);
+    localHeader.writeUInt16LE(0, 6);
+    localHeader.writeUInt16LE(0, 8);
+    localHeader.writeUInt16LE(0, 10);
+    localHeader.writeUInt16LE(0, 12);
+    localHeader.writeUInt32LE(crc, 14);
+    localHeader.writeUInt32LE(contentBuffer.length, 18);
+    localHeader.writeUInt32LE(contentBuffer.length, 22);
+    localHeader.writeUInt16LE(nameBuffer.length, 26);
+    localHeader.writeUInt16LE(0, 28);
+    localParts.push(localHeader, nameBuffer, contentBuffer);
+
+    const centralHeader = Buffer.alloc(46);
+    centralHeader.writeUInt32LE(0x02014b50, 0);
+    centralHeader.writeUInt16LE(20, 4);
+    centralHeader.writeUInt16LE(20, 6);
+    centralHeader.writeUInt16LE(0, 8);
+    centralHeader.writeUInt16LE(0, 10);
+    centralHeader.writeUInt16LE(0, 12);
+    centralHeader.writeUInt16LE(0, 14);
+    centralHeader.writeUInt32LE(crc, 16);
+    centralHeader.writeUInt32LE(contentBuffer.length, 20);
+    centralHeader.writeUInt32LE(contentBuffer.length, 24);
+    centralHeader.writeUInt16LE(nameBuffer.length, 28);
+    centralHeader.writeUInt16LE(0, 30);
+    centralHeader.writeUInt16LE(0, 32);
+    centralHeader.writeUInt16LE(0, 34);
+    centralHeader.writeUInt16LE(0, 36);
+    centralHeader.writeUInt32LE(0, 38);
+    centralHeader.writeUInt32LE(offset, 42);
+    centralParts.push(centralHeader, nameBuffer);
+
+    offset += localHeader.length + nameBuffer.length + contentBuffer.length;
+  }
+
+  const centralDirectory = Buffer.concat(centralParts);
+  const endHeader = Buffer.alloc(22);
+  const entryCount = Object.keys(entries).length;
+  endHeader.writeUInt32LE(0x06054b50, 0);
+  endHeader.writeUInt16LE(0, 4);
+  endHeader.writeUInt16LE(0, 6);
+  endHeader.writeUInt16LE(entryCount, 8);
+  endHeader.writeUInt16LE(entryCount, 10);
+  endHeader.writeUInt32LE(centralDirectory.length, 12);
+  endHeader.writeUInt32LE(offset, 16);
+  endHeader.writeUInt16LE(0, 20);
+
+  return Buffer.concat([...localParts, centralDirectory, endHeader]);
+}
+
+function crc32(buffer) {
+  let crc = 0xffffffff;
+  for (const byte of buffer) {
+    crc = crc32Table[(crc ^ byte) & 0xff] ^ (crc >>> 8);
+  }
+  return (crc ^ 0xffffffff) >>> 0;
 }
 
 async function assertArticleDocxWysiwygImport(driver, token) {
