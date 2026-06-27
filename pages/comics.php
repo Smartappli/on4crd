@@ -30,7 +30,7 @@ $boardListItems = array_map(
                 'contentSize' => (int) $board['content_size'],
                 'caption' => (string) $board['title'],
             ],
-            'thumbnailUrl' => (string) $board['url'],
+            'thumbnailUrl' => (string) $board['thumbnail_url'],
             'encodingFormat' => (string) $board['type'],
             'inLanguage' => $locale,
             'isPartOf' => ['@id' => $comicsUrl . '#collection'],
@@ -136,7 +136,7 @@ ob_start();
     <figure class="comics-hero-media">
         <div class="comics-hero-strip" aria-label="<?= e((string) $t['hero_image_alt']) ?>">
             <?php foreach ($boards as $board): ?>
-                <img src="<?= e((string) $board['url']) ?>" alt="<?= e((string) $board['title']) ?>" loading="eager" decoding="async">
+                <img src="<?= e((string) $board['thumbnail_url']) ?>" width="<?= (int) $board['thumbnail_width'] ?>" height="<?= (int) $board['thumbnail_height'] ?>" alt="<?= e((string) $board['title']) ?>" loading="eager" decoding="async">
             <?php endforeach; ?>
         </div>
     </figure>
@@ -154,7 +154,7 @@ ob_start();
         <?php foreach ($boards as $board): ?>
             <article class="comics-card">
                 <a class="comics-thumb-link" href="<?= e((string) $board['url']) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e((string) $t['open_board_prefix'] . ' ' . (string) $board['title']) ?>">
-                    <img class="comics-thumb-img" src="<?= e((string) $board['url']) ?>" alt="<?= e((string) $board['title']) ?>" loading="lazy" decoding="async">
+                    <img class="comics-thumb-img" src="<?= e((string) $board['thumbnail_url']) ?>" width="<?= (int) $board['thumbnail_width'] ?>" height="<?= (int) $board['thumbnail_height'] ?>" alt="<?= e((string) $board['title']) ?>" loading="lazy" decoding="async">
                 </a>
                 <div class="comics-card-copy">
                     <h3><?= e((string) $board['title']) ?></h3>

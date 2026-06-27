@@ -92,10 +92,15 @@ $comicsItems = array_map(
     static fn(array $board): array => [
         'name' => (string) $board['title'],
         'url' => (string) $board['url'],
+        'thumbnail_url' => (string) $board['thumbnail_url'],
         'type' => (string) $board['type'],
+        'thumbnail_type' => (string) $board['thumbnail_type'],
         'width' => (int) $board['width'],
         'height' => (int) $board['height'],
+        'thumbnail_width' => (int) $board['thumbnail_width'],
+        'thumbnail_height' => (int) $board['thumbnail_height'],
         'content_size' => (int) $board['content_size'],
+        'thumbnail_content_size' => (int) $board['thumbnail_content_size'],
     ],
     $comicsCollection['boards']
 );

@@ -155,7 +155,7 @@ foreach ($comicsCollection['boards'] as $comic) {
             'contentSize' => (int) $comic['content_size'],
             'caption' => (string) $comic['title'],
         ],
-        'thumbnailUrl' => $assetUrl,
+        'thumbnailUrl' => (string) $comic['thumbnail_url'],
         'encodingFormat' => (string) $comic['type'],
         'inLanguage' => (string) $comicsCollection['locale'],
         'isPartOf' => ['@id' => $url('comics') . '#webpage'],
