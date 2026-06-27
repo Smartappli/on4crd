@@ -213,6 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Comhéadan riaracháin do Radio Club Durnal ON4CRD.',
   'admin_wiki_title' => 'Riarachán ON4CRD',
   'admin_wiki_description' => 'Comhéadan riaracháin do Radio Club Durnal ON4CRD.',
-  'comics_title' => 'ON4CRD Greannain',
-  'comics_description' => 'Greannain A4 ON4CRD about radio best practices, first QSO and Ohm law for GA.',
+  'comics_title' => 'Greannáin ON4CRD',
+  'comics_description' => 'Greannáin A4 ON4CRD faoi dhea-chleachtais raidió amaitéarach, an chéad QSO agus dlí Ohm.',
 );

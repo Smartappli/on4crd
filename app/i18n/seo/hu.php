@@ -213,6 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Adminisztrációs felület az Radio Club Durnal ON4CRD-hez.',
   'admin_wiki_title' => 'ON4CRD adminisztráció',
   'admin_wiki_description' => 'Adminisztrációs felület az Radio Club Durnal ON4CRD-hez.',
-  'comics_title' => 'ON4CRD Kepregenyek',
-  'comics_description' => 'A4 kepregeny ON4CRD about radio best practices, first QSO and Ohm law for HU.',
+  'comics_title' => 'Képregények ON4CRD',
+  'comics_description' => 'Az ON4CRD A4-es képregényoldalai a jó rádióamatőr gyakorlatokról, az első QSO-ról és Ohm törvényéről.',
 );

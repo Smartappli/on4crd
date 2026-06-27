@@ -213,6 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Radio Club Durnal ON4CRD haldusliides.',
   'admin_wiki_title' => 'ON4CRD haldus',
   'admin_wiki_description' => 'Radio Club Durnal ON4CRD haldusliides.',
-  'comics_title' => 'ON4CRD Koomiksid',
-  'comics_description' => 'A4 koomiksid ON4CRD about radio best practices, first QSO and Ohm law for ET.',
+  'comics_title' => 'Koomiksid ON4CRD',
+  'comics_description' => 'ON4CRD A4 koomiksid headest raadioamatööri tavadest, esimesest QSO-st ja Ohmi seadusest.',
 );

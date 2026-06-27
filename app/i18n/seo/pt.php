@@ -213,6 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Interface de administração para Radio Club Durnal ON4CRD.',
   'admin_wiki_title' => 'Administração ON4CRD',
   'admin_wiki_description' => 'Interface de administração para Radio Club Durnal ON4CRD.',
-  'comics_title' => 'ON4CRD Banda desenhada',
-  'comics_description' => 'BD A4 ON4CRD about radio best practices, first QSO and Ohm law for PT.',
+  'comics_title' => 'Banda desenhada ON4CRD',
+  'comics_description' => 'Pranchas de banda desenhada A4 da ON4CRD sobre boas práticas de radioamador, o primeiro QSO e a lei de Ohm.',
 );

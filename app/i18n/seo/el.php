@@ -213,6 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Διεπαφή διαχείρισης για το Radio Club Durnal ON4CRD.',
   'admin_wiki_title' => 'Διαχείριση ON4CRD',
   'admin_wiki_description' => 'Διεπαφή διαχείρισης για το Radio Club Durnal ON4CRD.',
-  'comics_title' => 'ON4CRD Komiks EL',
-  'comics_description' => 'A4 komiks EL ON4CRD about radio best practices, first QSO and Ohm law for EL.',
+  'comics_title' => 'Κόμικς ON4CRD',
+  'comics_description' => 'Σελίδες κόμικ A4 του ON4CRD για καλές πρακτικές ραδιοερασιτεχνών, το πρώτο QSO και τον νόμο του Ohm.',
 );

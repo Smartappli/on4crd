@@ -213,6 +213,6 @@ return array (
   'admin_translation_reviews_description' => 'Radio Club Durnal ON4CRD এর জন্য প্রশাসনিক ইন্টারফেস।',
   'admin_wiki_title' => 'ON4CRD প্রশাসন',
   'admin_wiki_description' => 'Radio Club Durnal ON4CRD এর জন্য প্রশাসনিক ইন্টারফেস।',
-  'comics_title' => 'ON4CRD Comics BN',
-  'comics_description' => 'A4 comics BN ON4CRD about radio best practices, first QSO and Ohm law for BN.',
+  'comics_title' => 'ON4CRD কমিকস',
+  'comics_description' => 'ON4CRD-এর A4 কমিক পৃষ্ঠা রেডিও অ্যামেচারদের ভালো চর্চা, প্রথম QSO এবং ওহমের সূত্র নিয়ে.',
 );

@@ -34,7 +34,7 @@ return array (
   'schools_title' => 'Schools and Radio Education',
   'schools_description' => 'ON4CRD educational resources for teachers, schools and radio learning projects.',
   'comics_title' => 'ON4CRD Amateur Radio Comics',
-  'comics_description' => 'ON4CRD A4 comic pages about amateur radio best practices, a first QSO and Ohm s law.',
+  'comics_description' => 'ON4CRD A4 comic pages about amateur radio best practices, a first QSO and Ohm\'s law.',
   'press_title' => 'ON4CRD Press',
   'press_description' => 'Press kit, public information and contacts for journalists interested in ON4CRD.',
   'sponsoring_title' => 'ON4CRD Sponsoring',
