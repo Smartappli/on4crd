@@ -100,18 +100,6 @@
   margin: 0;
 }
 
-[data-route="videos"] .member-document-preheader-actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin: 0;
-}
-
-[data-route="videos"] .member-document-preheader-actions .member-document-propose-menu-panel {
-  top: calc(100% + .45rem);
-  bottom: auto;
-}
-
 :is([data-route="presentations"], [data-route="fichiers"]) .member-document-propose-menu-panel {
   top: auto;
   bottom: calc(100% + .45rem);
@@ -235,10 +223,6 @@
   }
 
   :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-actions {
-    justify-content: flex-start;
-  }
-
-  [data-route="videos"] .member-document-preheader-actions {
     justify-content: flex-start;
   }
 

@@ -460,9 +460,10 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("\$canProposeTaxonomy = in_array(\$moduleCode, ['presentations', 'videos'], true);", $renderer);
         self::assertStringContainsString("\$canProposeSubsubcategory = in_array(\$moduleCode, ['presentations', 'videos'], true) && \$canProposeTaxonomy;", $renderer);
         self::assertStringContainsString("\$showProposeDropdown = \$canProposeTaxonomy || (\$moduleCode === 'videos' && \$canProposeDocument);", $renderer);
-        self::assertStringContainsString("\$showPreHeaderProposeDropdown = \$moduleCode === 'videos' && \$showProposeDropdown;", $renderer);
+        self::assertStringContainsString("\$showHeroProposeDropdown = \$showProposeDropdown;", $renderer);
+        self::assertStringContainsString("\$showHeroPrimaryAction = \$moduleCode !== 'fichiers' && !\$showHeroProposeDropdown;", $renderer);
         self::assertStringContainsString("\$showHeroAdminLink = \$canManageDocuments && \$moduleCode !== 'fichiers';", $renderer);
-        self::assertStringContainsString('member-document-preheader-actions', $renderer);
+        self::assertStringNotContainsString('member-document-preheader-actions', $renderer);
         self::assertStringContainsString("elseif (\$showHeroProposeDropdown)", $renderer);
         self::assertStringContainsString("if (\$action === 'propose_category' && \$canProposeTaxonomy)", $renderer);
         self::assertStringContainsString("if (\$action === 'propose_subcategory' && \$canProposeTaxonomy)", $renderer);

@@ -2088,8 +2088,7 @@ function render_member_document_module_page(string $module): void
     $showSubcategoryProposalForm = $canProposeTaxonomy && (string) ($_GET['propose_subcategory'] ?? '') === '1';
     $showSubsubcategoryProposalForm = $canProposeSubsubcategory && (string) ($_GET['propose_subsubcategory'] ?? '') === '1';
     $showProposeDropdown = $canProposeTaxonomy || ($moduleCode === 'videos' && $canProposeDocument);
-    $showPreHeaderProposeDropdown = $moduleCode === 'videos' && $showProposeDropdown;
-    $showHeroProposeDropdown = $showProposeDropdown && !$showPreHeaderProposeDropdown;
+    $showHeroProposeDropdown = $showProposeDropdown;
     $primaryActionHref = '#member-document-list';
     $primaryActionAttributes = '';
     $primaryActionLabel = (string) $labels['view_content'];
@@ -2105,19 +2104,13 @@ function render_member_document_module_page(string $module): void
             $primaryActionAttributes = ' target="_blank" rel="noopener"';
         }
     }
-    $showHeroPrimaryAction = $moduleCode !== 'fichiers' && !$showHeroProposeDropdown && !$showPreHeaderProposeDropdown;
+    $showHeroPrimaryAction = $moduleCode !== 'fichiers' && !$showHeroProposeDropdown;
     $showHeroAdminLink = $canManageDocuments && $moduleCode !== 'fichiers';
     $showHeroActions = $moduleCode === 'fichiers' || $showHeroProposeDropdown || $showHeroPrimaryAction || $showHeroAdminLink;
 
     ob_start();
     ?>
     <div class="stack member-document-module">
-        <?php if ($showPreHeaderProposeDropdown): ?>
-            <div class="actions member-document-preheader-actions">
-                <?= render_member_document_propose_menu($moduleCode, $routeName, $labels, $canProposeDocument, $canProposeTaxonomy, $canProposeSubsubcategory) ?>
-            </div>
-        <?php endif; ?>
-
         <section class="page-hero member-document-hero member-module-hero">
             <div class="member-document-hero-copy">
                 <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
