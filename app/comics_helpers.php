@@ -79,6 +79,62 @@ function comics_public_boards(?string $locale = null): array
 }
 }
 
+if (!function_exists('comics_public_image_object')) {
+/**
+ * @param array{url:string,thumbnail_url:string,title:string,type:string,thumbnail_type:string,width:int,height:int,thumbnail_width:int,thumbnail_height:int,content_size:int,thumbnail_content_size:int} $board
+ * @return array<string, mixed>
+ */
+function comics_public_image_object(array $board, bool $thumbnail = false): array
+{
+    $url = (string) ($thumbnail ? $board['thumbnail_url'] : $board['url']);
+    $type = (string) ($thumbnail ? $board['thumbnail_type'] : $board['type']);
+    $width = (int) ($thumbnail ? $board['thumbnail_width'] : $board['width']);
+    $height = (int) ($thumbnail ? $board['thumbnail_height'] : $board['height']);
+    $contentSize = (int) ($thumbnail ? $board['thumbnail_content_size'] : $board['content_size']);
+
+    return [
+        '@type' => 'ImageObject',
+        '@id' => $url . '#image',
+        'url' => $url,
+        'contentUrl' => $url,
+        'encodingFormat' => $type,
+        'width' => $width,
+        'height' => $height,
+        'contentSize' => $contentSize,
+        'caption' => (string) $board['title'],
+    ];
+}
+}
+
+if (!function_exists('comics_public_creative_work')) {
+/**
+ * @param array{url:string,thumbnail_url:string,title:string,text:string,type:string,thumbnail_type:string,width:int,height:int,thumbnail_width:int,thumbnail_height:int,content_size:int,thumbnail_content_size:int} $board
+ * @return array<string, mixed>
+ */
+function comics_public_creative_work(array $board, string $locale, string $collectionId, string $publisherId): array
+{
+    return [
+        '@type' => 'CreativeWork',
+        '@id' => (string) $board['url'] . '#creativework',
+        'name' => (string) $board['title'],
+        'description' => (string) $board['text'],
+        'url' => (string) $board['url'],
+        'image' => comics_public_image_object($board),
+        'thumbnail' => comics_public_image_object($board, true),
+        'thumbnailUrl' => (string) $board['thumbnail_url'],
+        'encodingFormat' => (string) $board['type'],
+        'inLanguage' => $locale,
+        'isPartOf' => ['@id' => $collectionId],
+        'publisher' => ['@id' => $publisherId],
+        'creator' => ['@id' => $publisherId],
+        'about' => [
+            ['@type' => 'Thing', 'name' => 'radioamateurisme'],
+            ['@type' => 'Thing', 'name' => 'amateur radio education'],
+        ],
+    ];
+}
+}
+
 if (!function_exists('comics_public_collection')) {
 /**
  * @return array{locale:string,title:string,layout:string,description:string,summary:string,keywords:list<string>,url:string,available_languages:list<string>,alternate_urls:array<string,string>,boards:list<array{key:string,image:string,thumbnail:string,url:string,thumbnail_url:string,title:string,text:string,type:string,thumbnail_type:string,width:int,height:int,thumbnail_width:int,thumbnail_height:int,content_size:int,thumbnail_content_size:int}>}
