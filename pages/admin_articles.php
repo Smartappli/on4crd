@@ -1343,7 +1343,7 @@ ob_start();
                 <p><button class="button" type="submit"><?= e($t('filter')) ?></button> <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter')) ?></a></p>
             </form>
         </details>
-        <form id="admin-article-bulk-form" method="post" class="admin-article-bulk-bar" onsubmit="return confirm('<?= e($t('confirm_bulk_action')) ?>');">
+        <form id="admin-article-bulk-form" method="post" class="admin-article-bulk-bar" data-confirm-message="<?= e($t('confirm_bulk_action')) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="bulk_update_articles">
             <div>
