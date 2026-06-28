@@ -707,6 +707,40 @@ foreach ($albums as $albumRow) {
         $albumSubcategoryCounts[$categoryCode . ':' . $subcategoryCode] = ($albumSubcategoryCounts[$categoryCode . ':' . $subcategoryCode] ?? 0) + 1;
     }
 }
+$albumFilterQuery = mb_safe_substr(trim((string) ($_GET['album_q'] ?? '')), 0, 190);
+$albumFilterCategory = album_category_code((string) ($_GET['album_category'] ?? ''));
+if ($albumFilterCategory !== '' && !array_key_exists($albumFilterCategory, $albumCategories)) {
+    $albumFilterCategory = '';
+}
+$albumFilterVisibility = strtolower(trim((string) ($_GET['album_visibility'] ?? '')));
+if (!in_array($albumFilterVisibility, ['public', 'private', 'featured'], true)) {
+    $albumFilterVisibility = '';
+}
+$filteredAlbums = array_values(array_filter($albums, static function (array $album) use ($albumFilterQuery, $albumFilterCategory, $albumFilterVisibility): bool {
+    if ($albumFilterQuery !== '') {
+        $title = (string) ($album['title'] ?? '');
+        $description = (string) ($album['description'] ?? '');
+        if (mb_stripos($title, $albumFilterQuery) === false && mb_stripos($description, $albumFilterQuery) === false) {
+            return false;
+        }
+    }
+    if ($albumFilterCategory !== '' && album_category_code((string) ($album['category'] ?? 'general')) !== $albumFilterCategory) {
+        return false;
+    }
+    if ($albumFilterVisibility === 'public' && (int) ($album['is_public'] ?? 0) !== 1) {
+        return false;
+    }
+    if ($albumFilterVisibility === 'private' && (int) ($album['is_public'] ?? 0) === 1) {
+        return false;
+    }
+    if ($albumFilterVisibility === 'featured' && (int) ($album['is_featured'] ?? 0) !== 1) {
+        return false;
+    }
+
+    return true;
+}));
+$filteredAlbumsCount = count($filteredAlbums);
+$hasAlbumListFilters = $albumFilterQuery !== '' || $albumFilterCategory !== '' || $albumFilterVisibility !== '';
 
 $photoAlbumFilter = max(0, (int) ($_GET['photo_album'] ?? 0));
 $uploadAlbumId = max(0, (int) ($_GET['upload_album'] ?? $photoAlbumFilter));
@@ -1022,14 +1056,40 @@ ob_start();
         <div class="admin-albums-section-head">
             <div>
                 <h2><?= e((string) $t['edit_albums']) ?></h2>
-                <p class="help"><?= $albumsCount ?> <?= e((string) $t['albums']) ?></p>
+                <p class="help"><?= $filteredAlbumsCount ?> / <?= $albumsCount ?> <?= e((string) $t['albums']) ?></p>
             </div>
+            <form method="get" class="admin-album-list-filter">
+                <input type="hidden" name="route" value="admin_albums">
+                <label><?= e((string) $t['title']) ?>
+                    <input type="search" name="album_q" value="<?= e($albumFilterQuery) ?>">
+                </label>
+                <label><?= e((string) $t['category_field']) ?>
+                    <select name="album_category">
+                        <option value=""><?= e((string) $t['albums']) ?></option>
+                        <?php foreach ($albumCategories as $categoryCode => $categoryLabel): ?>
+                            <option value="<?= e((string) $categoryCode) ?>" <?= $albumFilterCategory === (string) $categoryCode ? 'selected' : '' ?>><?= e((string) $categoryLabel) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label><?= e((string) $t['public_album']) ?>
+                    <select name="album_visibility">
+                        <option value=""><?= e((string) $t['albums']) ?></option>
+                        <option value="public" <?= $albumFilterVisibility === 'public' ? 'selected' : '' ?>><?= e((string) $t['public_album']) ?>: <?= e((string) $t['yes']) ?></option>
+                        <option value="private" <?= $albumFilterVisibility === 'private' ? 'selected' : '' ?>><?= e((string) $t['public_album']) ?>: <?= e((string) $t['no']) ?></option>
+                        <option value="featured" <?= $albumFilterVisibility === 'featured' ? 'selected' : '' ?>><?= e($featuredAlbumLabel) ?>: <?= e((string) $t['yes']) ?></option>
+                    </select>
+                </label>
+                <button class="button small secondary" type="submit"><?= e((string) $t['update']) ?></button>
+                <?php if ($hasAlbumListFilters): ?>
+                    <a class="button small secondary" href="<?= e(route_url_clean('admin_albums') . '#admin-album-list') ?>"><?= e((string) $t['albums']) ?></a>
+                <?php endif; ?>
+            </form>
         </div>
-        <?php if ($albums === []): ?>
+        <?php if ($filteredAlbums === []): ?>
             <p class="help"><?= e((string) $t['no_albums']) ?></p>
         <?php else: ?>
             <div class="admin-album-list">
-                <?php foreach ($albums as $album): ?>
+                <?php foreach ($filteredAlbums as $album): ?>
                     <?php
                     $albumId = (int) $album['id'];
                     $albumEditFormId = 'admin-album-edit-form-' . $albumId;

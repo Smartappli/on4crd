@@ -253,6 +253,20 @@
   background: color-mix(in srgb, var(--accent) 4%, var(--panel));
 }
 
+[data-route="admin_albums"] .admin-album-list-filter {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) minmax(9rem, .8fr) minmax(10rem, .8fr) auto auto;
+  gap: .45rem;
+  align-items: end;
+  margin: 0;
+  max-width: min(100%, 58rem);
+}
+
+[data-route="admin_albums"] .admin-album-list-filter label {
+  min-width: 0;
+  margin: 0;
+}
+
 [data-route="admin_albums"] .admin-album-edit-form {
   gap: .8rem;
 }
@@ -321,6 +335,12 @@
   [data-route="admin_albums"] .admin-album-taxonomy-create-grid {
     grid-template-columns: 1fr;
   }
+
+  [data-route="admin_albums"] .admin-album-list-filter {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    max-width: none;
+  }
 }
 
 @media (max-width: 760px) {
@@ -338,6 +358,10 @@
 
   [data-route="admin_albums"] .admin-album-cover {
     grid-row: auto;
+  }
+
+  [data-route="admin_albums"] .admin-album-list-filter {
+    grid-template-columns: 1fr;
   }
 
   [data-route="admin_albums"] .admin-albums-rebuild-form,
