@@ -811,6 +811,7 @@ $adminCategory = $adminCategoryRaw !== '' ? article_category_code($adminCategory
 $adminSubcategory = article_subcategory_code(trim((string) ($_GET['subcategory'] ?? '')));
 $adminSubsubcategory = article_subsubcategory_code(trim((string) ($_GET['subsubcategory'] ?? '')));
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
+$hasAdvancedArticleFilters = $adminSearch !== '' || $adminCategory !== '' || $adminSubcategory !== '' || $adminSubsubcategory !== '';
 $adminWhere = [];
 $adminParams = [];
 $adminStatusCountWhere = [];
@@ -929,8 +930,16 @@ if ($showPendingProposals && ensure_content_proposals_table()) {
 ob_start();
 ?>
 <div class="admin-articles-module">
+<nav class="admin-article-quick-nav" aria-label="<?= e($t('layout')) ?>">
+    <a href="#admin-article-editor"><?= e($t('article_editor')) ?></a>
+    <a href="#admin-article-preview"><?= e($t('preview')) ?></a>
+    <a href="#admin-article-queue"><?= e($t('editorial_queue')) ?></a>
+    <a href="<?= e($pendingProposalUrl) ?>"><?= e($t('pending_proposals_title')) ?></a>
+    <a href="#admin-article-list"><?= e($t('existing_articles')) ?></a>
+    <a href="#admin-article-taxonomy"><?= e($t('category_edit')) ?></a>
+</nav>
 <div class="admin-articles-workspace">
-    <section class="card admin-article-editor-card">
+    <section class="card admin-article-editor-card" id="admin-article-editor">
         <div class="admin-article-editor-head">
             <div>
                 <p class="admin-section-kicker"><?= e($t('article_editor')) ?></p>
@@ -1101,7 +1110,7 @@ ob_start();
             </section>
         <?php endif; ?>
     </section>
-    <section class="card">
+    <section class="card admin-article-preview-card" id="admin-article-preview">
         <h2><?= e($t('preview')) ?></h2>
         <p class="help"><?= e($t('preview_help')) ?></p>
         <?php if ($previewPayload === null): ?>
@@ -1117,7 +1126,7 @@ ob_start();
             </article>
         <?php endif; ?>
     </section>
-    <section class="card">
+    <section class="card admin-article-queue-card" id="admin-article-queue">
         <h2><?= e($t('editorial_queue')) ?></h2>
         <p class="help"><?= e($t('editorial_queue_help')) ?></p>
         <?php if ($scheduledQueue === []): ?>
@@ -1229,7 +1238,7 @@ ob_start();
         </div>
     </section>
     <?php endif; ?>
-    <section class="card admin-article-list-card">
+    <section class="card admin-article-list-card" id="admin-article-list">
         <div class="admin-article-list-top">
             <div>
                 <p class="admin-section-kicker"><?= e($t('status_overview')) ?></p>
@@ -1449,7 +1458,7 @@ ob_start();
             </nav>
         <?php endif; ?>
     </section>
-    <section class="card admin-article-taxonomy-card">
+    <section class="card admin-article-taxonomy-card" id="admin-article-taxonomy">
         <h2><?= e($t('category_edit')) ?></h2>
         <div class="grid-2">
             <form method="post" class="stack">
