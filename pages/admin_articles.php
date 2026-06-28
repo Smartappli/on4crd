@@ -1557,20 +1557,28 @@ ob_start();
         <?php endif; ?>
     </section>
     <section class="card admin-article-taxonomy-card" id="admin-article-taxonomy">
-        <h2><?= e($t('category_edit')) ?></h2>
-        <div class="grid-2">
-            <form method="post" class="stack">
+        <div class="admin-article-taxonomy-head">
+            <div>
+                <p class="admin-section-kicker"><?= e($t('category_edit')) ?></p>
+                <h2><?= e($t('category_edit')) ?></h2>
+            </div>
+            <span class="badge muted"><?= count($knownCategories) ?></span>
+        </div>
+        <div class="admin-article-taxonomy-create-grid">
+            <form method="post" class="admin-article-taxonomy-create-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_category">
+                <h3><?= e($t('add_category')) ?></h3>
                 <label><?= e($t('category')) ?>
                     <input type="text" name="category_label" maxlength="160" required>
                 </label>
                 <input type="hidden" name="category_code" value="">
                 <button class="button" type="submit"><?= e($t('add_category')) ?></button>
             </form>
-            <form method="post" class="stack">
+            <form method="post" class="admin-article-taxonomy-create-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_subcategory">
+                <h3><?= e($t('add_subcategory')) ?></h3>
                 <label><?= e($t('category')) ?>
                     <select name="subcategory_category">
                         <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
@@ -1584,9 +1592,10 @@ ob_start();
                 <input type="hidden" name="subcategory_code" value="">
                 <button class="button" type="submit"><?= e($t('add_subcategory')) ?></button>
             </form>
-            <form method="post" class="stack">
+            <form method="post" class="admin-article-taxonomy-create-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_subsubcategory">
+                <h3><?= e($t('add_subsubcategory')) ?></h3>
                 <label><?= e($t('subcategory_field')) ?>
                     <select name="subsubcategory_parent_ref" required>
                         <option value=""><?= e($t('no_subcategory')) ?></option>
@@ -1608,23 +1617,36 @@ ob_start();
                 <button class="button" type="submit"><?= e($t('add_subsubcategory')) ?></button>
             </form>
         </div>
-        <div class="tags-cloud">
+        <div class="admin-article-taxonomy-manage-grid">
+            <section class="admin-article-taxonomy-group" aria-labelledby="admin-article-taxonomy-categories-title">
+                <div class="admin-article-taxonomy-group-head">
+                    <h3 id="admin-article-taxonomy-categories-title"><?= e($t('category')) ?></h3>
+                    <span class="badge muted"><?= count($knownCategories) ?></span>
+                </div>
             <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
                 <?php
                 $categoryTotal = (int) ($articleCategoryCounts[(string) $categoryCode] ?? 0);
                 $subcategoryTotal = count($articleSubcategoriesByCategory[(string) $categoryCode] ?? []);
                 $categoryDeleteDisabled = (string) $categoryCode === 'autres' || $subcategoryTotal > 0;
                 ?>
-                <form method="post" class="inline-form">
+                <form method="post" class="inline-form admin-article-taxonomy-row">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $categoryCode) ?>">
-                    <span class="pill taxonomy-pill-category"><?= e((string) $categoryCode) ?> (<?= $categoryTotal ?>)</span>
+                    <span class="pill taxonomy-pill-category admin-article-taxonomy-code"><?= e((string) $categoryCode) ?> (<?= $categoryTotal ?>)</span>
                     <input type="text" name="category_label" value="<?= e((string) $categoryLabel) ?>" maxlength="160" required>
-                    <button class="button small" type="submit"><?= e($t('save')) ?></button>
-                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
+                    <span class="admin-article-taxonomy-actions">
+                        <button class="button small" type="submit"><?= e($t('save')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
+                    </span>
                 </form>
             <?php endforeach; ?>
+            </section>
+            <section class="admin-article-taxonomy-group" aria-labelledby="admin-article-taxonomy-subcategories-title">
+                <div class="admin-article-taxonomy-group-head">
+                    <h3 id="admin-article-taxonomy-subcategories-title"><?= e($t('subcategory_field')) ?></h3>
+                    <span class="badge muted"><?= array_sum(array_map('count', $articleSubcategoriesByCategory)) ?></span>
+                </div>
             <?php foreach ($articleSubcategoriesByCategory as $parentCode => $subcategories): ?>
                 <?php foreach ($subcategories as $subcategoryInfo): ?>
                     <?php
@@ -1636,21 +1658,29 @@ ob_start();
                     $subsubParentRef = (string) $parentCode . ':' . $subCode;
                     $subsubcategoryTotal = count($articleSubsubcategoriesByParent[$subsubParentRef] ?? []);
                     ?>
-                    <form method="post" class="inline-form">
+                    <form method="post" class="inline-form admin-article-taxonomy-row">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_ref" value="<?= e(article_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                        <span class="taxonomy-badge-row">
+                        <span class="taxonomy-badge-row admin-article-taxonomy-code">
                             <span class="badge muted taxonomy-pill-category"><?= e((string) ($knownCategories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) ?></span>
                             <span class="badge muted taxonomy-pill-subcategory"><?= e($subCode) ?></span>
                             <span class="badge muted"><?= $subTotal ?></span>
                         </span>
                         <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
-                        <button class="button small" type="submit"><?= e($t('save')) ?></button>
-                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= ($subTotal > 0 || $subsubcategoryTotal > 0) ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
+                        <span class="admin-article-taxonomy-actions">
+                            <button class="button small" type="submit"><?= e($t('save')) ?></button>
+                            <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= ($subTotal > 0 || $subsubcategoryTotal > 0) ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
+                        </span>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>
+            </section>
+            <section class="admin-article-taxonomy-group" aria-labelledby="admin-article-taxonomy-subsubcategories-title">
+                <div class="admin-article-taxonomy-group-head">
+                    <h3 id="admin-article-taxonomy-subsubcategories-title"><?= e($t('subsubcategory_field')) ?></h3>
+                    <span class="badge muted"><?= array_sum(array_map('count', $articleSubsubcategoriesByParent)) ?></span>
+                </div>
             <?php foreach ($articleSubsubcategoriesByParent as $parentRef => $subsubcategories): ?>
                 <?php $parentParts = article_subcategory_ref_parts((string) $parentRef); ?>
                 <?php $parentCategory = $parentParts['category']; ?>
@@ -1664,24 +1694,27 @@ ob_start();
                     <?php $subsubCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')); ?>
                     <?php if ($subsubCode === '') { continue; } ?>
                     <?php $subsubTotal = (int) ($articleSubsubcategoryCounts[$parentCategory . ':' . $parentSubcategory . ':' . $subsubCode] ?? 0); ?>
-                    <form method="post" class="inline-form">
+                    <form method="post" class="inline-form admin-article-taxonomy-row">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="update_subsubcategory">
                         <input type="hidden" name="subsubcategory_category" value="<?= e($parentCategory) ?>">
                         <input type="hidden" name="subsubcategory_parent" value="<?= e($parentSubcategory) ?>">
                         <input type="hidden" name="subsubcategory_code" value="<?= e($subsubCode) ?>">
-                        <span class="taxonomy-badge-row">
+                        <span class="taxonomy-badge-row admin-article-taxonomy-code">
                             <span class="badge muted taxonomy-pill-category"><?= e((string) ($knownCategories[$parentCategory] ?? article_category_label_from_code($parentCategory))) ?></span>
                             <span class="badge muted taxonomy-pill-subcategory"><?= e($parentSubcategoryLabel) ?></span>
                             <span class="badge muted taxonomy-pill-subsubcategory"><?= e($subsubCode) ?></span>
                             <span class="badge muted"><?= $subsubTotal ?></span>
                         </span>
                         <input type="text" name="subsubcategory_label" value="<?= e((string) ($subsubcategoryInfo['label'] ?? $subsubCode)) ?>" maxlength="160" required>
-                        <button class="button small" type="submit"><?= e($t('save')) ?></button>
-                        <button class="button secondary small" type="submit" name="action" value="delete_subsubcategory"<?= $subsubTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
+                        <span class="admin-article-taxonomy-actions">
+                            <button class="button small" type="submit"><?= e($t('save')) ?></button>
+                            <button class="button secondary small" type="submit" name="action" value="delete_subsubcategory"<?= $subsubTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete')) ?></button>
+                        </span>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>
+            </section>
         </div>
     </section>
 </div>
