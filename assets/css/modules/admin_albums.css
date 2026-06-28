@@ -183,6 +183,18 @@
   border-left: 4px solid color-mix(in srgb, var(--border) 70%, transparent);
 }
 
+[data-route="admin_albums"] .admin-album-list-item.is-public {
+  border-left-color: color-mix(in srgb, var(--success) 82%, var(--accent));
+}
+
+[data-route="admin_albums"] .admin-album-list-item.is-private {
+  border-left-color: color-mix(in srgb, #b54708 76%, var(--border));
+}
+
+[data-route="admin_albums"] .admin-album-list-item.is-featured {
+  background: color-mix(in srgb, var(--accent) 4%, var(--panel));
+}
+
 [data-route="admin_albums"] .admin-album-edit-form {
   gap: .8rem;
 }
@@ -199,6 +211,24 @@
 
 [data-route="admin_albums"] .admin-album-taxonomy {
   align-self: center;
+}
+
+[data-route="admin_albums"] .admin-album-toggle {
+  display: inline-flex;
+  gap: .45rem;
+  align-items: center;
+  min-height: 2.35rem;
+  padding: .45rem .6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-2);
+  font-weight: 700;
+}
+
+[data-route="admin_albums"] .admin-album-toggle input {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
 }
 
 [data-route="admin_albums"] .admin-album-delete-form,

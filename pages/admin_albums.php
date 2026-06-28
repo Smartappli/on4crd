@@ -1026,7 +1026,7 @@ ob_start();
                         }
                     }
                     ?>
-                    <article class="article-item admin-album-list-item">
+                    <article class="article-item admin-album-list-item<?= (int) $album['is_public'] === 1 ? ' is-public' : ' is-private' ?><?= (int) ($album['is_featured'] ?? 0) === 1 ? ' is-featured' : '' ?>">
                         <form id="<?= e($albumEditFormId) ?>" method="post" action="<?= e(route_url('admin_albums')) ?>" class="grid-2 admin-album-edit-form" autocomplete="off">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_album">
@@ -1035,10 +1035,10 @@ ob_start();
                                 <input type="text" name="title" value="<?= e((string) $album['title']) ?>" required maxlength="190">
                             </label>
                             <input type="hidden" name="is_public" value="0">
-                            <label><input type="checkbox" name="is_public" value="1" <?= (int) $album['is_public'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['public_album']) ?></label>
+                            <label class="admin-album-toggle"><input type="checkbox" name="is_public" value="1" <?= (int) $album['is_public'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['public_album']) ?></label>
                             <input type="hidden" name="album_is_featured_present" value="1">
                             <input type="hidden" name="album_is_featured[]" value="0">
-                            <label><input type="checkbox" name="album_is_featured[]" value="1" autocomplete="off" <?= (int) ($album['is_featured'] ?? 0) === 1 ? 'checked' : '' ?>> <?= e($featuredAlbumLabel) ?></label>
+                            <label class="admin-album-toggle"><input type="checkbox" name="album_is_featured[]" value="1" autocomplete="off" <?= (int) ($album['is_featured'] ?? 0) === 1 ? 'checked' : '' ?>> <?= e($featuredAlbumLabel) ?></label>
                             <div class="taxonomy-badge-row admin-album-taxonomy">
                                 <span class="badge muted taxonomy-pill-category"><?= e($albumCategoryLabel) ?></span>
                                 <?php if ($albumSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($albumSubcategoryLabel) ?></span><?php endif; ?>
