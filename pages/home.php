@@ -483,9 +483,6 @@ $latestArticleHtml = '<a class="group block rounded-2xl border border-dashed bor
 if (is_array($latestArticle) && !empty($latestArticle['slug'])) {
     $latestArticle = localized_article_row($latestArticle);
     $articleExcerpt = trim((string) ($latestArticle['excerpt_localized'] ?? $latestArticle['excerpt'] ?? ''));
-    if ($articleExcerpt === '') {
-        $articleExcerpt = mb_safe_strimwidth(trim((string) preg_replace('/\s+/u', ' ', strip_tags((string) ($latestArticle['content_localized'] ?? $latestArticle['content'] ?? '')))), 0, 130, '...');
-    }
     $articlePublished = article_publication_datetime($latestArticle);
     $articleDate = $articlePublished !== null ? date('d/m/Y', strtotime($articlePublished)) : '';
     $latestArticleHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('article', ['slug' => (string) $latestArticle['slug']])) . '">'

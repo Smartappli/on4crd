@@ -594,12 +594,18 @@ async function assertAdminImportedArticleAutoPublished(driver, token) {
     assert.ok(Number(article.author_id) > 0, 'L article importe admin doit etre rattache a l administrateur.');
     assert.equal(article.status, 'published', 'L article importe par un administrateur doit etre publie automatiquement.');
     assert.ok(String(article.published_at || '') !== '', 'L article importe publie doit avoir une date de publication.');
+    assert.equal(String(article.excerpt || ''), '', 'Un import sans resume ne doit pas generer de resume automatique.');
     assert.match(article.content, new RegExp(importedSentence), 'Le contenu importe doit remplacer le contenu manuel.');
 
     await visit(driver, 'my_requests');
     let text = await pagePlainText(driver);
     assert.match(text, new RegExp(title), 'L article importe admin doit apparaitre dans Mes contenus.');
     assert.match(text, /publ|published/i, 'Mes contenus doit afficher l article importe comme publie.');
+
+    await visit(driver, 'articles', { q: title });
+    text = await pagePlainText(driver);
+    assert.match(text, new RegExp(title), 'La liste Articles doit afficher l article importe.');
+    assert.doesNotMatch(text, new RegExp(importedSentence), 'La liste Articles ne doit pas afficher le contenu comme resume de remplacement.');
 
     await visit(driver, 'article', { slug });
     text = await pagePlainText(driver);

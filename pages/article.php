@@ -194,9 +194,12 @@ ob_start();
     <div class="news-grid">
         <?php foreach ($relatedRows as $related): ?>
             <?php $related = localized_article_row($related); ?>
+            <?php $relatedExcerpt = trim((string) ($related['excerpt_localized'] ?? '')); ?>
             <article class="feature-card">
                 <h3><a href="<?= e(route_url('article', ['slug' => (string) $related['slug']])) ?>"><?= e((string) $related['title_localized']) ?></a></h3>
-                <p><?= e(trim((string) ($related['excerpt_localized'] ?? '')) !== '' ? (string) $related['excerpt_localized'] : mb_substr(article_view_plain_text((string) ($related['content_localized'] ?? '')), 0, 140)) ?></p>
+                <?php if ($relatedExcerpt !== ''): ?>
+                    <p><?= e($relatedExcerpt) ?></p>
+                <?php endif; ?>
             </article>
         <?php endforeach; ?>
     </div>

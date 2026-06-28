@@ -16,13 +16,7 @@ function article_reading_minutes(string $html): int
 
 function article_card_excerpt(array $row): string
 {
-    $excerpt = trim((string) ($row['excerpt_localized'] ?? $row['excerpt'] ?? ''));
-    if ($excerpt !== '') {
-        return $excerpt;
-    }
-
-    $plain = article_plain_text((string) ($row['content_localized'] ?? $row['content'] ?? ''));
-    return mb_strlen($plain) > 180 ? mb_substr($plain, 0, 177) . '...' : $plain;
+    return trim((string) ($row['excerpt_localized'] ?? $row['excerpt'] ?? ''));
 }
 
 function article_category_logo(string $label): string
@@ -762,7 +756,10 @@ ob_start();
                             </div>
                             <h3><a href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
                             <p class="help"><?= $articleDate !== null ? e(date('d/m/Y', strtotime($articleDate))) . ' · ' : '' ?><?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
-                            <p><?= e(article_card_excerpt($row)) ?></p>
+                            <?php $cardExcerpt = article_card_excerpt($row); ?>
+                            <?php if ($cardExcerpt !== ''): ?>
+                                <p><?= e($cardExcerpt) ?></p>
+                            <?php endif; ?>
                             <p class="actions">
                                 <a class="button secondary" href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $t['read_article']) ?></a>
                                 <?php if ($user !== null): ?>

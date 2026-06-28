@@ -928,6 +928,26 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('maxlength="50000"', $articlePropose);
     }
 
+    public function testArticlesDoNotRenderGeneratedSummaryWhenExcerptIsEmpty(): void
+    {
+        $adminArticles = file_get_contents(__DIR__ . '/../pages/admin_articles.php');
+        $articles = file_get_contents(__DIR__ . '/../pages/articles.php');
+        $article = file_get_contents(__DIR__ . '/../pages/article.php');
+        $home = file_get_contents(__DIR__ . '/../pages/home.php');
+        self::assertIsString($adminArticles);
+        self::assertIsString($articles);
+        self::assertIsString($article);
+        self::assertIsString($home);
+
+        self::assertStringContainsString("'excerpt' => ''", $adminArticles);
+        self::assertStringNotContainsString('$excerpt = $imported[\'excerpt\'];', $adminArticles);
+        self::assertStringNotContainsString("mb_substr(article_view_plain_text((string) (\$related['content_localized'] ?? '')), 0, 140)", $article);
+        self::assertStringNotContainsString("\$articleExcerpt = mb_safe_strimwidth", $home);
+        self::assertStringNotContainsString('return mb_strlen($plain) > 180', $articles);
+        self::assertStringContainsString('$cardExcerpt = article_card_excerpt($row);', $articles);
+        self::assertStringContainsString('if ($cardExcerpt !== \'\'):', $articles);
+    }
+
     public function testProfileGeocodeConsentIsCheckedByDefault(): void
     {
         $profile = file_get_contents(__DIR__ . '/../pages/profile.php');

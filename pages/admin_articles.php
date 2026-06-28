@@ -87,7 +87,6 @@ function import_article_document(array $file, bool $persist = true): array
         }
     }
 
-    $documentTitle = trim((string) pathinfo($originalName, PATHINFO_FILENAME));
     $sourceLabel = '<p class="help article-source-document">' . e($tm('source_file')) . ': ' . e($originalName) . '</p>';
     if (in_array($extension, ['txt', 'md'], true)) {
         $rawText = (string) file_get_contents($absolutePath);
@@ -116,7 +115,7 @@ function import_article_document(array $file, bool $persist = true): array
     $content = article_sanitize_content($content);
 
     return [
-        'excerpt' => $tm('imported_doc') . ' ' . $documentTitle,
+        'excerpt' => '',
         'content' => $content,
     ];
 }
@@ -541,9 +540,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $imported = import_article_document($_FILES['article_document'] ?? [], $action !== 'preview_article');
             if ($imported['content'] !== '') {
                 $content = $imported['content'];
-                if ($excerpt === '') {
-                    $excerpt = $imported['excerpt'];
-                }
             }
             if (
                 mb_strlen($title) > $articleFieldLimits['title']
@@ -1231,7 +1227,9 @@ ob_start();
                 <article class="article-item">
                     <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
                     <p class="taxonomy-badge-row"><strong><?= e($t('category_label')) ?></strong> <span class="badge muted taxonomy-pill-category"><?= e($articleCategoryLabel) ?></span><?php if ($articleSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($articleSubcategoryLabel) ?></span><?php endif; ?><?php if ($articleSubsubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($articleSubsubcategoryLabel) ?></span><?php endif; ?> <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
-                    <p><?= e((string) $article['excerpt']) ?></p>
+                    <?php if (trim((string) ($article['excerpt'] ?? '')) !== ''): ?>
+                        <p><?= e((string) $article['excerpt']) ?></p>
+                    <?php endif; ?>
                 </article>
             <?php endforeach; ?>
             <?php if ($articles === []): ?><p><?= e($t('no_articles')) ?></p><?php endif; ?>
