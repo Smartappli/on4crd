@@ -794,6 +794,36 @@ final class RouterContractTest extends TestCase
         }
     }
 
+    public function testWebothequeProposeMenuShowsLinkFirst(): void
+    {
+        $source = file_get_contents(__DIR__ . '/../app/member_webotheque.php');
+        self::assertIsString($source);
+
+        $menuStart = strpos($source, '<div class="webotheque-propose-menu-panel" role="menu">');
+        self::assertNotFalse($menuStart);
+
+        $linkPosition = strpos($source, 'data-webotheque-modal-open="webotheque-link-dialog"', $menuStart);
+        $domainPosition = strpos($source, 'data-webotheque-modal-open="webotheque-domain-dialog"', $menuStart);
+        $subcategoryPosition = strpos($source, 'data-webotheque-modal-open="webotheque-subcategory-dialog"', $menuStart);
+        $subsubcategoryPosition = strpos($source, 'data-webotheque-modal-open="webotheque-subsubcategory-dialog"', $menuStart);
+        $tagPosition = strpos($source, 'data-webotheque-modal-open="webotheque-tag-dialog"', $menuStart);
+
+        foreach ([
+            'link' => $linkPosition,
+            'domain' => $domainPosition,
+            'subcategory' => $subcategoryPosition,
+            'subsubcategory' => $subsubcategoryPosition,
+            'tag' => $tagPosition,
+        ] as $item => $position) {
+            self::assertNotFalse($position, sprintf('Missing webotheque propose menu item: %s.', $item));
+        }
+
+        self::assertLessThan($domainPosition, $linkPosition);
+        self::assertLessThan($subcategoryPosition, $linkPosition);
+        self::assertLessThan($subsubcategoryPosition, $linkPosition);
+        self::assertLessThan($tagPosition, $linkPosition);
+    }
+
     public function testWikiPageProposalReplacesDirectNewPageForModerators(): void
     {
         $wiki = file_get_contents(__DIR__ . '/../pages/wiki.php');
