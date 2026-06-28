@@ -269,7 +269,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $bulkRowsStmt->execute($ids);
                 $bulkRows = $bulkRowsStmt->fetchAll() ?: [];
                 $scheduledAt = $bulkOp === 'scheduled' ? date('Y-m-d H:i:s', time() + 3600) : null;
-                $moderationNote = $bulkOp === 'rejected' ? $t('moderation_note_rejected_default') : null;
+                $submittedModerationNote = trim((string) ($_POST['moderation_note'] ?? ''));
+                $moderationNote = $bulkOp === 'rejected'
+                    ? ($submittedModerationNote !== '' ? $submittedModerationNote : $t('moderation_note_rejected_default'))
+                    : null;
                 $publishedAtSql = $bulkOp === 'published' ? 'COALESCE(published_at, NOW())' : 'NULL';
                 db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = ' . $publishedAtSql . ', moderation_note = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
                     ->execute(array_merge([$bulkOp, $scheduledAt, $moderationNote], $ids));
@@ -878,9 +881,14 @@ if ($showPendingProposals && ensure_content_proposals_table()) {
 ob_start();
 ?>
 <div class="grid-2">
-    <section class="card">
-        <h1><?= $editingId > 0 ? e($t('edit')) : e($t('create')) ?> <?= e($t('an_article')) ?></h1>
-        <form method="post" enctype="multipart/form-data">
+    <section class="card admin-article-editor-card">
+        <div class="admin-article-editor-head">
+            <h1><?= $editingId > 0 ? e($t('edit')) : e($t('create')) ?> <?= e($t('an_article')) ?></h1>
+            <?php if ($editingId > 0): ?>
+                <span class="badge muted admin-article-status admin-article-status-<?= e((string) ($editing['status'] ?? 'draft')) ?>"><?= e($articleStatusLabel((string) ($editing['status'] ?? 'draft'))) ?></span>
+            <?php endif; ?>
+        </div>
+        <form method="post" enctype="multipart/form-data" class="admin-article-editor-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_article">
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
@@ -966,16 +974,28 @@ ob_start();
             </label>
             <label><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
             <label><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
-            <button class="button"><?= e($t('save')) ?></button>
+            <button class="button admin-article-save-button"><?= e($t('save')) ?></button>
             <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>
         </form>
         <?php if ((int) $editing['id'] > 0): ?>
-            <form method="post" style="margin-top:1rem;" onsubmit="return confirm('<?= e($t('confirm_delete')) ?>');">
-                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <input type="hidden" name="action" value="delete_article">
-                <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
-                <button class="button secondary" type="submit"><?= e($t('delete_article')) ?></button>
-            </form>
+            <div class="admin-article-moderation-panel">
+                <form method="post" class="admin-article-reject-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="bulk_update_articles">
+                    <input type="hidden" name="ids[]" value="<?= (int) $editing['id'] ?>">
+                    <input type="hidden" name="bulk_op" value="rejected">
+                    <label><?= e($t('moderation_note')) ?>
+                        <textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea>
+                    </label>
+                    <button class="button secondary admin-article-reject-button" type="submit"><?= e($t('notification_article_rejected')) ?></button>
+                </form>
+                <form method="post" class="admin-article-delete-form" onsubmit="return confirm('<?= e($t('confirm_delete')) ?>');">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="delete_article">
+                    <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
+                    <button class="button secondary admin-article-delete-button" type="submit"><?= e($t('delete_article')) ?></button>
+                </form>
+            </div>
             <section style="margin-top:1rem;">
                 <h3><?= e($t('revisions')) ?></h3>
                 <?php if ($revisions === []): ?>
@@ -1225,9 +1245,38 @@ ob_start();
                 }
                 $articleExcerpt = article_excerpt_from_input((string) ($article['excerpt'] ?? ''));
                 ?>
-                <article class="article-item">
-                    <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
-                    <p class="taxonomy-badge-row"><strong><?= e($t('category_label')) ?></strong> <span class="badge muted taxonomy-pill-category"><?= e($articleCategoryLabel) ?></span><?php if ($articleSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($articleSubcategoryLabel) ?></span><?php endif; ?><?php if ($articleSubsubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($articleSubsubcategoryLabel) ?></span><?php endif; ?> <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
+                <article class="article-item admin-article-list-item">
+                    <div class="admin-article-list-header">
+                        <div>
+                            <h3><?= e((string) $article['title']) ?></h3>
+                            <p class="help">#<?= (int) $article['id'] ?> &middot; <?= e(date('d/m/Y H:i', strtotime((string) ($article['updated_at'] ?? $article['created_at'] ?? 'now')))) ?></p>
+                        </div>
+                        <div class="admin-article-row-actions">
+                            <a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a>
+                            <?php if ((string) ($article['status'] ?? '') !== 'rejected'): ?>
+                                <details class="admin-article-row-reject">
+                                    <summary class="button small secondary"><?= e($t('notification_article_rejected')) ?></summary>
+                                    <form method="post" class="admin-article-row-reject-form">
+                                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                        <input type="hidden" name="action" value="bulk_update_articles">
+                                        <input type="hidden" name="ids[]" value="<?= (int) $article['id'] ?>">
+                                        <input type="hidden" name="bulk_op" value="rejected">
+                                        <label><?= e($t('moderation_note')) ?>
+                                            <textarea name="moderation_note" rows="2" placeholder="<?= e($t('moderation_note_help')) ?>"></textarea>
+                                        </label>
+                                        <button class="button small secondary admin-article-reject-button" type="submit"><?= e($t('save')) ?></button>
+                                    </form>
+                                </details>
+                            <?php endif; ?>
+                            <form method="post" class="admin-article-row-delete" onsubmit="return confirm('<?= e($t('confirm_delete')) ?>');">
+                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                <input type="hidden" name="action" value="delete_article">
+                                <input type="hidden" name="id" value="<?= (int) $article['id'] ?>">
+                                <button class="button small secondary admin-article-delete-button" type="submit"><?= e($t('delete')) ?></button>
+                            </form>
+                        </div>
+                    </div>
+                    <p class="taxonomy-badge-row"><strong><?= e($t('category_label')) ?></strong> <span class="badge muted taxonomy-pill-category"><?= e($articleCategoryLabel) ?></span><?php if ($articleSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($articleSubcategoryLabel) ?></span><?php endif; ?><?php if ($articleSubsubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($articleSubsubcategoryLabel) ?></span><?php endif; ?> <span class="badge muted admin-article-status admin-article-status-<?= e((string) $article['status']) ?>"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
                     <?php if ($articleExcerpt !== ''): ?>
                         <p><?= e($articleExcerpt) ?></p>
                     <?php endif; ?>
