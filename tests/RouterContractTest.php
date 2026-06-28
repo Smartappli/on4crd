@@ -908,6 +908,26 @@ final class RouterContractTest extends TestCase
         }
     }
 
+    public function testArticleWordImportsAreNotCappedBelowLongtextStorage(): void
+    {
+        $adminArticles = file_get_contents(__DIR__ . '/../pages/admin_articles.php');
+        $articlePropose = file_get_contents(__DIR__ . '/../pages/article_propose.php');
+        $schema = file_get_contents(__DIR__ . '/../schema/schema.sql');
+        self::assertIsString($adminArticles);
+        self::assertIsString($articlePropose);
+        self::assertIsString($schema);
+
+        self::assertStringContainsString('content LONGTEXT NOT NULL', $schema);
+        self::assertStringContainsString("'content' => 5000000", $adminArticles);
+        self::assertStringContainsString("'content' => 5000000", $articlePropose);
+        self::assertStringContainsString('mb_strlen($content) > $articleFieldLimits[\'content\']', $adminArticles);
+        self::assertStringContainsString('mb_strlen($rawContent) > $articleFieldLimits[\'content\']', $articlePropose);
+        self::assertStringContainsString('maxlength="<?= (int) $articleFieldLimits[\'content\'] ?>"', $articlePropose);
+        self::assertStringNotContainsString('mb_strlen($content) > 50000', $adminArticles);
+        self::assertStringNotContainsString('mb_strlen($rawContent) > 50000', $articlePropose);
+        self::assertStringNotContainsString('maxlength="50000"', $articlePropose);
+    }
+
     public function testProfileGeocodeConsentIsCheckedByDefault(): void
     {
         $profile = file_get_contents(__DIR__ . '/../pages/profile.php');

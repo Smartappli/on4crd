@@ -210,6 +210,13 @@ $proposalTypeLabels = [
     'subsubcategory' => $t('proposal_type_subsubcategory'),
     'tag' => $t('proposal_type_tag'),
 ];
+$articleFieldLimits = [
+    'title' => 190,
+    'slug' => 190,
+    'excerpt' => 2000,
+    'content' => 5000000,
+    'taxonomy' => 120,
+];
 $editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'published', 'category' => 'autres', 'subcategory' => '', 'subsubcategory' => '', 'scheduled_at' => null, 'moderation_note' => null];
 $editing = $editingDefault;
 $editingId = (int) ($_GET['id'] ?? 0);
@@ -539,15 +546,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             if (
-                mb_strlen($title) > 190
-                || mb_strlen($slugInput) > 190
-                || mb_strlen($excerpt) > 2000
-                || mb_strlen($content) > 50000
-                || mb_strlen($category) > 120
-                || mb_strlen($subcategory) > 120
-                || mb_strlen($subsubcategory) > 120
+                mb_strlen($title) > $articleFieldLimits['title']
+                || mb_strlen($slugInput) > $articleFieldLimits['slug']
+                || mb_strlen($excerpt) > $articleFieldLimits['excerpt']
+                || mb_strlen($content) > $articleFieldLimits['content']
+                || mb_strlen($category) > $articleFieldLimits['taxonomy']
+                || mb_strlen($subcategory) > $articleFieldLimits['taxonomy']
+                || mb_strlen($subsubcategory) > $articleFieldLimits['taxonomy']
             ) {
-                throw new RuntimeException($t('err_invalid_article'));
+                throw new RuntimeException($t('error_field_too_long'));
             }
             if ($action === 'preview_article') {
                 $previewPayload = [

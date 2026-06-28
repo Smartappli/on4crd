@@ -47,6 +47,12 @@ function article_propose_t(string $key): string
 $title = $label('propose_article');
 article_ensure_taxonomy_schema($articlesI18n);
 $categories = article_categories($articlesI18n);
+$articleFieldLimits = [
+    'title' => 190,
+    'excerpt' => 2000,
+    'content' => 5000000,
+    'taxonomy' => 120,
+];
 
 set_page_meta([
     'title' => $title,
@@ -73,7 +79,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'autres',
             trim((string) ($_POST['subsubcategory_ref'] ?? ''))
         );
-        if (mb_strlen($articleTitle) > 190 || mb_strlen($excerpt) > 2000 || mb_strlen($rawContent) > 50000 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($subsubcategory) > 120) {
+        if (
+            mb_strlen($articleTitle) > $articleFieldLimits['title']
+            || mb_strlen($excerpt) > $articleFieldLimits['excerpt']
+            || mb_strlen($rawContent) > $articleFieldLimits['content']
+            || mb_strlen($category) > $articleFieldLimits['taxonomy']
+            || mb_strlen($subcategory) > $articleFieldLimits['taxonomy']
+            || mb_strlen($subsubcategory) > $articleFieldLimits['taxonomy']
+        ) {
             throw new RuntimeException($label('error_field_too_long'));
         }
         if ($articleTitle === '' || $rawContent === '') {
@@ -142,7 +155,7 @@ ob_start();
             <label><?= e($label('article_title_label')) ?><input type="text" name="title" maxlength="190" required></label>
             <?= render_article_taxonomy_fields($categories, $articlesI18n, 'autres') ?>
             <label><?= e($label('excerpt_label')) ?><textarea name="excerpt" rows="3" maxlength="2000" placeholder="<?= e($label('excerpt_placeholder')) ?>"></textarea></label>
-            <label><?= e($label('content_label')) ?><textarea name="content" rows="16" maxlength="50000" data-wysiwyg="full" required placeholder="<?= e($label('content_placeholder')) ?>"></textarea></label>
+            <label><?= e($label('content_label')) ?><textarea name="content" rows="16" maxlength="<?= (int) $articleFieldLimits['content'] ?>" data-wysiwyg="full" required placeholder="<?= e($label('content_placeholder')) ?>"></textarea></label>
             <p class="help"><?= e($label('html_cleanup_help')) ?></p>
             <div class="actions">
                 <button class="button" type="submit"><?= e($label('submit_for_review')) ?></button>
