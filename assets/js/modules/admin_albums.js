@@ -47,6 +47,47 @@
     input.addEventListener('change', setCount);
   });
 
+  document.querySelectorAll('form').forEach((form) => {
+    if (!(form instanceof HTMLFormElement)) return;
+    const categorySelect = form.querySelector('select[name="category"]');
+    const subcategorySelect = form.querySelector('select[name="subcategory_ref"]');
+    if (!(categorySelect instanceof HTMLSelectElement) || !(subcategorySelect instanceof HTMLSelectElement)) return;
+
+    const optionParts = (option) => String(option.value || '').split(':');
+    const optionCategory = (option) => optionParts(option)[0] || '';
+
+    const setOptionAvailable = (option, available) => {
+      if (option.value === '') return;
+      option.disabled = !available;
+      option.hidden = !available;
+    };
+
+    const syncAlbumTaxonomy = (source) => {
+      if (source === 'subcategory' && subcategorySelect.value !== '') {
+        const selected = subcategorySelect.selectedOptions[0];
+        const parentCategory = selected instanceof HTMLOptionElement ? optionCategory(selected) : '';
+        if (parentCategory !== '' && categorySelect.value !== parentCategory) {
+          categorySelect.value = parentCategory;
+        }
+      }
+
+      const currentCategory = categorySelect.value;
+      const selected = subcategorySelect.selectedOptions[0];
+      const selectedCategory = selected instanceof HTMLOptionElement ? optionCategory(selected) : '';
+      if (subcategorySelect.value !== '' && selectedCategory !== currentCategory) {
+        subcategorySelect.value = '';
+      }
+
+      Array.from(subcategorySelect.options).forEach((option) => {
+        setOptionAvailable(option, optionCategory(option) === currentCategory);
+      });
+    };
+
+    categorySelect.addEventListener('change', () => syncAlbumTaxonomy('category'));
+    subcategorySelect.addEventListener('change', () => syncAlbumTaxonomy('subcategory'));
+    syncAlbumTaxonomy('init');
+  });
+
   document.querySelectorAll('[data-admin-album-save]').forEach((button) => {
     if (!(button instanceof HTMLButtonElement)) return;
     button.addEventListener('click', (event) => {
