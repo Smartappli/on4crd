@@ -787,20 +787,27 @@ ob_start();
         </div>
     </section>
 
-    <section class="card">
-        <h2><?= e((string) $t['category_field']) ?></h2>
-        <div class="grid-2">
-            <form method="post">
+    <section class="card admin-album-taxonomy-card" id="admin-album-taxonomy">
+        <div class="admin-albums-section-head">
+            <div>
+                <h2><?= e((string) $t['category_field']) ?></h2>
+                <p class="help"><?= count($albumCategories) ?> <?= e((string) $t['category_field']) ?></p>
+            </div>
+        </div>
+        <div class="admin-album-taxonomy-create-grid">
+            <form method="post" class="admin-album-taxonomy-create-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_category">
+                <h3><?= e((string) $t['add_category']) ?></h3>
                 <label><?= e((string) $t['category_field']) ?>
                     <input type="text" name="category_label" maxlength="160" required>
                 </label>
                 <button class="button"><?= e((string) $t['add_category']) ?></button>
             </form>
-            <form method="post">
+            <form method="post" class="admin-album-taxonomy-create-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_subcategory">
+                <h3><?= e((string) $t['add_subcategory']) ?></h3>
                 <label><?= e((string) $t['category_field']) ?>
                     <select name="subcategory_category">
                         <?php foreach ($albumCategories as $code => $label): ?>
@@ -814,54 +821,70 @@ ob_start();
                 <button class="button"><?= e((string) $t['add_subcategory']) ?></button>
             </form>
         </div>
-        <div class="tags-cloud">
+        <div class="admin-album-taxonomy-manage-grid">
+            <section class="admin-album-taxonomy-group" aria-labelledby="admin-album-taxonomy-categories-title">
+                <div class="admin-album-taxonomy-group-head">
+                    <h3 id="admin-album-taxonomy-categories-title"><?= e((string) $t['category_field']) ?></h3>
+                    <span class="badge muted"><?= count($albumCategories) ?></span>
+                </div>
             <?php foreach ($albumCategories as $code => $label): ?>
                 <?php $categoryTotal = (int) ($albumCategoryCounts[(string) $code] ?? 0); ?>
                 <?php $subcategoryTotal = count($albumSubcategoriesByCategory[(string) $code] ?? []); ?>
                 <?php $categoryDeleteDisabled = (string) $code === 'general' || $subcategoryTotal > 0; ?>
-                <form method="post" class="inline-form">
+                <form method="post" class="inline-form admin-album-taxonomy-row">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
-                    <span class="pill taxonomy-pill-category"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
+                    <span class="pill taxonomy-pill-category admin-album-taxonomy-code"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
                     <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
-                    <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
-                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
+                    <span class="admin-album-taxonomy-actions">
+                        <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
+                    </span>
                 </form>
             <?php endforeach; ?>
+            </section>
+            <section class="admin-album-taxonomy-group" aria-labelledby="admin-album-taxonomy-subcategories-title">
+                <div class="admin-album-taxonomy-group-head">
+                    <h3 id="admin-album-taxonomy-subcategories-title"><?= e((string) $t['subcategory_field']) ?></h3>
+                    <span class="badge muted"><?= array_sum(array_map('count', $albumSubcategoriesByCategory)) ?></span>
+                </div>
             <?php foreach ($albumSubcategoriesByCategory as $parentCode => $subcategories): ?>
                 <?php foreach ($subcategories as $subcategoryInfo): ?>
                     <?php $subCode = album_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
                     <?php if ($subCode === '') { continue; } ?>
                     <?php $subTotal = (int) ($albumSubcategoryCounts[(string) $parentCode . ':' . $subCode] ?? 0); ?>
-                    <form method="post" class="inline-form">
+                    <form method="post" class="inline-form admin-album-taxonomy-row">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_ref" value="<?= e(album_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                        <span class="taxonomy-badge-row">
+                        <span class="taxonomy-badge-row admin-album-taxonomy-code">
                             <span class="badge muted taxonomy-pill-category"><?= e((string) ($albumCategories[(string) $parentCode] ?? $parentCode)) ?></span>
                             <span class="badge muted taxonomy-pill-subcategory"><?= e($subCode) ?></span>
                             <span class="badge muted"><?= $subTotal ?></span>
                         </span>
                         <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
-                        <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
-                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
+                        <span class="admin-album-taxonomy-actions">
+                            <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
+                            <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
+                        </span>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>
+            </section>
         </div>
     </section>
 
-    <div class="grid-2">
-        <section class="card album-wizard" id="album-wizard">
+    <div class="admin-albums-workspace">
+        <section class="card album-wizard admin-album-wizard-card" id="album-wizard">
             <h2><?= e((string) $t['wizard_title']) ?></h2>
-            <div class="actions" aria-label="<?= e((string) $t['wizard_title']) ?>">
+            <div class="actions admin-album-wizard-steps" aria-label="<?= e((string) $t['wizard_title']) ?>">
                 <span class="pill<?= $wizardStep === 1 ? ' is-active' : '' ?>">1. <?= e((string) $t['wizard_step_details']) ?></span>
                 <span class="pill<?= $wizardStep === 2 ? ' is-active' : '' ?>">2. <?= e((string) $t['wizard_step_upload']) ?></span>
                 <span class="pill<?= $wizardStep === 3 ? ' is-active' : '' ?>">3. <?= e((string) $t['wizard_step_review']) ?></span>
             </div>
             <?php if ($wizardStep === 1): ?>
-                <form method="post" class="stack">
+                <form method="post" class="stack admin-album-wizard-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="create_album">
                     <label><?= e((string) $t['title']) ?>
@@ -881,7 +904,7 @@ ob_start();
                 </form>
             <?php elseif ($wizardStep === 2 && is_array($wizardAlbum)): ?>
                 <h3><?= e((string) ($wizardAlbum['title'] ?? $t['create_album'])) ?></h3>
-                <form method="post" enctype="multipart/form-data" class="stack">
+                <form method="post" enctype="multipart/form-data" class="stack admin-album-wizard-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="upload_photo">
                     <input type="hidden" name="album_id" value="<?= (int) $wizardAlbumId ?>">
@@ -893,7 +916,7 @@ ob_start();
                         <div id="album-wizard-dropzone" class="album-dropzone" data-ready-files="<?= e((string) $t['ready_files']) ?>">
                             <?= e((string) $t['dropzone_hint']) ?>
                         </div>
-                        <input id="album-wizard-photos-input" type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required style="display:none;">
+                        <input id="album-wizard-photos-input" class="admin-album-file-input" type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required>
                     </label>
                     <p class="help"><?= e((string) $t['upload_help']) ?></p>
                     <div class="actions">
@@ -947,9 +970,9 @@ ob_start();
             <?php endif; ?>
         </section>
 
-        <section class="card">
+        <section class="card admin-album-upload-card" id="admin-album-upload">
             <h2><?= e((string) $t['add_photo']) ?></h2>
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" class="admin-album-upload-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="upload_photo">
                 <label><?= e((string) $t['album_label']) ?>
@@ -969,7 +992,7 @@ ob_start();
                     <div id="album-dropzone" class="album-dropzone" data-ready-files="<?= e((string) $t['ready_files']) ?>">
                         <?= e((string) $t['dropzone_hint']) ?>
                     </div>
-                    <input id="album-photos-input" type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required style="display:none;">
+                    <input id="album-photos-input" class="admin-album-file-input" type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required>
                 </label>
                 <p class="help"><?= e((string) $t['upload_help']) ?></p>
                 <button class="button"><?= e((string) $t['upload']) ?></button>
