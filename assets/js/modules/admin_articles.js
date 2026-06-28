@@ -175,6 +175,42 @@
     syncQueueSelection();
   }
 
+  const proposalForms = Array.from(document.querySelectorAll('[data-admin-proposal-form]'))
+    .filter((form) => form instanceof HTMLFormElement);
+  proposalForms.forEach((form) => {
+    const statusSelect = form.querySelector('[data-admin-proposal-status]');
+    const noteField = form.querySelector('[data-admin-proposal-note-field]');
+    const shortcuts = Array.from(form.querySelectorAll('[data-admin-proposal-status-choice]'))
+      .filter((button) => button instanceof HTMLButtonElement);
+
+    if (!(statusSelect instanceof HTMLSelectElement)) return;
+
+    const syncProposalStatus = () => {
+      const status = statusSelect.value;
+      if (noteField instanceof HTMLElement) {
+        noteField.classList.toggle('is-muted', status !== 'rejected');
+      }
+      shortcuts.forEach((button) => {
+        button.classList.toggle('is-active', button.value === status);
+      });
+    };
+
+    shortcuts.forEach((button) => {
+      button.addEventListener('click', () => {
+        statusSelect.value = button.value;
+        statusSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        if (button.value === 'rejected' && noteField instanceof HTMLElement) {
+          const noteInput = noteField.querySelector('textarea');
+          if (noteInput instanceof HTMLTextAreaElement) {
+            noteInput.focus();
+          }
+        }
+      });
+    });
+    statusSelect.addEventListener('change', syncProposalStatus);
+    syncProposalStatus();
+  });
+
   const rejectDetails = Array.from(document.querySelectorAll('.admin-article-row-reject'))
     .filter((detail) => detail instanceof HTMLDetailsElement);
   rejectDetails.forEach((detail) => {
