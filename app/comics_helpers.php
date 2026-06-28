@@ -279,12 +279,14 @@ if (!function_exists('comics_public_link_object')) {
  */
 function comics_public_link_object(array $link): array
 {
+    $url = (string) $link['url'];
+
     return [
         '@type' => 'WebPage',
-        '@id' => (string) $link['url'] . '#webpage',
+        '@id' => str_contains($url, '#') ? $url . '-webpage' : $url . '#webpage',
         'name' => (string) $link['title'],
         'description' => (string) $link['text'],
-        'url' => (string) $link['url'],
+        'url' => $url,
     ];
 }
 }

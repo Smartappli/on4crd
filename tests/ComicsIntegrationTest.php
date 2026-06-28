@@ -92,7 +92,7 @@ final class ComicsIntegrationTest extends TestCase
         $linkObject = comics_public_link_object($links[0]);
         self::assertSame('WebPage', $linkObject['@type']);
         self::assertSame('Tool', $linkObject['name']);
-        self::assertStringContainsString('#tool-ohm-law#webpage', $linkObject['@id']);
+        self::assertStringContainsString('#tool-ohm-law-webpage', $linkObject['@id']);
     }
 
     public function testComicsPublicCollectionUsesNativeTranslationsAndExistingAssets(): void

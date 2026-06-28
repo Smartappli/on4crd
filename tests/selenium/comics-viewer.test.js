@@ -24,6 +24,11 @@ test('Selenium comics: la visionneuse ouvre la planche A4 pleine resolution', as
     assert.match(relatedDocumentText, /Fiche|m[eé]mo/i, 'La planche Ohm doit exposer son document connexe.');
     assert.ok((await relatedDocument.getAttribute('download')).endsWith('loi-ohm-fiche-memo.md'), 'Le document connexe local doit rester telechargeable.');
 
+    const relatedLink = await driver.findElement(By.css('.comics-related-link[href*="route=tools"][href*="#tool-ohm-law"]'));
+    const relatedLinkText = await relatedLink.getText();
+    assert.match(relatedLinkText, /Ohm|Calculateur/i, 'La planche Ohm doit exposer le lien connexe vers le calculateur.');
+    assert.equal(await relatedLink.getAttribute('download'), null, 'Un lien connexe ne doit pas etre rendu comme document telechargeable.');
+
     await driver.executeScript('arguments[0].scrollIntoView({ block: "center" });', firstTrigger);
     await firstTrigger.click();
 
