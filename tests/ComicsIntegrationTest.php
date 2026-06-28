@@ -138,7 +138,8 @@ final class ComicsIntegrationTest extends TestCase
         self::assertIsArray($ohmWork['hasPart']);
         self::assertSame('DigitalDocument', $ohmWork['hasPart'][0]['@type']);
         self::assertSame('text/markdown', $ohmWork['hasPart'][0]['encodingFormat']);
-        self::assertStringContainsString('loi-ohm-fiche-memo.md#document', (string) $ohmWork['hasPart'][0]['@id']);
+        self::assertStringContainsString('loi-ohm-fiche-memo.md', (string) $ohmWork['hasPart'][0]['@id']);
+        self::assertStringEndsWith('#document', (string) $ohmWork['hasPart'][0]['@id']);
     }
 
     public function testComicsHelperIsLoadedForPageAndDiscoveryRoutes(): void
