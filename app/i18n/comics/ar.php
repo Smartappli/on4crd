@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'إغلاق',
   'download_board_prefix' => 'تنزيل الصفحة',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'المستندات ذات الصلة',
   'board_commandments_title' => 'الوصايا العشر لهاوي الراديو',
   'board_commandments_text' => 'ممارسات جيدة لهواة الراديو معروضة في عشر قواعد سهلة التذكر.',
   'board_first_qso_title' => 'أول QSO لي',
   'board_first_qso_text' => 'أول QSO مروي خطوة بخطوة، من نداء CQ إلى ذكرى QSL.',
   'board_ohm_title' => 'اكتشاف قانون أوم',
   'board_ohm_text' => 'صفحة تاريخية وتقنية تربط الكهرباء والقياسات والراديو.',
+  'related_document_sheet_label' => 'ورقة تذكير',
+  'related_document_sheet_text' => 'ملاحظات سريعة لمراجعة المعادلة وتحويلاتها.',
 );

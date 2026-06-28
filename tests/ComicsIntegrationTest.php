@@ -86,12 +86,28 @@ final class ComicsIntegrationTest extends TestCase
             self::assertSame(594, $board['thumbnail_height']);
             self::assertGreaterThan(0, $board['thumbnail_content_size']);
             self::assertLessThan($board['content_size'], $board['thumbnail_content_size']);
+            self::assertArrayHasKey('documents', $board);
         }
+
+        self::assertSame([], $collection['boards'][0]['documents']);
+        self::assertSame([], $collection['boards'][1]['documents']);
+
+        $relatedDocuments = $collection['boards'][2]['documents'];
+        self::assertCount(1, $relatedDocuments);
+        $relatedDocument = $relatedDocuments[0];
+        self::assertSame('Fiche mémo', $relatedDocument['title']);
+        self::assertSame('text/markdown', $relatedDocument['type']);
+        self::assertFalse($relatedDocument['external']);
+        self::assertSame('loi-ohm-fiche-memo.md', $relatedDocument['download_name']);
+        self::assertStringContainsString('/assets/comics/loi-ohm-fiche-memo.md', (string) $relatedDocument['url']);
+        self::assertFileExists(__DIR__ . '/../' . (string) $relatedDocument['path']);
+        self::assertGreaterThan(0, $relatedDocument['content_size']);
     }
 
     public function testComicsStructuredDataHelpersExposeFullImageAndThumbnailObjects(): void
     {
-        $board = comics_public_collection('fr')['boards'][0];
+        $boards = comics_public_collection('fr')['boards'];
+        $board = $boards[0];
         $image = comics_public_image_object($board);
         $thumbnail = comics_public_image_object($board, true);
         $work = comics_public_creative_work($board, 'fr', 'https://example.test/comics#collection', 'https://example.test/#organization');
@@ -115,6 +131,14 @@ final class ComicsIntegrationTest extends TestCase
         self::assertSame(['@id' => 'https://example.test/comics#collection'], $work['isPartOf']);
         self::assertSame(['@id' => 'https://example.test/#organization'], $work['publisher']);
         self::assertSame(['@id' => 'https://example.test/#organization'], $work['creator']);
+        self::assertArrayNotHasKey('hasPart', $work);
+
+        $ohmWork = comics_public_creative_work($boards[2], 'fr', 'https://example.test/comics#collection', 'https://example.test/#organization');
+        self::assertArrayHasKey('hasPart', $ohmWork);
+        self::assertIsArray($ohmWork['hasPart']);
+        self::assertSame('DigitalDocument', $ohmWork['hasPart'][0]['@type']);
+        self::assertSame('text/markdown', $ohmWork['hasPart'][0]['encodingFormat']);
+        self::assertStringContainsString('loi-ohm-fiche-memo.md#document', (string) $ohmWork['hasPart'][0]['@id']);
     }
 
     public function testComicsHelperIsLoadedForPageAndDiscoveryRoutes(): void
@@ -131,7 +155,7 @@ final class ComicsIntegrationTest extends TestCase
     {
         $pageSource = file_get_contents(__DIR__ . '/../pages/comics.php');
         self::assertIsString($pageSource);
-        foreach (['data-comics-viewer-open', 'data-comics-viewer-download', 'download_board_prefix', 'download_board_label', 'viewer_close'] as $snippet) {
+        foreach (['data-comics-viewer-open', 'data-comics-viewer-download', 'download_board_prefix', 'download_board_label', 'viewer_close', 'related_documents_title', 'comics-related-documents'] as $snippet) {
             self::assertStringContainsString($snippet, $pageSource);
         }
 
@@ -148,6 +172,7 @@ final class ComicsIntegrationTest extends TestCase
         self::assertIsString($cssSource);
         self::assertStringContainsString('.comics-viewer', $cssSource);
         self::assertStringContainsString('.comics-card-action', $cssSource);
+        self::assertStringContainsString('.comics-related-document', $cssSource);
     }
 
     public function testComicsRoutePreloadsGeneratedThumbnailAsset(): void

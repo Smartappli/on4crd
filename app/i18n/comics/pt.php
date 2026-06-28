@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Fechar',
   'download_board_prefix' => 'Descarregar a prancha',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Documentos relacionados',
   'board_commandments_title' => 'Os 10 mandamentos do radioamador',
   'board_commandments_text' => 'Boas práticas de radioamador apresentadas como dez regras fáceis de memorizar.',
   'board_first_qso_title' => 'O meu primeiro QSO',
   'board_first_qso_text' => 'Um primeiro QSO contado passo a passo, da chamada CQ à recordação QSL.',
   'board_ohm_title' => 'A descoberta da lei de Ohm',
   'board_ohm_text' => 'Uma prancha histórica e técnica que liga eletricidade, medições e rádio.',
+  'related_document_sheet_label' => 'Ficha memo',
+  'related_document_sheet_text' => 'Notas rápidas para rever a fórmula e as suas equivalências.',
 );

@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Luk',
   'download_board_prefix' => 'Hent siden',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Relaterede dokumenter',
   'board_commandments_title' => 'Radioamatørens 10 bud',
   'board_commandments_text' => 'God radioamatørpraksis præsenteret som ti regler, der er nemme at huske.',
   'board_first_qso_title' => 'Mit første QSO',
   'board_first_qso_text' => 'Et første QSO fortalt trin for trin, fra CQ-kaldet til QSL-mindet.',
   'board_ohm_title' => 'Opdagelsen af Ohms lov',
   'board_ohm_text' => 'En historisk og teknisk side, der forbinder elektricitet, målinger og radio.',
+  'related_document_sheet_label' => 'Huskeark',
+  'related_document_sheet_text' => 'Korte noter til at gennemgå formlen og dens omskrivninger.',
 );

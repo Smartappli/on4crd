@@ -18,10 +18,13 @@ return array (
   'viewer_close' => '关闭',
   'download_board_prefix' => '下载页面',
   'download_board_label' => 'A4 PNG',
+  'related_documents_title' => '相关文档',
   'board_commandments_title' => '业余无线电爱好者的十条准则',
   'board_commandments_text' => '将业余无线电的良好实践整理成十条易记规则。',
   'board_first_qso_title' => '我的第一次 QSO',
   'board_first_qso_text' => '从 CQ 呼叫到 QSL 纪念，逐步讲述第一次 QSO。',
   'board_ohm_title' => '欧姆定律的发现',
   'board_ohm_text' => '一页连接电学、测量与无线电的历史和技术内容。',
+  'related_document_sheet_label' => '备忘单',
+  'related_document_sheet_text' => '用于复习公式及其等价变形的简要说明。',
 );

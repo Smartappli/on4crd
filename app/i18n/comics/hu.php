@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Bezárás',
   'download_board_prefix' => 'Oldal letöltése',
   'download_board_label' => 'A4 PNG',
+  'related_documents_title' => 'Kapcsolódó dokumentumok',
   'board_commandments_title' => 'A rádióamatőr 10 parancsolata',
   'board_commandments_text' => 'Jó rádióamatőr gyakorlatok tíz könnyen megjegyezhető szabályként.',
   'board_first_qso_title' => 'Az első QSO-m',
   'board_first_qso_text' => 'Egy első QSO lépésről lépésre, a CQ hívástól a QSL-emlékig.',
   'board_ohm_title' => 'Ohm törvényének felfedezése',
   'board_ohm_text' => 'Történeti és műszaki oldal, amely összekapcsolja az elektromosságot, a méréseket és a rádiót.',
+  'related_document_sheet_label' => 'Emlékeztető lap',
+  'related_document_sheet_text' => 'Rövid jegyzetek a képlet és átrendezéseinek áttekintéséhez.',
 );

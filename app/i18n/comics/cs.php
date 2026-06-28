@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Zavřít',
   'download_board_prefix' => 'Stáhnout stránku',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Související dokumenty',
   'board_commandments_title' => '10 přikázání radioamatéra',
   'board_commandments_text' => 'Dobrá radioamatérská praxe představená jako deset snadno zapamatovatelných pravidel.',
   'board_first_qso_title' => 'Moje první QSO',
   'board_first_qso_text' => 'První QSO vyprávěné krok za krokem, od výzvy CQ až po vzpomínku QSL.',
   'board_ohm_title' => 'Objev Ohmova zákona',
   'board_ohm_text' => 'Historická a technická stránka propojující elektřinu, měření a rádio.',
+  'related_document_sheet_label' => 'Přehledový list',
+  'related_document_sheet_text' => 'Stručné poznámky k zopakování vzorce a jeho úprav.',
 );

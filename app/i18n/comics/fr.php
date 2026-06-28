@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Fermer',
   'download_board_prefix' => 'Télécharger la planche',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Documents connexes',
   'board_commandments_title' => 'Les 10 commandements du radioamateur',
   'board_commandments_text' => 'Les bonnes pratiques radioamateurs présentées comme dix règles faciles à retenir.',
   'board_first_qso_title' => 'Mon premier QSO',
   'board_first_qso_text' => 'Un premier QSO raconté pas à pas, de l\'appel CQ au souvenir QSL.',
   'board_ohm_title' => 'La découverte de la loi d\'Ohm',
   'board_ohm_text' => 'Une planche historique et technique pour relier électricité, mesures et radio.',
+  'related_document_sheet_label' => 'Fiche mémo',
+  'related_document_sheet_text' => 'Repères rapides pour relire la formule et ses équivalences.',
 );

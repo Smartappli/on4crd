@@ -18,10 +18,13 @@ return array (
   'viewer_close' => '閉じる',
   'download_board_prefix' => 'ページをダウンロード',
   'download_board_label' => 'A4 PNG',
+  'related_documents_title' => '関連資料',
   'board_commandments_title' => 'アマチュア無線家の10の戒め',
   'board_commandments_text' => 'アマチュア無線の良い実践を、覚えやすい10の規則として紹介します。',
   'board_first_qso_title' => 'はじめてのQSO',
   'board_first_qso_text' => 'CQ呼び出しからQSLの思い出まで、初めてのQSOを順を追って描きます。',
   'board_ohm_title' => 'オームの法則の発見',
   'board_ohm_text' => '電気、測定、無線を結びつける歴史的で技術的なページです。',
+  'related_document_sheet_label' => 'メモシート',
+  'related_document_sheet_text' => '式とその変形を見直すための短いメモ。',
 );

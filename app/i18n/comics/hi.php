@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'बंद करें',
   'download_board_prefix' => 'कॉमिक पृष्ठ डाउनलोड करें',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'संबंधित दस्तावेज़',
   'board_commandments_title' => 'शौकिया रेडियो के 10 नियम',
   'board_commandments_text' => 'शौकिया रेडियो की अच्छी प्रथाएँ, याद रखने में आसान दस नियमों के रूप में.',
   'board_first_qso_title' => 'मेरा पहला QSO',
   'board_first_qso_text' => 'CQ कॉल से QSL स्मृति तक पहला QSO चरण दर चरण बताया गया है.',
   'board_ohm_title' => 'ओम के नियम की खोज',
   'board_ohm_text' => 'बिजली, मापन और रेडियो को जोड़ने वाला एक ऐतिहासिक और तकनीकी पृष्ठ.',
+  'related_document_sheet_label' => 'स्मरण पत्रक',
+  'related_document_sheet_text' => 'सूत्र और उसके रूपांतरणों की त्वरित पुनरावृत्ति के लिए नोट्स।',
 );

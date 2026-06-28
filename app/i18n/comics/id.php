@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Tutup',
   'download_board_prefix' => 'Unduh halaman',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Dokumen terkait',
   'board_commandments_title' => '10 Perintah Radio Amatir',
   'board_commandments_text' => 'Praktik baik radio amatir disajikan sebagai sepuluh aturan yang mudah diingat.',
   'board_first_qso_title' => 'QSO Pertamaku',
   'board_first_qso_text' => 'QSO pertama diceritakan langkah demi langkah, dari panggilan CQ hingga kenangan QSL.',
   'board_ohm_title' => 'Penemuan Hukum Ohm',
   'board_ohm_text' => 'Halaman historis dan teknis yang menghubungkan listrik, pengukuran, dan radio.',
+  'related_document_sheet_label' => 'Lembar pengingat',
+  'related_document_sheet_text' => 'Catatan singkat untuk meninjau rumus dan bentuk setaranya.',
 );

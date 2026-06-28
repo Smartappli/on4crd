@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Sulje',
   'download_board_prefix' => 'Lataa sivu',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Aiheeseen liittyvät dokumentit',
   'board_commandments_title' => 'Radioamatöörin 10 käskyä',
   'board_commandments_text' => 'Hyvät radioamatöörikäytännöt esitettynä kymmenenä helposti muistettavana sääntönä.',
   'board_first_qso_title' => 'Ensimmäinen QSO:ni',
   'board_first_qso_text' => 'Ensimmäinen QSO kerrottuna vaihe vaiheelta CQ-kutsusta QSL-muistoon.',
   'board_ohm_title' => 'Ohmin lain löytäminen',
   'board_ohm_text' => 'Historiallinen ja tekninen sivu, joka yhdistää sähkön, mittaukset ja radion.',
+  'related_document_sheet_label' => 'Muistilappu',
+  'related_document_sheet_text' => 'Lyhyet muistiinpanot kaavan ja sen muunnosten kertaamiseen.',
 );

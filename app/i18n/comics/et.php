@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Sulge',
   'download_board_prefix' => 'Laadi leht alla',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Seotud dokumendid',
   'board_commandments_title' => 'Raadioamatööri 10 käsku',
   'board_commandments_text' => 'Head raadioamatööri tavad esitatud kümne kergesti meeldejääva reeglina.',
   'board_first_qso_title' => 'Minu esimene QSO',
   'board_first_qso_text' => 'Esimene QSO samm-sammult, alates CQ-kutsest kuni QSL-mälestuseni.',
   'board_ohm_title' => 'Ohmi seaduse avastamine',
   'board_ohm_text' => 'Ajalooline ja tehniline leht, mis seob elektri, mõõtmised ja raadio.',
+  'related_document_sheet_label' => 'Meelespea',
+  'related_document_sheet_text' => 'Lühimärkmed valemi ja selle teisenduste ülevaatamiseks.',
 );

@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'বন্ধ করুন',
   'download_board_prefix' => 'কমিক পৃষ্ঠা ডাউনলোড করুন',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'সম্পর্কিত নথি',
   'board_commandments_title' => 'রেডিও অ্যামেচারের ১০টি আদেশ',
   'board_commandments_text' => 'সহজে মনে রাখার মতো দশটি নিয়ম হিসেবে ভালো রেডিও অ্যামেচার চর্চা।',
   'board_first_qso_title' => 'আমার প্রথম QSO',
   'board_first_qso_text' => 'CQ ডাক থেকে QSL স্মৃতি পর্যন্ত প্রথম QSO ধাপে ধাপে বলা হয়েছে।',
   'board_ohm_title' => 'ওহমের সূত্রের আবিষ্কার',
   'board_ohm_text' => 'বিদ্যুৎ, পরিমাপ এবং রেডিওকে যুক্ত করা একটি ঐতিহাসিক ও প্রযুক্তিগত পৃষ্ঠা।',
+  'related_document_sheet_label' => 'স্মারক পত্র',
+  'related_document_sheet_text' => 'সূত্র ও তার সমতুল্য রূপান্তর দ্রুত ঝালিয়ে নেওয়ার নোট।',
 );

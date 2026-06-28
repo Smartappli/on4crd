@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Sluiten',
   'download_board_prefix' => 'Stripplaat downloaden',
   'download_board_label' => 'A4 PNG',
+  'related_documents_title' => 'Gerelateerde documenten',
   'board_commandments_title' => 'De 10 geboden van de radioamateur',
   'board_commandments_text' => 'Goede radioamateurpraktijken gepresenteerd als tien makkelijk te onthouden regels.',
   'board_first_qso_title' => 'Mijn eerste QSO',
   'board_first_qso_text' => 'Een eerste QSO stap voor stap, van CQ-oproep tot QSL-herinnering.',
   'board_ohm_title' => 'De ontdekking van de wet van Ohm',
   'board_ohm_text' => 'Een historische en technische plaat over elektriciteit, metingen en radio.',
+  'related_document_sheet_label' => 'Memoblad',
+  'related_document_sheet_text' => 'Korte notities om de formule en haar omzettingen na te lezen.',
 );

@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Schließen',
   'download_board_prefix' => 'Comicseite herunterladen',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Zugehörige Dokumente',
   'board_commandments_title' => 'Die 10 Gebote des Funkamateurs',
   'board_commandments_text' => 'Gute Amateurfunkpraxis als zehn leicht zu merkende Regeln.',
   'board_first_qso_title' => 'Mein erstes QSO',
   'board_first_qso_text' => 'Ein erstes QSO Schritt für Schritt, vom CQ-Ruf bis zur QSL-Erinnerung.',
   'board_ohm_title' => 'Die Entdeckung des Ohmschen Gesetzes',
   'board_ohm_text' => 'Eine historische und technische Seite über Elektrizität, Messungen und Funk.',
+  'related_document_sheet_label' => 'Merkblatt',
+  'related_document_sheet_text' => 'Kurze Hinweise zum Nachlesen der Formel und ihrer Umstellungen.',
 );

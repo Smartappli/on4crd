@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Dún',
   'download_board_prefix' => 'Íoslódáil an leathanach',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Doiciméid ghaolmhara',
   'board_commandments_title' => '10 nAithne an raidió-amaitéaraigh',
   'board_commandments_text' => 'Dea-chleachtais raidió amaitéarach curtha i láthair mar dheich riail éasca le cuimhneamh.',
   'board_first_qso_title' => 'Mo chéad QSO',
   'board_first_qso_text' => 'An chéad QSO insithe céim ar chéim, ón nglao CQ go cuimhneachán QSL.',
   'board_ohm_title' => 'Fionnachtain dhlí Ohm',
   'board_ohm_text' => 'Leathanach stairiúil agus teicniúil a nascann leictreachas, tomhais agus raidió.',
+  'related_document_sheet_label' => 'Bileog mheabhrúcháin',
+  'related_document_sheet_text' => 'Nótaí gasta chun an fhoirmle agus a leaganacha a athbhreithniú.',
 );

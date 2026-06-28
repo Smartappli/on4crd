@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Cerrar',
   'download_board_prefix' => 'Descargar la página',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Documentos relacionados',
   'board_commandments_title' => 'Los 10 mandamientos del radioaficionado',
   'board_commandments_text' => 'Buenas prácticas de radioaficionados presentadas como diez reglas fáciles de recordar.',
   'board_first_qso_title' => 'Mi primer QSO',
   'board_first_qso_text' => 'Un primer QSO contado paso a paso, desde la llamada CQ hasta el recuerdo QSL.',
   'board_ohm_title' => 'El descubrimiento de la ley de Ohm',
   'board_ohm_text' => 'Una página histórica y técnica que conecta electricidad, mediciones y radio.',
+  'related_document_sheet_label' => 'Ficha recordatoria',
+  'related_document_sheet_text' => 'Notas rápidas para repasar la fórmula y sus equivalencias.',
 );

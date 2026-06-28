@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Uždaryti',
   'download_board_prefix' => 'Atsisiųsti puslapį',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Susiję dokumentai',
   'board_commandments_title' => '10 radijo mėgėjo įsakymų',
   'board_commandments_text' => 'Gera radijo mėgėjų praktika pateikta kaip dešimt lengvai įsimenamų taisyklių.',
   'board_first_qso_title' => 'Mano pirmasis QSO',
   'board_first_qso_text' => 'Pirmasis QSO žingsnis po žingsnio, nuo CQ kvietimo iki QSL prisiminimo.',
   'board_ohm_title' => 'Omo dėsnio atradimas',
   'board_ohm_text' => 'Istorinis ir techninis puslapis, jungiantis elektrą, matavimus ir radiją.',
+  'related_document_sheet_label' => 'Atmintinė',
+  'related_document_sheet_text' => 'Trumpos pastabos formulei ir jos pertvarkymams peržiūrėti.',
 );

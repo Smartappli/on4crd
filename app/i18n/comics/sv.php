@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Stäng',
   'download_board_prefix' => 'Ladda ner sidan',
   'download_board_label' => 'A4 PNG',
+  'related_documents_title' => 'Relaterade dokument',
   'board_commandments_title' => 'Radioamatörens 10 budord',
   'board_commandments_text' => 'God radioamatörpraxis presenterad som tio regler som är lätta att minnas.',
   'board_first_qso_title' => 'Mitt första QSO',
   'board_first_qso_text' => 'Ett första QSO berättat steg för steg, från CQ-anropet till QSL-minnet.',
   'board_ohm_title' => 'Upptäckten av Ohms lag',
   'board_ohm_text' => 'En historisk och teknisk sida som kopplar samman elektricitet, mätningar och radio.',
+  'related_document_sheet_label' => 'Minnesblad',
+  'related_document_sheet_text' => 'Korta anteckningar för att repetera formeln och dess omskrivningar.',
 );

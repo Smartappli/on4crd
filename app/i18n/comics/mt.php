@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Agħlaq',
   'download_board_prefix' => 'Niżżel il-paġna',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Dokumenti relatati',
   'board_commandments_title' => 'L-10 kmandamenti tar-radioamatur',
   'board_commandments_text' => 'Prattiki tajbin tar-radioamaturi ppreżentati bħala għaxar regoli faċli biex tiftakarhom.',
   'board_first_qso_title' => 'L-ewwel QSO tiegħi',
   'board_first_qso_text' => 'L-ewwel QSO rrakkontat pass pass, mis-sejħa CQ sat-tifkira QSL.',
   'board_ohm_title' => 'L-iskoperta tal-liġi ta’ Ohm',
   'board_ohm_text' => 'Paġna storika u teknika li tgħaqqad l-elettriku, il-kejl u r-radju.',
+  'related_document_sheet_label' => 'Folja ta\' tfakkira',
+  'related_document_sheet_text' => 'Noti qosra biex tirrevedi l-formula u l-ekwivalenzi tagħha.',
 );

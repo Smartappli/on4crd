@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Zamknij',
   'download_board_prefix' => 'Pobierz stronę',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Powiązane dokumenty',
   'board_commandments_title' => '10 przykazań krótkofalowca',
   'board_commandments_text' => 'Dobre praktyki krótkofalarskie przedstawione jako dziesięć łatwych do zapamiętania zasad.',
   'board_first_qso_title' => 'Moje pierwsze QSO',
   'board_first_qso_text' => 'Pierwsze QSO opowiedziane krok po kroku, od wywołania CQ po pamiątkę QSL.',
   'board_ohm_title' => 'Odkrycie prawa Ohma',
   'board_ohm_text' => 'Historyczna i techniczna strona łącząca elektryczność, pomiary i radio.',
+  'related_document_sheet_label' => 'Ściągawka',
+  'related_document_sheet_text' => 'Krótkie notatki do powtórzenia wzoru i jego przekształceń.',
 );

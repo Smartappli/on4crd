@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Aizvērt',
   'download_board_prefix' => 'Lejupielādēt lapu',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Saistītie dokumenti',
   'board_commandments_title' => 'Radioamatiera 10 baušļi',
   'board_commandments_text' => 'Laba radioamatieru prakse pasniegta kā desmit viegli iegaumējami noteikumi.',
   'board_first_qso_title' => 'Mans pirmais QSO',
   'board_first_qso_text' => 'Pirmais QSO soli pa solim, no CQ izsaukuma līdz QSL atmiņai.',
   'board_ohm_title' => 'Oma likuma atklāšana',
   'board_ohm_text' => 'Vēsturiska un tehniska lapa, kas savieno elektrību, mērījumus un radio.',
+  'related_document_sheet_label' => 'Atgādnes lapa',
+  'related_document_sheet_text' => 'Īsas piezīmes formulas un tās pārveidojumu pārskatīšanai.',
 );

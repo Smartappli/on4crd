@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Κλείσιμο',
   'download_board_prefix' => 'Λήψη σελίδας',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Σχετικά έγγραφα',
   'board_commandments_title' => 'Οι 10 εντολές του ραδιοερασιτέχνη',
   'board_commandments_text' => 'Καλές πρακτικές ραδιοερασιτεχνών παρουσιασμένες ως δέκα εύκολοι κανόνες.',
   'board_first_qso_title' => 'Το πρώτο μου QSO',
   'board_first_qso_text' => 'Ένα πρώτο QSO βήμα προς βήμα, από την κλήση CQ μέχρι την ανάμνηση QSL.',
   'board_ohm_title' => 'Η ανακάλυψη του νόμου του Ohm',
   'board_ohm_text' => 'Μια ιστορική και τεχνική σελίδα που συνδέει ηλεκτρισμό, μετρήσεις και ραδιόφωνο.',
+  'related_document_sheet_label' => 'Φύλλο υπενθύμισης',
+  'related_document_sheet_text' => 'Σύντομες σημειώσεις για επανάληψη του τύπου και των ισοδυναμιών του.',
 );

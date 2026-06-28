@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Закрыть',
   'download_board_prefix' => 'Скачать страницу',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Связанные документы',
   'board_commandments_title' => '10 заповедей радиолюбителя',
   'board_commandments_text' => 'Хорошие радиолюбительские практики, представленные как десять легко запоминающихся правил.',
   'board_first_qso_title' => 'Моё первое QSO',
   'board_first_qso_text' => 'Первое QSO, рассказанное шаг за шагом, от вызова CQ до памятной QSL.',
   'board_ohm_title' => 'Открытие закона Ома',
   'board_ohm_text' => 'Историческая и техническая страница, связывающая электричество, измерения и радио.',
+  'related_document_sheet_label' => 'Памятка',
+  'related_document_sheet_text' => 'Краткие заметки для повторения формулы и её преобразований.',
 );

@@ -19,6 +19,11 @@ test('Selenium comics: la visionneuse ouvre la planche A4 pleine resolution', as
     const thumbSrc = await firstTrigger.findElement(By.css('img')).getAttribute('src');
     assert.ok(thumbSrc.includes('-thumb.jpg'), 'La galerie doit afficher la miniature JPEG.');
 
+    const relatedDocument = await driver.findElement(By.css('.comics-related-document[href*="loi-ohm-fiche-memo.md"]'));
+    const relatedDocumentText = await relatedDocument.getText();
+    assert.match(relatedDocumentText, /Fiche|m[eé]mo/i, 'La planche Ohm doit exposer son document connexe.');
+    assert.ok((await relatedDocument.getAttribute('download')).endsWith('loi-ohm-fiche-memo.md'), 'Le document connexe local doit rester telechargeable.');
+
     await driver.executeScript('arguments[0].scrollIntoView({ block: "center" });', firstTrigger);
     await firstTrigger.click();
 

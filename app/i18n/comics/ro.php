@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Închide',
   'download_board_prefix' => 'Descărcați pagina',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Documente conexe',
   'board_commandments_title' => 'Cele 10 porunci ale radioamatorului',
   'board_commandments_text' => 'Bune practici radioamatoricești prezentate ca zece reguli ușor de reținut.',
   'board_first_qso_title' => 'Primul meu QSO',
   'board_first_qso_text' => 'Un prim QSO povestit pas cu pas, de la apelul CQ până la amintirea QSL.',
   'board_ohm_title' => 'Descoperirea legii lui Ohm',
   'board_ohm_text' => 'O pagină istorică și tehnică ce leagă electricitatea, măsurătorile și radioul.',
+  'related_document_sheet_label' => 'Fișă de reamintire',
+  'related_document_sheet_text' => 'Note rapide pentru revizuirea formulei și a echivalențelor ei.',
 );

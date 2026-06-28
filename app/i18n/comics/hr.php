@@ -18,10 +18,13 @@ return array (
   'viewer_close' => 'Zatvori',
   'download_board_prefix' => 'Preuzmi stranicu',
   'download_board_label' => 'PNG A4',
+  'related_documents_title' => 'Povezani dokumenti',
   'board_commandments_title' => '10 zapovijedi radioamatera',
   'board_commandments_text' => 'Dobre radioamaterske prakse predstavljene kao deset lako pamtljivih pravila.',
   'board_first_qso_title' => 'Moj prvi QSO',
   'board_first_qso_text' => 'Prvi QSO ispričan korak po korak, od CQ poziva do QSL uspomene.',
   'board_ohm_title' => 'Otkriće Ohmova zakona',
   'board_ohm_text' => 'Povijesna i tehnička stranica koja povezuje elektricitet, mjerenja i radio.',
+  'related_document_sheet_label' => 'Podsjetnik',
+  'related_document_sheet_text' => 'Kratke bilješke za pregled formule i njezinih ekvivalenata.',
 );
