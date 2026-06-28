@@ -252,14 +252,9 @@ const routeContracts = {
   },
   admin_members: {
     actions: {
-      add_member_grade: proof('tests/selenium/admin-configuration-workflows.test.js', ['admin_members', 'add_member_grade']),
       create_member: proof('tests/selenium/admin-configuration-workflows.test.js', ['admin_members', 'create_member']),
-      delete_member_grade: proof('tests/selenium/admin-configuration-workflows.test.js', ['delete_member_grade']),
-      delete_member_payment: proof('tests/selenium/admin-configuration-workflows.test.js', ['delete_member_payment']),
-      save_member_payment: proof('tests/selenium/admin-configuration-workflows.test.js', ['save_member_payment']),
       update_member: proof('tests/selenium/admin-configuration-workflows.test.js', ['admin_members', 'memberForm']),
     },
-    features: [proof('tests/selenium/admin-configuration-workflows.test.js', ['mutual_form=1', '2026'])],
   },
   admin_modules: {
     actions: {},

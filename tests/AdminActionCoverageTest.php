@@ -154,9 +154,9 @@ final class AdminActionCoverageTest extends TestCase
             ],
             'admin member account actions' => [
                 'page' => 'pages/admin_members.php',
-                'controller_snippets' => ["'create_member'", "'update_member'", "'add_member_grade'", "'delete_member_grade'", "'save_member_payment'", "'delete_member_payment'", 'member_cleanup_registration_auth_orphan(', 'member_delete_unlinked_auth_user('],
+                'controller_snippets' => ["'create_member'", "'update_member'", 'member_cleanup_registration_auth_orphan(', 'member_delete_unlinked_auth_user('],
                 'selenium' => 'tests/selenium/admin-configuration-workflows.test.js',
-                'selenium_snippets' => ['admin_members', 'create_member', 'memberForm', 'createdMemberForm', 'add_member_grade', 'save_member_payment', 'delete_member_grade', 'delete_member_payment', 'mutual_form=1'],
+                'selenium_snippets' => ['admin_members', 'create_member', 'memberForm', 'createdMemberForm'],
             ],
             'admin module visibility actions' => [
                 'page' => 'pages/admin_modules.php',

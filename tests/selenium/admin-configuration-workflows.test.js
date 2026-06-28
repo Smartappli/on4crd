@@ -66,7 +66,7 @@ function adminMemberState(callsign) {
   const state = seleniumJson(`
 require_once 'app/bootstrap.php';
 $callsign = strtoupper((string) getenv('SELENIUM_TARGET_CALLSIGN'));
-$columns = ['id', 'callsign', 'first_name', 'last_name', 'full_name', 'email', 'locator', 'is_active', 'is_committee'];
+$columns = ['id', 'callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee'];
 if (table_has_column('members', 'auth_user_id')) {
     $columns[] = 'auth_user_id';
 }
@@ -83,36 +83,14 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
   return state;
 }
 
-function adminMemberRelatedState(memberId) {
-  return seleniumJson(`
-require_once 'app/bootstrap.php';
-$memberId = (int) getenv('SELENIUM_MEMBER_ID');
-$grades = [];
-$payments = [];
-if ($memberId > 0 && table_exists('member_grade_history')) {
-    $stmt = db()->prepare('SELECT id, grade_label, obtained_on FROM member_grade_history WHERE member_id = ? ORDER BY id ASC');
-    $stmt->execute([$memberId]);
-    $grades = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-}
-if ($memberId > 0 && table_exists('member_payment_statuses')) {
-    $stmt = db()->prepare('SELECT id, period_type, period_key, status FROM member_payment_statuses WHERE member_id = ? ORDER BY id ASC');
-    $stmt->execute([$memberId]);
-    $payments = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-}
-echo json_encode(['grades' => $grades, 'payments' => $payments], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-`, { SELENIUM_MEMBER_ID: String(memberId) });
-}
-
 function restoreAdminMember(state) {
   runSeleniumPhp(`
 require_once 'app/bootstrap.php';
 $state = json_decode((string) getenv('SELENIUM_MEMBER_STATE'), true);
 if (is_array($state) && (int) ($state['id'] ?? 0) > 0) {
-    $columns = ['callsign = ?', 'first_name = ?', 'last_name = ?', 'full_name = ?', 'email = ?', 'locator = ?', 'is_active = ?', 'is_committee = ?'];
+    $columns = ['callsign = ?', 'full_name = ?', 'email = ?', 'locator = ?', 'is_active = ?', 'is_committee = ?'];
     $params = [
         (string) $state['callsign'],
-        (string) ($state['first_name'] ?? ''),
-        (string) ($state['last_name'] ?? ''),
         (string) $state['full_name'],
         ($state['email'] ?? null) !== '' ? $state['email'] : null,
         ($state['locator'] ?? null) !== '' ? $state['locator'] : null,
@@ -168,7 +146,7 @@ $memberIds = array_values(array_unique(array_filter($memberIds, static fn(int $i
 $authUserIds = array_values(array_unique(array_filter($authUserIds, static fn(int $id): bool => $id > 0)));
 if ($memberIds !== []) {
     $placeholders = implode(',', array_fill(0, count($memberIds), '?'));
-    foreach (['member_grade_history', 'member_payment_statuses', 'member_roles', 'member_permissions', 'member_notifications', 'member_favorites'] as $table) {
+    foreach (['member_roles', 'member_permissions', 'member_notifications', 'member_favorites'] as $table) {
         if (table_exists($table)) {
             db()->prepare('DELETE FROM ' . $table . ' WHERE member_id IN (' . $placeholders . ')')->execute($memberIds);
         }
@@ -370,15 +348,11 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
   const memberState = adminMemberState(callsign);
   const moduleOriginal = moduleState('press', true);
   const role = createTemporaryRole(`Selenium role ${Date.now()}`);
-  const updatedFirstName = 'Selenium';
-  const updatedLastName = `Admin ${Date.now()}`;
-  const updatedName = `${updatedFirstName} ${updatedLastName}`;
+  const updatedName = `Selenium Admin ${Date.now()}`;
   const updatedLocator = 'JO20AA';
   const newVisibility = moduleOriginal.visibility === 'members' ? 'public' : 'members';
   const createdCallsign = `T${String(Date.now()).slice(-7)}`;
   const createdEmail = `${createdCallsign.toLowerCase()}@example.test`;
-  const createdFirstName = 'Membre';
-  const createdLastName = `Selenium ${createdCallsign}`;
   cleanupCreatedAdminMember(createdCallsign, createdEmail);
 
   await withSelenium(t, async (driver) => {
@@ -400,13 +374,10 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
 
       await visit(driver, 'admin_members', { member_q: callsign });
       const memberForm = await driver.findElement(By.xpath(`//input[@name="member_id" and @value="${memberState.id}"]/ancestor::form[1]`));
-      await setFieldValue(driver, await memberForm.findElement(By.css('input[name="first_name"]')), updatedFirstName);
-      await setFieldValue(driver, await memberForm.findElement(By.css('input[name="last_name"]')), updatedLastName);
+      await setFieldValue(driver, await memberForm.findElement(By.css('input[name="full_name"]')), updatedName);
       await setFieldValue(driver, await memberForm.findElement(By.css('input[name="locator"]')), updatedLocator);
       await submitForm(driver, memberForm);
       const updatedMember = adminMemberState(callsign);
-      assert.equal(updatedMember.first_name, updatedFirstName, 'Le prenom modifie doit etre persiste en base.');
-      assert.equal(updatedMember.last_name, updatedLastName, 'Le nom modifie doit etre persiste en base.');
       assert.equal(updatedMember.full_name, updatedName, 'Le nom modifie doit etre persiste en base.');
       assert.equal(updatedMember.locator, updatedLocator, 'Le locator modifie doit etre persiste en base.');
       const source = await driver.getPageSource();
@@ -416,8 +387,7 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
       await visit(driver, 'admin_members');
       const createMemberForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="create_member"]]'));
       await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="callsign"]')), createdCallsign);
-      await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="first_name"]')), createdFirstName);
-      await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="last_name"]')), createdLastName);
+      await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="full_name"]')), `Membre Selenium ${createdCallsign}`);
       await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="email"]')), createdEmail);
       await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="locator"]')), 'JO20BB');
       await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="password"]')), 'Selenium!2026');
@@ -425,9 +395,7 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
       const createdMember = adminMemberState(createdCallsign);
       assert.equal(createdMember.callsign, createdCallsign, 'Le membre cree depuis admin_members doit etre persiste avec son indicatif.');
       assert.equal(createdMember.email, createdEmail, 'Le membre cree depuis admin_members doit etre persiste avec son email.');
-      assert.equal(createdMember.first_name, createdFirstName, 'Le membre cree depuis admin_members doit etre persiste avec son prenom.');
-      assert.equal(createdMember.last_name, createdLastName, 'Le membre cree depuis admin_members doit etre persiste avec son nom.');
-      assert.equal(createdMember.full_name, `${createdFirstName} ${createdLastName}`, 'Le membre cree depuis admin_members doit recalculer son nom complet.');
+      assert.equal(createdMember.full_name, `Membre Selenium ${createdCallsign}`, 'Le membre cree depuis admin_members doit etre persiste avec son nom.');
       assert.equal(createdMember.locator, 'JO20BB', 'Le membre cree depuis admin_members doit etre persiste avec son locator.');
       assert.equal(Number(createdMember.is_active), 1, 'Le membre cree depuis admin_members doit etre actif.');
       if (Object.prototype.hasOwnProperty.call(createdMember, 'auth_user_id')) {
@@ -437,43 +405,6 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
       const createdMemberForm = await driver.findElement(By.xpath(`//input[@name="member_id" and @value="${createdMember.id}"]/ancestor::form[1]`));
       const createdCallsignValue = await createdMemberForm.findElement(By.css('input[name="callsign"]')).getAttribute('value');
       assert.equal(createdCallsignValue, createdCallsign, 'Le membre cree doit etre retrouvable dans la recherche admin.');
-
-      const gradeForm = await driver.findElement(By.xpath(`//input[@name="action" and @value="add_member_grade"]/ancestor::form[input[@name="member_id" and @value="${createdMember.id}"]][1]`));
-      await setFieldValue(driver, await gradeForm.findElement(By.css('input[name="grade_label"]')), 'HAREC Selenium');
-      await setFieldValue(driver, await gradeForm.findElement(By.css('input[name="obtained_on"]')), '2026-06-15');
-      await submitForm(driver, gradeForm);
-      let relatedState = adminMemberRelatedState(createdMember.id);
-      assert.equal(relatedState.grades.length, 1, 'Le grade ajoute depuis admin_members doit etre persiste.');
-      assert.equal(relatedState.grades[0].grade_label, 'HAREC Selenium', 'Le libelle du grade doit etre conserve.');
-      assert.equal(relatedState.grades[0].obtained_on, '2026-06-15', 'La date d obtention du grade doit etre conservee.');
-
-      await visit(driver, 'admin_members', { member_q: createdCallsign });
-      const paymentForm = await driver.findElement(By.xpath(`//input[@name="action" and @value="save_member_payment"]/ancestor::form[input[@name="member_id" and @value="${createdMember.id}"]][1]`));
-      await setFieldValue(driver, await paymentForm.findElement(By.css('select[name="payment_period_type"]')), 'year');
-      await setFieldValue(driver, await paymentForm.findElement(By.css('input[name="payment_year"]')), '2026');
-      await setFieldValue(driver, await paymentForm.findElement(By.css('select[name="payment_status"]')), 'paid');
-      await submitForm(driver, paymentForm);
-      relatedState = adminMemberRelatedState(createdMember.id);
-      assert.equal(relatedState.payments.length, 1, 'Le statut de paiement ajoute depuis admin_members doit etre persiste.');
-      assert.equal(relatedState.payments[0].period_type, 'year', 'Le paiement doit conserver le mode annuel.');
-      assert.equal(relatedState.payments[0].period_key, '2026', 'Le paiement doit conserver l annee cible.');
-      assert.equal(relatedState.payments[0].status, 'paid', 'Le paiement doit conserver son etat.');
-
-      await visit(driver, 'admin_members', { member_q: createdCallsign });
-      const relatedSource = await driver.getPageSource();
-      assert.match(relatedSource, /HAREC Selenium/, 'Le grade ajoute doit rester visible dans la gestion du membre.');
-      assert.match(relatedSource, /2026/, 'La periode de paiement doit rester visible dans la gestion du membre.');
-      assert.match(relatedSource, /mutual_form=1/, 'Le formulaire mutuelle doit etre disponible quand l annee est payee.');
-      const deleteGradeForm = await driver.findElement(By.xpath(`//input[@name="action" and @value="delete_member_grade"]/ancestor::form[input[@name="grade_id" and @value="${relatedState.grades[0].id}"]][1]`));
-      await submitForm(driver, deleteGradeForm);
-      relatedState = adminMemberRelatedState(createdMember.id);
-      assert.equal(relatedState.grades.length, 0, 'La suppression du grade doit etre persistante.');
-
-      await visit(driver, 'admin_members', { member_q: createdCallsign });
-      const deletePaymentForm = await driver.findElement(By.xpath(`//input[@name="action" and @value="delete_member_payment"]/ancestor::form[input[@name="payment_id" and @value="${relatedState.payments[0].id}"]][1]`));
-      await submitForm(driver, deletePaymentForm);
-      relatedState = adminMemberRelatedState(createdMember.id);
-      assert.equal(relatedState.payments.length, 0, 'La suppression du statut de paiement doit etre persistante.');
 
       await visit(driver, 'admin_permissions');
       const assignForm = await driver.findElement(By.css('input[name="action"][value="assign_role"]'));

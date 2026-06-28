@@ -82,7 +82,7 @@ test('Selenium admin: contrats des actions hors propositions', () => {
     {
       label: 'member account workflows',
       file: 'tests/selenium/admin-configuration-workflows.test.js',
-      snippets: ['admin_members', 'create_member', 'memberForm', 'createdMemberForm', 'add_member_grade', 'save_member_payment', 'delete_member_grade', 'delete_member_payment', 'mutual_form=1'],
+      snippets: ['admin_members', 'create_member', 'memberForm', 'createdMemberForm'],
     },
     {
       label: 'module visibility updates',
