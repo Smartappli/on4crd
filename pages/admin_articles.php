@@ -205,6 +205,14 @@ $articleStatusChoices = [
     'rejected' => $t('rejected'),
 ];
 $articleStatusLabel = static fn(string $status): string => $articleStatusChoices[$status] ?? $status;
+$editorialBlockedReasonLabel = static function (string $reason) use ($t): string {
+    return match ($reason) {
+        'missing_title' => $t('title'),
+        'missing_content' => $t('content_simple_html'),
+        'missing_schedule_date', 'invalid_schedule_date', 'stuck_in_past_schedule' => $t('scheduled_at'),
+        default => $reason,
+    };
+};
 $pendingProposalUrl = route_url_clean('admin_articles', ['status' => 'pending']) . '#pending-proposals';
 $proposalStatusLabels = [
     'pending' => $t('proposal_status_pending'),
