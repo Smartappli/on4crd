@@ -455,17 +455,21 @@ function article_docx_relationship_targets(string $xml): array
 }
 }
 
-if (!function_exists('article_docx_image_data_uris')) {
+if (!function_exists('article_docx_max_inline_image_bytes')) {
 function article_docx_max_inline_image_bytes(): int
 {
     return 512 * 1024;
 }
+}
 
+if (!function_exists('article_docx_max_inline_image_total_bytes')) {
 function article_docx_max_inline_image_total_bytes(): int
 {
     return 1024 * 1024;
 }
+}
 
+if (!function_exists('article_docx_image_data_uris')) {
 /**
  * @return array<string,string>
  */
