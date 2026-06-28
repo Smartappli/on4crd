@@ -156,6 +156,14 @@
   margin-bottom: .8rem;
 }
 
+[data-route="admin_articles"] .admin-article-active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  align-items: center;
+  margin: 0 0 .8rem;
+}
+
 [data-route="admin_articles"] .admin-article-status-tabs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
