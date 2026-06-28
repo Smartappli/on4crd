@@ -1109,8 +1109,10 @@ ob_start();
                 </div>
                 <label data-admin-editor-note-field><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
             </div>
-            <button class="button admin-article-save-button" type="submit"><?= e($t('save')) ?></button>
-            <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>
+            <div class="admin-article-form-actions">
+                <button class="button admin-article-save-button" type="submit"><?= e($t('save')) ?></button>
+                <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>
+            </div>
         </form>
         <?php if ((int) $editing['id'] > 0): ?>
             <div class="admin-article-moderation-panel">
@@ -1146,14 +1148,14 @@ ob_start();
                     <button class="button secondary admin-article-delete-button" type="submit"><?= e($t('delete_article')) ?></button>
                 </form>
             </div>
-            <section style="margin-top:1rem;">
+            <section class="admin-article-revisions">
                 <h3><?= e($t('revisions')) ?></h3>
                 <?php if ($revisions === []): ?>
                     <p class="help"><?= e($t('no_revisions')) ?></p>
                 <?php else: ?>
-                    <div class="stack">
+                    <div class="admin-article-revision-list">
                         <?php foreach ($revisions as $revision): ?>
-                            <form method="post" class="row-between" style="gap:.6rem;align-items:center;">
+                            <form method="post" class="admin-article-revision-row">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                 <input type="hidden" name="action" value="restore_revision">
                                 <input type="hidden" name="article_id" value="<?= (int) $editing['id'] ?>">
@@ -1173,7 +1175,7 @@ ob_start();
         <?php if ($previewPayload === null): ?>
             <p class="help"><?= e($t('preview_empty')) ?></p>
         <?php else: ?>
-            <article class="feature-card" style="margin:0;">
+            <article class="feature-card admin-article-preview-result">
                 <h3><?= e((string) ($previewPayload['title'] ?? '')) ?></h3>
                 <?php if (trim((string) ($previewPayload['excerpt'] ?? '')) !== ''): ?>
                     <p><?= e((string) $previewPayload['excerpt']) ?></p>
