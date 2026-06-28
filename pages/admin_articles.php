@@ -1091,15 +1091,15 @@ ob_start();
                 <h2><?= e($t('publication_section')) ?></h2>
                 <div class="admin-article-form-grid">
                     <label><?= e($t('status')) ?>
-                        <select name="status">
+                        <select name="status" data-admin-editor-status>
                             <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
                                 <option value="<?= e($statusCode) ?>" <?= (string) $editing['status'] === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </label>
-                    <label><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
+                    <label data-admin-editor-scheduled-field><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
                 </div>
-                <label><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
+                <label data-admin-editor-note-field><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
             </div>
             <button class="button admin-article-save-button" type="submit"><?= e($t('save')) ?></button>
             <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>

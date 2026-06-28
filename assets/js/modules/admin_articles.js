@@ -3,6 +3,15 @@
   const slugInput = document.querySelector('input[name="slug"]');
   const categorySelect = document.querySelector('#article-category');
   const customCategoryWrapper = document.querySelector('#article-category-custom');
+  const setFieldDisabled = (field, disabled) => {
+    if (!(field instanceof HTMLElement)) return;
+    field.classList.toggle('is-muted', disabled);
+    field.querySelectorAll('input, select, textarea').forEach((control) => {
+      if (control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement) {
+        control.disabled = disabled;
+      }
+    });
+  };
 
   if (titleInput instanceof HTMLInputElement && slugInput instanceof HTMLInputElement) {
     let slugWasAuto = slugInput.value.trim() === '';
@@ -47,6 +56,22 @@
     syncCategoryCustom();
   }
 
+  const editorStatus = document.querySelector('[data-admin-editor-status]');
+  if (editorStatus instanceof HTMLSelectElement) {
+    const scheduledField = document.querySelector('[data-admin-editor-scheduled-field]');
+    const noteField = document.querySelector('[data-admin-editor-note-field]');
+
+    const syncEditorPublicationFields = () => {
+      setFieldDisabled(scheduledField, editorStatus.value !== 'scheduled');
+      if (noteField instanceof HTMLElement) {
+        noteField.classList.toggle('is-muted', editorStatus.value !== 'rejected');
+      }
+    };
+
+    editorStatus.addEventListener('change', syncEditorPublicationFields);
+    syncEditorPublicationFields();
+  }
+
   const bulkForm = document.querySelector('#admin-article-bulk-form');
   if (bulkForm instanceof HTMLFormElement) {
     const articleChecks = Array.from(document.querySelectorAll('input[type="checkbox"][form="admin-article-bulk-form"][name="ids[]"]'))
@@ -57,16 +82,6 @@
     const bulkOp = bulkForm.querySelector('[data-admin-bulk-op]');
     const scheduledField = bulkForm.querySelector('[data-admin-bulk-scheduled-field]');
     const noteField = bulkForm.querySelector('[data-admin-bulk-note-field]');
-
-    const setFieldDisabled = (field, disabled) => {
-      if (!(field instanceof HTMLElement)) return;
-      field.classList.toggle('is-muted', disabled);
-      field.querySelectorAll('input, select, textarea').forEach((control) => {
-        if (control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement) {
-          control.disabled = disabled;
-        }
-      });
-    };
 
     const syncBulkAuxiliaryFields = () => {
       const op = bulkOp instanceof HTMLSelectElement ? bulkOp.value : '';
