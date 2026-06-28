@@ -948,7 +948,11 @@ ob_start();
             </div>
             <div class="admin-article-editor-head-actions">
                 <?php if ($editingId > 0): ?>
+                    <?php $editingPublicSlug = trim((string) ($editing['slug'] ?? '')); ?>
                     <span class="badge muted admin-article-status admin-article-status-<?= e((string) ($editing['status'] ?? 'draft')) ?>"><?= e($articleStatusLabel((string) ($editing['status'] ?? 'draft'))) ?></span>
+                    <?php if ((string) ($editing['status'] ?? '') === 'published' && $editingPublicSlug !== ''): ?>
+                        <a class="button small secondary admin-article-public-link" href="<?= e(route_url('article', ['slug' => $editingPublicSlug])) ?>"><?= e($t('preview')) ?></a>
+                    <?php endif; ?>
                     <a class="button small secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('new_article')) ?></a>
                 <?php endif; ?>
             </div>
