@@ -106,6 +106,24 @@
     }
   }
 
+  const listFilter = document.querySelector('[data-admin-album-list-filter]');
+  if (listFilter instanceof HTMLFormElement) {
+    listFilter.querySelectorAll('select').forEach((select) => {
+      if (!(select instanceof HTMLSelectElement)) return;
+      select.addEventListener('change', () => {
+        try {
+          if (typeof listFilter.requestSubmit === 'function') {
+            listFilter.requestSubmit();
+            return;
+          }
+          listFilter.submit();
+        } catch (error) {
+          listFilter.submit();
+        }
+      });
+    });
+  }
+
   document.querySelectorAll('[data-admin-album-save]').forEach((button) => {
     if (!(button instanceof HTMLButtonElement)) return;
     button.addEventListener('click', (event) => {
