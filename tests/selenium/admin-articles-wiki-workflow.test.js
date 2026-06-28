@@ -562,6 +562,45 @@ async function assertArticleServerDocxPreviewImport(driver, token) {
   assert.equal(articleRecordBySlug(slug), null, 'La previsualisation DOCX serveur ne doit pas creer l article.');
 }
 
+async function assertAdminImportedArticleAutoPublished(driver, token) {
+  const fixtureDir = fs.mkdtempSync(path.join(os.tmpdir(), 'on4crd-article-import-'));
+  const fixturePath = path.join(fixtureDir, `article-${token}.txt`);
+  const title = `Selenium article import admin ${token}`;
+  const slug = `selenium-article-import-admin-${token}`;
+  const importedSentence = `Contenu importe admin ${token}`;
+
+  try {
+    fs.writeFileSync(fixturePath, `${importedSentence}\n\n- Ligne importee ${token}\n`, 'utf8');
+
+    await visit(driver, 'admin_articles');
+    const form = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save_article"]]'));
+    await setFieldValue(driver, await form.findElement(By.css('input[name="title"]')), title);
+    await setFieldValue(driver, await form.findElement(By.css('input[name="slug"]')), slug);
+    await setFieldValue(driver, await form.findElement(By.css('textarea[name="content"]')), '<p>Ce contenu doit etre remplace par le TXT importe.</p>');
+    await form.findElement(By.css('input[name="article_document"][accept*=".txt"]')).sendKeys(fixturePath);
+    await submitForm(driver, form, ':scope > button.button:not([name])');
+
+    const article = articleRecordBySlug(slug);
+    assert.ok(article && Number(article.id) > 0, 'L article importe admin doit etre enregistre.');
+    assert.ok(Number(article.author_id) > 0, 'L article importe admin doit etre rattache a l administrateur.');
+    assert.equal(article.status, 'published', 'L article importe par un administrateur doit etre publie automatiquement.');
+    assert.ok(String(article.published_at || '') !== '', 'L article importe publie doit avoir une date de publication.');
+    assert.match(article.content, new RegExp(importedSentence), 'Le contenu importe doit remplacer le contenu manuel.');
+
+    await visit(driver, 'my_requests');
+    let text = await pagePlainText(driver);
+    assert.match(text, new RegExp(title), 'L article importe admin doit apparaitre dans Mes contenus.');
+    assert.match(text, /publ|published/i, 'Mes contenus doit afficher l article importe comme publie.');
+
+    await visit(driver, 'article', { slug });
+    text = await pagePlainText(driver);
+    assert.match(text, new RegExp(title), 'L article importe admin doit etre accessible en ligne.');
+    assert.match(text, new RegExp(importedSentence), 'La page publique doit afficher le contenu importe.');
+  } finally {
+    fs.rmSync(fixtureDir, { recursive: true, force: true });
+  }
+}
+
 async function submitProposalStatus(driver, title, status, note) {
   const form = await driver.findElement(By.xpath(
     `//article[contains(@class,"article-item")][.//h3[contains(normalize-space(.), ${xpathLiteral(title)})]]//form[.//input[@name="action" and @value="update_proposal_status"]]`,
@@ -668,7 +707,7 @@ function articleRecordBySlug(slug) {
   return phpJson(`
 require_once 'app/bootstrap.php';
 $slug = (string) (getenv('SELENIUM_SLUG') ?: '');
-$stmt = db()->prepare('SELECT id, author_id, title, slug, excerpt, content, status, category, subcategory, subsubcategory FROM articles WHERE slug = ? LIMIT 1');
+$stmt = db()->prepare('SELECT id, author_id, title, slug, excerpt, content, status, category, subcategory, subsubcategory, published_at FROM articles WHERE slug = ? LIMIT 1');
 $stmt->execute([$slug]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null, JSON_THROW_ON_ERROR);
 `, { SELENIUM_SLUG: slug });
@@ -916,6 +955,8 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
       await visit(driver, 'admin_articles');
       await assertArticleDocxWysiwygImport(driver, token);
       await assertArticleServerDocxPreviewImport(driver, token);
+      await assertAdminImportedArticleAutoPublished(driver, token);
+      await visit(driver, 'admin_articles');
 
       const categoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_category"]]'));
       await categoryForm.findElement(By.css('input[name="category_label"]')).sendKeys(categoryLabel);

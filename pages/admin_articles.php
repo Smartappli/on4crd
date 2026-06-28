@@ -210,7 +210,7 @@ $proposalTypeLabels = [
     'subsubcategory' => $t('proposal_type_subsubcategory'),
     'tag' => $t('proposal_type_tag'),
 ];
-$editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'subcategory' => '', 'subsubcategory' => '', 'scheduled_at' => null, 'moderation_note' => null];
+$editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'published', 'category' => 'autres', 'subcategory' => '', 'subsubcategory' => '', 'scheduled_at' => null, 'moderation_note' => null];
 $editing = $editingDefault;
 $editingId = (int) ($_GET['id'] ?? 0);
 
