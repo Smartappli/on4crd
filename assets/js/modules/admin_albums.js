@@ -88,6 +88,24 @@
     syncAlbumTaxonomy('init');
   });
 
+  const photoFilter = document.querySelector('[data-admin-album-photo-filter]');
+  if (photoFilter instanceof HTMLFormElement) {
+    const select = photoFilter.querySelector('select[name="photo_album"]');
+    if (select instanceof HTMLSelectElement) {
+      select.addEventListener('change', () => {
+        try {
+          if (typeof photoFilter.requestSubmit === 'function') {
+            photoFilter.requestSubmit();
+            return;
+          }
+          photoFilter.submit();
+        } catch (error) {
+          photoFilter.submit();
+        }
+      });
+    }
+  }
+
   document.querySelectorAll('[data-admin-album-save]').forEach((button) => {
     if (!(button instanceof HTMLButtonElement)) return;
     button.addEventListener('click', (event) => {
