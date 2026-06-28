@@ -1070,6 +1070,7 @@ ob_start();
                                 <button class="button small" type="submit" data-admin-album-save><?= e((string) $t['save']) ?></button>
                                 <span class="pill"><?= e((string) $t['public_album']) ?>: <?= (int) $album['is_public'] === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
                                 <span class="pill"><?= e($featuredAlbumLabel) ?>: <?= (int) ($album['is_featured'] ?? 0) === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
+                                <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $albumId]) . '#admin-album-photos') ?>"><?= e((string) $t['photos']) ?></a>
                                 <a class="button secondary small" href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e((string) $t['view_public']) ?></a>
                             </div>
                         </form>
@@ -1089,7 +1090,7 @@ ob_start();
         <div class="admin-albums-section-head">
             <div>
                 <h2><?= e((string) $t['photos_editor']) ?></h2>
-                <p class="help"><?= $totalPhotos ?> <?= e((string) $t['photos']) ?></p>
+                <p class="help"><?= $photosTotal ?> <?= e((string) $t['photos']) ?></p>
             </div>
             <form method="get" class="admin-album-photo-filter" data-admin-album-photo-filter>
                 <input type="hidden" name="route" value="admin_albums">
@@ -1102,6 +1103,9 @@ ob_start();
                     </select>
                 </label>
                 <button class="button small secondary" type="submit"><?= e((string) $t['update']) ?></button>
+                <?php if ($photoAlbumFilter > 0): ?>
+                    <a class="button small secondary" href="<?= e(route_url_clean('admin_albums') . '#admin-album-photos') ?>"><?= e((string) $t['albums']) ?></a>
+                <?php endif; ?>
             </form>
         </div>
         <?php if ($photos === []): ?>
