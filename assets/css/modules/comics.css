@@ -139,6 +139,67 @@
   line-height: 1.55;
 }
 
+[data-route="comics"] .comics-related-documents {
+  display: grid;
+  gap: .45rem;
+  padding-block: .2rem;
+}
+
+[data-route="comics"] .comics-related-documents h4 {
+  margin: 0;
+  color: var(--text);
+  font-family: inherit;
+  font-size: .82rem;
+  font-weight: 780;
+  line-height: 1.25;
+}
+
+[data-route="comics"] .comics-related-documents ul {
+  display: grid;
+  gap: .45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-route="comics"] .comics-related-documents li {
+  display: grid;
+  gap: .2rem;
+}
+
+[data-route="comics"] .comics-related-document {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .55rem;
+  min-height: 2.1rem;
+  padding: .4rem .55rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: .84rem;
+  font-weight: 720;
+  line-height: 1.2;
+  background: color-mix(in srgb, var(--bg) 72%, var(--panel));
+}
+
+[data-route="comics"] .comics-related-document small {
+  flex: 0 0 auto;
+  padding: .18rem .32rem;
+  border-radius: 4px;
+  color: var(--accent-strong);
+  font-size: .68rem;
+  font-weight: 800;
+  line-height: 1;
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+[data-route="comics"] .comics-related-document:hover,
+[data-route="comics"] .comics-related-document:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
 [data-route="comics"] .comics-card-actions {
   display: flex;
   flex-wrap: wrap;

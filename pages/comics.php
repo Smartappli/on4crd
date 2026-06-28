@@ -121,6 +121,7 @@ ob_start();
             $openLabel = (string) $t['open_board_prefix'] . ' ' . (string) $board['title'];
             $downloadLabel = (string) $t['download_board_prefix'] . ' ' . (string) $board['title'];
             $downloadName = basename((string) $board['image']);
+            $documents = isset($board['documents']) && is_array($board['documents']) ? $board['documents'] : [];
             ?>
             <article class="comics-card">
                 <a class="comics-thumb-link"
@@ -139,6 +140,40 @@ ob_start();
                 <div class="comics-card-copy">
                     <h3><?= e((string) $board['title']) ?></h3>
                     <p><?= e((string) $board['text']) ?></p>
+                    <?php if ($documents !== []): ?>
+                        <div class="comics-related-documents">
+                            <h4><?= e((string) $t['related_documents_title']) ?></h4>
+                            <ul>
+                                <?php foreach ($documents as $document): ?>
+                                    <?php
+                                    $documentUrl = (string) ($document['url'] ?? '');
+                                    $documentTitle = (string) ($document['title'] ?? '');
+                                    $documentText = (string) ($document['text'] ?? '');
+                                    $documentDownloadName = (string) ($document['download_name'] ?? '');
+                                    $documentType = strtoupper((string) pathinfo((string) ($document['path'] ?? $documentUrl), PATHINFO_EXTENSION));
+                                    if ($documentType === '') {
+                                        $documentType = (string) ($document['type'] ?? '');
+                                    }
+                                    ?>
+                                    <li>
+                                        <a class="comics-related-document"
+                                           href="<?= e($documentUrl) ?>"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           <?php if ((bool) ($document['external'] ?? false) === false && $documentDownloadName !== ''): ?>download="<?= e($documentDownloadName) ?>"<?php endif; ?>>
+                                            <span><?= e($documentTitle) ?></span>
+                                            <?php if ($documentType !== ''): ?>
+                                                <small><?= e($documentType) ?></small>
+                                            <?php endif; ?>
+                                        </a>
+                                        <?php if ($documentText !== ''): ?>
+                                            <p><?= e($documentText) ?></p>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
                     <div class="comics-card-actions">
                         <a class="comics-card-action" href="<?= e((string) $board['url']) ?>" target="_blank" rel="noopener noreferrer" download="<?= e($downloadName) ?>" aria-label="<?= e($downloadLabel) ?>"><?= e((string) $t['download_board_label']) ?></a>
                     </div>
