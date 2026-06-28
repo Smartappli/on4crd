@@ -1223,12 +1223,13 @@ ob_start();
                         break;
                     }
                 }
+                $articleExcerpt = article_excerpt_from_input((string) ($article['excerpt'] ?? ''));
                 ?>
                 <article class="article-item">
                     <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
                     <p class="taxonomy-badge-row"><strong><?= e($t('category_label')) ?></strong> <span class="badge muted taxonomy-pill-category"><?= e($articleCategoryLabel) ?></span><?php if ($articleSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($articleSubcategoryLabel) ?></span><?php endif; ?><?php if ($articleSubsubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($articleSubsubcategoryLabel) ?></span><?php endif; ?> <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
-                    <?php if (trim((string) ($article['excerpt'] ?? '')) !== ''): ?>
-                        <p><?= e((string) $article['excerpt']) ?></p>
+                    <?php if ($articleExcerpt !== ''): ?>
+                        <p><?= e($articleExcerpt) ?></p>
                     <?php endif; ?>
                 </article>
             <?php endforeach; ?>

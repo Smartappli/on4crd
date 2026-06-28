@@ -947,6 +947,10 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('textarea name="excerpt" rows="4" data-wysiwyg="off"', $adminArticles);
         self::assertStringContainsString('article_excerpt_from_input((string) ($_POST[\'excerpt\'] ?? \'\'))', $articlePropose);
         self::assertStringContainsString('textarea name="excerpt" rows="3" maxlength="2000" data-wysiwyg="off"', $articlePropose);
+        self::assertStringContainsString('article_excerpt_from_input((string) ($article[\'excerpt\'] ?? \'\'))', $adminArticles);
+        self::assertStringContainsString('return article_excerpt_from_input((string) ($row[\'excerpt_localized\'] ?? $row[\'excerpt\'] ?? \'\'));', $articles);
+        self::assertStringContainsString('$articleExcerpt = article_excerpt_from_input((string) ($row[\'excerpt_localized\'] ?? \'\'));', $article);
+        self::assertStringContainsString('$articleExcerpt = article_excerpt_from_input((string) ($latestArticle[\'excerpt_localized\'] ?? $latestArticle[\'excerpt\'] ?? \'\'));', $home);
         self::assertStringNotContainsString("mb_substr(article_view_plain_text((string) (\$related['content_localized'] ?? '')), 0, 140)", $article);
         self::assertStringNotContainsString("\$articleExcerpt = mb_safe_strimwidth", $home);
         self::assertStringNotContainsString('return mb_strlen($plain) > 180', $articles);

@@ -16,7 +16,7 @@ function article_reading_minutes(string $html): int
 
 function article_card_excerpt(array $row): string
 {
-    return trim((string) ($row['excerpt_localized'] ?? $row['excerpt'] ?? ''));
+    return article_excerpt_from_input((string) ($row['excerpt_localized'] ?? $row['excerpt'] ?? ''));
 }
 
 function article_category_logo(string $label): string

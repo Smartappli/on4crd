@@ -87,7 +87,8 @@ foreach ($articleSubsubcategoriesByParent[$category . ':' . $subcategory] ?? [] 
 }
 $readingMinutes = article_view_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? ''));
 $articlePlainText = article_view_plain_text((string) ($row['content_localized'] ?? $row['content'] ?? ''));
-$articleDescription = trim((string) ($row['excerpt_localized'] ?? '')) !== '' ? (string) $row['excerpt_localized'] : (string) $t['meta_fallback'];
+$articleExcerpt = article_excerpt_from_input((string) ($row['excerpt_localized'] ?? ''));
+$articleDescription = $articleExcerpt !== '' ? $articleExcerpt : (string) $t['meta_fallback'];
 $articleUrl = route_url_with_locale('article', $locale, ['slug' => (string) $row['slug']]);
 $articlePublishedRaw = article_publication_datetime($row);
 $articlePublishedAt = $articlePublishedRaw !== null ? date('c', strtotime($articlePublishedRaw)) : null;
@@ -171,8 +172,8 @@ ob_start();
         <span><?= e($articleDisplayDate) ?></span>
         <span><?= $readingMinutes ?> <?= e((string) $t['reading_minutes']) ?></span>
     </p>
-    <?php if (trim((string) ($row['excerpt_localized'] ?? '')) !== ''): ?>
-        <p class="lead"><?= e((string) $row['excerpt_localized']) ?></p>
+    <?php if ($articleExcerpt !== ''): ?>
+        <p class="lead"><?= e($articleExcerpt) ?></p>
     <?php endif; ?>
     <div class="article-content">
         <?= article_sanitize_content((string) $row['content_localized']) ?>
@@ -194,7 +195,7 @@ ob_start();
     <div class="news-grid">
         <?php foreach ($relatedRows as $related): ?>
             <?php $related = localized_article_row($related); ?>
-            <?php $relatedExcerpt = trim((string) ($related['excerpt_localized'] ?? '')); ?>
+            <?php $relatedExcerpt = article_excerpt_from_input((string) ($related['excerpt_localized'] ?? '')); ?>
             <article class="feature-card">
                 <h3><a href="<?= e(route_url('article', ['slug' => (string) $related['slug']])) ?>"><?= e((string) $related['title_localized']) ?></a></h3>
                 <?php if ($relatedExcerpt !== ''): ?>
