@@ -1091,6 +1091,18 @@ ob_start();
                 <h2><?= e((string) $t['photos_editor']) ?></h2>
                 <p class="help"><?= $totalPhotos ?> <?= e((string) $t['photos']) ?></p>
             </div>
+            <form method="get" class="admin-album-photo-filter" data-admin-album-photo-filter>
+                <input type="hidden" name="route" value="admin_albums">
+                <label><?= e((string) $t['album_label']) ?>
+                    <select name="photo_album">
+                        <option value=""><?= e((string) $t['albums']) ?></option>
+                        <?php foreach ($albums as $album): ?>
+                            <option value="<?= (int) $album['id'] ?>" <?= $photoAlbumFilter === (int) $album['id'] ? 'selected' : '' ?>><?= e((string) $album['title']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <button class="button small secondary" type="submit"><?= e((string) $t['update']) ?></button>
+            </form>
         </div>
         <?php if ($photos === []): ?>
             <p class="help"><?= e((string) $t['no_photos']) ?></p>
@@ -1150,11 +1162,11 @@ ob_start();
             <?php if ($photosMaxPage > 1): ?>
                 <div class="actions mt-3">
                     <?php if ($photosPage > 1): ?>
-                        <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photos_page' => $photosPage - 1])) ?>"><?= e((string) $t['previous']) ?></a>
+                        <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $photoAlbumFilter > 0 ? $photoAlbumFilter : '', 'photos_page' => $photosPage - 1])) ?>"><?= e((string) $t['previous']) ?></a>
                     <?php endif; ?>
                     <span class="pill"><?= e((string) $t['page']) ?> <?= $photosPage ?> / <?= $photosMaxPage ?></span>
                     <?php if ($photosPage < $photosMaxPage): ?>
-                        <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photos_page' => $photosPage + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                        <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $photoAlbumFilter > 0 ? $photoAlbumFilter : '', 'photos_page' => $photosPage + 1])) ?>"><?= e((string) $t['next']) ?></a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
