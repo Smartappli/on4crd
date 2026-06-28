@@ -995,6 +995,9 @@ ob_start();
                     <?php if ((string) ($editing['status'] ?? '') === 'published' && $editingPublicSlug !== ''): ?>
                         <a class="button small secondary admin-article-public-link" href="<?= e(route_url('article', ['slug' => $editingPublicSlug])) ?>"><?= e($t('preview')) ?></a>
                     <?php endif; ?>
+                    <?php if (!empty($editing['updated_at'])): ?>
+                        <span class="badge muted"><?= e($t('updated_at')) ?> <?= e(date('d/m/Y H:i', strtotime((string) $editing['updated_at']))) ?></span>
+                    <?php endif; ?>
                     <a class="button small secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('new_article')) ?></a>
                 <?php endif; ?>
             </div>
