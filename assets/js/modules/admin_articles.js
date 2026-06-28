@@ -3,6 +3,8 @@
   const slugInput = document.querySelector('input[name="slug"]');
   const categorySelect = document.querySelector('#article-category');
   const customCategoryWrapper = document.querySelector('#article-category-custom');
+  const subcategorySelect = document.querySelector('[data-admin-taxonomy-subcategory]');
+  const subsubcategorySelect = document.querySelector('[data-admin-taxonomy-subsubcategory]');
   const setFieldDisabled = (field, disabled) => {
     if (!(field instanceof HTMLElement)) return;
     field.classList.toggle('is-muted', disabled);
@@ -48,12 +50,93 @@
     syncSlug();
   }
 
-  if (categorySelect instanceof HTMLSelectElement && customCategoryWrapper instanceof HTMLElement) {
-    const syncCategoryCustom = () => {
+  const syncCategoryCustom = () => {
+    if (categorySelect instanceof HTMLSelectElement && customCategoryWrapper instanceof HTMLElement) {
       customCategoryWrapper.hidden = categorySelect.value !== '__custom__';
-    };
+    }
+  };
+
+  if (categorySelect instanceof HTMLSelectElement && customCategoryWrapper instanceof HTMLElement) {
     categorySelect.addEventListener('change', syncCategoryCustom);
     syncCategoryCustom();
+  }
+
+  if (categorySelect instanceof HTMLSelectElement && subcategorySelect instanceof HTMLSelectElement && subsubcategorySelect instanceof HTMLSelectElement) {
+    const taxonomyParts = (value) => String(value || '').split(':');
+    const optionTaxonomy = (option) => ({
+      category: option.dataset.adminTaxonomyCategory || taxonomyParts(option.value)[0] || '',
+      subcategory: option.dataset.adminTaxonomySubcategory || taxonomyParts(option.value)[1] || '',
+    });
+    const setOptionAvailable = (option, available) => {
+      if (option.value === '') return;
+      option.disabled = !available;
+      option.hidden = !available;
+    };
+
+    const syncEditorTaxonomy = (source) => {
+      if (source === 'subcategory' && subcategorySelect.value !== '') {
+        const selected = subcategorySelect.selectedOptions[0];
+        const { category } = selected instanceof HTMLOptionElement ? optionTaxonomy(selected) : { category: '' };
+        if (category !== '' && categorySelect.value !== category) {
+          categorySelect.value = category;
+          syncCategoryCustom();
+        }
+      }
+
+      if (source === 'subsubcategory' && subsubcategorySelect.value !== '') {
+        const selected = subsubcategorySelect.selectedOptions[0];
+        const taxonomy = selected instanceof HTMLOptionElement ? optionTaxonomy(selected) : { category: '', subcategory: '' };
+        if (taxonomy.category !== '' && categorySelect.value !== taxonomy.category) {
+          categorySelect.value = taxonomy.category;
+          syncCategoryCustom();
+        }
+        if (taxonomy.category !== '' && taxonomy.subcategory !== '') {
+          const parentRef = `${taxonomy.category}:${taxonomy.subcategory}`;
+          if (subcategorySelect.value !== parentRef) {
+            subcategorySelect.value = parentRef;
+          }
+        }
+      }
+
+      const currentCategory = categorySelect.value === '__custom__' ? '' : categorySelect.value;
+      const selectedSubcategory = subcategorySelect.selectedOptions[0];
+      const currentSubcategoryTaxonomy = selectedSubcategory instanceof HTMLOptionElement ? optionTaxonomy(selectedSubcategory) : { category: '', subcategory: '' };
+      if (subcategorySelect.value !== '' && currentSubcategoryTaxonomy.category !== currentCategory) {
+        subcategorySelect.value = '';
+      }
+
+      const activeSubcategory = subcategorySelect.value !== ''
+        ? (subcategorySelect.selectedOptions[0] instanceof HTMLOptionElement ? optionTaxonomy(subcategorySelect.selectedOptions[0]).subcategory : '')
+        : '';
+
+      Array.from(subcategorySelect.options).forEach((option) => {
+        const taxonomy = optionTaxonomy(option);
+        setOptionAvailable(option, currentCategory !== '' && taxonomy.category === currentCategory);
+      });
+
+      if (subsubcategorySelect.value !== '') {
+        const selected = subsubcategorySelect.selectedOptions[0];
+        const taxonomy = selected instanceof HTMLOptionElement ? optionTaxonomy(selected) : { category: '', subcategory: '' };
+        if (taxonomy.category !== currentCategory || taxonomy.subcategory !== activeSubcategory) {
+          subsubcategorySelect.value = '';
+        }
+      }
+
+      const subsubcategoryDisabled = currentCategory === '' || activeSubcategory === '';
+      subsubcategorySelect.disabled = subsubcategoryDisabled;
+      if (subsubcategorySelect.parentElement instanceof HTMLElement) {
+        subsubcategorySelect.parentElement.classList.toggle('is-muted', subsubcategoryDisabled);
+      }
+      Array.from(subsubcategorySelect.options).forEach((option) => {
+        const taxonomy = optionTaxonomy(option);
+        setOptionAvailable(option, !subsubcategoryDisabled && taxonomy.category === currentCategory && taxonomy.subcategory === activeSubcategory);
+      });
+    };
+
+    categorySelect.addEventListener('change', () => syncEditorTaxonomy('category'));
+    subcategorySelect.addEventListener('change', () => syncEditorTaxonomy('subcategory'));
+    subsubcategorySelect.addEventListener('change', () => syncEditorTaxonomy('subsubcategory'));
+    syncEditorTaxonomy('init');
   }
 
   const editorStatus = document.querySelector('[data-admin-editor-status]');
