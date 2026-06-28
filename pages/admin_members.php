@@ -226,6 +226,161 @@ function admin_members_payment_status_label(string $status, array $labels): stri
     return (string) ($labels['payment_status_' . $status] ?? $status);
 }
 
+/**
+ * @param list<array<string, mixed>> $payments
+ * @return list<string>
+ */
+function admin_members_mutual_form_years_from_payments(array $payments): array
+{
+    $years = [];
+    $paidMonthsByYear = [];
+    foreach ($payments as $payment) {
+        if ((string) ($payment['status'] ?? '') !== 'paid') {
+            continue;
+        }
+
+        $periodType = (string) ($payment['period_type'] ?? '');
+        $periodKey = (string) ($payment['period_key'] ?? '');
+        if ($periodType === 'year' && preg_match('/^\d{4}$/', $periodKey) === 1) {
+            $years[$periodKey] = true;
+            continue;
+        }
+
+        if ($periodType === 'month' && preg_match('/^(\d{4})-(\d{2})$/', $periodKey, $matches) === 1) {
+            $year = (string) $matches[1];
+            $paidMonthsByYear[$year][$periodKey] = true;
+        }
+    }
+
+    foreach ($paidMonthsByYear as $year => $months) {
+        if (count($months) >= 12) {
+            $years[$year] = true;
+        }
+    }
+
+    $yearList = array_keys($years);
+    rsort($yearList, SORT_STRING);
+
+    return array_values($yearList);
+}
+
+function admin_members_membership_year_is_paid(int $memberId, string $year): bool
+{
+    if ($memberId <= 0 || preg_match('/^\d{4}$/', $year) !== 1 || !table_exists('member_payment_statuses')) {
+        return false;
+    }
+
+    $yearStmt = db()->prepare(
+        'SELECT COUNT(*)
+         FROM member_payment_statuses
+         WHERE member_id = ? AND period_type = "year" AND period_key = ? AND status = "paid"'
+    );
+    $yearStmt->execute([$memberId, $year]);
+    if ((int) $yearStmt->fetchColumn() > 0) {
+        return true;
+    }
+
+    $monthStmt = db()->prepare(
+        'SELECT COUNT(DISTINCT period_key)
+         FROM member_payment_statuses
+         WHERE member_id = ? AND period_type = "month" AND period_key LIKE ? AND status = "paid"'
+    );
+    $monthStmt->execute([$memberId, $year . '-%']);
+
+    return (int) $monthStmt->fetchColumn() >= 12;
+}
+
+function admin_members_mutual_form_filename(array $member, string $year): string
+{
+    $callsign = strtoupper(preg_replace('/[^A-Z0-9-]+/i', '-', (string) ($member['callsign'] ?? 'member')) ?: 'member');
+    $callsign = trim($callsign, '-');
+    if ($callsign === '') {
+        $callsign = 'member';
+    }
+
+    return 'formulaire-mutuelle-' . $callsign . '-' . $year . '.html';
+}
+
+function admin_members_generate_mutual_form_response(int $memberId, string $year, array $labels): void
+{
+    if ($memberId <= 0 || preg_match('/^\d{4}$/', $year) !== 1 || !admin_members_membership_year_is_paid($memberId, $year)) {
+        set_flash('error', (string) $labels['mutual_form_denied']);
+        redirect('admin_members');
+    }
+
+    $stmt = db()->prepare(
+        'SELECT id, callsign, first_name, last_name, full_name, email, country, address, postal_code, qth
+         FROM members
+         WHERE id = ? LIMIT 1'
+    );
+    $stmt->execute([$memberId]);
+    $member = $stmt->fetch();
+    if (!is_array($member)) {
+        set_flash('error', (string) $labels['mutual_form_denied']);
+        redirect('admin_members');
+    }
+
+    $clubName = trim((string) config('privacy.controller_name', 'Radio Club Durnal ON4CRD'));
+    $clubEmail = trim((string) config('privacy.controller_email', 'crdurnal@gmail.com'));
+    $clubAddress = trim((string) config('privacy.controller_postal_address', 'Rue des Ecoles, 5530 Purnode, Belgique'));
+    $memberAddress = trim(implode(' ', array_filter([
+        trim((string) ($member['address'] ?? '')),
+        trim((string) ($member['postal_code'] ?? '')),
+        trim((string) ($member['qth'] ?? '')),
+        trim((string) ($member['country'] ?? '')),
+    ], static fn(string $part): bool => $part !== '')));
+    $generatedOn = (new DateTimeImmutable())->format('d/m/Y');
+    $filename = admin_members_mutual_form_filename($member, $year);
+
+    header('Content-Type: text/html; charset=UTF-8');
+    header('Content-Disposition: attachment; filename="' . str_replace('"', '', $filename) . '"');
+    echo '<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>' . e((string) $labels['mutual_form_title']) . ' ' . e($year) . '</title>';
+    echo '<style>
+        :root{color:#111827;font-family:Arial,sans-serif;font-size:14px}
+        body{margin:0;background:#f8fafc}
+        .sheet{width:210mm;min-height:297mm;margin:0 auto;padding:18mm;background:#fff;box-sizing:border-box}
+        h1{font-size:22px;margin:0 0 6mm;text-transform:uppercase}
+        h2{font-size:15px;margin:8mm 0 3mm;border-bottom:1px solid #111827;padding-bottom:2mm}
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm 8mm}
+        .field{min-height:12mm;border-bottom:1px solid #9ca3af;padding-bottom:2mm}
+        .label{display:block;color:#4b5563;font-size:11px;text-transform:uppercase}
+        .value{display:block;font-size:15px;margin-top:1mm}
+        .wide{grid-column:1/-1}
+        .muted{color:#4b5563;font-size:12px}
+        .signature{height:25mm;border:1px solid #9ca3af;margin-top:4mm;padding:3mm}
+        @media print{body{background:#fff}.sheet{margin:0;box-shadow:none}.no-print{display:none}}
+    </style></head><body><main class="sheet">';
+    echo '<h1>' . e((string) $labels['mutual_form_title']) . '</h1>';
+    echo '<p class="muted">' . e(str_replace('{year}', $year, (string) $labels['mutual_form_intro'])) . '</p>';
+    echo '<p class="no-print"><button onclick="window.print()">' . e((string) $labels['mutual_form_print']) . '</button></p>';
+    echo '<h2>' . e((string) $labels['mutual_form_member_section']) . '</h2><div class="grid">';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_last_name']) . '</span><span class="value">' . e((string) ($member['last_name'] ?? '')) . '</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_first_name']) . '</span><span class="value">' . e((string) ($member['first_name'] ?? '')) . '</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_callsign']) . '</span><span class="value">' . e((string) ($member['callsign'] ?? '')) . '</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_email']) . '</span><span class="value">' . e((string) ($member['email'] ?? '')) . '</span></div>';
+    echo '<div class="field wide"><span class="label">' . e((string) $labels['mutual_form_address']) . '</span><span class="value">' . e($memberAddress) . '</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_birth_date']) . '</span><span class="value">&nbsp;</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_national_number']) . '</span><span class="value">&nbsp;</span></div>';
+    echo '</div><h2>' . e((string) $labels['mutual_form_club_section']) . '</h2><div class="grid">';
+    echo '<div class="field wide"><span class="label">' . e((string) $labels['mutual_form_club_name']) . '</span><span class="value">' . e($clubName) . '</span></div>';
+    echo '<div class="field wide"><span class="label">' . e((string) $labels['mutual_form_club_address']) . '</span><span class="value">' . e($clubAddress) . '</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_club_email']) . '</span><span class="value">' . e($clubEmail) . '</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_activity']) . '</span><span class="value">' . e((string) $labels['mutual_form_activity_value']) . '</span></div>';
+    echo '</div><h2>' . e((string) $labels['mutual_form_payment_section']) . '</h2><div class="grid">';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_year']) . '</span><span class="value">' . e($year) . '</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_paid_status']) . '</span><span class="value">' . e((string) $labels['mutual_form_paid_status_value']) . '</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_amount']) . '</span><span class="value">&nbsp;</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_generated_on']) . '</span><span class="value">' . e($generatedOn) . '</span></div>';
+    echo '</div><h2>' . e((string) $labels['mutual_form_mutual_section']) . '</h2><div class="grid">';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_mutual_name']) . '</span><span class="value">&nbsp;</span></div>';
+    echo '<div class="field"><span class="label">' . e((string) $labels['mutual_form_affiliation_number']) . '</span><span class="value">&nbsp;</span></div>';
+    echo '</div><h2>' . e((string) $labels['mutual_form_signature']) . '</h2>';
+    echo '<div class="signature">' . e((string) $labels['mutual_form_signature_place']) . '</div>';
+    echo '<p class="muted">' . e((string) $labels['mutual_form_note']) . '</p>';
+    echo '</main></body></html>';
+    exit;
+}
+
 $returnQuery = http_build_query([
     'member_q' => (string) ($_GET['member_q'] ?? ''),
     'sort' => (string) ($_GET['sort'] ?? 'callsign'),
@@ -236,6 +391,9 @@ $passwordChangeColumnAvailable = table_has_column('members', 'password_change_re
 $passwordResetMarkerColumnAvailable = table_has_column('members', 'password_reset_forced_at');
 $passwordResetForceAvailable = $passwordChangeColumnAvailable && $passwordResetMarkerColumnAvailable;
 admin_members_ensure_related_tables();
+if ((string) ($_GET['mutual_form'] ?? '') === '1') {
+    admin_members_generate_mutual_form_response((int) ($_GET['member_id'] ?? 0), trim((string) ($_GET['year'] ?? '')), $t);
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $action = (string) ($_POST['action'] ?? 'update_member');
@@ -488,6 +646,7 @@ ob_start();
             $memberId = (int) $member['id'];
             $gradesForMember = $memberGrades[$memberId] ?? [];
             $paymentsForMember = $memberPayments[$memberId] ?? [];
+            $mutualFormYears = admin_members_mutual_form_years_from_payments($paymentsForMember);
         ?>
         <tr><td colspan="10"><form method="post" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap:.5rem; align-items:center;">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="update_member"><input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>"><input type="hidden" name="return_query" value="<?= e($returnQuery) ?>">
@@ -554,6 +713,13 @@ ob_start();
                             </li>
                         <?php endforeach; ?>
                     </ul>
+                    <?php if ($mutualFormYears !== []): ?>
+                        <p>
+                            <?php foreach ($mutualFormYears as $mutualFormYear): ?>
+                                <a class="button secondary" href="<?= e(route_url('admin_members', ['mutual_form' => '1', 'member_id' => (string) $memberId, 'year' => $mutualFormYear])) ?>"><?= e(str_replace('{year}', $mutualFormYear, (string) $t['mutual_form_generate'])) ?></a>
+                            <?php endforeach; ?>
+                        </p>
+                    <?php endif; ?>
                 <?php endif; ?>
                 <form method="post" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap:.5rem; align-items:end;">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
