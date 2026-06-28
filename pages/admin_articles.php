@@ -813,6 +813,8 @@ $adminSubsubcategory = article_subsubcategory_code(trim((string) ($_GET['subsubc
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
 $adminWhere = [];
 $adminParams = [];
+$adminStatusCountWhere = [];
+$adminStatusCountParams = [];
 if (isset($articleStatusChoices[$adminStatus])) {
     $adminWhere[] = 'status = ?';
     $adminParams[] = $adminStatus;
@@ -820,17 +822,24 @@ if (isset($articleStatusChoices[$adminStatus])) {
 if ($adminCategory !== '') {
     $adminWhere[] = 'category = ?';
     $adminParams[] = $adminCategory;
+    $adminStatusCountWhere[] = 'category = ?';
+    $adminStatusCountParams[] = $adminCategory;
 }
 if ($adminSubcategory !== '') {
     $adminWhere[] = 'subcategory = ?';
     $adminParams[] = $adminSubcategory;
+    $adminStatusCountWhere[] = 'subcategory = ?';
+    $adminStatusCountParams[] = $adminSubcategory;
 }
 if ($adminSubsubcategory !== '') {
     $adminWhere[] = 'subsubcategory = ?';
     $adminParams[] = $adminSubsubcategory;
+    $adminStatusCountWhere[] = 'subsubcategory = ?';
+    $adminStatusCountParams[] = $adminSubsubcategory;
 }
 if ($adminSearch !== '') {
     $adminWhere[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ? OR category LIKE ? OR subcategory LIKE ? OR subsubcategory LIKE ?)';
+    $adminStatusCountWhere[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ? OR category LIKE ? OR subcategory LIKE ? OR subsubcategory LIKE ?)';
     $needle = '%' . $adminSearch . '%';
     $adminParams[] = $needle;
     $adminParams[] = $needle;
@@ -838,8 +847,15 @@ if ($adminSearch !== '') {
     $adminParams[] = $needle;
     $adminParams[] = $needle;
     $adminParams[] = $needle;
+    $adminStatusCountParams[] = $needle;
+    $adminStatusCountParams[] = $needle;
+    $adminStatusCountParams[] = $needle;
+    $adminStatusCountParams[] = $needle;
+    $adminStatusCountParams[] = $needle;
+    $adminStatusCountParams[] = $needle;
 }
 $adminWhereSql = $adminWhere === [] ? '' : ('WHERE ' . implode(' AND ', $adminWhere));
+$adminStatusCountWhereSql = $adminStatusCountWhere === [] ? '' : ('WHERE ' . implode(' AND ', $adminStatusCountWhere));
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $perPage = 30;
 $countStmt = db()->prepare('SELECT COUNT(*) FROM articles ' . $adminWhereSql);
@@ -852,7 +868,9 @@ $offset = $pagination['offset'];
 $articleStmt = db()->prepare('SELECT * FROM articles ' . $adminWhereSql . ' ORDER BY updated_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $articleStmt->execute($adminParams);
 $articles = $articleStmt->fetchAll() ?: [];
-$articleStats = db()->query('SELECT status, COUNT(*) AS total FROM articles GROUP BY status')->fetchAll() ?: [];
+$articleStatsStmt = db()->prepare('SELECT status, COUNT(*) AS total FROM articles ' . $adminStatusCountWhereSql . ' GROUP BY status');
+$articleStatsStmt->execute($adminStatusCountParams);
+$articleStats = $articleStatsStmt->fetchAll() ?: [];
 $articleStatMap = array_fill_keys(array_keys($articleStatusChoices), 0);
 foreach ($articleStats as $statRow) {
     $articleStatMap[(string) $statRow['status']] = (int) $statRow['total'];
