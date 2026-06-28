@@ -259,6 +259,7 @@ const routeContracts = {
       save_member_payment: proof('tests/selenium/admin-configuration-workflows.test.js', ['save_member_payment']),
       update_member: proof('tests/selenium/admin-configuration-workflows.test.js', ['admin_members', 'memberForm']),
     },
+    features: [proof('tests/selenium/admin-configuration-workflows.test.js', ['mutual_form=1', '2026'])],
   },
   admin_modules: {
     actions: {},

@@ -449,20 +449,21 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
 
       await visit(driver, 'admin_members', { member_q: createdCallsign });
       const paymentForm = await driver.findElement(By.xpath(`//input[@name="action" and @value="save_member_payment"]/ancestor::form[input[@name="member_id" and @value="${createdMember.id}"]][1]`));
-      await setFieldValue(driver, await paymentForm.findElement(By.css('select[name="payment_period_type"]')), 'month');
-      await setFieldValue(driver, await paymentForm.findElement(By.css('input[name="payment_month"]')), '2026-06');
+      await setFieldValue(driver, await paymentForm.findElement(By.css('select[name="payment_period_type"]')), 'year');
+      await setFieldValue(driver, await paymentForm.findElement(By.css('input[name="payment_year"]')), '2026');
       await setFieldValue(driver, await paymentForm.findElement(By.css('select[name="payment_status"]')), 'paid');
       await submitForm(driver, paymentForm);
       relatedState = adminMemberRelatedState(createdMember.id);
       assert.equal(relatedState.payments.length, 1, 'Le statut de paiement ajoute depuis admin_members doit etre persiste.');
-      assert.equal(relatedState.payments[0].period_type, 'month', 'Le paiement doit conserver le mode mensuel.');
-      assert.equal(relatedState.payments[0].period_key, '2026-06', 'Le paiement doit conserver le mois cible.');
+      assert.equal(relatedState.payments[0].period_type, 'year', 'Le paiement doit conserver le mode annuel.');
+      assert.equal(relatedState.payments[0].period_key, '2026', 'Le paiement doit conserver l annee cible.');
       assert.equal(relatedState.payments[0].status, 'paid', 'Le paiement doit conserver son etat.');
 
       await visit(driver, 'admin_members', { member_q: createdCallsign });
       const relatedSource = await driver.getPageSource();
       assert.match(relatedSource, /HAREC Selenium/, 'Le grade ajoute doit rester visible dans la gestion du membre.');
-      assert.match(relatedSource, /2026-06/, 'La periode de paiement doit rester visible dans la gestion du membre.');
+      assert.match(relatedSource, /2026/, 'La periode de paiement doit rester visible dans la gestion du membre.');
+      assert.match(relatedSource, /mutual_form=1/, 'Le formulaire mutuelle doit etre disponible quand l annee est payee.');
       const deleteGradeForm = await driver.findElement(By.xpath(`//input[@name="action" and @value="delete_member_grade"]/ancestor::form[input[@name="grade_id" and @value="${relatedState.grades[0].id}"]][1]`));
       await submitForm(driver, deleteGradeForm);
       relatedState = adminMemberRelatedState(createdMember.id);

@@ -389,7 +389,7 @@ final class RouterContractTest extends TestCase
         self::assertIsString($runtimeUpdates);
         self::assertIsString($selenium);
 
-        foreach (['first_name', 'last_name', 'member_grade_history', 'member_payment_statuses'] as $snippet) {
+        foreach (['first_name', 'last_name', 'member_grade_history', 'member_payment_statuses', 'admin_members_generate_mutual_form_response', 'mutual_form_generate'] as $snippet) {
             self::assertStringContainsString($snippet, $adminMembers);
         }
         foreach (["'add_member_grade'", "'delete_member_grade'", "'save_member_payment'", "'delete_member_payment'"] as $action) {
@@ -400,6 +400,7 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_payment_statuses', $schema);
         self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_grade_history', $runtimeUpdates);
         self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_payment_statuses', $runtimeUpdates);
+        self::assertStringContainsString('mutual_form=1', $selenium);
     }
 
     public function testDirectorySearchMatchesCallsignsCaseInsensitively(): void
