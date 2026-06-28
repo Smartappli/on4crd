@@ -44,6 +44,17 @@ function comics_public_document_type(string $path): string
 }
 }
 
+if (!function_exists('comics_public_safe_http_url')) {
+function comics_public_safe_http_url(string $url): ?string
+{
+    try {
+        return normalize_http_url($url);
+    } catch (RuntimeException) {
+        return null;
+    }
+}
+}
+
 if (!function_exists('comics_public_related_documents')) {
 /**
  * @param list<array{path?:string,url?:string,title:string,text?:string,type?:string,download_name?:string}> $documents
@@ -70,7 +81,7 @@ function comics_public_related_documents(array $documents): array
             }
             $url = asset_url($path);
         } else {
-            $safeUrl = normalize_http_url($url);
+            $safeUrl = comics_public_safe_http_url($url);
             if ($safeUrl === null) {
                 continue;
             }
@@ -118,7 +129,7 @@ function comics_public_related_links(array $links): array
 
         $external = $url !== '';
         if ($external) {
-            $safeUrl = normalize_http_url($url);
+            $safeUrl = comics_public_safe_http_url($url);
             if ($safeUrl === null) {
                 continue;
             }

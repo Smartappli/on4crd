@@ -55,6 +55,8 @@ final class ComicsIntegrationTest extends TestCase
         self::assertSame('text/markdown', comics_public_document_type('assets/comics/example.md?v=1'));
         self::assertSame('application/pdf', comics_public_document_type('https://example.test/file.pdf'));
         self::assertSame('application/octet-stream', comics_public_document_type('file.unknown'));
+        self::assertSame('https://example.test/safe', comics_public_safe_http_url('https://example.test/safe'));
+        self::assertNull(comics_public_safe_http_url('javascript:alert(1)'));
 
         $documents = comics_public_related_documents([
             ['path' => 'assets/comics/loi-ohm-fiche-memo.md', 'title' => 'Memo', 'text' => 'Local memo'],
