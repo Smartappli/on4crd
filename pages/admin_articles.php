@@ -1241,9 +1241,13 @@ ob_start();
         <?php endif; ?>
     </section>
     <?php if ($showPendingProposals): ?>
-    <section class="card" id="pending-proposals" aria-labelledby="pending-proposals-title">
-        <div class="row-between">
-            <h2 id="pending-proposals-title"><?= e($t('pending_proposals_title')) ?></h2>
+    <section class="card admin-article-proposals-card" id="pending-proposals" aria-labelledby="pending-proposals-title">
+        <div class="admin-article-proposals-head">
+            <div>
+                <p class="admin-section-kicker"><?= e($t('pending')) ?></p>
+                <h2 id="pending-proposals-title"><?= e($t('pending_proposals_title')) ?></h2>
+            </div>
+            <span class="badge muted"><?= count($pendingProposals) ?></span>
             <a class="button secondary small" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter')) ?></a>
         </div>
         <?php if ($pendingProposals === []): ?>
@@ -1266,37 +1270,46 @@ ob_start();
                     $proposalCreatedTimestamp = time();
                 }
                 ?>
-                <article class="article-item">
-                    <p>
-                        <span class="badge muted"><?= e((string) ($proposalTypeLabels[$proposalType] ?? $proposalType)) ?></span>
-                        <span class="badge muted"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
-                        <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
-                    </p>
-                    <h3><?= e((string) ($proposal['title'] ?? $t('proposal_default_title'))) ?></h3>
-                    <p class="help"><?= e($t('proposal_author')) ?>: <?= e($memberLabel) ?></p>
+                <article class="article-item admin-article-proposal-item admin-article-proposal-item-<?= e($proposalStatus) ?>">
+                    <div class="admin-article-proposal-summary">
+                        <div>
+                            <p class="admin-article-proposal-meta">
+                                <span class="badge muted"><?= e((string) ($proposalTypeLabels[$proposalType] ?? $proposalType)) ?></span>
+                                <span class="badge muted admin-article-proposal-status"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
+                                <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
+                            </p>
+                            <h3><?= e((string) ($proposal['title'] ?? $t('proposal_default_title'))) ?></h3>
+                        </div>
+                        <p class="help"><?= e($t('proposal_author')) ?>: <?= e($memberLabel) ?></p>
+                    </div>
                     <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
-                        <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
+                        <p class="admin-article-proposal-text"><?= nl2br(e((string) $proposal['summary'])) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
                         <p class="help"><?= e($t('proposal_contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
                     <?php endif; ?>
-                    <form method="post" class="stack">
+                    <form method="post" class="admin-article-proposal-form" data-admin-proposal-form>
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="update_proposal_status">
                         <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
+                        <div class="admin-article-proposal-shortcuts" aria-label="<?= e($t('proposal_status_label')) ?>">
+                            <?php foreach (['reviewed', 'accepted', 'rejected'] as $shortcutStatus): ?>
+                                <button class="button small secondary<?= $proposalStatus === $shortcutStatus ? ' is-active' : '' ?>" type="button" value="<?= e($shortcutStatus) ?>" data-admin-proposal-status-choice><?= e((string) ($proposalStatusLabels[$shortcutStatus] ?? $shortcutStatus)) ?></button>
+                            <?php endforeach; ?>
+                        </div>
                         <div class="grid-2">
                             <label><?= e($t('proposal_status_label')) ?>
-                                <select name="proposal_status">
+                                <select name="proposal_status" data-admin-proposal-status>
                                     <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
                                         <option value="<?= e($statusCode) ?>" <?= $proposalStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </label>
-                            <label><?= e($t('proposal_moderation_note')) ?>
+                            <label data-admin-proposal-note-field><?= e($t('proposal_moderation_note')) ?>
                                 <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
                             </label>
                         </div>
-                        <p><button class="button small" type="submit"><?= e($t('proposal_save_status')) ?></button></p>
+                        <button class="button small admin-article-proposal-submit" type="submit"><?= e($t('proposal_save_status')) ?></button>
                     </form>
                 </article>
             <?php endforeach; ?>
