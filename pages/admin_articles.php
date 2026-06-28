@@ -1350,17 +1350,22 @@ ob_start();
                 <h3><?= e($t('bulk_actions')) ?></h3>
                 <p class="help"><?= e($t('bulk_actions_help')) ?></p>
             </div>
+            <label class="admin-article-select-all">
+                <input type="checkbox" data-admin-articles-select-page>
+                <span><?= e($t('select_article')) ?></span>
+                <span class="badge muted" data-admin-articles-selected-count>0</span>
+            </label>
             <label><?= e($t('bulk_action')) ?>
-                <select name="bulk_op">
+                <select name="bulk_op" data-admin-bulk-op>
                     <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
                         <option value="<?= e($statusCode) ?>"><?= e($statusLabel) ?></option>
                     <?php endforeach; ?>
                     <option value="delete"><?= e($t('delete')) ?></option>
                 </select>
             </label>
-            <label><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at"></label>
-            <label><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="2" placeholder="<?= e($t('moderation_note_help')) ?>"></textarea></label>
-            <button class="button small" type="submit"><?= e($t('apply_to_selection')) ?></button>
+            <label data-admin-bulk-scheduled-field><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at"></label>
+            <label data-admin-bulk-note-field><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="2" placeholder="<?= e($t('moderation_note_help')) ?>"></textarea></label>
+            <button class="button small" type="submit" data-admin-bulk-submit><?= e($t('apply_to_selection')) ?></button>
         </form>
         <div class="stack">
             <?php foreach ($articles as $article): ?>
