@@ -1039,7 +1039,7 @@ ob_start();
                         <input type="text" name="category_custom" value="" placeholder="<?= e($t('custom_category_ph')) ?>">
                     </label>
                     <label><?= e($t('subcategory_field')) ?>
-                        <select name="subcategory_ref">
+                        <select name="subcategory_ref" data-admin-taxonomy-subcategory>
                             <?php $editingSubcategory = article_subcategory_code((string) ($editing['subcategory'] ?? '')); ?>
                             <option value=""><?= e($t('no_subcategory')) ?></option>
                             <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
@@ -1056,14 +1056,14 @@ ob_start();
                                         $subcategoryRef = article_subcategory_ref((string) $subcategoryCategoryCode, $subcategoryCode);
                                         $isSelectedSubcategory = $editingCategory === (string) $subcategoryCategoryCode && $editingSubcategory === $subcategoryCode;
                                         ?>
-                                        <option value="<?= e($subcategoryRef) ?>" <?= $isSelectedSubcategory ? 'selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subcategoryCode)) ?></option>
+                                        <option value="<?= e($subcategoryRef) ?>" data-admin-taxonomy-category="<?= e((string) $subcategoryCategoryCode) ?>" data-admin-taxonomy-subcategory="<?= e($subcategoryCode) ?>" <?= $isSelectedSubcategory ? 'selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subcategoryCode)) ?></option>
                                     <?php endforeach; ?>
                                 </optgroup>
                             <?php endforeach; ?>
                         </select>
                     </label>
                     <label><?= e($t('subsubcategory_field')) ?>
-                        <select name="subsubcategory_ref">
+                        <select name="subsubcategory_ref" data-admin-taxonomy-subsubcategory>
                             <?php $editingSubsubcategory = article_subsubcategory_code((string) ($editing['subsubcategory'] ?? '')); ?>
                             <option value=""><?= e($t('no_subsubcategory')) ?></option>
                             <?php foreach ($articleSubsubcategoriesByParent as $subsubcategoryParentRef => $subsubcategories): ?>
@@ -1087,7 +1087,7 @@ ob_start();
                                         $subsubcategoryRef = article_subsubcategory_ref($subsubcategoryParentCategory, $subsubcategoryParentSubcategory, $subsubcategoryCode);
                                         $isSelectedSubsubcategory = $editingCategory === $subsubcategoryParentCategory && $editingSubcategory === $subsubcategoryParentSubcategory && $editingSubsubcategory === $subsubcategoryCode;
                                         ?>
-                                        <option value="<?= e($subsubcategoryRef) ?>" <?= $isSelectedSubsubcategory ? 'selected' : '' ?>><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubcategoryCode)) ?></option>
+                                        <option value="<?= e($subsubcategoryRef) ?>" data-admin-taxonomy-category="<?= e($subsubcategoryParentCategory) ?>" data-admin-taxonomy-subcategory="<?= e($subsubcategoryParentSubcategory) ?>" data-admin-taxonomy-subsubcategory="<?= e($subsubcategoryCode) ?>" <?= $isSelectedSubsubcategory ? 'selected' : '' ?>><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubcategoryCode)) ?></option>
                                     <?php endforeach; ?>
                                 </optgroup>
                             <?php endforeach; ?>
@@ -1109,10 +1109,8 @@ ob_start();
                 </div>
                 <label data-admin-editor-note-field><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
             </div>
-            <div class="admin-article-form-actions">
-                <button class="button admin-article-save-button" type="submit"><?= e($t('save')) ?></button>
-                <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>
-            </div>
+            <button class="button admin-article-save-button" type="submit"><?= e($t('save')) ?></button>
+            <button class="button secondary admin-article-preview-button" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>
         </form>
         <?php if ((int) $editing['id'] > 0): ?>
             <div class="admin-article-moderation-panel">
