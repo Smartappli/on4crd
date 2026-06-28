@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Pobierz stronę',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Powiązane dokumenty',
+  'related_links_title' => 'Powiązane linki',
   'board_commandments_title' => '10 przykazań krótkofalowca',
   'board_commandments_text' => 'Dobre praktyki krótkofalarskie przedstawione jako dziesięć łatwych do zapamiętania zasad.',
   'board_first_qso_title' => 'Moje pierwsze QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Historyczna i techniczna strona łącząca elektryczność, pomiary i radio.',
   'related_document_sheet_label' => 'Ściągawka',
   'related_document_sheet_text' => 'Krótkie notatki do powtórzenia wzoru i jego przekształceń.',
+  'related_link_ohm_tool_label' => 'Kalkulator prawa Ohma',
+  'related_link_ohm_tool_text' => 'Otwórz interaktywne narzędzie dla napięcia, prądu i oporu.',
 );

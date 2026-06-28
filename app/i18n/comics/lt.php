@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Atsisiųsti puslapį',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Susiję dokumentai',
+  'related_links_title' => 'Susijusios nuorodos',
   'board_commandments_title' => '10 radijo mėgėjo įsakymų',
   'board_commandments_text' => 'Gera radijo mėgėjų praktika pateikta kaip dešimt lengvai įsimenamų taisyklių.',
   'board_first_qso_title' => 'Mano pirmasis QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Istorinis ir techninis puslapis, jungiantis elektrą, matavimus ir radiją.',
   'related_document_sheet_label' => 'Atmintinė',
   'related_document_sheet_text' => 'Trumpos pastabos formulei ir jos pertvarkymams peržiūrėti.',
+  'related_link_ohm_tool_label' => 'Omo dėsnio skaičiuoklė',
+  'related_link_ohm_tool_text' => 'Atverkite interaktyvų įrankį įtampai, srovei ir varžai.',
 );

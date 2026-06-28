@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Stripplaat downloaden',
   'download_board_label' => 'A4 PNG',
   'related_documents_title' => 'Gerelateerde documenten',
+  'related_links_title' => 'Gerelateerde links',
   'board_commandments_title' => 'De 10 geboden van de radioamateur',
   'board_commandments_text' => 'Goede radioamateurpraktijken gepresenteerd als tien makkelijk te onthouden regels.',
   'board_first_qso_title' => 'Mijn eerste QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Een historische en technische plaat over elektriciteit, metingen en radio.',
   'related_document_sheet_label' => 'Memoblad',
   'related_document_sheet_text' => 'Korte notities om de formule en haar omzettingen na te lezen.',
+  'related_link_ohm_tool_label' => 'Wet-van-Ohm-rekenaar',
+  'related_link_ohm_tool_text' => 'Open het interactieve hulpmiddel voor spanning, stroom en weerstand.',
 );

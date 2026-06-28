@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Laadi leht alla',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Seotud dokumendid',
+  'related_links_title' => 'Seotud lingid',
   'board_commandments_title' => 'Raadioamatööri 10 käsku',
   'board_commandments_text' => 'Head raadioamatööri tavad esitatud kümne kergesti meeldejääva reeglina.',
   'board_first_qso_title' => 'Minu esimene QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Ajalooline ja tehniline leht, mis seob elektri, mõõtmised ja raadio.',
   'related_document_sheet_label' => 'Meelespea',
   'related_document_sheet_text' => 'Lühimärkmed valemi ja selle teisenduste ülevaatamiseks.',
+  'related_link_ohm_tool_label' => 'Ohmi seaduse kalkulaator',
+  'related_link_ohm_tool_text' => 'Ava interaktiivne tööriist pinge, voolu ja takistuse jaoks.',
 );

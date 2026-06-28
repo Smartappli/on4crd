@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Unduh halaman',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Dokumen terkait',
+  'related_links_title' => 'Tautan terkait',
   'board_commandments_title' => '10 Perintah Radio Amatir',
   'board_commandments_text' => 'Praktik baik radio amatir disajikan sebagai sepuluh aturan yang mudah diingat.',
   'board_first_qso_title' => 'QSO Pertamaku',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Halaman historis dan teknis yang menghubungkan listrik, pengukuran, dan radio.',
   'related_document_sheet_label' => 'Lembar pengingat',
   'related_document_sheet_text' => 'Catatan singkat untuk meninjau rumus dan bentuk setaranya.',
+  'related_link_ohm_tool_label' => 'Kalkulator hukum Ohm',
+  'related_link_ohm_tool_text' => 'Buka alat interaktif untuk tegangan, arus, dan hambatan.',
 );

@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Ladda ner sidan',
   'download_board_label' => 'A4 PNG',
   'related_documents_title' => 'Relaterade dokument',
+  'related_links_title' => 'Relaterade länkar',
   'board_commandments_title' => 'Radioamatörens 10 budord',
   'board_commandments_text' => 'God radioamatörpraxis presenterad som tio regler som är lätta att minnas.',
   'board_first_qso_title' => 'Mitt första QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'En historisk och teknisk sida som kopplar samman elektricitet, mätningar och radio.',
   'related_document_sheet_label' => 'Minnesblad',
   'related_document_sheet_text' => 'Korta anteckningar för att repetera formeln och dess omskrivningar.',
+  'related_link_ohm_tool_label' => 'Ohms lag-kalkylator',
+  'related_link_ohm_tool_text' => 'Öppna det interaktiva verktyget för spänning, ström och resistans.',
 );

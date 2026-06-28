@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Lejupielādēt lapu',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Saistītie dokumenti',
+  'related_links_title' => 'Saistītās saites',
   'board_commandments_title' => 'Radioamatiera 10 baušļi',
   'board_commandments_text' => 'Laba radioamatieru prakse pasniegta kā desmit viegli iegaumējami noteikumi.',
   'board_first_qso_title' => 'Mans pirmais QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Vēsturiska un tehniska lapa, kas savieno elektrību, mērījumus un radio.',
   'related_document_sheet_label' => 'Atgādnes lapa',
   'related_document_sheet_text' => 'Īsas piezīmes formulas un tās pārveidojumu pārskatīšanai.',
+  'related_link_ohm_tool_label' => 'Oma likuma kalkulators',
+  'related_link_ohm_tool_text' => 'Atveriet interaktīvo rīku spriegumam, strāvai un pretestībai.',
 );

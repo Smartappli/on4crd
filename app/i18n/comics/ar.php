@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'تنزيل الصفحة',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'المستندات ذات الصلة',
+  'related_links_title' => 'روابط ذات صلة',
   'board_commandments_title' => 'الوصايا العشر لهاوي الراديو',
   'board_commandments_text' => 'ممارسات جيدة لهواة الراديو معروضة في عشر قواعد سهلة التذكر.',
   'board_first_qso_title' => 'أول QSO لي',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'صفحة تاريخية وتقنية تربط الكهرباء والقياسات والراديو.',
   'related_document_sheet_label' => 'ورقة تذكير',
   'related_document_sheet_text' => 'ملاحظات سريعة لمراجعة المعادلة وتحويلاتها.',
+  'related_link_ohm_tool_label' => 'حاسبة قانون أوم',
+  'related_link_ohm_tool_text' => 'افتح الأداة التفاعلية للجهد والتيار والمقاومة.',
 );

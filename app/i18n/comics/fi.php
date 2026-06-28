@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Lataa sivu',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Aiheeseen liittyvät dokumentit',
+  'related_links_title' => 'Aiheeseen liittyvät linkit',
   'board_commandments_title' => 'Radioamatöörin 10 käskyä',
   'board_commandments_text' => 'Hyvät radioamatöörikäytännöt esitettynä kymmenenä helposti muistettavana sääntönä.',
   'board_first_qso_title' => 'Ensimmäinen QSO:ni',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Historiallinen ja tekninen sivu, joka yhdistää sähkön, mittaukset ja radion.',
   'related_document_sheet_label' => 'Muistilappu',
   'related_document_sheet_text' => 'Lyhyet muistiinpanot kaavan ja sen muunnosten kertaamiseen.',
+  'related_link_ohm_tool_label' => 'Ohmin lain laskuri',
+  'related_link_ohm_tool_text' => 'Avaa vuorovaikutteinen työkalu jännitteelle, virralle ja resistanssille.',
 );

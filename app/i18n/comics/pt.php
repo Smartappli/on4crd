@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Descarregar a prancha',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Documentos relacionados',
+  'related_links_title' => 'Ligações relacionadas',
   'board_commandments_title' => 'Os 10 mandamentos do radioamador',
   'board_commandments_text' => 'Boas práticas de radioamador apresentadas como dez regras fáceis de memorizar.',
   'board_first_qso_title' => 'O meu primeiro QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Uma prancha histórica e técnica que liga eletricidade, medições e rádio.',
   'related_document_sheet_label' => 'Ficha memo',
   'related_document_sheet_text' => 'Notas rápidas para rever a fórmula e as suas equivalências.',
+  'related_link_ohm_tool_label' => 'Calculadora da lei de Ohm',
+  'related_link_ohm_tool_text' => 'Abrir a ferramenta interativa para tensão, corrente e resistência.',
 );

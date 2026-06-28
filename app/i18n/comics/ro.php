@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Descărcați pagina',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Documente conexe',
+  'related_links_title' => 'Linkuri conexe',
   'board_commandments_title' => 'Cele 10 porunci ale radioamatorului',
   'board_commandments_text' => 'Bune practici radioamatoricești prezentate ca zece reguli ușor de reținut.',
   'board_first_qso_title' => 'Primul meu QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'O pagină istorică și tehnică ce leagă electricitatea, măsurătorile și radioul.',
   'related_document_sheet_label' => 'Fișă de reamintire',
   'related_document_sheet_text' => 'Note rapide pentru revizuirea formulei și a echivalențelor ei.',
+  'related_link_ohm_tool_label' => 'Calculator pentru legea lui Ohm',
+  'related_link_ohm_tool_text' => 'Deschide instrumentul interactiv pentru tensiune, curent și rezistență.',
 );

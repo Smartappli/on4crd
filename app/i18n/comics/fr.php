@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Télécharger la planche',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Documents connexes',
+  'related_links_title' => 'Liens connexes',
   'board_commandments_title' => 'Les 10 commandements du radioamateur',
   'board_commandments_text' => 'Les bonnes pratiques radioamateurs présentées comme dix règles faciles à retenir.',
   'board_first_qso_title' => 'Mon premier QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Une planche historique et technique pour relier électricité, mesures et radio.',
   'related_document_sheet_label' => 'Fiche mémo',
   'related_document_sheet_text' => 'Repères rapides pour relire la formule et ses équivalences.',
+  'related_link_ohm_tool_label' => 'Calculateur loi d\'Ohm',
+  'related_link_ohm_tool_text' => 'Ouvrir l\'outil interactif pour relier tension, courant et résistance.',
 );

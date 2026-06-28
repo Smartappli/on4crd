@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Скачать страницу',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Связанные документы',
+  'related_links_title' => 'Связанные ссылки',
   'board_commandments_title' => '10 заповедей радиолюбителя',
   'board_commandments_text' => 'Хорошие радиолюбительские практики, представленные как десять легко запоминающихся правил.',
   'board_first_qso_title' => 'Моё первое QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Историческая и техническая страница, связывающая электричество, измерения и радио.',
   'related_document_sheet_label' => 'Памятка',
   'related_document_sheet_text' => 'Краткие заметки для повторения формулы и её преобразований.',
+  'related_link_ohm_tool_label' => 'Калькулятор закона Ома',
+  'related_link_ohm_tool_text' => 'Откройте интерактивный инструмент для напряжения, тока и сопротивления.',
 );

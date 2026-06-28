@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Comicseite herunterladen',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Zugehörige Dokumente',
+  'related_links_title' => 'Zugehörige Links',
   'board_commandments_title' => 'Die 10 Gebote des Funkamateurs',
   'board_commandments_text' => 'Gute Amateurfunkpraxis als zehn leicht zu merkende Regeln.',
   'board_first_qso_title' => 'Mein erstes QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Eine historische und technische Seite über Elektrizität, Messungen und Funk.',
   'related_document_sheet_label' => 'Merkblatt',
   'related_document_sheet_text' => 'Kurze Hinweise zum Nachlesen der Formel und ihrer Umstellungen.',
+  'related_link_ohm_tool_label' => 'Ohmsches-Gesetz-Rechner',
+  'related_link_ohm_tool_text' => 'Das interaktive Werkzeug für Spannung, Strom und Widerstand öffnen.',
 );

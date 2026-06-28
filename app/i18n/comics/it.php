@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Scarica la tavola',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Documenti correlati',
+  'related_links_title' => 'Link correlati',
   'board_commandments_title' => 'I 10 comandamenti del radioamatore',
   'board_commandments_text' => 'Buone pratiche radioamatoriali presentate come dieci regole facili da ricordare.',
   'board_first_qso_title' => 'Il mio primo QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Una tavola storica e tecnica che collega elettricità, misure e radio.',
   'related_document_sheet_label' => 'Scheda promemoria',
   'related_document_sheet_text' => 'Note rapide per rivedere la formula e le sue equivalenze.',
+  'related_link_ohm_tool_label' => 'Calcolatore della legge di Ohm',
+  'related_link_ohm_tool_text' => 'Apri lo strumento interattivo per tensione, corrente e resistenza.',
 );

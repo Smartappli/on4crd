@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => '下载页面',
   'download_board_label' => 'A4 PNG',
   'related_documents_title' => '相关文档',
+  'related_links_title' => '相关链接',
   'board_commandments_title' => '业余无线电爱好者的十条准则',
   'board_commandments_text' => '将业余无线电的良好实践整理成十条易记规则。',
   'board_first_qso_title' => '我的第一次 QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => '一页连接电学、测量与无线电的历史和技术内容。',
   'related_document_sheet_label' => '备忘单',
   'related_document_sheet_text' => '用于复习公式及其等价变形的简要说明。',
+  'related_link_ohm_tool_label' => '欧姆定律计算器',
+  'related_link_ohm_tool_text' => '打开用于电压、电流和电阻的交互式工具。',
 );

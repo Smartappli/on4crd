@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Download comic page',
   'download_board_label' => 'A4 PNG',
   'related_documents_title' => 'Related documents',
+  'related_links_title' => 'Related links',
   'board_commandments_title' => 'The 10 Commandments of Amateur Radio',
   'board_commandments_text' => 'Good amateur radio practices presented as ten easy-to-remember rules.',
   'board_first_qso_title' => 'My First QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'A historical and technical page connecting electricity, measurement and radio.',
   'related_document_sheet_label' => 'Memo sheet',
   'related_document_sheet_text' => 'Quick notes for reviewing the formula and its equivalents.',
+  'related_link_ohm_tool_label' => 'Ohm\'s law calculator',
+  'related_link_ohm_tool_text' => 'Open the interactive tool linking voltage, current and resistance.',
 );

@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Niżżel il-paġna',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Dokumenti relatati',
+  'related_links_title' => 'Ħoloq relatati',
   'board_commandments_title' => 'L-10 kmandamenti tar-radioamatur',
   'board_commandments_text' => 'Prattiki tajbin tar-radioamaturi ppreżentati bħala għaxar regoli faċli biex tiftakarhom.',
   'board_first_qso_title' => 'L-ewwel QSO tiegħi',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Paġna storika u teknika li tgħaqqad l-elettriku, il-kejl u r-radju.',
   'related_document_sheet_label' => 'Folja ta\' tfakkira',
   'related_document_sheet_text' => 'Noti qosra biex tirrevedi l-formula u l-ekwivalenzi tagħha.',
+  'related_link_ohm_tool_label' => 'Kalkulatur tal-liġi ta\' Ohm',
+  'related_link_ohm_tool_text' => 'Iftaħ l-għodda interattiva għall-vultaġġ, il-kurrent u r-reżistenza.',
 );

@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Oldal letöltése',
   'download_board_label' => 'A4 PNG',
   'related_documents_title' => 'Kapcsolódó dokumentumok',
+  'related_links_title' => 'Kapcsolódó hivatkozások',
   'board_commandments_title' => 'A rádióamatőr 10 parancsolata',
   'board_commandments_text' => 'Jó rádióamatőr gyakorlatok tíz könnyen megjegyezhető szabályként.',
   'board_first_qso_title' => 'Az első QSO-m',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Történeti és műszaki oldal, amely összekapcsolja az elektromosságot, a méréseket és a rádiót.',
   'related_document_sheet_label' => 'Emlékeztető lap',
   'related_document_sheet_text' => 'Rövid jegyzetek a képlet és átrendezéseinek áttekintéséhez.',
+  'related_link_ohm_tool_label' => 'Ohm-törvény kalkulátor',
+  'related_link_ohm_tool_text' => 'Nyissa meg az interaktív eszközt a feszültséghez, áramhoz és ellenálláshoz.',
 );

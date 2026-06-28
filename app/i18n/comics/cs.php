@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Stáhnout stránku',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Související dokumenty',
+  'related_links_title' => 'Související odkazy',
   'board_commandments_title' => '10 přikázání radioamatéra',
   'board_commandments_text' => 'Dobrá radioamatérská praxe představená jako deset snadno zapamatovatelných pravidel.',
   'board_first_qso_title' => 'Moje první QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Historická a technická stránka propojující elektřinu, měření a rádio.',
   'related_document_sheet_label' => 'Přehledový list',
   'related_document_sheet_text' => 'Stručné poznámky k zopakování vzorce a jeho úprav.',
+  'related_link_ohm_tool_label' => 'Kalkulačka Ohmova zákona',
+  'related_link_ohm_tool_text' => 'Otevřete interaktivní nástroj pro napětí, proud a odpor.',
 );

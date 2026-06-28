@@ -69,6 +69,12 @@ function comics_public_related_documents(array $documents): array
                 continue;
             }
             $url = asset_url($path);
+        } else {
+            $safeUrl = normalize_http_url($url);
+            if ($safeUrl === null) {
+                continue;
+            }
+            $url = $safeUrl;
         }
 
         $absolutePath = $external ? '' : $root . $path;

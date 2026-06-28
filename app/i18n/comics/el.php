@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Λήψη σελίδας',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Σχετικά έγγραφα',
+  'related_links_title' => 'Σχετικοί σύνδεσμοι',
   'board_commandments_title' => 'Οι 10 εντολές του ραδιοερασιτέχνη',
   'board_commandments_text' => 'Καλές πρακτικές ραδιοερασιτεχνών παρουσιασμένες ως δέκα εύκολοι κανόνες.',
   'board_first_qso_title' => 'Το πρώτο μου QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Μια ιστορική και τεχνική σελίδα που συνδέει ηλεκτρισμό, μετρήσεις και ραδιόφωνο.',
   'related_document_sheet_label' => 'Φύλλο υπενθύμισης',
   'related_document_sheet_text' => 'Σύντομες σημειώσεις για επανάληψη του τύπου και των ισοδυναμιών του.',
+  'related_link_ohm_tool_label' => 'Υπολογιστής νόμου του Ohm',
+  'related_link_ohm_tool_text' => 'Ανοίξτε το διαδραστικό εργαλείο για τάση, ρεύμα και αντίσταση.',
 );

@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Descargar la página',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Documentos relacionados',
+  'related_links_title' => 'Enlaces relacionados',
   'board_commandments_title' => 'Los 10 mandamientos del radioaficionado',
   'board_commandments_text' => 'Buenas prácticas de radioaficionados presentadas como diez reglas fáciles de recordar.',
   'board_first_qso_title' => 'Mi primer QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Una página histórica y técnica que conecta electricidad, mediciones y radio.',
   'related_document_sheet_label' => 'Ficha recordatoria',
   'related_document_sheet_text' => 'Notas rápidas para repasar la fórmula y sus equivalencias.',
+  'related_link_ohm_tool_label' => 'Calculadora de la ley de Ohm',
+  'related_link_ohm_tool_text' => 'Abre la herramienta interactiva para tensión, corriente y resistencia.',
 );

@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Prenesi stran',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Povezani dokumenti',
+  'related_links_title' => 'Povezane povezave',
   'board_commandments_title' => '10 zapovedi radioamaterja',
   'board_commandments_text' => 'Dobra radioamaterska praksa predstavljena kot deset pravil, ki si jih je lahko zapomniti.',
   'board_first_qso_title' => 'Moj prvi QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Zgodovinska in tehnična stran, ki povezuje elektriko, meritve in radio.',
   'related_document_sheet_label' => 'Opomnik',
   'related_document_sheet_text' => 'Kratke opombe za ponovitev formule in njenih pretvorb.',
+  'related_link_ohm_tool_label' => 'Kalkulator Ohmovega zakona',
+  'related_link_ohm_tool_text' => 'Odprite interaktivno orodje za napetost, tok in upor.',
 );

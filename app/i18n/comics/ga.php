@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'Íoslódáil an leathanach',
   'download_board_label' => 'PNG A4',
   'related_documents_title' => 'Doiciméid ghaolmhara',
+  'related_links_title' => 'Naisc ghaolmhara',
   'board_commandments_title' => '10 nAithne an raidió-amaitéaraigh',
   'board_commandments_text' => 'Dea-chleachtais raidió amaitéarach curtha i láthair mar dheich riail éasca le cuimhneamh.',
   'board_first_qso_title' => 'Mo chéad QSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => 'Leathanach stairiúil agus teicniúil a nascann leictreachas, tomhais agus raidió.',
   'related_document_sheet_label' => 'Bileog mheabhrúcháin',
   'related_document_sheet_text' => 'Nótaí gasta chun an fhoirmle agus a leaganacha a athbhreithniú.',
+  'related_link_ohm_tool_label' => 'Áireamhán dhlí Ohm',
+  'related_link_ohm_tool_text' => 'Oscail an uirlis idirghníomhach do voltas, sruth agus friotaíocht.',
 );

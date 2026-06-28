@@ -19,6 +19,7 @@ return array (
   'download_board_prefix' => 'ページをダウンロード',
   'download_board_label' => 'A4 PNG',
   'related_documents_title' => '関連資料',
+  'related_links_title' => '関連リンク',
   'board_commandments_title' => 'アマチュア無線家の10の戒め',
   'board_commandments_text' => 'アマチュア無線の良い実践を、覚えやすい10の規則として紹介します。',
   'board_first_qso_title' => 'はじめてのQSO',
@@ -27,4 +28,6 @@ return array (
   'board_ohm_text' => '電気、測定、無線を結びつける歴史的で技術的なページです。',
   'related_document_sheet_label' => 'メモシート',
   'related_document_sheet_text' => '式とその変形を見直すための短いメモ。',
+  'related_link_ohm_tool_label' => 'オームの法則計算機',
+  'related_link_ohm_tool_text' => '電圧、電流、抵抗を扱う対話型ツールを開きます。',
 );
