@@ -278,7 +278,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $bulkRowsStmt = db()->prepare('SELECT id, title, slug, author_id FROM articles WHERE id IN (' . $placeholders . ')');
                 $bulkRowsStmt->execute($ids);
                 $bulkRows = $bulkRowsStmt->fetchAll() ?: [];
-                $scheduledAt = $bulkOp === 'scheduled' ? date('Y-m-d H:i:s', time() + 3600) : null;
+                $scheduledAt = null;
+                if ($bulkOp === 'scheduled') {
+                    $bulkScheduledAtRaw = trim((string) ($_POST['scheduled_at'] ?? ''));
+                    $bulkScheduledTs = $bulkScheduledAtRaw !== '' ? strtotime($bulkScheduledAtRaw) : (time() + 3600);
+                    if ($bulkScheduledTs === false) {
+                        throw new RuntimeException($t('err_invalid_article'));
+                    }
+                    if ($bulkScheduledTs <= time()) {
+                        $bulkOp = 'published';
+                    } else {
+                        $scheduledAt = date('Y-m-d H:i:s', $bulkScheduledTs);
+                    }
+                }
                 $submittedModerationNote = trim((string) ($_POST['moderation_note'] ?? ''));
                 $moderationNote = $bulkOp === 'rejected'
                     ? ($submittedModerationNote !== '' ? $submittedModerationNote : $t('moderation_note_rejected_default'))
@@ -897,105 +909,130 @@ if ($showPendingProposals && ensure_content_proposals_table()) {
 
 ob_start();
 ?>
-<div class="grid-2">
+<div class="admin-articles-module">
+<div class="admin-articles-workspace">
     <section class="card admin-article-editor-card">
         <div class="admin-article-editor-head">
-            <h1><?= $editingId > 0 ? e($t('edit')) : e($t('create')) ?> <?= e($t('an_article')) ?></h1>
-            <?php if ($editingId > 0): ?>
-                <span class="badge muted admin-article-status admin-article-status-<?= e((string) ($editing['status'] ?? 'draft')) ?>"><?= e($articleStatusLabel((string) ($editing['status'] ?? 'draft'))) ?></span>
-            <?php endif; ?>
+            <div>
+                <p class="admin-section-kicker"><?= e($t('article_editor')) ?></p>
+                <h1><?= $editingId > 0 ? e($t('edit')) : e($t('create')) ?> <?= e($t('an_article')) ?></h1>
+                <p class="help"><?= e($editingId > 0 ? $t('editor_intro_edit') : $t('editor_intro_new')) ?></p>
+            </div>
+            <div class="admin-article-editor-head-actions">
+                <?php if ($editingId > 0): ?>
+                    <span class="badge muted admin-article-status admin-article-status-<?= e((string) ($editing['status'] ?? 'draft')) ?>"><?= e($articleStatusLabel((string) ($editing['status'] ?? 'draft'))) ?></span>
+                    <a class="button small secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('new_article')) ?></a>
+                <?php endif; ?>
+            </div>
         </div>
         <form method="post" enctype="multipart/form-data" class="admin-article-editor-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_article">
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
-            <label><?= e($t('title')) ?><input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
-            <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" placeholder="<?= e($t('slug_placeholder')) ?>"></label>
-            <label><?= e($t('category')) ?>
-                <select name="category" id="article-category">
-                    <?php $editingCategory = (string) ($editing['category'] ?? 'autres'); ?>
-                    <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
-                        <option value="<?= e($categoryCode) ?>" <?= $editingCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option>
-                    <?php endforeach; ?>
-                    <option value="__custom__"><?= e($t('new_category')) ?></option>
-                </select>
-            </label>
-            <label id="article-category-custom" hidden><?= e($t('new_category_id')) ?>
-                <input type="text" name="category_custom" value="" placeholder="<?= e($t('custom_category_ph')) ?>">
-            </label>
-            <label><?= e($t('subcategory_field')) ?>
-                <select name="subcategory_ref">
-                    <?php $editingSubcategory = article_subcategory_code((string) ($editing['subcategory'] ?? '')); ?>
-                    <option value=""><?= e($t('no_subcategory')) ?></option>
-                    <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
-                        <?php if ($subcategories === []): ?>
-                            <?php continue; ?>
-                        <?php endif; ?>
-                        <optgroup label="<?= e((string) ($knownCategories[(string) $subcategoryCategoryCode] ?? article_category_label_from_code((string) $subcategoryCategoryCode))) ?>">
-                            <?php foreach ($subcategories as $subcategoryInfo): ?>
-                                <?php
-                                $subcategoryCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? ''));
-                                if ($subcategoryCode === '') {
-                                    continue;
-                                }
-                                $subcategoryRef = article_subcategory_ref((string) $subcategoryCategoryCode, $subcategoryCode);
-                                $isSelectedSubcategory = $editingCategory === (string) $subcategoryCategoryCode && $editingSubcategory === $subcategoryCode;
-                                ?>
-                                <option value="<?= e($subcategoryRef) ?>" <?= $isSelectedSubcategory ? 'selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subcategoryCode)) ?></option>
+            <div class="admin-article-form-section">
+                <h2><?= e($t('content_section')) ?></h2>
+                <label><?= e($t('title')) ?><input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
+                <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" placeholder="<?= e($t('slug_placeholder')) ?>"></label>
+                <label><?= e($t('import_document')) ?><input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
+                <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4" data-wysiwyg="off"><?= e((string) $editing['excerpt']) ?></textarea></label>
+                <label><?= e($t('content_simple_html')) ?><textarea name="content" rows="16" data-wysiwyg="full"><?= e((string) $editing['content']) ?></textarea></label>
+                <p class="help"><?= e($t('editor_tip')) ?></p>
+            </div>
+            <div class="admin-article-form-section">
+                <h2><?= e($t('taxonomy_section')) ?></h2>
+                <div class="admin-article-form-grid">
+                    <label><?= e($t('category')) ?>
+                        <select name="category" id="article-category">
+                            <?php $editingCategory = (string) ($editing['category'] ?? 'autres'); ?>
+                            <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
+                                <option value="<?= e($categoryCode) ?>" <?= $editingCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option>
                             <?php endforeach; ?>
-                        </optgroup>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-            <label><?= e($t('subsubcategory_field')) ?>
-                <select name="subsubcategory_ref">
-                    <?php $editingSubsubcategory = article_subsubcategory_code((string) ($editing['subsubcategory'] ?? '')); ?>
-                    <option value=""><?= e($t('no_subsubcategory')) ?></option>
-                    <?php foreach ($articleSubsubcategoriesByParent as $subsubcategoryParentRef => $subsubcategories): ?>
-                        <?php $subsubcategoryParentParts = article_subcategory_ref_parts((string) $subsubcategoryParentRef); ?>
-                        <?php $subsubcategoryParentCategory = $subsubcategoryParentParts['category']; ?>
-                        <?php $subsubcategoryParentSubcategory = $subsubcategoryParentParts['subcategory']; ?>
-                        <?php if ($subsubcategoryParentCategory === '' || $subsubcategoryParentSubcategory === ''): ?>
-                            <?php continue; ?>
-                        <?php endif; ?>
-                        <?php $subsubcategoryParentLabel = article_category_label_from_code($subsubcategoryParentSubcategory); ?>
-                        <?php foreach ($articleSubcategoriesByCategory[$subsubcategoryParentCategory] ?? [] as $subcategoryInfo): ?>
-                            <?php if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subsubcategoryParentSubcategory) { $subsubcategoryParentLabel = (string) ($subcategoryInfo['label'] ?? $subsubcategoryParentLabel); break; } ?>
-                        <?php endforeach; ?>
-                        <optgroup label="<?= e((string) ($knownCategories[$subsubcategoryParentCategory] ?? article_category_label_from_code($subsubcategoryParentCategory)) . ' / ' . $subsubcategoryParentLabel) ?>">
-                            <?php foreach ($subsubcategories as $subsubcategoryInfo): ?>
-                                <?php
-                                $subsubcategoryCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? ''));
-                                if ($subsubcategoryCode === '') {
-                                    continue;
-                                }
-                                $subsubcategoryRef = article_subsubcategory_ref($subsubcategoryParentCategory, $subsubcategoryParentSubcategory, $subsubcategoryCode);
-                                $isSelectedSubsubcategory = $editingCategory === $subsubcategoryParentCategory && $editingSubcategory === $subsubcategoryParentSubcategory && $editingSubsubcategory === $subsubcategoryCode;
-                                ?>
-                                <option value="<?= e($subsubcategoryRef) ?>" <?= $isSelectedSubsubcategory ? 'selected' : '' ?>><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubcategoryCode)) ?></option>
+                            <option value="__custom__"><?= e($t('new_category')) ?></option>
+                        </select>
+                    </label>
+                    <label id="article-category-custom" hidden><?= e($t('new_category_id')) ?>
+                        <input type="text" name="category_custom" value="" placeholder="<?= e($t('custom_category_ph')) ?>">
+                    </label>
+                    <label><?= e($t('subcategory_field')) ?>
+                        <select name="subcategory_ref">
+                            <?php $editingSubcategory = article_subcategory_code((string) ($editing['subcategory'] ?? '')); ?>
+                            <option value=""><?= e($t('no_subcategory')) ?></option>
+                            <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
+                                <?php if ($subcategories === []): ?>
+                                    <?php continue; ?>
+                                <?php endif; ?>
+                                <optgroup label="<?= e((string) ($knownCategories[(string) $subcategoryCategoryCode] ?? article_category_label_from_code((string) $subcategoryCategoryCode))) ?>">
+                                    <?php foreach ($subcategories as $subcategoryInfo): ?>
+                                        <?php
+                                        $subcategoryCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? ''));
+                                        if ($subcategoryCode === '') {
+                                            continue;
+                                        }
+                                        $subcategoryRef = article_subcategory_ref((string) $subcategoryCategoryCode, $subcategoryCode);
+                                        $isSelectedSubcategory = $editingCategory === (string) $subcategoryCategoryCode && $editingSubcategory === $subcategoryCode;
+                                        ?>
+                                        <option value="<?= e($subcategoryRef) ?>" <?= $isSelectedSubcategory ? 'selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subcategoryCode)) ?></option>
+                                    <?php endforeach; ?>
+                                </optgroup>
                             <?php endforeach; ?>
-                        </optgroup>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-            <label><?= e($t('import_document')) ?><input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
-            <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4" data-wysiwyg="off"><?= e((string) $editing['excerpt']) ?></textarea></label>
-            <label><?= e($t('content_simple_html')) ?><textarea name="content" rows="16" data-wysiwyg="full"><?= e((string) $editing['content']) ?></textarea></label>
-            <p class="help"><?= e($t('editor_tip')) ?></p>
-            <label><?= e($t('status')) ?>
-                <select name="status">
-                    <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
-                        <option value="<?= e($statusCode) ?>" <?= (string) $editing['status'] === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-            <label><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
-            <label><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
+                        </select>
+                    </label>
+                    <label><?= e($t('subsubcategory_field')) ?>
+                        <select name="subsubcategory_ref">
+                            <?php $editingSubsubcategory = article_subsubcategory_code((string) ($editing['subsubcategory'] ?? '')); ?>
+                            <option value=""><?= e($t('no_subsubcategory')) ?></option>
+                            <?php foreach ($articleSubsubcategoriesByParent as $subsubcategoryParentRef => $subsubcategories): ?>
+                                <?php $subsubcategoryParentParts = article_subcategory_ref_parts((string) $subsubcategoryParentRef); ?>
+                                <?php $subsubcategoryParentCategory = $subsubcategoryParentParts['category']; ?>
+                                <?php $subsubcategoryParentSubcategory = $subsubcategoryParentParts['subcategory']; ?>
+                                <?php if ($subsubcategoryParentCategory === '' || $subsubcategoryParentSubcategory === ''): ?>
+                                    <?php continue; ?>
+                                <?php endif; ?>
+                                <?php $subsubcategoryParentLabel = article_category_label_from_code($subsubcategoryParentSubcategory); ?>
+                                <?php foreach ($articleSubcategoriesByCategory[$subsubcategoryParentCategory] ?? [] as $subcategoryInfo): ?>
+                                    <?php if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subsubcategoryParentSubcategory) { $subsubcategoryParentLabel = (string) ($subcategoryInfo['label'] ?? $subsubcategoryParentLabel); break; } ?>
+                                <?php endforeach; ?>
+                                <optgroup label="<?= e((string) ($knownCategories[$subsubcategoryParentCategory] ?? article_category_label_from_code($subsubcategoryParentCategory)) . ' / ' . $subsubcategoryParentLabel) ?>">
+                                    <?php foreach ($subsubcategories as $subsubcategoryInfo): ?>
+                                        <?php
+                                        $subsubcategoryCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? ''));
+                                        if ($subsubcategoryCode === '') {
+                                            continue;
+                                        }
+                                        $subsubcategoryRef = article_subsubcategory_ref($subsubcategoryParentCategory, $subsubcategoryParentSubcategory, $subsubcategoryCode);
+                                        $isSelectedSubsubcategory = $editingCategory === $subsubcategoryParentCategory && $editingSubcategory === $subsubcategoryParentSubcategory && $editingSubsubcategory === $subsubcategoryCode;
+                                        ?>
+                                        <option value="<?= e($subsubcategoryRef) ?>" <?= $isSelectedSubsubcategory ? 'selected' : '' ?>><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubcategoryCode)) ?></option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div class="admin-article-form-section">
+                <h2><?= e($t('publication_section')) ?></h2>
+                <div class="admin-article-form-grid">
+                    <label><?= e($t('status')) ?>
+                        <select name="status">
+                            <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
+                                <option value="<?= e($statusCode) ?>" <?= (string) $editing['status'] === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
+                </div>
+                <label><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
+            </div>
             <button class="button admin-article-save-button" type="submit"><?= e($t('save')) ?></button>
             <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>
         </form>
         <?php if ((int) $editing['id'] > 0): ?>
             <div class="admin-article-moderation-panel">
+                <div class="admin-article-panel-head">
+                    <h2><?= e($t('moderation_actions')) ?></h2>
+                    <p class="help"><?= e($t('moderation_actions_help')) ?></p>
+                </div>
                 <?php if ((string) ($editing['status'] ?? '') !== 'published'): ?>
                     <form method="post" class="admin-article-publish-form">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -1003,7 +1040,7 @@ ob_start();
                         <input type="hidden" name="ids[]" value="<?= (int) $editing['id'] ?>">
                         <input type="hidden" name="bulk_op" value="published">
                         <input type="hidden" name="return_id" value="<?= (int) $editing['id'] ?>">
-                        <button class="button admin-article-publish-button" type="submit"><?= e($articleStatusLabel('published')) ?></button>
+                        <button class="button admin-article-publish-button" type="submit"><?= e($t('publish_now')) ?></button>
                     </form>
                 <?php endif; ?>
                 <form method="post" class="admin-article-reject-form">
@@ -1015,7 +1052,7 @@ ob_start();
                     <label><?= e($t('moderation_note')) ?>
                         <textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea>
                     </label>
-                    <button class="button secondary admin-article-reject-button" type="submit"><?= e($t('notification_article_rejected')) ?></button>
+                    <button class="button secondary admin-article-reject-button" type="submit"><?= e($t('reject_article')) ?></button>
                 </form>
                 <form method="post" class="admin-article-delete-form" onsubmit="return confirm('<?= e($t('confirm_delete')) ?>');">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -1173,12 +1210,37 @@ ob_start();
         </div>
     </section>
     <?php endif; ?>
-    <section class="card">
-        <div class="row-between">
-            <h2><?= e($t('existing_articles')) ?></h2>
-            <span class="badge"><?php $statusStats = []; foreach (['pending', 'draft', 'scheduled', 'published', 'rejected'] as $statusCode) { $statusStats[] = $articleStatusLabel($statusCode) . ': ' . (int) ($articleStatMap[$statusCode] ?? 0); } echo e(implode(' · ', $statusStats)); ?></span>
+    <section class="card admin-article-list-card">
+        <div class="admin-article-list-top">
+            <div>
+                <p class="admin-section-kicker"><?= e($t('status_overview')) ?></p>
+                <h2><?= e($t('existing_articles')) ?></h2>
+                <p class="help"><?= e(sprintf($t('articles_found'), $totalArticles)) ?></p>
+            </div>
+            <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('new_article')) ?></a>
         </div>
-        <form method="get" class="stack">
+        <div class="admin-article-status-tabs" aria-label="<?= e($t('status')) ?>">
+            <?php
+            $statusFilterBase = [
+                'q' => $adminSearch,
+                'category' => $adminCategory,
+                'subcategory' => $adminSubcategory,
+                'subsubcategory' => $adminSubsubcategory,
+            ];
+            $allArticleCount = array_sum($articleStatMap);
+            ?>
+            <a class="admin-article-status-tab<?= $adminStatus === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_articles', array_merge($statusFilterBase, ['status' => '']))) ?>">
+                <span><?= e($t('all_statuses')) ?></span>
+                <strong><?= (int) $allArticleCount ?></strong>
+            </a>
+            <?php foreach (['pending', 'draft', 'scheduled', 'published', 'rejected'] as $statusCode): ?>
+                <a class="admin-article-status-tab admin-article-status-tab-<?= e($statusCode) ?><?= $adminStatus === $statusCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_articles', array_merge($statusFilterBase, ['status' => $statusCode]))) ?>">
+                    <span><?= e($articleStatusLabel($statusCode)) ?></span>
+                    <strong><?= (int) ($articleStatMap[$statusCode] ?? 0) ?></strong>
+                </a>
+            <?php endforeach; ?>
+        </div>
+        <form method="get" class="stack admin-article-filter-form">
             <input type="hidden" name="route" value="admin_articles">
             <div class="grid-3">
                 <label><?= e($t('search')) ?><input type="search" name="q" value="<?= e($adminSearch) ?>"></label>
@@ -1250,6 +1312,25 @@ ob_start();
             </div>
             <p><button class="button" type="submit"><?= e($t('filter')) ?></button> <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter')) ?></a></p>
         </form>
+        <form id="admin-article-bulk-form" method="post" class="admin-article-bulk-bar" onsubmit="return confirm('<?= e($t('confirm_bulk_action')) ?>');">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="bulk_update_articles">
+            <div>
+                <h3><?= e($t('bulk_actions')) ?></h3>
+                <p class="help"><?= e($t('bulk_actions_help')) ?></p>
+            </div>
+            <label><?= e($t('bulk_action')) ?>
+                <select name="bulk_op">
+                    <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
+                        <option value="<?= e($statusCode) ?>"><?= e($statusLabel) ?></option>
+                    <?php endforeach; ?>
+                    <option value="delete"><?= e($t('delete')) ?></option>
+                </select>
+            </label>
+            <label><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at"></label>
+            <label><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="2" placeholder="<?= e($t('moderation_note_help')) ?>"></textarea></label>
+            <button class="button small" type="submit"><?= e($t('apply_to_selection')) ?></button>
+        </form>
         <div class="stack">
             <?php foreach ($articles as $article): ?>
                 <?php
@@ -1272,12 +1353,25 @@ ob_start();
                     }
                 }
                 $articleExcerpt = article_excerpt_from_input((string) ($article['excerpt'] ?? ''));
+                $articleTimelineBadges = [];
+                if (!empty($article['published_at'])) {
+                    $articleTimelineBadges[] = $t('published_at') . ' ' . date('d/m/Y H:i', strtotime((string) $article['published_at']));
+                }
+                if (!empty($article['scheduled_at'])) {
+                    $articleTimelineBadges[] = $t('scheduled_at') . ' ' . date('d/m/Y H:i', strtotime((string) $article['scheduled_at']));
+                }
                 ?>
-                <article class="article-item admin-article-list-item">
+                <article class="article-item admin-article-list-item admin-article-list-item-<?= e((string) $article['status']) ?>">
                     <div class="admin-article-list-header">
-                        <div>
-                            <h3><?= e((string) $article['title']) ?></h3>
-                            <p class="help">#<?= (int) $article['id'] ?> &middot; <?= e(date('d/m/Y H:i', strtotime((string) ($article['updated_at'] ?? $article['created_at'] ?? 'now')))) ?></p>
+                        <div class="admin-article-title-block">
+                            <label class="admin-article-select">
+                                <input type="checkbox" name="ids[]" value="<?= (int) $article['id'] ?>" form="admin-article-bulk-form">
+                                <span><?= e($t('select_article')) ?></span>
+                            </label>
+                            <div>
+                                <h3><?= e((string) $article['title']) ?></h3>
+                                <p class="help">#<?= (int) $article['id'] ?> &middot; <?= e($t('updated_at')) ?> <?= e(date('d/m/Y H:i', strtotime((string) ($article['updated_at'] ?? $article['created_at'] ?? 'now')))) ?></p>
+                            </div>
                         </div>
                         <div class="admin-article-row-actions">
                             <a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a>
@@ -1287,12 +1381,12 @@ ob_start();
                                     <input type="hidden" name="action" value="bulk_update_articles">
                                     <input type="hidden" name="ids[]" value="<?= (int) $article['id'] ?>">
                                     <input type="hidden" name="bulk_op" value="published">
-                                    <button class="button small admin-article-publish-button" type="submit"><?= e($articleStatusLabel('published')) ?></button>
+                                    <button class="button small admin-article-publish-button" type="submit"><?= e($t('publish_now')) ?></button>
                                 </form>
                             <?php endif; ?>
                             <?php if ((string) ($article['status'] ?? '') !== 'rejected'): ?>
                                 <details class="admin-article-row-reject">
-                                    <summary class="button small secondary"><?= e($t('notification_article_rejected')) ?></summary>
+                                    <summary class="button small secondary"><?= e($t('reject_article')) ?></summary>
                                     <form method="post" class="admin-article-row-reject-form">
                                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                         <input type="hidden" name="action" value="bulk_update_articles">
@@ -1314,6 +1408,13 @@ ob_start();
                         </div>
                     </div>
                     <p class="taxonomy-badge-row"><strong><?= e($t('category_label')) ?></strong> <span class="badge muted taxonomy-pill-category"><?= e($articleCategoryLabel) ?></span><?php if ($articleSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($articleSubcategoryLabel) ?></span><?php endif; ?><?php if ($articleSubsubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subsubcategory"><?= e($articleSubsubcategoryLabel) ?></span><?php endif; ?> <span class="badge muted admin-article-status admin-article-status-<?= e((string) $article['status']) ?>"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
+                    <?php if ($articleTimelineBadges !== []): ?>
+                        <p class="admin-article-date-row">
+                            <?php foreach ($articleTimelineBadges as $articleTimelineBadge): ?>
+                                <span class="badge muted"><?= e($articleTimelineBadge) ?></span>
+                            <?php endforeach; ?>
+                        </p>
+                    <?php endif; ?>
                     <?php if ($articleExcerpt !== ''): ?>
                         <p><?= e($articleExcerpt) ?></p>
                     <?php endif; ?>
@@ -1329,7 +1430,7 @@ ob_start();
             </nav>
         <?php endif; ?>
     </section>
-    <section class="card">
+    <section class="card admin-article-taxonomy-card">
         <h2><?= e($t('category_edit')) ?></h2>
         <div class="grid-2">
             <form method="post" class="stack">
@@ -1457,6 +1558,7 @@ ob_start();
             <?php endforeach; ?>
         </div>
     </section>
+</div>
 </div>
 <?php
 echo render_layout((string) ob_get_clean(), $t('layout'));
