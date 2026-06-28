@@ -232,16 +232,29 @@ for (const moduleCode of ['pv', 'fichiers']) {
 
         if (moduleCode === 'fichiers') {
           const adminButtonState = await driver.executeScript(`
-            const manageSummary = document.querySelector('[data-route="fichiers"] .member-document-manage-menu summary');
+            const manageMenu = document.querySelector('[data-route="fichiers"] .member-document-manage-menu');
+            const manageSummary = manageMenu ? manageMenu.querySelector('summary') : null;
+            const managePanel = manageMenu ? manageMenu.querySelector('.member-document-propose-menu-panel[role="menu"]') : null;
             const adminButton = document.querySelector('[data-route="fichiers"] .member-document-admin-button');
-            if (!manageSummary || !adminButton) {
+            if (!manageMenu || !manageSummary || !managePanel || !adminButton) {
               return null;
             }
+            manageMenu.open = true;
             const manageRect = manageSummary.getBoundingClientRect();
             const adminRect = adminButton.getBoundingClientRect();
+            const panelRect = managePanel.getBoundingClientRect();
             const style = getComputedStyle(adminButton);
+            const panelLinks = [...managePanel.querySelectorAll('a[role="menuitem"]')].map((link) => ({
+              text: link.textContent.trim(),
+              href: link.getAttribute('href') || '',
+            }));
             return {
+              isDetails: manageMenu.tagName.toLowerCase() === 'details',
+              isOpen: manageMenu.open === true,
               manageText: manageSummary.textContent.trim(),
+              panelRole: managePanel.getAttribute('role') || '',
+              panelHasSize: panelRect.width > 0 && panelRect.height > 0,
+              panelLinks,
               adminText: adminButton.textContent.trim(),
               adminHref: adminButton.getAttribute('href') || '',
               adminBackground: style.backgroundColor,
@@ -250,7 +263,14 @@ for (const moduleCode of ['pv', 'fichiers']) {
             };
           `);
           assert.ok(adminButtonState, 'Le header fichiers doit afficher le menu Gerer et le bouton Administrer.');
+          assert.equal(adminButtonState.isDetails, true, 'Le bouton Gerer fichiers doit etre un details dropdown.');
+          assert.equal(adminButtonState.isOpen, true, 'Le dropdown Gerer fichiers doit pouvoir etre ouvert.');
           assert.match(adminButtonState.manageText, /G.rer/i, 'Le menu fichiers doit rester libelle Gerer.');
+          assert.equal(adminButtonState.panelRole, 'menu', 'Le dropdown Gerer fichiers doit exposer un panneau de menu.');
+          assert.equal(adminButtonState.panelHasSize, true, 'Le panneau Gerer fichiers doit devenir visible une fois ouvert.');
+          assert.ok(adminButtonState.panelLinks.length >= 2, 'Le dropdown Gerer fichiers doit contenir des entrees de menu.');
+          assert.ok(adminButtonState.panelLinks.some((link) => /route=fichiers/.test(link.href) || /#member-document-list/.test(link.href)), 'Le dropdown Gerer doit contenir un lien vers mes fichiers.');
+          assert.ok(adminButtonState.panelLinks.some((link) => /route=admin_fichiers/.test(link.href)), 'Le dropdown Gerer doit contenir un lien vers la gestion admin des partages.');
           assert.equal(adminButtonState.adminText, 'Administrer', 'Le bouton admin fichiers doit etre libelle Administrer.');
           assert.match(adminButtonState.adminHref, /route=admin_fichiers/, 'Le bouton Administrer doit pointer vers admin_fichiers.');
           assert.match(adminButtonState.adminBackground, /rgb\(0,\s*0,\s*0\)/, 'Le bouton Administrer doit etre noir.');
