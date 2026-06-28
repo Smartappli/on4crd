@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -33,4 +32,29 @@ return array (
   'err_password' => 'পাসওয়ার্ড বৈধ নয়।',
   'err_exists' => 'এই কলসাইনের জন্য সদস্য বা অ্যাকাউন্ট ইতিমধ্যে আছে।',
   'auth_unavailable' => 'প্রমাণীকরণ উপলভ্য নয়।',
+  'th_first_name' => 'প্রথম নাম',
+  'th_last_name' => 'পদবি',
+  'grades_title' => 'গ্রেড',
+  'grades_empty' => 'কোনো গ্রেড নথিভুক্ত নেই।',
+  'grade_label' => 'গ্রেড',
+  'grade_obtained_on' => 'প্রাপ্তির তারিখ',
+  'grade_add' => 'গ্রেড যোগ করুন',
+  'grade_delete' => 'মুছুন',
+  'err_grade' => 'গ্রেড প্রয়োজন।',
+  'err_grade_date' => 'গ্রেডের তারিখ অবৈধ।',
+  'payments_title' => 'পেমেন্ট',
+  'payments_empty' => 'কোনো পেমেন্ট অবস্থা নথিভুক্ত নেই।',
+  'payment_type' => 'সময়কাল',
+  'payment_type_year' => 'বছর',
+  'payment_type_month' => 'মাস',
+  'payment_period_year' => 'বছর',
+  'payment_period_month' => 'মাস',
+  'payment_status' => 'পেমেন্ট অবস্থা',
+  'payment_status_paid' => 'পরিশোধিত',
+  'payment_status_pending' => 'অপেক্ষমাণ',
+  'payment_status_unpaid' => 'অপরিশোধিত',
+  'payment_save' => 'পেমেন্ট সংরক্ষণ করুন',
+  'payment_delete' => 'মুছুন',
+  'err_payment_period' => 'পেমেন্ট সময়কাল অবৈধ।',
+  'err_payment_status' => 'পেমেন্ট অবস্থা অবৈধ।',
 );

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -33,4 +32,29 @@ return array (
   'err_password' => 'パスワードが無効です。',
   'err_exists' => 'このコールサインのメンバーまたはアカウントは既に存在します。',
   'auth_unavailable' => '認証を利用できません。',
+  'th_first_name' => '名',
+  'th_last_name' => '姓',
+  'grades_title' => '等級',
+  'grades_empty' => '等級は記録されていません。',
+  'grade_label' => '等級',
+  'grade_obtained_on' => '取得日',
+  'grade_add' => '等級を追加',
+  'grade_delete' => '削除',
+  'err_grade' => '等級は必須です。',
+  'err_grade_date' => '等級の日付が無効です。',
+  'payments_title' => '支払い',
+  'payments_empty' => '支払い状況は記録されていません。',
+  'payment_type' => '期間',
+  'payment_type_year' => '年',
+  'payment_type_month' => '月',
+  'payment_period_year' => '年',
+  'payment_period_month' => '月',
+  'payment_status' => '支払い状況',
+  'payment_status_paid' => '支払い済み',
+  'payment_status_pending' => '保留中',
+  'payment_status_unpaid' => '未払い',
+  'payment_save' => '支払いを保存',
+  'payment_delete' => '削除',
+  'err_payment_period' => '支払い期間が無効です。',
+  'err_payment_status' => '支払い状況が無効です。',
 );

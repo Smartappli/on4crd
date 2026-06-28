@@ -63,6 +63,30 @@ CREATE TABLE IF NOT EXISTS members (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS member_grade_history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    grade_label VARCHAR(120) NOT NULL,
+    obtained_on DATE DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_member_grade_history_member_date (member_id, obtained_on),
+    CONSTRAINT member_grade_history_member_fk FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS member_payment_statuses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    period_type ENUM('month','year') NOT NULL DEFAULT 'year',
+    period_key VARCHAR(7) NOT NULL,
+    status ENUM('paid','pending','unpaid') NOT NULL DEFAULT 'unpaid',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_member_payment_period (member_id, period_type, period_key),
+    KEY idx_member_payment_statuses_member_period (member_id, period_type, period_key),
+    CONSTRAINT member_payment_statuses_member_fk FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(249) NOT NULL,

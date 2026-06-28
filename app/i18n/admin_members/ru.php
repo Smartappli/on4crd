@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -33,4 +32,29 @@ return array (
   'err_password' => 'Недействительный пароль.',
   'err_exists' => 'Для этого позывного уже есть участник или учетная запись.',
   'auth_unavailable' => 'Аутентификация недоступна.',
+  'th_first_name' => 'Имя',
+  'th_last_name' => 'Фамилия',
+  'grades_title' => 'Разряды',
+  'grades_empty' => 'Разряд не записан.',
+  'grade_label' => 'Разряд',
+  'grade_obtained_on' => 'Получен',
+  'grade_add' => 'Добавить разряд',
+  'grade_delete' => 'Удалить',
+  'err_grade' => 'Разряд обязателен.',
+  'err_grade_date' => 'Недопустимая дата разряда.',
+  'payments_title' => 'Платежи',
+  'payments_empty' => 'Статус платежа не записан.',
+  'payment_type' => 'Период',
+  'payment_type_year' => 'Год',
+  'payment_type_month' => 'Месяц',
+  'payment_period_year' => 'Год',
+  'payment_period_month' => 'Месяц',
+  'payment_status' => 'Статус платежа',
+  'payment_status_paid' => 'Оплачено',
+  'payment_status_pending' => 'Ожидает',
+  'payment_status_unpaid' => 'Не оплачено',
+  'payment_save' => 'Сохранить платеж',
+  'payment_delete' => 'Удалить',
+  'err_payment_period' => 'Недопустимый период платежа.',
+  'err_payment_status' => 'Недопустимый статус платежа.',
 );

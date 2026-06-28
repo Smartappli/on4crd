@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -33,4 +32,29 @@ return array (
   'err_password' => 'Невалидна парола.',
   'err_exists' => 'Вече има член или акаунт за този повиквателен знак.',
   'auth_unavailable' => 'Удостоверяването не е налично.',
+  'th_first_name' => 'Име',
+  'th_last_name' => 'Фамилия',
+  'grades_title' => 'Степени',
+  'grades_empty' => 'Няма записана степен.',
+  'grade_label' => 'Степен',
+  'grade_obtained_on' => 'Получена на',
+  'grade_add' => 'Добавяне на степен',
+  'grade_delete' => 'Изтриване',
+  'err_grade' => 'Степента е задължителна.',
+  'err_grade_date' => 'Невалидна дата за степен.',
+  'payments_title' => 'Плащания',
+  'payments_empty' => 'Няма записано състояние на плащане.',
+  'payment_type' => 'Период',
+  'payment_type_year' => 'Година',
+  'payment_type_month' => 'Месец',
+  'payment_period_year' => 'Година',
+  'payment_period_month' => 'Месец',
+  'payment_status' => 'Състояние на плащането',
+  'payment_status_paid' => 'Платено',
+  'payment_status_pending' => 'В изчакване',
+  'payment_status_unpaid' => 'Неплатено',
+  'payment_save' => 'Запази плащане',
+  'payment_delete' => 'Изтриване',
+  'err_payment_period' => 'Невалиден период на плащане.',
+  'err_payment_status' => 'Невалидно състояние на плащане.',
 );

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -33,4 +32,29 @@ return array (
   'err_password' => '密码无效。',
   'err_exists' => '此呼号已有成员或账户。',
   'auth_unavailable' => '身份验证不可用。',
+  'th_first_name' => '名',
+  'th_last_name' => '姓',
+  'grades_title' => '等级',
+  'grades_empty' => '没有记录等级。',
+  'grade_label' => '等级',
+  'grade_obtained_on' => '取得日期',
+  'grade_add' => '添加等级',
+  'grade_delete' => '删除',
+  'err_grade' => '需要等级。',
+  'err_grade_date' => '等级日期无效。',
+  'payments_title' => '付款',
+  'payments_empty' => '没有记录付款状态。',
+  'payment_type' => '周期',
+  'payment_type_year' => '年份',
+  'payment_type_month' => '月份',
+  'payment_period_year' => '年份',
+  'payment_period_month' => '月份',
+  'payment_status' => '付款状态',
+  'payment_status_paid' => '已付款',
+  'payment_status_pending' => '待处理',
+  'payment_status_unpaid' => '未付款',
+  'payment_save' => '保存付款',
+  'payment_delete' => '删除',
+  'err_payment_period' => '付款周期无效。',
+  'err_payment_status' => '付款状态无效。',
 );

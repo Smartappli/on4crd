@@ -52,7 +52,7 @@ const expectedRouteActions = {
   admin_classifieds: [],
   admin_dashboard: [],
   admin_library: ['add_category', 'add_subcategory', 'merge_tags'],
-  admin_members: ['update_member', 'create_member'],
+  admin_members: ['update_member', 'create_member', 'add_member_grade', 'save_member_payment'],
   admin_news: ['save_post', 'assign_section_manager'],
   admin_newsletters: ['add_subscriber', 'import_csv', 'create_campaign'],
   admin_permissions: ['assign_role'],

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -33,4 +32,29 @@ return array (
   'err_password' => 'Μη έγκυρος κωδικός.',
   'err_exists' => 'Υπάρχει ήδη μέλος ή λογαριασμός για αυτό το διακριτικό.',
   'auth_unavailable' => 'Ο έλεγχος ταυτότητας δεν είναι διαθέσιμος.',
+  'th_first_name' => 'Όνομα',
+  'th_last_name' => 'Επώνυμο',
+  'grades_title' => 'Βαθμοί',
+  'grades_empty' => 'Δεν έχει καταγραφεί βαθμός.',
+  'grade_label' => 'Βαθμός',
+  'grade_obtained_on' => 'Αποκτήθηκε στις',
+  'grade_add' => 'Προσθήκη βαθμού',
+  'grade_delete' => 'Διαγραφή',
+  'err_grade' => 'Απαιτείται βαθμός.',
+  'err_grade_date' => 'Μη έγκυρη ημερομηνία βαθμού.',
+  'payments_title' => 'Πληρωμές',
+  'payments_empty' => 'Δεν έχει καταγραφεί κατάσταση πληρωμής.',
+  'payment_type' => 'Περίοδος',
+  'payment_type_year' => 'Έτος',
+  'payment_type_month' => 'Μήνας',
+  'payment_period_year' => 'Έτος',
+  'payment_period_month' => 'Μήνας',
+  'payment_status' => 'Κατάσταση πληρωμής',
+  'payment_status_paid' => 'Πληρωμένο',
+  'payment_status_pending' => 'Σε εκκρεμότητα',
+  'payment_status_unpaid' => 'Απλήρωτο',
+  'payment_save' => 'Αποθήκευση πληρωμής',
+  'payment_delete' => 'Διαγραφή',
+  'err_payment_period' => 'Μη έγκυρη περίοδος πληρωμής.',
+  'err_payment_status' => 'Μη έγκυρη κατάσταση πληρωμής.',
 );

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -33,4 +32,29 @@ return array (
   'err_password' => 'अमान्य पासवर्ड।',
   'err_exists' => 'इस कॉलसाइन के लिए सदस्य या खाता पहले से मौजूद है।',
   'auth_unavailable' => 'प्रमाणीकरण उपलब्ध नहीं है।',
+  'th_first_name' => 'पहला नाम',
+  'th_last_name' => 'अंतिम नाम',
+  'grades_title' => 'ग्रेड',
+  'grades_empty' => 'कोई ग्रेड दर्ज नहीं है।',
+  'grade_label' => 'ग्रेड',
+  'grade_obtained_on' => 'प्राप्ति तिथि',
+  'grade_add' => 'ग्रेड जोड़ें',
+  'grade_delete' => 'हटाएं',
+  'err_grade' => 'ग्रेड आवश्यक है।',
+  'err_grade_date' => 'ग्रेड की तिथि अमान्य है।',
+  'payments_title' => 'भुगतान',
+  'payments_empty' => 'कोई भुगतान स्थिति दर्ज नहीं है।',
+  'payment_type' => 'अवधि',
+  'payment_type_year' => 'वर्ष',
+  'payment_type_month' => 'माह',
+  'payment_period_year' => 'वर्ष',
+  'payment_period_month' => 'माह',
+  'payment_status' => 'भुगतान स्थिति',
+  'payment_status_paid' => 'भुगतान किया',
+  'payment_status_pending' => 'लंबित',
+  'payment_status_unpaid' => 'भुगतान बाकी',
+  'payment_save' => 'भुगतान सहेजें',
+  'payment_delete' => 'हटाएं',
+  'err_payment_period' => 'भुगतान अवधि अमान्य है।',
+  'err_payment_status' => 'भुगतान स्थिति अमान्य है।',
 );

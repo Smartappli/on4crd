@@ -378,6 +378,30 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('registerWithUniqueUsername($authEmail, $password, $callsign)', $register);
     }
 
+    public function testAdminMembersManageNamesGradesAndPaymentStatuses(): void
+    {
+        $adminMembers = file_get_contents(__DIR__ . '/../pages/admin_members.php');
+        $schema = file_get_contents(__DIR__ . '/../schema/schema.sql');
+        $runtimeUpdates = file_get_contents(__DIR__ . '/../app/runtime_schema_updates.php');
+        $selenium = file_get_contents(__DIR__ . '/../tests/selenium/admin-configuration-workflows.test.js');
+        self::assertIsString($adminMembers);
+        self::assertIsString($schema);
+        self::assertIsString($runtimeUpdates);
+        self::assertIsString($selenium);
+
+        foreach (['first_name', 'last_name', 'member_grade_history', 'member_payment_statuses'] as $snippet) {
+            self::assertStringContainsString($snippet, $adminMembers);
+        }
+        foreach (["'add_member_grade'", "'delete_member_grade'", "'save_member_payment'", "'delete_member_payment'"] as $action) {
+            self::assertStringContainsString($action, $adminMembers);
+            self::assertStringContainsString(trim($action, "'"), $selenium);
+        }
+        self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_grade_history', $schema);
+        self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_payment_statuses', $schema);
+        self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_grade_history', $runtimeUpdates);
+        self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_payment_statuses', $runtimeUpdates);
+    }
+
     public function testDirectorySearchMatchesCallsignsCaseInsensitively(): void
     {
         $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
