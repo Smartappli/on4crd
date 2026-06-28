@@ -993,7 +993,7 @@ test('Selenium membre: proposer une video, la valider et la retrouver dans video
       await driver.wait(until.urlContains('route=my_requests'), timeoutMs);
       await assertMyRequestsCard(driver, title, {
         statusRegex: /attente|pending/i,
-        moduleRegex: /videos/i,
+        moduleRegex: /vid[eé]os/i,
       });
       assert.equal(proposalStatus(title), 'pending', 'La video proposee doit rester en attente avant validation admin.');
 
@@ -1003,7 +1003,7 @@ test('Selenium membre: proposer une video, la valider et la retrouver dans video
       await loginAsMember(driver);
       await assertMyRequestsCard(driver, title, {
         statusRegex: /accept|publ/i,
-        moduleRegex: /videos/i,
+        moduleRegex: /vid[eé]os/i,
       });
     } finally {
       cleanupPendingValidationRows(token);
