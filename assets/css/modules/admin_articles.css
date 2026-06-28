@@ -50,6 +50,7 @@
 }
 
 [data-route="admin_articles"] .admin-article-list-card,
+[data-route="admin_articles"] .admin-article-proposals-card,
 [data-route="admin_articles"] .admin-article-taxonomy-card {
   grid-column: 1 / -1;
 }
@@ -182,6 +183,85 @@
 
 [data-route="admin_articles"] .admin-article-warning {
   color: #b54708;
+}
+
+[data-route="admin_articles"] .admin-article-proposals-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: .8rem;
+}
+
+[data-route="admin_articles"] .admin-article-proposals-head h2,
+[data-route="admin_articles"] .admin-article-proposals-head p {
+  margin-top: 0;
+}
+
+[data-route="admin_articles"] .admin-article-proposal-item {
+  border-left: 4px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+[data-route="admin_articles"] .admin-article-proposal-item-pending,
+[data-route="admin_articles"] .admin-article-proposal-item-reviewed {
+  border-left-color: #b54708;
+}
+
+[data-route="admin_articles"] .admin-article-proposal-item-accepted {
+  border-left-color: color-mix(in srgb, var(--success) 80%, var(--accent));
+}
+
+[data-route="admin_articles"] .admin-article-proposal-item-rejected {
+  border-left-color: #b42318;
+}
+
+[data-route="admin_articles"] .admin-article-proposal-summary {
+  display: flex;
+  gap: .8rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+[data-route="admin_articles"] .admin-article-proposal-summary h3,
+[data-route="admin_articles"] .admin-article-proposal-summary p,
+[data-route="admin_articles"] .admin-article-proposal-text {
+  margin-top: 0;
+}
+
+[data-route="admin_articles"] .admin-article-proposal-meta,
+[data-route="admin_articles"] .admin-article-proposal-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  align-items: center;
+}
+
+[data-route="admin_articles"] .admin-article-proposal-form {
+  display: grid;
+  gap: .7rem;
+  margin-top: .8rem;
+  padding: .75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel-2) 72%, transparent);
+}
+
+[data-route="admin_articles"] .admin-article-proposal-form label {
+  margin: 0;
+}
+
+[data-route="admin_articles"] .admin-article-proposal-form .is-muted {
+  opacity: .55;
+}
+
+[data-route="admin_articles"] .admin-article-proposal-shortcuts .is-active {
+  border-color: color-mix(in srgb, var(--accent) 44%, var(--border));
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+}
+
+[data-route="admin_articles"] .admin-article-proposal-submit {
+  justify-self: start;
 }
 
 [data-route="admin_articles"] .admin-article-list-top {
@@ -458,7 +538,8 @@
   [data-route="admin_articles"] .admin-article-editor-head,
   [data-route="admin_articles"] .admin-article-list-top,
   [data-route="admin_articles"] .admin-article-list-header,
-  [data-route="admin_articles"] .admin-article-panel-head {
+  [data-route="admin_articles"] .admin-article-panel-head,
+  [data-route="admin_articles"] .admin-article-proposal-summary {
     flex-direction: column;
   }
 
