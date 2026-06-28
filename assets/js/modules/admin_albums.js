@@ -31,14 +31,14 @@
     dropzone.addEventListener('click', () => input.click());
     dropzone.addEventListener('dragover', (event) => {
       event.preventDefault();
-      dropzone.style.background = 'var(--panel-3)';
+      dropzone.classList.add('is-dragging');
     });
     dropzone.addEventListener('dragleave', () => {
-      dropzone.style.background = '';
+      dropzone.classList.remove('is-dragging');
     });
     dropzone.addEventListener('drop', (event) => {
       event.preventDefault();
-      dropzone.style.background = '';
+      dropzone.classList.remove('is-dragging');
       const files = event.dataTransfer?.files;
       if (!files || files.length === 0) return;
       input.files = files;
