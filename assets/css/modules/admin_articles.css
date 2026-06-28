@@ -121,15 +121,8 @@
   gap: .8rem;
 }
 
-[data-route="admin_articles"] .admin-article-form-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .55rem;
-  align-items: center;
-  padding-top: .2rem;
-}
-
-[data-route="admin_articles"] .admin-article-save-button {
+[data-route="admin_articles"] .admin-article-save-button,
+[data-route="admin_articles"] .admin-article-preview-button {
   justify-self: start;
 }
 
@@ -683,7 +676,6 @@
   }
 
   [data-route="admin_articles"] .admin-article-editor-head-actions,
-  [data-route="admin_articles"] .admin-article-form-actions,
   [data-route="admin_articles"] .admin-article-revision-row,
   [data-route="admin_articles"] .admin-article-queue-row,
   [data-route="admin_articles"] .admin-article-row-actions {
