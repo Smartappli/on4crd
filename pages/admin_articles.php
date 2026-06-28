@@ -1400,6 +1400,7 @@ ob_start();
                 if (!empty($article['scheduled_at'])) {
                     $articleTimelineBadges[] = $t('scheduled_at') . ' ' . date('d/m/Y H:i', strtotime((string) $article['scheduled_at']));
                 }
+                $articlePublicSlug = trim((string) ($article['slug'] ?? ''));
                 ?>
                 <article class="article-item admin-article-list-item admin-article-list-item-<?= e((string) $article['status']) ?>">
                     <div class="admin-article-list-header">
@@ -1414,6 +1415,9 @@ ob_start();
                             </div>
                         </div>
                         <div class="admin-article-row-actions">
+                            <?php if ((string) ($article['status'] ?? '') === 'published' && $articlePublicSlug !== ''): ?>
+                                <a class="button small secondary admin-article-public-link" href="<?= e(route_url('article', ['slug' => $articlePublicSlug])) ?>"><?= e($t('preview')) ?></a>
+                            <?php endif; ?>
                             <a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a>
                             <?php if ((string) ($article['status'] ?? '') !== 'published'): ?>
                                 <form method="post" class="admin-article-row-publish">
