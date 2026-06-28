@@ -273,6 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')->execute(array_merge(['article'], $ids));
                 }
                 db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')')->execute($ids);
+                admin_articles_forget_public_caches();
                 set_flash('success', $t('ok_deleted'));
             } else {
                 $bulkRowsStmt = db()->prepare('SELECT id, title, slug, author_id FROM articles WHERE id IN (' . $placeholders . ')');
