@@ -197,6 +197,38 @@ function albums_admin_post_form_checkbox(string $key, string $presenceKey, ?int 
     return albums_admin_post_checkbox($key, $recordId, ...$fallbackKeys);
 }
 
+/**
+ * @return array<string, string>
+ */
+function albums_admin_album_list_return_query(): array
+{
+    $visibility = strtolower(trim((string) ($_POST['return_album_visibility'] ?? '')));
+    if (!in_array($visibility, ['public', 'private', 'featured'], true)) {
+        $visibility = '';
+    }
+
+    return [
+        'album_q' => mb_safe_substr(trim((string) ($_POST['return_album_q'] ?? '')), 0, 190),
+        'album_category' => album_category_code((string) ($_POST['return_album_category'] ?? '')),
+        'album_visibility' => $visibility,
+    ];
+}
+
+function albums_admin_redirect_album_list(): void
+{
+    redirect_url(route_url_clean('admin_albums', albums_admin_album_list_return_query()) . '#admin-album-list');
+}
+
+function albums_admin_redirect_photo_editor(?int $fallbackAlbumId = null): void
+{
+    $albumId = max(0, (int) ($_POST['return_photo_album'] ?? 0));
+    if ($albumId <= 0 && $fallbackAlbumId !== null) {
+        $albumId = max(0, $fallbackAlbumId);
+    }
+
+    redirect_url(route_url_clean('admin_albums', ['photo_album' => $albumId > 0 ? $albumId : '']) . '#admin-album-photos');
+}
+
 if (!albums_admin_tables_ready()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['manage_title']) . '</h1><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['manage_title']);
     return;
@@ -368,7 +400,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             album_update_record($albumId, $title, $description, $isPublic, $category, $subcategory, $isFeatured);
             set_flash('success', (string) $t['updated_ok']);
-            redirect('admin_albums');
+            albums_admin_redirect_album_list();
         }
 
         if ($action === 'delete_album') {
@@ -383,7 +415,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             album_delete_record($albumId);
             set_flash('success', (string) $t['album_deleted_ok']);
-            redirect('admin_albums');
+            albums_admin_redirect_album_list();
         }
 
         if ($action === 'upload_photo') {
@@ -486,7 +518,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ((int) ($_POST['album_wizard'] ?? 0) === $albumId) {
                 redirect_url(album_admin_wizard_url(['album_wizard' => $albumId, 'step' => 3]));
             }
-            redirect('admin_albums');
+            albums_admin_redirect_photo_editor($albumId);
         }
 
         if ($action === 'finalize_album_creation') {
@@ -542,7 +574,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare('UPDATE album_photos SET title = ?, caption = ? WHERE id = ?')->execute([$title, $caption, $photoId]);
             albums_admin_clear_cache();
             set_flash('success', (string) $t['photo_updated_ok']);
-            redirect('admin_albums');
+            albums_admin_redirect_photo_editor();
         }
 
         if ($action === 'delete_photo') {
@@ -566,7 +598,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($wizardAlbumId > 0) {
                 redirect_url(album_admin_wizard_url(['album_wizard' => $wizardAlbumId, 'step' => 3]));
             }
-            redirect('admin_albums');
+            albums_admin_redirect_photo_editor();
         }
 
         if ($action === 'reorder_photo') {
@@ -597,7 +629,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 db()->commit();
             }
             albums_admin_clear_cache();
-            redirect('admin_albums');
+            albums_admin_redirect_photo_editor($albumId);
         }
 
         if ($action === 'rebuild_thumbnails') {
@@ -1131,6 +1163,9 @@ ob_start();
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_album">
                             <input type="hidden" name="album_id" value="<?= $albumId ?>">
+                            <input type="hidden" name="return_album_q" value="<?= e($albumFilterQuery) ?>">
+                            <input type="hidden" name="return_album_category" value="<?= e($albumFilterCategory) ?>">
+                            <input type="hidden" name="return_album_visibility" value="<?= e($albumFilterVisibility) ?>">
                             <label><?= e((string) $t['title']) ?>
                                 <input type="text" name="title" value="<?= e((string) $album['title']) ?>" required maxlength="190">
                             </label>
@@ -1163,6 +1198,9 @@ ob_start();
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_album">
                             <input type="hidden" name="album_id" value="<?= $albumId ?>">
+                            <input type="hidden" name="return_album_q" value="<?= e($albumFilterQuery) ?>">
+                            <input type="hidden" name="return_album_category" value="<?= e($albumFilterCategory) ?>">
+                            <input type="hidden" name="return_album_visibility" value="<?= e($albumFilterVisibility) ?>">
                             <button class="button small secondary" type="submit"><?= e((string) $t['delete_album']) ?></button>
                         </form>
                     </article>
@@ -1214,6 +1252,7 @@ ob_start();
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
+                            <input type="hidden" name="return_photo_album" value="<?= $photoAlbumFilter > 0 ? $photoAlbumFilter : (int) ($photoRow['album_id'] ?? 0) ?>">
                             <label><?= e((string) $t['title']) ?>
                                 <input type="text" name="title" value="<?= e($photoRender['title']) ?>" required maxlength="190">
                             </label>
@@ -1229,6 +1268,7 @@ ob_start();
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="reorder_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
+                            <input type="hidden" name="return_photo_album" value="<?= $photoAlbumFilter > 0 ? $photoAlbumFilter : (int) ($photoRow['album_id'] ?? 0) ?>">
                             <button class="button small secondary" type="submit" name="direction" value="up">&uarr;</button>
                             <button class="button small secondary" type="submit" name="direction" value="down">&darr;</button>
                         </form>
@@ -1236,6 +1276,7 @@ ob_start();
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
+                            <input type="hidden" name="return_photo_album" value="<?= $photoAlbumFilter > 0 ? $photoAlbumFilter : (int) ($photoRow['album_id'] ?? 0) ?>">
                             <button class="button small secondary" type="submit"><?= e((string) $t['delete']) ?></button>
                         </form>
                     </article>
