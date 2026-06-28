@@ -48,6 +48,53 @@ final class ComicsIntegrationTest extends TestCase
         }
     }
 
+    public function testComicsHelperFunctionsNormalizeRelatedResources(): void
+    {
+        self::assertSame('fr', comics_public_locale('fr'));
+        self::assertSame((string) config('app.default_locale', 'fr'), comics_public_locale('invalid-locale'));
+        self::assertSame('text/markdown', comics_public_document_type('assets/comics/example.md?v=1'));
+        self::assertSame('application/pdf', comics_public_document_type('https://example.test/file.pdf'));
+        self::assertSame('application/octet-stream', comics_public_document_type('file.unknown'));
+
+        $documents = comics_public_related_documents([
+            ['path' => 'assets/comics/loi-ohm-fiche-memo.md', 'title' => 'Memo', 'text' => 'Local memo'],
+            ['url' => 'https://example.test/radio.pdf', 'title' => 'Remote PDF'],
+            ['path' => '../private.txt', 'title' => 'Unsafe path'],
+            ['url' => 'javascript:alert(1)', 'title' => 'Unsafe URL'],
+            ['path' => 'assets/comics/loi-ohm-fiche-memo.md', 'title' => ''],
+        ]);
+        self::assertCount(2, $documents);
+        self::assertFalse($documents[0]['external']);
+        self::assertSame('loi-ohm-fiche-memo.md', $documents[0]['download_name']);
+        self::assertSame('text/markdown', $documents[0]['type']);
+        self::assertGreaterThan(0, $documents[0]['content_size']);
+        self::assertTrue($documents[1]['external']);
+        self::assertSame('application/pdf', $documents[1]['type']);
+        self::assertSame(0, $documents[1]['content_size']);
+
+        $links = comics_public_related_links([
+            ['route' => 'tools', 'fragment' => 'tool-ohm-law', 'title' => 'Tool', 'text' => 'Internal tool'],
+            ['url' => 'https://example.test/ohm', 'title' => 'External reference'],
+            ['url' => 'javascript:alert(1)', 'title' => 'Unsafe link'],
+            ['route' => '', 'title' => 'Missing target'],
+        ]);
+        self::assertCount(2, $links);
+        self::assertFalse($links[0]['external']);
+        self::assertStringContainsString('route=tools', $links[0]['url']);
+        self::assertStringEndsWith('#tool-ohm-law', $links[0]['url']);
+        self::assertTrue($links[1]['external']);
+        self::assertSame('https://example.test/ohm', $links[1]['url']);
+
+        $documentObject = comics_public_document_object($documents[0]);
+        self::assertSame('DigitalDocument', $documentObject['@type']);
+        self::assertSame('Memo', $documentObject['name']);
+
+        $linkObject = comics_public_link_object($links[0]);
+        self::assertSame('WebPage', $linkObject['@type']);
+        self::assertSame('Tool', $linkObject['name']);
+        self::assertStringContainsString('#tool-ohm-law#webpage', $linkObject['@id']);
+    }
+
     public function testComicsPublicCollectionUsesNativeTranslationsAndExistingAssets(): void
     {
         $collection = comics_public_collection('fr');
@@ -87,10 +134,13 @@ final class ComicsIntegrationTest extends TestCase
             self::assertGreaterThan(0, $board['thumbnail_content_size']);
             self::assertLessThan($board['content_size'], $board['thumbnail_content_size']);
             self::assertArrayHasKey('documents', $board);
+            self::assertArrayHasKey('links', $board);
         }
 
         self::assertSame([], $collection['boards'][0]['documents']);
         self::assertSame([], $collection['boards'][1]['documents']);
+        self::assertSame([], $collection['boards'][0]['links']);
+        self::assertSame([], $collection['boards'][1]['links']);
 
         $relatedDocuments = $collection['boards'][2]['documents'];
         self::assertCount(1, $relatedDocuments);
@@ -102,6 +152,13 @@ final class ComicsIntegrationTest extends TestCase
         self::assertStringContainsString('/assets/comics/loi-ohm-fiche-memo.md', (string) $relatedDocument['url']);
         self::assertFileExists(__DIR__ . '/../' . (string) $relatedDocument['path']);
         self::assertGreaterThan(0, $relatedDocument['content_size']);
+
+        $relatedLinks = $collection['boards'][2]['links'];
+        self::assertCount(1, $relatedLinks);
+        self::assertSame('Calculateur loi d\'Ohm', $relatedLinks[0]['title']);
+        self::assertFalse($relatedLinks[0]['external']);
+        self::assertStringContainsString('route=tools', $relatedLinks[0]['url']);
+        self::assertStringEndsWith('#tool-ohm-law', $relatedLinks[0]['url']);
     }
 
     public function testComicsStructuredDataHelpersExposeFullImageAndThumbnailObjects(): void
@@ -140,6 +197,10 @@ final class ComicsIntegrationTest extends TestCase
         self::assertSame('text/markdown', $ohmWork['hasPart'][0]['encodingFormat']);
         self::assertStringContainsString('loi-ohm-fiche-memo.md', (string) $ohmWork['hasPart'][0]['@id']);
         self::assertStringEndsWith('#document', (string) $ohmWork['hasPart'][0]['@id']);
+        self::assertArrayHasKey('subjectOf', $ohmWork);
+        self::assertSame('WebPage', $ohmWork['subjectOf'][0]['@type']);
+        self::assertStringContainsString('route=tools', (string) $ohmWork['subjectOf'][0]['url']);
+        self::assertStringContainsString('#tool-ohm-law', (string) $ohmWork['subjectOf'][0]['url']);
     }
 
     public function testComicsHelperIsLoadedForPageAndDiscoveryRoutes(): void
@@ -156,7 +217,7 @@ final class ComicsIntegrationTest extends TestCase
     {
         $pageSource = file_get_contents(__DIR__ . '/../pages/comics.php');
         self::assertIsString($pageSource);
-        foreach (['data-comics-viewer-open', 'data-comics-viewer-download', 'download_board_prefix', 'download_board_label', 'viewer_close', 'related_documents_title', 'comics-related-documents'] as $snippet) {
+        foreach (['data-comics-viewer-open', 'data-comics-viewer-download', 'download_board_prefix', 'download_board_label', 'viewer_close', 'related_documents_title', 'related_links_title', 'comics-related-documents', 'comics-related-links'] as $snippet) {
             self::assertStringContainsString($snippet, $pageSource);
         }
 
@@ -174,6 +235,7 @@ final class ComicsIntegrationTest extends TestCase
         self::assertStringContainsString('.comics-viewer', $cssSource);
         self::assertStringContainsString('.comics-card-action', $cssSource);
         self::assertStringContainsString('.comics-related-document', $cssSource);
+        self::assertStringContainsString('.comics-related-link', $cssSource);
     }
 
     public function testComicsRoutePreloadsGeneratedThumbnailAsset(): void
