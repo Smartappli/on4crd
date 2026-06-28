@@ -100,13 +100,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($label('error_content_empty_after_cleanup'));
         }
 
+        $autoPublish = has_permission('articles.manage');
+        $articleStatus = $autoPublish ? 'published' : 'pending';
+        $publishedAt = $autoPublish ? date('Y-m-d H:i:s') : null;
         $maxSlugAttempts = 5;
         for ($slugAttempt = 0; $slugAttempt < $maxSlugAttempts; $slugAttempt++) {
             $slug = article_unique_slug($articleTitle);
             try {
                 db()->beginTransaction();
-                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, subcategory, subsubcategory, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?, ?, ?)')
-                    ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, $subcategory, $subsubcategory, (int) $user['id']]);
+                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, subcategory, subsubcategory, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                    ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $articleStatus, $category, $subcategory, $subsubcategory, $publishedAt, (int) $user['id']]);
                 db()->commit();
                 break;
             } catch (Throwable $submitThrowable) {

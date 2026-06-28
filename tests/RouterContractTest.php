@@ -889,6 +889,7 @@ final class RouterContractTest extends TestCase
     public function testRequestedModulesAutoValidateForAdministratorsAndKeepMemberQueue(): void
     {
         $contracts = [
+            'pages/article_propose.php' => ["has_permission('articles.manage')", "\$articleStatus = \$autoPublish ? 'published' : 'pending';", "\$publishedAt = \$autoPublish ? date('Y-m-d H:i:s') : null;", "redirect('my_requests')"],
             'pages/events.php' => ["has_permission('events.manage')", "content_proposal_create((int) \$user['id'], 'events', 'content'", "redirect('my_requests')"],
             'pages/news.php' => ["has_permission('news.moderate')", "INSERT INTO news_posts", "INSERT INTO news_sections", "redirect('my_requests')"],
             'pages/albums.php' => ["has_permission('albums.manage')", "INSERT INTO albums", "content_proposal_create((int) \$user['id'], 'albums', 'content'", "redirect('my_requests')"],
