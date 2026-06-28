@@ -926,6 +926,48 @@ if ($showPendingProposals && ensure_content_proposals_table()) {
     $pendingStmt->execute();
     $pendingProposals = $pendingStmt->fetchAll() ?: [];
 }
+$activeArticleFilterBadges = [];
+if ($adminSearch !== '') {
+    $activeArticleFilterBadges[] = $t('search') . ': ' . $adminSearch;
+}
+if (isset($articleStatusChoices[$adminStatus])) {
+    $activeArticleFilterBadges[] = $t('status') . ': ' . $articleStatusLabel($adminStatus);
+}
+if ($adminCategory !== '') {
+    $activeArticleFilterBadges[] = $t('category') . ': ' . (string) ($knownCategories[$adminCategory] ?? article_category_label_from_code($adminCategory));
+}
+if ($adminSubcategory !== '') {
+    $activeSubcategoryLabel = article_category_label_from_code($adminSubcategory);
+    foreach ($articleSubcategoriesByCategory[$adminCategory] ?? [] as $subcategoryInfo) {
+        if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $adminSubcategory) {
+            $activeSubcategoryLabel = (string) ($subcategoryInfo['label'] ?? $activeSubcategoryLabel);
+            break;
+        }
+    }
+    if ($adminCategory === '') {
+        foreach ($articleSubcategoriesByCategory as $subcategories) {
+            foreach ($subcategories as $subcategoryInfo) {
+                if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $adminSubcategory) {
+                    $activeSubcategoryLabel = (string) ($subcategoryInfo['label'] ?? $activeSubcategoryLabel);
+                    break 2;
+                }
+            }
+        }
+    }
+    $activeArticleFilterBadges[] = $t('subcategory_field') . ': ' . $activeSubcategoryLabel;
+}
+if ($adminSubsubcategory !== '') {
+    $activeSubsubcategoryLabel = article_category_label_from_code($adminSubsubcategory);
+    foreach ($articleSubsubcategoriesByParent as $subsubcategories) {
+        foreach ($subsubcategories as $subsubcategoryInfo) {
+            if (article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')) === $adminSubsubcategory) {
+                $activeSubsubcategoryLabel = (string) ($subsubcategoryInfo['label'] ?? $activeSubsubcategoryLabel);
+                break 2;
+            }
+        }
+    }
+    $activeArticleFilterBadges[] = $t('subsubcategory_field') . ': ' . $activeSubsubcategoryLabel;
+}
 
 ob_start();
 ?>
@@ -1251,6 +1293,14 @@ ob_start();
             </div>
             <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('new_article')) ?></a>
         </div>
+        <?php if ($activeArticleFilterBadges !== []): ?>
+            <p class="admin-article-active-filters">
+                <?php foreach ($activeArticleFilterBadges as $activeArticleFilterBadge): ?>
+                    <span class="badge muted"><?= e($activeArticleFilterBadge) ?></span>
+                <?php endforeach; ?>
+                <a class="button small secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter')) ?></a>
+            </p>
+        <?php endif; ?>
         <div class="admin-article-status-tabs" aria-label="<?= e($t('status')) ?>">
             <?php
             $statusFilterBase = [
