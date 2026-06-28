@@ -1268,78 +1268,81 @@ ob_start();
                 </a>
             <?php endforeach; ?>
         </div>
-        <form method="get" class="stack admin-article-filter-form">
-            <input type="hidden" name="route" value="admin_articles">
-            <div class="grid-3">
-                <label><?= e($t('search')) ?><input type="search" name="q" value="<?= e($adminSearch) ?>"></label>
-                <label><?= e($t('status')) ?>
-                    <select name="status">
-                        <option value=""><?= e($t('all_statuses')) ?></option>
-                        <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
-                            <option value="<?= e($statusCode) ?>" <?= $adminStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-                <label><?= e($t('category')) ?>
-                    <select name="category">
-                        <option value=""><?= e($t('all_categories')) ?></option>
-                        <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
-                            <option value="<?= e($categoryCode) ?>" <?= $adminCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-                <label><?= e($t('subcategory_field')) ?>
-                    <select name="subcategory">
-                        <option value=""><?= e($t('no_subcategory')) ?></option>
-                        <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
-                            <?php if ($subcategories === []): ?>
-                                <?php continue; ?>
-                            <?php endif; ?>
-                            <optgroup label="<?= e((string) ($knownCategories[(string) $subcategoryCategoryCode] ?? article_category_label_from_code((string) $subcategoryCategoryCode))) ?>">
-                                <?php foreach ($subcategories as $subcategoryInfo): ?>
-                                    <?php
-                                    $subcategoryCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? ''));
-                                    if ($subcategoryCode === '') {
-                                        continue;
-                                    }
-                                    ?>
-                                    <option value="<?= e($subcategoryCode) ?>" <?= $adminSubcategory === $subcategoryCode ? 'selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subcategoryCode)) ?></option>
-                                <?php endforeach; ?>
-                            </optgroup>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-                <label><?= e($t('subsubcategory_field')) ?>
-                    <select name="subsubcategory">
-                        <option value=""><?= e($t('no_subsubcategory')) ?></option>
-                        <?php foreach ($articleSubsubcategoriesByParent as $subsubcategoryParentRef => $subsubcategories): ?>
-                            <?php $subsubcategoryParentParts = article_subcategory_ref_parts((string) $subsubcategoryParentRef); ?>
-                            <?php $subsubcategoryParentCategory = $subsubcategoryParentParts['category']; ?>
-                            <?php $subsubcategoryParentSubcategory = $subsubcategoryParentParts['subcategory']; ?>
-                            <?php if ($subsubcategoryParentCategory === '' || $subsubcategoryParentSubcategory === ''): ?>
-                                <?php continue; ?>
-                            <?php endif; ?>
-                            <?php $subsubcategoryParentLabel = article_category_label_from_code($subsubcategoryParentSubcategory); ?>
-                            <?php foreach ($articleSubcategoriesByCategory[$subsubcategoryParentCategory] ?? [] as $subcategoryInfo): ?>
-                                <?php if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subsubcategoryParentSubcategory) { $subsubcategoryParentLabel = (string) ($subcategoryInfo['label'] ?? $subsubcategoryParentLabel); break; } ?>
+        <details class="admin-article-filter-panel"<?= $hasAdvancedArticleFilters ? ' open' : '' ?>>
+            <summary><?= e($t('filter')) ?></summary>
+            <form method="get" class="stack admin-article-filter-form">
+                <input type="hidden" name="route" value="admin_articles">
+                <div class="grid-3">
+                    <label><?= e($t('search')) ?><input type="search" name="q" value="<?= e($adminSearch) ?>"></label>
+                    <label><?= e($t('status')) ?>
+                        <select name="status">
+                            <option value=""><?= e($t('all_statuses')) ?></option>
+                            <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
+                                <option value="<?= e($statusCode) ?>" <?= $adminStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
                             <?php endforeach; ?>
-                            <optgroup label="<?= e((string) ($knownCategories[$subsubcategoryParentCategory] ?? article_category_label_from_code($subsubcategoryParentCategory)) . ' / ' . $subsubcategoryParentLabel) ?>">
-                                <?php foreach ($subsubcategories as $subsubcategoryInfo): ?>
-                                    <?php
-                                    $subsubcategoryCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? ''));
-                                    if ($subsubcategoryCode === '') {
-                                        continue;
-                                    }
-                                    ?>
-                                    <option value="<?= e($subsubcategoryCode) ?>" <?= $adminSubsubcategory === $subsubcategoryCode ? 'selected' : '' ?>><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubcategoryCode)) ?></option>
+                        </select>
+                    </label>
+                    <label><?= e($t('category')) ?>
+                        <select name="category">
+                            <option value=""><?= e($t('all_categories')) ?></option>
+                            <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
+                                <option value="<?= e($categoryCode) ?>" <?= $adminCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label><?= e($t('subcategory_field')) ?>
+                        <select name="subcategory">
+                            <option value=""><?= e($t('no_subcategory')) ?></option>
+                            <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
+                                <?php if ($subcategories === []): ?>
+                                    <?php continue; ?>
+                                <?php endif; ?>
+                                <optgroup label="<?= e((string) ($knownCategories[(string) $subcategoryCategoryCode] ?? article_category_label_from_code((string) $subcategoryCategoryCode))) ?>">
+                                    <?php foreach ($subcategories as $subcategoryInfo): ?>
+                                        <?php
+                                        $subcategoryCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? ''));
+                                        if ($subcategoryCode === '') {
+                                            continue;
+                                        }
+                                        ?>
+                                        <option value="<?= e($subcategoryCode) ?>" <?= $adminSubcategory === $subcategoryCode ? 'selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subcategoryCode)) ?></option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label><?= e($t('subsubcategory_field')) ?>
+                        <select name="subsubcategory">
+                            <option value=""><?= e($t('no_subsubcategory')) ?></option>
+                            <?php foreach ($articleSubsubcategoriesByParent as $subsubcategoryParentRef => $subsubcategories): ?>
+                                <?php $subsubcategoryParentParts = article_subcategory_ref_parts((string) $subsubcategoryParentRef); ?>
+                                <?php $subsubcategoryParentCategory = $subsubcategoryParentParts['category']; ?>
+                                <?php $subsubcategoryParentSubcategory = $subsubcategoryParentParts['subcategory']; ?>
+                                <?php if ($subsubcategoryParentCategory === '' || $subsubcategoryParentSubcategory === ''): ?>
+                                    <?php continue; ?>
+                                <?php endif; ?>
+                                <?php $subsubcategoryParentLabel = article_category_label_from_code($subsubcategoryParentSubcategory); ?>
+                                <?php foreach ($articleSubcategoriesByCategory[$subsubcategoryParentCategory] ?? [] as $subcategoryInfo): ?>
+                                    <?php if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subsubcategoryParentSubcategory) { $subsubcategoryParentLabel = (string) ($subcategoryInfo['label'] ?? $subsubcategoryParentLabel); break; } ?>
                                 <?php endforeach; ?>
-                            </optgroup>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-            </div>
-            <p><button class="button" type="submit"><?= e($t('filter')) ?></button> <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter')) ?></a></p>
-        </form>
+                                <optgroup label="<?= e((string) ($knownCategories[$subsubcategoryParentCategory] ?? article_category_label_from_code($subsubcategoryParentCategory)) . ' / ' . $subsubcategoryParentLabel) ?>">
+                                    <?php foreach ($subsubcategories as $subsubcategoryInfo): ?>
+                                        <?php
+                                        $subsubcategoryCode = article_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? ''));
+                                        if ($subsubcategoryCode === '') {
+                                            continue;
+                                        }
+                                        ?>
+                                        <option value="<?= e($subsubcategoryCode) ?>" <?= $adminSubsubcategory === $subsubcategoryCode ? 'selected' : '' ?>><?= e((string) ($subsubcategoryInfo['label'] ?? $subsubcategoryCode)) ?></option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+                <p><button class="button" type="submit"><?= e($t('filter')) ?></button> <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter')) ?></a></p>
+            </form>
+        </details>
         <form id="admin-article-bulk-form" method="post" class="admin-article-bulk-bar" onsubmit="return confirm('<?= e($t('confirm_bulk_action')) ?>');">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="bulk_update_articles">
