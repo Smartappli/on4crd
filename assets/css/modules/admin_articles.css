@@ -272,7 +272,8 @@
   margin: 0;
 }
 
-[data-route="admin_articles"] .admin-article-bulk-bar .is-muted {
+[data-route="admin_articles"] .admin-article-bulk-bar .is-muted,
+[data-route="admin_articles"] .admin-article-editor-form .is-muted {
   opacity: .55;
 }
 
