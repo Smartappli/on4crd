@@ -353,6 +353,44 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
       assert.equal(taxonomyState.subcategory.label, subcategory, 'Le libelle sous-thematique doit etre persiste.');
 
       await visit(driver, 'presentations');
+      const proposeDropdownState = await driver.executeScript(`
+        const hero = document.querySelector('[data-route="presentations"] .member-module-hero');
+        const actions = hero ? hero.querySelector('.member-document-hero-actions') : null;
+        const menu = actions ? actions.querySelector('.member-document-propose-menu') : null;
+        const summary = menu ? menu.querySelector('summary') : null;
+        const panel = menu ? menu.querySelector('.member-document-propose-menu-panel[role="menu"]') : null;
+        if (!hero || !actions || !menu || !summary || !panel) {
+          return null;
+        }
+        menu.open = true;
+        const panelRect = panel.getBoundingClientRect();
+        const items = [...panel.querySelectorAll('a[role="menuitem"]')].map((link) => ({
+          text: link.textContent.trim(),
+          href: link.getAttribute('href') || '',
+          dialog: link.getAttribute('aria-controls') || '',
+        }));
+
+        return {
+          isDetails: menu.tagName.toLowerCase() === 'details',
+          isInHeroActions: actions.contains(menu),
+          isOpen: menu.open === true,
+          summaryText: summary.textContent.trim(),
+          panelRole: panel.getAttribute('role') || '',
+          panelHasSize: panelRect.width > 0 && panelRect.height > 0,
+          items,
+        };
+      `);
+      assert.ok(proposeDropdownState, 'Le header presentations doit afficher le menu Proposer.');
+      assert.equal(proposeDropdownState.isDetails, true, 'Proposer presentations doit etre un details dropdown.');
+      assert.equal(proposeDropdownState.isInHeroActions, true, 'Le dropdown Proposer presentations doit rester dans les actions du header.');
+      assert.equal(proposeDropdownState.isOpen, true, 'Le dropdown Proposer presentations doit pouvoir etre ouvert.');
+      assert.match(proposeDropdownState.summaryText, /Propos/i, 'Le summary du dropdown presentations doit rester libelle Proposer.');
+      assert.equal(proposeDropdownState.panelRole, 'menu', 'Le dropdown Proposer presentations doit exposer un panneau menu.');
+      assert.equal(proposeDropdownState.panelHasSize, true, 'Le panneau Proposer presentations doit devenir visible une fois ouvert.');
+      assert.ok(proposeDropdownState.items.some((item) => /propose_document=1/.test(item.href) && item.dialog === 'member-document-proposal-dialog'), 'Le dropdown Proposer presentations doit contenir l entree presentation.');
+      assert.ok(proposeDropdownState.items.some((item) => /propose_category=1/.test(item.href) && item.dialog === 'member-document-category-dialog'), 'Le dropdown Proposer presentations doit contenir l entree thematique.');
+      assert.ok(proposeDropdownState.items.some((item) => /propose_subcategory=1/.test(item.href) && item.dialog === 'member-document-subcategory-dialog'), 'Le dropdown Proposer presentations doit contenir l entree sous-thematique.');
+      assert.ok(proposeDropdownState.items.some((item) => /propose_subsubcategory=1/.test(item.href) && item.dialog === 'member-document-subsubcategory-dialog'), 'Le dropdown Proposer presentations doit contenir l entree sous-sous-thematique.');
       assert.doesNotMatch(await taxonomyText(driver), new RegExp(category), 'Une thematique vide ne doit pas apparaitre cote membre.');
 
       await visit(driver, 'admin_presentations', { category, subcategory });
