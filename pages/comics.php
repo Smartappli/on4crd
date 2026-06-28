@@ -122,6 +122,7 @@ ob_start();
             $downloadLabel = (string) $t['download_board_prefix'] . ' ' . (string) $board['title'];
             $downloadName = basename((string) $board['image']);
             $documents = isset($board['documents']) && is_array($board['documents']) ? $board['documents'] : [];
+            $links = isset($board['links']) && is_array($board['links']) ? $board['links'] : [];
             ?>
             <article class="comics-card">
                 <a class="comics-thumb-link"
@@ -168,6 +169,31 @@ ob_start();
                                         </a>
                                         <?php if ($documentText !== ''): ?>
                                             <p><?= e($documentText) ?></p>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($links !== []): ?>
+                        <div class="comics-related-links">
+                            <h4><?= e((string) $t['related_links_title']) ?></h4>
+                            <ul>
+                                <?php foreach ($links as $link): ?>
+                                    <?php
+                                    $linkUrl = (string) ($link['url'] ?? '');
+                                    $linkTitle = (string) ($link['title'] ?? '');
+                                    $linkText = (string) ($link['text'] ?? '');
+                                    $linkExternal = (bool) ($link['external'] ?? false);
+                                    ?>
+                                    <li>
+                                        <a class="comics-related-link"
+                                           href="<?= e($linkUrl) ?>"
+                                           <?php if ($linkExternal): ?>target="_blank" rel="noopener noreferrer"<?php endif; ?>>
+                                            <span><?= e($linkTitle) ?></span>
+                                        </a>
+                                        <?php if ($linkText !== ''): ?>
+                                            <p><?= e($linkText) ?></p>
                                         <?php endif; ?>
                                     </li>
                                 <?php endforeach; ?>
