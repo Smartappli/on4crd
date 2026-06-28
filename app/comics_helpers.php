@@ -24,9 +24,78 @@ function comics_public_i18n(?string $locale = null): array
 }
 }
 
+if (!function_exists('comics_public_document_type')) {
+function comics_public_document_type(string $path): string
+{
+    $extension = strtolower((string) pathinfo(parse_url($path, PHP_URL_PATH) ?: $path, PATHINFO_EXTENSION));
+
+    return match ($extension) {
+        'pdf' => 'application/pdf',
+        'doc' => 'application/msword',
+        'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'html', 'htm' => 'text/html',
+        'md', 'markdown' => 'text/markdown',
+        'txt' => 'text/plain',
+        'png' => 'image/png',
+        'jpg', 'jpeg' => 'image/jpeg',
+        'webp' => 'image/webp',
+        default => 'application/octet-stream',
+    };
+}
+}
+
+if (!function_exists('comics_public_related_documents')) {
+/**
+ * @param list<array{path?:string,url?:string,title:string,text?:string,type?:string,download_name?:string}> $documents
+ * @return list<array{title:string,text:string,url:string,path:string,type:string,content_size:int,download_name:string,external:bool}>
+ */
+function comics_public_related_documents(array $documents): array
+{
+    $root = dirname(__DIR__) . '/';
+    $normalized = [];
+
+    foreach ($documents as $document) {
+        $title = trim((string) ($document['title'] ?? ''));
+        $path = trim(str_replace('\\', '/', (string) ($document['path'] ?? '')));
+        $url = trim((string) ($document['url'] ?? ''));
+        if ($title === '' || ($path === '' && $url === '')) {
+            continue;
+        }
+
+        $external = $url !== '';
+        if (!$external) {
+            $path = ltrim($path, '/');
+            if ($path === '' || str_contains($path, '../')) {
+                continue;
+            }
+            $url = asset_url($path);
+        }
+
+        $absolutePath = $external ? '' : $root . $path;
+        $downloadName = trim((string) ($document['download_name'] ?? ''));
+        if ($downloadName === '') {
+            $downloadName = basename((string) (parse_url($external ? $url : $path, PHP_URL_PATH) ?: ($external ? $url : $path)));
+        }
+
+        $normalized[] = [
+            'title' => $title,
+            'text' => trim((string) ($document['text'] ?? '')),
+            'url' => $url,
+            'path' => $path,
+            'type' => (string) ($document['type'] ?? comics_public_document_type($external ? $url : $path)),
+            'content_size' => $absolutePath !== '' && is_file($absolutePath) ? (int) filesize($absolutePath) : 0,
+            'download_name' => $downloadName,
+            'external' => $external,
+        ];
+    }
+
+    return $normalized;
+}
+}
+
 if (!function_exists('comics_public_boards')) {
 /**
- * @return list<array{key:string,image:string,thumbnail:string,url:string,thumbnail_url:string,title:string,text:string,type:string,thumbnail_type:string,width:int,height:int,thumbnail_width:int,thumbnail_height:int,content_size:int,thumbnail_content_size:int}>
+ * @return list<array{key:string,image:string,thumbnail:string,url:string,thumbnail_url:string,title:string,text:string,type:string,thumbnail_type:string,width:int,height:int,thumbnail_width:int,thumbnail_height:int,content_size:int,thumbnail_content_size:int,documents:list<array{title:string,text:string,url:string,path:string,type:string,content_size:int,download_name:string,external:bool}>}>
  */
 function comics_public_boards(?string $locale = null): array
 {
@@ -38,6 +107,7 @@ function comics_public_boards(?string $locale = null): array
             'thumbnail' => 'assets/comics/les-10-commandements-radio-amateur-thumb.jpg',
             'title' => (string) $t['board_commandments_title'],
             'text' => (string) $t['board_commandments_text'],
+            'documents' => [],
         ],
         [
             'key' => 'first_qso',
@@ -45,6 +115,7 @@ function comics_public_boards(?string $locale = null): array
             'thumbnail' => 'assets/comics/ma-premiere-fois-premier-qso-thumb.jpg',
             'title' => (string) $t['board_first_qso_title'],
             'text' => (string) $t['board_first_qso_text'],
+            'documents' => [],
         ],
         [
             'key' => 'ohm',
@@ -52,6 +123,13 @@ function comics_public_boards(?string $locale = null): array
             'thumbnail' => 'assets/comics/decouverte-loi-ohm-thumb.jpg',
             'title' => (string) $t['board_ohm_title'],
             'text' => (string) $t['board_ohm_text'],
+            'documents' => [
+                [
+                    'path' => 'assets/comics/loi-ohm-fiche-memo.md',
+                    'title' => (string) $t['related_document_sheet_label'],
+                    'text' => (string) $t['related_document_sheet_text'],
+                ],
+            ],
         ],
     ];
 
@@ -62,8 +140,11 @@ function comics_public_boards(?string $locale = null): array
         $absoluteThumbnailPath = dirname(__DIR__) . '/' . $thumbnailPath;
         $size = is_file($absolutePath) ? @getimagesize($absolutePath) : false;
         $thumbnailSize = is_file($absoluteThumbnailPath) ? @getimagesize($absoluteThumbnailPath) : false;
+        $documents = isset($board['documents']) && is_array($board['documents'])
+            ? comics_public_related_documents($board['documents'])
+            : [];
 
-        return $board + [
+        return array_merge($board, [
             'url' => asset_url($path),
             'thumbnail_url' => asset_url($thumbnailPath),
             'type' => 'image/png',
@@ -74,7 +155,8 @@ function comics_public_boards(?string $locale = null): array
             'thumbnail_height' => is_array($thumbnailSize) ? (int) ($thumbnailSize[1] ?? 0) : 0,
             'content_size' => is_file($absolutePath) ? (int) filesize($absolutePath) : 0,
             'thumbnail_content_size' => is_file($absoluteThumbnailPath) ? (int) filesize($absoluteThumbnailPath) : 0,
-        ];
+            'documents' => $documents,
+        ]);
     }, $boards);
 }
 }
@@ -106,14 +188,33 @@ function comics_public_image_object(array $board, bool $thumbnail = false): arra
 }
 }
 
+if (!function_exists('comics_public_document_object')) {
+/**
+ * @param array{title:string,text:string,url:string,type:string,content_size:int} $document
+ * @return array<string, mixed>
+ */
+function comics_public_document_object(array $document): array
+{
+    return [
+        '@type' => 'DigitalDocument',
+        '@id' => (string) $document['url'] . '#document',
+        'name' => (string) $document['title'],
+        'description' => (string) $document['text'],
+        'url' => (string) $document['url'],
+        'encodingFormat' => (string) $document['type'],
+        'contentSize' => (int) $document['content_size'],
+    ];
+}
+}
+
 if (!function_exists('comics_public_creative_work')) {
 /**
- * @param array{url:string,thumbnail_url:string,title:string,text:string,type:string,thumbnail_type:string,width:int,height:int,thumbnail_width:int,thumbnail_height:int,content_size:int,thumbnail_content_size:int} $board
+ * @param array{url:string,thumbnail_url:string,title:string,text:string,type:string,thumbnail_type:string,width:int,height:int,thumbnail_width:int,thumbnail_height:int,content_size:int,thumbnail_content_size:int,documents?:list<array{title:string,text:string,url:string,type:string,content_size:int}>} $board
  * @return array<string, mixed>
  */
 function comics_public_creative_work(array $board, string $locale, string $collectionId, string $publisherId): array
 {
-    return [
+    $work = [
         '@type' => 'CreativeWork',
         '@id' => (string) $board['url'] . '#creativework',
         'name' => (string) $board['title'],
@@ -132,12 +233,22 @@ function comics_public_creative_work(array $board, string $locale, string $colle
             ['@type' => 'Thing', 'name' => 'amateur radio education'],
         ],
     ];
+
+    $documents = isset($board['documents']) && is_array($board['documents']) ? $board['documents'] : [];
+    if ($documents !== []) {
+        $work['hasPart'] = array_map(
+            static fn(array $document): array => comics_public_document_object($document),
+            $documents
+        );
+    }
+
+    return $work;
 }
 }
 
 if (!function_exists('comics_public_collection')) {
 /**
- * @return array{locale:string,title:string,layout:string,description:string,summary:string,keywords:list<string>,url:string,available_languages:list<string>,alternate_urls:array<string,string>,boards:list<array{key:string,image:string,thumbnail:string,url:string,thumbnail_url:string,title:string,text:string,type:string,thumbnail_type:string,width:int,height:int,thumbnail_width:int,thumbnail_height:int,content_size:int,thumbnail_content_size:int}>}
+ * @return array{locale:string,title:string,layout:string,description:string,summary:string,keywords:list<string>,url:string,available_languages:list<string>,alternate_urls:array<string,string>,boards:list<array{key:string,image:string,thumbnail:string,url:string,thumbnail_url:string,title:string,text:string,type:string,thumbnail_type:string,width:int,height:int,thumbnail_width:int,thumbnail_height:int,content_size:int,thumbnail_content_size:int,documents:list<array{title:string,text:string,url:string,path:string,type:string,content_size:int,download_name:string,external:bool}>}>}
  */
 function comics_public_collection(?string $locale = null): array
 {
