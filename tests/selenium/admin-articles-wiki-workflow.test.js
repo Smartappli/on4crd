@@ -172,8 +172,14 @@ function createDocxFixture(token) {
   return filePath;
 }
 
-function createRichDocxFixture(token) {
+function createRichDocxFixture(token, options = {}) {
   const safeToken = String(token).replace(/[^A-Za-z0-9_.-]/g, '-');
+  const largeContentParagraphs = options.largeContent === true
+    ? Array.from({ length: 140 }, (_, index) => `
+    <w:p>
+      <w:r><w:t>Bloc volumineux ${index} ${escapeXml(safeToken)} ${'contenu-import-word '.repeat(24)}</w:t></w:r>
+    </w:p>`).join('')
+    : '';
   const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
@@ -210,6 +216,7 @@ function createRichDocxFixture(token) {
       <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
       <w:r><w:t>Import serveur ${escapeXml(safeToken)}</w:t></w:r>
     </w:p>
+    ${largeContentParagraphs}
     <w:p>
       <w:r><w:rPr><w:b/><w:i/></w:rPr><w:t>Texte fort ${escapeXml(safeToken)}</w:t></w:r>
       <w:r><w:t> et </w:t></w:r>
@@ -516,7 +523,7 @@ async function assertArticleDocxWysiwygImport(driver, token) {
 }
 
 async function assertArticleServerDocxPreviewImport(driver, token) {
-  const fixturePath = createRichDocxFixture(token);
+  const fixturePath = createRichDocxFixture(token, { largeContent: true });
   const title = `Selenium article import serveur ${token}`;
   const slug = `selenium-article-import-serveur-${token}`;
 
@@ -539,6 +546,8 @@ async function assertArticleServerDocxPreviewImport(driver, token) {
   `, `Import serveur ${token}`), timeoutMs);
 
   assert.match(preview, /<h2>Import serveur/, 'Le DOCX serveur doit conserver le titre en previsualisation.');
+  assert.ok(preview.length > 50000, 'Le preview DOCX serveur doit accepter un contenu extrait superieur a 50 000 caracteres.');
+  assert.ok(preview.includes(`Bloc volumineux 139 ${token}`), 'Le DOCX serveur volumineux doit etre conserve en previsualisation.');
   assert.match(preview, /<strong><em>Texte fort/, 'Le DOCX serveur doit conserver gras et italique.');
   assert.match(preview, /<s>Texte barre/, 'Le DOCX serveur doit conserver le texte barre.');
   assert.match(preview, /<sup>exposant<\/sup>/, 'Le DOCX serveur doit conserver les exposants.');
@@ -649,6 +658,15 @@ if ($token !== '') {
     }
     if (table_exists('article_categories')) {
         db()->prepare('DELETE FROM article_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+    }
+    $storageDir = getcwd() . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'articles';
+    if (is_dir($storageDir)) {
+        foreach (new DirectoryIterator($storageDir) as $fileInfo) {
+            if ($fileInfo->isFile() && str_contains($fileInfo->getFilename(), $token)) {
+                @unlink($fileInfo->getPathname());
+            }
+        }
+        @rmdir($storageDir);
     }
 }
 `, { SELENIUM_TOKEN: token });
