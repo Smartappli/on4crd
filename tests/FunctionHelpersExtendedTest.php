@@ -311,6 +311,58 @@ XML;
         }
     }
 
+    public function testArticleExtractDocxHtmlSkipsOversizedInlineImages(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'docx-large-image-');
+        self::assertIsString($tmp);
+
+        $documentXml = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
+  <w:body>
+    <w:p><w:r><w:t>Texte conserve avant image lourde</w:t></w:r></w:p>
+    <w:p>
+      <w:r>
+        <w:drawing>
+          <wp:inline>
+            <wp:extent cx="95250" cy="190500"/>
+            <wp:docPr id="1" name="Image Word" descr="Image lourde"/>
+            <a:graphic><a:graphicData><a:blip r:embed="rId1"/></a:graphicData></a:graphic>
+          </wp:inline>
+        </w:drawing>
+      </w:r>
+    </w:p>
+    <w:p><w:r><w:t>Texte conserve apres image lourde</w:t></w:r></w:p>
+  </w:body>
+</w:document>
+XML;
+        $relationshipsXml = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image-large.png"/>
+</Relationships>
+XML;
+
+        file_put_contents($tmp, self::zipFixture([
+            '[Content_Types].xml' => '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+            '_rels/.rels' => '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId0" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
+            'word/document.xml' => $documentXml,
+            'word/_rels/document.xml.rels' => $relationshipsXml,
+            'word/media/image-large.png' => str_repeat('x', article_docx_max_inline_image_bytes() + 1),
+        ]));
+
+        try {
+            $html = article_extract_docx_html($tmp);
+
+            self::assertStringContainsString('Texte conserve avant image lourde', $html);
+            self::assertStringContainsString('Texte conserve apres image lourde', $html);
+            self::assertStringNotContainsString('<img ', $html);
+            self::assertLessThan(50000, strlen($html));
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
     public function testUploadSignatureValidatorAcceptsDocxZipHeader(): void
     {
         $tmp = tempnam(sys_get_temp_dir(), 'docx-sig-');

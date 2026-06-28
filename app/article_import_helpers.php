@@ -456,6 +456,16 @@ function article_docx_relationship_targets(string $xml): array
 }
 
 if (!function_exists('article_docx_image_data_uris')) {
+function article_docx_max_inline_image_bytes(): int
+{
+    return 512 * 1024;
+}
+
+function article_docx_max_inline_image_total_bytes(): int
+{
+    return 1024 * 1024;
+}
+
 /**
  * @return array<string,string>
  */
@@ -481,6 +491,7 @@ function article_docx_image_data_uris(string $path, string $relationshipsXml): a
     }
 
     $images = [];
+    $totalImageBytes = 0;
     foreach ($nodes as $node) {
         if (!$node instanceof DOMElement) {
             continue;
@@ -501,10 +512,16 @@ function article_docx_image_data_uris(string $path, string $relationshipsXml): a
         }
 
         $bytes = article_docx_part_contents($path, $partName);
-        if ($bytes === '' || strlen($bytes) > 5 * 1024 * 1024) {
+        $byteLength = strlen($bytes);
+        if (
+            $bytes === ''
+            || $byteLength > article_docx_max_inline_image_bytes()
+            || $totalImageBytes + $byteLength > article_docx_max_inline_image_total_bytes()
+        ) {
             continue;
         }
 
+        $totalImageBytes += $byteLength;
         $images[$id] = 'data:' . $mimeType . ';base64,' . base64_encode($bytes);
     }
 

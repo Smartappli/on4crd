@@ -447,6 +447,39 @@ async function assertArticleDocxWysiwygImport(driver, token) {
   assert.match(safeImport, /colspan="2"/, 'Le colspan valide importe doit etre conserve.');
   assert.match(safeImport, /rowspan="2"/, 'Le rowspan valide importe doit etre conserve.');
 
+  const largeImageText = `Import DOCX image lourde ${token}`;
+  await driver.executeScript(`
+    const expected = arguments[0];
+    const largeImage = 'data:image/png;base64,' + 'A'.repeat(800000);
+    window.mammoth = {
+      convertToHtml: async () => ({
+        value: '<p>' + expected + '</p>'
+          + '<img src="' + largeImage + '" alt="Image trop lourde">'
+          + '<img src="data:image/png;base64,QUJDRA==" alt="Image legere">',
+      }),
+    };
+  `, largeImageText);
+  await fileInput.sendKeys(fixturePath);
+
+  const largeImageImport = await driver.wait(async () => driver.executeScript(`
+    const expected = arguments[0];
+    const textarea = document.querySelector('textarea[name="content"]');
+    const wrapper = textarea ? textarea.previousElementSibling : null;
+    const editor = wrapper ? wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (!textarea || !editor || !editor.textContent.includes(expected) || !textarea.value.includes(expected)) {
+      return null;
+    }
+    const html = editor.innerHTML;
+    return {
+      hasLargeImage: html.includes('A'.repeat(1000)),
+      hasSmallImage: html.includes('data:image/png;base64,QUJDRA=='),
+      htmlLength: html.length,
+    };
+  `, largeImageText), timeoutMs);
+  assert.equal(largeImageImport.hasLargeImage, false, 'Une image Word inline trop lourde doit etre retiree du WYSIWYG.');
+  assert.equal(largeImageImport.hasSmallImage, true, 'Une petite image Word inline doit rester disponible.');
+  assert.ok(largeImageImport.htmlLength < 50000, 'L import Word WYSIWYG doit rester sous la limite de contenu apres filtrage des images lourdes.');
+
   const unsafeText = `Import DOCX dangereux ${token}`;
   await driver.executeScript(`
     const expected = arguments[0];

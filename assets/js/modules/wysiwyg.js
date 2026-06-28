@@ -6,6 +6,8 @@
   const mammothAssetUrl = currentScriptUrl
     ? new URL('../../vendor/mammoth/1.8.0/mammoth.browser.min.js', currentScriptUrl).href
     : '/assets/vendor/mammoth/1.8.0/mammoth.browser.min.js';
+  const maxImportedImageDataUriLength = 700000;
+  const maxImportedImageDataUriTotalLength = 1400000;
 
   const syncHandlers = [];
   const toolbarButtons = [
@@ -112,6 +114,7 @@
   const sanitizeImportedHtml = (html) => {
     const template = document.createElement('template');
     template.innerHTML = String(html || '');
+    let importedImageDataUriTotalLength = 0;
 
     const sanitizeNode = (node) => {
       if (node.nodeType === Node.COMMENT_NODE) {
@@ -162,6 +165,17 @@
         if (src === '') {
           element.parentNode && element.parentNode.removeChild(element);
           return;
+        }
+        if (src.startsWith('data:image/')) {
+          const srcLength = src.length;
+          if (
+            srcLength > maxImportedImageDataUriLength
+            || importedImageDataUriTotalLength + srcLength > maxImportedImageDataUriTotalLength
+          ) {
+            element.parentNode && element.parentNode.removeChild(element);
+            return;
+          }
+          importedImageDataUriTotalLength += srcLength;
         }
         element.setAttribute('src', src);
         element.setAttribute('loading', 'lazy');
