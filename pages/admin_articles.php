@@ -1189,34 +1189,43 @@ ob_start();
         <?php if ($scheduledQueue === []): ?>
             <p class="help"><?= e($t('editorial_queue_empty')) ?></p>
         <?php else: ?>
-            <form method="post" style="margin:0 0 .8rem 0;">
+            <form method="post" id="admin-article-queue-form" class="admin-article-queue-form" data-confirm-message="<?= e($t('confirm_bulk_action')) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="retry_scheduled_bulk">
-                <button class="button secondary small" type="submit"><?= e($t('retry_bulk')) ?></button>
+                <div class="admin-article-queue-toolbar">
+                    <label class="admin-article-select-all">
+                        <input type="checkbox" data-admin-queue-select-page>
+                        <span><?= e($t('select_article')) ?></span>
+                        <span class="badge muted" data-admin-queue-selected-count>0</span>
+                    </label>
+                    <button class="button secondary small" type="submit" data-admin-queue-submit disabled><?= e($t('retry_bulk')) ?></button>
+                </div>
+            </form>
             <div class="stack">
                 <?php foreach ($scheduledQueue as $queueItem): ?>
                     <?php $blockedReasons = editorial_blocked_reasons((array) $queueItem); ?>
-                    <article class="article-item">
-                        <div class="row-between" style="gap:.8rem;align-items:flex-start;">
-                            <div>
-                                <p style="margin:0 0 .25rem 0;">
-                                    <label style="display:inline-flex;align-items:center;gap:.35rem;">
-                                        <input type="checkbox" name="ids[]" value="<?= (int) $queueItem['id'] ?>">
-                                        <span class="help">#<?= (int) $queueItem['id'] ?></span>
-                                    </label>
-                                </p>
-                                <h3 style="margin:.1rem 0;"><?= e((string) (($queueItem['title'] ?? '') !== '' ? $queueItem['title'] : ('#' . (int) $queueItem['id']))) ?></h3>
-                                <p class="help" style="margin:0;">
+                    <?php $blockedReasonLabels = array_map($editorialBlockedReasonLabel, $blockedReasons); ?>
+                    <article class="article-item admin-article-queue-item<?= $blockedReasons !== [] ? ' is-blocked' : '' ?>">
+                        <div class="admin-article-queue-row">
+                            <div class="admin-article-title-block">
+                                <label class="admin-article-select">
+                                    <input type="checkbox" name="ids[]" value="<?= (int) $queueItem['id'] ?>" form="admin-article-queue-form" data-admin-queue-item>
+                                    <span><?= e($t('select_article')) ?></span>
+                                </label>
+                                <div>
+                                    <h3><?= e((string) (($queueItem['title'] ?? '') !== '' ? $queueItem['title'] : ('#' . (int) $queueItem['id']))) ?></h3>
+                                    <p class="help">#<?= (int) $queueItem['id'] ?> &middot;
                                     <?= e($t('scheduled_at')) ?>:
                                     <?= e((string) (($queueItem['scheduled_at'] ?? '') !== '' ? date('d/m/Y H:i', strtotime((string) $queueItem['scheduled_at'])) : 'n/a')) ?>
-                                </p>
-                                <?php if ($blockedReasons !== []): ?>
-                                    <p class="help" style="margin:.3rem 0 0 0;color:#b54708;">
-                                        <?= e($t('blocked_reasons')) ?>: <?= e(implode(', ', $blockedReasons)) ?>
                                     </p>
-                                <?php endif; ?>
+                                    <?php if ($blockedReasonLabels !== []): ?>
+                                        <p class="help admin-article-warning">
+                                            <?= e($t('blocked_reasons')) ?>: <?= e(implode(', ', $blockedReasonLabels)) ?>
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                            <div class="actions">
+                            <div class="admin-article-row-actions">
                                 <a class="button small secondary" href="<?= e(route_url('admin_articles', ['id' => (int) $queueItem['id']])) ?>"><?= e($t('edit')) ?></a>
                                 <form method="post">
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -1229,7 +1238,6 @@ ob_start();
                     </article>
                 <?php endforeach; ?>
             </div>
-            </form>
         <?php endif; ?>
     </section>
     <?php if ($showPendingProposals): ?>

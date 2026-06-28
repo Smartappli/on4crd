@@ -130,6 +130,51 @@
     syncBulkAuxiliaryFields();
   }
 
+  const queueForm = document.querySelector('#admin-article-queue-form');
+  if (queueForm instanceof HTMLFormElement) {
+    const queueChecks = Array.from(document.querySelectorAll('input[type="checkbox"][form="admin-article-queue-form"][name="ids[]"]'))
+      .filter((input) => input instanceof HTMLInputElement);
+    const selectQueue = queueForm.querySelector('[data-admin-queue-select-page]');
+    const selectedCount = queueForm.querySelector('[data-admin-queue-selected-count]');
+    const submitButton = queueForm.querySelector('[data-admin-queue-submit]');
+
+    const syncQueueSelection = () => {
+      const checkedCount = queueChecks.filter((input) => input.checked).length;
+      if (selectedCount instanceof HTMLElement) {
+        selectedCount.textContent = String(checkedCount);
+      }
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = checkedCount === 0;
+      }
+      if (selectQueue instanceof HTMLInputElement) {
+        selectQueue.checked = checkedCount > 0 && checkedCount === queueChecks.length;
+        selectQueue.indeterminate = checkedCount > 0 && checkedCount < queueChecks.length;
+      }
+    };
+
+    if (selectQueue instanceof HTMLInputElement) {
+      selectQueue.addEventListener('change', () => {
+        queueChecks.forEach((input) => {
+          input.checked = selectQueue.checked;
+        });
+        syncQueueSelection();
+      });
+    }
+    queueChecks.forEach((input) => input.addEventListener('change', syncQueueSelection));
+    queueForm.addEventListener('submit', (event) => {
+      if (!queueChecks.some((input) => input.checked)) {
+        event.preventDefault();
+        syncQueueSelection();
+        return;
+      }
+      const confirmMessage = queueForm.getAttribute('data-confirm-message') || '';
+      if (confirmMessage !== '' && !window.confirm(confirmMessage)) {
+        event.preventDefault();
+      }
+    });
+    syncQueueSelection();
+  }
+
   const rejectDetails = Array.from(document.querySelectorAll('.admin-article-row-reject'))
     .filter((detail) => detail instanceof HTMLDetailsElement);
   rejectDetails.forEach((detail) => {
