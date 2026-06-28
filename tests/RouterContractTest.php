@@ -931,16 +931,22 @@ final class RouterContractTest extends TestCase
     public function testArticlesDoNotRenderGeneratedSummaryWhenExcerptIsEmpty(): void
     {
         $adminArticles = file_get_contents(__DIR__ . '/../pages/admin_articles.php');
+        $articlePropose = file_get_contents(__DIR__ . '/../pages/article_propose.php');
         $articles = file_get_contents(__DIR__ . '/../pages/articles.php');
         $article = file_get_contents(__DIR__ . '/../pages/article.php');
         $home = file_get_contents(__DIR__ . '/../pages/home.php');
         self::assertIsString($adminArticles);
+        self::assertIsString($articlePropose);
         self::assertIsString($articles);
         self::assertIsString($article);
         self::assertIsString($home);
 
         self::assertStringContainsString("'excerpt' => ''", $adminArticles);
         self::assertStringNotContainsString('$excerpt = $imported[\'excerpt\'];', $adminArticles);
+        self::assertStringContainsString('article_excerpt_from_input((string) ($_POST[\'excerpt\'] ?? \'\'))', $adminArticles);
+        self::assertStringContainsString('textarea name="excerpt" rows="4" data-wysiwyg="off"', $adminArticles);
+        self::assertStringContainsString('article_excerpt_from_input((string) ($_POST[\'excerpt\'] ?? \'\'))', $articlePropose);
+        self::assertStringContainsString('textarea name="excerpt" rows="3" maxlength="2000" data-wysiwyg="off"', $articlePropose);
         self::assertStringNotContainsString("mb_substr(article_view_plain_text((string) (\$related['content_localized'] ?? '')), 0, 140)", $article);
         self::assertStringNotContainsString("\$articleExcerpt = mb_safe_strimwidth", $home);
         self::assertStringNotContainsString('return mb_strlen($plain) > 180', $articles);

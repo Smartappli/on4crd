@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
         $articleTitle = trim((string) ($_POST['title'] ?? ''));
-        $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
+        $excerpt = article_excerpt_from_input((string) ($_POST['excerpt'] ?? ''));
         $rawContent = trim((string) ($_POST['content'] ?? ''));
         [$category, $subcategory, $subsubcategory] = article_taxonomy_from_input(
             (string) ($_POST['category'] ?? 'autres'),
@@ -154,7 +154,7 @@ ob_start();
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <label><?= e($label('article_title_label')) ?><input type="text" name="title" maxlength="190" required></label>
             <?= render_article_taxonomy_fields($categories, $articlesI18n, 'autres') ?>
-            <label><?= e($label('excerpt_label')) ?><textarea name="excerpt" rows="3" maxlength="2000" placeholder="<?= e($label('excerpt_placeholder')) ?>"></textarea></label>
+            <label><?= e($label('excerpt_label')) ?><textarea name="excerpt" rows="3" maxlength="2000" data-wysiwyg="off" placeholder="<?= e($label('excerpt_placeholder')) ?>"></textarea></label>
             <label><?= e($label('content_label')) ?><textarea name="content" rows="16" maxlength="<?= (int) $articleFieldLimits['content'] ?>" data-wysiwyg="full" required placeholder="<?= e($label('content_placeholder')) ?>"></textarea></label>
             <p class="help"><?= e($label('html_cleanup_help')) ?></p>
             <div class="actions">

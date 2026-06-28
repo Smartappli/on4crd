@@ -54,6 +54,19 @@ function localized_article_row(array $row): array
     return $row;
 }
 
+function article_excerpt_from_input(string $value): string
+{
+    $value = preg_replace('/<\s*br\s*\/?\s*>/iu', "\n", $value) ?? $value;
+    $value = preg_replace('/<\s*\/\s*(p|div|li|h[1-6])\s*>/iu', "\n", $value) ?? $value;
+    $value = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $value = str_replace(["\r\n", "\r"], "\n", $value);
+    $value = preg_replace('/\x{00A0}/u', ' ', $value) ?? $value;
+    $value = preg_replace('/[ \t]+/u', ' ', $value) ?? $value;
+    $value = preg_replace('/\n{3,}/u', "\n\n", $value) ?? $value;
+
+    return trim($value);
+}
+
 function article_translation_source_hash(string $title, string $excerpt, string $content): string
 {
     return substr(hash('sha256', trim($title) . "\n---excerpt---\n" . trim($excerpt) . "\n---content---\n" . trim($content)), 0, 40);

@@ -915,6 +915,14 @@ XML;
         self::assertNotSame($baseHash, article_translation_source_hash('Titre', 'Resume', '<p>Contenu modifie</p>'));
     }
 
+    public function testArticleExcerptFromInputTreatsEmptyEditorMarkupAsMissing(): void
+    {
+        self::assertSame('', article_excerpt_from_input(''));
+        self::assertSame('', article_excerpt_from_input('<p><br></p>'));
+        self::assertSame('', article_excerpt_from_input("<div>\n&nbsp;\n</div>"));
+        self::assertSame("Resume\nSuite", article_excerpt_from_input('<p>Resume</p><p><strong>Suite</strong></p>'));
+    }
+
     public function testNewsTranslationTargetLocalesCoverEveryNonFrenchLocale(): void
     {
         $targets = news_translation_target_locales();

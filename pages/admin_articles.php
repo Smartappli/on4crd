@@ -483,7 +483,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slugInput = trim((string) ($_POST['slug'] ?? ''));
             $slugSource = $slugInput !== '' ? $slugInput : $title;
             $slug = article_unique_slug($slugSource, $id);
-            $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
+            $excerpt = article_excerpt_from_input((string) ($_POST['excerpt'] ?? ''));
             $content = article_sanitize_content((string) ($_POST['content'] ?? ''));
             $status = (string) ($_POST['status'] ?? 'draft');
             $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
@@ -954,7 +954,7 @@ ob_start();
                 </select>
             </label>
             <label><?= e($t('import_document')) ?><input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
-            <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4"><?= e((string) $editing['excerpt']) ?></textarea></label>
+            <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4" data-wysiwyg="off"><?= e((string) $editing['excerpt']) ?></textarea></label>
             <label><?= e($t('content_simple_html')) ?><textarea name="content" rows="16" data-wysiwyg="full"><?= e((string) $editing['content']) ?></textarea></label>
             <p class="help"><?= e($t('editor_tip')) ?></p>
             <label><?= e($t('status')) ?>
