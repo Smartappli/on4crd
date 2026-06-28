@@ -679,7 +679,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $albums = db()->query(
-    'SELECT a.*, COUNT(p.id) AS photo_count, MAX(p.created_at) AS last_photo_at
+    'SELECT a.*, COUNT(p.id) AS photo_count, MAX(p.created_at) AS last_photo_at,
+        (SELECT p2.file_path FROM album_photos p2 WHERE p2.album_id = a.id ORDER BY p2.sort_order ASC, p2.id ASC LIMIT 1) AS cover_file_path
      FROM albums a
      LEFT JOIN album_photos p ON p.album_id = a.id
      GROUP BY a.id
@@ -708,6 +709,7 @@ foreach ($albums as $albumRow) {
 }
 
 $photoAlbumFilter = max(0, (int) ($_GET['photo_album'] ?? 0));
+$uploadAlbumId = max(0, (int) ($_GET['upload_album'] ?? $photoAlbumFilter));
 $photosPage = max(1, (int) ($_GET['photos_page'] ?? 1));
 $photosPerPage = 36;
 $photosWhereSql = '';
@@ -994,7 +996,7 @@ ob_start();
                 <label><?= e((string) $t['album_label']) ?>
                     <select name="album_id" required>
                         <?php foreach ($albums as $album): ?>
-                            <option value="<?= (int) $album['id'] ?>"><?= e((string) $album['title']) ?></option>
+                            <option value="<?= (int) $album['id'] ?>" <?= $uploadAlbumId === (int) $album['id'] ? 'selected' : '' ?>><?= e((string) $album['title']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
