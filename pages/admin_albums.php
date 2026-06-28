@@ -1043,8 +1043,30 @@ ob_start();
                             break;
                         }
                     }
+                    $albumCoverRender = [
+                        'image_src' => '',
+                        'image_webp_src' => '',
+                        'title' => (string) ($album['title'] ?? $t['album_word']),
+                    ];
+                    if (trim((string) ($album['cover_file_path'] ?? '')) !== '') {
+                        $albumCoverRender = albums_admin_photo_render_data([
+                            'file_path' => (string) $album['cover_file_path'],
+                            'title' => (string) ($album['title'] ?? $t['album_word']),
+                            'album_title' => (string) ($album['title'] ?? ''),
+                        ], $t, 'album_admin_cover_prepare_failed');
+                    }
                     ?>
                     <article class="article-item admin-album-list-item<?= (int) $album['is_public'] === 1 ? ' is-public' : ' is-private' ?><?= (int) ($album['is_featured'] ?? 0) === 1 ? ' is-featured' : '' ?>">
+                        <a class="admin-album-cover" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $albumId]) . '#admin-album-photos') ?>">
+                            <?php if ($albumCoverRender['image_src'] !== ''): ?>
+                                <?= album_picture_html($albumCoverRender['image_src'], $albumCoverRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $albumCoverRender['image_webp_src']) ?>
+                            <?php else: ?>
+                                <span class="admin-album-cover-placeholder">
+                                    <strong><?= e((string) $album['title']) ?></strong>
+                                    <span><?= (int) $album['photo_count'] ?> <?= e((string) $t['photos']) ?></span>
+                                </span>
+                            <?php endif; ?>
+                        </a>
                         <form id="<?= e($albumEditFormId) ?>" method="post" action="<?= e(route_url('admin_albums')) ?>" class="grid-2 admin-album-edit-form" autocomplete="off">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_album">
@@ -1072,6 +1094,7 @@ ob_start();
                                 <button class="button small" type="submit" data-admin-album-save><?= e((string) $t['save']) ?></button>
                                 <span class="pill"><?= e((string) $t['public_album']) ?>: <?= (int) $album['is_public'] === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
                                 <span class="pill"><?= e($featuredAlbumLabel) ?>: <?= (int) ($album['is_featured'] ?? 0) === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
+                                <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['upload_album' => $albumId]) . '#admin-album-upload') ?>"><?= e((string) $t['add_photo']) ?></a>
                                 <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $albumId]) . '#admin-album-photos') ?>"><?= e((string) $t['photos']) ?></a>
                                 <a class="button secondary small" href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e((string) $t['view_public']) ?></a>
                             </div>
