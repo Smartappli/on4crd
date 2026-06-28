@@ -756,14 +756,21 @@ if ($wizardAlbumId <= 0) {
 
 ob_start();
 ?>
-<div class="stack">
-    <section class="card gallery-header">
-        <div class="row-between">
+<div class="admin-albums-module">
+    <nav class="admin-albums-quick-nav" aria-label="<?= e((string) $t['manage_title']) ?>">
+        <a href="#admin-album-taxonomy"><?= e((string) $t['category_field']) ?></a>
+        <a href="#album-wizard"><?= e((string) $t['wizard_title']) ?></a>
+        <a href="#admin-album-upload"><?= e((string) $t['add_photo']) ?></a>
+        <a href="#admin-album-list"><?= e((string) $t['edit_albums']) ?></a>
+        <a href="#admin-album-photos"><?= e((string) $t['photos_editor']) ?></a>
+    </nav>
+    <section class="card gallery-header admin-albums-overview">
+        <div class="admin-albums-overview-head">
             <div>
                 <h1><?= e((string) $t['manage_title']) ?></h1>
                 <p class="help"><?= e((string) $t['intro']) ?></p>
             </div>
-            <form method="post" data-admin-album-rebuild-form<?= $thumbnailRebuildActive ? ' data-auto-continue="1"' : '' ?>>
+            <form method="post" class="admin-albums-rebuild-form" data-admin-album-rebuild-form<?= $thumbnailRebuildActive ? ' data-auto-continue="1"' : '' ?>>
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="rebuild_thumbnails">
                 <button class="button secondary small" type="submit"><?= e((string) $t['rebuild_thumbs']) ?></button>
