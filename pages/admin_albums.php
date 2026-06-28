@@ -707,20 +707,36 @@ foreach ($albums as $albumRow) {
     }
 }
 
+$photoAlbumFilter = max(0, (int) ($_GET['photo_album'] ?? 0));
 $photosPage = max(1, (int) ($_GET['photos_page'] ?? 1));
 $photosPerPage = 36;
-$photosTotal = (int) cache_remember('admin_albums_photos_total_v2', 30, static fn(): int => (int) (db()->query('SELECT COUNT(*) FROM album_photos')?->fetchColumn() ?: 0));
+$photosWhereSql = '';
+$photosParams = [];
+if ($photoAlbumFilter > 0) {
+    $photosWhereSql = 'WHERE p.album_id = ?';
+    $photosParams[] = $photoAlbumFilter;
+}
+if ($photoAlbumFilter > 0) {
+    $photosCountStmt = db()->prepare('SELECT COUNT(*) FROM album_photos p ' . $photosWhereSql);
+    $photosCountStmt->execute($photosParams);
+    $photosTotal = (int) ($photosCountStmt->fetchColumn() ?: 0);
+} else {
+    $photosTotal = (int) cache_remember('admin_albums_photos_total_v2', 30, static fn(): int => (int) (db()->query('SELECT COUNT(*) FROM album_photos')?->fetchColumn() ?: 0));
+}
 $pagination = pagination_state($photosTotal, $photosPage, $photosPerPage);
 $photosPage = $pagination['page'];
 $photosMaxPage = $pagination['total_pages'];
 $photosOffset = $pagination['offset'];
-$photos = db()->query(
+$photosStmt = db()->prepare(
     'SELECT p.*, a.title AS album_title
      FROM album_photos p
      INNER JOIN albums a ON a.id = p.album_id
+     ' . $photosWhereSql . '
      ORDER BY p.album_id ASC, p.sort_order ASC, p.id ASC
      LIMIT ' . (int) $photosPerPage . ' OFFSET ' . (int) $photosOffset
-)->fetchAll() ?: [];
+);
+$photosStmt->execute($photosParams);
+$photos = $photosStmt->fetchAll() ?: [];
 $thumbnailRebuildProgress = $_SESSION[albums_admin_rebuild_session_key()] ?? null;
 $thumbnailRebuildActive = is_array($thumbnailRebuildProgress)
     && (bool) ($thumbnailRebuildProgress['auto_continue'] ?? false)
