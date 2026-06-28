@@ -37,7 +37,9 @@
 }
 
 [data-route="admin_articles"] .admin-article-reject-form,
+[data-route="admin_articles"] .admin-article-publish-form,
 [data-route="admin_articles"] .admin-article-delete-form,
+[data-route="admin_articles"] .admin-article-row-publish,
 [data-route="admin_articles"] .admin-article-row-delete,
 [data-route="admin_articles"] .admin-article-row-reject-form {
   margin: 0;
@@ -85,6 +87,16 @@
 
 [data-route="admin_articles"] .admin-article-row-reject-form textarea {
   min-height: 5rem;
+}
+
+[data-route="admin_articles"] .admin-article-publish-button {
+  border-color: color-mix(in srgb, var(--success) 44%, var(--border));
+  background: color-mix(in srgb, var(--success) 86%, var(--accent));
+  color: #fff;
+}
+
+[data-route="admin_articles"] .admin-article-publish-button:hover {
+  background: color-mix(in srgb, var(--success) 72%, var(--accent-strong));
 }
 
 [data-route="admin_articles"] .admin-article-reject-button,

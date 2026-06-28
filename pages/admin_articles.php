@@ -183,6 +183,16 @@ function editorial_retry_scheduled_article(int $id): string
     return 'retried';
 }
 
+function admin_articles_forget_public_caches(): void
+{
+    if (!function_exists('cache_forget')) {
+        return;
+    }
+
+    cache_forget('articles_theme_counts_v2');
+    cache_forget('home_latest_article_v2');
+}
+
 $knownCategories = article_categories($articleMessages);
 $articleSubcategoriesByCategory = article_subcategories_by_category();
 $articleSubsubcategoriesByParent = article_subsubcategories_by_parent();
@@ -276,6 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $publishedAtSql = $bulkOp === 'published' ? 'COALESCE(published_at, NOW())' : 'NULL';
                 db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = ' . $publishedAtSql . ', moderation_note = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
                     ->execute(array_merge([$bulkOp, $scheduledAt, $moderationNote], $ids));
+                admin_articles_forget_public_caches();
                 $translationSyncFailed = false;
                 $currentUserId = (int) current_user()['id'];
                 foreach ($bulkRows as $bulkRow) {
@@ -305,6 +316,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     set_flash('warning', $t('warning_translation_sync_bulk'));
                 }
                 set_flash('success', $t('ok_saved'));
+                $returnId = (int) ($_POST['return_id'] ?? 0);
+                if ($returnId > 0 && count($ids) === 1 && in_array($returnId, $ids, true)) {
+                    redirect_url(route_url('admin_articles', ['id' => $returnId]));
+                }
             }
             redirect_url(route_url_clean('admin_articles', ['q' => (string) ($_GET['q'] ?? ''), 'status' => (string) ($_GET['status'] ?? ''), 'category' => (string) ($_GET['category'] ?? ''), 'subcategory' => (string) ($_GET['subcategory'] ?? ''), 'subsubcategory' => (string) ($_GET['subsubcategory'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
         }
@@ -628,6 +643,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         }
                         db()->commit();
+                        admin_articles_forget_public_caches();
                         break;
                     } catch (Throwable $saveThrowable) {
                         if (db()->inTransaction()) {
@@ -660,7 +676,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 set_flash('success', $t('ok_saved'));
-                redirect('admin_articles');
+                redirect_url(route_url('admin_articles', ['id' => $id]));
             }
         } elseif ($action === 'delete_article') {
             $id = (int) ($_POST['id'] ?? 0);
@@ -677,6 +693,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['article', $id]);
             }
             db()->prepare('DELETE FROM articles WHERE id = ?')->execute([$id]);
+            admin_articles_forget_public_caches();
             set_flash('success', $t('ok_deleted'));
             redirect('admin_articles');
         } elseif ($action === 'restore_revision') {
@@ -974,16 +991,27 @@ ob_start();
             </label>
             <label><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
             <label><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
-            <button class="button admin-article-save-button"><?= e($t('save')) ?></button>
+            <button class="button admin-article-save-button" type="submit"><?= e($t('save')) ?></button>
             <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>
         </form>
         <?php if ((int) $editing['id'] > 0): ?>
             <div class="admin-article-moderation-panel">
+                <?php if ((string) ($editing['status'] ?? '') !== 'published'): ?>
+                    <form method="post" class="admin-article-publish-form">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="bulk_update_articles">
+                        <input type="hidden" name="ids[]" value="<?= (int) $editing['id'] ?>">
+                        <input type="hidden" name="bulk_op" value="published">
+                        <input type="hidden" name="return_id" value="<?= (int) $editing['id'] ?>">
+                        <button class="button admin-article-publish-button" type="submit"><?= e($articleStatusLabel('published')) ?></button>
+                    </form>
+                <?php endif; ?>
                 <form method="post" class="admin-article-reject-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="bulk_update_articles">
                     <input type="hidden" name="ids[]" value="<?= (int) $editing['id'] ?>">
                     <input type="hidden" name="bulk_op" value="rejected">
+                    <input type="hidden" name="return_id" value="<?= (int) $editing['id'] ?>">
                     <label><?= e($t('moderation_note')) ?>
                         <textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea>
                     </label>
@@ -1253,6 +1281,15 @@ ob_start();
                         </div>
                         <div class="admin-article-row-actions">
                             <a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a>
+                            <?php if ((string) ($article['status'] ?? '') !== 'published'): ?>
+                                <form method="post" class="admin-article-row-publish">
+                                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                    <input type="hidden" name="action" value="bulk_update_articles">
+                                    <input type="hidden" name="ids[]" value="<?= (int) $article['id'] ?>">
+                                    <input type="hidden" name="bulk_op" value="published">
+                                    <button class="button small admin-article-publish-button" type="submit"><?= e($articleStatusLabel('published')) ?></button>
+                                </form>
+                            <?php endif; ?>
                             <?php if ((string) ($article['status'] ?? '') !== 'rejected'): ?>
                                 <details class="admin-article-row-reject">
                                     <summary class="button small secondary"><?= e($t('notification_article_rejected')) ?></summary>
