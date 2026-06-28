@@ -328,6 +328,10 @@
   gap: .45rem;
 }
 
+[data-route="admin_articles"] .admin-article-public-link {
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
+}
+
 [data-route="admin_articles"] .admin-article-row-reject {
   position: relative;
 }
