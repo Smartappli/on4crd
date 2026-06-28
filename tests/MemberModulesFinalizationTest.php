@@ -462,7 +462,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("\$showProposeDropdown = \$canProposeTaxonomy || (\$moduleCode === 'videos' && \$canProposeDocument);", $renderer);
         self::assertStringContainsString("\$showHeroProposeDropdown = \$showProposeDropdown;", $renderer);
         self::assertStringContainsString("\$showHeroPrimaryAction = \$moduleCode !== 'fichiers' && !\$showHeroProposeDropdown;", $renderer);
-        self::assertStringContainsString("\$showHeroAdminLink = \$canManageDocuments && \$moduleCode !== 'fichiers';", $renderer);
+        self::assertStringContainsString("\$showHeroAdminLink = \$canManageDocuments;", $renderer);
+        self::assertStringContainsString('member-document-admin-button', $renderer);
         self::assertStringNotContainsString('member-document-preheader-actions', $renderer);
         self::assertStringContainsString("elseif (\$showHeroProposeDropdown)", $renderer);
         self::assertStringContainsString("if (\$action === 'propose_category' && \$canProposeTaxonomy)", $renderer);

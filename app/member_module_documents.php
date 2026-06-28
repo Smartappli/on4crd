@@ -2105,7 +2105,7 @@ function render_member_document_module_page(string $module): void
         }
     }
     $showHeroPrimaryAction = $moduleCode !== 'fichiers' && !$showHeroProposeDropdown;
-    $showHeroAdminLink = $canManageDocuments && $moduleCode !== 'fichiers';
+    $showHeroAdminLink = $canManageDocuments;
     $showHeroActions = $moduleCode === 'fichiers' || $showHeroProposeDropdown || $showHeroPrimaryAction || $showHeroAdminLink;
 
     ob_start();
@@ -2137,7 +2137,7 @@ function render_member_document_module_page(string $module): void
                         <a class="button" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e($primaryActionLabel) ?></a>
                     <?php endif; ?>
                     <?php if ($showHeroAdminLink): ?>
-                        <a class="button secondary" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) ($moduleCode === 'fichiers' ? $labels['administer'] : $labels['administration'])) ?></a>
+                        <a class="button<?= $moduleCode === 'fichiers' ? ' member-document-admin-button' : ' secondary' ?>" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) ($moduleCode === 'fichiers' ? $labels['administer'] : $labels['administration'])) ?></a>
                     <?php endif; ?>
                 </div>
                 <?php endif; ?>

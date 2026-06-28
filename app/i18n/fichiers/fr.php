@@ -20,7 +20,7 @@ return array (
   'manage_menu' => 'Gérer',
   'manage_my_files' => 'Mes fichiers',
   'manage_my_shares' => 'Mes partages',
-  'administer' => 'Administer',
+  'administer' => 'Administrer',
   'search_ph' => 'Rechercher dans mes fichiers',
   'empty' => 'Aucun fichier trouvé.',
   'upload_title' => 'Partager un fichier',

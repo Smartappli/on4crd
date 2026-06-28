@@ -230,6 +230,34 @@ for (const moduleCode of ['pv', 'fichiers']) {
         text = await pagePlainText(driver);
         assert.match(text, new RegExp(title), `Le document ${moduleCode} doit etre consultable cote membre.`);
 
+        if (moduleCode === 'fichiers') {
+          const adminButtonState = await driver.executeScript(`
+            const manageSummary = document.querySelector('[data-route="fichiers"] .member-document-manage-menu summary');
+            const adminButton = document.querySelector('[data-route="fichiers"] .member-document-admin-button');
+            if (!manageSummary || !adminButton) {
+              return null;
+            }
+            const manageRect = manageSummary.getBoundingClientRect();
+            const adminRect = adminButton.getBoundingClientRect();
+            const style = getComputedStyle(adminButton);
+            return {
+              manageText: manageSummary.textContent.trim(),
+              adminText: adminButton.textContent.trim(),
+              adminHref: adminButton.getAttribute('href') || '',
+              adminBackground: style.backgroundColor,
+              adminColor: style.color,
+              isRightOfManage: adminRect.left >= manageRect.right,
+            };
+          `);
+          assert.ok(adminButtonState, 'Le header fichiers doit afficher le menu Gerer et le bouton Administrer.');
+          assert.match(adminButtonState.manageText, /G.rer/i, 'Le menu fichiers doit rester libelle Gerer.');
+          assert.equal(adminButtonState.adminText, 'Administrer', 'Le bouton admin fichiers doit etre libelle Administrer.');
+          assert.match(adminButtonState.adminHref, /route=admin_fichiers/, 'Le bouton Administrer doit pointer vers admin_fichiers.');
+          assert.match(adminButtonState.adminBackground, /rgb\(0,\s*0,\s*0\)/, 'Le bouton Administrer doit etre noir.');
+          assert.match(adminButtonState.adminColor, /rgb\(255,\s*255,\s*255\)/, 'Le bouton Administrer noir doit garder un texte blanc.');
+          assert.equal(adminButtonState.isRightOfManage, true, 'Le bouton Administrer doit etre a droite de Gerer.');
+        }
+
         const favoriteForm = await driver.findElement(By.xpath(`//article[contains(@class,"member-document-card")][.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="toggle_favorite_document"]]`));
         await submitForm(driver, favoriteForm);
         const favorite = memberDocumentFavoriteRecord(Number(document.member_id), Number(document.id));

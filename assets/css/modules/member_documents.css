@@ -100,6 +100,17 @@
   margin: 0;
 }
 
+[data-route="fichiers"] .member-document-admin-button {
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+[data-route="fichiers"] .member-document-admin-button:hover {
+  background: #111827;
+  border-color: #111827;
+}
+
 :is([data-route="presentations"], [data-route="fichiers"]) .member-document-propose-menu-panel {
   top: auto;
   bottom: calc(100% + .45rem);
