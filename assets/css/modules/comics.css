@@ -139,13 +139,15 @@
   line-height: 1.55;
 }
 
-[data-route="comics"] .comics-related-documents {
+[data-route="comics"] .comics-related-documents,
+[data-route="comics"] .comics-related-links {
   display: grid;
   gap: .45rem;
   padding-block: .2rem;
 }
 
-[data-route="comics"] .comics-related-documents h4 {
+[data-route="comics"] .comics-related-documents h4,
+[data-route="comics"] .comics-related-links h4 {
   margin: 0;
   color: var(--text);
   font-family: inherit;
@@ -154,7 +156,8 @@
   line-height: 1.25;
 }
 
-[data-route="comics"] .comics-related-documents ul {
+[data-route="comics"] .comics-related-documents ul,
+[data-route="comics"] .comics-related-links ul {
   display: grid;
   gap: .45rem;
   margin: 0;
@@ -162,12 +165,14 @@
   list-style: none;
 }
 
-[data-route="comics"] .comics-related-documents li {
+[data-route="comics"] .comics-related-documents li,
+[data-route="comics"] .comics-related-links li {
   display: grid;
   gap: .2rem;
 }
 
-[data-route="comics"] .comics-related-document {
+[data-route="comics"] .comics-related-document,
+[data-route="comics"] .comics-related-link {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -183,7 +188,8 @@
   background: color-mix(in srgb, var(--bg) 72%, var(--panel));
 }
 
-[data-route="comics"] .comics-related-document small {
+[data-route="comics"] .comics-related-document small,
+[data-route="comics"] .comics-related-link small {
   flex: 0 0 auto;
   padding: .18rem .32rem;
   border-radius: 4px;
@@ -195,7 +201,9 @@
 }
 
 [data-route="comics"] .comics-related-document:hover,
-[data-route="comics"] .comics-related-document:focus-visible {
+[data-route="comics"] .comics-related-document:focus-visible,
+[data-route="comics"] .comics-related-link:hover,
+[data-route="comics"] .comics-related-link:focus-visible {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
 }
