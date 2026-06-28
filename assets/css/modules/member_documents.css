@@ -110,6 +110,11 @@
   bottom: auto;
 }
 
+[data-route="videos"] .member-module-hero {
+  overflow: visible;
+  z-index: 2;
+}
+
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-search-panel {
   margin-top: 0;
   padding-block: .65rem;

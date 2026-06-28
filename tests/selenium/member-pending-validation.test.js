@@ -953,6 +953,29 @@ test('Selenium membre: proposer une video, la valider et la retrouver dans video
       assert.match(proposeMenuLabel, /Propos/i, 'La page videos doit afficher un menu Proposer.');
       await driver.executeScript('arguments[0].click();', proposeMenu);
 
+      const proposeMenuLayout = await driver.executeScript(`
+        const hero = document.querySelector('[data-route="videos"] .member-module-hero');
+        const panel = document.querySelector('.member-document-propose-menu-panel');
+        if (!hero || !panel) {
+          return null;
+        }
+        const heroRect = hero.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        const probeX = Math.min(Math.max(panelRect.left + panelRect.width / 2, 0), window.innerWidth - 1);
+        const probeY = Math.min(Math.max(panelRect.bottom - 2, 0), window.innerHeight - 1);
+        const topElement = document.elementFromPoint(probeX, probeY);
+        return {
+          heroOverflow: getComputedStyle(hero).overflow,
+          panelBottom: panelRect.bottom,
+          heroBottom: heroRect.bottom,
+          visibleAtBottom: panel.contains(topElement) || topElement === panel,
+        };
+      `);
+      assert.ok(proposeMenuLayout, 'Le menu Proposer videos doit exposer un panneau.');
+      assert.equal(proposeMenuLayout.heroOverflow, 'visible', 'Le hero videos doit permettre au dropdown de sortir du header.');
+      assert.ok(proposeMenuLayout.panelBottom > proposeMenuLayout.heroBottom, 'Le dropdown videos doit depasser visuellement du header.');
+      assert.equal(proposeMenuLayout.visibleAtBottom, true, 'Le dropdown videos ne doit pas etre masque hors du header.');
+
       const proposeButton = await driver.findElement(By.css('.member-document-propose-menu [data-member-document-modal-open="member-document-proposal-dialog"]'));
       const proposeLabel = (await proposeButton.getText()).replace(/\s+/g, ' ').trim();
       assert.match(proposeLabel, /vid/i, 'Le menu videos doit contenir une entree video.');
