@@ -1000,12 +1000,17 @@ ob_start();
         </section>
     </div>
 
-    <section class="card">
-        <h2><?= e((string) $t['edit_albums']) ?></h2>
+    <section class="card admin-album-list-card" id="admin-album-list">
+        <div class="admin-albums-section-head">
+            <div>
+                <h2><?= e((string) $t['edit_albums']) ?></h2>
+                <p class="help"><?= $albumsCount ?> <?= e((string) $t['albums']) ?></p>
+            </div>
+        </div>
         <?php if ($albums === []): ?>
             <p class="help"><?= e((string) $t['no_albums']) ?></p>
         <?php else: ?>
-            <div class="stack">
+            <div class="admin-album-list">
                 <?php foreach ($albums as $album): ?>
                     <?php
                     $albumId = (int) $album['id'];
@@ -1021,8 +1026,8 @@ ob_start();
                         }
                     }
                     ?>
-                    <article class="article-item">
-                        <form id="<?= e($albumEditFormId) ?>" method="post" action="<?= e(route_url('admin_albums')) ?>" class="grid-2" autocomplete="off">
+                    <article class="article-item admin-album-list-item">
+                        <form id="<?= e($albumEditFormId) ?>" method="post" action="<?= e(route_url('admin_albums')) ?>" class="grid-2 admin-album-edit-form" autocomplete="off">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_album">
                             <input type="hidden" name="album_id" value="<?= $albumId ?>">
@@ -1038,21 +1043,21 @@ ob_start();
                                 <span class="badge muted taxonomy-pill-category"><?= e($albumCategoryLabel) ?></span>
                                 <?php if ($albumSubcategoryLabel !== ''): ?><span class="badge muted taxonomy-pill-subcategory"><?= e($albumSubcategoryLabel) ?></span><?php endif; ?>
                             </div>
-                            <div style="grid-column:1 / -1;">
+                            <div class="admin-album-form-wide">
                                 <?= render_album_taxonomy_fields($albumCategories, $t, (string) ($album['category'] ?? 'general'), (string) ($album['subcategory'] ?? '')) ?>
                             </div>
-                            <label style="grid-column:1 / -1;"><?= e((string) $t['description']) ?>
+                            <label class="admin-album-form-wide"><?= e((string) $t['description']) ?>
                                 <textarea name="description" rows="3"><?= e((string) ($album['description'] ?? '')) ?></textarea>
                             </label>
                             <p class="help"><?= (int) $album['photo_count'] ?> <?= e((string) $t['photos']) ?> · <?= e((string) $t['created_at']) ?> <?= e((string) $album['created_at']) ?></p>
-                            <div class="actions" style="grid-column:1 / -1;">
+                            <div class="actions admin-album-form-wide admin-album-row-actions">
                                 <button class="button small" type="submit" data-admin-album-save><?= e((string) $t['save']) ?></button>
                                 <span class="pill"><?= e((string) $t['public_album']) ?>: <?= (int) $album['is_public'] === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
                                 <span class="pill"><?= e($featuredAlbumLabel) ?>: <?= (int) ($album['is_featured'] ?? 0) === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
                                 <a class="button secondary small" href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e((string) $t['view_public']) ?></a>
                             </div>
                         </form>
-                        <form method="post" style="margin-top:8px;" onsubmit="return confirm(<?= e(json_encode((string) $t['confirm_delete_album'], JSON_UNESCAPED_UNICODE)) ?>)">
+                        <form method="post" class="admin-album-delete-form" onsubmit="return confirm(<?= e(json_encode((string) $t['confirm_delete_album'], JSON_UNESCAPED_UNICODE)) ?>)">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_album">
                             <input type="hidden" name="album_id" value="<?= $albumId ?>">
@@ -1064,8 +1069,13 @@ ob_start();
         <?php endif; ?>
     </section>
 
-    <section class="card">
-        <h2><?= e((string) $t['photos_editor']) ?></h2>
+    <section class="card admin-album-photos-card" id="admin-album-photos">
+        <div class="admin-albums-section-head">
+            <div>
+                <h2><?= e((string) $t['photos_editor']) ?></h2>
+                <p class="help"><?= $totalPhotos ?> <?= e((string) $t['photos']) ?></p>
+            </div>
+        </div>
         <?php if ($photos === []): ?>
             <p class="help"><?= e((string) $t['no_photos']) ?></p>
         <?php else: ?>
@@ -1078,7 +1088,7 @@ ob_start();
                         $safePath = $photoRender['safe_path'];
                         $imageSrc = $photoRender['image_src'];
                     ?>
-                    <article class="gallery-item">
+                    <article class="gallery-item admin-album-photo-item">
                         <?php if ($imageSrc !== ''): ?>
                             <?= album_picture_html($imageSrc, $photoRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $photoRender['image_webp_src']) ?>
                         <?php endif; ?>
@@ -1098,14 +1108,14 @@ ob_start();
                                 <?php if ($safePath !== null): ?><a class="button secondary small" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a><?php endif; ?>
                             </div>
                         </form>
-                        <form method="post" class="inline-form" style="margin-top:8px;">
+                        <form method="post" class="inline-form admin-album-photo-order-form">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="reorder_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
                             <button class="button small secondary" type="submit" name="direction" value="up">&uarr;</button>
                             <button class="button small secondary" type="submit" name="direction" value="down">&darr;</button>
                         </form>
-                        <form method="post" style="margin-top:8px;" onsubmit="return confirm(<?= e(albums_admin_js_string((string) $t['confirm_delete_photo'])) ?>)">
+                        <form method="post" class="admin-album-photo-delete-form" onsubmit="return confirm(<?= e(albums_admin_js_string((string) $t['confirm_delete_photo'])) ?>)">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
