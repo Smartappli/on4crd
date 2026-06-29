@@ -2707,7 +2707,14 @@ function render_admin_webotheque_page(): void
     $links = webotheque_fetch_links($search, $categoryFilter, 120, $subcategoryFilter, [], $subsubcategoryFilter);
     $showPendingProposals = (string) ($_GET['status'] ?? '') === 'pending';
     $pendingProposals = [];
-    if ($showPendingProposals && ensure_content_proposals_table()) {
+    $hasContentProposalsTable = ensure_content_proposals_table();
+    $pendingProposalCount = 0;
+    if ($hasContentProposalsTable) {
+        $pendingCountStmt = db()->prepare('SELECT COUNT(*) FROM content_proposals WHERE area = ? AND status = ?');
+        $pendingCountStmt->execute(['webotheque', 'pending']);
+        $pendingProposalCount = (int) ($pendingCountStmt->fetchColumn() ?: 0);
+    }
+    if ($showPendingProposals && $hasContentProposalsTable) {
         $pendingStmt = db()->prepare(
             'SELECT cp.id, cp.member_id, cp.proposal_type, cp.title, cp.summary, cp.contact, cp.source_ref, cp.status, cp.moderation_note, cp.created_at, cp.updated_at, m.callsign, m.email
              FROM content_proposals cp
@@ -2717,6 +2724,39 @@ function render_admin_webotheque_page(): void
         );
         $pendingStmt->execute();
         $pendingProposals = $pendingStmt->fetchAll() ?: [];
+    }
+    $activeFilterLabels = [];
+    if ($categoryFilter !== '') {
+        $activeFilterLabels[] = (string) ($categories[$categoryFilter] ?? webotheque_category_label_from_code($categoryFilter));
+    }
+    if ($subcategoryFilter !== '') {
+        $subcategoryLabel = $subcategoryFilter;
+        foreach (($subcategoriesByCategory[$categoryFilter] ?? []) as $subcategoryInfo) {
+            if (webotheque_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategoryFilter) {
+                $subcategoryLabel = (string) ($subcategoryInfo['label'] ?? $subcategoryFilter);
+                break;
+            }
+        }
+        $activeFilterLabels[] = $subcategoryLabel;
+    }
+    if ($subsubcategoryFilter !== '') {
+        $subsubcategoryLabel = $subsubcategoryFilter;
+        foreach (($subsubcategoriesByParent[$categoryFilter . ':' . $subcategoryFilter] ?? []) as $subsubcategoryInfo) {
+            if (webotheque_subsubcategory_code((string) ($subsubcategoryInfo['code'] ?? '')) === $subsubcategoryFilter) {
+                $subsubcategoryLabel = (string) ($subsubcategoryInfo['label'] ?? $subsubcategoryFilter);
+                break;
+            }
+        }
+        $activeFilterLabels[] = $subsubcategoryLabel;
+    }
+    $hasActiveFilters = $search !== '' || $activeFilterLabels !== [];
+    $subcategoryCount = 0;
+    foreach ($subcategoriesByCategory as $subcategories) {
+        $subcategoryCount += count($subcategories);
+    }
+    $subsubcategoryCount = 0;
+    foreach ($subsubcategoriesByParent as $subsubcategories) {
+        $subsubcategoryCount += count($subsubcategories);
     }
 
     ob_start();
@@ -2733,6 +2773,7 @@ function render_admin_webotheque_page(): void
                     <article><span><?= e((string) $t['links']) ?></span><strong><?= (int) ($stats['total'] ?? 0) ?></strong></article>
                     <article><span><?= e((string) $t['tags']) ?></span><strong><?= (int) ($stats['tags'] ?? 0) ?></strong></article>
                     <article><span><?= e((string) $t['domains']) ?></span><strong><?= (int) ($stats['domains'] ?? 0) ?></strong></article>
+                    <article><span><?= e($adminText('proposal_status_pending')) ?></span><strong><?= $pendingProposalCount ?></strong></article>
                 </div>
                 <p class="actions admin-webotheque-hero-actions">
                     <a class="button secondary" href="<?= e(route_url('webotheque')) ?>"><?= e((string) $t['view_links']) ?></a>
@@ -2741,10 +2782,21 @@ function render_admin_webotheque_page(): void
             </div>
         </section>
 
+        <nav class="admin-webotheque-toolbar" aria-label="<?= e((string) $t['administration']) ?>">
+            <a href="#admin-webotheque-search"><?= e((string) $t['search']) ?></a>
+            <a href="#admin-webotheque-links"><?= e((string) $t['content_list']) ?></a>
+            <a href="#admin-webotheque-taxonomy"><?= e($adminText('taxonomy_title')) ?></a>
+            <a href="<?= e($pendingProposalUrl) ?>"><?= e($adminText('pending_proposals_title')) ?> <span class="badge muted"><?= $pendingProposalCount ?></span></a>
+        </nav>
+
         <?php if ($showPendingProposals): ?>
         <section class="admin-webotheque-list" id="pending-proposals" aria-labelledby="pending-proposals-title">
-            <div class="row-between">
-                <h2 id="pending-proposals-title"><?= e($adminText('pending_proposals_title')) ?></h2>
+            <div class="admin-webotheque-section-head">
+                <div>
+                    <p class="eyebrow"><?= e((string) $t['administration']) ?></p>
+                    <h2 id="pending-proposals-title"><?= e($adminText('pending_proposals_title')) ?></h2>
+                </div>
+                <span class="badge muted"><?= count($pendingProposals) ?></span>
                 <a class="button secondary" href="<?= e(route_url('admin_webotheque')) ?>"><?= e((string) $t['reset']) ?></a>
             </div>
             <?php if ($pendingProposals === []): ?>
@@ -2768,8 +2820,8 @@ function render_admin_webotheque_page(): void
                 }
                 $proposalCategory = webotheque_proposal_category_from_summary((string) ($proposal['summary'] ?? ''), $categories);
                 ?>
-                <article class="news-card feature-card webotheque-card">
-                    <p>
+                <article class="news-card feature-card webotheque-card admin-webotheque-proposal-card">
+                    <p class="admin-webotheque-meta-row">
                         <span class="badge muted"><?= e((string) ($proposalTypeLabels[$proposalType] ?? $proposalType)) ?></span>
                         <span class="badge muted"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
                         <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
@@ -2842,7 +2894,14 @@ function render_admin_webotheque_page(): void
             </div>
         </dialog>
 
-        <section class="card webotheque-search-panel">
+        <section class="card webotheque-search-panel admin-webotheque-search-panel" id="admin-webotheque-search">
+            <div class="admin-webotheque-section-head">
+                <div>
+                    <p class="eyebrow"><?= e((string) $t['content_list']) ?></p>
+                    <h2><?= e((string) $t['search']) ?></h2>
+                </div>
+                <span class="badge muted"><?= count($links) ?> / <?= (int) ($stats['total'] ?? 0) ?> <?= e((string) $t['links']) ?></span>
+            </div>
             <form method="get" class="inline-form webotheque-search-form">
                 <input type="hidden" name="route" value="admin_webotheque">
                 <?php if ($categoryFilter !== ''): ?>
@@ -2860,6 +2919,17 @@ function render_admin_webotheque_page(): void
                     <a class="button secondary" href="<?= e(route_url('admin_webotheque')) ?>"><?= e((string) $t['reset']) ?></a>
                 <?php endif; ?>
             </form>
+            <?php if ($hasActiveFilters): ?>
+                <div class="admin-webotheque-active-filters">
+                    <?php if ($search !== ''): ?>
+                        <span class="badge muted"><?= e((string) $t['search']) ?>: <?= e($search) ?></span>
+                    <?php endif; ?>
+                    <?php foreach ($activeFilterLabels as $filterLabel): ?>
+                        <span class="badge muted"><?= e($filterLabel) ?></span>
+                    <?php endforeach; ?>
+                    <a href="<?= e(route_url('admin_webotheque')) ?>"><?= e((string) $t['reset']) ?></a>
+                </div>
+            <?php endif; ?>
         </section>
 
         <?php if (count($categories) > 1): ?>
@@ -2879,8 +2949,15 @@ function render_admin_webotheque_page(): void
             </nav>
         <?php endif; ?>
 
-        <section class="card admin-webotheque-taxonomy">
-            <h2><?= e($adminText('taxonomy_title')) ?></h2>
+        <section class="card admin-webotheque-taxonomy" id="admin-webotheque-taxonomy">
+            <div class="admin-webotheque-section-head">
+                <div>
+                    <p class="eyebrow"><?= e((string) $t['domains']) ?></p>
+                    <h2><?= e($adminText('taxonomy_title')) ?></h2>
+                </div>
+                <span class="badge muted"><?= count($categories) ?> <?= e((string) $t['domains']) ?></span>
+            </div>
+            <div class="admin-webotheque-taxonomy-group">
             <form method="post" class="inline-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_category">
@@ -2908,6 +2985,8 @@ function render_admin_webotheque_page(): void
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+            </div>
+            <div class="admin-webotheque-taxonomy-group">
             <form method="post" class="inline-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_subcategory">
@@ -2953,6 +3032,8 @@ function render_admin_webotheque_page(): void
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+            </div>
+            <div class="admin-webotheque-taxonomy-group">
             <form method="post" class="inline-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_subsubcategory">
@@ -3009,10 +3090,17 @@ function render_admin_webotheque_page(): void
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+            </div>
         </section>
 
-        <section class="admin-webotheque-list">
-            <h2><?= e((string) $t['content_list']) ?></h2>
+        <section class="admin-webotheque-list" id="admin-webotheque-links">
+            <div class="admin-webotheque-section-head">
+                <div>
+                    <p class="eyebrow"><?= e((string) $t['links']) ?></p>
+                    <h2><?= e((string) $t['content_list']) ?></h2>
+                </div>
+                <span class="badge muted"><?= count($links) ?></span>
+            </div>
             <?php if ($links === []): ?>
                 <div class="card"><p><?= e((string) $t['empty']) ?></p></div>
             <?php else: ?>
