@@ -113,6 +113,47 @@ final class WebothequeHelpersTest extends TestCase
         self::assertStringNotContainsString('<script>', $html);
     }
 
+    public function testManagedCardsKeepEditActionWithoutFavoriteForm(): void
+    {
+        $html = render_webotheque_cards([
+            [
+                'id' => 42,
+                'member_id' => 7,
+                'title' => 'Managed link',
+                'url' => 'https://admin.example.org',
+                'description' => 'Editable from admin',
+                'tags' => 'admin',
+                'category' => 'general',
+            ],
+        ], [
+            'link' => 'Link',
+            'open' => 'Open',
+            'tags' => 'Tags',
+            'domain_field' => 'Topic',
+            'subcategory_field' => 'Subtopic',
+            'subsubcategory_field' => 'Sub-subtopic',
+            'no_subcategory' => 'No subtopic',
+            'no_subsubcategory' => 'No sub-subtopic',
+            'edit_link' => 'Edit',
+            'edit_link_title' => 'Edit link',
+            'title_field' => 'Title',
+            'url_field' => 'URL',
+            'description_field' => 'Description',
+            'tags_field' => 'Keywords',
+            'save' => 'Save',
+            'cancel' => 'Cancel',
+            'delete_link_warning' => 'Delete warning',
+            'delete_link' => 'Delete link',
+        ], [
+            'general' => 'General',
+        ], null, true);
+
+        self::assertStringContainsString('data-webotheque-modal-open="webotheque-edit-dialog-42"', $html);
+        self::assertStringContainsString('name="action" value="update_link"', $html);
+        self::assertStringContainsString('name="action" value="delete_link"', $html);
+        self::assertStringNotContainsString('toggle_favorite_link', $html);
+    }
+
     public function testLinkFieldsRenderCategorySelectKeywordsAndOptionalContact(): void
     {
         $labels = [
