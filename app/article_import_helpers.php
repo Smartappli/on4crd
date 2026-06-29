@@ -110,12 +110,17 @@ function article_extract_docx_html(string $path): string
         'endnote' => article_docx_note_bodies($path, 'endnote', $numberingFormats),
     ];
     $referencedNotes = [];
+    $headerFooterHtml = article_docx_header_footer_html($path, $relationshipsXml, $numberingFormats, $noteBodies, $referencedNotes);
     $bodyNodes = $xpath->query('/*[local-name()="document"]/*[local-name()="body"]/*');
     if (!$bodyNodes instanceof DOMNodeList) {
         return '';
     }
 
     $html = [];
+    foreach ($headerFooterHtml['headers'] as $headerHtml) {
+        $html[] = $headerHtml;
+    }
+
     $openListTag = null;
     foreach ($bodyNodes as $block) {
         if (!$block instanceof DOMElement) {
@@ -128,6 +133,10 @@ function article_extract_docx_html(string $path): string
     if ($openListTag !== null) {
         $html[] = '</' . $openListTag . '>';
     }
+    foreach ($headerFooterHtml['footers'] as $footerHtml) {
+        $html[] = '<hr>' . $footerHtml;
+    }
+
     $notesHtml = article_docx_referenced_notes_html($noteBodies, $referencedNotes);
     if ($notesHtml !== '') {
         $html[] = $notesHtml;
@@ -266,7 +275,7 @@ if (!function_exists('article_docx_alt_chunk_html_by_relationship_id')) {
 /**
  * @return array<string,string>
  */
-function article_docx_alt_chunk_html_by_relationship_id(string $path, string $relationshipsXml): array
+function article_docx_alt_chunk_html_by_relationship_id(string $path, string $relationshipsXml, string $baseDirectory = 'word'): array
 {
     if ($relationshipsXml === '' || !is_file($path)) {
         return [];
@@ -275,7 +284,7 @@ function article_docx_alt_chunk_html_by_relationship_id(string $path, string $re
     $relationships = article_docx_relationship_targets($relationshipsXml);
     $chunks = [];
     foreach ($relationships as $relationshipId => $target) {
-        $partName = article_docx_relationship_part_name('word', $target);
+        $partName = article_docx_relationship_part_name($baseDirectory, $target);
         if ($partName === '') {
             continue;
         }
@@ -299,6 +308,120 @@ function article_docx_alt_chunk_html_by_relationship_id(string $path, string $re
     }
 
     return $chunks;
+}
+}
+
+if (!function_exists('article_docx_header_footer_html')) {
+/**
+ * @param array<string,array<string,string>> $numberingFormats
+ * @param array<string,array<string,string>> $noteBodies
+ * @param array<string,array{type:string,id:string}> $referencedNotes
+ * @return array{headers:list<string>,footers:list<string>}
+ */
+function article_docx_header_footer_html(string $path, string $relationshipsXml, array $numberingFormats, array $noteBodies, array &$referencedNotes): array
+{
+    $relationships = article_docx_relationship_targets($relationshipsXml);
+    $parts = ['headers' => [], 'footers' => []];
+    $seenPartNames = [];
+    $seenHtml = [];
+
+    foreach ($relationships as $target) {
+        $partName = article_docx_relationship_part_name('word', $target);
+        if ($partName === '' || isset($seenPartNames[$partName])) {
+            continue;
+        }
+
+        if (preg_match('#^word/header\d*\.xml$#i', $partName) === 1) {
+            $bucket = 'headers';
+        } elseif (preg_match('#^word/footer\d*\.xml$#i', $partName) === 1) {
+            $bucket = 'footers';
+        } else {
+            continue;
+        }
+
+        $seenPartNames[$partName] = true;
+        $html = article_docx_wordprocessing_part_html($path, $partName, $numberingFormats, $noteBodies, $referencedNotes);
+        if (article_docx_html_is_empty($html)) {
+            continue;
+        }
+
+        $fingerprint = sha1($html);
+        if (isset($seenHtml[$bucket][$fingerprint])) {
+            continue;
+        }
+        $seenHtml[$bucket][$fingerprint] = true;
+        $parts[$bucket][] = $html;
+    }
+
+    return $parts;
+}
+}
+
+if (!function_exists('article_docx_wordprocessing_part_html')) {
+/**
+ * @param array<string,array<string,string>> $numberingFormats
+ * @param array<string,array<string,string>> $noteBodies
+ * @param array<string,array{type:string,id:string}> $referencedNotes
+ */
+function article_docx_wordprocessing_part_html(string $path, string $partName, array $numberingFormats, array $noteBodies, array &$referencedNotes): string
+{
+    $xml = article_docx_part_contents($path, $partName);
+    if ($xml === '') {
+        return '';
+    }
+
+    $dom = new DOMDocument();
+    $previousUseInternalErrors = libxml_use_internal_errors(true);
+    $loaded = $dom->loadXML($xml);
+    libxml_clear_errors();
+    libxml_use_internal_errors($previousUseInternalErrors);
+    if (!$loaded) {
+        return article_import_text_to_html(strip_tags($xml));
+    }
+
+    $relationshipsXml = article_docx_part_contents($path, article_docx_relationships_part_name($partName));
+    $relationships = article_docx_relationship_targets($relationshipsXml);
+    $imageDataUris = article_docx_image_data_uris($path, $relationshipsXml);
+    $baseDirectory = article_docx_part_base_directory($partName);
+    $altChunkHtmlByRelationshipId = article_docx_alt_chunk_html_by_relationship_id($path, $relationshipsXml, $baseDirectory);
+    $xpath = new DOMXPath($dom);
+    $blockNodes = $xpath->query('/*/*');
+    if (!$blockNodes instanceof DOMNodeList) {
+        return '';
+    }
+
+    $html = [];
+    $openListTag = null;
+    foreach ($blockNodes as $block) {
+        if ($block instanceof DOMElement) {
+            article_docx_append_block_html($block, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openListTag, $noteBodies, $referencedNotes, $altChunkHtmlByRelationshipId);
+        }
+    }
+    article_docx_close_open_list($html, $openListTag);
+
+    return trim(implode("\n", $html));
+}
+}
+
+if (!function_exists('article_docx_relationships_part_name')) {
+function article_docx_relationships_part_name(string $partName): string
+{
+    $partName = trim(str_replace('\\', '/', $partName), '/');
+    if ($partName === '' || str_contains($partName, '..')) {
+        return '';
+    }
+
+    $directory = dirname($partName);
+    $baseName = basename($partName);
+    return ($directory === '.' ? '_rels' : $directory . '/_rels') . '/' . $baseName . '.rels';
+}
+}
+
+if (!function_exists('article_docx_part_base_directory')) {
+function article_docx_part_base_directory(string $partName): string
+{
+    $directory = trim(str_replace('\\', '/', dirname($partName)), '/');
+    return $directory === '' || $directory === '.' ? 'word' : $directory;
 }
 }
 
@@ -953,8 +1076,16 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $relation
             $html .= ' ';
             continue;
         }
-        if ($localName === 'br') {
+        if ($localName === 'br' || $localName === 'cr') {
             $html .= '<br>';
+            continue;
+        }
+        if ($localName === 'noBreakHyphen') {
+            $html .= '-';
+            continue;
+        }
+        if ($localName === 'softHyphen') {
+            $html .= '&shy;';
             continue;
         }
         if ($localName === 'footnoteReference' || $localName === 'endnoteReference') {
