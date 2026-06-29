@@ -447,6 +447,204 @@ body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(nav[clas
   gap: .55rem !important;
 }
 
+[data-route="admin_dashboard"] .admin-dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: flex-end;
+}
+
+[data-route="admin_dashboard"] .admin-dashboard-stats,
+[data-route="admin_permissions"] .admin-permissions-stats,
+[data-route="admin_news"] .admin-news-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: .75rem;
+  margin-top: 1rem;
+}
+
+[data-route="admin_dashboard"] .admin-dashboard-stats article,
+[data-route="admin_permissions"] .admin-permissions-stats article,
+[data-route="admin_news"] .admin-news-stats article {
+  display: grid;
+  gap: .25rem;
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_dashboard"] .admin-dashboard-stats span,
+[data-route="admin_permissions"] .admin-permissions-stats span,
+[data-route="admin_news"] .admin-news-stats span {
+  color: var(--muted);
+  font-size: .84rem;
+  font-weight: 800;
+}
+
+[data-route="admin_dashboard"] .admin-dashboard-stats strong,
+[data-route="admin_permissions"] .admin-permissions-stats strong,
+[data-route="admin_news"] .admin-news-stats strong {
+  color: var(--text);
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+[data-route="admin_dashboard"] .admin-widget-form,
+[data-route="admin_dashboard"] .admin-widget-list {
+  display: grid;
+  gap: .75rem;
+}
+
+[data-route="admin_dashboard"] .admin-widget-list {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+}
+
+[data-route="admin_dashboard"] .admin-widget-toggle {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .75rem;
+  align-items: flex-start;
+  margin: 0;
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_dashboard"] .admin-widget-toggle input {
+  margin-top: .25rem;
+}
+
+[data-route="admin_dashboard"] .admin-widget-copy {
+  display: grid;
+  gap: .2rem;
+  min-width: 0;
+}
+
+[data-route="admin_dashboard"] .admin-widget-copy .help {
+  margin: 0;
+}
+
+[data-route="admin_members"] .admin-members-header .badge {
+  align-self: flex-start;
+}
+
+[data-route="admin_members"] .admin-member-create-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: .75rem;
+  align-items: end;
+}
+
+[data-route="admin_members"] .admin-member-toggle {
+  display: inline-flex;
+  gap: .45rem;
+  align-items: center;
+  min-height: 2.85rem;
+  margin: .55rem 0 0;
+  padding: .45rem .6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+  font-weight: 800;
+}
+
+[data-route="admin_members"] .admin-member-toggle input {
+  margin: 0;
+}
+
+[data-route="admin_members"] .admin-member-search {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  gap: .5rem;
+  align-items: end;
+  width: min(100%, 34rem);
+  margin: 0;
+}
+
+[data-route="admin_members"] .admin-member-search label {
+  margin: 0;
+}
+
+[data-route="admin_members"] .admin-member-row-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(8rem, 1fr)) repeat(2, minmax(5.5rem, auto)) minmax(12rem, 1fr) auto;
+  gap: .5rem;
+  align-items: center;
+  margin: 0;
+}
+
+[data-route="admin_members"] .admin-member-row-form :is(input[type="text"], input[type="email"]) {
+  margin-top: 0;
+}
+
+[data-route="admin_permissions"] .admin-role-form,
+[data-route="admin_permissions"] .admin-role-assignment-list,
+[data-route="admin_news"] .admin-news-manager-form {
+  display: grid;
+  gap: .75rem;
+}
+
+[data-route="admin_permissions"] .admin-role-assignment-list {
+  margin-top: .75rem;
+}
+
+[data-route="admin_permissions"] .admin-role-assignment {
+  display: grid;
+  gap: .5rem;
+  padding: .75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_permissions"] .admin-role-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+[data-route="admin_permissions"] .admin-role-chip-form {
+  display: inline-flex;
+  gap: .35rem;
+  align-items: center;
+  margin: 0;
+}
+
+[data-route="admin_news"] .admin-news-workspace,
+[data-route="admin_news"] .admin-news-moderation-grid {
+  align-items: start;
+}
+
+[data-route="admin_news"] .admin-news-editor-form label,
+[data-route="admin_news"] .admin-news-manager-form label {
+  margin: 0;
+}
+
+[data-route="admin_news"] .admin-news-list-card .table-wrap {
+  margin-top: .75rem;
+}
+
+[data-route="admin_news"] .admin-news-queue-card {
+  display: grid;
+  gap: .75rem;
+}
+
+[data-route="admin_news"] .admin-news-queue-item {
+  display: grid;
+  gap: .7rem;
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--admin-warning);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_news"] .admin-news-queue-item :is(h3, p) {
+  margin-top: 0;
+}
+
 @media (max-width: 900px) {
   [data-route="admin"] .admin-home-hero {
     grid-template-columns: 1fr;
@@ -454,6 +652,10 @@ body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(nav[clas
 
   body:is([data-route="admin"], [data-route^="admin_"]) #main-content table {
     min-width: 640px;
+  }
+
+  [data-route="admin_members"] .admin-member-row-form {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
   }
 }
 
@@ -490,5 +692,22 @@ body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(nav[clas
 
   [data-route="admin"] .admin-card {
     grid-template-columns: 1fr;
+  }
+
+  [data-route="admin_dashboard"] .admin-dashboard-actions,
+  [data-route="admin_members"] .admin-member-search,
+  [data-route="admin_permissions"] .admin-role-chip-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  [data-route="admin_members"] .admin-member-search {
+    display: flex;
+    width: 100%;
+  }
+
+  [data-route="admin_dashboard"] .admin-dashboard-actions .button,
+  [data-route="admin_permissions"] .admin-role-chip-form .button {
+    width: 100%;
   }
 }

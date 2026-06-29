@@ -134,11 +134,27 @@ $sectionManagers = has_permission('news.moderate') ? db()->query('SELECT nsm.sec
 
 ob_start();
 ?>
-<div class="grid-2">
-    <section class="card">
-        <h1><?= $editing ? e((string) $t['edit']) : e((string) $t['write']) ?> <?= e((string) $t['news_item']) ?></h1>
-        <p class="help"><?= e((string) $t['help_intro']) ?></p>
-        <form method="post">
+<div class="stack admin-news-module">
+<section class="card admin-news-header">
+    <div class="admin-section-head">
+        <div>
+            <h1><?= e((string) $t['layout']) ?></h1>
+            <p class="help"><?= e((string) $t['help_intro']) ?></p>
+        </div>
+    </div>
+    <div class="admin-news-stats">
+        <article><span><?= e((string) $t['my_news']) ?></span><strong><?= count($posts) ?></strong></article>
+        <?php if (has_permission('news.moderate')): ?>
+            <article><span><?= e((string) $t['moderation_queue']) ?></span><strong><?= count($queue) ?></strong></article>
+            <article><span><?= e((string) $t['section_managers']) ?></span><strong><?= count($sectionManagers) ?></strong></article>
+        <?php endif; ?>
+    </div>
+</section>
+
+<div class="grid-2 admin-news-workspace">
+    <section class="card admin-news-editor-card">
+        <h2><?= $editing ? e((string) $t['edit']) : e((string) $t['write']) ?> <?= e((string) $t['news_item']) ?></h2>
+        <form method="post" class="stack admin-news-editor-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_post">
             <input type="hidden" name="post_id" value="<?= (int) ($editing['id'] ?? 0) ?>">
@@ -160,12 +176,15 @@ ob_start();
                     <select name="status"><?php foreach (['draft', 'pending', 'published', 'rejected'] as $status): ?><option value="<?= e($status) ?>" <?= (($editing['status'] ?? 'published') === $status) ? 'selected' : '' ?>><?= e(news_status_label($status)) ?></option><?php endforeach; ?></select>
                 </label>
             <?php endif; ?>
-            <p><button class="button"><?= e((string) $t['save']) ?></button></p>
+            <div class="actions"><button class="button"><?= e((string) $t['save']) ?></button></div>
         </form>
     </section>
 
-    <section class="card">
-        <h2><?= e((string) $t['my_news']) ?></h2>
+    <section class="card admin-news-list-card">
+        <div class="admin-section-head">
+            <h2><?= e((string) $t['my_news']) ?></h2>
+            <span class="badge muted"><?= count($posts) ?></span>
+        </div>
         <div class="table-wrap"><table><thead><tr><th><?= e((string) $t['title']) ?></th><th><?= e((string) $t['section']) ?></th><th><?= e((string) $t['status']) ?></th><th><?= e((string) $t['action']) ?></th></tr></thead><tbody>
         <?php foreach ($posts as $post): ?><tr><td><?= e((string) $post['title']) ?></td><td><?= e((string) $post['section_name']) ?></td><td><span class="badge muted"><?= e(news_status_label((string) $post['status'])) ?></span></td><td><a href="<?= e(route_url('admin_news', ['edit' => (int) $post['id']])) ?>"><?= e((string) $t['edit_action']) ?></a></td></tr><?php endforeach; ?>
         <?php if ($posts === []): ?><tr><td colspan="4"><?= e((string) $t['no_news']) ?></td></tr><?php endif; ?>
@@ -174,29 +193,35 @@ ob_start();
 </div>
 
 <?php if (has_permission('news.moderate')): ?>
-<div class="grid-2">
-    <section class="card">
-        <h2><?= e((string) $t['moderation_queue']) ?></h2>
+<div class="grid-2 admin-news-moderation-grid">
+    <section class="card admin-news-queue-card">
+        <div class="admin-section-head">
+            <h2><?= e((string) $t['moderation_queue']) ?></h2>
+            <span class="badge muted"><?= count($queue) ?></span>
+        </div>
         <?php foreach ($queue as $post): ?>
-            <article class="card inner-card">
+            <article class="inner-card admin-news-queue-item">
                 <div class="row-between"><div><h3><?= e((string) $post['title']) ?></h3><p class="help"><?= e((string) $post['section_name']) ?> — <?= e((string) ($post['author_callsign'] ?: $t['unknown'])) ?></p></div><span class="badge muted"><?= e(news_status_label((string) $post['status'])) ?></span></div>
                 <p><?= e((string) $post['excerpt']) ?></p>
                 <form method="post" class="stack"><input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="moderate_post"><input type="hidden" name="post_id" value="<?= (int) $post['id'] ?>">
                     <label><?= e((string) $t['decision']) ?><select name="status"><option value="published"><?= e((string) $t['publish']) ?></option><option value="pending"><?= e((string) $t['keep_pending']) ?></option><option value="rejected"><?= e((string) $t['reject']) ?></option><option value="draft"><?= e((string) $t['back_to_draft']) ?></option></select></label>
                     <label><?= e((string) $t['moderation_note']) ?><textarea name="moderation_note" rows="3"><?= e((string) ($post['moderation_note'] ?? '')) ?></textarea></label>
-                    <p><button class="button"><?= e((string) $t['save_decision']) ?></button></p>
+                    <div class="actions"><button class="button"><?= e((string) $t['save_decision']) ?></button></div>
                 </form>
             </article>
         <?php endforeach; ?>
         <?php if ($queue === []): ?><p><?= e((string) $t['no_pending_news']) ?></p><?php endif; ?>
     </section>
 
-    <section class="card">
-        <h2><?= e((string) $t['section_managers']) ?></h2>
-        <form method="post"><input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="assign_section_manager">
+    <section class="card admin-news-managers-card">
+        <div class="admin-section-head">
+            <h2><?= e((string) $t['section_managers']) ?></h2>
+            <span class="badge muted"><?= count($sectionManagers) ?></span>
+        </div>
+        <form method="post" class="stack admin-news-manager-form"><input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="assign_section_manager">
             <label><?= e((string) $t['member']) ?><select name="member_id"><?php foreach ($members as $member): ?><option value="<?= (int) $member['id'] ?>"><?= e((string) $member['callsign']) ?> — <?= e((string) $member['full_name']) ?></option><?php endforeach; ?></select></label>
             <label><?= e((string) $t['section']) ?><select name="section_id"><?php foreach ($sections as $section): ?><option value="<?= (int) $section['id'] ?>"><?= e((string) $section['name']) ?></option><?php endforeach; ?></select></label>
-            <p><button class="button"><?= e((string) $t['assign']) ?></button></p>
+            <div class="actions"><button class="button"><?= e((string) $t['assign']) ?></button></div>
         </form>
         <div class="table-wrap"><table><thead><tr><th><?= e((string) $t['section']) ?></th><th><?= e((string) $t['callsign']) ?></th></tr></thead><tbody>
             <?php foreach ($sectionManagers as $item): ?><tr><td><?= e((string) $item['section_name']) ?></td><td><?= e((string) $item['callsign']) ?></td></tr><?php endforeach; ?>
@@ -205,5 +230,6 @@ ob_start();
     </section>
 </div>
 <?php endif; ?>
+</div>
 
 <?php echo render_layout((string) ob_get_clean(), (string) $t['layout']);
