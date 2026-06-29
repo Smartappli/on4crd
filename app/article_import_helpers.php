@@ -200,7 +200,8 @@ function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, arra
                     article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $candidateHtml, $candidateOpenListTag);
                 }
             }
-            if ($candidateHtml !== $html || $candidateOpenListTag !== $openListTag) {
+            $addedHtml = implode('', array_slice($candidateHtml, count($html)));
+            if (!article_docx_html_is_empty($addedHtml)) {
                 $html = $candidateHtml;
                 $openListTag = $candidateOpenListTag;
                 return;

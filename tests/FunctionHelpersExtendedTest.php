@@ -283,6 +283,14 @@ final class FunctionHelpersExtendedTest extends TestCase
       <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr></w:pPr>
       <w:r><w:t>Element numerote</w:t></w:r>
     </w:p>
+    <mc:AlternateContent>
+      <mc:Choice Requires="wps">
+        <w:p/>
+      </mc:Choice>
+      <mc:Fallback>
+        <w:p><w:r><w:t>Texte fallback apres liste</w:t></w:r></w:p>
+      </mc:Fallback>
+    </mc:AlternateContent>
     <w:p>
       <w:r>
         <w:drawing>
@@ -408,6 +416,7 @@ XML;
             self::assertStringContainsString('<li>Element de liste</li>', $html);
             self::assertStringContainsString('<ol>', $html);
             self::assertStringContainsString('<li>Element numerote</li>', $html);
+            self::assertStringContainsString('<p>Texte fallback apres liste</p>', $html);
             self::assertStringContainsString('<img src="data:image/png;base64,', $html);
             self::assertStringContainsString('alt="Image importee"', $html);
             self::assertStringContainsString('width="10"', $html);
