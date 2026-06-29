@@ -1,4 +1,494 @@
-﻿/* Module CSS: admin */
-[data-route="admin"] .admin-module {
+/* Module CSS: admin */
+body:is([data-route="admin"], [data-route^="admin_"]) {
+  --admin-radius: 8px;
+  --admin-soft: color-mix(in srgb, var(--panel-2) 68%, var(--panel));
+  --admin-card: color-mix(in srgb, var(--panel) 94%, var(--panel-3));
+  --admin-hover: color-mix(in srgb, var(--accent) 8%, var(--panel));
+  --admin-warning: #b54708;
+  --admin-warning-bg: color-mix(in srgb, #f59e0b 12%, var(--panel));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content {
+  max-width: 1380px;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(.admin-module, [class*="-module"]) {
   min-width: 0;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .card {
+  border-radius: var(--admin-radius);
+  background: var(--admin-card);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .06);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(.inner-card, .article-item, .news-card, .feature-card) {
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+  box-shadow: none;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(h1, h2, h3) {
+  margin-top: 0;
+  letter-spacing: 0;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content h1 {
+  font-size: 1.9rem;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content h2 {
+  font-size: 1.35rem;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content h3 {
+  font-size: 1rem;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .help {
+  max-width: 72ch;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .grid-2,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .grid-3,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  align-items: start;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .row-between,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .section-header,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .admin-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .admin-section-head :is(h1, h2, h3, p) {
+  margin-top: 0;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .admin-section-kicker {
+  margin: 0 0 .25rem;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .admin-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  align-items: center;
+  margin: 0 0 .45rem;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .actions {
+  align-items: center;
+  gap: .5rem;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(.button, button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.55rem;
+  border-radius: var(--admin-radius);
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .button.small,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content button.small {
+  min-height: 2.25rem;
+  padding: .48rem .7rem;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(.button, button):focus-visible,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(a, input, select, textarea, summary):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  outline-offset: 2px;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content label {
+  margin: .55rem 0;
+  color: var(--text);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content label:not([class]) > span:first-child {
+  display: inline-block;
+  margin-bottom: .15rem;
+  color: var(--muted);
+  font-size: .84rem;
+  font-weight: 800;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="password"], input[type="file"], input[type="search"], input[type="number"], input[type="date"], input[type="month"], input[type="datetime-local"], select, textarea) {
+  border-radius: var(--admin-radius);
+  background-color: color-mix(in srgb, var(--panel) 96%, var(--panel-2));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="password"], input[type="search"], input[type="number"], input[type="date"], input[type="month"], input[type="datetime-local"], select) {
+  min-height: 2.85rem;
+  height: auto;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(input, select, textarea):hover {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content label:not([class]):has(> input[type="checkbox"]),
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content label:not([class]):has(> input[type="radio"]) {
+  display: inline-flex;
+  gap: .45rem;
+  align-items: center;
+  width: auto;
+  min-height: 2.3rem;
+  margin: .25rem .35rem .25rem 0;
+  padding: .35rem .55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+  font-weight: 700;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content label:not([class]):has(> input[type="checkbox"]) input,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content label:not([class]):has(> input[type="radio"]) input {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--panel);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 36%, transparent);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content table {
+  min-width: 720px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content th {
+  background: color-mix(in srgb, var(--panel-2) 78%, var(--panel));
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(th, td) {
+  padding: .72rem .78rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content tbody tr:hover {
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content code {
+  padding: .1rem .35rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .badge,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .pill {
+  margin-bottom: 0;
+  border-radius: 999px;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content .badge.muted {
+  background: color-mix(in srgb, var(--panel-2) 72%, var(--panel));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(nav[class*="quick-nav"], .admin-webotheque-toolbar, .admin-webotheque-taxonomy-nav) {
+  border-radius: var(--admin-radius);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(nav[class*="quick-nav"], .admin-webotheque-toolbar, .admin-webotheque-taxonomy-nav) a {
+  border-radius: var(--admin-radius);
+}
+
+[data-route="admin"] .admin-home {
+  min-width: 0;
+}
+
+[data-route="admin"] .admin-home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+  gap: 1rem;
+  align-items: stretch;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 34%),
+    linear-gradient(180deg, var(--panel), var(--panel-3));
+}
+
+[data-route="admin"] .admin-home-hero-copy {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+}
+
+[data-route="admin"] .admin-home-hero-copy h1 {
+  margin-bottom: .45rem;
+}
+
+[data-route="admin"] .admin-home-search {
+  display: grid;
+  gap: .75rem;
+  align-content: center;
+  margin: 0;
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+}
+
+[data-route="admin"] .admin-home-search label {
+  margin: 0;
+}
+
+[data-route="admin"] .admin-home-search-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+[data-route="admin"] .admin-pending-card {
+  border-left: 4px solid var(--admin-warning);
+}
+
+[data-route="admin"] .admin-pending-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+  min-height: 1.8rem;
+  padding: .25rem .58rem;
+  border: 1px solid color-mix(in srgb, #f59e0b 38%, var(--border));
+  border-radius: 999px;
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning);
+  font-size: .78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+[data-route="admin"] .admin-pending-list {
+  display: grid;
+  gap: .75rem;
+}
+
+[data-route="admin"] .admin-pending-item {
+  display: grid;
+  gap: .7rem;
+  padding: .95rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--panel) 84%, var(--panel-2));
+}
+
+[data-route="admin"] .admin-pending-item-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+[data-route="admin"] .admin-pending-item-head :is(h3, p) {
+  margin-top: 0;
+}
+
+[data-route="admin"] .admin-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: .85rem;
+}
+
+[data-route="admin"] .admin-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: .85rem;
+  min-height: 11rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease;
+}
+
+[data-route="admin"] .admin-card:hover,
+[data-route="admin"] .admin-card:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: var(--admin-hover);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+[data-route="admin"] .admin-card-icon {
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--accent) 9%, var(--panel));
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+[data-route="admin"] .admin-card-copy {
+  min-width: 0;
+}
+
+[data-route="admin"] .admin-card-copy h2 {
+  margin-bottom: .35rem;
+  font-size: 1.05rem;
+}
+
+[data-route="admin"] .admin-card-copy p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--muted);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+[data-route="admin"] .admin-card-footer {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: .65rem;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2rem;
+}
+
+[data-route="admin"] .admin-open-cta {
+  display: inline-flex;
+  gap: .35rem;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  padding: .32rem .62rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 9%, var(--panel));
+  color: var(--accent-strong);
+  font-size: .82rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: background .16s ease, border-color .16s ease, color .16s ease;
+}
+
+[data-route="admin"] .admin-card:hover .admin-open-cta,
+[data-route="admin"] .admin-card:focus-visible .admin-open-cta {
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
+  background: var(--accent);
+  color: #fff;
+}
+
+[data-route="admin_ads"] #main-content .stats-grid {
+  margin-bottom: 1rem;
+}
+
+[data-route="admin_ads"] #main-content .stat-card {
+  display: grid;
+  gap: .25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-card);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .06);
+}
+
+[data-route="admin_ads"] #main-content .stat-card strong {
+  color: var(--text);
+  font-size: 1.85rem;
+  line-height: 1;
+}
+
+[data-route="admin_ads"] #main-content .stat-card span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+[data-route="admin_members"] #main-content section.card > section.stack {
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_members"] #main-content table td[colspan] {
+  padding: .65rem;
+}
+
+[data-route="admin_members"] #main-content table form.grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr)) !important;
+  gap: .55rem !important;
+}
+
+@media (max-width: 900px) {
+  [data-route="admin"] .admin-home-hero {
+    grid-template-columns: 1fr;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content table {
+    min-width: 640px;
+  }
+}
+
+@media (max-width: 640px) {
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content {
+    padding-inline: .85rem;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content .card {
+    padding: .95rem;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content h1 {
+    font-size: 1.55rem;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content h2 {
+    font-size: 1.18rem;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content .actions,
+  [data-route="admin"] .admin-home-search-actions,
+  [data-route="admin"] .admin-card-footer,
+  [data-route="admin"] .admin-pending-item-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content .actions :is(.button, button),
+  [data-route="admin"] .admin-home-search-actions .button,
+  [data-route="admin"] .admin-open-cta {
+    width: 100%;
+  }
+
+  [data-route="admin"] .admin-card {
+    grid-template-columns: 1fr;
+  }
 }

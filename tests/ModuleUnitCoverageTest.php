@@ -185,7 +185,7 @@ final class ModuleUnitCoverageTest extends TestCase
 
         foreach (['admin_pv', 'admin_fichiers', 'admin_telechargements'] as $route) {
             self::assertSame(
-                ['assets/css/modules/shared.css', 'assets/css/modules/admin_member_documents.css'],
+                ['assets/css/modules/shared.css', 'assets/css/modules/admin.css', 'assets/css/modules/admin_member_documents.css'],
                 module_css_assets_for_route($route)
             );
             self::assertContains('assets/js/modules/wysiwyg.js', module_js_assets_for_route($route));
