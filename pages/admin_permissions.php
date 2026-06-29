@@ -55,9 +55,27 @@ foreach ($memberRoles as $item) {
 
 ob_start();
 ?>
+<div class="stack admin-permissions-module">
+<section class="card admin-permissions-header">
+    <div class="admin-section-head">
+        <div>
+            <h1><?= e((string) $t['title']) ?></h1>
+            <p class="help"><?= e((string) $t['meta_desc']) ?></p>
+        </div>
+    </div>
+    <div class="admin-permissions-stats">
+        <article><span><?= e((string) $t['th_permission']) ?></span><strong><?= count($permissions) ?></strong></article>
+        <article><span><?= e((string) $t['role']) ?></span><strong><?= count($roles) ?></strong></article>
+        <article><span><?= e((string) $t['assignments']) ?></span><strong><?= count($memberRoles) ?></strong></article>
+    </div>
+</section>
+
 <div class="grid-2">
-    <section class="card">
-        <h1><?= e((string) $t['title']) ?></h1>
+    <section class="card admin-permissions-list-card">
+        <div class="admin-section-head">
+            <h2><?= e((string) $t['th_permission']) ?></h2>
+            <span class="badge muted"><?= count($permissions) ?></span>
+        </div>
         <div class="table-wrap">
             <table>
                 <thead><tr><th><?= e((string) $t['th_permission']) ?></th><th><?= e((string) $t['th_label']) ?></th></tr></thead>
@@ -70,9 +88,14 @@ ob_start();
         </div>
     </section>
 
-    <section class="card">
-        <h2><?= e((string) $t['assign_role']) ?></h2>
-        <form method="post">
+    <section class="card admin-role-card">
+        <div class="admin-section-head">
+            <div>
+                <h2><?= e((string) $t['assign_role']) ?></h2>
+                <p class="help"><?= e((string) $t['assignments']) ?></p>
+            </div>
+        </div>
+        <form method="post" class="admin-role-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="assign_role">
             <label><?= e((string) $t['member']) ?>
@@ -81,27 +104,32 @@ ob_start();
             <label><?= e((string) $t['role']) ?>
                 <select name="role_id"><?php foreach ($roles as $role): ?><option value="<?= (int) $role['id'] ?>"><?= e($roleLabel($role)) ?></option><?php endforeach; ?></select>
             </label>
-            <p><button class="button"><?= e((string) $t['assign']) ?></button></p>
+            <div class="actions"><button class="button"><?= e((string) $t['assign']) ?></button></div>
         </form>
 
         <h3><?= e((string) $t['assignments']) ?></h3>
-        <?php foreach ($members as $member): ?>
-            <?php $currentRoles = $rolesByMember[(int) $member['id']] ?? []; if ($currentRoles === []) { continue; } ?>
-            <div style="margin:.6rem 0;">
-                <strong><?= e((string) $member['callsign']) ?></strong>
-                <?php foreach ($currentRoles as $r): ?>
-                    <form method="post" style="display:inline-flex; gap:.35rem; margin:.2rem;">
-                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                        <input type="hidden" name="action" value="remove_role">
-                        <input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>">
-                        <input type="hidden" name="role_id" value="<?= (int) $r['id'] ?>">
-                        <span class="badge muted"><?= e($roleLabel($r)) ?></span>
-                        <button class="button secondary" type="submit"><?= e((string) $t['remove_role']) ?></button>
-                    </form>
-                <?php endforeach; ?>
-            </div>
-        <?php endforeach; ?>
+        <div class="admin-role-assignment-list">
+            <?php foreach ($members as $member): ?>
+                <?php $currentRoles = $rolesByMember[(int) $member['id']] ?? []; if ($currentRoles === []) { continue; } ?>
+                <article class="admin-role-assignment">
+                    <strong><?= e((string) $member['callsign']) ?></strong>
+                    <div class="admin-role-chip-list">
+                        <?php foreach ($currentRoles as $r): ?>
+                            <form method="post" class="admin-role-chip-form">
+                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                <input type="hidden" name="action" value="remove_role">
+                                <input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>">
+                                <input type="hidden" name="role_id" value="<?= (int) $r['id'] ?>">
+                                <span class="badge muted"><?= e($roleLabel($r)) ?></span>
+                                <button class="button secondary small" type="submit"><?= e((string) $t['remove_role']) ?></button>
+                            </form>
+                        <?php endforeach; ?>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
     </section>
+</div>
 </div>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout']);

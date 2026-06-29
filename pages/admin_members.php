@@ -171,11 +171,25 @@ $members = array_slice($members, ($memberPage - 1) * $memberPerPage, $memberPerP
 
 ob_start();
 ?>
-<section class="card">
-    <h1><?= e((string) $t['title']) ?></h1>
-    <section class="stack" style="margin:1rem 0;">
-        <h2><?= e((string) $t['create_title']) ?></h2>
-        <form method="post" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap:.75rem; align-items:end;">
+<div class="stack admin-members-module">
+<section class="card admin-members-header">
+    <div class="admin-section-head">
+        <div>
+            <h1><?= e((string) $t['title']) ?></h1>
+            <p class="help"><?= e((string) $t['meta_desc']) ?></p>
+        </div>
+        <span class="badge muted"><?= $memberTotal ?> <?= e((string) $t['members']) ?></span>
+    </div>
+</section>
+
+<section class="card admin-member-create-card">
+    <div class="admin-section-head">
+        <div>
+            <h2><?= e((string) $t['create_title']) ?></h2>
+            <p class="help"><?= e((string) $t['temporary_password']) ?></p>
+        </div>
+    </div>
+    <form method="post" class="admin-member-create-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="create_member">
             <label><?= e((string) $t['th_callsign']) ?><input type="text" name="callsign" maxlength="32" required></label>
@@ -183,39 +197,51 @@ ob_start();
             <label><?= e((string) $t['th_email']) ?><input type="email" name="email" maxlength="190" placeholder="<?= e(member_default_contact_email()) ?>"></label>
             <label><?= e((string) $t['th_locator']) ?><input type="text" name="locator" maxlength="6"></label>
             <label><?= e((string) $t['temporary_password']) ?><input type="password" name="password" minlength="8" autocomplete="new-password" required></label>
-            <label><input type="checkbox" name="is_active" value="1" checked> <?= e((string) $t['th_active']) ?></label>
-            <label><input type="checkbox" name="is_committee" value="1"> <?= e((string) $t['th_committee']) ?></label>
+            <label class="admin-member-toggle"><input type="checkbox" name="is_active" value="1" checked> <?= e((string) $t['th_active']) ?></label>
+            <label class="admin-member-toggle"><input type="checkbox" name="is_committee" value="1"> <?= e((string) $t['th_committee']) ?></label>
             <?php if ($passwordChangeColumnAvailable): ?>
-                <label><input type="checkbox" name="password_change_required" value="1" checked> <?= e((string) $t['password_reset_force']) ?></label>
+                <label class="admin-member-toggle"><input type="checkbox" name="password_change_required" value="1" checked> <?= e((string) $t['password_reset_force']) ?></label>
             <?php endif; ?>
             <button class="button" type="submit"><?= e((string) $t['create_submit']) ?></button>
-        </form>
-    </section>
-    <form method="get" style="margin:.5rem 0 1rem;">
+    </form>
+</section>
+
+<section class="card admin-member-list-card">
+    <div class="admin-section-head">
+        <div>
+            <h2><?= e((string) $t['members']) ?></h2>
+            <p class="help"><?= e((string) $t['search_ph']) ?></p>
+        </div>
+        <form method="get" class="admin-member-search">
         <label><?= e((string) $t['search']) ?>
             <input type="text" name="member_q" value="<?= e($memberSearch) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
         </label>
-        <input type="hidden" name="sort" value="<?= e($memberSort) ?>"><input type="hidden" name="dir" value="<?= e($memberDir) ?>"><button class="button secondary" type="submit"><?= e((string) $t['search_btn']) ?></button>
-    </form>
+            <input type="hidden" name="sort" value="<?= e($memberSort) ?>">
+            <input type="hidden" name="dir" value="<?= e($memberDir) ?>">
+            <button class="button secondary" type="submit"><?= e((string) $t['search_btn']) ?></button>
+        </form>
+    </div>
     <div class="table-wrap"><table><thead><tr>
         <th><?= e((string) $t['th_callsign']) ?></th><th><?= e((string) $t['th_name']) ?></th><th><?= e((string) $t['th_email']) ?></th><th><?= e((string) $t['th_locator']) ?></th><th><?= e((string) $t['th_active']) ?></th><th><?= e((string) $t['th_committee']) ?></th><th><?= e((string) $t['th_password_reset']) ?></th><th><?= e((string) $t['th_actions']) ?></th>
     </tr></thead><tbody>
     <?php foreach ($members as $member): ?>
-        <tr><td colspan="8"><form method="post" class="grid" style="grid-template-columns: 1fr 1fr 1fr 1fr auto auto minmax(11rem, auto) auto; gap:.5rem; align-items:center;">
+        <tr><td colspan="8"><form method="post" class="admin-member-row-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="update_member"><input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>"><input type="hidden" name="return_query" value="<?= e($returnQuery) ?>">
-            <input type="text" name="callsign" value="<?= e((string) $member['callsign']) ?>"><input type="text" name="full_name" value="<?= e((string) $member['full_name']) ?>"><input type="email" name="email" value="<?= e((string) $member['email']) ?>"><input type="text" name="locator" value="<?= e((string) $member['locator']) ?>" maxlength="6">
-            <label><input type="checkbox" name="is_active" value="1" <?= (int) $member['is_active'] === 1 ? 'checked' : '' ?>></label>
-            <label><input type="checkbox" name="is_committee" value="1" <?= (int) $member['is_committee'] === 1 ? 'checked' : '' ?>></label>
+            <input type="text" name="callsign" value="<?= e((string) $member['callsign']) ?>" aria-label="<?= e((string) $t['th_callsign']) ?>"><input type="text" name="full_name" value="<?= e((string) $member['full_name']) ?>" aria-label="<?= e((string) $t['th_name']) ?>"><input type="email" name="email" value="<?= e((string) $member['email']) ?>" aria-label="<?= e((string) $t['th_email']) ?>"><input type="text" name="locator" value="<?= e((string) $member['locator']) ?>" maxlength="6" aria-label="<?= e((string) $t['th_locator']) ?>">
+            <label class="admin-member-toggle"><input type="checkbox" name="is_active" value="1" <?= (int) $member['is_active'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['th_active']) ?></label>
+            <label class="admin-member-toggle"><input type="checkbox" name="is_committee" value="1" <?= (int) $member['is_committee'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['th_committee']) ?></label>
             <?php if ($passwordResetForceAvailable): ?>
                 <?php $passwordResetForced = (int) ($member['password_change_required'] ?? 0) === 1 && trim((string) ($member['password_reset_forced_at'] ?? '')) !== ''; ?>
-                <label><input type="checkbox" name="password_change_required" value="1" <?= $passwordResetForced ? 'checked' : '' ?>> <?= e((string) $t['password_reset_force']) ?></label>
+                <label class="admin-member-toggle"><input type="checkbox" name="password_change_required" value="1" <?= $passwordResetForced ? 'checked' : '' ?>> <?= e((string) $t['password_reset_force']) ?></label>
             <?php else: ?>
                 <span class="help"><?= e((string) $t['password_reset_unavailable']) ?></span>
             <?php endif; ?>
             <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
         </form></td></tr>
     <?php endforeach; ?>
+    <?php if ($members === []): ?><tr><td colspan="8"><?= e((string) $t['members']) ?></td></tr><?php endif; ?>
     </tbody></table></div>
 </section>
+</div>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout']);

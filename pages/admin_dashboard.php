@@ -54,20 +54,62 @@ if (table_exists('members')) {
 
 ob_start();
 ?>
-<div class="card">
-    <h1><?= e((string) $t['title']) ?></h1>
-    <p class="help"><?= e((string) $t['help']) ?></p>
-    <form method="post" class="stack">
-        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-        <?php foreach ($catalog as $widgetKey => $widget): ?>
-            <label>
-                <input type="checkbox" name="widget_<?= e((string) $widgetKey) ?>" value="1" <?= (($enabledMap[$widgetKey] ?? true) ? 'checked' : '') ?>>
-                <strong><?= e((string) ($widget['title'] ?? $widgetKey)) ?></strong>
-                <span class="help"><?= e((string) ($widget['description'] ?? '')) ?></span>
-            </label>
-        <?php endforeach; ?>
-        <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
-    </form>
+<div class="stack admin-dashboard-module">
+    <section class="card admin-dashboard-header">
+        <div class="admin-section-head">
+            <div>
+                <h1><?= e((string) $t['title']) ?></h1>
+                <p class="help"><?= e((string) $t['help']) ?></p>
+            </div>
+            <div class="admin-dashboard-actions">
+                <a class="button secondary small" href="<?= e(route_url('admin_members')) ?>"><?= e((string) $t['members_title']) ?></a>
+                <a class="button secondary small" href="<?= e(route_url('admin_permissions')) ?>"><?= e((string) $t['members_roles']) ?></a>
+                <a class="button secondary small" href="<?= e(route_url('admin_committee')) ?>"><?= e((string) $t['members_committee_cta']) ?></a>
+            </div>
+        </div>
+        <div class="admin-dashboard-stats" aria-label="<?= e((string) $t['members_title']) ?>">
+            <article>
+                <span><?= e((string) $t['members_total']) ?></span>
+                <strong><?= (int) $memberStats['total'] ?></strong>
+            </article>
+            <article>
+                <span><?= e((string) $t['members_active']) ?></span>
+                <strong><?= (int) $memberStats['active'] ?></strong>
+            </article>
+            <article>
+                <span><?= e((string) $t['members_committee']) ?></span>
+                <strong><?= (int) $memberStats['committee'] ?></strong>
+            </article>
+        </div>
+    </section>
+
+    <section class="card admin-dashboard-widget-card">
+        <div class="admin-section-head">
+            <div>
+                <h2><?= e((string) $t['layout']) ?></h2>
+                <p class="help"><?= e((string) $t['help']) ?></p>
+            </div>
+            <span class="badge muted"><?= count($catalog) ?></span>
+        </div>
+        <form method="post" class="admin-widget-form">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <div class="admin-widget-list">
+                <?php foreach ($catalog as $widgetKey => $widget): ?>
+                    <?php $widgetEnabled = ($enabledMap[$widgetKey] ?? true); ?>
+                    <label class="admin-widget-toggle">
+                        <input type="checkbox" name="widget_<?= e((string) $widgetKey) ?>" value="1" <?= $widgetEnabled ? 'checked' : '' ?>>
+                        <span class="admin-widget-copy">
+                            <strong><?= e((string) ($widget['title'] ?? $widgetKey)) ?></strong>
+                            <span class="help"><?= e((string) ($widget['description'] ?? '')) ?></span>
+                        </span>
+                    </label>
+                <?php endforeach; ?>
+            </div>
+            <div class="actions">
+                <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
+            </div>
+        </form>
+    </section>
 </div>
 
 <?php
