@@ -2784,9 +2784,10 @@ function render_admin_webotheque_page(): void
 
         <nav class="admin-webotheque-toolbar" aria-label="<?= e((string) $t['administration']) ?>">
             <a href="#admin-webotheque-search"><?= e((string) $t['search']) ?></a>
-            <a href="#admin-webotheque-links"><?= e((string) $t['content_list']) ?></a>
-            <a href="#admin-webotheque-taxonomy"><?= e($adminText('taxonomy_title')) ?></a>
+            <a href="#admin-webotheque-links"><?= e((string) $t['content_list']) ?> <span class="badge muted"><?= count($links) ?></span></a>
+            <a href="#admin-webotheque-taxonomy"><?= e($adminText('taxonomy_title')) ?> <span class="badge muted"><?= count($categories) + $subcategoryCount + $subsubcategoryCount ?></span></a>
             <a href="<?= e($pendingProposalUrl) ?>"><?= e($adminText('pending_proposals_title')) ?> <span class="badge muted"><?= $pendingProposalCount ?></span></a>
+            <a class="admin-webotheque-toolbar-primary" href="<?= e(route_url('admin_webotheque', ['propose_link' => '1'])) ?>" data-webotheque-modal-open="admin-webotheque-link-dialog" aria-haspopup="dialog" aria-controls="admin-webotheque-link-dialog"><?= e((string) $t['propose_link']) ?></a>
         </nav>
 
         <?php if ($showPendingProposals): ?>
@@ -2961,7 +2962,12 @@ function render_admin_webotheque_page(): void
                     <span class="badge muted"><?= $subsubcategoryCount ?> <?= e((string) $t['subsubcategory_field']) ?></span>
                 </div>
             </div>
-            <div class="admin-webotheque-taxonomy-group">
+            <nav class="admin-webotheque-taxonomy-nav" aria-label="<?= e($adminText('taxonomy_title')) ?>">
+                <a href="#admin-webotheque-taxonomy-categories"><?= e((string) $t['domain_field']) ?> <span class="badge muted"><?= count($categories) ?></span></a>
+                <a href="#admin-webotheque-taxonomy-subcategories"><?= e((string) $t['subcategory_field']) ?> <span class="badge muted"><?= $subcategoryCount ?></span></a>
+                <a href="#admin-webotheque-taxonomy-subsubcategories"><?= e((string) $t['subsubcategory_field']) ?> <span class="badge muted"><?= $subsubcategoryCount ?></span></a>
+            </nav>
+            <div class="admin-webotheque-taxonomy-group" id="admin-webotheque-taxonomy-categories">
                 <div class="admin-webotheque-taxonomy-group-head">
                     <div>
                         <h3><?= e((string) $t['domain_field']) ?></h3>
@@ -3008,7 +3014,7 @@ function render_admin_webotheque_page(): void
                     </div>
                 <?php endif; ?>
             </div>
-            <div class="admin-webotheque-taxonomy-group">
+            <div class="admin-webotheque-taxonomy-group" id="admin-webotheque-taxonomy-subcategories">
                 <div class="admin-webotheque-taxonomy-group-head">
                     <div>
                         <h3><?= e((string) $t['subcategory_field']) ?></h3>
@@ -3071,7 +3077,7 @@ function render_admin_webotheque_page(): void
                     </div>
                 <?php endif; ?>
             </div>
-            <div class="admin-webotheque-taxonomy-group">
+            <div class="admin-webotheque-taxonomy-group" id="admin-webotheque-taxonomy-subsubcategories">
                 <div class="admin-webotheque-taxonomy-group-head">
                     <div>
                         <h3><?= e((string) $t['subsubcategory_field']) ?></h3>
