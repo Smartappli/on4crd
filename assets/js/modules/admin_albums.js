@@ -124,6 +124,97 @@
     });
   }
 
+  const uploadTarget = document.querySelector('[data-admin-album-upload-target]');
+  const uploadForm = document.querySelector('.admin-album-upload-form');
+  if (uploadTarget instanceof HTMLElement && uploadForm instanceof HTMLFormElement) {
+    const albumSelect = uploadForm.querySelector('select[name="album_id"]');
+    const media = uploadTarget.querySelector('[data-admin-album-upload-media]');
+    const title = uploadTarget.querySelector('[data-admin-album-upload-title]');
+    const meta = uploadTarget.querySelector('[data-admin-album-upload-meta]');
+
+    const replaceMedia = (option, titleText) => {
+      if (!(media instanceof HTMLElement)) return;
+
+      media.replaceChildren();
+      const imageSrc = option.dataset.imageSrc || '';
+      if (imageSrc !== '') {
+        const picture = document.createElement('picture');
+        const webpSrc = option.dataset.imageWebpSrc || '';
+        if (webpSrc !== '') {
+          const source = document.createElement('source');
+          source.srcset = webpSrc;
+          source.type = 'image/webp';
+          picture.appendChild(source);
+        }
+
+        const image = document.createElement('img');
+        image.src = imageSrc;
+        image.alt = option.dataset.imageAlt || titleText;
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        picture.appendChild(image);
+        media.appendChild(picture);
+        return;
+      }
+
+      const placeholder = document.createElement('span');
+      placeholder.textContent = uploadTarget.dataset.placeholder || 'Album';
+      media.appendChild(placeholder);
+    };
+
+    const syncUploadTarget = () => {
+      if (!(albumSelect instanceof HTMLSelectElement)) return;
+      const option = albumSelect.selectedOptions[0];
+      if (!(option instanceof HTMLOptionElement)) return;
+
+      const titleText = option.dataset.title || option.textContent?.trim() || '';
+      if (title instanceof HTMLElement) title.textContent = titleText;
+      if (meta instanceof HTMLElement) {
+        const photosLabel = uploadTarget.dataset.photosLabel || 'photos';
+        const publicLabel = uploadTarget.dataset.publicLabel || 'Public';
+        const visibility = option.dataset.isPublic === '1' ? uploadTarget.dataset.yes || 'Yes' : uploadTarget.dataset.no || 'No';
+        meta.textContent = (option.dataset.photoCount || '0') + ' ' + photosLabel + ' - ' + publicLabel + ': ' + visibility;
+      }
+      replaceMedia(option, titleText);
+    };
+
+    if (albumSelect instanceof HTMLSelectElement) {
+      albumSelect.addEventListener('change', syncUploadTarget);
+      syncUploadTarget();
+    }
+  }
+
+  document.querySelectorAll('.admin-album-edit-form').forEach((form) => {
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const controls = Array.from(form.elements).filter((control) => {
+      if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement || control instanceof HTMLSelectElement)) return false;
+      if (control instanceof HTMLInputElement && ['hidden', 'submit', 'button'].includes(control.type)) return false;
+      return !control.disabled;
+    });
+    const saveButton = form.querySelector('[data-admin-album-save]');
+    const listItem = form.closest('.admin-album-list-item');
+    const valueOf = (control) => {
+      if (control instanceof HTMLInputElement && (control.type === 'checkbox' || control.type === 'radio')) {
+        return control.checked ? '1' : '0';
+      }
+      return control.value;
+    };
+    const initialValues = new Map(controls.map((control) => [control, valueOf(control)]));
+    const syncDirtyState = () => {
+      const isDirty = controls.some((control) => valueOf(control) !== initialValues.get(control));
+      form.classList.toggle('is-dirty', isDirty);
+      if (listItem instanceof HTMLElement) listItem.classList.toggle('is-dirty', isDirty);
+      if (saveButton instanceof HTMLElement) saveButton.classList.toggle('is-dirty', isDirty);
+    };
+
+    controls.forEach((control) => {
+      control.addEventListener('input', syncDirtyState);
+      control.addEventListener('change', syncDirtyState);
+    });
+    syncDirtyState();
+  });
+
   document.querySelectorAll('[data-admin-album-save]').forEach((button) => {
     if (!(button instanceof HTMLButtonElement)) return;
     button.addEventListener('click', (event) => {

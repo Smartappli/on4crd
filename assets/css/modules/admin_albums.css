@@ -180,6 +180,15 @@
   margin: .25rem 0 0;
 }
 
+[data-route="admin_albums"] .admin-album-photo-context {
+  margin-bottom: 1rem;
+}
+
+[data-route="admin_albums"] .admin-album-photo-context-actions {
+  gap: .4rem;
+  margin-top: .55rem;
+}
+
 [data-route="admin_albums"] .admin-album-upload-target-media {
   display: grid;
   place-items: center;
@@ -298,6 +307,16 @@
 
 [data-route="admin_albums"] .admin-album-list-item.is-featured {
   background: color-mix(in srgb, var(--accent) 4%, var(--panel));
+}
+
+[data-route="admin_albums"] .admin-album-list-item.is-dirty {
+  border-left-color: color-mix(in srgb, var(--warning, #b54708) 82%, var(--accent));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warning, #b54708) 28%, transparent);
+}
+
+[data-route="admin_albums"] .admin-album-edit-form.is-dirty [data-admin-album-save] {
+  border-color: color-mix(in srgb, var(--warning, #b54708) 55%, var(--accent));
+  background: color-mix(in srgb, var(--warning, #b54708) 16%, var(--accent));
 }
 
 [data-route="admin_albums"] .admin-album-list-filter {

@@ -815,6 +815,15 @@ if ($uploadAlbum === null && $albums !== []) {
     $firstAlbum = $albums[0] ?? null;
     $uploadAlbum = is_array($firstAlbum) ? $firstAlbum : null;
 }
+$photoFilterAlbum = null;
+if ($photoAlbumFilter > 0) {
+    foreach ($albums as $albumRow) {
+        if ((int) ($albumRow['id'] ?? 0) === $photoAlbumFilter) {
+            $photoFilterAlbum = is_array($albumRow) ? $albumRow : null;
+            break;
+        }
+    }
+}
 $photosPage = max(1, (int) ($_GET['photos_page'] ?? 1));
 $photosPerPage = 36;
 $photosWhereSql = '';
@@ -1110,8 +1119,8 @@ ob_start();
                     ], $t, 'album_admin_upload_target_prepare_failed');
                 }
                 ?>
-                <div class="admin-album-upload-target">
-                    <div class="admin-album-upload-target-media">
+                <div class="admin-album-upload-target" data-admin-album-upload-target data-placeholder="<?= e((string) $t['album_word']) ?>" data-photos-label="<?= e((string) $t['photos']) ?>" data-public-label="<?= e((string) $t['public_album']) ?>" data-yes="<?= e((string) $t['yes']) ?>" data-no="<?= e((string) $t['no']) ?>">
+                    <div class="admin-album-upload-target-media" data-admin-album-upload-media>
                         <?php if ($uploadAlbumCoverRender['image_src'] !== ''): ?>
                             <?= album_picture_html($uploadAlbumCoverRender['image_src'], $uploadAlbumCoverRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $uploadAlbumCoverRender['image_webp_src']) ?>
                         <?php else: ?>
@@ -1120,8 +1129,8 @@ ob_start();
                     </div>
                     <div>
                         <span class="badge muted"><?= e((string) $t['album_label']) ?></span>
-                        <strong><?= e((string) ($uploadAlbum['title'] ?? $t['album_word'])) ?></strong>
-                        <p class="help"><?= (int) ($uploadAlbum['photo_count'] ?? 0) ?> <?= e((string) $t['photos']) ?> &middot; <?= e((string) $t['public_album']) ?>: <?= (int) ($uploadAlbum['is_public'] ?? 0) === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></p>
+                        <strong data-admin-album-upload-title><?= e((string) ($uploadAlbum['title'] ?? $t['album_word'])) ?></strong>
+                        <p class="help" data-admin-album-upload-meta><?= (int) ($uploadAlbum['photo_count'] ?? 0) ?> <?= e((string) $t['photos']) ?> &middot; <?= e((string) $t['public_album']) ?>: <?= (int) ($uploadAlbum['is_public'] ?? 0) === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></p>
                     </div>
                 </div>
             <?php endif; ?>
@@ -1131,7 +1140,21 @@ ob_start();
                 <label><?= e((string) $t['album_label']) ?>
                     <select name="album_id" required>
                         <?php foreach ($albums as $album): ?>
-                            <option value="<?= (int) $album['id'] ?>" <?= $uploadAlbumId === (int) $album['id'] ? 'selected' : '' ?>><?= e((string) $album['title']) ?></option>
+                            <?php
+                            $uploadOptionCoverRender = [
+                                'image_src' => '',
+                                'image_webp_src' => '',
+                                'title' => (string) ($album['title'] ?? $t['album_word']),
+                            ];
+                            if (trim((string) ($album['cover_file_path'] ?? '')) !== '') {
+                                $uploadOptionCoverRender = albums_admin_photo_render_data([
+                                    'file_path' => (string) $album['cover_file_path'],
+                                    'title' => (string) ($album['title'] ?? $t['album_word']),
+                                    'album_title' => (string) ($album['title'] ?? ''),
+                                ], $t, 'album_admin_upload_option_prepare_failed');
+                            }
+                            ?>
+                            <option value="<?= (int) $album['id'] ?>" data-title="<?= e((string) ($album['title'] ?? $t['album_word'])) ?>" data-photo-count="<?= (int) ($album['photo_count'] ?? 0) ?>" data-is-public="<?= (int) ($album['is_public'] ?? 0) === 1 ? '1' : '0' ?>" data-image-src="<?= e($uploadOptionCoverRender['image_src']) ?>" data-image-webp-src="<?= e($uploadOptionCoverRender['image_webp_src']) ?>" data-image-alt="<?= e($uploadOptionCoverRender['title']) ?>" <?= $uploadAlbumId === (int) $album['id'] ? 'selected' : '' ?>><?= e((string) $album['title']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -1159,7 +1182,7 @@ ob_start();
                 <h2><?= e((string) $t['edit_albums']) ?></h2>
                 <p class="help"><?= $filteredAlbumsCount ?> / <?= $albumsCount ?> <?= e((string) $t['albums']) ?></p>
             </div>
-            <form method="get" class="admin-album-list-filter" data-admin-album-list-filter>
+            <form method="get" action="<?= e(route_url_clean('admin_albums') . '#admin-album-list') ?>" class="admin-album-list-filter" data-admin-album-list-filter>
                 <input type="hidden" name="route" value="admin_albums">
                 <label><?= e((string) $t['title']) ?>
                     <input type="search" name="album_q" value="<?= e($albumFilterQuery) ?>">
@@ -1284,7 +1307,7 @@ ob_start();
                 <h2><?= e((string) $t['photos_editor']) ?></h2>
                 <p class="help"><?= $photosTotal ?> <?= e((string) $t['photos']) ?></p>
             </div>
-            <form method="get" class="admin-album-photo-filter" data-admin-album-photo-filter>
+            <form method="get" action="<?= e(route_url_clean('admin_albums') . '#admin-album-photos') ?>" class="admin-album-photo-filter" data-admin-album-photo-filter>
                 <input type="hidden" name="route" value="admin_albums">
                 <label><?= e((string) $t['album_label']) ?>
                     <select name="photo_album">
@@ -1300,6 +1323,40 @@ ob_start();
                 <?php endif; ?>
             </form>
         </div>
+        <?php if (is_array($photoFilterAlbum)): ?>
+            <?php
+            $photoFilterAlbumCoverRender = [
+                'image_src' => '',
+                'image_webp_src' => '',
+                'title' => (string) ($photoFilterAlbum['title'] ?? $t['album_word']),
+            ];
+            if (trim((string) ($photoFilterAlbum['cover_file_path'] ?? '')) !== '') {
+                $photoFilterAlbumCoverRender = albums_admin_photo_render_data([
+                    'file_path' => (string) $photoFilterAlbum['cover_file_path'],
+                    'title' => (string) ($photoFilterAlbum['title'] ?? $t['album_word']),
+                    'album_title' => (string) ($photoFilterAlbum['title'] ?? ''),
+                ], $t, 'album_admin_photo_filter_cover_prepare_failed');
+            }
+            ?>
+            <div class="admin-album-upload-target admin-album-photo-context">
+                <div class="admin-album-upload-target-media">
+                    <?php if ($photoFilterAlbumCoverRender['image_src'] !== ''): ?>
+                        <?= album_picture_html($photoFilterAlbumCoverRender['image_src'], $photoFilterAlbumCoverRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $photoFilterAlbumCoverRender['image_webp_src']) ?>
+                    <?php else: ?>
+                        <span><?= e((string) $t['album_word']) ?></span>
+                    <?php endif; ?>
+                </div>
+                <div>
+                    <span class="badge muted"><?= e((string) $t['album_label']) ?></span>
+                    <strong><?= e((string) ($photoFilterAlbum['title'] ?? $t['album_word'])) ?></strong>
+                    <p class="help"><?= (int) ($photoFilterAlbum['photo_count'] ?? 0) ?> <?= e((string) $t['photos']) ?> &middot; <?= e((string) $t['public_album']) ?>: <?= (int) ($photoFilterAlbum['is_public'] ?? 0) === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></p>
+                    <div class="actions admin-album-photo-context-actions">
+                        <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['upload_album' => (int) $photoFilterAlbum['id']]) . '#admin-album-upload') ?>"><?= e((string) $t['add_photo']) ?></a>
+                        <a class="button secondary small" href="<?= e(route_url('album', ['id' => (int) $photoFilterAlbum['id']])) ?>"><?= e((string) $t['view_public']) ?></a>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <?php if ($photos === []): ?>
             <p class="help"><?= e((string) $t['no_photos']) ?></p>
         <?php else: ?>
@@ -1364,11 +1421,11 @@ ob_start();
             <?php if ($photosMaxPage > 1): ?>
                 <div class="actions mt-3">
                     <?php if ($photosPage > 1): ?>
-                        <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $photoAlbumFilter > 0 ? $photoAlbumFilter : '', 'photos_page' => $photosPage - 1])) ?>"><?= e((string) $t['previous']) ?></a>
+                        <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $photoAlbumFilter > 0 ? $photoAlbumFilter : '', 'photos_page' => $photosPage - 1]) . '#admin-album-photos') ?>"><?= e((string) $t['previous']) ?></a>
                     <?php endif; ?>
                     <span class="pill"><?= e((string) $t['page']) ?> <?= $photosPage ?> / <?= $photosMaxPage ?></span>
                     <?php if ($photosPage < $photosMaxPage): ?>
-                        <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $photoAlbumFilter > 0 ? $photoAlbumFilter : '', 'photos_page' => $photosPage + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                        <a class="button secondary small" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $photoAlbumFilter > 0 ? $photoAlbumFilter : '', 'photos_page' => $photosPage + 1]) . '#admin-album-photos') ?>"><?= e((string) $t['next']) ?></a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
