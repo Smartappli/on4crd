@@ -106,6 +106,20 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringNotContainsString("\xC3\x82", $clean);
     }
 
+    public function testArticleSanitizeContentRepairsWordImportControlCharacterMojibake(): void
+    {
+        $text = html_entity_decode('Dossier n&deg;1&nbsp;: Tenez &agrave; l&rsquo;&oelig;il vos fusibles d&rsquo;alimentation. Voici un indicateur que j&rsquo;ai trouv&eacute; au d&eacute;part.', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $mojibake = "Dossier n\xC3\x83\xC2\x82\xC3\x82\xC2\xB01\xC3\x82\xC2\xA0: Tenez \xC3\x83\xC2\x83\xC3\x82\xC2\xA0 l\xC3\x83\xC2\xA2\xC3\x82\xC2\x80\xC3\x82\xC2\x99\xC3\x83\xC2\x85\xC3\x82\xC2\x93il vos fusibles d\xC3\x83\xC2\xA2\xC3\x82\xC2\x80\xC3\x82\xC2\x99alimentation. Voici un indicateur que j\xC3\x83\xC2\xA2\xC3\x82\xC2\x80\xC3\x82\xC2\x99ai trouv\xC3\x83\xC2\x83\xC3\x82\xC2\xA9 au d\xC3\x83\xC2\x83\xC3\x82\xC2\xA9part.";
+
+        $clean = article_sanitize_content('<p>' . e($mojibake) . '</p>');
+        $plain = html_entity_decode(strip_tags($clean), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        self::assertSame($text, $plain);
+        self::assertStringNotContainsString("\xC3\x83", $clean);
+        self::assertStringNotContainsString("\xC3\x82", $clean);
+        self::assertDoesNotMatchRegularExpression('/\xC2[\x80-\x9F]/', $clean);
+    }
+
     public function testLocalizedArticleRowRepairsMojibakeFields(): void
     {
         $text = html_entity_decode('Dossier n&deg;1 &agrave; l&rsquo;&oelig;il trouv&eacute; au d&eacute;part 230V AC', ENT_QUOTES | ENT_HTML5, 'UTF-8');

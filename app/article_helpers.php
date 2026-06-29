@@ -921,7 +921,92 @@ function article_mojibake_score(string $value): int
         $score += substr_count($value, $marker);
     }
 
+    $controlCount = preg_match_all('/\xC2[\x80-\x9F]/', $value);
+    if ($controlCount !== false) {
+        $score += $controlCount;
+    }
+
     return $score;
+}
+
+function article_windows_1252_byte_to_utf8(int $byte): string
+{
+    if ($byte < 0x80) {
+        return chr($byte);
+    }
+
+    $converted = @mb_convert_encoding(chr($byte), 'UTF-8', 'Windows-1252');
+
+    return is_string($converted) ? $converted : '';
+}
+
+function article_utf8_from_mixed_windows_1252_bytes(string $value): string
+{
+    $result = '';
+    $length = strlen($value);
+
+    for ($i = 0; $i < $length; $i++) {
+        $byte = ord($value[$i]);
+        if ($byte < 0x80) {
+            $result .= $value[$i];
+            continue;
+        }
+
+        $sequenceLength = 0;
+        if ($byte >= 0xC2 && $byte <= 0xDF) {
+            $sequenceLength = 2;
+        } elseif ($byte >= 0xE0 && $byte <= 0xEF) {
+            $sequenceLength = 3;
+        } elseif ($byte >= 0xF0 && $byte <= 0xF4) {
+            $sequenceLength = 4;
+        }
+
+        if ($sequenceLength > 0 && $i + $sequenceLength <= $length) {
+            $sequence = substr($value, $i, $sequenceLength);
+            if (preg_match('//u', $sequence) === 1) {
+                $result .= $sequence;
+                $i += $sequenceLength - 1;
+                continue;
+            }
+        }
+
+        $result .= article_windows_1252_byte_to_utf8($byte);
+    }
+
+    return $result;
+}
+
+function article_normalize_windows_1252_controls(string $value): string
+{
+    return strtr($value, [
+        "\xC2\x80" => "\xE2\x82\xAC",
+        "\xC2\x82" => "\xE2\x80\x9A",
+        "\xC2\x83" => "\xC6\x92",
+        "\xC2\x84" => "\xE2\x80\x9E",
+        "\xC2\x85" => "\xE2\x80\xA6",
+        "\xC2\x86" => "\xE2\x80\xA0",
+        "\xC2\x87" => "\xE2\x80\xA1",
+        "\xC2\x88" => "\xCB\x86",
+        "\xC2\x89" => "\xE2\x80\xB0",
+        "\xC2\x8A" => "\xC5\xA0",
+        "\xC2\x8B" => "\xE2\x80\xB9",
+        "\xC2\x8C" => "\xC5\x92",
+        "\xC2\x8E" => "\xC5\xBD",
+        "\xC2\x91" => "\xE2\x80\x98",
+        "\xC2\x92" => "\xE2\x80\x99",
+        "\xC2\x93" => "\xE2\x80\x9C",
+        "\xC2\x94" => "\xE2\x80\x9D",
+        "\xC2\x95" => "\xE2\x80\xA2",
+        "\xC2\x96" => "\xE2\x80\x93",
+        "\xC2\x97" => "\xE2\x80\x94",
+        "\xC2\x98" => "\xCB\x9C",
+        "\xC2\x99" => "\xE2\x84\xA2",
+        "\xC2\x9A" => "\xC5\xA1",
+        "\xC2\x9B" => "\xE2\x80\xBA",
+        "\xC2\x9C" => "\xC5\x93",
+        "\xC2\x9E" => "\xC5\xBE",
+        "\xC2\x9F" => "\xC5\xB8",
+    ]);
 }
 
 function article_repair_mojibake_text(string $value): string
@@ -930,11 +1015,17 @@ function article_repair_mojibake_text(string $value): string
         return $value;
     }
 
-    $current = $value;
+    $current = article_normalize_windows_1252_controls($value);
     $currentScore = article_mojibake_score($current);
-    for ($i = 0; $i < 3 && $currentScore > 0; $i++) {
+    for ($i = 0; $i < 5 && $currentScore > 0; $i++) {
         $candidate = @mb_convert_encoding($current, 'Windows-1252', 'UTF-8');
-        if (!is_string($candidate) || $candidate === '' || preg_match('//u', $candidate) !== 1) {
+        if (!is_string($candidate) || $candidate === '') {
+            break;
+        }
+
+        $candidate = article_utf8_from_mixed_windows_1252_bytes($candidate);
+        $candidate = article_normalize_windows_1252_controls($candidate);
+        if (preg_match('//u', $candidate) !== 1) {
             break;
         }
 
