@@ -89,6 +89,13 @@ function module_css_assets_for_route(string $route): array
     $module = $moduleByRoute[$route] ?? $route;
     $sharedPath = 'assets/css/modules/shared.css';
     $assets = is_file(dirname(__DIR__) . '/' . $sharedPath) ? [$sharedPath] : [];
+    $adminPath = 'assets/css/modules/admin.css';
+    if (
+        ($route === 'admin' || str_starts_with($route, 'admin_'))
+        && is_file(dirname(__DIR__) . '/' . $adminPath)
+    ) {
+        $assets[] = $adminPath;
+    }
 
     $candidates = [$module];
     if ($route !== $module) {
@@ -97,7 +104,7 @@ function module_css_assets_for_route(string $route): array
 
     foreach (array_unique($candidates) as $candidate) {
         $path = 'assets/css/modules/' . $candidate . '.css';
-        if (is_file(dirname(__DIR__) . '/' . $path)) {
+        if (!in_array($path, $assets, true) && is_file(dirname(__DIR__) . '/' . $path)) {
             $assets[] = $path;
         }
     }
