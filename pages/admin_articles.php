@@ -539,11 +539,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'save_article' || $action === 'preview_article') {
             $id = (int) ($_POST['id'] ?? 0);
-            $title = trim((string) ($_POST['title'] ?? ''));
+            $title = trim(article_repair_mojibake_text((string) ($_POST['title'] ?? '')));
             $slugInput = trim((string) ($_POST['slug'] ?? ''));
             $slugSource = $slugInput !== '' ? $slugInput : $title;
             $slug = article_unique_slug($slugSource, $id);
-            $excerpt = article_excerpt_from_input((string) ($_POST['excerpt'] ?? ''));
+            $excerpt = article_repair_mojibake_text(article_excerpt_from_input((string) ($_POST['excerpt'] ?? '')));
             $content = article_sanitize_content((string) ($_POST['content'] ?? ''));
             $status = (string) ($_POST['status'] ?? 'draft');
             $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
