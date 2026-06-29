@@ -47,6 +47,7 @@ function localized_translation_row(array $row, string $translationTable, string 
 function localized_article_row(array $row): array
 {
     $row = localized_translation_row($row, 'article_translations', 'article_id', (int) ($row['id'] ?? 0), article_translation_public_statuses());
+    $row = article_repair_mojibake_fields($row);
     $row['title_localized'] = (string) ($row['title'] ?? '');
     $row['excerpt_localized'] = (string) ($row['excerpt'] ?? '');
     $row['content_localized'] = (string) ($row['content'] ?? '');

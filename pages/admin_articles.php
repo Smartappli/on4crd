@@ -729,6 +729,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_array($revision)) {
                 throw new RuntimeException($t('err_invalid_article'));
             }
+            $revision = article_repair_mojibake_fields($revision);
             $restoredStatus = (string) ($revision['status'] ?? 'draft');
             db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, subcategory = ?, subsubcategory = ?, scheduled_at = ?, published_at = ?, moderation_note = NULL, updated_at = NOW() WHERE id = ?')
                 ->execute([

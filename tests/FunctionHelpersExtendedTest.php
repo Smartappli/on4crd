@@ -104,6 +104,23 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringNotContainsString("\xC3\x82", $clean);
     }
 
+    public function testLocalizedArticleRowRepairsMojibakeFields(): void
+    {
+        $text = html_entity_decode('Dossier n&deg;1 &agrave; l&rsquo;&oelig;il trouv&eacute; au d&eacute;part 230V AC', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $mojibake = mb_convert_encoding($text, 'UTF-8', 'Windows-1252');
+
+        $row = localized_article_row([
+            'id' => 0,
+            'title' => $mojibake,
+            'excerpt' => $mojibake,
+            'content' => '<p>' . e($mojibake) . '</p>',
+        ]);
+
+        self::assertSame($text, $row['title_localized']);
+        self::assertSame($text, $row['excerpt_localized']);
+        self::assertStringContainsString($text, html_entity_decode(strip_tags((string) $row['content_localized']), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    }
+
     public function testExtractLatestKpMeasurementReturnsNullWhenPayloadHasOnlyHeader(): void
     {
         $payload = [
