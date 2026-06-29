@@ -830,9 +830,10 @@ function article_docx_max_inline_image_total_bytes(): int
 
 if (!function_exists('article_docx_image_data_uris')) {
 /**
+ * @param array<string,array{width:int,height:int}> $displayDimensionsByRelationshipId
  * @return array<string,string>
  */
-function article_docx_image_data_uris(string $path, string $relationshipsXml): array
+function article_docx_image_data_uris(string $path, string $relationshipsXml, string $baseDirectory = 'word', array $displayDimensionsByRelationshipId = []): array
 {
     if ($relationshipsXml === '' || !is_file($path)) {
         return [];
@@ -868,13 +869,26 @@ function article_docx_image_data_uris(string $path, string $relationshipsXml): a
             continue;
         }
 
-        $partName = article_docx_relationship_part_name('word', $target);
+        $partName = article_docx_relationship_part_name($baseDirectory, $target);
         $mimeType = article_docx_image_mime_type($partName);
         if ($partName === '' || $mimeType === '') {
             continue;
         }
 
         $bytes = article_docx_part_contents($path, $partName);
+        $displayDimensions = $displayDimensionsByRelationshipId[$id] ?? [];
+        if ($bytes !== '' && $displayDimensions !== []) {
+            $resizedBytes = article_docx_resize_image_bytes(
+                $bytes,
+                $mimeType,
+                (int) ($displayDimensions['width'] ?? 0),
+                (int) ($displayDimensions['height'] ?? 0)
+            );
+            if ($resizedBytes !== '') {
+                $bytes = $resizedBytes;
+            }
+        }
+
         $byteLength = strlen($bytes);
         if (
             $bytes === ''
@@ -889,6 +903,78 @@ function article_docx_image_data_uris(string $path, string $relationshipsXml): a
     }
 
     return $images;
+}
+}
+
+if (!function_exists('article_docx_resize_image_bytes')) {
+function article_docx_resize_image_bytes(string $bytes, string $mimeType, int $targetWidth, int $targetHeight): string
+{
+    if (
+        $targetWidth <= 0
+        || $targetHeight <= 0
+        || !function_exists('imagecreatefromstring')
+        || !function_exists('imagecreatetruecolor')
+        || !function_exists('imagecopyresampled')
+    ) {
+        return '';
+    }
+
+    $size = @getimagesizefromstring($bytes);
+    if (!is_array($size) || (int) ($size[0] ?? 0) <= 0 || (int) ($size[1] ?? 0) <= 0) {
+        return '';
+    }
+
+    $sourceWidth = (int) $size[0];
+    $sourceHeight = (int) $size[1];
+    if ($targetWidth >= $sourceWidth && $targetHeight >= $sourceHeight) {
+        return '';
+    }
+
+    $targetWidth = min($targetWidth, $sourceWidth);
+    $targetHeight = min($targetHeight, $sourceHeight);
+    if ($targetWidth < 1 || $targetHeight < 1) {
+        return '';
+    }
+
+    $source = @imagecreatefromstring($bytes);
+    if (!$source instanceof GdImage) {
+        return '';
+    }
+
+    $target = imagecreatetruecolor($targetWidth, $targetHeight);
+    if (!$target instanceof GdImage) {
+        imagedestroy($source);
+        return '';
+    }
+
+    if (in_array($mimeType, ['image/png', 'image/webp'], true)) {
+        imagealphablending($target, false);
+        imagesavealpha($target, true);
+        $transparent = imagecolorallocatealpha($target, 0, 0, 0, 127);
+        if ($transparent !== false) {
+            imagefilledrectangle($target, 0, 0, $targetWidth, $targetHeight, $transparent);
+        }
+    }
+
+    imagecopyresampled($target, $source, 0, 0, 0, 0, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
+
+    ob_start();
+    $written = match ($mimeType) {
+        'image/jpeg' => function_exists('imagejpeg') ? imagejpeg($target, null, 85) : false,
+        'image/png' => function_exists('imagepng') ? imagepng($target, null, 6) : false,
+        'image/webp' => function_exists('imagewebp') ? imagewebp($target, null, 82) : false,
+        default => false,
+    };
+    $resized = (string) ob_get_clean();
+
+    imagedestroy($target);
+    imagedestroy($source);
+
+    if (!$written || $resized === '') {
+        return '';
+    }
+
+    return strlen($resized) < strlen($bytes) || strlen($bytes) > article_docx_max_inline_image_bytes() ? $resized : '';
 }
 }
 
@@ -943,6 +1029,23 @@ function article_docx_attribute(DOMElement $element, string $localName): string
 }
 }
 
+if (!function_exists('article_docx_html_attributes')) {
+/**
+ * @param array<string,string> $attributes
+ */
+function article_docx_html_attributes(array $attributes): string
+{
+    $html = '';
+    foreach ($attributes as $name => $value) {
+        if ($value !== '') {
+            $html .= ' ' . $name . '="' . e($value) . '"';
+        }
+    }
+
+    return $html;
+}
+}
+
 if (!function_exists('article_docx_paragraph_style')) {
 function article_docx_paragraph_style(DOMElement $paragraph, DOMXPath $xpath): string
 {
@@ -953,6 +1056,43 @@ function article_docx_paragraph_style(DOMElement $paragraph, DOMXPath $xpath): s
     }
 
     return strtolower(article_docx_attribute($styleNode, 'val'));
+}
+}
+
+if (!function_exists('article_docx_paragraph_attributes')) {
+/**
+ * @return array<string,string>
+ */
+function article_docx_paragraph_attributes(DOMElement $paragraph, DOMXPath $xpath): array
+{
+    $alignment = article_docx_paragraph_alignment($paragraph, $xpath);
+    return $alignment === '' ? [] : ['align' => $alignment];
+}
+}
+
+if (!function_exists('article_docx_paragraph_alignment')) {
+function article_docx_paragraph_alignment(DOMElement $paragraph, DOMXPath $xpath): string
+{
+    $nodes = $xpath->query('./*[local-name()="pPr"]/*[local-name()="jc"]', $paragraph);
+    $node = $nodes instanceof DOMNodeList ? $nodes->item(0) : null;
+    if (!$node instanceof DOMElement) {
+        return '';
+    }
+
+    return article_docx_normalized_alignment(article_docx_attribute($node, 'val'));
+}
+}
+
+if (!function_exists('article_docx_normalized_alignment')) {
+function article_docx_normalized_alignment(string $value): string
+{
+    return match (strtolower(trim($value))) {
+        'left', 'start' => 'left',
+        'right', 'end' => 'right',
+        'center', 'centre' => 'center',
+        'both', 'distribute', 'mediumkashida', 'highkashida', 'lowkashida', 'thaiDistribute' => 'justify',
+        default => '',
+    };
 }
 }
 
@@ -1229,6 +1369,10 @@ function article_docx_run_image_html(DOMElement $container, DOMXPath $xpath, arr
         ];
         $dimensions = article_docx_image_dimensions($container, $xpath);
         $attributes = array_merge($attributes, $dimensions);
+        $alignment = article_docx_image_alignment($container, $xpath);
+        if ($alignment !== '') {
+            $attributes['align'] = $alignment;
+        }
 
         $imageHtml = '<img';
         foreach ($attributes as $name => $value) {
