@@ -218,6 +218,19 @@
   margin-top: auto;
 }
 
+[data-route="admin_webotheque"] .webotheque-grid .webotheque-link-actions [data-webotheque-modal-open] {
+  border-color: rgb(37 99 235 / .35);
+  color: #1d4ed8;
+  background: rgb(239 246 255 / .8);
+}
+
+[data-route="admin_webotheque"] .webotheque-grid .webotheque-link-actions [data-webotheque-modal-open]:hover,
+[data-route="admin_webotheque"] .webotheque-grid .webotheque-link-actions [data-webotheque-modal-open]:focus-visible {
+  border-color: #2563eb;
+  color: #1e40af;
+  background: #dbeafe;
+}
+
 [data-route="admin_webotheque"] .admin-webotheque-taxonomy {
   display: grid;
   gap: 1rem;
