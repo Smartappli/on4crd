@@ -60,6 +60,7 @@ function article_excerpt_from_input(string $value): string
     $value = preg_replace('/<\s*br\s*\/?\s*>/iu', "\n", $value) ?? $value;
     $value = preg_replace('/<\s*\/\s*(p|div|li|h[1-6])\s*>/iu', "\n", $value) ?? $value;
     $value = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $value = article_repair_mojibake_text($value);
     $value = str_replace(["\r\n", "\r"], "\n", $value);
     $value = preg_replace('/\x{00A0}/u', ' ', $value) ?? $value;
     $value = preg_replace('/[ \t]+/u', ' ', $value) ?? $value;
@@ -1070,6 +1071,27 @@ function article_repair_mojibake_fields(array $article, array $fields = ['title'
     return $article;
 }
 
+function article_repair_mojibake_dom_text_nodes(DOMNode $node): void
+{
+    foreach ($node->childNodes as $child) {
+        if ($child instanceof DOMText) {
+            $repaired = article_repair_mojibake_text($child->nodeValue);
+            if ($repaired !== $child->nodeValue) {
+                $child->nodeValue = $repaired;
+            }
+            continue;
+        }
+
+        if ($child instanceof DOMElement && in_array(strtolower($child->tagName), ['code', 'pre'], true)) {
+            continue;
+        }
+
+        if ($child->hasChildNodes()) {
+            article_repair_mojibake_dom_text_nodes($child);
+        }
+    }
+}
+
 function article_sanitize_content(string $html): string
 {
     $html = article_repair_mojibake_text($html);
@@ -1126,6 +1148,11 @@ function article_sanitize_content(string $html): string
     $dom->loadHTML('<?xml encoding="UTF-8"><!doctype html><html><body>' . $html . '</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     libxml_clear_errors();
     libxml_use_internal_errors($previousUseInternalErrors);
+
+    $body = $dom->getElementsByTagName('body')->item(0);
+    if ($body instanceof DOMElement) {
+        article_repair_mojibake_dom_text_nodes($body);
+    }
 
     $allNodes = $dom->getElementsByTagName('*');
     for ($i = $allNodes->length - 1; $i >= 0; $i--) {
@@ -1246,7 +1273,6 @@ function article_sanitize_content(string $html): string
         }
     }
 
-    $body = $dom->getElementsByTagName('body')->item(0);
     if (!$body) {
         return '';
     }

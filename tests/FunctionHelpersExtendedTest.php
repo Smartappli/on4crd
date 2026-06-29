@@ -135,6 +135,28 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertDoesNotMatchRegularExpression('/\xC2[\x80-\x9F]/', $clean);
     }
 
+    public function testArticleSanitizeContentRepairsEntityEncodedSubmittedMojibake(): void
+    {
+        $text = html_entity_decode('Dossier n&deg;1&nbsp;: Tenez &agrave; l&rsquo;&oelig;il vos fusibles d&rsquo;alimentation. Voici un indicateur que j&rsquo;ai trouv&eacute; au d&eacute;part.', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $mojibake = 'Dossier n&Atilde;&#130;&Acirc;&deg;1&Atilde;&#130;&Acirc;&nbsp;: Tenez &Atilde;&#131;&Acirc;&nbsp; l&Atilde;&cent;&Acirc;&#128;&Acirc;&#153;&Atilde;&#133;&Acirc;&#147;il vos fusibles d&Atilde;&cent;&Acirc;&#128;&Acirc;&#153;alimentation. Voici un indicateur que j&Atilde;&cent;&Acirc;&#128;&Acirc;&#153;ai trouv&Atilde;&#131;&Acirc;&copy; au d&Atilde;&#131;&Acirc;&copy;part.';
+
+        $clean = article_sanitize_content('<p>' . $mojibake . '</p>');
+        $plain = html_entity_decode(strip_tags($clean), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        self::assertSame($text, $plain);
+        self::assertStringNotContainsString('Ã', $plain);
+        self::assertStringNotContainsString('Â', $plain);
+        self::assertStringNotContainsString('â', $plain);
+    }
+
+    public function testArticleExcerptFromInputRepairsEntityEncodedMojibake(): void
+    {
+        $text = html_entity_decode('Tenez &agrave; l&rsquo;&oelig;il vos fusibles d&rsquo;alimentation', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $mojibake = 'Tenez &Atilde;&#131;&Acirc;&nbsp; l&Atilde;&cent;&Acirc;&#128;&Acirc;&#153;&Atilde;&#133;&Acirc;&#147;il vos fusibles d&Atilde;&cent;&Acirc;&#128;&Acirc;&#153;alimentation';
+
+        self::assertSame($text, article_excerpt_from_input($mojibake));
+    }
+
     public function testLocalizedArticleRowRepairsMojibakeFields(): void
     {
         $text = html_entity_decode('Dossier n&deg;1 &agrave; l&rsquo;&oelig;il trouv&eacute; au d&eacute;part 230V AC', ENT_QUOTES | ENT_HTML5, 'UTF-8');
