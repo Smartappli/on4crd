@@ -342,12 +342,12 @@ for ($i = 1; $i <= 2; $i++) {
 }
 $oldSlug = strtolower($token) . '-old-published';
 db()->prepare('INSERT INTO articles (slug, title, excerpt, content, status, category, subcategory, published_at, author_id) VALUES (?, ?, ?, ?, "published", ?, ?, ?, ?)')
-    ->execute([$oldSlug, 'Old published article ' . $token, 'Old excerpt ' . $token, '<p>Old content ' . $token . '</p>', $category, $subcategory, '2001-01-01 12:00:00', $memberId]);
+    ->execute([$oldSlug, 'Old published article ' . $token, 'Old excerpt ' . $token, '<p>Old content ' . $token . '</p>', $category, $subcategory, '1001-01-01 12:00:00', $memberId]);
 $oldId = (int) db()->lastInsertId();
 article_ensure_revisions_table();
 if (table_exists('article_revisions')) {
     db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, subcategory, published_at, author_id) VALUES (?, ?, ?, ?, ?, "published", ?, ?, ?, ?)')
-        ->execute([$oldId, 'Old revision ' . $token, $oldSlug, 'Old revision excerpt ' . $token, '<p>Old revision content ' . $token . '</p>', $category, $subcategory, '2001-01-01 12:00:00', $memberId]);
+        ->execute([$oldId, 'Old revision ' . $token, $oldSlug, 'Old revision excerpt ' . $token, '<p>Old revision content ' . $token . '</p>', $category, $subcategory, '1001-01-01 12:00:00', $memberId]);
 }
 if (table_exists('article_translations')) {
     db()->prepare('INSERT INTO article_translations (article_id, locale, source_hash, title, excerpt, content, status) VALUES (?, "en", ?, ?, ?, ?, "auto") ON DUPLICATE KEY UPDATE title = VALUES(title)')
@@ -896,7 +896,7 @@ test('Selenium admin articles: taxonomie, bulk update et relance programmee', as
       response = await postBrowserForm(driver, routeUrl('admin_articles'), {
         _csrf: csrf,
         action: 'delete_old_articles',
-        old_articles_before: '2002-01-01',
+        old_articles_before: '1002-01-01',
         old_articles_status: 'published',
         old_articles_confirm: 'SUPPRIMER',
       });

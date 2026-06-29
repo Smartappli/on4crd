@@ -166,6 +166,7 @@ const routeContracts = {
       add_subsubcategory: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['admin_articles', 'add_subsubcategory']),
       bulk_update_articles: proof('tests/selenium/admin-maintenance-coverage.test.js', ['bulk_update_articles']),
       delete_article: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['delete_article']),
+      delete_old_articles: proof('tests/selenium/admin-maintenance-coverage.test.js', ['delete_old_articles']),
       delete_category: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['delete_category']),
       delete_subcategory: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['delete_subcategory']),
       delete_subsubcategory: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['delete_subsubcategory']),

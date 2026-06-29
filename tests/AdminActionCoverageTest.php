@@ -70,9 +70,9 @@ final class AdminActionCoverageTest extends TestCase
         return [
             'admin articles bulk and scheduled actions' => [
                 'page' => 'pages/admin_articles.php',
-                'controller_snippets' => ["'bulk_update_articles'", "'save_category'", "'retry_scheduled_article'", "'retry_scheduled_bulk'"],
+                'controller_snippets' => ["'bulk_update_articles'", "'delete_old_articles'", "'save_category'", "'retry_scheduled_article'", "'retry_scheduled_bulk'"],
                 'selenium' => 'tests/selenium/admin-maintenance-coverage.test.js',
-                'selenium_snippets' => ['save_category', 'bulk_update_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
+                'selenium_snippets' => ['save_category', 'bulk_update_articles', 'delete_old_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
             ],
             'admin article editor actions' => [
                 'page' => 'pages/admin_articles.php',

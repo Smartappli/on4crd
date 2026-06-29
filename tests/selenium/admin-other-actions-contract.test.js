@@ -12,7 +12,7 @@ test('Selenium admin: contrats des actions hors propositions', () => {
     {
       label: 'articles bulk and scheduled retries',
       file: 'tests/selenium/admin-maintenance-coverage.test.js',
-      snippets: ['save_category', 'bulk_update_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
+      snippets: ['save_category', 'bulk_update_articles', 'delete_old_articles', 'retry_scheduled_article', 'retry_scheduled_bulk'],
     },
     {
       label: 'article editor preview restore and delete',

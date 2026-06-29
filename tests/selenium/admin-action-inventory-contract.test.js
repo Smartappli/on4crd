@@ -110,6 +110,7 @@ const expectedExplicitActionsByRoute = {
     'add_subcategory',
     'bulk_update_articles',
     'delete_article',
+    'delete_old_articles',
     'delete_category',
     'delete_subcategory',
     'preview_article',
