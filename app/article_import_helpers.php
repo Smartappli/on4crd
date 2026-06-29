@@ -1411,6 +1411,20 @@ function article_docx_image_alt_text(DOMElement $container, DOMXPath $xpath): st
 }
 }
 
+if (!function_exists('article_docx_image_alignment')) {
+function article_docx_image_alignment(DOMElement $container, DOMXPath $xpath): string
+{
+    $nodes = $xpath->query('.//*[local-name()="positionH"]/*[local-name()="align"]', $container);
+    $node = $nodes instanceof DOMNodeList ? $nodes->item(0) : null;
+    if (!$node instanceof DOMElement) {
+        return '';
+    }
+
+    $alignment = article_docx_normalized_alignment($node->textContent);
+    return in_array($alignment, ['left', 'right', 'center'], true) ? $alignment : '';
+}
+}
+
 if (!function_exists('article_docx_image_dimensions')) {
 /**
  * @return array{width?:string,height?:string}
@@ -1434,6 +1448,68 @@ function article_docx_image_dimensions(DOMElement $container, DOMXPath $xpath): 
     }
 
     return $dimensions;
+}
+}
+
+if (!function_exists('article_docx_image_dimensions_by_relationship_id')) {
+/**
+ * @return array<string,array{width:int,height:int}>
+ */
+function article_docx_image_dimensions_by_relationship_id(DOMXPath $xpath): array
+{
+    $imageNodes = $xpath->query('//*[local-name()="blip" or local-name()="imagedata"]');
+    if (!$imageNodes instanceof DOMNodeList) {
+        return [];
+    }
+
+    $dimensionsById = [];
+    foreach ($imageNodes as $imageNode) {
+        if (!$imageNode instanceof DOMElement) {
+            continue;
+        }
+
+        $relationshipId = article_docx_attribute($imageNode, 'embed');
+        if ($relationshipId === '') {
+            $relationshipId = article_docx_attribute($imageNode, 'id');
+        }
+        if ($relationshipId === '') {
+            continue;
+        }
+
+        $container = article_docx_image_container($imageNode);
+        if (!$container instanceof DOMElement) {
+            continue;
+        }
+
+        $dimensions = article_docx_image_dimensions($container, $xpath);
+        $width = (int) ($dimensions['width'] ?? 0);
+        $height = (int) ($dimensions['height'] ?? 0);
+        if ($width <= 0 || $height <= 0) {
+            continue;
+        }
+
+        $current = $dimensionsById[$relationshipId] ?? ['width' => 0, 'height' => 0];
+        if ($width * $height > $current['width'] * $current['height']) {
+            $dimensionsById[$relationshipId] = ['width' => $width, 'height' => $height];
+        }
+    }
+
+    return $dimensionsById;
+}
+}
+
+if (!function_exists('article_docx_image_container')) {
+function article_docx_image_container(DOMElement $imageNode): ?DOMElement
+{
+    $node = $imageNode;
+    while ($node->parentNode instanceof DOMElement) {
+        $node = $node->parentNode;
+        if (in_array($node->localName, ['drawing', 'pict'], true)) {
+            return $node;
+        }
+    }
+
+    return null;
 }
 }
 

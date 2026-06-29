@@ -42,11 +42,13 @@ final class FunctionHelpersExtendedTest extends TestCase
 
     public function testArticleSanitizeContentStripsUnsupportedTagsAndAttributes(): void
     {
-        $html = '<p id="intro" style="position:fixed">Intro</p><form><input name="token" value="secret"><button>Send</button></form><a href="javascript:alert(1)" onclick="evil()">Bad</a><a href="/articles" target="_blank" class="external">OK</a><p><s class="bad">Barre</s><sup data-x="1">2</sup><sub>i</sub></p><table><tr><th scope="bad">Bad</th><th scope="COL">Head</th></tr></table>';
+        $html = '<p id="intro" style="position:fixed">Intro</p><p align="CENTER">Centre</p><p align="fixed">Bad align</p><form><input name="token" value="secret"><button>Send</button></form><a href="javascript:alert(1)" onclick="evil()">Bad</a><a href="/articles" target="_blank" class="external">OK</a><p><s class="bad">Barre</s><sup data-x="1">2</sup><sub>i</sub></p><table><tr><th scope="bad">Bad</th><th scope="COL">Head</th></tr></table>';
 
         $clean = article_sanitize_content($html);
 
         self::assertStringContainsString('<p>Intro</p>', $clean);
+        self::assertStringContainsString('<p align="center">Centre</p>', $clean);
+        self::assertStringContainsString('<p>Bad align</p>', $clean);
         self::assertStringContainsString('Send', $clean);
         self::assertStringContainsString('rel="noopener noreferrer"', $clean);
         self::assertStringContainsString('<s>Barre</s>', $clean);
@@ -241,6 +243,10 @@ final class FunctionHelpersExtendedTest extends TestCase
       <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
       <w:r><w:t>Titre importe</w:t></w:r>
     </w:p>
+    <w:p>
+      <w:pPr><w:jc w:val="right"/></w:pPr>
+      <w:r><w:t>Texte aligne droite</w:t></w:r>
+    </w:p>
     <w:sdt>
       <w:sdtContent>
         <w:p><w:r><w:t>Texte dans controle Word</w:t></w:r></w:p>
@@ -309,10 +315,12 @@ final class FunctionHelpersExtendedTest extends TestCase
       </mc:Fallback>
     </mc:AlternateContent>
     <w:p>
+      <w:pPr><w:jc w:val="center"/></w:pPr>
       <w:r>
         <w:drawing>
           <wp:inline>
             <wp:extent cx="95250" cy="190500"/>
+            <wp:positionH><wp:align>right</wp:align></wp:positionH>
             <wp:docPr id="1" name="Image Word" descr="Image importee"/>
             <a:graphic><a:graphicData><a:blip r:embed="rId3"/></a:graphicData></a:graphic>
           </wp:inline>
@@ -456,6 +464,7 @@ XML;
             $html = article_extract_docx_html($tmp);
 
             self::assertStringContainsString('<h2>Titre importe</h2>', $html);
+            self::assertStringContainsString('<p align="right">Texte aligne droite</p>', $html);
             self::assertStringContainsString('<p>Entete importe</p>', $html);
             self::assertStringContainsString('<p>Texte dans controle Word</p>', $html);
             self::assertStringContainsString('<p>Texte depuis choix Word</p>', $html);
@@ -481,6 +490,7 @@ XML;
             self::assertStringContainsString('<p>Texte fallback apres liste</p>', $html);
             self::assertStringContainsString('<img src="data:image/png;base64,', $html);
             self::assertStringContainsString('alt="Image importee"', $html);
+            self::assertStringContainsString('align="right"', $html);
             self::assertStringContainsString('width="10"', $html);
             self::assertStringContainsString('height="20"', $html);
             self::assertStringContainsString('<p>Texte dans zone de texte<br>Deuxieme ligne de zone</p>', $html);

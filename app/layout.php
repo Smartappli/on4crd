@@ -312,8 +312,14 @@ function sanitize_rich_html_attributes(DOMElement $node): void
     $tag = strtolower($node->tagName);
     $allowedByTag = [
         'a' => ['href' => true, 'rel' => true, 'target' => true, 'title' => true],
-        'img' => ['alt' => true, 'height' => true, 'loading' => true, 'src' => true, 'title' => true, 'width' => true],
+        'h2' => ['align' => true, 'title' => true],
+        'h3' => ['align' => true, 'title' => true],
+        'h4' => ['align' => true, 'title' => true],
+        'h5' => ['align' => true, 'title' => true],
+        'h6' => ['align' => true, 'title' => true],
+        'img' => ['align' => true, 'alt' => true, 'height' => true, 'loading' => true, 'src' => true, 'title' => true, 'width' => true],
         'ol' => ['start' => true, 'title' => true],
+        'p' => ['align' => true, 'title' => true],
         'td' => ['colspan' => true, 'rowspan' => true, 'title' => true],
         'th' => ['colspan' => true, 'rowspan' => true, 'scope' => true, 'title' => true],
     ];
@@ -376,6 +382,16 @@ function sanitize_rich_html_attributes(DOMElement $node): void
 
         if ($name === 'scope' && !in_array(strtolower($value), ['col', 'row', 'colgroup', 'rowgroup'], true)) {
             $toRemove[] = $originalName;
+            continue;
+        }
+
+        if ($name === 'align') {
+            $safeAlignment = strtolower($value);
+            if (!in_array($safeAlignment, ['left', 'right', 'center', 'justify', 'middle', 'top', 'bottom'], true)) {
+                $toRemove[] = $originalName;
+            } else {
+                $node->setAttribute('align', $safeAlignment);
+            }
             continue;
         }
 
