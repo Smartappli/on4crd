@@ -1012,7 +1012,11 @@ function article_sanitize_content(string $html): string
     ], true);
     $allowedAttributes = [
         'a' => ['href' => true, 'title' => true, 'target' => true, 'rel' => true],
-        'img' => ['src' => true, 'alt' => true, 'title' => true, 'width' => true, 'height' => true, 'loading' => true],
+        'h2' => ['align' => true],
+        'h3' => ['align' => true],
+        'h4' => ['align' => true],
+        'img' => ['align' => true, 'src' => true, 'alt' => true, 'title' => true, 'width' => true, 'height' => true, 'loading' => true],
+        'p' => ['align' => true],
         'th' => ['colspan' => true, 'rowspan' => true, 'scope' => true],
         'td' => ['colspan' => true, 'rowspan' => true],
     ];
@@ -1058,6 +1062,15 @@ function article_sanitize_content(string $html): string
             }
             foreach ($toRemove as $attrName) {
                 $node->removeAttribute($attrName);
+            }
+        }
+
+        if ($node->hasAttribute('align')) {
+            $alignment = strtolower(trim($node->getAttribute('align')));
+            if (!in_array($alignment, ['left', 'right', 'center', 'justify', 'middle', 'top', 'bottom'], true)) {
+                $node->removeAttribute('align');
+            } else {
+                $node->setAttribute('align', $alignment);
             }
         }
 
