@@ -912,6 +912,11 @@ function article_translation_target_locales(): array
     ));
 }
 
+function article_mojibake_entity_marker_pattern(): string
+{
+    return '/&(?:amp;)?(?:Atilde|Acirc|AElig|aring|sbquo|fnof|bdquo|hellip|dagger|Dagger|circ|permil|Scaron|lsaquo|OElig|Zcaron|lsquo|rsquo|ldquo|rdquo|bull|ndash|mdash|tilde|trade|scaron|rsaquo|oelig|zcaron|Yuml|euro);|&(?:amp;)?#(?:x[89][0-9a-f]|1[2-5][0-9]);/i';
+}
+
 function article_mojibake_score(string $value): int
 {
     if ($value === '') {
@@ -926,6 +931,11 @@ function article_mojibake_score(string $value): int
     $controlCount = preg_match_all('/\xC2[\x80-\x9F]/', $value);
     if ($controlCount !== false) {
         $score += $controlCount;
+    }
+
+    $entityCount = preg_match_all(article_mojibake_entity_marker_pattern(), $value);
+    if ($entityCount !== false) {
+        $score += $entityCount;
     }
 
     return $score;
@@ -967,7 +977,7 @@ function article_decode_mojibake_html_entities(string $value): string
         return $value;
     }
 
-    $entityMarkerPattern = '/&(?:amp;)?(?:Atilde|Acirc|AElig|aring|sbquo|fnof|bdquo|hellip|dagger|Dagger|circ|permil|Scaron|lsaquo|OElig|Zcaron|lsquo|rsquo|ldquo|rdquo|bull|ndash|mdash|tilde|trade|scaron|rsaquo|oelig|zcaron|Yuml|euro);|&(?:amp;)?#(?:x[89][0-9a-f]|1[2-5][0-9]);/i';
+    $entityMarkerPattern = article_mojibake_entity_marker_pattern();
     $current = $value;
     for ($i = 0; $i < 2; $i++) {
         if (preg_match($entityMarkerPattern, $current) !== 1) {
