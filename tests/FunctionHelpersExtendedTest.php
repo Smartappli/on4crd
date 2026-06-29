@@ -135,6 +135,19 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertDoesNotMatchRegularExpression('/\xC2[\x80-\x9F]/', $clean);
     }
 
+    public function testArticleRepairMojibakeTextRepairsPartiallyRepairedArticleText(): void
+    {
+        $text = html_entity_decode('Dossier &deg;1 : Tenez &agrave; l&rsquo;&oelig;il vos fusibles d&rsquo;alimentation. Voici un indicateur que j&rsquo;ai trouv&eacute; au d&eacute;part.', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $mojibake = "Dossier \xC2\xB01\xC3\x83\xC2\x82\xC3\x82 : Tenez \xC3\x83\xC2\x83\xC3\x82  l\xC3\x83\xC2\xA2\xC3\x82\xC2\x80\xC3\x82\xC2\x99\xC3\x83\xC2\x85\xC3\x82\xC2\x93il vos fusibles d\xC3\x83\xC2\xA2\xC3\x82\xC2\x80\xC3\x82\xC2\x99alimentation. Voici un indicateur que j\xC3\x83\xC2\xA2\xC3\x82\xC2\x80\xC3\x82\xC2\x99ai trouv\xC3\x83\xC2\x83\xC3\x82\xC2\xA9 au d\xC3\x83\xC2\x83\xC3\x82\xC2\xA9part.";
+
+        $clean = article_repair_mojibake_text($mojibake);
+
+        self::assertSame($text, $clean);
+        self::assertStringNotContainsString('Ã', $clean);
+        self::assertStringNotContainsString('Â', $clean);
+        self::assertStringNotContainsString('â', $clean);
+    }
+
     public function testArticleSanitizeContentRepairsEntityEncodedSubmittedMojibake(): void
     {
         $text = html_entity_decode('Dossier n&deg;1&nbsp;: Tenez &agrave; l&rsquo;&oelig;il vos fusibles d&rsquo;alimentation. Voici un indicateur que j&rsquo;ai trouv&eacute; au d&eacute;part.', ENT_QUOTES | ENT_HTML5, 'UTF-8');
