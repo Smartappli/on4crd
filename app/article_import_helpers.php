@@ -102,7 +102,7 @@ function article_extract_docx_html(string $path): string
     $xpath = new DOMXPath($dom);
     $relationshipsXml = article_docx_part_contents($path, 'word/_rels/document.xml.rels');
     $relationships = article_docx_relationship_targets($relationshipsXml);
-    $imageDataUris = article_docx_image_data_uris($path, $relationshipsXml);
+    $imageDataUris = article_docx_image_data_uris($path, $relationshipsXml, 'word', article_docx_image_dimensions_by_relationship_id($xpath));
     $numberingFormats = article_docx_numbering_formats(article_docx_part_contents($path, 'word/numbering.xml'));
     $altChunkHtmlByRelationshipId = article_docx_alt_chunk_html_by_relationship_id($path, $relationshipsXml);
     $noteBodies = [
@@ -212,12 +212,14 @@ function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, arra
         }
 
         article_docx_close_open_list($html, $openListTag);
+        $attributes = article_docx_paragraph_attributes($block, $xpath);
+        $attributeHtml = article_docx_html_attributes($attributes);
         if (str_contains($style, 'heading') || str_contains($style, 'titre')) {
             $level = preg_match('/([1-6])/', $style, $matches) ? (int) $matches[1] + 1 : 2;
             $level = min(4, max(2, $level));
-            $html[] = '<h' . $level . '>' . $inlineHtml . '</h' . $level . '>';
+            $html[] = '<h' . $level . $attributeHtml . '>' . $inlineHtml . '</h' . $level . '>';
         } else {
-            $html[] = '<p>' . $inlineHtml . '</p>';
+            $html[] = '<p' . $attributeHtml . '>' . $inlineHtml . '</p>';
         }
         return;
     }
@@ -381,10 +383,10 @@ function article_docx_wordprocessing_part_html(string $path, string $partName, a
 
     $relationshipsXml = article_docx_part_contents($path, article_docx_relationships_part_name($partName));
     $relationships = article_docx_relationship_targets($relationshipsXml);
-    $imageDataUris = article_docx_image_data_uris($path, $relationshipsXml);
     $baseDirectory = article_docx_part_base_directory($partName);
     $altChunkHtmlByRelationshipId = article_docx_alt_chunk_html_by_relationship_id($path, $relationshipsXml, $baseDirectory);
     $xpath = new DOMXPath($dom);
+    $imageDataUris = article_docx_image_data_uris($path, $relationshipsXml, $baseDirectory, article_docx_image_dimensions_by_relationship_id($xpath));
     $blockNodes = $xpath->query('/*/*');
     if (!$blockNodes instanceof DOMNodeList) {
         return '';
@@ -450,8 +452,8 @@ function article_docx_note_bodies(string $path, string $noteType, array $numberi
 
     $relationshipsXml = article_docx_part_contents($path, 'word/_rels/' . $partBaseName . '.xml.rels');
     $relationships = article_docx_relationship_targets($relationshipsXml);
-    $imageDataUris = article_docx_image_data_uris($path, $relationshipsXml);
     $xpath = new DOMXPath($dom);
+    $imageDataUris = article_docx_image_data_uris($path, $relationshipsXml, 'word', article_docx_image_dimensions_by_relationship_id($xpath));
     $noteNodes = $xpath->query('/*[local-name()="' . $partBaseName . '"]/*[local-name()="' . $nodeName . '"]');
     if (!$noteNodes instanceof DOMNodeList) {
         return [];
