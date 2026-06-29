@@ -225,8 +225,12 @@ function albums_admin_redirect_photo_editor(?int $fallbackAlbumId = null): void
     if ($albumId <= 0 && $fallbackAlbumId !== null) {
         $albumId = max(0, $fallbackAlbumId);
     }
+    $page = max(1, (int) ($_POST['return_photos_page'] ?? 1));
 
-    redirect_url(route_url_clean('admin_albums', ['photo_album' => $albumId > 0 ? $albumId : '']) . '#admin-album-photos');
+    redirect_url(route_url_clean('admin_albums', [
+        'photo_album' => $albumId > 0 ? $albumId : '',
+        'photos_page' => $page > 1 ? $page : '',
+    ]) . '#admin-album-photos');
 }
 
 function albums_admin_redirect_upload_form(?int $fallbackAlbumId = null): void
@@ -800,6 +804,17 @@ $hasAlbumListFilters = $albumFilterQuery !== '' || $albumFilterCategory !== '' |
 
 $photoAlbumFilter = max(0, (int) ($_GET['photo_album'] ?? 0));
 $uploadAlbumId = max(0, (int) ($_GET['upload_album'] ?? $photoAlbumFilter));
+$uploadAlbum = null;
+foreach ($albums as $albumRow) {
+    if ((int) ($albumRow['id'] ?? 0) === $uploadAlbumId) {
+        $uploadAlbum = is_array($albumRow) ? $albumRow : null;
+        break;
+    }
+}
+if ($uploadAlbum === null && $albums !== []) {
+    $firstAlbum = $albums[0] ?? null;
+    $uploadAlbum = is_array($firstAlbum) ? $firstAlbum : null;
+}
 $photosPage = max(1, (int) ($_GET['photos_page'] ?? 1));
 $photosPerPage = 36;
 $photosWhereSql = '';
@@ -1080,6 +1095,36 @@ ob_start();
 
         <section class="card admin-album-upload-card" id="admin-album-upload">
             <h2><?= e((string) $t['add_photo']) ?></h2>
+            <?php if (is_array($uploadAlbum)): ?>
+                <?php
+                $uploadAlbumCoverRender = [
+                    'image_src' => '',
+                    'image_webp_src' => '',
+                    'title' => (string) ($uploadAlbum['title'] ?? $t['album_word']),
+                ];
+                if (trim((string) ($uploadAlbum['cover_file_path'] ?? '')) !== '') {
+                    $uploadAlbumCoverRender = albums_admin_photo_render_data([
+                        'file_path' => (string) $uploadAlbum['cover_file_path'],
+                        'title' => (string) ($uploadAlbum['title'] ?? $t['album_word']),
+                        'album_title' => (string) ($uploadAlbum['title'] ?? ''),
+                    ], $t, 'album_admin_upload_target_prepare_failed');
+                }
+                ?>
+                <div class="admin-album-upload-target">
+                    <div class="admin-album-upload-target-media">
+                        <?php if ($uploadAlbumCoverRender['image_src'] !== ''): ?>
+                            <?= album_picture_html($uploadAlbumCoverRender['image_src'], $uploadAlbumCoverRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $uploadAlbumCoverRender['image_webp_src']) ?>
+                        <?php else: ?>
+                            <span><?= e((string) $t['album_word']) ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <div>
+                        <span class="badge muted"><?= e((string) $t['album_label']) ?></span>
+                        <strong><?= e((string) ($uploadAlbum['title'] ?? $t['album_word'])) ?></strong>
+                        <p class="help"><?= (int) ($uploadAlbum['photo_count'] ?? 0) ?> <?= e((string) $t['photos']) ?> &middot; <?= e((string) $t['public_album']) ?>: <?= (int) ($uploadAlbum['is_public'] ?? 0) === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></p>
+                    </div>
+                </div>
+            <?php endif; ?>
             <form method="post" enctype="multipart/form-data" class="admin-album-upload-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="upload_photo">
@@ -1277,6 +1322,7 @@ ob_start();
                             <input type="hidden" name="action" value="update_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
                             <input type="hidden" name="return_photo_album" value="<?= $photoAlbumFilter > 0 ? $photoAlbumFilter : 0 ?>">
+                            <input type="hidden" name="return_photos_page" value="<?= $photosPage ?>">
                             <label><?= e((string) $t['title']) ?>
                                 <input type="text" name="title" value="<?= e($photoRender['title']) ?>" required maxlength="190">
                             </label>
@@ -1293,6 +1339,7 @@ ob_start();
                             <input type="hidden" name="action" value="reorder_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
                             <input type="hidden" name="return_photo_album" value="<?= $photoAlbumFilter > 0 ? $photoAlbumFilter : 0 ?>">
+                            <input type="hidden" name="return_photos_page" value="<?= $photosPage ?>">
                             <button class="button small secondary" type="submit" name="direction" value="up">&uarr;</button>
                             <button class="button small secondary" type="submit" name="direction" value="down">&darr;</button>
                         </form>
@@ -1301,6 +1348,7 @@ ob_start();
                             <input type="hidden" name="action" value="delete_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
                             <input type="hidden" name="return_photo_album" value="<?= $photoAlbumFilter > 0 ? $photoAlbumFilter : 0 ?>">
+                            <input type="hidden" name="return_photos_page" value="<?= $photosPage ?>">
                             <button class="button small secondary" type="submit"><?= e((string) $t['delete']) ?></button>
                         </form>
                     </article>

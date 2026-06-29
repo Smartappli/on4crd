@@ -158,6 +158,53 @@
   margin: 0;
 }
 
+[data-route="admin_albums"] .admin-album-upload-target {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: .7rem;
+  align-items: center;
+  margin: 0 0 .85rem;
+  padding: .65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel-2) 70%, transparent);
+}
+
+[data-route="admin_albums"] .admin-album-upload-target strong {
+  display: block;
+  margin-top: .25rem;
+  overflow-wrap: anywhere;
+}
+
+[data-route="admin_albums"] .admin-album-upload-target p {
+  margin: .25rem 0 0;
+}
+
+[data-route="admin_albums"] .admin-album-upload-target-media {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel) 70%, transparent);
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+[data-route="admin_albums"] .admin-album-upload-target-media picture,
+[data-route="admin_albums"] .admin-album-upload-target-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+[data-route="admin_albums"] .admin-album-upload-target-media img {
+  object-fit: cover;
+}
+
 [data-route="admin_albums"] .admin-album-file-input {
   display: none;
 }
