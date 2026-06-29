@@ -1119,6 +1119,48 @@ function article_repair_mojibake_fields(array $article, array $fields = ['title'
     return $article;
 }
 
+/**
+ * @param array<string,mixed> $article
+ * @return array<string,mixed>
+ */
+function article_repair_and_persist_mojibake_article(array $article): array
+{
+    $articleId = (int) ($article['id'] ?? 0);
+    $repaired = article_repair_mojibake_fields($article);
+    if ($articleId <= 0 || !function_exists('db')) {
+        return $repaired;
+    }
+
+    $changedFields = [];
+    foreach (['title', 'excerpt', 'content'] as $field) {
+        $previous = (string) ($article[$field] ?? '');
+        $current = (string) ($repaired[$field] ?? '');
+        if ($previous !== $current && article_mojibake_score($previous) > article_mojibake_score($current)) {
+            $changedFields[$field] = $current;
+        }
+    }
+    if ($changedFields === []) {
+        return $repaired;
+    }
+
+    try {
+        if (table_exists('articles')) {
+            db()->prepare(
+                'UPDATE articles SET title = ?, excerpt = ?, content = ? WHERE id = ?'
+            )->execute([
+                (string) ($repaired['title'] ?? ''),
+                trim((string) ($repaired['excerpt'] ?? '')) !== '' ? (string) $repaired['excerpt'] : null,
+                (string) ($repaired['content'] ?? ''),
+                $articleId,
+            ]);
+        }
+    } catch (Throwable) {
+        // Keep the repaired in-memory row even when the database cannot be updated.
+    }
+
+    return $repaired;
+}
+
 function article_repair_mojibake_dom_text_nodes(DOMNode $node): void
 {
     foreach ($node->childNodes as $child) {

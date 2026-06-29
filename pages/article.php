@@ -46,6 +46,7 @@ if (!$row) {
     return;
 }
 
+$row = article_repair_and_persist_mojibake_article((array) $row);
 $row = localized_article_row($row);
 $user = current_user();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {

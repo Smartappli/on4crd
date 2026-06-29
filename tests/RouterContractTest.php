@@ -942,15 +942,18 @@ final class RouterContractTest extends TestCase
     {
         $adminArticles = file_get_contents(__DIR__ . '/../pages/admin_articles.php');
         $articlePropose = file_get_contents(__DIR__ . '/../pages/article_propose.php');
+        $article = file_get_contents(__DIR__ . '/../pages/article.php');
         $helpers = file_get_contents(__DIR__ . '/../app/article_helpers.php');
         self::assertIsString($adminArticles);
         self::assertIsString($articlePropose);
+        self::assertIsString($article);
         self::assertIsString($helpers);
 
         self::assertStringContainsString('$title = trim(article_repair_mojibake_text((string) ($_POST[\'title\'] ?? \'\')));', $adminArticles);
         self::assertStringContainsString('$excerpt = article_repair_mojibake_text(article_excerpt_from_input((string) ($_POST[\'excerpt\'] ?? \'\')));', $adminArticles);
         self::assertStringContainsString('$articleTitle = trim(article_repair_mojibake_text((string) ($_POST[\'title\'] ?? \'\')));', $articlePropose);
         self::assertStringContainsString('$excerpt = article_repair_mojibake_text(article_excerpt_from_input((string) ($_POST[\'excerpt\'] ?? \'\')));', $articlePropose);
+        self::assertStringContainsString('$row = article_repair_and_persist_mojibake_article((array) $row);', $article);
         self::assertStringContainsString('$sourceFields = article_repair_mojibake_fields($sourceFields);', $helpers);
     }
 
