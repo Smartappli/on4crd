@@ -59,6 +59,7 @@ function article_excerpt_from_input(string $value): string
 {
     $value = preg_replace('/<\s*br\s*\/?\s*>/iu', "\n", $value) ?? $value;
     $value = preg_replace('/<\s*\/\s*(p|div|li|h[1-6])\s*>/iu', "\n", $value) ?? $value;
+    $value = article_decode_windows_1252_numeric_entities($value);
     $value = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $value = article_repair_mojibake_text($value);
     $value = str_replace(["\r\n", "\r"], "\n", $value);
@@ -941,6 +942,25 @@ function article_windows_1252_byte_to_utf8(int $byte): string
     return is_string($converted) ? $converted : '';
 }
 
+function article_decode_windows_1252_numeric_entities(string $value): string
+{
+    return preg_replace_callback(
+        '/&#(?:x([0-9a-f]{2})|([0-9]{2,3}));/i',
+        static function (array $matches): string {
+            $byte = $matches[1] !== ''
+                ? hexdec($matches[1])
+                : (int) $matches[2];
+
+            if ($byte >= 0x80 && $byte <= 0x9F) {
+                return article_windows_1252_byte_to_utf8($byte);
+            }
+
+            return $matches[0];
+        },
+        $value
+    ) ?? $value;
+}
+
 function article_utf8_from_mixed_windows_1252_bytes(string $value): string
 {
     $result = '';
@@ -1094,6 +1114,7 @@ function article_repair_mojibake_dom_text_nodes(DOMNode $node): void
 
 function article_sanitize_content(string $html): string
 {
+    $html = article_decode_windows_1252_numeric_entities($html);
     $html = article_repair_mojibake_text($html);
     $html = trim(sanitize_rich_html($html));
     if ($html === '') {
