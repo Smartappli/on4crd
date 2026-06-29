@@ -203,21 +203,25 @@ function admin_articles_delete_by_ids(array $ids): int
         return 0;
     }
 
-    $placeholders = implode(',', array_fill(0, count($ids), '?'));
-    if (table_exists('article_translations')) {
-        db()->prepare('DELETE FROM article_translations WHERE article_id IN (' . $placeholders . ')')->execute($ids);
+    $deleted = 0;
+    foreach (array_chunk($ids, 500) as $chunk) {
+        $placeholders = implode(',', array_fill(0, count($chunk), '?'));
+        if (table_exists('article_translations')) {
+            db()->prepare('DELETE FROM article_translations WHERE article_id IN (' . $placeholders . ')')->execute($chunk);
+        }
+        if (table_exists('article_revisions')) {
+            db()->prepare('DELETE FROM article_revisions WHERE article_id IN (' . $placeholders . ')')->execute($chunk);
+        }
+        if (table_exists('member_favorites')) {
+            db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')->execute(array_merge(['article'], $chunk));
+        }
+        $deleteStmt = db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')');
+        $deleteStmt->execute($chunk);
+        $deleted += $deleteStmt->rowCount();
     }
-    if (table_exists('article_revisions')) {
-        db()->prepare('DELETE FROM article_revisions WHERE article_id IN (' . $placeholders . ')')->execute($ids);
-    }
-    if (table_exists('member_favorites')) {
-        db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')->execute(array_merge(['article'], $ids));
-    }
-    $deleteStmt = db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')');
-    $deleteStmt->execute($ids);
     admin_articles_forget_public_caches();
 
-    return $deleteStmt->rowCount();
+    return $deleted;
 }
 
 $knownCategories = article_categories($articleMessages);
