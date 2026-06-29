@@ -2955,141 +2955,193 @@ function render_admin_webotheque_page(): void
                     <p class="eyebrow"><?= e((string) $t['domains']) ?></p>
                     <h2><?= e($adminText('taxonomy_title')) ?></h2>
                 </div>
-                <span class="badge muted"><?= count($categories) ?> <?= e((string) $t['domains']) ?></span>
-            </div>
-            <div class="admin-webotheque-taxonomy-group">
-            <form method="post" class="inline-form">
-                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <input type="hidden" name="action" value="add_category">
-                <label><span><?= e((string) $t['domain_field']) ?></span><input type="text" name="category_label" maxlength="160" required></label>
-                <input type="hidden" name="category_code" value="">
-                <button class="button" type="submit"><?= e($adminText('add_category')) ?></button>
-            </form>
-            <?php if ($categories !== []): ?>
-                <div class="tags-cloud">
-                    <?php foreach ($categories as $code => $label): ?>
-                        <?php
-                        $categoryTotal = (int) (($stats['by_category'][(string) $code] ?? 0));
-                        $categorySubcategoryTotal = count($subcategoriesByCategory[(string) $code] ?? []);
-                        $categoryDeleteDisabled = (string) $code === 'general' || $categorySubcategoryTotal > 0 || count($categories) <= 1;
-                        ?>
-                        <form method="post" class="inline-form">
-                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                            <input type="hidden" name="action" value="update_category">
-                            <input type="hidden" name="category" value="<?= e((string) $code) ?>">
-                            <span class="pill taxonomy-pill-category"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
-                            <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
-                            <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
-                            <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
-                        </form>
-                    <?php endforeach; ?>
+                <div class="admin-webotheque-taxonomy-summary">
+                    <span class="badge muted"><?= count($categories) ?> <?= e((string) $t['domains']) ?></span>
+                    <span class="badge muted"><?= $subcategoryCount ?> <?= e((string) $t['subcategory_field']) ?></span>
+                    <span class="badge muted"><?= $subsubcategoryCount ?> <?= e((string) $t['subsubcategory_field']) ?></span>
                 </div>
-            <?php endif; ?>
             </div>
             <div class="admin-webotheque-taxonomy-group">
-            <form method="post" class="inline-form">
-                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <input type="hidden" name="action" value="add_subcategory">
-                <label><span><?= e((string) $t['domain_field']) ?></span>
-                    <select name="subcategory_category">
+                <div class="admin-webotheque-taxonomy-group-head">
+                    <div>
+                        <h3><?= e((string) $t['domain_field']) ?></h3>
+                        <p class="help"><?= e($adminText('add_category')) ?></p>
+                    </div>
+                    <span class="badge muted"><?= count($categories) ?></span>
+                </div>
+                <form method="post" class="inline-form admin-webotheque-taxonomy-add-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="add_category">
+                    <label><span><?= e((string) $t['domain_field']) ?></span><input type="text" name="category_label" maxlength="160" required></label>
+                    <input type="hidden" name="category_code" value="">
+                    <button class="button" type="submit"><?= e($adminText('add_category')) ?></button>
+                </form>
+                <?php if ($categories !== []): ?>
+                    <div class="tags-cloud">
                         <?php foreach ($categories as $code => $label): ?>
-                            <option value="<?= e((string) $code) ?>"<?= $categoryFilter === (string) $code ? ' selected' : '' ?>><?= e((string) $label) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-                <label><span><?= e((string) $t['subcategory_field']) ?></span><input type="text" name="subcategory_label" maxlength="160" required></label>
-                <input type="hidden" name="subcategory_code" value="">
-                <button class="button" type="submit"><?= e($adminText('add_subcategory')) ?></button>
-            </form>
-            <?php if ($subcategoriesByCategory === []): ?>
-                <p class="help"><?= e($adminText('no_subcategories')) ?></p>
-            <?php else: ?>
-                <div class="tags-cloud">
-                    <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>
-                        <?php foreach ($subcategories as $subcategoryInfo): ?>
                             <?php
-                            $subCode = webotheque_subcategory_code((string) $subcategoryInfo['code']);
-                            if ($subCode === '') {
-                                continue;
-                            }
-                            $subTotal = (int) (($stats['by_subcategory'][(string) $parentCode . ':' . $subCode] ?? 0));
-                            $subSubcategoryTotal = count($subsubcategoriesByParent[(string) $parentCode . ':' . $subCode] ?? []);
+                            $categoryTotal = (int) (($stats['by_category'][(string) $code] ?? 0));
+                            $categorySubcategoryTotal = count($subcategoriesByCategory[(string) $code] ?? []);
+                            $categoryDeleteReason = $categorySubcategoryTotal > 0 ? $adminText('err_category_has_subcategories') : '';
+                            $categoryDeleteDisabled = (string) $code === 'general' || $categorySubcategoryTotal > 0 || count($categories) <= 1;
                             ?>
-                            <form method="post" class="inline-form">
+                            <form method="post" class="inline-form admin-webotheque-taxonomy-card">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                                <input type="hidden" name="action" value="update_subcategory">
-                                <input type="hidden" name="subcategory_ref" value="<?= e(webotheque_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                                <span class="taxonomy-badge-row">
-                                    <span class="badge muted taxonomy-pill-category"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?></span>
-                                    <span class="badge muted taxonomy-pill-subcategory"><?= e($subCode) ?></span>
-                                    <span class="badge muted"><?= $subTotal ?></span>
+                                <input type="hidden" name="action" value="update_category">
+                                <input type="hidden" name="category" value="<?= e((string) $code) ?>">
+                                <span class="admin-webotheque-taxonomy-meta">
+                                    <span class="badge muted taxonomy-pill-category"><?= e((string) $code) ?></span>
+                                    <span class="badge muted"><?= $categoryTotal ?> <?= e((string) $t['links']) ?></span>
+                                    <span class="badge muted"><?= $categorySubcategoryTotal ?> <?= e((string) $t['subcategory_field']) ?></span>
                                 </span>
-                                <input type="text" name="subcategory_label" value="<?= e((string) $subcategoryInfo['label']) ?>" maxlength="160" required>
-                                <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
-                                <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 || $subSubcategoryTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
+                                <label><span><?= e((string) $t['domain_field']) ?></span><input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required></label>
+                                <?php if ($categoryDeleteReason !== ''): ?>
+                                    <span class="help admin-webotheque-taxonomy-lock"><?= e($categoryDeleteReason) ?></span>
+                                <?php endif; ?>
+                                <span class="admin-webotheque-taxonomy-actions">
+                                    <a class="button secondary small" href="<?= e(route_url_clean('admin_webotheque', ['category' => (string) $code])) ?>#admin-webotheque-links"><?= e((string) $t['links']) ?></a>
+                                    <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
+                                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?><?= $categoryDeleteReason !== '' ? ' title="' . e($categoryDeleteReason) . '"' : '' ?>><?= e((string) $t['delete']) ?></button>
+                                </span>
                             </form>
                         <?php endforeach; ?>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="admin-webotheque-taxonomy-group">
-            <form method="post" class="inline-form">
-                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <input type="hidden" name="action" value="add_subsubcategory">
-                <label><span><?= e((string) $t['propose_subsubcategory_parent']) ?></span>
-                    <select name="subsubcategory_parent_ref" required>
-                        <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>
-                            <optgroup label="<?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?>">
-                                <?php foreach ($subcategories as $subcategoryInfo): ?>
-                                    <?php $subCode = webotheque_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
-                                    <?php if ($subCode === '') { continue; } ?>
-                                    <option value="<?= e(webotheque_subcategory_ref((string) $parentCode, $subCode)) ?>"<?= $categoryFilter === (string) $parentCode && $subcategoryFilter === $subCode ? ' selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></option>
-                                <?php endforeach; ?>
-                            </optgroup>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-                <label><span><?= e((string) $t['subsubcategory_field']) ?></span><input type="text" name="subsubcategory_label" maxlength="160" required></label>
-                <input type="hidden" name="subsubcategory_code" value="">
-                <button class="button" type="submit"><?= e($adminText('add_subsubcategory')) ?></button>
-            </form>
-            <?php if ($subsubcategoriesByParent === []): ?>
-                <p class="help"><?= e($adminText('no_subsubcategories')) ?></p>
-            <?php else: ?>
-                <div class="tags-cloud">
-                    <?php foreach ($subsubcategoriesByParent as $parentRef => $subsubcategories): ?>
-                        <?php $parentParts = webotheque_subcategory_ref_parts((string) $parentRef); ?>
-                        <?php $parentCategory = (string) $parentParts['category']; ?>
-                        <?php $parentSubcategory = (string) $parentParts['subcategory']; ?>
-                        <?php foreach ($subsubcategories as $subsubcategoryInfo): ?>
-                            <?php
-                            $subsubCode = webotheque_subsubcategory_code((string) $subsubcategoryInfo['code']);
-                            if ($parentCategory === '' || $parentSubcategory === '' || $subsubCode === '') {
-                                continue;
-                            }
-                            $subsubTotal = (int) (($stats['by_subsubcategory'][$parentCategory . ':' . $parentSubcategory . ':' . $subsubCode] ?? 0));
-                            ?>
-                            <form method="post" class="inline-form">
-                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                                <input type="hidden" name="action" value="update_subsubcategory">
-                                <input type="hidden" name="subsubcategory_category" value="<?= e($parentCategory) ?>">
-                                <input type="hidden" name="subsubcategory_parent" value="<?= e($parentSubcategory) ?>">
-                                <input type="hidden" name="subsubcategory_code" value="<?= e($subsubCode) ?>">
-                                <span class="taxonomy-badge-row">
-                                    <span class="badge muted taxonomy-pill-category"><?= e((string) ($categories[$parentCategory] ?? $parentCategory)) ?></span>
-                                    <span class="badge muted taxonomy-pill-subcategory"><?= e($parentSubcategory) ?></span>
-                                    <span class="badge muted taxonomy-pill-subsubcategory"><?= e($subsubCode) ?></span>
-                                    <span class="badge muted"><?= $subsubTotal ?></span>
-                                </span>
-                                <input type="text" name="subsubcategory_label" value="<?= e((string) $subsubcategoryInfo['label']) ?>" maxlength="160" required>
-                                <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
-                                <button class="button secondary small" type="submit" name="action" value="delete_subsubcategory"<?= $subsubTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
-                            </form>
-                        <?php endforeach; ?>
-                    <?php endforeach; ?>
+                <div class="admin-webotheque-taxonomy-group-head">
+                    <div>
+                        <h3><?= e((string) $t['subcategory_field']) ?></h3>
+                        <p class="help"><?= e($adminText('add_subcategory')) ?></p>
+                    </div>
+                    <span class="badge muted"><?= $subcategoryCount ?></span>
                 </div>
-            <?php endif; ?>
+                <form method="post" class="inline-form admin-webotheque-taxonomy-add-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="add_subcategory">
+                    <label><span><?= e((string) $t['domain_field']) ?></span>
+                        <select name="subcategory_category">
+                            <?php foreach ($categories as $code => $label): ?>
+                                <option value="<?= e((string) $code) ?>"<?= $categoryFilter === (string) $code ? ' selected' : '' ?>><?= e((string) $label) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label><span><?= e((string) $t['subcategory_field']) ?></span><input type="text" name="subcategory_label" maxlength="160" required></label>
+                    <input type="hidden" name="subcategory_code" value="">
+                    <button class="button" type="submit"><?= e($adminText('add_subcategory')) ?></button>
+                </form>
+                <?php if ($subcategoriesByCategory === []): ?>
+                    <p class="help"><?= e($adminText('no_subcategories')) ?></p>
+                <?php else: ?>
+                    <div class="tags-cloud">
+                        <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>
+                            <?php foreach ($subcategories as $subcategoryInfo): ?>
+                                <?php
+                                $subCode = webotheque_subcategory_code((string) $subcategoryInfo['code']);
+                                if ($subCode === '') {
+                                    continue;
+                                }
+                                $subTotal = (int) (($stats['by_subcategory'][(string) $parentCode . ':' . $subCode] ?? 0));
+                                $subSubcategoryTotal = count($subsubcategoriesByParent[(string) $parentCode . ':' . $subCode] ?? []);
+                                $subDeleteReason = $subSubcategoryTotal > 0 ? $adminText('err_subcategory_has_subsubcategories') : ($subTotal > 0 ? $adminText('err_subcategory_has_documents') : '');
+                                $subDeleteDisabled = $subDeleteReason !== '';
+                                ?>
+                                <form method="post" class="inline-form admin-webotheque-taxonomy-card">
+                                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                    <input type="hidden" name="action" value="update_subcategory">
+                                    <input type="hidden" name="subcategory_ref" value="<?= e(webotheque_subcategory_ref((string) $parentCode, $subCode)) ?>">
+                                    <span class="admin-webotheque-taxonomy-meta">
+                                        <span class="badge muted taxonomy-pill-category"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?></span>
+                                        <span class="badge muted taxonomy-pill-subcategory"><?= e($subCode) ?></span>
+                                        <span class="badge muted"><?= $subTotal ?> <?= e((string) $t['links']) ?></span>
+                                        <span class="badge muted"><?= $subSubcategoryTotal ?> <?= e((string) $t['subsubcategory_field']) ?></span>
+                                    </span>
+                                    <label><span><?= e((string) $t['subcategory_field']) ?></span><input type="text" name="subcategory_label" value="<?= e((string) $subcategoryInfo['label']) ?>" maxlength="160" required></label>
+                                    <?php if ($subDeleteReason !== ''): ?>
+                                        <span class="help admin-webotheque-taxonomy-lock"><?= e($subDeleteReason) ?></span>
+                                    <?php endif; ?>
+                                    <span class="admin-webotheque-taxonomy-actions">
+                                        <a class="button secondary small" href="<?= e(route_url_clean('admin_webotheque', ['category' => (string) $parentCode, 'subcategory' => $subCode])) ?>#admin-webotheque-links"><?= e((string) $t['links']) ?></a>
+                                        <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
+                                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subDeleteDisabled ? ' disabled' : '' ?><?= $subDeleteReason !== '' ? ' title="' . e($subDeleteReason) . '"' : '' ?>><?= e((string) $t['delete']) ?></button>
+                                    </span>
+                                </form>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="admin-webotheque-taxonomy-group">
+                <div class="admin-webotheque-taxonomy-group-head">
+                    <div>
+                        <h3><?= e((string) $t['subsubcategory_field']) ?></h3>
+                        <p class="help"><?= e($adminText('add_subsubcategory')) ?></p>
+                    </div>
+                    <span class="badge muted"><?= $subsubcategoryCount ?></span>
+                </div>
+                <form method="post" class="inline-form admin-webotheque-taxonomy-add-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="add_subsubcategory">
+                    <label><span><?= e((string) $t['propose_subsubcategory_parent']) ?></span>
+                        <select name="subsubcategory_parent_ref" required>
+                            <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>
+                                <optgroup label="<?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?>">
+                                    <?php foreach ($subcategories as $subcategoryInfo): ?>
+                                        <?php $subCode = webotheque_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                                        <?php if ($subCode === '') { continue; } ?>
+                                        <option value="<?= e(webotheque_subcategory_ref((string) $parentCode, $subCode)) ?>"<?= $categoryFilter === (string) $parentCode && $subcategoryFilter === $subCode ? ' selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label><span><?= e((string) $t['subsubcategory_field']) ?></span><input type="text" name="subsubcategory_label" maxlength="160" required></label>
+                    <input type="hidden" name="subsubcategory_code" value="">
+                    <button class="button" type="submit"><?= e($adminText('add_subsubcategory')) ?></button>
+                </form>
+                <?php if ($subsubcategoriesByParent === []): ?>
+                    <p class="help"><?= e($adminText('no_subsubcategories')) ?></p>
+                <?php else: ?>
+                    <div class="tags-cloud">
+                        <?php foreach ($subsubcategoriesByParent as $parentRef => $subsubcategories): ?>
+                            <?php $parentParts = webotheque_subcategory_ref_parts((string) $parentRef); ?>
+                            <?php $parentCategory = (string) $parentParts['category']; ?>
+                            <?php $parentSubcategory = (string) $parentParts['subcategory']; ?>
+                            <?php foreach ($subsubcategories as $subsubcategoryInfo): ?>
+                                <?php
+                                $subsubCode = webotheque_subsubcategory_code((string) $subsubcategoryInfo['code']);
+                                if ($parentCategory === '' || $parentSubcategory === '' || $subsubCode === '') {
+                                    continue;
+                                }
+                                $subsubTotal = (int) (($stats['by_subsubcategory'][$parentCategory . ':' . $parentSubcategory . ':' . $subsubCode] ?? 0));
+                                $subsubDeleteReason = $subsubTotal > 0 ? $adminText('err_subsubcategory_has_documents') : '';
+                                ?>
+                                <form method="post" class="inline-form admin-webotheque-taxonomy-card">
+                                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                    <input type="hidden" name="action" value="update_subsubcategory">
+                                    <input type="hidden" name="subsubcategory_category" value="<?= e($parentCategory) ?>">
+                                    <input type="hidden" name="subsubcategory_parent" value="<?= e($parentSubcategory) ?>">
+                                    <input type="hidden" name="subsubcategory_code" value="<?= e($subsubCode) ?>">
+                                    <span class="admin-webotheque-taxonomy-meta">
+                                        <span class="badge muted taxonomy-pill-category"><?= e((string) ($categories[$parentCategory] ?? $parentCategory)) ?></span>
+                                        <span class="badge muted taxonomy-pill-subcategory"><?= e($parentSubcategory) ?></span>
+                                        <span class="badge muted taxonomy-pill-subsubcategory"><?= e($subsubCode) ?></span>
+                                        <span class="badge muted"><?= $subsubTotal ?> <?= e((string) $t['links']) ?></span>
+                                    </span>
+                                    <label><span><?= e((string) $t['subsubcategory_field']) ?></span><input type="text" name="subsubcategory_label" value="<?= e((string) $subsubcategoryInfo['label']) ?>" maxlength="160" required></label>
+                                    <?php if ($subsubDeleteReason !== ''): ?>
+                                        <span class="help admin-webotheque-taxonomy-lock"><?= e($subsubDeleteReason) ?></span>
+                                    <?php endif; ?>
+                                    <span class="admin-webotheque-taxonomy-actions">
+                                        <a class="button secondary small" href="<?= e(route_url_clean('admin_webotheque', ['category' => $parentCategory, 'subcategory' => $parentSubcategory, 'subsubcategory' => $subsubCode])) ?>#admin-webotheque-links"><?= e((string) $t['links']) ?></a>
+                                        <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
+                                        <button class="button secondary small" type="submit" name="action" value="delete_subsubcategory"<?= $subsubTotal > 0 ? ' disabled' : '' ?><?= $subsubDeleteReason !== '' ? ' title="' . e($subsubDeleteReason) . '"' : '' ?>><?= e((string) $t['delete']) ?></button>
+                                    </span>
+                                </form>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </section>
 
@@ -3102,7 +3154,10 @@ function render_admin_webotheque_page(): void
                 <span class="badge muted"><?= count($links) ?></span>
             </div>
             <?php if ($links === []): ?>
-                <div class="card"><p><?= e((string) $t['empty']) ?></p></div>
+                <div class="card admin-webotheque-empty-state">
+                    <p><?= e((string) $t['empty']) ?></p>
+                    <a class="button" href="<?= e(route_url('admin_webotheque', ['propose_link' => '1'])) ?>" data-webotheque-modal-open="admin-webotheque-link-dialog" aria-haspopup="dialog" aria-controls="admin-webotheque-link-dialog"><?= e((string) $t['propose_link']) ?></a>
+                </div>
             <?php else: ?>
                 <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t, $categories, $user, true, ['q' => $search, 'category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'subsubcategory' => $subsubcategoryFilter]) ?></div>
             <?php endif; ?>
