@@ -235,12 +235,25 @@ final class FunctionHelpersExtendedTest extends TestCase
 
         $documentXml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
   <w:body>
     <w:p>
       <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
       <w:r><w:t>Titre importe</w:t></w:r>
     </w:p>
+    <w:sdt>
+      <w:sdtContent>
+        <w:p><w:r><w:t>Texte dans controle Word</w:t></w:r></w:p>
+      </w:sdtContent>
+    </w:sdt>
+    <mc:AlternateContent>
+      <mc:Choice Requires="wps">
+        <w:p><w:r><w:t>Texte depuis choix Word</w:t></w:r></w:p>
+      </mc:Choice>
+      <mc:Fallback>
+        <w:p><w:r><w:t>Texte fallback duplique</w:t></w:r></w:p>
+      </mc:Fallback>
+    </mc:AlternateContent>
     <w:p>
       <w:r><w:rPr><w:b/><w:i/></w:rPr><w:t>Texte fort</w:t></w:r>
       <w:r><w:t> et </w:t></w:r>
@@ -269,6 +282,20 @@ final class FunctionHelpersExtendedTest extends TestCase
             <wp:extent cx="95250" cy="190500"/>
             <wp:docPr id="1" name="Image Word" descr="Image importee"/>
             <a:graphic><a:graphicData><a:blip r:embed="rId3"/></a:graphicData></a:graphic>
+          </wp:inline>
+        </w:drawing>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:drawing>
+          <wp:inline>
+            <wp:extent cx="190500" cy="190500"/>
+            <wp:docPr id="2" name="Zone de texte"/>
+            <a:graphic><a:graphicData><wps:wsp><wps:txbx><w:txbxContent>
+              <w:p><w:r><w:t>Texte dans zone de texte</w:t></w:r></w:p>
+              <w:p><w:r><w:t>Deuxieme ligne de zone</w:t></w:r></w:p>
+            </w:txbxContent></wps:txbx></wps:wsp></a:graphicData></a:graphic>
           </wp:inline>
         </w:drawing>
       </w:r>
@@ -337,6 +364,9 @@ XML;
             $html = article_extract_docx_html($tmp);
 
             self::assertStringContainsString('<h2>Titre importe</h2>', $html);
+            self::assertStringContainsString('<p>Texte dans controle Word</p>', $html);
+            self::assertStringContainsString('<p>Texte depuis choix Word</p>', $html);
+            self::assertStringNotContainsString('Texte fallback duplique', $html);
             self::assertStringContainsString('<strong><em>Texte fort</em></strong>', $html);
             self::assertStringContainsString('<a href="https://example.test/docx">lien fiable</a>', $html);
             self::assertStringContainsString('<br>', $html);
@@ -351,6 +381,7 @@ XML;
             self::assertStringContainsString('alt="Image importee"', $html);
             self::assertStringContainsString('width="10"', $html);
             self::assertStringContainsString('height="20"', $html);
+            self::assertStringContainsString('<p>Texte dans zone de texte<br>Deuxieme ligne de zone</p>', $html);
             self::assertStringContainsString('<table>', $html);
             self::assertStringContainsString('<thead>', $html);
             self::assertStringContainsString('<th scope="col">Colonne A</th>', $html);

@@ -116,59 +116,7 @@ function article_extract_docx_html(string $path): string
             continue;
         }
 
-        $localName = $block->localName;
-        if ($localName === 'tbl') {
-            if ($openListTag !== null) {
-                $html[] = '</' . $openListTag . '>';
-                $openListTag = null;
-            }
-            $table = article_docx_table_html($block, $xpath, $relationships, $imageDataUris);
-            if ($table !== '') {
-                $html[] = $table;
-            }
-            continue;
-        }
-
-        if ($localName !== 'p') {
-            continue;
-        }
-
-        $inlineHtml = article_docx_inline_html($block, $xpath, $relationships, $imageDataUris);
-        if (article_docx_html_is_empty($inlineHtml)) {
-            if ($openListTag !== null) {
-                $html[] = '</' . $openListTag . '>';
-                $openListTag = null;
-            }
-            continue;
-        }
-
-        $style = article_docx_paragraph_style($block, $xpath);
-        $listTag = article_docx_paragraph_list_tag($block, $xpath, $numberingFormats);
-
-        if ($listTag !== '') {
-            if ($openListTag !== $listTag) {
-                if ($openListTag !== null) {
-                    $html[] = '</' . $openListTag . '>';
-                }
-                $html[] = '<' . $listTag . '>';
-                $openListTag = $listTag;
-            }
-            $html[] = '<li>' . $inlineHtml . '</li>';
-            continue;
-        }
-
-        if ($openListTag !== null) {
-            $html[] = '</' . $openListTag . '>';
-            $openListTag = null;
-        }
-
-        if (str_contains($style, 'heading') || str_contains($style, 'titre')) {
-            $level = preg_match('/([1-6])/', $style, $matches) ? (int) $matches[1] + 1 : 2;
-            $level = min(4, max(2, $level));
-            $html[] = '<h' . $level . '>' . $inlineHtml . '</h' . $level . '>';
-        } else {
-            $html[] = '<p>' . $inlineHtml . '</p>';
-        }
+        article_docx_append_block_html($block, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openListTag);
     }
 
     if ($openListTag !== null) {
@@ -176,6 +124,95 @@ function article_extract_docx_html(string $path): string
     }
 
     return sanitize_rich_html(implode("\n", $html));
+}
+}
+
+if (!function_exists('article_docx_close_open_list')) {
+/**
+ * @param list<string> $html
+ */
+function article_docx_close_open_list(array &$html, ?string &$openListTag): void
+{
+    if ($openListTag === null) {
+        return;
+    }
+
+    $html[] = '</' . $openListTag . '>';
+    $openListTag = null;
+}
+}
+
+if (!function_exists('article_docx_append_block_html')) {
+/**
+ * @param array<string,string> $relationships
+ * @param array<string,string> $imageDataUris
+ * @param array<string,array<string,string>> $numberingFormats
+ * @param list<string> $html
+ */
+function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, array $relationships, array $imageDataUris, array $numberingFormats, array &$html, ?string &$openListTag): void
+{
+    $localName = $block->localName;
+    if ($localName === 'tbl') {
+        article_docx_close_open_list($html, $openListTag);
+        $table = article_docx_table_html($block, $xpath, $relationships, $imageDataUris);
+        if ($table !== '') {
+            $html[] = $table;
+        }
+        return;
+    }
+
+    if ($localName === 'p') {
+        $inlineHtml = article_docx_inline_html($block, $xpath, $relationships, $imageDataUris);
+        if (article_docx_html_is_empty($inlineHtml)) {
+            article_docx_close_open_list($html, $openListTag);
+            return;
+        }
+
+        $style = article_docx_paragraph_style($block, $xpath);
+        $listTag = article_docx_paragraph_list_tag($block, $xpath, $numberingFormats);
+        if ($listTag !== '') {
+            if ($openListTag !== $listTag) {
+                article_docx_close_open_list($html, $openListTag);
+                $html[] = '<' . $listTag . '>';
+                $openListTag = $listTag;
+            }
+            $html[] = '<li>' . $inlineHtml . '</li>';
+            return;
+        }
+
+        article_docx_close_open_list($html, $openListTag);
+        if (str_contains($style, 'heading') || str_contains($style, 'titre')) {
+            $level = preg_match('/([1-6])/', $style, $matches) ? (int) $matches[1] + 1 : 2;
+            $level = min(4, max(2, $level));
+            $html[] = '<h' . $level . '>' . $inlineHtml . '</h' . $level . '>';
+        } else {
+            $html[] = '<p>' . $inlineHtml . '</p>';
+        }
+        return;
+    }
+
+    if ($localName === 'AlternateContent') {
+        foreach (['Choice', 'Fallback'] as $candidateName) {
+            foreach ($block->childNodes as $candidateNode) {
+                if (!$candidateNode instanceof DOMElement || $candidateNode->localName !== $candidateName) {
+                    continue;
+                }
+                foreach ($candidateNode->childNodes as $child) {
+                    if ($child instanceof DOMElement) {
+                        article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openListTag);
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+    foreach ($block->childNodes as $child) {
+        if (!$child instanceof DOMElement || str_ends_with($child->localName, 'Pr')) {
+            continue;
+        }
+        article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openListTag);
+    }
 }
 }
 
@@ -622,7 +659,7 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
             continue;
         }
         if ($localName === 'r') {
-            $html .= article_docx_run_html($child, $xpath, $imageDataUris);
+            $html .= article_docx_run_html($child, $xpath, $relationships, $imageDataUris);
             continue;
         }
         if ($localName === 'hyperlink') {
@@ -661,9 +698,10 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
 
 if (!function_exists('article_docx_run_html')) {
 /**
+ * @param array<string,string> $relationships
  * @param array<string,string> $imageDataUris
  */
-function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $imageDataUris = []): string
+function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $relationships = [], array $imageDataUris = []): string
 {
     $html = '';
     foreach ($run->childNodes as $child) {
@@ -689,6 +727,8 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $imageDat
         }
         if ($localName === 'drawing' || $localName === 'pict') {
             $html .= article_docx_run_image_html($child, $xpath, $imageDataUris);
+            $html .= article_docx_textbox_inline_html($child, $xpath, $relationships, $imageDataUris);
+            continue;
         }
     }
 
@@ -716,6 +756,42 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $imageDat
     }
 
     return $html;
+}
+}
+
+if (!function_exists('article_docx_textbox_inline_html')) {
+/**
+ * @param array<string,string> $relationships
+ * @param array<string,string> $imageDataUris
+ */
+function article_docx_textbox_inline_html(DOMElement $container, DOMXPath $xpath, array $relationships, array $imageDataUris = []): string
+{
+    $contentNodes = $xpath->query('.//*[local-name()="txbxContent"]', $container);
+    if (!$contentNodes instanceof DOMNodeList || $contentNodes->length === 0) {
+        return '';
+    }
+
+    $parts = [];
+    foreach ($contentNodes as $contentNode) {
+        if (!$contentNode instanceof DOMElement) {
+            continue;
+        }
+        $paragraphNodes = $xpath->query('.//*[local-name()="p"]', $contentNode);
+        if (!$paragraphNodes instanceof DOMNodeList) {
+            continue;
+        }
+        foreach ($paragraphNodes as $paragraphNode) {
+            if (!$paragraphNode instanceof DOMElement) {
+                continue;
+            }
+            $inline = article_docx_inline_html($paragraphNode, $xpath, $relationships, $imageDataUris);
+            if (!article_docx_html_is_empty($inline)) {
+                $parts[] = $inline;
+            }
+        }
+    }
+
+    return implode('<br>', $parts);
 }
 }
 
@@ -902,18 +978,7 @@ function article_docx_table_html(DOMElement $table, DOMXPath $xpath, array $rela
                 continue;
             }
 
-            $paragraphs = [];
-            $paragraphNodes = $xpath->query('./*[local-name()="p"]', $cellNode);
-            if ($paragraphNodes instanceof DOMNodeList) {
-                foreach ($paragraphNodes as $paragraphNode) {
-                    if ($paragraphNode instanceof DOMElement) {
-                        $inline = article_docx_inline_html($paragraphNode, $xpath, $relationships, $imageDataUris);
-                        if (!article_docx_html_is_empty($inline)) {
-                            $paragraphs[] = $inline;
-                        }
-                    }
-                }
-            }
+            $paragraphs = article_docx_table_cell_content_parts($cellNode, $xpath, $relationships, $imageDataUris);
 
             $cell = [
                 'tag' => $cellTag,
@@ -987,6 +1052,53 @@ function article_docx_table_cell_vertical_merge_state(DOMElement $cell, DOMXPath
 
     $value = strtolower(article_docx_attribute($mergeNode, 'val'));
     return $value === 'restart' ? 'restart' : 'continue';
+}
+}
+
+if (!function_exists('article_docx_table_cell_content_parts')) {
+/**
+ * @param array<string,string> $relationships
+ * @param array<string,string> $imageDataUris
+ * @return list<string>
+ */
+function article_docx_table_cell_content_parts(DOMElement $cellNode, DOMXPath $xpath, array $relationships, array $imageDataUris = []): array
+{
+    $parts = [];
+    foreach ($cellNode->childNodes as $child) {
+        if (!$child instanceof DOMElement || $child->localName === 'tcPr') {
+            continue;
+        }
+        if ($child->localName === 'p') {
+            $inline = article_docx_inline_html($child, $xpath, $relationships, $imageDataUris);
+            if (!article_docx_html_is_empty($inline)) {
+                $parts[] = $inline;
+            }
+            continue;
+        }
+        if ($child->localName === 'tbl') {
+            $table = article_docx_table_html($child, $xpath, $relationships, $imageDataUris);
+            if ($table !== '') {
+                $parts[] = $table;
+            }
+            continue;
+        }
+
+        $nestedNodes = $xpath->query('.//*[local-name()="p"]', $child);
+        if (!$nestedNodes instanceof DOMNodeList) {
+            continue;
+        }
+        foreach ($nestedNodes as $nestedNode) {
+            if (!$nestedNode instanceof DOMElement) {
+                continue;
+            }
+            $inline = article_docx_inline_html($nestedNode, $xpath, $relationships, $imageDataUris);
+            if (!article_docx_html_is_empty($inline)) {
+                $parts[] = $inline;
+            }
+        }
+    }
+
+    return $parts;
 }
 }
 
