@@ -262,6 +262,7 @@ final class FunctionHelpersExtendedTest extends TestCase
         <w:p><w:r><w:t>Texte depuis fallback Word</w:t></w:r></w:p>
       </mc:Fallback>
     </mc:AlternateContent>
+    <w:altChunk r:id="rId4"/>
     <w:p>
       <w:r><w:rPr><w:b/><w:i/></w:rPr><w:t>Texte fort</w:t></w:r>
       <w:r><w:t> et </w:t></w:r>
@@ -274,6 +275,12 @@ final class FunctionHelpersExtendedTest extends TestCase
       <w:r><w:rPr><w:vertAlign w:val="superscript"/></w:rPr><w:t>exposant</w:t></w:r>
       <w:r><w:t> </w:t></w:r>
       <w:r><w:rPr><w:vertAlign w:val="subscript"/></w:rPr><w:t>indice</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:r><w:t>Texte avec note</w:t></w:r>
+      <w:r><w:footnoteReference w:id="1"/></w:r>
+      <w:r><w:t> et note finale</w:t></w:r>
+      <w:r><w:endnoteReference w:id="2"/></w:r>
     </w:p>
     <w:p>
       <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr>
@@ -371,6 +378,7 @@ XML;
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://example.test/docx" TargetMode="External"/>
   <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="javascript:alert(1)" TargetMode="External"/>
   <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image1.png"/>
+  <Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/aFChunk" Target="afchunk1.html"/>
 </Relationships>
 XML;
         $numberingXml = <<<'XML'
@@ -386,15 +394,31 @@ XML;
   <w:num w:numId="2"><w:abstractNumId w:val="1"/></w:num>
 </w:numbering>
 XML;
+        $footnotesXml = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:footnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:footnote w:id="-1"><w:p><w:r><w:t>Separateur ignore</w:t></w:r></w:p></w:footnote>
+  <w:footnote w:id="1"><w:p><w:r><w:t>Texte de note de bas de page</w:t></w:r></w:p></w:footnote>
+</w:footnotes>
+XML;
+        $endnotesXml = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:endnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:endnote w:id="2"><w:p><w:r><w:t>Texte de note de fin</w:t></w:r></w:p></w:endnote>
+</w:endnotes>
+XML;
         $pngBytes = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=', true);
         self::assertIsString($pngBytes);
 
         file_put_contents($tmp, self::zipFixture([
-            '[Content_Types].xml' => '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/></Types>',
+            '[Content_Types].xml' => '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Default Extension="html" ContentType="text/html"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/><Override PartName="/word/footnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"/><Override PartName="/word/endnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"/></Types>',
             '_rels/.rels' => '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId0" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
             'word/document.xml' => $documentXml,
             'word/_rels/document.xml.rels' => $relationshipsXml,
             'word/numbering.xml' => $numberingXml,
+            'word/footnotes.xml' => $footnotesXml,
+            'word/endnotes.xml' => $endnotesXml,
+            'word/afchunk1.html' => '<h2>Titre altChunk</h2><p>Texte depuis bloc HTML Word</p><script>alert(1)</script>',
             'word/media/image1.png' => $pngBytes,
         ]));
 
@@ -406,12 +430,16 @@ XML;
             self::assertStringContainsString('<p>Texte depuis choix Word</p>', $html);
             self::assertStringNotContainsString('Texte fallback duplique', $html);
             self::assertStringContainsString('<p>Texte depuis fallback Word</p>', $html);
+            self::assertStringContainsString('<h2>Titre altChunk</h2>', $html);
+            self::assertStringContainsString('<p>Texte depuis bloc HTML Word</p>', $html);
+            self::assertStringNotContainsString('<script', $html);
             self::assertStringContainsString('<strong><em>Texte fort</em></strong>', $html);
             self::assertStringContainsString('<a href="https://example.test/docx">lien fiable</a>', $html);
             self::assertStringContainsString('<br>', $html);
             self::assertStringContainsString('<s>Texte barre</s>', $html);
             self::assertStringContainsString('<sup>exposant</sup>', $html);
             self::assertStringContainsString('<sub>indice</sub>', $html);
+            self::assertStringContainsString('<p>Texte avec note<sup>1</sup> et note finale<sup>e2</sup></p>', $html);
             self::assertStringContainsString('<ul>', $html);
             self::assertStringContainsString('<li>Element de liste</li>', $html);
             self::assertStringContainsString('<ol>', $html);
@@ -434,6 +462,10 @@ XML;
             self::assertStringContainsString('<td>Cellule C</td>', $html);
             self::assertStringContainsString('Lien bloque', $html);
             self::assertStringNotContainsString('javascript:', $html);
+            self::assertStringContainsString('<h3>Notes</h3>', $html);
+            self::assertStringContainsString('<li><sup>1</sup> <p>Texte de note de bas de page</p></li>', $html);
+            self::assertStringContainsString('<li><sup>e2</sup> <p>Texte de note de fin</p></li>', $html);
+            self::assertStringNotContainsString('Separateur ignore', $html);
         } finally {
             @unlink($tmp);
         }
