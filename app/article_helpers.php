@@ -1009,13 +1009,21 @@ function article_normalize_windows_1252_controls(string $value): string
     ]);
 }
 
+function article_normalize_lost_mojibake_spaces(string $value): string
+{
+    $value = preg_replace('/\x{00C3}[ \t\x{00A0}]+/u', "à ", $value) ?? $value;
+    $value = preg_replace('/\x{00C2}[ \t]+/u', ' ', $value) ?? $value;
+
+    return $value;
+}
+
 function article_repair_mojibake_text(string $value): string
 {
     if (!function_exists('mb_convert_encoding')) {
         return $value;
     }
 
-    $current = article_normalize_windows_1252_controls($value);
+    $current = article_normalize_lost_mojibake_spaces(article_normalize_windows_1252_controls($value));
     $currentScore = article_mojibake_score($current);
     for ($i = 0; $i < 5 && $currentScore > 0; $i++) {
         $candidate = @mb_convert_encoding($current, 'Windows-1252', 'UTF-8');
@@ -1025,6 +1033,7 @@ function article_repair_mojibake_text(string $value): string
 
         $candidate = article_utf8_from_mixed_windows_1252_bytes($candidate);
         $candidate = article_normalize_windows_1252_controls($candidate);
+        $candidate = article_normalize_lost_mojibake_spaces($candidate);
         if (preg_match('//u', $candidate) !== 1) {
             break;
         }
