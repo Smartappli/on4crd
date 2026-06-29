@@ -193,6 +193,33 @@ function admin_articles_forget_public_caches(): void
     cache_forget('home_latest_article_v2');
 }
 
+/**
+ * @param list<int> $ids
+ */
+function admin_articles_delete_by_ids(array $ids): int
+{
+    $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn(int $id): bool => $id > 0)));
+    if ($ids === []) {
+        return 0;
+    }
+
+    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+    if (table_exists('article_translations')) {
+        db()->prepare('DELETE FROM article_translations WHERE article_id IN (' . $placeholders . ')')->execute($ids);
+    }
+    if (table_exists('article_revisions')) {
+        db()->prepare('DELETE FROM article_revisions WHERE article_id IN (' . $placeholders . ')')->execute($ids);
+    }
+    if (table_exists('member_favorites')) {
+        db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')->execute(array_merge(['article'], $ids));
+    }
+    $deleteStmt = db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')');
+    $deleteStmt->execute($ids);
+    admin_articles_forget_public_caches();
+
+    return $deleteStmt->rowCount();
+}
+
 $knownCategories = article_categories($articleMessages);
 $articleSubcategoriesByCategory = article_subcategories_by_category();
 $articleSubsubcategoriesByParent = article_subsubcategories_by_parent();
@@ -271,18 +298,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
             if ($bulkOp === 'delete') {
-                if (table_exists('article_translations')) {
-                    db()->prepare('DELETE FROM article_translations WHERE article_id IN (' . $placeholders . ')')->execute($ids);
-                }
-                if (table_exists('article_revisions')) {
-                    db()->prepare('DELETE FROM article_revisions WHERE article_id IN (' . $placeholders . ')')->execute($ids);
-                }
-                if (table_exists('member_favorites')) {
-                    db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')->execute(array_merge(['article'], $ids));
-                }
-                db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')')->execute($ids);
-                admin_articles_forget_public_caches();
-                set_flash('success', $t('ok_deleted'));
+                $deletedCount = admin_articles_delete_by_ids($ids);
+                set_flash('success', sprintf($t('old_articles_deleted'), $deletedCount));
             } else {
                 $bulkRowsStmt = db()->prepare('SELECT id, title, slug, author_id FROM articles WHERE id IN (' . $placeholders . ')');
                 $bulkRowsStmt->execute($ids);
@@ -704,18 +721,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id <= 0) {
                 throw new RuntimeException($t('err_invalid_article'));
             }
-            if (table_exists('article_translations')) {
-                db()->prepare('DELETE FROM article_translations WHERE article_id = ?')->execute([$id]);
-            }
-            if (table_exists('article_revisions')) {
-                db()->prepare('DELETE FROM article_revisions WHERE article_id = ?')->execute([$id]);
-            }
-            if (table_exists('member_favorites')) {
-                db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['article', $id]);
-            }
-            db()->prepare('DELETE FROM articles WHERE id = ?')->execute([$id]);
-            admin_articles_forget_public_caches();
+            admin_articles_delete_by_ids([$id]);
             set_flash('success', $t('ok_deleted'));
+            redirect('admin_articles');
+        } elseif ($action === 'delete_old_articles') {
+            $beforeRaw = trim((string) ($_POST['old_articles_before'] ?? ''));
+            $status = (string) ($_POST['old_articles_status'] ?? 'published');
+            $confirmation = trim((string) ($_POST['old_articles_confirm'] ?? ''));
+            $cutoffTimestamp = $beforeRaw !== '' ? strtotime($beforeRaw . ' 00:00:00') : false;
+            if ($cutoffTimestamp === false || $cutoffTimestamp >= strtotime('today')) {
+                throw new RuntimeException($t('old_articles_invalid_before'));
+            }
+            if ($status !== '__all__' && !isset($articleStatusChoices[$status])) {
+                throw new RuntimeException($t('err_invalid_article'));
+            }
+            if (!in_array(mb_strtoupper($confirmation, 'UTF-8'), ['SUPPRIMER', 'DELETE'], true)) {
+                throw new RuntimeException($t('old_articles_confirm_required'));
+            }
+
+            $oldWhere = ['COALESCE(published_at, updated_at, created_at) < ?'];
+            $oldParams = [date('Y-m-d 00:00:00', $cutoffTimestamp)];
+            if ($status !== '__all__') {
+                $oldWhere[] = 'status = ?';
+                $oldParams[] = $status;
+            }
+            $oldIdsStmt = db()->prepare('SELECT id FROM articles WHERE ' . implode(' AND ', $oldWhere) . ' ORDER BY COALESCE(published_at, updated_at, created_at) ASC, id ASC');
+            $oldIdsStmt->execute($oldParams);
+            $oldIds = array_map('intval', $oldIdsStmt->fetchAll(PDO::FETCH_COLUMN) ?: []);
+            $deletedCount = admin_articles_delete_by_ids($oldIds);
+            set_flash('success', sprintf($t('old_articles_deleted'), $deletedCount));
             redirect('admin_articles');
         } elseif ($action === 'restore_revision') {
             $articleId = (int) ($_POST['article_id'] ?? 0);
@@ -978,6 +1012,7 @@ if ($adminSubsubcategory !== '') {
     }
     $activeArticleFilterBadges[] = $t('subsubcategory_field') . ': ' . $activeSubsubcategoryLabel;
 }
+$oldArticlesDefaultBefore = date('Y-m-d', strtotime('-2 years'));
 
 ob_start();
 ?>
@@ -1455,6 +1490,33 @@ ob_start();
             <label data-admin-bulk-note-field><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="2" placeholder="<?= e($t('moderation_note_help')) ?>"></textarea></label>
             <button class="button small" type="submit" data-admin-bulk-submit><?= e($t('apply_to_selection')) ?></button>
         </form>
+        <details class="admin-article-old-cleanup-panel">
+            <summary><?= e($t('old_articles_cleanup')) ?></summary>
+            <form method="post" class="stack admin-article-old-cleanup-form" onsubmit="return confirm('<?= e($t('confirm_delete_old_articles')) ?>');">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="delete_old_articles">
+                <p class="help"><?= e($t('old_articles_cleanup_help')) ?></p>
+                <div class="grid-3">
+                    <label><?= e($t('old_articles_before')) ?>
+                        <input type="date" name="old_articles_before" max="<?= e(date('Y-m-d', strtotime('-1 day'))) ?>" value="<?= e($oldArticlesDefaultBefore) ?>" required>
+                    </label>
+                    <label><?= e($t('old_articles_status')) ?>
+                        <select name="old_articles_status">
+                            <option value="published"><?= e($t('published')) ?></option>
+                            <option value="rejected"><?= e($t('rejected')) ?></option>
+                            <option value="draft"><?= e($t('draft')) ?></option>
+                            <option value="pending"><?= e($t('pending')) ?></option>
+                            <option value="scheduled"><?= e($t('scheduled')) ?></option>
+                            <option value="__all__"><?= e($t('old_articles_all_statuses')) ?></option>
+                        </select>
+                    </label>
+                    <label><?= e($t('old_articles_confirm_label')) ?>
+                        <input type="text" name="old_articles_confirm" placeholder="<?= e($t('old_articles_confirm_placeholder')) ?>" autocomplete="off" required>
+                    </label>
+                </div>
+                <button class="button secondary admin-article-delete-button" type="submit"><?= e($t('delete_old_articles')) ?></button>
+            </form>
+        </details>
         <div class="stack">
             <?php foreach ($articles as $article): ?>
                 <?php
