@@ -286,6 +286,13 @@ final class FunctionHelpersExtendedTest extends TestCase
       <w:r><w:t>Mot</w:t><w:noBreakHyphen/><w:t>lie</w:t><w:softHyphen/><w:t>visible</w:t><w:cr/><w:t>ligne apres retour</w:t></w:r>
     </w:p>
     <w:p>
+      <w:r><w:t>Texte</w:t></w:r>
+      <w:r><w:t> </w:t></w:r>
+      <w:r><w:t>separe</w:t></w:r>
+      <w:r><w:t> </w:t></w:r>
+      <w:r><w:t>par runs</w:t></w:r>
+    </w:p>
+    <w:p>
       <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr>
       <w:r><w:t>Element de liste</w:t></w:r>
     </w:p>
@@ -466,6 +473,7 @@ XML;
             self::assertStringContainsString('<p>Texte avec note<sup>1</sup> et note finale<sup>e2</sup></p>', $html);
             self::assertStringContainsString('Mot-lie', $html);
             self::assertStringContainsString('visible<br>ligne apres retour', $html);
+            self::assertStringContainsString('<p>Texte separe par runs</p>', $html);
             self::assertStringContainsString('<ul>', $html);
             self::assertStringContainsString('<li>Element de liste</li>', $html);
             self::assertStringContainsString('<ol>', $html);

@@ -1112,7 +1112,7 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $relation
         }
     }
 
-    if (article_docx_html_is_empty($html)) {
+    if ($html === '') {
         return '';
     }
 
