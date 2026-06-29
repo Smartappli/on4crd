@@ -314,6 +314,16 @@
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warning, #b54708) 28%, transparent);
 }
 
+[data-route="admin_albums"] .admin-album-list-item:target {
+  border-left-color: color-mix(in srgb, var(--accent) 80%, var(--success));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+[data-route="admin_albums"] .admin-album-list-item:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  outline-offset: 2px;
+}
+
 [data-route="admin_albums"] .admin-album-edit-form.is-dirty [data-admin-album-save] {
   border-color: color-mix(in srgb, var(--warning, #b54708) 55%, var(--accent));
   background: color-mix(in srgb, var(--warning, #b54708) 16%, var(--accent));

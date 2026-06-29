@@ -214,9 +214,11 @@ function albums_admin_album_list_return_query(): array
     ];
 }
 
-function albums_admin_redirect_album_list(): void
+function albums_admin_redirect_album_list(?int $focusAlbumId = null): void
 {
-    redirect_url(route_url_clean('admin_albums', albums_admin_album_list_return_query()) . '#admin-album-list');
+    $hash = $focusAlbumId !== null && $focusAlbumId > 0 ? '#admin-album-row-' . $focusAlbumId : '#admin-album-list';
+
+    redirect_url(route_url_clean('admin_albums', albums_admin_album_list_return_query()) . $hash);
 }
 
 function albums_admin_redirect_photo_editor(?int $fallbackAlbumId = null): void
@@ -414,7 +416,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             album_update_record($albumId, $title, $description, $isPublic, $category, $subcategory, $isFeatured);
             set_flash('success', (string) $t['updated_ok']);
-            albums_admin_redirect_album_list();
+            albums_admin_redirect_album_list($albumId);
         }
 
         if ($action === 'delete_album') {
@@ -1240,7 +1242,7 @@ ob_start();
                         ], $t, 'album_admin_cover_prepare_failed');
                     }
                     ?>
-                    <article class="article-item admin-album-list-item<?= (int) $album['is_public'] === 1 ? ' is-public' : ' is-private' ?><?= (int) ($album['is_featured'] ?? 0) === 1 ? ' is-featured' : '' ?>">
+                    <article id="admin-album-row-<?= $albumId ?>" class="article-item admin-album-list-item<?= (int) $album['is_public'] === 1 ? ' is-public' : ' is-private' ?><?= (int) ($album['is_featured'] ?? 0) === 1 ? ' is-featured' : '' ?>" tabindex="-1">
                         <a class="admin-album-cover" href="<?= e(route_url_clean('admin_albums', ['photo_album' => $albumId]) . '#admin-album-photos') ?>">
                             <?php if ($albumCoverRender['image_src'] !== ''): ?>
                                 <?= album_picture_html($albumCoverRender['image_src'], $albumCoverRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $albumCoverRender['image_webp_src']) ?>

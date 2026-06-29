@@ -206,13 +206,29 @@
       form.classList.toggle('is-dirty', isDirty);
       if (listItem instanceof HTMLElement) listItem.classList.toggle('is-dirty', isDirty);
       if (saveButton instanceof HTMLElement) saveButton.classList.toggle('is-dirty', isDirty);
+      if (isDirty) {
+        delete form.dataset.cleanSubmit;
+      }
     };
 
     controls.forEach((control) => {
       control.addEventListener('input', syncDirtyState);
       control.addEventListener('change', syncDirtyState);
     });
+    form.addEventListener('submit', () => {
+      form.dataset.cleanSubmit = '1';
+    });
     syncDirtyState();
+  });
+
+  window.addEventListener('beforeunload', (event) => {
+    const dirtyForms = Array.from(document.querySelectorAll('.admin-album-edit-form.is-dirty')).filter((form) => {
+      return form instanceof HTMLFormElement && form.dataset.cleanSubmit !== '1';
+    });
+    if (dirtyForms.length === 0) return;
+
+    event.preventDefault();
+    event.returnValue = '';
   });
 
   document.querySelectorAll('[data-admin-album-save]').forEach((button) => {
