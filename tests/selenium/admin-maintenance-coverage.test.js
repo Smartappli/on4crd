@@ -340,7 +340,24 @@ for ($i = 1; $i <= 2; $i++) {
         ->execute([strtolower($token) . '-scheduled-' . $i, 'Scheduled article ' . $i . ' ' . $token, 'Scheduled excerpt ' . $token, '<p>Scheduled content ' . $token . '</p>', $category, $subcategory, $memberId]);
     $scheduledIds[] = (int) db()->lastInsertId();
 }
-echo json_encode(['ids' => $ids, 'scheduled_ids' => $scheduledIds, 'category' => $category, 'renamed_category' => $renamedCategory], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+$oldSlug = strtolower($token) . '-old-published';
+db()->prepare('INSERT INTO articles (slug, title, excerpt, content, status, category, subcategory, published_at, author_id) VALUES (?, ?, ?, ?, "published", ?, ?, ?, ?)')
+    ->execute([$oldSlug, 'Old published article ' . $token, 'Old excerpt ' . $token, '<p>Old content ' . $token . '</p>', $category, $subcategory, '2001-01-01 12:00:00', $memberId]);
+$oldId = (int) db()->lastInsertId();
+article_ensure_revisions_table();
+if (table_exists('article_revisions')) {
+    db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, subcategory, published_at, author_id) VALUES (?, ?, ?, ?, ?, "published", ?, ?, ?, ?)')
+        ->execute([$oldId, 'Old revision ' . $token, $oldSlug, 'Old revision excerpt ' . $token, '<p>Old revision content ' . $token . '</p>', $category, $subcategory, '2001-01-01 12:00:00', $memberId]);
+}
+if (table_exists('article_translations')) {
+    db()->prepare('INSERT INTO article_translations (article_id, locale, source_hash, title, excerpt, content, status) VALUES (?, "en", ?, ?, ?, ?, "auto") ON DUPLICATE KEY UPDATE title = VALUES(title)')
+        ->execute([$oldId, article_translation_source_hash('Old published article ' . $token, 'Old excerpt ' . $token, '<p>Old content ' . $token . '</p>'), 'Old translated ' . $token, 'Old translated excerpt ' . $token, '<p>Old translated content ' . $token . '</p>']);
+}
+if (function_exists('ensure_member_favorites_table') && ensure_member_favorites_table()) {
+    db()->prepare('INSERT INTO member_favorites (member_id, target_type, target_id, target_key, title, url) VALUES (?, "article", ?, ?, ?, ?) ON DUPLICATE KEY UPDATE title = VALUES(title)')
+        ->execute([$memberId, $oldId, $oldSlug, 'Old favorite ' . $token, '/article/' . $oldSlug]);
+}
+echo json_encode(['ids' => $ids, 'scheduled_ids' => $scheduledIds, 'old_id' => $oldId, 'category' => $category, 'renamed_category' => $renamedCategory], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_TOKEN: token, SELENIUM_MEMBER_ID: String(memberId) });
 }
 
@@ -361,6 +378,33 @@ foreach ($stmt->fetchAll() ?: [] as $row) {
 }
 echo json_encode($rows, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_IDS: ids.join(',') });
+}
+
+function articleRelatedCounts(id) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$id = (int) getenv('SELENIUM_ARTICLE_ID');
+$counts = ['articles' => 0, 'article_translations' => 0, 'article_revisions' => 0, 'member_favorites' => 0];
+if ($id > 0) {
+    foreach (array_keys($counts) as $table) {
+        if (!table_exists($table)) {
+            continue;
+        }
+        if ($table === 'articles') {
+            $stmt = db()->prepare('SELECT COUNT(*) FROM articles WHERE id = ?');
+            $stmt->execute([$id]);
+        } elseif ($table === 'member_favorites') {
+            $stmt = db()->prepare('SELECT COUNT(*) FROM member_favorites WHERE target_type = "article" AND target_id = ?');
+            $stmt->execute([$id]);
+        } else {
+            $stmt = db()->prepare('SELECT COUNT(*) FROM ' . $table . ' WHERE article_id = ?');
+            $stmt->execute([$id]);
+        }
+        $counts[$table] = (int) ($stmt->fetchColumn() ?: 0);
+    }
+}
+echo json_encode($counts, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_ARTICLE_ID: String(id) });
 }
 
 function prepareNewsFixture(token, memberId) {
