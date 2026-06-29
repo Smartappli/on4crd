@@ -192,19 +192,21 @@ function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, arra
     }
 
     if ($localName === 'AlternateContent') {
-        foreach (['Choice', 'Fallback'] as $candidateName) {
-            foreach ($block->childNodes as $candidateNode) {
-                if (!$candidateNode instanceof DOMElement || $candidateNode->localName !== $candidateName) {
-                    continue;
+        foreach (article_docx_alternate_content_candidates($block) as $candidateNode) {
+            $candidateHtml = $html;
+            $candidateOpenListTag = $openListTag;
+            foreach ($candidateNode->childNodes as $child) {
+                if ($child instanceof DOMElement) {
+                    article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $candidateHtml, $candidateOpenListTag);
                 }
-                foreach ($candidateNode->childNodes as $child) {
-                    if ($child instanceof DOMElement) {
-                        article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openListTag);
-                    }
-                }
+            }
+            if ($candidateHtml !== $html || $candidateOpenListTag !== $openListTag) {
+                $html = $candidateHtml;
+                $openListTag = $candidateOpenListTag;
                 return;
             }
         }
+        return;
     }
 
     foreach ($block->childNodes as $child) {
@@ -213,6 +215,25 @@ function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, arra
         }
         article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openListTag);
     }
+}
+}
+
+if (!function_exists('article_docx_alternate_content_candidates')) {
+/**
+ * @return list<DOMElement>
+ */
+function article_docx_alternate_content_candidates(DOMElement $alternateContent): array
+{
+    $candidates = [];
+    foreach (['Choice', 'Fallback'] as $candidateName) {
+        foreach ($alternateContent->childNodes as $candidateNode) {
+            if ($candidateNode instanceof DOMElement && $candidateNode->localName === $candidateName) {
+                $candidates[] = $candidateNode;
+            }
+        }
+    }
+
+    return $candidates;
 }
 }
 
@@ -680,6 +701,15 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
             $html .= $href !== '' ? '<a href="' . e($href) . '">' . $inner . '</a>' : $inner;
             continue;
         }
+        if ($localName === 'AlternateContent') {
+            $html .= article_docx_alternate_content_inline_html($child, $xpath, $relationships, $imageDataUris);
+            continue;
+        }
+        if ($localName === 'drawing' || $localName === 'pict') {
+            $html .= article_docx_run_image_html($child, $xpath, $imageDataUris);
+            $html .= article_docx_textbox_inline_html($child, $xpath, $relationships, $imageDataUris);
+            continue;
+        }
         if ($localName === 'tab') {
             $html .= ' ';
             continue;
@@ -693,6 +723,24 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
     }
 
     return trim((string) preg_replace('/[ \t\r\n]+/u', ' ', $html));
+}
+}
+
+if (!function_exists('article_docx_alternate_content_inline_html')) {
+/**
+ * @param array<string,string> $relationships
+ * @param array<string,string> $imageDataUris
+ */
+function article_docx_alternate_content_inline_html(DOMElement $alternateContent, DOMXPath $xpath, array $relationships, array $imageDataUris = []): string
+{
+    foreach (article_docx_alternate_content_candidates($alternateContent) as $candidateNode) {
+        $html = article_docx_inline_html($candidateNode, $xpath, $relationships, $imageDataUris);
+        if (!article_docx_html_is_empty($html)) {
+            return $html;
+        }
+    }
+
+    return '';
 }
 }
 
@@ -723,6 +771,10 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $relation
         }
         if ($localName === 'br') {
             $html .= '<br>';
+            continue;
+        }
+        if ($localName === 'AlternateContent') {
+            $html .= article_docx_alternate_content_inline_html($child, $xpath, $relationships, $imageDataUris);
             continue;
         }
         if ($localName === 'drawing' || $localName === 'pict') {

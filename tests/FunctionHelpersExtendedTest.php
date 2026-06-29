@@ -254,6 +254,14 @@ final class FunctionHelpersExtendedTest extends TestCase
         <w:p><w:r><w:t>Texte fallback duplique</w:t></w:r></w:p>
       </mc:Fallback>
     </mc:AlternateContent>
+    <mc:AlternateContent>
+      <mc:Choice Requires="wps">
+        <w:p/>
+      </mc:Choice>
+      <mc:Fallback>
+        <w:p><w:r><w:t>Texte depuis fallback Word</w:t></w:r></w:p>
+      </mc:Fallback>
+    </mc:AlternateContent>
     <w:p>
       <w:r><w:rPr><w:b/><w:i/></w:rPr><w:t>Texte fort</w:t></w:r>
       <w:r><w:t> et </w:t></w:r>
@@ -298,6 +306,28 @@ final class FunctionHelpersExtendedTest extends TestCase
             </w:txbxContent></wps:txbx></wps:wsp></a:graphicData></a:graphic>
           </wp:inline>
         </w:drawing>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <mc:AlternateContent>
+          <mc:Choice Requires="wps">
+            <w:drawing>
+              <wp:inline>
+                <wp:extent cx="190500" cy="190500"/>
+                <wp:docPr id="3" name="Zone de texte alternative"/>
+                <a:graphic><a:graphicData><wps:wsp><wps:txbx><w:txbxContent>
+                  <w:p><w:r><w:t>Texte dans zone alternative</w:t></w:r></w:p>
+                </w:txbxContent></wps:txbx></wps:wsp></a:graphicData></a:graphic>
+              </wp:inline>
+            </w:drawing>
+          </mc:Choice>
+          <mc:Fallback>
+            <w:pict><w:txbxContent>
+              <w:p><w:r><w:t>Texte fallback zone duplique</w:t></w:r></w:p>
+            </w:txbxContent></w:pict>
+          </mc:Fallback>
+        </mc:AlternateContent>
       </w:r>
     </w:p>
     <w:p>
@@ -367,6 +397,7 @@ XML;
             self::assertStringContainsString('<p>Texte dans controle Word</p>', $html);
             self::assertStringContainsString('<p>Texte depuis choix Word</p>', $html);
             self::assertStringNotContainsString('Texte fallback duplique', $html);
+            self::assertStringContainsString('<p>Texte depuis fallback Word</p>', $html);
             self::assertStringContainsString('<strong><em>Texte fort</em></strong>', $html);
             self::assertStringContainsString('<a href="https://example.test/docx">lien fiable</a>', $html);
             self::assertStringContainsString('<br>', $html);
@@ -382,6 +413,8 @@ XML;
             self::assertStringContainsString('width="10"', $html);
             self::assertStringContainsString('height="20"', $html);
             self::assertStringContainsString('<p>Texte dans zone de texte<br>Deuxieme ligne de zone</p>', $html);
+            self::assertStringContainsString('<p>Texte dans zone alternative</p>', $html);
+            self::assertStringNotContainsString('Texte fallback zone duplique', $html);
             self::assertStringContainsString('<table>', $html);
             self::assertStringContainsString('<thead>', $html);
             self::assertStringContainsString('<th scope="col">Colonne A</th>', $html);
