@@ -3165,7 +3165,7 @@ function render_admin_webotheque_page(): void
                     <a class="button" href="<?= e(route_url('admin_webotheque', ['propose_link' => '1'])) ?>" data-webotheque-modal-open="admin-webotheque-link-dialog" aria-haspopup="dialog" aria-controls="admin-webotheque-link-dialog"><?= e((string) $t['propose_link']) ?></a>
                 </div>
             <?php else: ?>
-                <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t, $categories, $user, true, ['q' => $search, 'category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'subsubcategory' => $subsubcategoryFilter]) ?></div>
+                <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t, $categories, null, true, ['q' => $search, 'category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'subsubcategory' => $subsubcategoryFilter]) ?></div>
             <?php endif; ?>
         </section>
     </div>
