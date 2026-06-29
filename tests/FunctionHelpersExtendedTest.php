@@ -66,6 +66,44 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringNotContainsString('onclick', $clean);
     }
 
+    public function testArticleSanitizeContentKeepsWordImportUtf8TextReadable(): void
+    {
+        $text = html_entity_decode('Dossier n&deg;1 &agrave; l&rsquo;&oelig;il trouv&eacute; au d&eacute;part 230V AC', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        $clean = article_sanitize_content('<p>' . e($text) . '</p>');
+        $plain = html_entity_decode(strip_tags($clean), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        self::assertSame($text, $plain);
+        self::assertStringNotContainsString('Ã', $clean);
+        self::assertStringNotContainsString('Â', $clean);
+    }
+
+    public function testArticleSanitizeContentRepairsPreviousWordImportMojibake(): void
+    {
+        $text = html_entity_decode('Dossier n&deg;1 &agrave; l&rsquo;&oelig;il trouv&eacute; au d&eacute;part 230V AC', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $mojibake = mb_convert_encoding($text, 'UTF-8', 'Windows-1252');
+
+        $clean = article_sanitize_content('<p>' . e($mojibake) . '</p>');
+        $plain = html_entity_decode(strip_tags($clean), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        self::assertSame($text, $plain);
+        self::assertStringNotContainsString('Ã', $clean);
+        self::assertStringNotContainsString('Â', $clean);
+    }
+
+    public function testArticleSanitizeContentRepairsRepeatedWordImportMojibake(): void
+    {
+        $text = html_entity_decode('Dossier n&deg;1 &agrave; l&rsquo;&oelig;il trouv&eacute; au d&eacute;part 230V AC', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $mojibake = mb_convert_encoding(mb_convert_encoding($text, 'UTF-8', 'Windows-1252'), 'UTF-8', 'Windows-1252');
+
+        $clean = article_sanitize_content('<p>' . e($mojibake) . '</p>');
+        $plain = html_entity_decode(strip_tags($clean), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        self::assertSame($text, $plain);
+        self::assertStringNotContainsString('Ã', $clean);
+        self::assertStringNotContainsString('Â', $clean);
+    }
+
     public function testExtractLatestKpMeasurementReturnsNullWhenPayloadHasOnlyHeader(): void
     {
         $payload = [

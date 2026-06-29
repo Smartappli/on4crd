@@ -909,8 +909,53 @@ function article_translation_target_locales(): array
     ));
 }
 
+function article_mojibake_score(string $value): int
+{
+    if ($value === '') {
+        return 0;
+    }
+
+    $score = 0;
+    foreach (['Ã', 'Â', 'â', 'Å', 'Ä'] as $marker) {
+        $score += substr_count($value, $marker);
+    }
+
+    return $score;
+}
+
+function article_repair_mojibake_text(string $value): string
+{
+    if (!function_exists('mb_convert_encoding')) {
+        return $value;
+    }
+
+    $current = $value;
+    $currentScore = article_mojibake_score($current);
+    for ($i = 0; $i < 3 && $currentScore > 0; $i++) {
+        $candidate = @mb_convert_encoding($current, 'Windows-1252', 'UTF-8');
+        if (!is_string($candidate) || $candidate === '' || preg_match('//u', $candidate) !== 1) {
+            break;
+        }
+
+        if (substr_count($candidate, '?') > substr_count($current, '?')) {
+            break;
+        }
+
+        $candidateScore = article_mojibake_score($candidate);
+        if ($candidateScore >= $currentScore) {
+            break;
+        }
+
+        $current = $candidate;
+        $currentScore = $candidateScore;
+    }
+
+    return $current;
+}
+
 function article_sanitize_content(string $html): string
 {
+    $html = article_repair_mojibake_text($html);
     $html = trim(sanitize_rich_html($html));
     if ($html === '') {
         return '';
@@ -957,7 +1002,7 @@ function article_sanitize_content(string $html): string
 
     $dom = new DOMDocument();
     $previousUseInternalErrors = libxml_use_internal_errors(true);
-    $dom->loadHTML('<!doctype html><html><body>' . $html . '</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    $dom->loadHTML('<?xml encoding="UTF-8"><!doctype html><html><body>' . $html . '</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     libxml_clear_errors();
     libxml_use_internal_errors($previousUseInternalErrors);
 
