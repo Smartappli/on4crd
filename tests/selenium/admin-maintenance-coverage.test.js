@@ -888,6 +888,27 @@ test('Selenium admin articles: taxonomie, bulk update et relance programmee', as
         assert.ok(String(row.published_at || '') !== '', 'Le bulk update article doit renseigner published_at.');
       }
 
+      let relatedCounts = articleRelatedCounts(fixture.old_id);
+      assert.equal(relatedCounts.articles, 1, 'Le fixture ancien article doit exister avant suppression.');
+      assert.ok(relatedCounts.article_revisions >= 1, 'Le fixture ancien article doit avoir une revision de test.');
+      await visit(driver, 'admin_articles');
+      csrf = await firstCsrfToken(driver);
+      response = await postBrowserForm(driver, routeUrl('admin_articles'), {
+        _csrf: csrf,
+        action: 'delete_old_articles',
+        old_articles_before: '2002-01-01',
+        old_articles_status: 'published',
+        old_articles_confirm: 'SUPPRIMER',
+      });
+      assert.equal(response.ok, true, response.body);
+      assert.doesNotMatch(response.body, /Une erreur interne|Internal Server Error|Fatal error/i);
+      relatedCounts = articleRelatedCounts(fixture.old_id);
+      assert.deepEqual(
+        relatedCounts,
+        { articles: 0, article_translations: 0, article_revisions: 0, member_favorites: 0 },
+        'La suppression des anciens articles doit nettoyer articles, traductions, revisions et favoris.'
+      );
+
       await visit(driver, 'admin_articles');
       const retryForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="retry_scheduled_article"] and .//input[@name="id" and @value="${fixture.scheduled_ids[0]}"]]`));
       await submitForm(driver, retryForm);
