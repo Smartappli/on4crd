@@ -55,17 +55,29 @@ $proposalStatusLabels = admin_pending_content_proposal_status_labels($locale);
 
 ob_start();
 ?>
-<div class="stack">
-    <style>
-        .admin-open-cta{display:inline-flex;align-items:center;justify-content:center;padding:.35rem .7rem;border-radius:999px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;font-size:.8rem;font-weight:600;transition:all .15s ease}
-        .admin-link:hover .admin-open-cta{background:#dbeafe;border-color:#93c5fd;color:#1e40af}
-        .admin-pending-badge{display:inline-flex;align-items:center;justify-content:center;padding:.25rem .55rem;border-radius:999px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:.78rem;font-weight:700}
-        .admin-pending-list{display:grid;gap:.75rem}
-        .admin-pending-item{padding:1rem;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
-    </style>
+<div class="stack admin-module admin-home">
+    <section class="admin-home-hero" aria-labelledby="admin-home-title">
+        <div class="admin-home-hero-copy">
+            <p class="admin-section-kicker"><?= e((string) $t['layout']) ?></p>
+            <h1 id="admin-home-title"><?= e((string) $t['title']) ?></h1>
+            <p class="help"><?= e((string) $t['lead']) ?></p>
+        </div>
+        <form class="admin-home-search" method="get" action="<?= e(route_url('admin')) ?>" role="search">
+            <label for="admin-dashboard-search">
+                <span><?= e((string) $t['search_label']) ?></span>
+                <input id="admin-dashboard-search" type="search" name="q" value="<?= e($adminSearch) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
+            </label>
+            <div class="admin-home-search-actions">
+                <button class="button" type="submit"><?= e((string) $t['search_cta']) ?></button>
+                <?php if ($adminSearch !== ''): ?>
+                    <a class="button secondary" href="<?= e(route_url('admin')) ?>"><?= e((string) $t['search_reset']) ?></a>
+                <?php endif; ?>
+            </div>
+        </form>
+    </section>
     <?php if ($pendingProposals !== []): ?>
-        <section class="card" id="pending-proposals" aria-labelledby="pending-proposals-title">
-            <div class="row-between">
+        <section class="card admin-pending-card" id="pending-proposals" aria-labelledby="pending-proposals-title">
+            <div class="admin-section-head">
                 <div>
                     <h2 id="pending-proposals-title"><?= e((string) $t['pending_content_title']) ?></h2>
                     <p class="help"><?= e((string) $t['pending_content_help']) ?></p>
@@ -89,13 +101,17 @@ ob_start();
                     }
                     ?>
                     <article class="admin-pending-item">
-                        <p>
-                            <span class="badge muted"><?= e((string) ($proposal['area_label'] ?? $proposal['area'] ?? '')) ?></span>
-                            <span class="badge muted"><?= e($proposalType) ?></span>
-                            <span class="badge muted"><?= e(date('d/m/Y H:i', $createdTimestamp)) ?></span>
-                        </p>
-                        <h3><?= e((string) ($proposal['title'] ?? $t['proposal_default_title'])) ?></h3>
-                        <p class="help"><?= e((string) $t['proposal_author']) ?>: <?= e($memberLabel) ?></p>
+                        <header class="admin-pending-item-head">
+                            <div>
+                                <p class="admin-meta-row">
+                                    <span class="badge muted"><?= e((string) ($proposal['area_label'] ?? $proposal['area'] ?? '')) ?></span>
+                                    <span class="badge muted"><?= e($proposalType) ?></span>
+                                    <span class="badge muted"><?= e(date('d/m/Y H:i', $createdTimestamp)) ?></span>
+                                </p>
+                                <h3><?= e((string) ($proposal['title'] ?? $t['proposal_default_title'])) ?></h3>
+                            </div>
+                            <p class="help"><?= e((string) $t['proposal_author']) ?>: <?= e($memberLabel) ?></p>
+                        </header>
                         <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
                             <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
                         <?php endif; ?>
@@ -134,22 +150,22 @@ ob_start();
     <?php if ($cards === []): ?>
         <section class="card empty-state"><p><?= e((string) $t['empty']) ?></p></section>
     <?php else: ?>
-    <div class="grid-3">
+    <div class="admin-card-grid">
         <?php foreach ($cards as $card): ?>
             <?php $cardRoute = (string) $card['route']; $cardIcon = (string) ($adminCardIcons[$cardRoute] ?? '📦'); ?>
-            <a class="card admin-link" href="<?= e((string) ($card['url'] ?? route_url($cardRoute))) ?>">
-                <div class="row-between">
+            <a class="card admin-link admin-card" href="<?= e((string) ($card['url'] ?? route_url($cardRoute))) ?>">
+                <span class="admin-card-icon" aria-hidden="true"><?= e($cardIcon) ?></span>
+                <div class="admin-card-copy">
                     <h2><?= e((string) $card['title']) ?></h2>
-                    <span aria-hidden="true"><?= e($cardIcon) ?></span>
+                    <p><?= e((string) $card['desc']) ?></p>
                 </div>
-                <p><?= e((string) $card['desc']) ?></p>
-                <div class="row-between" style="margin-top:.75rem;">
+                <div class="admin-card-footer">
                     <?php if ((int) ($card['pending_count'] ?? 0) > 0): ?>
                         <span class="admin-pending-badge"><?= (int) ($card['pending_count'] ?? 0) ?> <?= e((string) $t['pending_label']) ?></span>
                     <?php else: ?>
                         <span></span>
                     <?php endif; ?>
-                    <span class="admin-open-cta"><?= e((string) $t['open']) ?> →</span>
+                    <span class="admin-open-cta"><span><?= e((string) $t['open']) ?></span><span aria-hidden="true">&rarr;</span></span>
                 </div>
             </a>
         <?php endforeach; ?>
