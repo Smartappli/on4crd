@@ -149,6 +149,14 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringNotContainsString('â', $plain);
     }
 
+    public function testArticleRepairMojibakeTextRepairsEntityEncodedTitle(): void
+    {
+        $text = html_entity_decode('Dossier n&deg;1&nbsp;: Tenez &agrave; l&rsquo;&oelig;il vos fusibles d&rsquo;alimentation', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $mojibake = 'Dossier n&amp;Atilde;&amp;sbquo;&amp;Acirc;&amp;deg;1&amp;Atilde;&amp;sbquo;&amp;Acirc;&amp;nbsp;: Tenez &amp;Atilde;&amp;fnof;&amp;Acirc;&amp;nbsp; l&amp;Atilde;&amp;cent;&amp;Acirc;&amp;euro;&amp;Acirc;&amp;trade;&amp;Atilde;&amp;#133;&amp;Acirc;&amp;#147;il vos fusibles d&amp;Atilde;&amp;cent;&amp;Acirc;&amp;euro;&amp;Acirc;&amp;trade;alimentation';
+
+        self::assertSame($text, article_repair_mojibake_text($mojibake));
+    }
+
     public function testArticleExcerptFromInputRepairsEntityEncodedMojibake(): void
     {
         $text = html_entity_decode('Tenez &agrave; l&rsquo;&oelig;il vos fusibles d&rsquo;alimentation', ENT_QUOTES | ENT_HTML5, 'UTF-8');

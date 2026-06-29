@@ -916,6 +916,7 @@ $offset = $pagination['offset'];
 $articleStmt = db()->prepare('SELECT * FROM articles ' . $adminWhereSql . ' ORDER BY updated_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $articleStmt->execute($adminParams);
 $articles = $articleStmt->fetchAll() ?: [];
+$articles = array_map(static fn(array $article): array => article_repair_mojibake_fields($article), $articles);
 $articleStatsStmt = db()->prepare('SELECT status, COUNT(*) AS total FROM articles ' . $adminStatusCountWhereSql . ' GROUP BY status');
 $articleStatsStmt->execute($adminStatusCountParams);
 $articleStats = $articleStatsStmt->fetchAll() ?: [];
@@ -961,6 +962,7 @@ if ($editingId > 0 && table_exists('article_revisions')) {
     $revisions = $revisionStmt->fetchAll() ?: [];
 }
 $scheduledQueue = db()->query('SELECT id, title, slug, status, scheduled_at, updated_at, content FROM articles WHERE status = "scheduled" ORDER BY scheduled_at ASC, updated_at DESC LIMIT 50')->fetchAll() ?: [];
+$scheduledQueue = array_map(static fn(array $article): array => article_repair_mojibake_fields($article), $scheduledQueue);
 $showPendingProposals = $adminStatus === 'pending';
 $pendingProposals = [];
 if ($showPendingProposals && ensure_content_proposals_table()) {

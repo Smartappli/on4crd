@@ -166,6 +166,7 @@ if (table_exists('articles') && table_has_column('articles', 'author_id')) {
         $stmt = db()->prepare('SELECT id, slug, title, status, category, moderation_note, created_at, updated_at FROM articles WHERE author_id = ? ORDER BY updated_at DESC, id DESC LIMIT 50');
         $stmt->execute([(int) $user['id']]);
         foreach (($stmt->fetchAll() ?: []) as $article) {
+            $article = article_repair_mojibake_fields((array) $article, ['title']);
             $articleStatus = (string) ($article['status'] ?? 'draft');
             $articleTitle = trim((string) ($article['title'] ?? ''));
             if ($articleTitle === '') {

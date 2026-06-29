@@ -961,6 +961,33 @@ function article_decode_windows_1252_numeric_entities(string $value): string
     ) ?? $value;
 }
 
+function article_decode_mojibake_html_entities(string $value): string
+{
+    if ($value === '' || !str_contains($value, '&')) {
+        return $value;
+    }
+
+    $entityMarkerPattern = '/&(?:amp;)?(?:Atilde|Acirc|AElig|aring|sbquo|fnof|bdquo|hellip|dagger|Dagger|circ|permil|Scaron|lsaquo|OElig|Zcaron|lsquo|rsquo|ldquo|rdquo|bull|ndash|mdash|tilde|trade|scaron|rsaquo|oelig|zcaron|Yuml|euro);|&(?:amp;)?#(?:x[89][0-9a-f]|1[2-5][0-9]);/i';
+    $current = $value;
+    for ($i = 0; $i < 2; $i++) {
+        if (preg_match($entityMarkerPattern, $current) !== 1) {
+            break;
+        }
+
+        $decoded = html_entity_decode(
+            article_decode_windows_1252_numeric_entities($current),
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8'
+        );
+        if ($decoded === $current) {
+            break;
+        }
+        $current = $decoded;
+    }
+
+    return $current;
+}
+
 function article_utf8_from_mixed_windows_1252_bytes(string $value): string
 {
     $result = '';
@@ -1044,6 +1071,7 @@ function article_repair_mojibake_text(string $value): string
         return $value;
     }
 
+    $value = article_decode_mojibake_html_entities($value);
     $current = article_normalize_lost_mojibake_spaces(article_normalize_windows_1252_controls($value));
     $currentScore = article_mojibake_score($current);
     for ($i = 0; $i < 5 && $currentScore > 0; $i++) {
