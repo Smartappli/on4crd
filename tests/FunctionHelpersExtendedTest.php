@@ -74,8 +74,8 @@ final class FunctionHelpersExtendedTest extends TestCase
         $plain = html_entity_decode(strip_tags($clean), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
         self::assertSame($text, $plain);
-        self::assertStringNotContainsString('Ã', $clean);
-        self::assertStringNotContainsString('Â', $clean);
+        self::assertStringNotContainsString("\xC3\x83", $clean);
+        self::assertStringNotContainsString("\xC3\x82", $clean);
     }
 
     public function testArticleSanitizeContentRepairsPreviousWordImportMojibake(): void
@@ -87,8 +87,8 @@ final class FunctionHelpersExtendedTest extends TestCase
         $plain = html_entity_decode(strip_tags($clean), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
         self::assertSame($text, $plain);
-        self::assertStringNotContainsString('Ã', $clean);
-        self::assertStringNotContainsString('Â', $clean);
+        self::assertStringNotContainsString("\xC3\x83", $clean);
+        self::assertStringNotContainsString("\xC3\x82", $clean);
     }
 
     public function testArticleSanitizeContentRepairsRepeatedWordImportMojibake(): void
@@ -100,8 +100,8 @@ final class FunctionHelpersExtendedTest extends TestCase
         $plain = html_entity_decode(strip_tags($clean), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
         self::assertSame($text, $plain);
-        self::assertStringNotContainsString('Ã', $clean);
-        self::assertStringNotContainsString('Â', $clean);
+        self::assertStringNotContainsString("\xC3\x83", $clean);
+        self::assertStringNotContainsString("\xC3\x82", $clean);
     }
 
     public function testExtractLatestKpMeasurementReturnsNullWhenPayloadHasOnlyHeader(): void

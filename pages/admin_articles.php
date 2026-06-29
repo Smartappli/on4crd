@@ -914,6 +914,7 @@ if ($previewPayload === null) {
 } else {
     $editingId = (int) ($editing['id'] ?? 0);
 }
+$editing = article_repair_mojibake_fields((array) $editing);
 $revisions = [];
 if ($editingId > 0 && table_exists('article_revisions')) {
     $revisionStmt = db()->prepare('SELECT id, created_at, status FROM article_revisions WHERE article_id = ? ORDER BY created_at DESC, id DESC LIMIT 20');

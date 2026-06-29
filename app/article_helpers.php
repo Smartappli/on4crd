@@ -916,7 +916,7 @@ function article_mojibake_score(string $value): int
     }
 
     $score = 0;
-    foreach (['Ã', 'Â', 'â', 'Å', 'Ä'] as $marker) {
+    foreach (["\xC3\x83", "\xC3\x82", "\xC3\xA2", "\xC3\x85", "\xC3\x84"] as $marker) {
         $score += substr_count($value, $marker);
     }
 
@@ -951,6 +951,22 @@ function article_repair_mojibake_text(string $value): string
     }
 
     return $current;
+}
+
+/**
+ * @param array<string,mixed> $article
+ * @param list<string> $fields
+ * @return array<string,mixed>
+ */
+function article_repair_mojibake_fields(array $article, array $fields = ['title', 'excerpt', 'content']): array
+{
+    foreach ($fields as $field) {
+        if (isset($article[$field]) && is_string($article[$field])) {
+            $article[$field] = article_repair_mojibake_text($article[$field]);
+        }
+    }
+
+    return $article;
 }
 
 function article_sanitize_content(string $html): string
