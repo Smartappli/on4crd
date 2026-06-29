@@ -69,8 +69,8 @@ if (!table_exists('articles')) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
-        $articleTitle = trim((string) ($_POST['title'] ?? ''));
-        $excerpt = article_excerpt_from_input((string) ($_POST['excerpt'] ?? ''));
+        $articleTitle = trim(article_repair_mojibake_text((string) ($_POST['title'] ?? '')));
+        $excerpt = article_repair_mojibake_text(article_excerpt_from_input((string) ($_POST['excerpt'] ?? '')));
         $rawContent = trim((string) ($_POST['content'] ?? ''));
         [$category, $subcategory, $subsubcategory] = article_taxonomy_from_input(
             (string) ($_POST['category'] ?? 'autres'),

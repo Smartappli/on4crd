@@ -1421,6 +1421,7 @@ function article_translation_upsert(int $articleId, string $locale, ?string $tit
         'excerpt' => (string) ($source['excerpt'] ?? ''),
         'content' => (string) ($source['content'] ?? ''),
     ];
+    $sourceFields = article_repair_mojibake_fields($sourceFields);
     $sourceHash = article_translation_source_hash($sourceFields['title'], $sourceFields['excerpt'], $sourceFields['content']);
 
     $existingStmt = db()->prepare('SELECT status, source_hash, title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? LIMIT 1');

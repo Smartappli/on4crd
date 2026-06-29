@@ -320,6 +320,15 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('new \\Delight\\Auth\\Auth($pdo)', $core);
     }
 
+    public function testDatabaseConnectionForcesMysqlUtf8mb4Charset(): void
+    {
+        $core = file_get_contents(__DIR__ . '/../app/core.php');
+        self::assertIsString($core);
+
+        self::assertStringContainsString('PDO::ATTR_DRIVER_NAME', $core);
+        self::assertStringContainsString('SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci', $core);
+    }
+
     public function testBootstrapUsesVersionedRuntimeSchemaUpdates(): void
     {
         $bootstrap = file_get_contents(__DIR__ . '/../app/bootstrap.php');
@@ -927,6 +936,22 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('mb_strlen($content) > 50000', $adminArticles);
         self::assertStringNotContainsString('mb_strlen($rawContent) > 50000', $articlePropose);
         self::assertStringNotContainsString('maxlength="50000"', $articlePropose);
+    }
+
+    public function testArticleFormsRepairMojibakeBeforePersistingTextFields(): void
+    {
+        $adminArticles = file_get_contents(__DIR__ . '/../pages/admin_articles.php');
+        $articlePropose = file_get_contents(__DIR__ . '/../pages/article_propose.php');
+        $helpers = file_get_contents(__DIR__ . '/../app/article_helpers.php');
+        self::assertIsString($adminArticles);
+        self::assertIsString($articlePropose);
+        self::assertIsString($helpers);
+
+        self::assertStringContainsString('$title = trim(article_repair_mojibake_text((string) ($_POST[\'title\'] ?? \'\')));', $adminArticles);
+        self::assertStringContainsString('$excerpt = article_repair_mojibake_text(article_excerpt_from_input((string) ($_POST[\'excerpt\'] ?? \'\')));', $adminArticles);
+        self::assertStringContainsString('$articleTitle = trim(article_repair_mojibake_text((string) ($_POST[\'title\'] ?? \'\')));', $articlePropose);
+        self::assertStringContainsString('$excerpt = article_repair_mojibake_text(article_excerpt_from_input((string) ($_POST[\'excerpt\'] ?? \'\')));', $articlePropose);
+        self::assertStringContainsString('$sourceFields = article_repair_mojibake_fields($sourceFields);', $helpers);
     }
 
     public function testArticlesDoNotRenderGeneratedSummaryWhenExcerptIsEmpty(): void
