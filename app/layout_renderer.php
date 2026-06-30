@@ -82,8 +82,12 @@ function render_admin_workspace_nav(string $currentRoute, string $currentLocale)
     $dashboardLabel = (string) ($messages['layout'] ?? 'Administration');
     $currentLabel = $currentRoute === 'admin' ? (string) ($messages['title'] ?? $dashboardLabel) : $dashboardLabel;
     $pendingLabel = (string) ($messages['pending_label'] ?? '');
+    $searchLabel = (string) ($messages['search_label'] ?? $dashboardLabel);
+    $searchPlaceholder = (string) ($messages['search_placeholder'] ?? '');
+    $searchCta = (string) ($messages['search_cta'] ?? $searchLabel);
+    $searchValue = trim((string) ($_GET['q'] ?? ''));
     $pendingTotal = 0;
-    $links = '<a class="admin-shell-link' . ($currentRoute === 'admin' ? ' is-active" aria-current="page"' : '"') . ' href="' . e(route_url('admin')) . '">' . e($dashboardLabel) . '</a>';
+    $links = '<a class="admin-shell-link' . ($currentRoute === 'admin' ? ' is-active" aria-current="page"' : '"') . ' href="' . e(route_url('admin')) . '"><span>' . e($dashboardLabel) . '</span></a>';
 
     foreach ($cards as $card) {
         $route = (string) ($card['route'] ?? '');
@@ -105,11 +109,18 @@ function render_admin_workspace_nav(string $currentRoute, string $currentLocale)
     $pendingSummary = $pendingTotal > 0 && $pendingLabel !== ''
         ? '<span class="admin-shell-status">' . e((string) $pendingTotal . ' ' . $pendingLabel) . '</span>'
         : '';
+    $searchForm = '<form class="admin-shell-search" method="get" action="' . e(base_url('/index.php')) . '" role="search">'
+        . '<input type="hidden" name="route" value="admin">'
+        . '<label class="sr-only" for="admin-shell-search">' . e($searchLabel) . '</label>'
+        . '<input id="admin-shell-search" type="search" name="q" value="' . e($searchValue) . '" placeholder="' . e($searchPlaceholder) . '">'
+        . '<button class="button secondary small" type="submit">' . e($searchCta) . '</button>'
+        . '</form>';
 
     return '<section class="admin-shell-nav" aria-label="' . e($dashboardLabel) . '">'
         . '<div class="admin-shell-current"><span class="admin-section-kicker">' . e($dashboardLabel) . '</span><strong>' . e($currentLabel) . '</strong></div>'
-        . '<nav class="admin-shell-links" aria-label="' . e($dashboardLabel) . '">' . $links . '</nav>'
+        . $searchForm
         . $pendingSummary
+        . '<nav class="admin-shell-links" aria-label="' . e($dashboardLabel) . '">' . $links . '</nav>'
         . '</section>';
 }
 }
