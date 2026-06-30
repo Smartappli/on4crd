@@ -152,16 +152,17 @@ ob_start();
     <?php else: ?>
     <div class="admin-card-grid">
         <?php foreach ($cards as $card): ?>
+            <?php $cardPendingCount = (int) ($card['pending_count'] ?? 0); $cardClass = 'card admin-link admin-card' . ($cardPendingCount > 0 ? ' has-pending' : ''); ?>
             <?php $cardRoute = (string) $card['route']; $cardIcon = (string) ($adminCardIcons[$cardRoute] ?? '📦'); ?>
-            <a class="card admin-link admin-card" href="<?= e((string) ($card['url'] ?? route_url($cardRoute))) ?>">
+            <a class="<?= e($cardClass) ?>" href="<?= e((string) ($card['url'] ?? route_url($cardRoute))) ?>">
                 <span class="admin-card-icon" aria-hidden="true"><?= e($cardIcon) ?></span>
                 <div class="admin-card-copy">
                     <h2><?= e((string) $card['title']) ?></h2>
                     <p><?= e((string) $card['desc']) ?></p>
                 </div>
                 <div class="admin-card-footer">
-                    <?php if ((int) ($card['pending_count'] ?? 0) > 0): ?>
-                        <span class="admin-pending-badge"><?= (int) ($card['pending_count'] ?? 0) ?> <?= e((string) $t['pending_label']) ?></span>
+                    <?php if ($cardPendingCount > 0): ?>
+                        <span class="admin-pending-badge"><?= $cardPendingCount ?> <?= e((string) $t['pending_label']) ?></span>
                     <?php else: ?>
                         <span></span>
                     <?php endif; ?>

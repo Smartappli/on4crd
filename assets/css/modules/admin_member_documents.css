@@ -46,7 +46,7 @@
   display: block;
   order: 1;
   margin: 0;
-  color: #000;
+  color: var(--text);
   font-size: clamp(1.15rem, 2vw, 1.55rem);
   font-weight: 800;
   line-height: 1;
@@ -56,7 +56,7 @@
   display: block;
   order: 2;
   margin: .35rem 0 0;
-  color: #000;
+  color: var(--muted);
   font-size: .82rem;
   font-weight: 650;
 }
@@ -74,13 +74,90 @@
   max-width: 760px;
 }
 
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) #admin-member-document-upload,
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-search-panel,
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-taxonomy {
+  scroll-margin-top: 5rem;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-form .actions {
+  margin-bottom: 0;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-search-panel {
+  display: grid;
+  gap: .75rem;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-search-form {
+  margin: 0;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-taxonomy {
+  display: grid;
+  gap: .85rem;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-taxonomy > .grid-2 {
+  align-items: start;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-taxonomy > .grid-2 > form {
+  margin: 0;
+  padding: .75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--admin-soft);
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-taxonomy .tags-cloud {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: .6rem;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-taxonomy .tags-cloud .inline-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: .5rem;
+  align-items: stretch;
+  margin: 0;
+  padding: .65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel) 84%, var(--panel-2));
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-taxonomy .tags-cloud .inline-form :is(input, button, .button) {
+  width: 100%;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-category-filter {
+  align-items: center;
+}
+
 :is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-list {
   display: grid;
   gap: .75rem;
 }
 
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-list > .card {
+  border-style: dashed;
+  color: var(--muted);
+  font-weight: 800;
+}
+
 :is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-card {
   height: 100%;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-card .actions {
+  align-items: center;
+  margin-top: auto;
+}
+
+:is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-card .actions form {
+  margin: 0;
 }
 
 @media (max-width: 900px) {
@@ -100,5 +177,11 @@
 @media (max-width: 640px) {
   :is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-hero-stats {
     grid-template-columns: 1fr;
+  }
+
+  :is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .admin-member-document-hero-actions .button,
+  :is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-search-form :is(input, .button, button),
+  :is([data-route="admin_presentations"], [data-route="admin_videos"], [data-route="admin_fichiers"], [data-route="admin_pv"]) .member-document-card .actions :is(.button, button) {
+    width: 100%;
   }
 }

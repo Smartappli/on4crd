@@ -2,3 +2,38 @@
 [data-route="admin_live_feeds"] .admin-live-feeds-module {
   min-width: 0;
 }
+
+[data-route="admin_live_feeds"] #main-content > .card > p {
+  max-width: 72ch;
+  color: var(--muted);
+}
+
+[data-route="admin_live_feeds"] #main-content form > .stack {
+  display: grid;
+  gap: .8rem;
+}
+
+[data-route="admin_live_feeds"] #main-content .muted-card {
+  border-left: 4px solid color-mix(in srgb, var(--accent) 34%, var(--border));
+}
+
+[data-route="admin_live_feeds"] #main-content .muted-card .row-between {
+  margin-bottom: .65rem;
+}
+
+[data-route="admin_live_feeds"] #main-content .muted-card .row-between label {
+  margin: 0;
+}
+
+[data-route="admin_live_feeds"] #main-content .form-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: .65rem;
+}
+
+[data-route="admin_live_feeds"] #main-content .form-grid label:has(textarea) {
+  grid-column: 1 / -1;
+}
+
+[data-route="admin_live_feeds"] #main-content form > p:last-child {
+  margin-bottom: 0;
+}

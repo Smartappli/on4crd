@@ -1,0 +1,39 @@
+/* Module CSS: admin_privacy */
+[data-route="admin_privacy"] #main-content > .card {
+  display: grid;
+  gap: .85rem;
+}
+
+[data-route="admin_privacy"] #main-content > .card > .help {
+  max-width: 76ch;
+}
+
+[data-route="admin_privacy"] #main-content details {
+  min-width: 14rem;
+  padding: .55rem .65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_privacy"] #main-content details summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+[data-route="admin_privacy"] #main-content details ul {
+  margin-top: .55rem;
+}
+
+[data-route="admin_privacy"] #main-content td form {
+  gap: .55rem;
+  min-width: min(24rem, 72vw);
+}
+
+[data-route="admin_privacy"] #main-content td form textarea {
+  min-height: 5rem;
+}
+
+[data-route="admin_privacy"] #main-content td form button {
+  justify-self: start;
+}

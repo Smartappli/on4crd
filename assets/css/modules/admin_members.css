@@ -2,3 +2,29 @@
 [data-route="admin_members"] .admin-members-module {
   min-width: 0;
 }
+
+[data-route="admin_members"] .admin-members-header {
+  display: grid;
+  gap: .75rem;
+}
+
+[data-route="admin_members"] .admin-member-create-card,
+[data-route="admin_members"] .admin-member-list-card {
+  display: grid;
+  gap: .85rem;
+}
+
+[data-route="admin_members"] .admin-member-create-form {
+  margin: 0;
+}
+
+[data-route="admin_members"] .admin-member-list-card .row-between {
+  align-items: end;
+}
+
+[data-route="admin_members"] .admin-member-row-form {
+  padding: .35rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--panel) 86%, var(--panel-2));
+}

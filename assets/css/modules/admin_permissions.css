@@ -2,3 +2,48 @@
 [data-route="admin_permissions"] .admin-permissions-module {
   min-width: 0;
 }
+
+[data-route="admin_permissions"] .admin-permissions-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: .65rem;
+  margin-top: .9rem;
+}
+
+[data-route="admin_permissions"] .admin-permissions-stats article {
+  display: grid;
+  gap: .25rem;
+  padding: .8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_permissions"] .admin-permissions-stats span {
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 800;
+}
+
+[data-route="admin_permissions"] .admin-permissions-stats strong {
+  font-size: 1.55rem;
+}
+
+[data-route="admin_permissions"] #main-content .grid-2 {
+  align-items: start;
+}
+
+[data-route="admin_permissions"] .admin-role-card h3 {
+  margin-top: .95rem;
+}
+
+[data-route="admin_permissions"] .admin-role-chip-list {
+  align-items: center;
+}
+
+[data-route="admin_permissions"] .admin-role-chip-form {
+  padding: .25rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 86%, var(--panel-2));
+}

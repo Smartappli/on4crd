@@ -103,9 +103,9 @@
   gap: .5rem;
   align-items: center;
   padding: .65rem;
-  border: 1px solid rgb(148 163 184 / .22);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background: rgb(255 255 255 / .94);
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
   box-shadow: 0 10px 24px rgb(15 23 42 / .08);
   backdrop-filter: blur(10px);
 }
@@ -116,32 +116,32 @@
   align-items: center;
   gap: .4rem;
   padding: .45rem .7rem;
-  border: 1px solid rgb(148 163 184 / .22);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  color: #0f172a;
+  color: var(--text);
   font-size: .9rem;
   font-weight: 700;
   text-decoration: none;
-  background: #fff;
+  background: var(--panel);
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-toolbar a:hover,
 [data-route="admin_webotheque"] .admin-webotheque-toolbar a:focus-visible {
-  border-color: rgb(37 99 235 / .45);
-  color: #1d4ed8;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  color: var(--accent-strong);
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-toolbar a.admin-webotheque-toolbar-primary {
   margin-left: auto;
-  border-color: #1d4ed8;
+  border-color: var(--accent-strong);
   color: #fff;
-  background: #2563eb;
+  background: var(--accent);
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-toolbar a.admin-webotheque-toolbar-primary:hover,
 [data-route="admin_webotheque"] .admin-webotheque-toolbar a.admin-webotheque-toolbar-primary:focus-visible {
   color: #fff;
-  background: #1d4ed8;
+  background: var(--accent-strong);
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-section-head {
@@ -219,16 +219,16 @@
 }
 
 [data-route="admin_webotheque"] .webotheque-grid .webotheque-link-actions [data-webotheque-modal-open] {
-  border-color: rgb(37 99 235 / .35);
-  color: #1d4ed8;
-  background: rgb(239 246 255 / .8);
+  border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 9%, var(--panel));
 }
 
 [data-route="admin_webotheque"] .webotheque-grid .webotheque-link-actions [data-webotheque-modal-open]:hover,
 [data-route="admin_webotheque"] .webotheque-grid .webotheque-link-actions [data-webotheque-modal-open]:focus-visible {
-  border-color: #2563eb;
-  color: #1e40af;
-  background: #dbeafe;
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 15%, var(--panel));
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-taxonomy {
@@ -259,19 +259,19 @@
   align-items: center;
   gap: .4rem;
   padding: .4rem .65rem;
-  border: 1px solid rgb(148 163 184 / .22);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  color: #0f172a;
+  color: var(--text);
   font-size: .88rem;
   font-weight: 700;
   text-decoration: none;
-  background: #fff;
+  background: var(--panel);
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-taxonomy-nav a:hover,
 [data-route="admin_webotheque"] .admin-webotheque-taxonomy-nav a:focus-visible {
-  border-color: rgb(37 99 235 / .45);
-  color: #1d4ed8;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  color: var(--accent-strong);
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-taxonomy-group {
@@ -297,7 +297,7 @@
 
 [data-route="admin_webotheque"] .admin-webotheque-taxonomy-group-head h3 {
   margin: 0;
-  color: #0f172a;
+  color: var(--text);
   font-size: 1.05rem;
   line-height: 1.2;
 }
@@ -318,9 +318,9 @@
   align-items: end;
   margin: 0;
   padding: .75rem;
-  border: 1px dashed rgb(37 99 235 / .28);
+  border: 1px dashed color-mix(in srgb, var(--accent) 32%, var(--border));
   border-radius: 8px;
-  background: rgb(239 246 255 / .62);
+  background: color-mix(in srgb, var(--accent) 8%, var(--panel));
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-taxonomy-add-form label,
@@ -347,9 +347,9 @@
   align-items: stretch;
   margin: 0;
   padding: .65rem;
-  border: 1px solid rgb(148 163 184 / .18);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: rgb(248 250 252 / .78);
+  background: color-mix(in srgb, var(--panel) 86%, var(--panel-2));
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-taxonomy-lock {

@@ -7,3 +7,29 @@
   height: min(140vh, 1320px);
   min-height: min(1120px, 140vh);
 }
+
+[data-route="admin_library"] .admin-library-documents,
+[data-route="admin_library"] .admin-library-categories {
+  display: grid;
+  gap: .85rem;
+}
+
+[data-route="admin_library"] .admin-library-categories > form.inline-form {
+  margin: 0;
+}
+
+[data-route="admin_library"] .admin-library-category-item {
+  padding: .55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_library"] .admin-library-preview-toggle {
+  margin-top: .55rem;
+}
+
+[data-route="admin_library"] .admin-library-preview-toggle > summary {
+  cursor: pointer;
+  font-weight: 800;
+}
