@@ -159,6 +159,57 @@ body:is([data-route="admin"], [data-route^="admin_"]) #main-content button.small
   padding: .48rem .7rem;
 }
 
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(.button.danger, button.danger, .admin-article-delete-button),
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(button[name="action"][value*="delete"], button[name="action"][value*="remove"], button[name="action"][value*="purge"]),
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(form:has(input[type="hidden"][name="action"][value*="delete"]), form:has(input[type="hidden"][name="action"][value*="remove"]), form:has(input[type="hidden"][name="action"][value*="purge"])) :is(.button, button) {
+  border-color: color-mix(in srgb, var(--danger) 48%, var(--border));
+  background: color-mix(in srgb, var(--danger) 10%, var(--panel));
+  color: var(--danger);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(.button.danger, button.danger, .admin-article-delete-button):hover,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(button[name="action"][value*="delete"], button[name="action"][value*="remove"], button[name="action"][value*="purge"]):hover,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(form:has(input[type="hidden"][name="action"][value*="delete"]), form:has(input[type="hidden"][name="action"][value*="remove"]), form:has(input[type="hidden"][name="action"][value*="purge"])) :is(.button, button):hover {
+  background: color-mix(in srgb, var(--danger) 16%, var(--panel-2));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(.admin-article-reject-button, button[value="rejected"]),
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(button[name="action"][value*="reject"]),
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(form:has(input[type="hidden"][name="bulk_op"][value="rejected"])) :is(.button, button) {
+  border-color: color-mix(in srgb, #f59e0b 48%, var(--border));
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(.admin-article-reject-button, button[value="rejected"]):hover,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(button[name="action"][value*="reject"]):hover,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(form:has(input[type="hidden"][name="bulk_op"][value="rejected"])) :is(.button, button):hover {
+  background: color-mix(in srgb, #f59e0b 16%, var(--panel-2));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(.admin-article-publish-button),
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(button[name="action"][value*="approve"], button[name="action"][value*="publish"], button[value="published"]),
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(form:has(input[type="hidden"][name="bulk_op"][value="published"])) :is(.button, button) {
+  border-color: color-mix(in srgb, var(--success) 46%, var(--border));
+  background: color-mix(in srgb, var(--success) 12%, var(--panel));
+  color: color-mix(in srgb, var(--success) 82%, var(--text));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(.admin-article-publish-button):hover,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(button[name="action"][value*="approve"], button[name="action"][value*="publish"], button[value="published"]):hover,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :where(form:has(input[type="hidden"][name="bulk_op"][value="published"])) :is(.button, button):hover {
+  background: color-mix(in srgb, var(--success) 18%, var(--panel-2));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(.button, button):is(:disabled, [aria-disabled="true"], .disabled) {
+  border-color: var(--border);
+  background: var(--panel-2);
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: .68;
+  transform: none;
+}
+
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(.button, button):focus-visible,
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(a, input, select, textarea, summary):focus-visible {
   outline: 3px solid color-mix(in srgb, var(--accent) 38%, transparent);
@@ -267,6 +318,47 @@ body:is([data-route="admin"], [data-route^="admin_"]) #main-content form > .acti
   margin-top: .85rem;
   padding-top: .75rem;
   border-top: 1px solid var(--border);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content form.inline-form[method="get"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  align-items: end;
+  padding: .65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--panel) 90%, var(--panel-2));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content form.inline-form[method="get"] > :is(label, input[type="search"], input[type="text"], select) {
+  flex: 1 1 12rem;
+  width: auto;
+  min-width: min(100%, 10rem);
+  margin: 0;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content form.inline-form[method="get"] > :is(.button, button, a.button) {
+  flex: 0 0 auto;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content form:has(select[name="bulk_op"]) > .inline-form,
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content #bulk-delete-form > p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  align-items: end;
+  margin: .75rem 0;
+  padding: .7rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid color-mix(in srgb, var(--admin-warning) 78%, var(--border));
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, #f59e0b 7%, var(--panel));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content form:has(select[name="bulk_op"]) > .inline-form :is(select, button, .button),
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content #bulk-delete-form > p :is(button, .button) {
+  margin: 0;
 }
 
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content .table-wrap {
@@ -831,6 +923,10 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-status {
   align-items: end;
   width: min(100%, 34rem);
   margin: 0;
+  padding: .65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--panel) 90%, var(--panel-2));
 }
 
 [data-route="admin_members"] .admin-member-search label {
@@ -981,6 +1077,9 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-status {
   }
 
   body:is([data-route="admin"], [data-route^="admin_"]) #main-content .actions :is(.button, button),
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content form.inline-form[method="get"] > :is(label, input[type="search"], input[type="text"], select, .button, button, a.button),
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content form:has(select[name="bulk_op"]) > .inline-form :is(select, button, .button),
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content #bulk-delete-form > p :is(button, .button),
   [data-route="admin"] .admin-home-search-actions .button,
   [data-route="admin"] .admin-open-cta {
     width: 100%;
