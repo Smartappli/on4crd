@@ -48,6 +48,8 @@ if (!$row) {
 
 $row = article_repair_and_persist_mojibake_article((array) $row);
 $row = localized_article_row($row);
+$articleContentHtml = article_sanitize_content((string) ($row['content_localized'] ?? $row['content'] ?? ''));
+$row['content_localized'] = $articleContentHtml;
 $user = current_user();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {
     $user = require_login();
@@ -86,8 +88,8 @@ foreach ($articleSubsubcategoriesByParent[$category . ':' . $subcategory] ?? [] 
         break;
     }
 }
-$readingMinutes = article_view_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? ''));
-$articlePlainText = article_view_plain_text((string) ($row['content_localized'] ?? $row['content'] ?? ''));
+$readingMinutes = article_view_reading_minutes($articleContentHtml);
+$articlePlainText = article_view_plain_text($articleContentHtml);
 $articleExcerpt = article_excerpt_from_input((string) ($row['excerpt_localized'] ?? ''));
 $articleDescription = $articleExcerpt !== '' ? $articleExcerpt : (string) $t['meta_fallback'];
 $articleUrl = route_url_with_locale('article', $locale, ['slug' => (string) $row['slug']]);
@@ -177,7 +179,7 @@ ob_start();
         <p class="lead"><?= e($articleExcerpt) ?></p>
     <?php endif; ?>
     <div class="article-content">
-        <?= article_sanitize_content((string) $row['content_localized']) ?>
+        <?= $articleContentHtml ?>
     </div>
 </article>
 

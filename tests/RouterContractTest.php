@@ -974,6 +974,19 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('$sourceFields = article_repair_mojibake_fields($sourceFields);', $helpers);
     }
 
+    public function testPublicArticleUsesSanitizedRepairedContentForRenderAndMetadata(): void
+    {
+        $article = file_get_contents(__DIR__ . '/../pages/article.php');
+        self::assertIsString($article);
+
+        self::assertStringContainsString('$articleContentHtml = article_sanitize_content((string) ($row[\'content_localized\'] ?? $row[\'content\'] ?? \'\'));', $article);
+        self::assertStringContainsString('$row[\'content_localized\'] = $articleContentHtml;', $article);
+        self::assertStringContainsString('$readingMinutes = article_view_reading_minutes($articleContentHtml);', $article);
+        self::assertStringContainsString('$articlePlainText = article_view_plain_text($articleContentHtml);', $article);
+        self::assertStringContainsString('<?= $articleContentHtml ?>', $article);
+        self::assertStringNotContainsString("<?= article_sanitize_content((string) \$row['content_localized']) ?>", $article);
+    }
+
     public function testArticlesDoNotRenderGeneratedSummaryWhenExcerptIsEmpty(): void
     {
         $adminArticles = file_get_contents(__DIR__ . '/../pages/admin_articles.php');
