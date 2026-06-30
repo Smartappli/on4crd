@@ -22,7 +22,7 @@ $previewPayload = null;
 /**
  * @return array{excerpt:string,content:string}
  */
-function import_article_document(array $file, bool $persist = true): array
+function import_article_document(array $file, bool $persist = true, bool $includeSourceLabel = true): array
 {
     $locale = current_locale();
     $tm = i18n_domain_translator('admin_articles_import', $locale);
@@ -109,7 +109,7 @@ function import_article_document(array $file, bool $persist = true): array
         $content = '';
     }
     $content = trim($content);
-    if ($content !== '') {
+    if ($includeSourceLabel && $content !== '') {
         $content .= "\n" . $sourceLabel;
     }
     $content = article_sanitize_content($content);
@@ -118,6 +118,18 @@ function import_article_document(array $file, bool $persist = true): array
         'excerpt' => '',
         'content' => $content,
     ];
+}
+
+/**
+ * @param array<string,mixed> $payload
+ */
+function admin_articles_json_response(array $payload, int $statusCode = 200): void
+{
+    http_response_code($statusCode);
+    header('Content-Type: application/json; charset=utf-8');
+    $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    echo is_string($json) ? $json : '{}';
+    exit;
 }
 
 function article_assert_docx_document(string $path): void
@@ -273,6 +285,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? '');
+
+        if ($action === 'import_article_word') {
+            $imported = import_article_document($_FILES['article_document'] ?? [], false, false);
+            if ($imported['content'] === '') {
+                throw new RuntimeException(i18n_domain_translator('admin_articles_import', $locale)('docx_extraction_unavailable'));
+            }
+            admin_articles_json_response([
+                'ok' => true,
+                'content' => $imported['content'],
+            ]);
+        }
 
         if ($action === 'update_proposal_status') {
             $proposalId = (int) ($_POST['proposal_id'] ?? 0);
@@ -847,6 +870,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (db()->inTransaction()) {
             db()->rollBack();
         }
+        $isAjaxRequest = strtolower((string) ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) === 'xmlhttprequest';
+        if ($isAjaxRequest) {
+            admin_articles_json_response([
+                'ok' => false,
+                'error' => $throwable->getMessage(),
+            ], 400);
+        }
         set_flash('error', $throwable->getMessage());
         redirect('admin_articles');
     }
@@ -1063,7 +1093,7 @@ ob_start();
                 <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" placeholder="<?= e($t('slug_placeholder')) ?>"></label>
                 <label><?= e($t('import_document')) ?><input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
                 <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4" data-wysiwyg="off"><?= e((string) $editing['excerpt']) ?></textarea></label>
-                <label><?= e($t('content_simple_html')) ?><textarea name="content" rows="16" data-wysiwyg="full"><?= e((string) $editing['content']) ?></textarea></label>
+                <label><?= e($t('content_simple_html')) ?><textarea name="content" rows="16" data-wysiwyg="full" data-wysiwyg-import-docx-url="<?= e(route_url('admin_articles')) ?>"><?= e((string) $editing['content']) ?></textarea></label>
                 <p class="help"><?= e($t('editor_tip')) ?></p>
             </div>
             <div class="admin-article-form-section">

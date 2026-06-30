@@ -361,7 +361,7 @@ function crc32(buffer) {
 }
 
 async function assertArticleDocxWysiwygImport(driver, token) {
-  const fixturePath = createDocxFixture(token);
+  const fixturePath = createRichDocxFixture(token);
   assert.notEqual(fixturePath, '', 'Un fichier DOCX de test doit pouvoir etre genere.');
 
   const controlsReady = await driver.wait(async () => driver.executeScript(`
@@ -388,7 +388,7 @@ async function assertArticleDocxWysiwygImport(driver, token) {
   `, fileInput);
   await fileInput.sendKeys(fixturePath);
 
-  const importedText = `Import DOCX Selenium ${token}`;
+  const importedText = `Import serveur ${token}`;
   const imported = await driver.wait(async () => driver.executeScript(`
     const expected = arguments[0];
     const textarea = document.querySelector('textarea[name="content"]');
@@ -397,9 +397,21 @@ async function assertArticleDocxWysiwygImport(driver, token) {
     if (!textarea || !editor) {
       return null;
     }
-    return editor.textContent.includes(expected) && textarea.value.includes(expected) ? true : null;
+    if (!editor.textContent.includes(expected) || !textarea.value.includes(expected)) {
+      return null;
+    }
+    return {
+      editorText: editor.textContent,
+      textarea: textarea.value,
+      html: editor.innerHTML,
+    };
   `, importedText), timeoutMs);
-  assert.equal(imported, true, 'Le DOCX importe doit remplir l editeur WYSIWYG et le textarea article.');
+  assert.match(imported.editorText, new RegExp(`^\\s*${importedText}`), 'Le DOCX importe doit conserver le debut du document.');
+  assert.match(imported.editorText, new RegExp(`Texte fort ${token}`), 'Le DOCX importe doit conserver les paragraphes riches.');
+  assert.match(imported.editorText, new RegExp(`Element de liste ${token}`), 'Le DOCX importe doit conserver les listes.');
+  assert.match(imported.editorText, new RegExp(`Colonne A ${token}`), 'Le DOCX importe doit conserver les tableaux.');
+  assert.match(imported.textarea, new RegExp(importedText), 'Le DOCX importe doit synchroniser le textarea article.');
+  assert.doesNotMatch(imported.html, /article-source-document/, 'L import Word WYSIWYG ne doit pas ajouter de libelle de fichier source.');
 
   const restored = await driver.executeScript(`
     const textarea = document.querySelector('textarea[name="content"]');
@@ -411,6 +423,13 @@ async function assertArticleDocxWysiwygImport(driver, token) {
     return importButton ? !importButton.disabled : false;
   `);
   assert.equal(restored, true, 'Le bouton Importer Word doit etre restaure apres conversion.');
+
+  await driver.executeScript(`
+    const textarea = document.querySelector('textarea[name="content"]');
+    if (textarea) {
+      textarea.dataset.wysiwygImportDocxUrl = '';
+    }
+  `);
 
   const safeText = `Import DOCX propre ${token}`;
   await driver.executeScript(`

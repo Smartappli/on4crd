@@ -365,6 +365,43 @@
     return mammothLoader;
   };
 
+  const findFormCsrfToken = (textarea) => {
+    const form = textarea.form || textarea.closest('form') || document.querySelector('form');
+    const csrfInput = form ? form.querySelector('input[name="_csrf"]') : null;
+    return csrfInput instanceof HTMLInputElement ? csrfInput.value : '';
+  };
+
+  const importDocxThroughServer = async (file, textarea) => {
+    const endpoint = textarea.dataset.wysiwygImportDocxUrl || '';
+    if (!endpoint) return '';
+
+    const csrf = findFormCsrfToken(textarea);
+    if (!csrf) {
+      throw new Error('Jeton CSRF introuvable.');
+    }
+
+    const payload = new FormData();
+    payload.append('_csrf', csrf);
+    payload.append('action', 'import_article_word');
+    payload.append('article_document', file, file.name);
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      body: payload,
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    });
+    const result = await response.json().catch(() => null);
+    if (!response.ok || !result || result.ok !== true || typeof result.content !== 'string') {
+      throw new Error(result && typeof result.error === 'string' ? result.error : 'Import serveur indisponible.');
+    }
+
+    return sanitizeImportedHtml(result.content);
+  };
+
   textareas.forEach((textarea, index) => {
     if (textarea.dataset.wysiwygApplied === '1') return;
     textarea.dataset.wysiwygApplied = '1';
@@ -530,13 +567,19 @@
         importButton.disabled = true;
         importButton.textContent = 'Import...';
         try {
-          const mammoth = await loadMammoth();
-          if (!mammoth) {
-            throw new Error('Convertisseur indisponible.');
+          let importedHtml = '';
+          if (extension.endsWith('.docx')) {
+            importedHtml = await importDocxThroughServer(file, textarea);
           }
-          const arrayBuffer = await file.arrayBuffer();
-          const result = await mammoth.convertToHtml({ arrayBuffer });
-          const importedHtml = sanitizeImportedHtml(result.value);
+          if (importedHtml === '') {
+            const mammoth = await loadMammoth();
+            if (!mammoth) {
+              throw new Error('Convertisseur indisponible.');
+            }
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.convertToHtml({ arrayBuffer });
+            importedHtml = sanitizeImportedHtml(result.value);
+          }
           if (importedHtml === '') {
             throw new Error('Aucun contenu Word exploitable.');
           }
