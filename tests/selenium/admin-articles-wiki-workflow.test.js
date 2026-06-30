@@ -376,7 +376,8 @@ async function assertArticleDocxWysiwygImport(driver, token) {
     const editor = wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]');
     const help = Array.from(document.querySelectorAll('p.help'))
       .some((item) => item.textContent.includes('Importer Word') && item.textContent.includes('format .docx'));
-    return importButton && fileInput && editor && help ? true : null;
+    const serverImportEndpoint = textarea.dataset.wysiwygImportDocxUrl || '';
+    return importButton && fileInput && editor && help && serverImportEndpoint.includes('admin_articles') ? true : null;
   `), timeoutMs);
   assert.equal(controlsReady, true, 'Le WYSIWYG article doit exposer le bouton Importer Word et son aide.');
 
@@ -386,6 +387,19 @@ async function assertArticleDocxWysiwygImport(driver, token) {
     input.hidden = false;
     input.style.display = 'block';
   `, fileInput);
+  await driver.executeScript(`
+    if (!window.__articleWordImportFetchWrapped) {
+      const originalFetch = window.fetch.bind(window);
+      window.fetch = async (input, init) => {
+        if (init && init.body instanceof FormData) {
+          window.__articleWordImportAction = String(init.body.get('action') || '');
+        }
+        return originalFetch(input, init);
+      };
+      window.__articleWordImportFetchWrapped = true;
+    }
+    window.__articleWordImportAction = '';
+  `);
   await fileInput.sendKeys(fixturePath);
 
   const importedText = `Import serveur ${token}`;
@@ -412,6 +426,7 @@ async function assertArticleDocxWysiwygImport(driver, token) {
   assert.match(imported.editorText, new RegExp(`Colonne A ${token}`), 'Le DOCX importe doit conserver les tableaux.');
   assert.match(imported.textarea, new RegExp(importedText), 'Le DOCX importe doit synchroniser le textarea article.');
   assert.doesNotMatch(imported.html, /article-source-document/, 'L import Word WYSIWYG ne doit pas ajouter de libelle de fichier source.');
+  assert.equal(await driver.executeScript('return window.__articleWordImportAction || "";'), 'import_article_word', 'Le bouton Importer Word doit appeler l action AJAX dediee.');
 
   const restored = await driver.executeScript(`
     const textarea = document.querySelector('textarea[name="content"]');

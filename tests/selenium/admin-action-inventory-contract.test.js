@@ -115,6 +115,7 @@ const expectedExplicitActionsByRoute = {
     'delete_category',
     'delete_subcategory',
     'delete_subsubcategory',
+    'import_article_word',
     'preview_article',
     'restore_revision',
     'retry_scheduled_article',

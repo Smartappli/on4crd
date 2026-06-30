@@ -170,6 +170,7 @@ const routeContracts = {
       delete_category: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['delete_category']),
       delete_subcategory: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['delete_subcategory']),
       delete_subsubcategory: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['delete_subsubcategory']),
+      import_article_word: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['import_article_word', 'wysiwygImportDocxUrl']),
       preview_article: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['preview_article']),
       restore_revision: proof('tests/selenium/admin-articles-wiki-workflow.test.js', ['restore_revision']),
       retry_scheduled_article: proof('tests/selenium/admin-maintenance-coverage.test.js', ['retry_scheduled_article']),
