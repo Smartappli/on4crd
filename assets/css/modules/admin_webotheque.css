@@ -138,8 +138,8 @@
   background: var(--accent);
 }
 
-  [data-route="admin_webotheque"] .admin-webotheque-toolbar a.admin-webotheque-toolbar-primary:hover,
-  [data-route="admin_webotheque"] .admin-webotheque-toolbar a.admin-webotheque-toolbar-primary:focus-visible {
+[data-route="admin_webotheque"] .admin-webotheque-toolbar a.admin-webotheque-toolbar-primary:hover,
+[data-route="admin_webotheque"] .admin-webotheque-toolbar a.admin-webotheque-toolbar-primary:focus-visible {
   color: #fff;
   background: var(--accent-strong);
 }
