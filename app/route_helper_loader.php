@@ -27,7 +27,7 @@ function app_route_helper_map(): array
         'member_recommendations.php' => ['settings'],
         'notifications.php' => ['dashboard', 'notifications', 'articles', 'article', 'albums', 'album', 'classifieds', 'members_library', 'admin_articles', 'admin_albums', 'admin_classifieds', 'admin_library', 'admin_news'],
         'article_import_helpers.php' => ['presentations', 'videos', 'pv', 'fichiers', 'members_library', 'member_library_preview', 'member_document_preview', 'admin_articles', 'admin_library', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_fichiers'],
-        'article_helpers.php' => ['home', 'dashboard', 'search', 'chatbot', 'articles', 'article', 'article_propose', 'admin_articles', 'admin_translation_reviews', 'llms.txt', 'ai-index.json'],
+        'article_helpers.php' => ['home', 'dashboard', 'search', 'chatbot', 'articles', 'article', 'article_propose', 'admin_articles', 'admin_translation_reviews', 'llms.txt', 'ai-index.json', 'my_requests'],
         'comics_helpers.php' => ['comics', 'sitemap.xml', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld'],
         'ads_helpers.php' => ['ads', 'admin_ads', 'ad_click'],
         'committee_helpers.php' => ['committee', 'admin_editorial'],
