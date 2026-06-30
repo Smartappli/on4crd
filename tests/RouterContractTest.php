@@ -939,6 +939,22 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('maxlength="50000"', $articlePropose);
     }
 
+    public function testArticleProposalRateLimitDoesNotApplyToAdministrators(): void
+    {
+        $articlePropose = file_get_contents(__DIR__ . '/../pages/article_propose.php');
+        self::assertIsString($articlePropose);
+        $normalizedSource = str_replace("\r\n", "\n", $articlePropose);
+
+        self::assertStringContainsString('$autoPublish = has_permission(\'articles.manage\');', $normalizedSource);
+        self::assertStringContainsString("if (!\$autoPublish) {\n            article_propose_enforce_submission_limits((int) \$user['id']);\n        }", $normalizedSource);
+
+        $autoPublishPos = strpos($normalizedSource, '$autoPublish = has_permission(\'articles.manage\');');
+        $submissionLimitPos = strpos($normalizedSource, "article_propose_enforce_submission_limits((int) \$user['id']);");
+        self::assertNotFalse($autoPublishPos);
+        self::assertNotFalse($submissionLimitPos);
+        self::assertLessThan($submissionLimitPos, $autoPublishPos);
+    }
+
     public function testArticleFormsRepairMojibakeBeforePersistingTextFields(): void
     {
         $adminArticles = file_get_contents(__DIR__ . '/../pages/admin_articles.php');

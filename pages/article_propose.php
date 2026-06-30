@@ -93,14 +93,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($label('error_title_content_required'));
         }
 
-        article_propose_enforce_submission_limits((int) $user['id']);
+        $autoPublish = has_permission('articles.manage');
+        if (!$autoPublish) {
+            article_propose_enforce_submission_limits((int) $user['id']);
+        }
 
         $content = article_sanitize_content($rawContent);
         if (trim(strip_tags($content)) === '') {
             throw new RuntimeException($label('error_content_empty_after_cleanup'));
         }
 
-        $autoPublish = has_permission('articles.manage');
         $articleStatus = $autoPublish ? 'published' : 'pending';
         $publishedAt = $autoPublish ? date('Y-m-d H:i:s') : null;
         $maxSlugAttempts = 5;
