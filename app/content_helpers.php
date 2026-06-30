@@ -1338,10 +1338,40 @@ function content_proposal_allowed_areas(): array
 }
 }
 
+if (!function_exists('content_proposal_repair_mojibake_text')) {
+function content_proposal_repair_mojibake_text(string $value): string
+{
+    if (function_exists('article_repair_mojibake_text')) {
+        return article_repair_mojibake_text($value);
+    }
+
+    return $value;
+}
+}
+
+if (!function_exists('content_proposal_repair_mojibake_fields')) {
+/**
+ * @param array<string,mixed> $proposal
+ * @param list<string> $fields
+ * @return array<string,mixed>
+ */
+function content_proposal_repair_mojibake_fields(array $proposal, array $fields = ['title', 'summary', 'contact', 'source_ref', 'moderation_note']): array
+{
+    foreach ($fields as $field) {
+        if (isset($proposal[$field]) && is_string($proposal[$field])) {
+            $proposal[$field] = content_proposal_repair_mojibake_text($proposal[$field]);
+        }
+    }
+
+    return $proposal;
+}
+}
+
 if (!function_exists('content_proposal_clean_single_line')) {
 function content_proposal_clean_single_line(string $value, int $maxLength): string
 {
     $value = str_replace(["\r", "\n"], ' ', strip_tags($value));
+    $value = content_proposal_repair_mojibake_text($value);
     $value = trim((string) preg_replace('/\s+/u', ' ', $value));
     if ($value !== '' && mb_strlen($value) > $maxLength) {
         throw new RuntimeException('Invalid content proposal.');
@@ -1355,6 +1385,7 @@ if (!function_exists('content_proposal_clean_multiline')) {
 function content_proposal_clean_multiline(string $value, int $maxLength): string
 {
     $value = str_replace(["\r\n", "\r"], "\n", strip_tags($value));
+    $value = content_proposal_repair_mojibake_text($value);
     $value = trim((string) preg_replace('/[ \t]+/u', ' ', $value));
     if ($value !== '' && mb_strlen($value) > $maxLength) {
         throw new RuntimeException('Invalid content proposal.');
@@ -1394,6 +1425,7 @@ function content_proposal_summary_rows(string $summary): array
     $currentIndex = null;
     foreach (preg_split('/\R/u', $summary) ?: [] as $line) {
         $line = trim((string) $line);
+        $line = content_proposal_repair_mojibake_text($line);
         if ($line === '') {
             continue;
         }

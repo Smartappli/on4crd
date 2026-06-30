@@ -869,6 +869,32 @@ XML;
         self::assertSame('tag', $webothequeTagPayload['proposal_type']);
     }
 
+    public function testContentProposalPayloadRepairsArticleMojibakeText(): void
+    {
+        $text = html_entity_decode('Dossier n&deg;1 : Tenez &agrave; l&rsquo;&oelig;il', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $mojibake = "Dossier n\xC3\x82\xC2\xB01\xC3\x82 : Tenez \xC3\x83  l\xC3\xA2\xC2\x80\xC2\x99\xC3\x85\xC2\x93il";
+
+        $payload = content_proposal_payload(
+            12,
+            'articles',
+            'content',
+            $mojibake,
+            content_proposal_details_text(['Description' => $mojibake])
+        );
+
+        self::assertSame($text, $payload['title']);
+        self::assertSame('Description: ' . $text, $payload['summary']);
+        self::assertSame($text, content_proposal_detail_from_summary('Description: ' . $mojibake, ['Description']));
+
+        $proposal = content_proposal_repair_mojibake_fields([
+            'title' => $mojibake,
+            'summary' => 'Description: ' . $mojibake,
+        ]);
+
+        self::assertSame($text, $proposal['title']);
+        self::assertSame('Description: ' . $text, $proposal['summary']);
+    }
+
     public function testContentProposalPayloadRejectsUnknownArea(): void
     {
         $this->expectException(RuntimeException::class);

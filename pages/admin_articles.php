@@ -1004,7 +1004,10 @@ if ($showPendingProposals && ensure_content_proposals_table()) {
          ORDER BY cp.created_at ASC, cp.id ASC'
     );
     $pendingStmt->execute();
-    $pendingProposals = $pendingStmt->fetchAll() ?: [];
+    $pendingProposals = array_map(
+        static fn(array $proposal): array => content_proposal_repair_mojibake_fields($proposal),
+        $pendingStmt->fetchAll() ?: []
+    );
 }
 $activeArticleFilterBadges = [];
 if ($adminSearch !== '') {
