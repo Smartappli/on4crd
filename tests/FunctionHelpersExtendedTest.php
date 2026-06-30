@@ -617,6 +617,49 @@ XML;
         }
     }
 
+    public function testArticleExtractDocxHtmlKeepsBeginningInsideWordWrappers(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'docx-wrapped-start-');
+        self::assertIsString($tmp);
+
+        $documentXml = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:customXml>
+      <w:p><w:r><w:t>Debut dans customXml</w:t></w:r></w:p>
+    </w:customXml>
+    <w:ins w:id="1">
+      <w:p><w:r><w:t>Debut insere suivi</w:t></w:r></w:p>
+    </w:ins>
+    <w:p>
+      <w:smartTag>
+        <w:r><w:t>Debut smartTag</w:t></w:r>
+      </w:smartTag>
+    </w:p>
+    <w:p><w:r><w:t>Suite normale</w:t></w:r></w:p>
+  </w:body>
+</w:document>
+XML;
+
+        file_put_contents($tmp, self::zipFixture([
+            '[Content_Types].xml' => '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+            '_rels/.rels' => '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId0" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
+            'word/document.xml' => $documentXml,
+        ]));
+
+        try {
+            $html = article_extract_docx_html($tmp);
+
+            self::assertStringStartsWith('<p>Debut dans customXml</p>', $html);
+            self::assertStringContainsString('<p>Debut insere suivi</p>', $html);
+            self::assertStringContainsString('<p>Debut smartTag</p>', $html);
+            self::assertStringContainsString('<p>Suite normale</p>', $html);
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
     public function testArticleExtractDocxHtmlSkipsOversizedInlineImages(): void
     {
         $tmp = tempnam(sys_get_temp_dir(), 'docx-large-image-');
