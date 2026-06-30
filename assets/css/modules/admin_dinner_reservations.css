@@ -2,3 +2,53 @@
 [data-route="admin_dinner_reservations"] .admin-dinner-reservations-module {
   min-width: 0;
 }
+
+[data-route="admin_dinner_reservations"] #main-content > .card {
+  display: grid;
+  gap: .85rem;
+}
+
+[data-route="admin_dinner_reservations"] #main-content .row-between {
+  align-items: center;
+}
+
+[data-route="admin_dinner_reservations"] #dinner-reservation-form {
+  margin: 0;
+}
+
+[data-route="admin_dinner_reservations"] #dinner-lines {
+  display: grid;
+  gap: .7rem;
+}
+
+[data-route="admin_dinner_reservations"] #dinner-total {
+  display: inline-flex;
+  min-width: 5.5rem;
+  justify-content: flex-end;
+  padding: .28rem .45rem;
+  border: 1px solid color-mix(in srgb, var(--success) 36%, var(--border));
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--success) 10%, var(--panel));
+  color: color-mix(in srgb, var(--success) 84%, var(--text));
+}
+
+[data-route="admin_dinner_reservations"] #main-content article.inner-card {
+  display: grid;
+  gap: .65rem;
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_dinner_reservations"] #main-content article.inner-card :is(h3, p) {
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  [data-route="admin_dinner_reservations"] #main-content .row-between {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
