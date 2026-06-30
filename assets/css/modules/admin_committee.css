@@ -3,6 +3,17 @@
   min-width: 0;
 }
 
+[data-route="admin_committee"] .admin-committee-module > .card {
+  display: grid;
+  gap: .85rem;
+}
+
+[data-route="admin_committee"] .admin-committee-module > .card > p {
+  max-width: 72ch;
+  margin: 0;
+  color: var(--muted);
+}
+
 [data-route="admin_committee"] .admin-committee-module .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -19,6 +30,19 @@
   align-items: center;
   gap: .45rem;
   min-height: 2.75rem;
+  padding: .5rem .65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+  font-weight: 800;
+}
+
+[data-route="admin_committee"] .admin-committee-module #admin-committee-form {
+  margin: 0;
+}
+
+[data-route="admin_committee"] .admin-committee-module #admin-committee-form > p:last-child {
+  margin-bottom: 0;
 }
 
 [data-route="admin_committee"] .admin-committee-module .admin-committee-member {
@@ -55,6 +79,10 @@
   flex-wrap: wrap;
 }
 
+[data-route="admin_committee"] .admin-committee-module .admin-committee-actions > a {
+  font-weight: 800;
+}
+
 [data-route="admin_committee"] .admin-committee-module .admin-committee-arrow {
   width: 2.1rem;
   min-width: 2.1rem;
@@ -66,5 +94,10 @@
 @media (max-width: 720px) {
   [data-route="admin_committee"] .admin-committee-module .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  [data-route="admin_committee"] .admin-committee-module .admin-committee-actions {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

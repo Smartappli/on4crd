@@ -2,3 +2,52 @@
 [data-route="admin_ads"] .admin-ads-module {
   min-width: 0;
 }
+
+[data-route="admin_ads"] #main-content > .grid-2 {
+  align-items: start;
+}
+
+[data-route="admin_ads"] #main-content .stats-grid {
+  margin-bottom: 1rem;
+}
+
+[data-route="admin_ads"] #main-content .card > .table-wrap {
+  margin-top: .85rem;
+}
+
+[data-route="admin_ads"] #main-content section.card > h1,
+[data-route="admin_ads"] #main-content section.card > h2 {
+  margin-bottom: .75rem;
+}
+
+[data-route="admin_ads"] #main-content article.inner-card {
+  display: grid;
+  gap: .75rem;
+  border-left: 4px solid var(--admin-warning);
+}
+
+[data-route="admin_ads"] #main-content article.inner-card p {
+  margin: 0;
+}
+
+[data-route="admin_ads"] #main-content article.inner-card form {
+  margin-top: .15rem;
+  padding-top: .75rem;
+  border-top: 1px solid var(--border);
+}
+
+[data-route="admin_ads"] #main-content article.inner-card form p,
+[data-route="admin_ads"] #main-content section.card > form p {
+  margin: 0;
+}
+
+[data-route="admin_ads"] #main-content .badge {
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  [data-route="admin_ads"] #main-content .row-between {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

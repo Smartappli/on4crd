@@ -2,3 +2,34 @@
 [data-route="admin_wiki"] .admin-wiki-module {
   min-width: 0;
 }
+
+[data-route="admin_wiki"] #main-content > .inline-form {
+  margin-bottom: 1rem;
+}
+
+[data-route="admin_wiki"] .admin-wiki-taxonomy {
+  display: grid;
+  gap: 1rem;
+}
+
+[data-route="admin_wiki"] .admin-wiki-taxonomy > .grid-3,
+[data-route="admin_wiki"] .admin-wiki-taxonomy > .grid-2 {
+  align-items: start;
+}
+
+[data-route="admin_wiki"] .admin-wiki-taxonomy form.stack {
+  margin: 0;
+}
+
+[data-route="admin_wiki"] .admin-wiki-taxonomy table {
+  margin-top: .75rem;
+}
+
+[data-route="admin_wiki"] #pending-proposals {
+  display: grid;
+  gap: .8rem;
+}
+
+[data-route="admin_wiki"] #pending-proposals article.inner-card {
+  border-left: 4px solid var(--admin-warning);
+}

@@ -840,6 +840,26 @@ XML;
         self::assertSame('classifieds.moderate', (string) ($classifiedsCards[0]['permission'] ?? ''));
     }
 
+    public function testAdminDashboardCardsPrioritizePendingCounts(): void
+    {
+        $cards = [
+            ['route' => 'admin_members', 'pending_count' => 0, '_order' => 0],
+            ['route' => 'admin_news', 'pending_count' => 4, '_order' => 1],
+            ['route' => 'admin_articles', 'pending_count' => 4, '_order' => 2],
+            ['route' => 'admin_permissions', 'pending_count' => 1, '_order' => 3],
+        ];
+
+        $prioritized = admin_order_dashboard_cards($cards);
+
+        self::assertSame(['admin_news', 'admin_articles', 'admin_permissions', 'admin_members'], array_column($prioritized, 'route'));
+        self::assertArrayNotHasKey('_order', $prioritized[0]);
+
+        $stable = admin_order_dashboard_cards($cards, false);
+
+        self::assertSame(['admin_members', 'admin_news', 'admin_articles', 'admin_permissions'], array_column($stable, 'route'));
+        self::assertArrayNotHasKey('_order', $stable[0]);
+    }
+
     public function testContentProposalPayloadSanitizesAndValidatesInput(): void
     {
         $payload = content_proposal_payload(

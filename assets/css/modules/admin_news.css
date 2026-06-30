@@ -2,3 +2,26 @@
 [data-route="admin_news"] .admin-news-module {
   min-width: 0;
 }
+
+[data-route="admin_news"] .admin-news-header,
+[data-route="admin_news"] .admin-news-editor-card,
+[data-route="admin_news"] .admin-news-list-card,
+[data-route="admin_news"] .admin-news-queue-card,
+[data-route="admin_news"] .admin-news-managers-card {
+  display: grid;
+  gap: .85rem;
+}
+
+[data-route="admin_news"] .admin-news-editor-form {
+  margin: 0;
+}
+
+[data-route="admin_news"] .admin-news-list-card .table-wrap,
+[data-route="admin_news"] .admin-news-managers-card .table-wrap {
+  margin-top: .15rem;
+}
+
+[data-route="admin_news"] .admin-news-queue-card .inner-card,
+[data-route="admin_news"] .admin-news-queue-card article {
+  border-left: 4px solid var(--admin-warning);
+}

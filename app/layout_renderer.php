@@ -60,6 +60,71 @@ function render_site_footer(string $currentRoute): string
 }
 }
 
+if (!function_exists('render_admin_workspace_nav')) {
+function render_admin_workspace_nav(string $currentRoute, string $currentLocale): string
+{
+    if ($currentRoute !== 'admin' && !str_starts_with($currentRoute, 'admin_')) {
+        return '';
+    }
+    if (!function_exists('has_permission') || !has_permission('admin.access')) {
+        return '';
+    }
+
+    try {
+        require_once __DIR__ . '/admin_helpers.php';
+        $messages = i18n_domain_locale('admin', $currentLocale);
+        $user = current_user();
+        $cards = admin_dashboard_cards($currentLocale, (int) ($user['id'] ?? 0), '', false);
+    } catch (Throwable) {
+        return '';
+    }
+
+    $dashboardLabel = (string) ($messages['layout'] ?? 'Administration');
+    $currentLabel = $currentRoute === 'admin' ? (string) ($messages['title'] ?? $dashboardLabel) : $dashboardLabel;
+    $pendingLabel = (string) ($messages['pending_label'] ?? '');
+    $searchLabel = (string) ($messages['search_label'] ?? $dashboardLabel);
+    $searchPlaceholder = (string) ($messages['search_placeholder'] ?? '');
+    $searchCta = (string) ($messages['search_cta'] ?? $searchLabel);
+    $searchValue = trim((string) ($_GET['q'] ?? ''));
+    $pendingTotal = 0;
+    $links = '<a class="admin-shell-link' . ($currentRoute === 'admin' ? ' is-active" aria-current="page"' : '"') . ' href="' . e(route_url('admin')) . '"><span>' . e($dashboardLabel) . '</span></a>';
+
+    foreach ($cards as $card) {
+        $route = (string) ($card['route'] ?? '');
+        if ($route === '') {
+            continue;
+        }
+        $title = (string) ($card['title'] ?? $route);
+        if ($route === $currentRoute) {
+            $currentLabel = $title;
+        }
+        $pendingCount = max(0, (int) ($card['pending_count'] ?? 0));
+        $pendingTotal += $pendingCount;
+        $badge = $pendingCount > 0
+            ? '<span class="admin-shell-link-badge" aria-label="' . e((string) $pendingCount . ' ' . $pendingLabel) . '">' . $pendingCount . '</span>'
+            : '';
+        $links .= '<a class="admin-shell-link' . ($route === $currentRoute ? ' is-active" aria-current="page"' : '"') . ' href="' . e((string) ($card['url'] ?? route_url($route))) . '"><span>' . e($title) . '</span>' . $badge . '</a>';
+    }
+
+    $pendingSummary = $pendingTotal > 0 && $pendingLabel !== ''
+        ? '<span class="admin-shell-status">' . e((string) $pendingTotal . ' ' . $pendingLabel) . '</span>'
+        : '';
+    $searchForm = '<form class="admin-shell-search" method="get" action="' . e(base_url('/index.php')) . '" role="search">'
+        . '<input type="hidden" name="route" value="admin">'
+        . '<label class="sr-only" for="admin-shell-search">' . e($searchLabel) . '</label>'
+        . '<input id="admin-shell-search" type="search" name="q" value="' . e($searchValue) . '" placeholder="' . e($searchPlaceholder) . '">'
+        . '<button class="button secondary small" type="submit">' . e($searchCta) . '</button>'
+        . '</form>';
+
+    return '<section class="admin-shell-nav" aria-label="' . e($dashboardLabel) . '">'
+        . '<div class="admin-shell-current"><span class="admin-section-kicker">' . e($dashboardLabel) . '</span><strong>' . e($currentLabel) . '</strong></div>'
+        . $searchForm
+        . $pendingSummary
+        . '<nav class="admin-shell-links" aria-label="' . e($dashboardLabel) . '">' . $links . '</nav>'
+        . '</section>';
+}
+}
+
 function module_css_assets_for_route(string $route): array
 {
     $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
@@ -707,6 +772,7 @@ function render_layout_impl(string $content, string $title = ''): string
         require_once __DIR__ . '/matomo_helpers.php';
         $matomoHtml = render_matomo_tracking_html($matomoOptions);
     }
+    $adminWorkspaceNavHtml = render_admin_workspace_nav($currentRoute, $currentLocale);
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" class="notranslate" translate="no" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
@@ -732,7 +798,7 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<nav id="main-nav" class="nav" aria-label="' . e((string) $layoutI18n['main_navigation']) . '">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
         . $ideaDialogHtml
-        . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
+        . '<main id="main-content" class="layout container py-6">' . $flashHtml . $adminWorkspaceNavHtml . $content . '</main>'
         . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
         . $moduleJsHtml

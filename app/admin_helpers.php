@@ -27,23 +27,49 @@ function admin_dashboard_translations(string $locale): array
 /**
  * @return array<int, array{route:string,title:string,desc:string,url:string,pending_count:int}>
  */
-function admin_dashboard_cards(string $locale, int $userId, string $search = ''): array
+function admin_dashboard_cards(string $locale, int $userId, string $search = '', bool $prioritizePending = true): array
 {
     $needle = trim($search);
     $needle = $needle !== '' ? mb_safe_strtolower($needle) : '';
 
-    return admin_cards_for_dashboard($locale, $userId, $needle);
+    return admin_cards_for_dashboard($locale, $userId, $needle, $prioritizePending);
+}
+
+/**
+ * @param array<int, array<string, mixed>> $cards
+ * @return array<int, array<string, mixed>>
+ */
+function admin_order_dashboard_cards(array $cards, bool $prioritizePending = true): array
+{
+    if ($prioritizePending) {
+        usort($cards, static function (array $left, array $right): int {
+            $leftPending = (int) ($left['pending_count'] ?? 0);
+            $rightPending = (int) ($right['pending_count'] ?? 0);
+            if ($leftPending !== $rightPending) {
+                return $rightPending <=> $leftPending;
+            }
+
+            return (int) ($left['_order'] ?? 0) <=> (int) ($right['_order'] ?? 0);
+        });
+    }
+
+    foreach ($cards as &$card) {
+        unset($card['_order']);
+    }
+    unset($card);
+
+    return array_values($cards);
 }
 
 /**
  * @return array<int, array{route:string,title:string,desc:string,url:string,pending_count:int}>
  */
-function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = ''): array
+function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = '', bool $prioritizePending = true): array
 {
-    return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . hash('sha256', $searchNeedle), 30, static function () use ($locale, $searchNeedle): array {
+    return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . hash('sha256', $searchNeedle) . '_' . ($prioritizePending ? 'pending_first' : 'stable'), 30, static function () use ($locale, $searchNeedle, $prioritizePending): array {
         $cards = [];
         $pendingCounts = admin_pending_content_counts_by_route();
-        foreach (admin_module_cards_catalog() as $card) {
+        foreach (admin_module_cards_catalog() as $index => $card) {
             $module = (string) ($card['module'] ?? '');
             $permission = (string) ($card['permission'] ?? '');
             if ($module !== '' && !module_enabled($module)) {
@@ -54,13 +80,13 @@ function admin_cards_for_dashboard(string $locale, int $userId, string $searchNe
             }
             $title = i18n_localized_value($card['title'], $locale, 'fr');
             $desc = i18n_localized_value($card['desc'], $locale, 'fr');
+            $route = (string) $card['route'];
             if ($searchNeedle !== '') {
-                $haystack = mb_safe_strtolower($title . ' ' . $desc);
+                $haystack = mb_safe_strtolower($title . ' ' . $desc . ' ' . $route . ' ' . $module . ' ' . $permission);
                 if (!str_contains($haystack, $searchNeedle)) {
                     continue;
                 }
             }
-            $route = (string) $card['route'];
             $pendingCount = (int) ($pendingCounts[$route] ?? 0);
             $cards[] = [
                 'route' => $route,
@@ -68,9 +94,11 @@ function admin_cards_for_dashboard(string $locale, int $userId, string $searchNe
                 'desc' => $desc,
                 'url' => admin_pending_content_card_url($route, $pendingCount),
                 'pending_count' => $pendingCount,
+                '_order' => $index,
             ];
         }
-        return $cards;
+
+        return admin_order_dashboard_cards($cards, $prioritizePending);
     });
 }
 

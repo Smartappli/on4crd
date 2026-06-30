@@ -2,3 +2,56 @@
 [data-route="admin_newsletters"] .admin-newsletters-module {
   min-width: 0;
 }
+
+[data-route="admin_newsletters"] #main-content > .grid-2 {
+  align-items: start;
+}
+
+[data-route="admin_newsletters"] #main-content section.card {
+  display: grid;
+  gap: .9rem;
+}
+
+[data-route="admin_newsletters"] #main-content section.card > :is(h1, h2) {
+  margin-bottom: 0;
+}
+
+[data-route="admin_newsletters"] #main-content form.stack {
+  margin: 0;
+}
+
+[data-route="admin_newsletters"] #main-content form.stack + h2 {
+  margin-top: .35rem;
+  padding-top: .9rem;
+  border-top: 1px solid var(--border);
+}
+
+[data-route="admin_newsletters"] #main-content .table-wrap {
+  margin-top: .15rem;
+}
+
+[data-route="admin_newsletters"] #main-content td form {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  align-items: center;
+  margin: .15rem .2rem .15rem 0;
+}
+
+[data-route="admin_newsletters"] #main-content td form input[type="text"] {
+  min-width: min(100%, 12rem);
+}
+
+[data-route="admin_newsletters"] #main-content td .help {
+  margin-top: .25rem;
+}
+
+@media (max-width: 720px) {
+  [data-route="admin_newsletters"] #main-content td form {
+    display: flex;
+  }
+
+  [data-route="admin_newsletters"] #main-content td form :is(input, button, .button) {
+    width: 100%;
+  }
+}

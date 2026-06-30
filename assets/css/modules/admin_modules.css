@@ -2,3 +2,50 @@
 [data-route="admin_modules"] .admin-modules-module {
   min-width: 0;
 }
+
+[data-route="admin_modules"] #main-content form > .stack {
+  display: grid;
+  gap: .65rem;
+}
+
+[data-route="admin_modules"] #main-content .module-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, auto);
+  gap: .75rem;
+  align-items: center;
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_modules"] #main-content .module-row p {
+  margin: .25rem 0 0;
+}
+
+[data-route="admin_modules"] #main-content .module-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+[data-route="admin_modules"] #main-content .module-actions label {
+  margin: 0;
+}
+
+[data-route="admin_modules"] #main-content .module-actions label:has(select) {
+  min-width: 10rem;
+}
+
+@media (max-width: 760px) {
+  [data-route="admin_modules"] #main-content .module-row {
+    grid-template-columns: 1fr;
+  }
+
+  [data-route="admin_modules"] #main-content .module-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

@@ -2,3 +2,43 @@
 [data-route="admin_events"] .admin-events-module {
   min-width: 0;
 }
+
+[data-route="admin_events"] #main-content > .grid-2 {
+  align-items: start;
+}
+
+[data-route="admin_events"] #main-content section.card > form {
+  display: grid;
+  gap: .75rem;
+}
+
+[data-route="admin_events"] #main-content section.card > form > .grid-2 {
+  gap: .75rem;
+}
+
+[data-route="admin_events"] #main-content .list-spaced {
+  gap: .65rem;
+}
+
+[data-route="admin_events"] #main-content .list-spaced li {
+  padding: .75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_events"] #main-content .list-spaced li a {
+  overflow-wrap: anywhere;
+}
+
+[data-route="admin_events"] #main-content .list-spaced li .help {
+  display: block;
+  margin-top: .18rem;
+}
+
+[data-route="admin_events"] #admin-events-calendar {
+  margin-top: .85rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+}
