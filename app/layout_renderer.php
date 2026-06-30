@@ -74,7 +74,7 @@ function render_admin_workspace_nav(string $currentRoute, string $currentLocale)
         require_once __DIR__ . '/admin_helpers.php';
         $messages = i18n_domain_locale('admin', $currentLocale);
         $user = current_user();
-        $cards = admin_dashboard_cards($currentLocale, (int) ($user['id'] ?? 0));
+        $cards = admin_dashboard_cards($currentLocale, (int) ($user['id'] ?? 0), '', false);
     } catch (Throwable) {
         return '';
     }
