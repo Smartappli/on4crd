@@ -185,30 +185,49 @@ body:is([data-route="admin"], [data-route^="admin_"]) #main-content label:not([c
 }
 
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content .table-wrap {
+  position: relative;
+  overflow: auto;
+  max-height: min(72vh, 54rem);
   border: 1px solid var(--border);
   border-radius: var(--admin-radius);
   background: var(--panel);
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 36%, transparent);
+  scrollbar-gutter: stable both-edges;
+  -webkit-overflow-scrolling: touch;
 }
 
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content table {
   min-width: 720px;
+  width: 100%;
   border-collapse: separate;
   border-spacing: 0;
 }
 
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   background: color-mix(in srgb, var(--panel-2) 78%, var(--panel));
   color: var(--muted);
   font-size: .78rem;
   font-weight: 800;
   text-transform: uppercase;
+  box-shadow: 0 1px 0 var(--border);
 }
 
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(th, td) {
   padding: .72rem .78rem;
   border-bottom: 1px solid var(--border);
   vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content td {
+  background: color-mix(in srgb, var(--panel) 97%, var(--panel-2));
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--panel-2) 22%, var(--panel));
 }
 
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content tbody tr:last-child :is(th, td) {
@@ -217,6 +236,10 @@ body:is([data-route="admin"], [data-route^="admin_"]) #main-content tbody tr:las
 
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content tbody tr:hover {
   background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) #main-content tbody tr:hover td {
+  background: color-mix(in srgb, var(--accent) 7%, var(--panel));
 }
 
 body:is([data-route="admin"], [data-route^="admin_"]) #main-content :is(th, td) .actions {
