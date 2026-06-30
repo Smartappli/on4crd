@@ -2,3 +2,39 @@
 [data-route="admin_translation_reviews"] .admin-translation-reviews-module {
   min-width: 0;
 }
+
+[data-route="admin_translation_reviews"] #main-content > .stack {
+  display: grid;
+  gap: 1rem;
+}
+
+[data-route="admin_translation_reviews"] #main-content article.inner-card {
+  display: grid;
+  gap: .7rem;
+}
+
+[data-route="admin_translation_reviews"] #main-content article.inner-card h3 {
+  margin-bottom: 0;
+  overflow-wrap: anywhere;
+}
+
+[data-route="admin_translation_reviews"] #main-content details {
+  padding: .65rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_translation_reviews"] #main-content details summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+[data-route="admin_translation_reviews"] #main-content ul.help {
+  margin: .4rem 0 0;
+  padding-left: 1.1rem;
+}
+
+[data-route="admin_translation_reviews"] #main-content form button {
+  justify-self: start;
+}

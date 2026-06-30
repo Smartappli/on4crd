@@ -2,3 +2,25 @@
 [data-route="admin_press"] .admin-press-module {
   min-width: 0;
 }
+
+[data-route="admin_press"] #main-content > .grid-2 {
+  align-items: start;
+}
+
+[data-route="admin_press"] #main-content section.card > form {
+  display: grid;
+  gap: .65rem;
+  margin-bottom: .9rem;
+}
+
+[data-route="admin_press"] #main-content section.card > form button {
+  justify-self: start;
+}
+
+[data-route="admin_press"] #main-content .table-wrap {
+  margin-top: .75rem;
+}
+
+[data-route="admin_press"] #main-content td a {
+  font-weight: 800;
+}

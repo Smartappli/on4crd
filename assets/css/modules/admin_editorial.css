@@ -2,3 +2,38 @@
 [data-route="admin_editorial"] .admin-editorial-module {
   min-width: 0;
 }
+
+[data-route="admin_editorial"] #main-content > .card > p {
+  max-width: 72ch;
+  color: var(--muted);
+}
+
+[data-route="admin_editorial"] #main-content form > .stack {
+  display: grid;
+  gap: .85rem;
+}
+
+[data-route="admin_editorial"] #main-content .muted-card {
+  border-left: 4px solid color-mix(in srgb, var(--accent) 36%, var(--border));
+}
+
+[data-route="admin_editorial"] #main-content .muted-card h2 {
+  margin-bottom: .65rem;
+}
+
+[data-route="admin_editorial"] #main-content .muted-card textarea {
+  min-height: 8rem;
+}
+
+[data-route="admin_editorial"] #main-content form > p:last-child {
+  position: sticky;
+  bottom: .75rem;
+  z-index: 3;
+  display: inline-flex;
+  margin: 1rem 0 0;
+  padding: .55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, .12);
+}
