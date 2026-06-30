@@ -447,6 +447,31 @@ async function assertArticleDocxWysiwygImport(driver, token) {
   assert.match(safeImport, /colspan="2"/, 'Le colspan valide importe doit etre conserve.');
   assert.match(safeImport, /rowspan="2"/, 'Le rowspan valide importe doit etre conserve.');
 
+  const repairedMojibakeText = 'Dossier import\u00e9 \u00e0 l\u2019\u0153il';
+  await driver.executeScript(`
+    window.mammoth = {
+      convertToHtml: async () => ({
+        value: '<p>Dossier import&Atilde;&copy; &Atilde;&nbsp; l&Atilde;&cent;&Acirc;&#128;&Acirc;&#153;&Atilde;&#133;&Acirc;&#147;il</p>',
+      }),
+    };
+  `);
+  await fileInput.sendKeys(fixturePath);
+
+  const repairedImport = await driver.wait(async () => driver.executeScript(`
+    const expected = arguments[0];
+    const textarea = document.querySelector('textarea[name="content"]');
+    const wrapper = textarea ? textarea.previousElementSibling : null;
+    const editor = wrapper ? wrapper.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (!textarea || !editor || !editor.textContent.includes(expected) || !textarea.value.includes(expected)) {
+      return null;
+    }
+    return {
+      editorText: editor.textContent,
+      textarea: textarea.value,
+    };
+  `, repairedMojibakeText), timeoutMs);
+  assert.doesNotMatch(repairedImport.editorText + repairedImport.textarea, /Ã|Â|â/, 'Le texte Word mojibake doit etre repare avant insertion WYSIWYG.');
+
   const largeImageText = `Import DOCX image lourde ${token}`;
   await driver.executeScript(`
     const expected = arguments[0];

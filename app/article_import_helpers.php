@@ -1151,6 +1151,7 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
         if ($localName === 'drawing' || $localName === 'pict') {
             $html .= article_docx_run_image_html($child, $xpath, $imageDataUris);
             $html .= article_docx_textbox_inline_html($child, $xpath, $relationships, $imageDataUris, $noteBodies, $referencedNotes);
+            $html .= article_docx_drawing_text_html($child, $xpath);
             continue;
         }
         if ($localName === 'tab') {
@@ -1250,6 +1251,7 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $relation
         if ($localName === 'drawing' || $localName === 'pict') {
             $html .= article_docx_run_image_html($child, $xpath, $imageDataUris);
             $html .= article_docx_textbox_inline_html($child, $xpath, $relationships, $imageDataUris, $noteBodies, $referencedNotes);
+            $html .= article_docx_drawing_text_html($child, $xpath);
             continue;
         }
     }
@@ -1316,6 +1318,39 @@ function article_docx_textbox_inline_html(DOMElement $container, DOMXPath $xpath
     }
 
     return implode('<br>', $parts);
+}
+}
+
+if (!function_exists('article_docx_drawing_text_html')) {
+function article_docx_drawing_text_html(DOMElement $container, DOMXPath $xpath): string
+{
+    $paragraphNodes = $xpath->query('.//*[local-name()="p" and namespace-uri()="http://schemas.openxmlformats.org/drawingml/2006/main"]', $container);
+    if (!$paragraphNodes instanceof DOMNodeList || $paragraphNodes->length === 0) {
+        return '';
+    }
+
+    $parts = [];
+    foreach ($paragraphNodes as $paragraphNode) {
+        if (!$paragraphNode instanceof DOMElement) {
+            continue;
+        }
+
+        $textNodes = $xpath->query('.//*[local-name()="t" and namespace-uri()="http://schemas.openxmlformats.org/drawingml/2006/main"]', $paragraphNode);
+        if (!$textNodes instanceof DOMNodeList || $textNodes->length === 0) {
+            continue;
+        }
+
+        $text = '';
+        foreach ($textNodes as $textNode) {
+            $text .= $textNode->textContent;
+        }
+        $text = trim($text);
+        if ($text !== '') {
+            $parts[] = e($text);
+        }
+    }
+
+    return $parts === [] ? '' : implode('<br>', $parts);
 }
 }
 

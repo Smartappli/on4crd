@@ -450,6 +450,20 @@ final class FunctionHelpersExtendedTest extends TestCase
       </w:r>
     </w:p>
     <w:p>
+      <w:r>
+        <w:drawing>
+          <wp:inline>
+            <wp:extent cx="190500" cy="190500"/>
+            <wp:docPr id="4" name="Texte DrawingML"/>
+            <a:graphic><a:graphicData><a:txBody>
+              <a:p><a:r><a:t>Texte DrawingML autonome</a:t></a:r></a:p>
+              <a:p><a:r><a:t>Deuxieme texte DrawingML</a:t></a:r></a:p>
+            </a:txBody></a:graphicData></a:graphic>
+          </wp:inline>
+        </w:drawing>
+      </w:r>
+    </w:p>
+    <w:p>
       <w:hyperlink r:id="rId2"><w:r><w:t>Lien bloque</w:t></w:r></w:hyperlink>
     </w:p>
     <w:tbl>
@@ -582,6 +596,7 @@ XML;
             self::assertStringContainsString('<p>Texte dans zone de texte<br>Deuxieme ligne de zone</p>', $html);
             self::assertStringContainsString('<p>Texte dans zone alternative</p>', $html);
             self::assertStringNotContainsString('Texte fallback zone duplique', $html);
+            self::assertStringContainsString('<p>Texte DrawingML autonome<br>Deuxieme texte DrawingML</p>', $html);
             self::assertStringContainsString('<table>', $html);
             self::assertStringContainsString('<thead>', $html);
             self::assertStringContainsString('<th scope="col">Colonne A</th>', $html);

@@ -67,6 +67,150 @@
     th: new Set(['colspan', 'rowspan', 'scope']),
     td: new Set(['colspan', 'rowspan']),
   };
+  const windows1252EncodeMap = new Map([
+    ['\u20ac', 0x80], ['\u201a', 0x82], ['\u0192', 0x83], ['\u201e', 0x84],
+    ['\u2026', 0x85], ['\u2020', 0x86], ['\u2021', 0x87], ['\u02c6', 0x88],
+    ['\u2030', 0x89], ['\u0160', 0x8a], ['\u2039', 0x8b], ['\u0152', 0x8c],
+    ['\u017d', 0x8e], ['\u2018', 0x91], ['\u2019', 0x92], ['\u201c', 0x93],
+    ['\u201d', 0x94], ['\u2022', 0x95], ['\u2013', 0x96], ['\u2014', 0x97],
+    ['\u02dc', 0x98], ['\u2122', 0x99], ['\u0161', 0x9a], ['\u203a', 0x9b],
+    ['\u0153', 0x9c], ['\u017e', 0x9e], ['\u0178', 0x9f],
+  ]);
+  const windows1252ControlMap = new Map([
+    ['\u0080', '\u20ac'], ['\u0082', '\u201a'], ['\u0083', '\u0192'], ['\u0084', '\u201e'],
+    ['\u0085', '\u2026'], ['\u0086', '\u2020'], ['\u0087', '\u2021'], ['\u0088', '\u02c6'],
+    ['\u0089', '\u2030'], ['\u008a', '\u0160'], ['\u008b', '\u2039'], ['\u008c', '\u0152'],
+    ['\u008e', '\u017d'], ['\u0091', '\u2018'], ['\u0092', '\u2019'], ['\u0093', '\u201c'],
+    ['\u0094', '\u201d'], ['\u0095', '\u2022'], ['\u0096', '\u2013'], ['\u0097', '\u2014'],
+    ['\u0098', '\u02dc'], ['\u0099', '\u2122'], ['\u009a', '\u0161'], ['\u009b', '\u203a'],
+    ['\u009c', '\u0153'], ['\u009e', '\u017e'], ['\u009f', '\u0178'],
+  ]);
+  const mojibakeEntityPattern = /&(?:amp;)?(?:Atilde|Acirc|AElig|aring|sbquo|fnof|bdquo|hellip|dagger|Dagger|circ|permil|Scaron|lsaquo|OElig|Zcaron|lsquo|rsquo|ldquo|rdquo|bull|ndash|mdash|tilde|trade|scaron|rsaquo|oelig|zcaron|Yuml|euro);|&(?:amp;)?#(?:x[89][0-9a-f]|1[2-5][0-9]);/i;
+  const createTextDecoder = (encoding, options) => {
+    if (typeof TextDecoder !== 'function') return null;
+    try {
+      return new TextDecoder(encoding, options);
+    } catch (error) {
+      return null;
+    }
+  };
+  const utf8Decoder = createTextDecoder('utf-8');
+  const fatalUtf8Decoder = createTextDecoder('utf-8', { fatal: true });
+  const windows1252Decoder = createTextDecoder('windows-1252');
+
+  const decodeMojibakeHtmlEntities = (value) => {
+    let current = String(value || '');
+    for (let index = 0; index < 2 && mojibakeEntityPattern.test(current); index += 1) {
+      const decoder = document.createElement('textarea');
+      decoder.innerHTML = current.replace(/&amp;/g, '&');
+      const decoded = decoder.value;
+      if (decoded === current) break;
+      current = decoded;
+    }
+    return current;
+  };
+
+  const mojibakeScore = (value) => {
+    const text = String(value || '');
+    if (text === '') return 0;
+    const markerMatches = text.match(/[\u00c3\u00c2\u00e2\u00c5\u00c4]/g) || [];
+    const controlMatches = text.match(/[\u0080-\u009f]/g) || [];
+    const entityMatches = text.match(new RegExp(mojibakeEntityPattern.source, 'gi')) || [];
+    return markerMatches.length + controlMatches.length + entityMatches.length;
+  };
+
+  const normalizeWindows1252Controls = (value) => String(value || '').replace(
+    /[\u0080-\u009f]/g,
+    (character) => windows1252ControlMap.get(character) || character,
+  );
+
+  const normalizeLostMojibakeSpaces = (value) => String(value || '')
+    .replace(/\u00c3[ \t\u00a0]+/g, '\u00c3\u00a0 ')
+    .replace(/\u00c2[ \t]+/g, ' ');
+
+  const windows1252BytesFromString = (value) => {
+    const bytes = [];
+    for (const character of String(value || '')) {
+      const codePoint = character.codePointAt(0);
+      if (codePoint <= 0x7f) {
+        bytes.push(codePoint);
+      } else if (codePoint >= 0xa0 && codePoint <= 0xff) {
+        bytes.push(codePoint);
+      } else if (windows1252EncodeMap.has(character)) {
+        bytes.push(windows1252EncodeMap.get(character));
+      } else {
+        return null;
+      }
+    }
+    return new Uint8Array(bytes);
+  };
+
+  const validUtf8SequenceLength = (bytes, offset, sequenceLength) => {
+    if (!fatalUtf8Decoder || offset + sequenceLength > bytes.length) return 0;
+    try {
+      fatalUtf8Decoder.decode(bytes.slice(offset, offset + sequenceLength));
+      return sequenceLength;
+    } catch (error) {
+      return 0;
+    }
+  };
+
+  const utf8FromMixedWindows1252Bytes = (bytes) => {
+    if (!utf8Decoder || !windows1252Decoder) return '';
+    let result = '';
+    for (let index = 0; index < bytes.length; index += 1) {
+      const byte = bytes[index];
+      if (byte < 0x80) {
+        result += String.fromCharCode(byte);
+        continue;
+      }
+
+      let sequenceLength = 0;
+      if (byte >= 0xc2 && byte <= 0xdf) {
+        sequenceLength = 2;
+      } else if (byte >= 0xe0 && byte <= 0xef) {
+        sequenceLength = 3;
+      } else if (byte >= 0xf0 && byte <= 0xf4) {
+        sequenceLength = 4;
+      }
+
+      if (sequenceLength > 0 && validUtf8SequenceLength(bytes, index, sequenceLength) > 0) {
+        result += utf8Decoder.decode(bytes.slice(index, index + sequenceLength));
+        index += sequenceLength - 1;
+        continue;
+      }
+
+      result += windows1252Decoder.decode(bytes.slice(index, index + 1));
+    }
+    return result;
+  };
+
+  const repairImportedMojibakeText = (value) => {
+    if (!utf8Decoder || !windows1252Decoder) return value;
+
+    let current = normalizeLostMojibakeSpaces(
+      normalizeWindows1252Controls(decodeMojibakeHtmlEntities(value)),
+    );
+    let currentScore = mojibakeScore(current);
+    for (let index = 0; index < 5 && currentScore > 0; index += 1) {
+      const bytes = windows1252BytesFromString(current);
+      if (!bytes || bytes.length === 0) break;
+
+      const candidate = normalizeLostMojibakeSpaces(
+        normalizeWindows1252Controls(utf8FromMixedWindows1252Bytes(bytes)),
+      );
+      if (candidate === '' || (candidate.match(/\?/g) || []).length > (current.match(/\?/g) || []).length) {
+        break;
+      }
+
+      const candidateScore = mojibakeScore(candidate);
+      if (candidateScore >= currentScore) break;
+      current = candidate;
+      currentScore = candidateScore;
+    }
+
+    return current;
+  };
 
   const sanitizeImportedUrl = (value, allowImageData = false) => {
     const raw = String(value || '').trim().replace(/[\u0000-\u001f\u007f]+/g, '');
@@ -119,6 +263,10 @@
     const sanitizeNode = (node) => {
       if (node.nodeType === Node.COMMENT_NODE) {
         node.parentNode && node.parentNode.removeChild(node);
+        return;
+      }
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.nodeValue = repairImportedMojibakeText(node.nodeValue || '');
         return;
       }
       if (node.nodeType !== Node.ELEMENT_NODE) return;
