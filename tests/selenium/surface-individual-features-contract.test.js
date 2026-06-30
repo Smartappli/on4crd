@@ -111,6 +111,7 @@ const memberAccountFile = 'tests/selenium/member-account-dashboard-workflow.test
 const memberPrivacyFile = 'tests/selenium/member-privacy-notifications.test.js';
 const memberQslFile = 'tests/selenium/member-qsl-workflow.test.js';
 const publicReferenceFile = 'tests/selenium/public-reference-modules.test.js';
+const comicsFile = 'tests/selenium/comics-viewer.test.js';
 
 const publicPageProof = (route) => proof(publicRoutesFile, [route]);
 const discoveryProof = (route) => proof(publicRoutesFile, [route]);
@@ -125,6 +126,7 @@ function memberDocumentActionProofs(route) {
     propose_category: proof(publicCoverageFile, ['presentations', 'propose_category']),
     propose_document: proof(memberDocumentFile, [route, 'propose_document']),
     propose_subcategory: proof(publicCoverageFile, ['presentations', 'propose_subcategory']),
+    propose_subsubcategory: proof(memberDocumentFile, [route, 'propose_subsubcategory', 'member-document-subsubcategory-dialog']),
     toggle_favorite_document: proof(memberDocumentFile, [route, 'toggle_favorite_document']),
     update_document: proof(memberDocumentFile, [route, 'update_document']),
   };
@@ -217,6 +219,7 @@ Object.assign(routeContracts, {
       propose_album: proof(publicCoverageFile, ['propose_album']),
       propose_category: proof(publicCoverageFile, ['Album category', 'propose_category']),
       propose_subcategory: proof(publicCoverageFile, ['Album subcategory', 'propose_subcategory']),
+      propose_subsubcategory: proof(publicCoverageFile, ['Album subsubcategory', 'propose_subsubcategory']),
       toggle_favorite_album: proof(publicCoverageFile, ['toggle_favorite_album']),
       update_album: proof(memberWorkflowFile, ['update_album']),
     },
@@ -225,7 +228,13 @@ Object.assign(routeContracts, {
     actions: actionProofs(publicCoverageFile, ['toggle_favorite']),
   },
   articles: {
-    actions: actionProofs(publicCoverageFile, ['propose_category', 'propose_tag', 'toggle_favorite_article']),
+    actions: actionProofs(publicCoverageFile, [
+      'propose_category',
+      'propose_subcategory',
+      'propose_subsubcategory',
+      'propose_tag',
+      'toggle_favorite_article',
+    ]),
   },
   auctions: {
     actions: actionProofs(publicCoverageFile, ['propose_lot']),
@@ -235,6 +244,10 @@ Object.assign(routeContracts, {
   },
   classifieds: {
     actions: actionProofs(publicCoverageFile, ['propose_category', 'toggle_favorite']),
+  },
+  comics: {
+    actions: {},
+    features: [proof(comicsFile, ['comics', 'data-comics-viewer-open', 'data-comics-viewer-image'])],
   },
   events: {
     actions: actionProofs(publicCoverageFile, ['propose_event']),

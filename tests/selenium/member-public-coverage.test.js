@@ -675,11 +675,14 @@ test('Selenium membre/public: propositions et auto-publications des modules publ
     try {
       await loginAsAdmin(driver, credentials.username, credentials.password);
       const articleSubcategoryCode = `selenium-${token.toLowerCase()}`;
+      const albumSubcategoryCode = `selenium-${token.toLowerCase()}`;
       runSeleniumPhp(`
 require_once 'app/bootstrap.php';
 require_once 'app/article_helpers.php';
+require_once 'app/album_helpers.php';
 $messages = i18n_domain_locale('articles', current_locale());
 article_ensure_taxonomy_schema($messages);
+album_ensure_subcategories_table();
 $token = trim((string) getenv('SELENIUM_TOKEN'));
 $code = article_subcategory_code('selenium-' . strtolower($token));
 if ($token === '' || $code === '') {
@@ -687,6 +690,9 @@ if ($token === '' || $code === '') {
 }
 db()->prepare('INSERT INTO article_subcategories (category_code, code, label) VALUES ("autres", ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
     ->execute([$code, 'Selenium subcategory ' . $token]);
+$albumCode = album_subcategory_code('selenium-' . strtolower($token));
+db()->prepare('INSERT INTO album_subcategories (category_code, code, label) VALUES ("general", ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+    ->execute([$albumCode, 'Selenium album subcategory ' . $token]);
 `, { SELENIUM_TOKEN: token });
 
       await submitProposal(driver, 'articles', {}, 'propose_category', {
@@ -762,6 +768,12 @@ db()->prepare('INSERT INTO article_subcategories (category_code, code, label) VA
         proposal_parent_category: 'general',
         proposal_subcategory_name: `Album subcategory ${token}`,
         proposal_reason: `Album subcategory reason ${token}`,
+        proposal_contact: contact,
+      });
+      await submitProposal(driver, 'albums', { propose_subsubcategory: '1' }, 'propose_subsubcategory', {
+        proposal_parent_subcategory_ref: `general:${albumSubcategoryCode}`,
+        proposal_subsubcategory_name: `Album subsubcategory ${token}`,
+        proposal_reason: `Album subsubcategory reason ${token}`,
         proposal_contact: contact,
       });
       await submitProposal(driver, 'webotheque', { propose_domain: '1' }, 'propose_domain', {
