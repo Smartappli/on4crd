@@ -322,6 +322,7 @@ ob_start();
                 <?php if (trim((string) ($reservation['notes'] ?? '')) !== ''): ?>
                     <p class="help"><?= nl2br(e((string) $reservation['notes'])) ?></p>
                 <?php endif; ?>
+                <div class="table-wrap">
                 <table>
                     <thead>
                         <tr>
@@ -344,6 +345,7 @@ ob_start();
                     <?php endforeach; ?>
                     </tbody>
                 </table>
+                </div>
             </article>
         <?php endforeach; ?>
     <?php endif; ?>
