@@ -54,7 +54,6 @@ const coveredRoutes = new Set([
   'ai-index.json',
   'knowledge-graph.jsonld',
   'errors',
-  'install.php',
   'logout',
   'toggle_theme',
   'set_language',

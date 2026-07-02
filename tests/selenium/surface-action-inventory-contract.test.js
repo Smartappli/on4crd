@@ -125,7 +125,6 @@ const expectedPublicActions = {
   forgot_password: [],
   gdpr: ['export_data', 'privacy_request', 'save_visibility'],
   home: [],
-  'install.php': [],
   idea_submit: [],
   'knowledge-graph.jsonld': [],
   'llms.txt': [],

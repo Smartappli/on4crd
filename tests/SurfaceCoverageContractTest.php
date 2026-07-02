@@ -108,7 +108,6 @@ final class SurfaceCoverageContractTest extends TestCase
             'dashboard_widget_card',
             'events_feed',
             'idea_submit',
-            'install.php',
             'knowledge-graph.jsonld',
             'llms.txt',
             'member_document_preview',
@@ -201,7 +200,6 @@ final class SurfaceCoverageContractTest extends TestCase
             'events_feed',
             'footer_contact',
             'idea_submit',
-            'install.php',
             'knowledge-graph.jsonld',
             'llms.txt',
             'news_view',
@@ -290,10 +288,6 @@ final class SurfaceCoverageContractTest extends TestCase
         $publicPostEndpointRoutes = ['footer_contact', 'idea_submit'];
 
         foreach ($this->dispatchRoutes() as $route => $relativePage) {
-            if ($route === 'install.php') {
-                continue;
-            }
-
             $controller = $this->routeControllerSource($relativePage);
             if (!str_contains($controller, 'REQUEST_METHOD') || !str_contains($controller, 'POST')) {
                 continue;

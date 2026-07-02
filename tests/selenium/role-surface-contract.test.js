@@ -64,7 +64,6 @@ const publicNonPageRoutes = new Set([
   'events_feed',
   'footer_contact',
   'idea_submit',
-  'install.php',
   'knowledge-graph.jsonld',
   'llms.txt',
   'news_view',

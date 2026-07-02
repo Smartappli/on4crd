@@ -263,10 +263,6 @@ Object.assign(routeContracts, {
       save_visibility: proof(publicCoverageFile, ['save_visibility']),
     },
   },
-  'install.php': {
-    actions: {},
-    features: [proof('tests/selenium/route-inventory-contract.test.js', ['install.php'])],
-  },
   idea_submit: {
     actions: {},
     features: [methodGuardProof('idea_submit')],

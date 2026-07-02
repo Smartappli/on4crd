@@ -82,7 +82,7 @@ L’assistant fonctionne en 2 étapes :
 1. création automatique de `config/config.php` avec test de connexion MySQL ;
 2. initialisation de la base + création du compte administrateur.
 
-Ensuite, vérifiez que `app.allow_install` reste à `false` et conservez `storage/install.lock`.
+L'etape 2 utilise un jeton temporaire, cree `storage/install.lock` et remet automatiquement `app.allow_install` a `false`.
 
 ### Variables utiles
 
