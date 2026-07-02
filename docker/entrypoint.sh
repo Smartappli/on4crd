@@ -9,20 +9,60 @@ DB_HOST="${DB_HOST:-db}"
 DB_PORT="${DB_PORT:-3306}"
 DB_NAME="${DB_NAME:-on4crd}"
 DB_USER="${DB_USER:-on4crd}"
-DB_PASS="${DB_PASS:-on4crd}"
+DB_PASS="${DB_PASS:-}"
 MYSQL_WAIT_TIMEOUT="${MYSQL_WAIT_TIMEOUT:-120}"
 
 APP_URL="${APP_URL:-http://localhost:8080}"
 ADMIN_CALLSIGN="${ADMIN_CALLSIGN:-ON4CRD}"
 ADMIN_NAME="${ADMIN_NAME:-Administrateur local}"
 ADMIN_EMAIL="${ADMIN_EMAIL:-admin@on4crd.local}"
-ADMIN_PASSWORD="${ADMIN_PASSWORD:-Admin!23456}"
+ADMIN_PASSWORD="${ADMIN_PASSWORD:-}"
+CSRF_KEY="${CSRF_KEY:-}"
+
+require_non_empty() {
+    if [ -z "$2" ]; then
+        echo "ERROR: $1 must be set."
+        exit 1
+    fi
+}
+
+php_export_env() {
+    php -r '$value = getenv($argv[1]); echo var_export($value === false ? "" : $value, true);' "$1"
+}
+
+require_non_empty "DB_PASS" "${DB_PASS}"
+require_non_empty "ADMIN_PASSWORD" "${ADMIN_PASSWORD}"
 
 mkdir -p \
     "${CONFIG_DIR}" \
     "${APP_DIR}/storage" \
+    "${APP_DIR}/storage/auth" \
     "${APP_DIR}/storage/cache" \
     "${APP_DIR}/storage/uploads"
+
+CSRF_KEY_FILE="${APP_DIR}/storage/auth/docker-csrf.key"
+if [ -z "${CSRF_KEY}" ]; then
+    if [ -f "${CSRF_KEY_FILE}" ]; then
+        CSRF_KEY="$(cat "${CSRF_KEY_FILE}")"
+    else
+        CSRF_KEY="$(php -r 'echo bin2hex(random_bytes(32));')"
+        printf '%s' "${CSRF_KEY}" > "${CSRF_KEY_FILE}"
+        chmod 600 "${CSRF_KEY_FILE}" || true
+    fi
+fi
+
+if [ "${#CSRF_KEY}" -lt 32 ]; then
+    echo "ERROR: CSRF_KEY must be at least 32 characters."
+    exit 1
+fi
+
+DB_DSN="mysql:host=${DB_HOST};port=${DB_PORT};dbname=${DB_NAME};charset=utf8mb4"
+export DB_DSN DB_USER DB_PASS APP_URL CSRF_KEY
+DB_DSN_PHP="$(php_export_env DB_DSN)"
+DB_USER_PHP="$(php_export_env DB_USER)"
+DB_PASS_PHP="$(php_export_env DB_PASS)"
+APP_URL_PHP="$(php_export_env APP_URL)"
+CSRF_KEY_PHP="$(php_export_env CSRF_KEY)"
 
 cat > "${CONFIG_FILE}" <<EOF
 <?php
@@ -30,20 +70,20 @@ declare(strict_types=1);
 
 return [
     'db' => [
-        'dsn' => 'mysql:host=${DB_HOST};port=${DB_PORT};dbname=${DB_NAME};charset=utf8mb4',
-        'user' => '${DB_USER}',
-        'pass' => '${DB_PASS}',
+        'dsn' => ${DB_DSN_PHP},
+        'user' => ${DB_USER_PHP},
+        'pass' => ${DB_PASS_PHP},
     ],
     'app' => [
         'site_name' => 'ON4CRD v3.6.1',
-        'base_url' => '${APP_URL}',
+        'base_url' => ${APP_URL_PHP},
         'default_locale' => 'fr',
         'supported_locales' => ['fr', 'en', 'de', 'nl'],
         'session_name' => 'on4crd_session',
         'allow_install' => false,
     ],
     'security' => [
-        'csrf_key' => 'docker-local-key',
+        'csrf_key' => ${CSRF_KEY_PHP},
     ],
     'tracking' => [
         'matomo_url' => '',
