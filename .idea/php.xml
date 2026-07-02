@@ -86,7 +86,7 @@
   </component>
   <component name="PhpStan">
     <PhpStan_settings>
-      <phpstan_by_interpreter asDefaultInterpreter="true" interpreter_id="c9a7eeff-fe91-4401-ad43-98775e4d6e3c" timeout="60000" />
+      <phpstan_by_interpreter asDefaultInterpreter="true" interpreter_id="c9a7eeff-fe91-4401-ad43-98775e4d6e3c" tool_path="D:\projects\on4crd\vendor\bin\phpstan" timeout="60000" />
       <PhpStanConfiguration tool_path="$PROJECT_DIR$/vendor/bin/phpstan" />
     </PhpStan_settings>
   </component>
