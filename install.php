@@ -350,7 +350,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         db()->prepare('INSERT IGNORE INTO member_roles (member_id, role_id) VALUES (?, ?)')->execute([$memberId, $roleMap['super_admin']]);
 
         file_put_contents($installLockFile, 'installed ' . date('c'));
-        $message = 'Installation terminée. Le verrou a été créé : désactivez maintenant app.allow_install puis connectez-vous.';
+        installer_disable_web_install($configFile);
+        $message = 'Installation terminee. Le verrou a ete cree et l\'installation web est desactivee.';
     } catch (Throwable $throwable) {
         $error = $throwable->getMessage();
     }
