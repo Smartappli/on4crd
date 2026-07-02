@@ -209,14 +209,61 @@ if (!is_file($configFile)) {
 
 require_once $rootDir . '/app/bootstrap.php';
 
+function installer_request_install_token(): string
+{
+    return trim((string) ($_POST['install_token'] ?? $_GET['install_token'] ?? ''));
+}
+
+function installer_install_token_is_valid(): bool
+{
+    $expected = trim((string) config('security.install_token', ''));
+    $provided = installer_request_install_token();
+
+    return $expected !== '' && $provided !== '' && hash_equals($expected, $provided);
+}
+
+function installer_existing_installation_detected(): bool
+{
+    foreach (['users', 'members'] as $table) {
+        try {
+            if (!table_exists($table)) {
+                continue;
+            }
+
+            $count = (int) (db()->query('SELECT COUNT(*) FROM `' . $table . '`')?->fetchColumn() ?: 0);
+            if ($count > 0) {
+                return true;
+            }
+        } catch (Throwable) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function installer_disable_web_install(string $configFile): void
+{
+    $config = require $configFile;
+    if (!is_array($config)) {
+        return;
+    }
+
+    $config['app']['allow_install'] = false;
+    unset($config['security']['install_token']);
+
+    $php = "<?php\ndeclare(strict_types=1);\n\nreturn " . var_export($config, true) . ";\n";
+    file_put_contents($configFile, $php, LOCK_EX);
+}
+
 $message = '';
 $error = '';
 $installAllowed = (bool) config('app.allow_install', false);
-if (!$installAllowed || is_file($installLockFile)) {
+if (!$installAllowed || is_file($installLockFile) || !installer_install_token_is_valid() || installer_existing_installation_detected()) {
     http_response_code(403);
     installer_render_html(
         'Installation verrouillée',
-        '<p>Activez temporairement <code>app.allow_install</code> puis supprimez le verrou uniquement pour l\'installation initiale.</p>'
+        '<p>L\'installation web est verrouillee. Elle n\'est autorisee qu\'une seule fois avec le jeton temporaire genere a l\'etape 1.</p>'
     );
     return;
 }
@@ -224,6 +271,10 @@ if (!$installAllowed || is_file($installLockFile)) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
+        if (!installer_install_token_is_valid() || installer_existing_installation_detected()) {
+            throw new RuntimeException('Installation verrouillee.');
+        }
+
         $schema = file_get_contents(__DIR__ . '/schema/schema.sql');
         if ($schema === false) {
             throw new RuntimeException('Impossible de lire le schéma SQL.');
