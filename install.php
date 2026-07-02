@@ -22,6 +22,11 @@ function installer_generate_csrf_key(): string
     return bin2hex(random_bytes(24));
 }
 
+function installer_generate_install_token(): string
+{
+    return bin2hex(random_bytes(32));
+}
+
 function installer_apply_schema(PDO $pdo, string $schema): void
 {
     $statements = preg_split('/;\s*(?:\r\n|\r|\n|$)/', $schema) ?: [];
@@ -76,6 +81,7 @@ function installer_build_config_php(array $values): string
         ],
         'security' => [
             'csrf_key' => $values['csrf_key'],
+            'install_token' => $values['install_token'],
         ],
         'cache' => [
             'enabled' => true,
@@ -135,6 +141,7 @@ if (!is_file($configFile)) {
                 'site_name' => trim((string) ($_POST['site_name'] ?? 'ON4CRD')),
                 'base_url' => trim((string) ($_POST['base_url'] ?? '')),
                 'csrf_key' => trim((string) ($_POST['csrf_key'] ?? installer_generate_csrf_key())),
+                'install_token' => installer_generate_install_token(),
             ];
 
             if ($values['db_host'] === '' || $values['db_name'] === '' || $values['db_user'] === '') {
@@ -167,7 +174,7 @@ if (!is_file($configFile)) {
     $body = '';
     if ($success !== '') {
         $body .= '<p style="color:#22c55e"><strong>' . htmlspecialchars($success, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</strong></p>';
-        $body .= '<p><a href="install.php" style="color:#93c5fd">Continuer l\'installation</a></p>';
+        $body .= '<p><a href="install.php?install_token=' . htmlspecialchars((string) ($values['install_token'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '" style="color:#93c5fd">Continuer l\'installation</a></p>';
     }
     if ($error !== '') {
         $body .= '<p style="color:#f87171"><strong>' . htmlspecialchars($error, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</strong></p>';
