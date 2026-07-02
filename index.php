@@ -434,7 +434,6 @@ switch ($route) {
     case 'knowledge-graph.jsonld': $dispatchPage('pages/knowledge_graph.php'); break;
     case 'newsletter_unsubscribe': $dispatchPage('pages/newsletter_unsubscribe.php'); break;
     case 'footer_contact': $dispatchPage('pages/footer_contact.php'); break;
-    case 'install.php': $dispatchPage('install.php'); break;
     default:
         http_response_code(404);
         render_localized_not_found();

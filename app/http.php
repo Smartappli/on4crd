@@ -246,7 +246,6 @@ if (!function_exists('route_url')) {
 function route_url(string $route, array $query = []): string
 {
     static $directRoutes = [
-        'install.php' => true,
         'sitemap.xml' => true,
         'robots.txt' => true,
         'llms.txt' => true,
