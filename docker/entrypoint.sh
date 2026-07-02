@@ -123,7 +123,7 @@ until php -r "
 \$port = (int) (getenv('DB_PORT') ?: 3306);
 \$db   = getenv('DB_NAME') ?: 'on4crd';
 \$user = getenv('DB_USER') ?: 'on4crd';
-\$pass = getenv('DB_PASS') ?: 'on4crd';
+\$pass = getenv('DB_PASS') ?: '';
 
 try {
     new PDO(

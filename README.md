@@ -102,6 +102,8 @@ ADMIN_CALLSIGN=F4ABC
 ADMIN_NAME=Admin Local
 ADMIN_EMAIL=admin@example.test
 ADMIN_PASSWORD=SuperSecret123!
+DB_PASS=ChangeMeDbUser123!
+DB_ROOT_PASS=ChangeMeDbRoot123!
 ENV
 ```
 

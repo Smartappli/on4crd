@@ -1033,7 +1033,7 @@ if (!function_exists('member_document_upload_max_bytes')) {
 function member_document_upload_max_bytes(string $moduleCode, string $extension): int
 {
     if (member_document_module_normalize($moduleCode) === 'videos' && member_document_is_video_extension($extension)) {
-        return 1024 * 1024 * 1024;
+        return 120 * 1024 * 1024;
     }
 
     return 120 * 1024 * 1024;
