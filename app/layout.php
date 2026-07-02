@@ -291,7 +291,19 @@ function sanitize_image_src_attribute(string $url): ?string
         return $trimmed;
     }
 
-    return sanitize_href_attribute($trimmed);
+    if (preg_match('~^/(?!/)~', $trimmed) === 1) {
+        return normalize_http_url($trimmed, true);
+    }
+
+    $safe = sanitize_href_attribute($trimmed);
+    if ($safe === null) {
+        return null;
+    }
+
+    $imageHost = strtolower((string) parse_url($safe, PHP_URL_HOST));
+    $baseHost = strtolower((string) parse_url(base_url('/'), PHP_URL_HOST));
+
+    return $imageHost !== '' && $baseHost !== '' && hash_equals($baseHost, $imageHost) ? $safe : null;
 }
 
 function sanitize_rich_html_unwrap_element(DOMElement $element): void

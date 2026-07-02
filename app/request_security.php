@@ -251,7 +251,7 @@ function apply_security_headers(): void
 
     $nonce = csp_nonce();
     $scriptSrc = ["'self'", "'nonce-" . $nonce . "'"];
-    $imgSrc = ["'self'", 'data:', 'https:'];
+    $imgSrc = ["'self'", 'data:', 'https://www.hamqsl.com'];
     $styleSrc = ["'self'", "'unsafe-inline'"];
     $connectSrc = ["'self'"];
     $frameSrc = ["'self'", 'https://www.google.com', 'https://maps.google.com'];
