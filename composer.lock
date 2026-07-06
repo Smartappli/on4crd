@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66c6841695667a21136790ff86ce3b27",
+    "content-hash": "3644731235e3e1cb29e432fa0048e719",
     "packages": [
         {
             "name": "delight-im/auth",
@@ -1749,16 +1749,16 @@
         },
         {
             "name": "theodo-group/llphant",
-            "version": "0.11.21",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LLPhant/LLPhant.git",
-                "reference": "747b979bf772b147bb7d5c544cce85aae6992041"
+                "reference": "4fc721b1c94ff869fcce1f70dcfa8a01b96d0461"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LLPhant/LLPhant/zipball/747b979bf772b147bb7d5c544cce85aae6992041",
-                "reference": "747b979bf772b147bb7d5c544cce85aae6992041",
+                "url": "https://api.github.com/repos/LLPhant/LLPhant/zipball/4fc721b1c94ff869fcce1f70dcfa8a01b96d0461",
+                "reference": "4fc721b1c94ff869fcce1f70dcfa8a01b96d0461",
                 "shasum": ""
             },
             "require": {
@@ -1839,9 +1839,9 @@
             ],
             "support": {
                 "issues": "https://github.com/LLPhant/LLPhant/issues",
-                "source": "https://github.com/LLPhant/LLPhant/tree/0.11.21"
+                "source": "https://github.com/LLPhant/LLPhant/tree/1.0.0"
             },
-            "time": "2026-05-16T14:31:04+00:00"
+            "time": "2026-07-05T19:08:23+00:00"
         },
         {
             "name": "yethee/tiktoken",
