@@ -1040,6 +1040,22 @@ function member_document_upload_max_bytes(string $moduleCode, string $extension)
 }
 }
 
+if (!function_exists('member_document_upload_help_text')) {
+function member_document_upload_help_text(string $moduleCode, array $labels, string $locale): string
+{
+    if (member_document_module_normalize($moduleCode) !== 'videos') {
+        return (string) ($labels['upload_help'] ?? '');
+    }
+
+    return match (strtolower($locale)) {
+        'fr' => 'Formats acceptes : MP4, WEBM, MOV, M4V, PDF, DOC, DOCX, TXT, Markdown et HTML. Taille maximale : 1 Go pour une video, 120 Mo pour une ressource.',
+        'nl' => 'Geaccepteerde formaten: MP4, WEBM, MOV, M4V, PDF, DOC, DOCX, TXT, Markdown en HTML. Maximale grootte: 1 GB voor video, 120 MB voor andere bronnen.',
+        'de' => 'Akzeptierte Formate: MP4, WEBM, MOV, M4V, PDF, DOC, DOCX, TXT, Markdown und HTML. Maximale Groesse: 1 GB fuer Videos, 120 MB fuer andere Ressourcen.',
+        default => 'Accepted formats: MP4, WEBM, MOV, M4V, PDF, DOC, DOCX, TXT, Markdown and HTML. Maximum size: 1 GB for video files, 120 MB for other resources.',
+    };
+}
+}
+
 if (!function_exists('member_document_store_upload')) {
 function member_document_store_upload(array $file, string $moduleCode, int $memberId): array
 {
@@ -1722,6 +1738,7 @@ function render_member_document_module_page(string $module): void
     $moduleText = member_document_module_text($moduleCode, $locale);
     $title = (string) $moduleText['title'];
     $intro = (string) $moduleText['intro'];
+    $uploadHelp = member_document_upload_help_text($moduleCode, $labels, $locale);
 
     set_page_meta([
         'title' => $title,
@@ -2263,6 +2280,7 @@ function render_member_document_module_page(string $module): void
                         <?= render_member_document_taxonomy_fields($moduleCode, $categories, $labels, $categoryFilter !== '' ? $categoryFilter : 'general', $subcategoryFilter) ?>
                         <label><span><?= e((string) $labels['description_field']) ?></span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
                         <label><span><?= e((string) $labels['tags_field']) ?></span><input type="text" name="proposal_tags" maxlength="255"></label>
+                        <?php if ($uploadHelp !== ''): ?><p class="help"><?= e($uploadHelp) ?></p><?php endif; ?>
                         <label><span><?= e((string) $labels['proposal_file_field']) ?></span><input type="file" name="proposal_file" required></label>
                         <label><span><?= e((string) $labels['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
                         <p class="member-document-dialog-actions module-dialog-actions">
@@ -2363,6 +2381,7 @@ function render_admin_member_document_module_page(string $module): void
     $labels = member_document_module_labels($moduleCode, $locale);
     $moduleText = member_document_module_text($moduleCode, $locale);
     $title = (string) $moduleText['title'];
+    $uploadHelp = member_document_upload_help_text($moduleCode, $labels, $locale);
     $adminPageTitle = trim((string) $labels['admin_page_title']);
     if ($adminPageTitle === '') {
         $adminPageTitle = $title;
@@ -2577,7 +2596,7 @@ function render_admin_member_document_module_page(string $module): void
 
         <section class="card" id="admin-member-document-upload">
             <h2><?= e((string) $labels['upload_title']) ?></h2>
-            <p class="help"><?= e((string) $labels['upload_help']) ?></p>
+            <?php if ($uploadHelp !== ''): ?><p class="help"><?= e($uploadHelp) ?></p><?php endif; ?>
             <form method="post" enctype="multipart/form-data" class="stack admin-member-document-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="upload">

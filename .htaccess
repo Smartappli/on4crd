@@ -2,25 +2,25 @@ Options -Indexes
 RewriteEngine On
 
 <IfModule mod_php.c>
-    php_value upload_max_filesize 128M
-    php_value post_max_size 140M
+    php_value upload_max_filesize 1024M
+    php_value post_max_size 1100M
     php_value max_file_uploads 20
-    php_value max_input_time 300
-    php_value max_execution_time 300
+    php_value max_input_time 900
+    php_value max_execution_time 900
 </IfModule>
 <IfModule mod_php7.c>
-    php_value upload_max_filesize 128M
-    php_value post_max_size 140M
+    php_value upload_max_filesize 1024M
+    php_value post_max_size 1100M
     php_value max_file_uploads 20
-    php_value max_input_time 300
-    php_value max_execution_time 300
+    php_value max_input_time 900
+    php_value max_execution_time 900
 </IfModule>
 <IfModule mod_php8.c>
-    php_value upload_max_filesize 128M
-    php_value post_max_size 140M
+    php_value upload_max_filesize 1024M
+    php_value post_max_size 1100M
     php_value max_file_uploads 20
-    php_value max_input_time 300
-    php_value max_execution_time 300
+    php_value max_input_time 900
+    php_value max_execution_time 900
 </IfModule>
 
 # Force HTTPS (keep localhost/dev reachable in HTTP)

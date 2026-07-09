@@ -483,15 +483,25 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("route_url(\$routeName, ['propose_subsubcategory' => '1'])", $renderer);
         self::assertStringContainsString('data-member-document-modal-open', $renderer);
         self::assertStringContainsString('function member_document_upload_max_bytes(', $renderer);
+        self::assertStringContainsString('function member_document_upload_help_text(', $renderer);
         self::assertStringContainsString('1024 * 1024 * 1024', $renderer);
         self::assertSame(120 * 1024 * 1024, member_document_upload_max_bytes('presentations', 'pdf'));
         self::assertSame(120 * 1024 * 1024, member_document_upload_max_bytes('videos', 'pdf'));
         self::assertSame(1024 * 1024 * 1024, member_document_upload_max_bytes('videos', 'mp4'));
+        self::assertStringContainsString('1 Go', member_document_upload_help_text('videos', member_document_module_labels('videos', 'fr'), 'fr'));
+        self::assertStringContainsString('1 GB', member_document_upload_help_text('videos', member_document_module_labels('videos', 'en'), 'en'));
         self::assertStringContainsString('member-document-video-player', $renderer);
 
         $memberDocumentsCss = $this->source('assets/css/modules/member_documents.css');
         self::assertStringContainsString('[data-route="videos"] .member-document-grid', $memberDocumentsCss);
         self::assertStringContainsString('grid-template-columns: repeat(2, minmax(0, 1fr));', $memberDocumentsCss);
+
+        $rootHtaccess = $this->source('.htaccess');
+        $userIni = $this->source('.user.ini');
+        self::assertStringContainsString('php_value upload_max_filesize 1024M', $rootHtaccess);
+        self::assertStringContainsString('php_value post_max_size 1100M', $rootHtaccess);
+        self::assertStringContainsString('upload_max_filesize=1024M', $userIni);
+        self::assertStringContainsString('post_max_size=1100M', $userIni);
 
         $adminHelpers = $this->source('app/admin_helpers.php');
         $contentHelpers = $this->source('app/content_helpers.php');
