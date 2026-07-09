@@ -16,6 +16,7 @@ const {
   ensureSeleniumFixtures,
   ensureSeleniumRunnable,
   runSeleniumPhp,
+  solveMathCaptcha,
 } = require('./helpers');
 
 function cleanupNewsletterEmail(email) {
@@ -70,7 +71,7 @@ test('Selenium login: captcha, champs et next sont conserves', async (t) => {
     assert.match(next, /#album-wizard$/);
 
     const captchaLabel = await driver.findElement(By.xpath('//input[@name="captcha"]/ancestor::label')).getText();
-    assert.match(captchaLabel, /\d+\s*\+\s*\d+/);
+    assert.ok(Number.isFinite(solveMathCaptcha(captchaLabel)));
   });
 });
 

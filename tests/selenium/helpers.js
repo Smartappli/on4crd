@@ -559,6 +559,24 @@ async function visibleImageCount(driver, selector) {
   return count;
 }
 
+function solveMathCaptcha(label) {
+  const expressionMatch = String(label).match(/(\d+(?:\s*[+-]\s*\d+)+)/);
+  assert.ok(expressionMatch, `Captcha arithmetique introuvable: ${label}`);
+  const tokens = expressionMatch[1].match(/\d+|[+-]/g) || [];
+  let result = Number(tokens[0] || 0);
+  for (let index = 1; index < tokens.length - 1; index += 2) {
+    const operator = tokens[index];
+    const value = Number(tokens[index + 1]);
+    if (operator === '+') {
+      result += value;
+    } else if (operator === '-') {
+      result -= value;
+    }
+  }
+
+  return result;
+}
+
 async function loginAsAdmin(driver, username, password) {
   resetSeleniumLoginThrottle(username);
   try {
@@ -583,10 +601,8 @@ async function loginAsAdmin(driver, username, password) {
     await passwordInput.sendKeys(password);
 
     const captchaLabel = await captchaInput.findElement(By.xpath('ancestor::label')).getText();
-    const captchaMatch = captchaLabel.match(/(\d+)\s*\+\s*(\d+)/);
-    assert.ok(captchaMatch, `Captcha arithmetique introuvable: ${captchaLabel}`);
     await captchaInput.clear();
-    await captchaInput.sendKeys(String(Number(captchaMatch[1]) + Number(captchaMatch[2])));
+    await captchaInput.sendKeys(String(solveMathCaptcha(captchaLabel)));
     await driver.findElement(By.css('[data-login-form] button')).click();
     await waitForDocumentReady(driver);
     await assertNoServerError(driver);
@@ -786,6 +802,7 @@ module.exports = {
   assertLoginPage,
   parsePhotoCount,
   visibleImageCount,
+  solveMathCaptcha,
   loginAsAdmin,
   requireAdminCredentials,
   writeTinyPngFixture,
