@@ -94,7 +94,7 @@ function verify_csrf(): void
 /**
  * @return array{question:string,answer_hash:string,salt:string,expires_at:int}
  */
-function login_captcha_generate_challenge(): array
+function math_captcha_generate_challenge(): array
 {
     $variant = random_int(0, 3);
     if ($variant === 0) {
@@ -153,7 +153,7 @@ function login_captcha_challenge(): array
     }
 
     unset($_SESSION['login_captcha'], $_SESSION['login_captcha_operands']);
-    $challenge = login_captcha_generate_challenge();
+    $challenge = math_captcha_generate_challenge();
     $_SESSION['_login_captcha'] = $challenge;
 
     return [
@@ -236,7 +236,7 @@ function public_form_rate_limit(string $scope, int $limit = 5, int $windowSecond
 }
 
 /**
- * @return array{left:int,right:int,answer:int}
+ * @return array<string, int|string>
  */
 function public_form_captcha_challenge(string $scope): array
 {
@@ -246,39 +246,58 @@ function public_form_captcha_challenge(string $scope): array
     }
 
     $existing = $_SESSION['_public_form_captchas'][$scope] ?? null;
-    if (is_array($existing)
-        && isset($existing['left'], $existing['right'], $existing['answer'])
+    if (
+        is_array($existing)
         && (int) ($existing['expires_at'] ?? 0) > time()
     ) {
-        return [
-            'left' => (int) $existing['left'],
-            'right' => (int) $existing['right'],
-            'answer' => (int) $existing['answer'],
-        ];
+        if (
+            isset($existing['question'], $existing['answer_hash'], $existing['salt'])
+            && is_string($existing['question'])
+            && is_string($existing['answer_hash'])
+            && is_string($existing['salt'])
+        ) {
+            return [
+                'question' => $existing['question'],
+                'answer_hash' => $existing['answer_hash'],
+                'salt' => $existing['salt'],
+                'expires_at' => (int) $existing['expires_at'],
+            ];
+        }
+
+        if (isset($existing['left'], $existing['right'], $existing['answer'])) {
+            $left = (int) $existing['left'];
+            $right = (int) $existing['right'];
+
+            return [
+                'left' => $left,
+                'right' => $right,
+                'answer' => (int) $existing['answer'],
+                'question' => $left . ' + ' . $right,
+                'expires_at' => (int) $existing['expires_at'],
+            ];
+        }
     }
 
-    $left = random_int(2, 9);
-    $right = random_int(2, 9);
-    $_SESSION['_public_form_captchas'][$scope] = [
-        'left' => $left,
-        'right' => $right,
-        'answer' => $left + $right,
-        'expires_at' => time() + 1800,
-    ];
+    $challenge = math_captcha_generate_challenge();
+    $_SESSION['_public_form_captchas'][$scope] = $challenge;
 
-    return ['left' => $left, 'right' => $right, 'answer' => $left + $right];
+    return $challenge;
 }
 
 function public_form_captcha_label(array $challenge, string $locale = ''): string
 {
-    $left = (int) ($challenge['left'] ?? 0);
-    $right = (int) ($challenge['right'] ?? 0);
+    $question = trim((string) ($challenge['question'] ?? ''));
+    if ($question === '') {
+        $left = (int) ($challenge['left'] ?? 0);
+        $right = (int) ($challenge['right'] ?? 0);
+        $question = $left . ' + ' . $right;
+    }
 
     return match (strtolower($locale)) {
-        'fr' => 'Anti-spam: combien font ' . $left . ' + ' . $right . ' ?',
-        'nl' => 'Anti-spam: hoeveel is ' . $left . ' + ' . $right . '?',
-        'de' => 'Anti-spam: wie viel ist ' . $left . ' + ' . $right . '?',
-        default => 'Anti-spam: what is ' . $left . ' + ' . $right . '?',
+        'fr' => 'Anti-spam: combien font ' . $question . ' ?',
+        'nl' => 'Anti-spam: hoeveel is ' . $question . '?',
+        'de' => 'Anti-spam: wie viel ist ' . $question . '?',
+        default => 'Anti-spam: what is ' . $question . '?',
     };
 }
 
@@ -292,11 +311,25 @@ function public_form_verify_captcha(string $scope, string $answer): bool
     }
 
     $submitted = trim($answer);
-    if ($submitted === '' || preg_match('/^-?\\d+$/', $submitted) !== 1) {
+    if ($submitted === '' || preg_match('/^\d+$/', $submitted) !== 1) {
         return false;
     }
 
-    return hash_equals((string) (int) $challenge['answer'], (string) (int) $submitted);
+    if (
+        isset($challenge['answer_hash'], $challenge['salt'])
+        && is_string($challenge['answer_hash'])
+        && is_string($challenge['salt'])
+    ) {
+        $submittedHash = hash('sha256', $challenge['salt'] . ':' . (string) (int) $submitted);
+
+        return hash_equals($challenge['answer_hash'], $submittedHash);
+    }
+
+    if (isset($challenge['answer'])) {
+        return hash_equals((string) (int) $challenge['answer'], (string) (int) $submitted);
+    }
+
+    return false;
 }
 
 function public_form_honeypot_triggered(string $fieldName): bool
