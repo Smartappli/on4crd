@@ -14,6 +14,24 @@ final class FunctionHelpersTest extends TestCase
         $_GET = [];
     }
 
+    private static function solveMathCaptchaQuestion(string $question): int
+    {
+        preg_match_all('/\d+|[+-]/', $question, $matches);
+        $tokens = $matches[0] ?? [];
+        $result = (int) ($tokens[0] ?? 0);
+        for ($index = 1; $index < count($tokens) - 1; $index += 2) {
+            $operator = (string) $tokens[$index];
+            $value = (int) $tokens[$index + 1];
+            if ($operator === '+') {
+                $result += $value;
+            } elseif ($operator === '-') {
+                $result -= $value;
+            }
+        }
+
+        return $result;
+    }
+
     public function testEscapeHelperEscapesHtml(): void
     {
         self::assertSame('&lt;script&gt;alert(1)&lt;/script&gt;', e('<script>alert(1)</script>'));
@@ -116,6 +134,37 @@ final class FunctionHelpersTest extends TestCase
         verify_csrf();
 
         self::assertSame(64, strlen($token));
+    }
+
+    public function testLoginCaptchaUsesHashAndSingleUseMathChallenge(): void
+    {
+        $challenge = login_captcha_challenge();
+        $answer = self::solveMathCaptchaQuestion((string) $challenge['question']);
+
+        self::assertMatchesRegularExpression('/^\d+(?:\s[+-]\s\d+)+$/', (string) $challenge['question']);
+        self::assertArrayHasKey('_login_captcha', $_SESSION);
+        self::assertArrayHasKey('answer_hash', $_SESSION['_login_captcha']);
+        self::assertArrayNotHasKey('answer', $_SESSION['_login_captcha']);
+        self::assertTrue(login_captcha_verify((string) $answer));
+        self::assertFalse(login_captcha_verify((string) $answer));
+    }
+
+    public function testPublicFormCaptchaUsesSharedMathChallengeAndRejectsWrongAnswer(): void
+    {
+        $challenge = public_form_captcha_challenge('footer_contact');
+        $answer = self::solveMathCaptchaQuestion((string) $challenge['question']);
+        $label = public_form_captcha_label($challenge, 'fr');
+
+        self::assertStringContainsString((string) $challenge['question'], $label);
+        self::assertArrayHasKey('answer_hash', $challenge);
+        self::assertArrayNotHasKey('answer', $challenge);
+        self::assertFalse(public_form_verify_captcha('footer_contact', (string) ($answer + 1)));
+
+        $challenge = public_form_captcha_challenge('footer_contact');
+        $answer = self::solveMathCaptchaQuestion((string) $challenge['question']);
+
+        self::assertTrue(public_form_verify_captcha('footer_contact', (string) $answer));
+        self::assertFalse(public_form_verify_captcha('footer_contact', (string) $answer));
     }
 
     public function testLoginNextUrlForRoutePreservesSafeQuery(): void

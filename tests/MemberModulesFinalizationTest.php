@@ -489,6 +489,10 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame(1024 * 1024 * 1024, member_document_upload_max_bytes('videos', 'mp4'));
         self::assertStringContainsString('member-document-video-player', $renderer);
 
+        $memberDocumentsCss = $this->source('assets/css/modules/member_documents.css');
+        self::assertStringContainsString('[data-route="videos"] .member-document-grid', $memberDocumentsCss);
+        self::assertStringContainsString('grid-template-columns: repeat(2, minmax(0, 1fr));', $memberDocumentsCss);
+
         $adminHelpers = $this->source('app/admin_helpers.php');
         $contentHelpers = $this->source('app/content_helpers.php');
         self::assertStringContainsString("'presentations' => ['route' => 'admin_presentations'", $adminHelpers);
