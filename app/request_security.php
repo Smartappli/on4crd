@@ -91,6 +91,106 @@ function verify_csrf(): void
     }
 }
 
+/**
+ * @return array{question:string,answer_hash:string,salt:string,expires_at:int}
+ */
+function login_captcha_generate_challenge(): array
+{
+    $variant = random_int(0, 3);
+    if ($variant === 0) {
+        $a = random_int(3, 12);
+        $b = random_int(2, 9);
+        $answer = $a + $b;
+        $question = $a . ' + ' . $b;
+    } elseif ($variant === 1) {
+        $a = random_int(2, 9);
+        $b = random_int(2, 9);
+        $c = random_int(1, 6);
+        $answer = $a + $b + $c;
+        $question = $a . ' + ' . $b . ' + ' . $c;
+    } elseif ($variant === 2) {
+        $a = random_int(5, 14);
+        $b = random_int(2, 9);
+        $c = random_int(1, min(6, $a + $b - 1));
+        $answer = $a + $b - $c;
+        $question = $a . ' + ' . $b . ' - ' . $c;
+    } else {
+        $a = random_int(9, 18);
+        $b = random_int(1, 7);
+        $c = random_int(1, 6);
+        $answer = $a - $b + $c;
+        $question = $a . ' - ' . $b . ' + ' . $c;
+    }
+
+    $salt = bin2hex(random_bytes(8));
+
+    return [
+        'question' => $question,
+        'answer_hash' => hash('sha256', $salt . ':' . (string) $answer),
+        'salt' => $salt,
+        'expires_at' => time() + 900,
+    ];
+}
+
+/**
+ * @return array{question:string,expires_at:int}
+ */
+function login_captcha_challenge(): array
+{
+    $challenge = $_SESSION['_login_captcha'] ?? null;
+    if (
+        is_array($challenge)
+        && isset($challenge['question'], $challenge['answer_hash'], $challenge['salt'], $challenge['expires_at'])
+        && is_string($challenge['question'])
+        && is_string($challenge['answer_hash'])
+        && is_string($challenge['salt'])
+        && (int) $challenge['expires_at'] > time()
+    ) {
+        return [
+            'question' => $challenge['question'],
+            'expires_at' => (int) $challenge['expires_at'],
+        ];
+    }
+
+    unset($_SESSION['login_captcha'], $_SESSION['login_captcha_operands']);
+    $challenge = login_captcha_generate_challenge();
+    $_SESSION['_login_captcha'] = $challenge;
+
+    return [
+        'question' => $challenge['question'],
+        'expires_at' => (int) $challenge['expires_at'],
+    ];
+}
+
+function login_captcha_clear(): void
+{
+    unset($_SESSION['_login_captcha'], $_SESSION['login_captcha'], $_SESSION['login_captcha_operands']);
+}
+
+function login_captcha_verify(string $answer): bool
+{
+    $challenge = $_SESSION['_login_captcha'] ?? null;
+    login_captcha_clear();
+    if (
+        !is_array($challenge)
+        || !isset($challenge['answer_hash'], $challenge['salt'], $challenge['expires_at'])
+        || !is_string($challenge['answer_hash'])
+        || !is_string($challenge['salt'])
+        || (int) $challenge['expires_at'] < time()
+    ) {
+        return false;
+    }
+
+    $submitted = trim($answer);
+    if ($submitted === '' || preg_match('/^\d+$/', $submitted) !== 1) {
+        return false;
+    }
+
+    $submittedHash = hash('sha256', $challenge['salt'] . ':' . (string) (int) $submitted);
+
+    return hash_equals($challenge['answer_hash'], $submittedHash);
+}
+
 function public_form_client_ip(): string
 {
     if (function_exists('request_is_from_trusted_proxy') && request_is_from_trusted_proxy()) {

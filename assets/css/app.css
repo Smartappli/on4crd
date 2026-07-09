@@ -716,6 +716,32 @@ textarea:focus-visible {
   padding: .62rem .75rem;
   border-radius: 12px;
 }
+.login-captcha-field {
+  display: grid;
+  gap: .45rem;
+}
+.login-captcha-label {
+  color: var(--muted);
+  font-size: .86rem;
+  font-weight: 750;
+}
+.login-captcha-challenge {
+  display: grid;
+  min-height: 3rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, var(--border));
+  border-radius: 14px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 13%, transparent), transparent 48%),
+    var(--panel-2);
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 850;
+  line-height: 1;
+}
+.login-captcha-field input {
+  margin: 0;
+}
 .register-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

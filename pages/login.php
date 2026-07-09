@@ -14,21 +14,22 @@ if (current_user() !== null) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $shouldRecordFailure = false;
     try {
         verify_csrf();
+        enforce_login_throttle();
+        $shouldRecordFailure = true;
         $identifier = trim((string) ($_POST['callsign'] ?? ''));
         $callsign = strtoupper($identifier);
         $password = (string) ($_POST['password'] ?? '');
         $captcha = trim((string) ($_POST['captcha'] ?? ''));
-        $captchaExpected = (string) ($_SESSION['login_captcha'] ?? '');
 
         if ($identifier === '' || $password === '' || $captcha === '') {
             throw new RuntimeException((string) $t['required']);
         }
-        if (!hash_equals($captchaExpected, $captcha)) {
+        if (!login_captcha_verify($captcha)) {
             throw new RuntimeException((string) $t['captcha_invalid']);
         }
-        unset($_SESSION['login_captcha'], $_SESSION['login_captcha_operands']);
         $authClient = auth();
         if ($authClient === null) {
             throw new RuntimeException((string) $t['auth_unavailable']);
@@ -59,41 +60,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException((string) ($t['member_unavailable'] ?? $t['auth_unavailable']));
         }
 
-        unset($_SESSION['login_captcha'], $_SESSION['login_captcha_operands']);
+        login_captcha_clear();
+        clear_login_failures();
         $_SESSION['member_id'] = (int) ($memberRow['id'] ?? 0);
         set_flash('success', (string) $t['login_success']);
         redirect_url($nextUrl ?? $defaultLoginRedirectUrl);
     } catch (Throwable $throwable) {
-        unset($_SESSION['login_captcha'], $_SESSION['login_captcha_operands']);
+        login_captcha_clear();
+        if ($shouldRecordFailure) {
+            record_login_failure();
+        }
         set_flash('error', $throwable->getMessage());
         redirect_url(route_url('login', $nextUrl !== null ? ['next' => $nextUrl] : []));
     }
 }
 
-$captchaOperands = $_SESSION['login_captcha_operands'] ?? null;
-if (
-    is_array($captchaOperands)
-    && isset($captchaOperands['a'], $captchaOperands['b'])
-    && is_int($captchaOperands['a'])
-    && is_int($captchaOperands['b'])
-) {
-    $captchaA = $captchaOperands['a'];
-    $captchaB = $captchaOperands['b'];
-} else {
-    $captchaA = random_int(1, 9);
-    $captchaB = random_int(1, 9);
-    $_SESSION['login_captcha_operands'] = ['a' => $captchaA, 'b' => $captchaB];
-}
-$captchaExpected = $captchaA + $captchaB;
-$_SESSION['login_captcha'] = (string) $captchaExpected;
+$captchaChallenge = login_captcha_challenge();
+$captchaQuestion = (string) $captchaChallenge['question'];
 
 $content = '<div class="card narrow login-card"><h1>' . e((string) $t['title']) . '</h1>'
     . '<form method="post" data-login-form><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
     . ($nextUrl !== null ? '<input type="hidden" name="next" value="' . e($nextUrl) . '">' : '')
     . '<label>' . e((string) $t['callsign']) . '<input type="text" name="callsign" required></label>'
     . '<label>' . e((string) $t['password']) . '<input type="password" name="password" required></label>'
-    . '<label>' . e((string) $t['captcha_question']) . ' ' . $captchaA . ' + ' . $captchaB . ' ?'
-    . '<input type="text" name="captcha" inputmode="numeric" autocomplete="off" required></label>'
+    . '<label class="login-captcha-field"><span class="login-captcha-label">' . e((string) $t['captcha_question']) . '</span>'
+    . '<span class="login-captcha-challenge">' . e($captchaQuestion) . ' = ?</span>'
+    . '<input type="text" name="captcha" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required></label>'
     . '<button class="button">' . e((string) $t['login']) . '</button></form>'
     . '<p><a href="' . e(route_url('forgot_password')) . '">' . e((string) $t['forgot_password']) . '</a></p>'
     . '<p>' . e((string) $t['no_member']) . ' <a href="' . e(route_url('membership')) . '">' . e($membershipLabel) . '</a></p>'
