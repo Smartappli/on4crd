@@ -90,6 +90,7 @@ function admin_cards_for_dashboard(string $locale, int $userId, string $searchNe
             $pendingCount = (int) ($pendingCounts[$route] ?? 0);
             $cards[] = [
                 'route' => $route,
+                'group' => (string) ($card['group'] ?? 'settings'),
                 'title' => $title,
                 'desc' => $desc,
                 'url' => admin_pending_content_card_url($route, $pendingCount),

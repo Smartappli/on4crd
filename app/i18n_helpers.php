@@ -22,6 +22,27 @@ function supported_locales_map(): array
 }
 }
 
+if (!function_exists('locale_language_tag')) {
+/** Return the regional BCP 47 tag used in document and structured metadata. */
+function locale_language_tag(string $locale): string
+{
+    $locale = strtolower(str_replace('_', '-', trim($locale)));
+    $language = explode('-', $locale, 2)[0];
+    $tags = [
+        'fr' => 'fr-BE', 'en' => 'en-GB', 'de' => 'de-DE', 'nl' => 'nl-BE',
+        'it' => 'it-IT', 'es' => 'es-ES', 'pt' => 'pt-PT', 'bg' => 'bg-BG',
+        'hr' => 'hr-HR', 'cs' => 'cs-CZ', 'da' => 'da-DK', 'et' => 'et-EE',
+        'fi' => 'fi-FI', 'el' => 'el-GR', 'hu' => 'hu-HU', 'ga' => 'ga-IE',
+        'lv' => 'lv-LV', 'lt' => 'lt-LT', 'mt' => 'mt-MT', 'pl' => 'pl-PL',
+        'ro' => 'ro-RO', 'sk' => 'sk-SK', 'sl' => 'sl-SI', 'sv' => 'sv-SE',
+        'ar' => 'ar-SA', 'hi' => 'hi-IN', 'ja' => 'ja-JP', 'zh' => 'zh-CN',
+        'bn' => 'bn-BD', 'ru' => 'ru-RU', 'id' => 'id-ID',
+    ];
+
+    return $tags[$language] ?? ($language !== '' ? $language : 'fr-BE');
+}
+}
+
 if (!function_exists('is_rtl_locale')) {
 function is_rtl_locale(string $locale): bool
 {

@@ -1076,7 +1076,7 @@ ob_start();
                                 <?php if ($imageSrc !== ''): ?>
                                     <?= album_picture_html($imageSrc, $photoRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $photoRender['image_webp_src']) ?>
                                 <?php endif; ?>
-                                <form method="post" onsubmit="return confirm(<?= e(albums_admin_js_string((string) $t['confirm_delete_photo'])) ?>)">
+                                <form method="post" data-confirm-message="<?= e((string) $t['confirm_delete_photo']) ?>">
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                     <input type="hidden" name="action" value="delete_photo">
                                     <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
@@ -1288,7 +1288,7 @@ ob_start();
                                 <a class="button secondary small" href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e((string) $t['view_public']) ?></a>
                             </div>
                         </form>
-                        <form method="post" class="admin-album-delete-form" onsubmit="return confirm(<?= e(json_encode((string) $t['confirm_delete_album'], JSON_UNESCAPED_UNICODE)) ?>)">
+                        <form method="post" class="admin-album-delete-form" data-confirm-message="<?= e((string) $t['confirm_delete_album']) ?>">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_album">
                             <input type="hidden" name="album_id" value="<?= $albumId ?>">
@@ -1402,7 +1402,7 @@ ob_start();
                             <button class="button small secondary" type="submit" name="direction" value="up">&uarr;</button>
                             <button class="button small secondary" type="submit" name="direction" value="down">&darr;</button>
                         </form>
-                        <form method="post" class="admin-album-photo-delete-form" onsubmit="return confirm(<?= e(albums_admin_js_string((string) $t['confirm_delete_photo'])) ?>)">
+                        <form method="post" class="admin-album-photo-delete-form" data-confirm-message="<?= e((string) $t['confirm_delete_photo']) ?>">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">

@@ -511,6 +511,137 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-links {
   scrollbar-color: color-mix(in srgb, var(--accent) 35%, var(--border)) transparent;
 }
 
+body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group > summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.35rem;
+  padding: .42rem .72rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 82%, var(--panel-2));
+  color: var(--text);
+  font-size: .88rem;
+  font-weight: 850;
+  cursor: pointer;
+  list-style: none;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group > summary::after {
+  content: "▾";
+  margin-left: .45rem;
+  color: var(--muted);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group[open] > summary {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+  color: var(--accent-strong);
+}
+
+body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: .4rem;
+  padding: .45rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--panel);
+}
+
+.admin-pagination {
+  display: flex;
+  gap: .55rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: .85rem;
+}
+
+.admin-pagination-status {
+  min-width: 4.5rem;
+  color: var(--muted);
+  font-weight: 850;
+  text-align: center;
+}
+
+.admin-dirty-status {
+  color: var(--admin-warning);
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.admin-confirm-dialog {
+  width: min(92vw, 32rem);
+  padding: 0;
+  border: 0;
+  border-radius: var(--admin-radius);
+  background: transparent;
+  color: var(--text);
+}
+
+.admin-confirm-dialog::backdrop {
+  background: rgba(15, 23, 42, .68);
+  backdrop-filter: blur(3px);
+}
+
+.admin-confirm-card {
+  display: grid;
+  gap: .85rem;
+  margin: 0;
+  padding: 1.15rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--panel);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, .28);
+}
+
+.admin-confirm-card :is(h2, p) {
+  margin: 0;
+}
+
+[data-route="admin_translation_reviews"] .admin-translation-review-queue,
+[data-route="admin_translation_reviews"] .admin-translation-review-card {
+  display: grid;
+  gap: .85rem;
+}
+
+[data-route="admin_translation_reviews"] .admin-translation-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: .85rem;
+  align-items: start;
+}
+
+[data-route="admin_translation_reviews"] .admin-translation-source {
+  position: sticky;
+  top: 6rem;
+  max-height: 65vh;
+  overflow: auto;
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_translation_reviews"] .admin-translation-source h4 {
+  margin: 0 0 .65rem;
+}
+
+[data-route="admin_translation_reviews"] .admin-translation-source-content {
+  margin-top: .65rem;
+  color: var(--muted);
+  white-space: normal;
+}
+
 body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-link {
   display: inline-flex;
   flex: 0 0 auto;
@@ -1012,6 +1143,14 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-status {
 }
 
 @media (max-width: 900px) {
+  [data-route="admin_translation_reviews"] .admin-translation-compare {
+    grid-template-columns: 1fr;
+  }
+
+  [data-route="admin_translation_reviews"] .admin-translation-source {
+    position: static;
+    max-height: 20rem;
+  }
   body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-nav {
     grid-template-columns: 1fr;
     align-items: stretch;
@@ -1039,6 +1178,61 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-status {
 }
 
 @media (max-width: 640px) {
+  body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-links {
+    display: grid;
+    overflow: visible;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group,
+  body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-dashboard-link,
+  body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group > summary {
+    width: 100%;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group-links {
+    display: grid;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group-links .admin-shell-link {
+    width: 100%;
+    max-width: none;
+    border-radius: var(--admin-radius);
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content table.admin-responsive-table {
+    min-width: 0;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content table.admin-responsive-table :is(thead, th) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content table.admin-responsive-table :is(tbody, tr, td) {
+    display: block;
+    width: 100%;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content table.admin-responsive-table tr {
+    margin-bottom: .75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--admin-radius);
+    overflow: hidden;
+  }
+
+  body:is([data-route="admin"], [data-route^="admin_"]) #main-content table.admin-responsive-table td:not([colspan])::before {
+    content: attr(data-admin-label);
+    display: block;
+    margin-bottom: .2rem;
+    color: var(--muted);
+    font-size: .72rem;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+
   body:is([data-route="admin"], [data-route^="admin_"]) #main-content {
     padding-inline: .85rem;
   }

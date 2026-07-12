@@ -88,13 +88,17 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
     foreach (supported_locales() as $supportedLocale) {
         $alternates[$supportedLocale] = route_url_with_locale($canonicalRoute, $supportedLocale, $canonicalQuery);
     }
-    $alternates['x-default'] = route_url_with_locale($canonicalRoute, 'fr', $canonicalQuery);
+    $defaultLocale = strtolower((string) config('app.default_locale', 'fr'));
+    if (!in_array($defaultLocale, supported_locales(), true)) {
+        $defaultLocale = 'fr';
+    }
+    $alternates['x-default'] = route_url_with_locale($canonicalRoute, $defaultLocale, $canonicalQuery);
 
     $defaults = array_replace([
         'title' => $title,
         'description' => $description,
         'canonical' => route_url_with_locale($canonicalRoute, $locale, $canonicalQuery),
-        'locale' => str_replace('-', '_', locale_open_graph_code($locale)),
+        'locale' => locale_open_graph_code($locale),
         'geo_region' => 'BE-WNA',
         'geo_placename' => (string) ($seo['geo_placename'] ?? 'Durnal, Yvoir, Namur, Belgium'),
         'geo_position' => '50.3150;4.9452',
@@ -116,7 +120,7 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
             'name' => (string) $defaults['title'],
             'description' => (string) $defaults['description'],
             'url' => (string) $defaults['canonical'],
-            'inLanguage' => $locale,
+            'inLanguage' => locale_language_tag($locale),
             'isPartOf' => [
                 '@type' => 'WebSite',
                 'name' => $siteName,
@@ -147,23 +151,7 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
 
 function locale_open_graph_code(string $locale): string
 {
-    return match ($locale) {
-        'fr' => 'fr_BE',
-        'en' => 'en_US',
-        'de' => 'de_DE',
-        'nl' => 'nl_BE',
-        'it' => 'it_IT',
-        'es' => 'es_ES',
-        'pt' => 'pt_PT',
-        'ar' => 'ar_AR',
-        'hi' => 'hi_IN',
-        'ja' => 'ja_JP',
-        'zh' => 'zh_CN',
-        'bn' => 'bn_BD',
-        'ru' => 'ru_RU',
-        'id' => 'id_ID',
-        default => 'fr_BE',
-    };
+    return str_replace('-', '_', locale_language_tag($locale));
 }
 }
 

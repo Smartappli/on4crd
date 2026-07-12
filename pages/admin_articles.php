@@ -1086,7 +1086,7 @@ ob_start();
                 <?php endif; ?>
             </div>
         </div>
-        <form method="post" enctype="multipart/form-data" class="admin-article-editor-form">
+        <form method="post" enctype="multipart/form-data" class="admin-article-editor-form" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_article">
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
@@ -1215,7 +1215,7 @@ ob_start();
                     </label>
                     <button class="button secondary admin-article-reject-button" type="submit"><?= e($t('reject_article')) ?></button>
                 </form>
-                <form method="post" class="admin-article-delete-form" onsubmit="return confirm('<?= e($t('confirm_delete')) ?>');">
+                <form method="post" class="admin-article-delete-form" data-confirm-message="<?= e($t('confirm_delete')) ?>">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="delete_article">
                     <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
@@ -1229,13 +1229,13 @@ ob_start();
                 <?php else: ?>
                     <div class="admin-article-revision-list">
                         <?php foreach ($revisions as $revision): ?>
-                            <form method="post" class="admin-article-revision-row">
+                            <form method="post" class="admin-article-revision-row" data-confirm-message="<?= e($t('confirm_restore_revision')) ?>">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                 <input type="hidden" name="action" value="restore_revision">
                                 <input type="hidden" name="article_id" value="<?= (int) $editing['id'] ?>">
                                 <input type="hidden" name="revision_id" value="<?= (int) $revision['id'] ?>">
                                 <span class="help"><?= e($t('revision_saved_at')) ?> <?= e(date('d/m/Y H:i', strtotime((string) $revision['created_at']))) ?> · <?= e($articleStatusLabel((string) $revision['status'])) ?></span>
-                                <button class="button small secondary" type="submit" onclick="return confirm('<?= e($t('confirm_restore_revision')) ?>');"><?= e($t('restore_revision')) ?></button>
+                                <button class="button small secondary" type="submit"><?= e($t('restore_revision')) ?></button>
                             </form>
                         <?php endforeach; ?>
                     </div>
@@ -1531,7 +1531,7 @@ ob_start();
         </form>
         <details class="admin-article-old-cleanup-panel">
             <summary><?= e($t('old_articles_cleanup')) ?></summary>
-            <form method="post" class="stack admin-article-old-cleanup-form" onsubmit="return confirm('<?= e($t('confirm_delete_old_articles')) ?>');">
+            <form method="post" class="stack admin-article-old-cleanup-form" data-confirm-message="<?= e($t('confirm_delete_old_articles')) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="delete_old_articles">
                 <p class="help"><?= e($t('old_articles_cleanup_help')) ?></p>
@@ -1628,7 +1628,7 @@ ob_start();
                                     </form>
                                 </details>
                             <?php endif; ?>
-                            <form method="post" class="admin-article-row-delete" onsubmit="return confirm('<?= e($t('confirm_delete')) ?>');">
+                            <form method="post" class="admin-article-row-delete" data-confirm-message="<?= e($t('confirm_delete')) ?>">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                 <input type="hidden" name="action" value="delete_article">
                                 <input type="hidden" name="id" value="<?= (int) $article['id'] ?>">

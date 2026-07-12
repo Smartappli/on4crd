@@ -257,11 +257,6 @@ function seo_apply_defaults(string $route): void
     if ($routeDescription !== '') {
         $routeSpecificMeta['description'] = $routeDescription;
     }
-    $localeMap = [
-        'fr' => 'fr_BE', 'en' => 'en_GB', 'de' => 'de_DE', 'nl' => 'nl_BE', 'es' => 'es_ES', 'it' => 'it_IT', 'pt' => 'pt_PT',
-        'ar' => 'ar_SA', 'hi' => 'hi_IN', 'ja' => 'ja_JP', 'zh' => 'zh_CN', 'bn' => 'bn_BD', 'ru' => 'ru_RU', 'id' => 'id_ID',
-    ];
-
     $meta = [
         'alternates' => seo_build_hreflang_alternates($route),
         'canonical' => seo_build_canonical_url($route),
@@ -270,7 +265,7 @@ function seo_apply_defaults(string $route): void
         'twitter_card' => 'summary_large_image',
         'schema_type' => 'WebPage',
         'site_name' => (string) config('app.site_name', 'ON4CRD'),
-        'locale' => (string) ($localeMap[$locale] ?? 'fr_BE'),
+        'locale' => locale_open_graph_code($locale),
         'geo_region' => 'BE-WNA',
         'geo_placename' => 'Durnal, Belgium',
         'geo_position' => '50.3150;4.9452',

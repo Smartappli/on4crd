@@ -52,11 +52,6 @@ $deleteFavoriteLinks = static function (array $ids): void {
         ]);
     }
 };
-$deleteConfirm = json_encode($tText('delete_confirm'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
-if (!is_string($deleteConfirm)) {
-    $deleteConfirm = '"delete_confirm"';
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
@@ -240,7 +235,7 @@ ob_start();
         <?php if ($edit === null): ?>
             <p class="help"><?= e($tText('no_ads')) ?></p>
         <?php else: ?>
-        <form method="post" class="stack">
+        <form method="post" class="stack" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save">
             <input type="hidden" name="id" value="<?= (int) $edit['id'] ?>">
@@ -261,7 +256,7 @@ ob_start();
             <label><?= e($tText('contact')) ?><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($edit['contact'] ?? '')) ?>"></label>
             <p><button class="button"><?= e($tText('save')) ?></button> <a class="button ghost" href="<?= e(route_url('admin_classifieds')) ?>"><?= e($tText('cancel')) ?></a></p>
         </form>
-        <form method="post" onsubmit="return confirm(<?= e($deleteConfirm) ?>);">
+        <form method="post" data-confirm-message="<?= e($tText('delete_confirm')) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $edit['id'] ?>">
             <button class="button ghost"><?= e($tText('delete')) ?></button>
         </form>
@@ -279,7 +274,7 @@ ob_start();
             <a class="button secondary" href="<?= e(route_url('admin_classifieds')) ?>"><?= e($tText('reset')) ?></a>
         </form>
         <?php if ($rows === []): ?><p class="help"><?= e($tText('no_ads')) ?></p><?php else: ?>
-        <form method="post">
+        <form method="post" data-confirm-message="<?= e($tText('delete_confirm')) ?>" data-confirm-when-select="bulk_op:delete">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="bulk_update">
             <div class="inline-form" style="margin-bottom:.7rem;">
                 <select name="bulk_op">

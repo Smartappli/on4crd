@@ -939,10 +939,10 @@ ob_start();
         <article class="card admin-library-empty"><p><?= e((string) $t['empty']) ?></p></article>
     <?php endif; ?>
     <?php if ($documents !== []): ?>
-    <form method="post" id="bulk-delete-form">
+    <form method="post" id="bulk-delete-form" data-confirm-message="<?= e((string) $t['confirm_delete']) ?>">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <input type="hidden" name="action" value="bulk_delete_documents">
-        <p><button class="button secondary" type="submit" onclick="return confirm('<?= e((string) $t['confirm_delete']) ?>');"><?= e((string) $t['bulk_delete']) ?></button></p>
+        <p><button class="button secondary" type="submit"><?= e((string) $t['bulk_delete']) ?></button></p>
     </form>
     <?php endif; ?>
     <?php foreach ($documents as $document): ?>
@@ -976,7 +976,7 @@ ob_start();
                 <?php if ($documentDownloadUrl !== ''): ?>
                     <a class="button secondary" href="<?= e($documentDownloadUrl) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a>
                 <?php endif; ?>
-                <form method="post" onsubmit="return confirm('<?= e((string) $t['confirm_delete']) ?>');">
+                <form method="post" data-confirm-message="<?= e((string) $t['confirm_delete']) ?>">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="delete_document">
                     <input type="hidden" name="id" value="<?= $documentId ?>">

@@ -87,7 +87,14 @@ function render_admin_workspace_nav(string $currentRoute, string $currentLocale)
     $searchCta = (string) ($messages['search_cta'] ?? $searchLabel);
     $searchValue = trim((string) ($_GET['q'] ?? ''));
     $pendingTotal = 0;
-    $links = '<a class="admin-shell-link' . ($currentRoute === 'admin' ? ' is-active" aria-current="page"' : '"') . ' href="' . e(route_url('admin')) . '"><span>' . e($dashboardLabel) . '</span></a>';
+    $groupLabelsByLocale = [
+        'fr' => ['content' => 'Contenus', 'media' => 'Médias et documents', 'communication' => 'Communication', 'members' => 'Membres et accès', 'settings' => 'Configuration'],
+        'en' => ['content' => 'Content', 'media' => 'Media and documents', 'communication' => 'Communication', 'members' => 'Members and access', 'settings' => 'Settings'],
+        'de' => ['content' => 'Inhalte', 'media' => 'Medien und Dokumente', 'communication' => 'Kommunikation', 'members' => 'Mitglieder und Zugriff', 'settings' => 'Einstellungen'],
+        'nl' => ['content' => 'Inhoud', 'media' => 'Media en documenten', 'communication' => 'Communicatie', 'members' => 'Leden en toegang', 'settings' => 'Instellingen'],
+    ];
+    $groupLabels = $groupLabelsByLocale[$currentLocale] ?? $groupLabelsByLocale['en'];
+    $groupedLinks = [];
 
     foreach ($cards as $card) {
         $route = (string) ($card['route'] ?? '');
@@ -103,18 +110,36 @@ function render_admin_workspace_nav(string $currentRoute, string $currentLocale)
         $badge = $pendingCount > 0
             ? '<span class="admin-shell-link-badge" aria-label="' . e((string) $pendingCount . ' ' . $pendingLabel) . '">' . $pendingCount . '</span>'
             : '';
-        $links .= '<a class="admin-shell-link' . ($route === $currentRoute ? ' is-active" aria-current="page"' : '"') . ' href="' . e((string) ($card['url'] ?? route_url($route))) . '"><span>' . e($title) . '</span>' . $badge . '</a>';
+        $group = (string) ($card['group'] ?? 'settings');
+        $groupedLinks[$group] = ($groupedLinks[$group] ?? '')
+            . '<a class="admin-shell-link' . ($route === $currentRoute ? ' is-active" aria-current="page"' : '"') . ' href="' . e((string) ($card['url'] ?? route_url($route))) . '"><span>' . e($title) . '</span>' . $badge . '</a>';
     }
 
     $pendingSummary = $pendingTotal > 0 && $pendingLabel !== ''
         ? '<span class="admin-shell-status">' . e((string) $pendingTotal . ' ' . $pendingLabel) . '</span>'
         : '';
+    $dashboardPendingBadge = $pendingTotal > 0
+        ? '<span class="admin-shell-link-badge" aria-label="' . e((string) $pendingTotal . ' ' . $pendingLabel) . '">' . $pendingTotal . '</span>'
+        : '';
+    $dashboardLink = '<a class="admin-shell-link admin-shell-dashboard-link' . ($currentRoute === 'admin' ? ' is-active" aria-current="page"' : '"') . ' href="' . e(route_url('admin')) . '"><span>' . e($dashboardLabel) . '</span>' . $dashboardPendingBadge . '</a>';
     $searchForm = '<form class="admin-shell-search" method="get" action="' . e(base_url('/index.php')) . '" role="search">'
         . '<input type="hidden" name="route" value="admin">'
         . '<label class="sr-only" for="admin-shell-search">' . e($searchLabel) . '</label>'
         . '<input id="admin-shell-search" type="search" name="q" value="' . e($searchValue) . '" placeholder="' . e($searchPlaceholder) . '">'
         . '<button class="button secondary small" type="submit">' . e($searchCta) . '</button>'
         . '</form>';
+
+    $links = $dashboardLink;
+    foreach (['content', 'media', 'communication', 'members', 'settings'] as $group) {
+        $groupLinks = (string) ($groupedLinks[$group] ?? '');
+        if ($groupLinks === '') {
+            continue;
+        }
+        $isCurrentGroup = str_contains($groupLinks, 'aria-current="page"');
+        $links .= '<details class="admin-shell-group"' . ($isCurrentGroup ? ' open' : '') . '><summary>'
+            . e((string) ($groupLabels[$group] ?? $group))
+            . '</summary><div class="admin-shell-group-links">' . $groupLinks . '</div></details>';
+    }
 
     return '<section class="admin-shell-nav" aria-label="' . e($dashboardLabel) . '">'
         . '<div class="admin-shell-current"><span class="admin-section-kicker">' . e($dashboardLabel) . '</span><strong>' . e($currentLabel) . '</strong></div>'
@@ -239,6 +264,13 @@ function module_js_assets_for_route(string $route): array
     ];
     $module = $moduleByRoute[$route] ?? $route;
     $assets = [];
+
+    if ($route === 'admin' || str_starts_with($route, 'admin_')) {
+        $adminCommonPath = 'assets/js/modules/admin_common.js';
+        if (is_file(dirname(__DIR__) . '/' . $adminCommonPath)) {
+            $assets[] = $adminCommonPath;
+        }
+    }
 
     $dialogModules = ['albums', 'articles', 'member_documents', 'members_library', 'news', 'webotheque', 'wiki'];
     $candidates = in_array($module, $dialogModules, true) ? ['module_dialogs', $module] : [$module];
@@ -488,6 +520,10 @@ function render_layout_impl(string $content, string $title = ''): string
     $metaAiSummary = trim((string) ($pageMeta['ai_summary'] ?? $metaDescription));
     $metaContentType = trim((string) ($pageMeta['content_type'] ?? $pageMeta['schema_type'] ?? 'WebPage'));
     $metaCitationAuthor = trim((string) ($pageMeta['citation_author'] ?? 'Radio Club Durnal ON4CRD'));
+    $documentLanguage = locale_language_tag($currentLocale);
+    if (!headers_sent()) {
+        header('Content-Language: ' . $documentLanguage);
+    }
     $metaKeywords = [];
     foreach (array_merge((array) ($pageMeta['keywords'] ?? []), (array) ($pageMeta['tags'] ?? [])) as $keyword) {
         $keyword = trim((string) $keyword);
@@ -503,13 +539,13 @@ function render_layout_impl(string $content, string $title = ''): string
     }
     $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
         . '<meta name="robots" content="' . e($metaRobots) . '">'
-        . '<meta name="language" content="' . e($currentLocale) . '">'
+        . '<meta name="language" content="' . e($documentLanguage) . '">'
         . '<meta name="ai-summary" content="' . e($metaAiSummary) . '">'
         . '<meta name="answer-engine-summary" content="' . e($metaAiSummary) . '">'
         . '<meta name="content-type" content="' . e($metaContentType) . '">'
         . '<meta name="dcterms.title" content="' . e($pageTitle) . '">'
         . '<meta name="dcterms.description" content="' . e($metaAiSummary) . '">'
-        . '<meta name="dcterms.language" content="' . e($currentLocale) . '">'
+        . '<meta name="dcterms.language" content="' . e($documentLanguage) . '">'
         . '<meta name="dcterms.publisher" content="' . e($metaSiteName) . '">'
         . '<meta name="dcterms.type" content="' . e($metaContentType) . '">'
         . '<meta name="citation_title" content="' . e($pageTitle) . '">'
@@ -547,7 +583,7 @@ function render_layout_impl(string $content, string $title = ''): string
             continue;
         }
         $metaHead .= '<link rel="alternate" hreflang="' . e($lang) . '" href="' . e($url) . '">';
-        if ($lang !== 'x-default') {
+        if ($lang !== 'x-default' && locale_open_graph_code($lang) !== $metaLocale) {
             $metaHead .= '<meta property="og:locale:alternate" content="' . e(locale_open_graph_code($lang)) . '">';
         }
     }
@@ -774,7 +810,7 @@ function render_layout_impl(string $content, string $title = ''): string
     }
     $adminWorkspaceNavHtml = render_admin_workspace_nav($currentRoute, $currentLocale);
 
-    return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" class="notranslate" translate="no" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
+    return '<!doctype html><html lang="' . e($documentLanguage) . '" dir="' . e($htmlDir) . '" class="notranslate" translate="no" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
         . '</title>' . $metaHead
         . '<meta name="theme-color" content="#2f6fed">'

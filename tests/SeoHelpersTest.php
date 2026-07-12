@@ -86,6 +86,34 @@ final class SeoHelpersTest extends TestCase
         self::assertSame($expectedBaseUrl . '/knowledge-graph.jsonld', seo_build_canonical_url('knowledge-graph.jsonld'));
     }
 
+    public function testEverySupportedLocaleHasConsistentInternationalMetadata(): void
+    {
+        foreach (supported_locales() as $locale) {
+            $languageTag = locale_language_tag($locale);
+            self::assertMatchesRegularExpression(
+                '/^[a-z]{2,3}-[A-Z]{2}$/',
+                $languageTag,
+                sprintf('Invalid BCP 47 tag for %s', $locale)
+            );
+            self::assertSame(str_replace('-', '_', $languageTag), locale_open_graph_code($locale));
+            self::assertStringStartsWith($locale . '-', $languageTag);
+        }
+
+        self::assertSame('bg_BG', locale_open_graph_code('bg'));
+        self::assertSame('pl_PL', locale_open_graph_code('pl'));
+        self::assertSame('en_GB', locale_open_graph_code('en'));
+    }
+
+    public function testSeoApplyDefaultsUsesRequestedLocaleMetadata(): void
+    {
+        $_SESSION['locale'] = 'sv';
+        seo_apply_defaults('home');
+
+        $meta = (array) ($_SESSION['_page_meta'] ?? []);
+        self::assertSame('sv_SE', $meta['locale'] ?? null);
+        unset($_SESSION['locale']);
+    }
+
     public function testLocalizedSeoDefaultsAddsGeoMetadataForAnswerEngines(): void
     {
         $meta = localized_seo_defaults('tools', 'fr', [], 'ON4CRD');

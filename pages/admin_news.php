@@ -154,7 +154,7 @@ ob_start();
 <div class="grid-2 admin-news-workspace">
     <section class="card admin-news-editor-card">
         <h2><?= $editing ? e((string) $t['edit']) : e((string) $t['write']) ?> <?= e((string) $t['news_item']) ?></h2>
-        <form method="post" class="stack admin-news-editor-form">
+        <form method="post" class="stack admin-news-editor-form" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_post">
             <input type="hidden" name="post_id" value="<?= (int) ($editing['id'] ?? 0) ?>">

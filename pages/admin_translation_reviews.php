@@ -13,6 +13,22 @@ $tr = static function (string $key) use ($t): string {
     $value = trim((string) ($t[$key] ?? ''));
     return $value;
 };
+$reviewableLocales = array_values(array_filter(supported_locales(), static fn(string $supportedLocale): bool => $supportedLocale !== 'fr'));
+$reviewLocale = strtolower(trim((string) ($_GET['review_locale'] ?? '')));
+if ($reviewLocale !== '' && !in_array($reviewLocale, $reviewableLocales, true)) {
+    $reviewLocale = '';
+}
+$reviewType = strtolower(trim((string) ($_GET['review_type'] ?? 'all')));
+if (!in_array($reviewType, ['all', 'news', 'articles'], true)) {
+    $reviewType = 'all';
+}
+$filterLabelsByLocale = [
+    'fr' => ['language' => 'Langue', 'all_languages' => 'Toutes les langues', 'type' => 'Type de contenu', 'all_content' => 'Tous les contenus', 'apply' => 'Filtrer', 'source' => 'Source'],
+    'en' => ['language' => 'Language', 'all_languages' => 'All languages', 'type' => 'Content type', 'all_content' => 'All content', 'apply' => 'Filter', 'source' => 'Source'],
+    'de' => ['language' => 'Sprache', 'all_languages' => 'Alle Sprachen', 'type' => 'Inhaltstyp', 'all_content' => 'Alle Inhalte', 'apply' => 'Filtern', 'source' => 'Quelle'],
+    'nl' => ['language' => 'Taal', 'all_languages' => 'Alle talen', 'type' => 'Inhoudstype', 'all_content' => 'Alle inhoud', 'apply' => 'Filteren', 'source' => 'Bron'],
+];
+$filterLabels = $filterLabelsByLocale[$localeUi] ?? $filterLabelsByLocale['en'];
 
 set_page_meta([
     'title' => (string) $tr('layout'),
@@ -26,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = (string) ($_POST['action'] ?? '');
         $id = (int) ($_POST['id'] ?? 0);
         $locale = (string) ($_POST['locale'] ?? 'en');
-        $reviewableLocales = array_values(array_filter(supported_locales(), static fn(string $supportedLocale): bool => $supportedLocale !== 'fr'));
         if (!in_array($locale, $reviewableLocales, true)) {
             throw new RuntimeException((string) $tr('invalid_lang'));
         }
@@ -56,15 +71,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
     }
-    redirect('admin_translation_reviews');
+    $returnLocale = strtolower(trim((string) ($_POST['return_locale'] ?? '')));
+    $returnType = strtolower(trim((string) ($_POST['return_type'] ?? 'all')));
+    redirect_url(route_url_clean('admin_translation_reviews', [
+        'review_locale' => in_array($returnLocale, $reviewableLocales, true) ? $returnLocale : '',
+        'review_type' => in_array($returnType, ['all', 'news', 'articles'], true) ? $returnType : 'all',
+    ]));
 }
 
-$newsTranslations = table_exists('news_translations')
-    ? db()->query('SELECT nt.*, np.title AS source_title FROM news_translations nt INNER JOIN news_posts np ON np.id = nt.news_post_id WHERE nt.status IN ("auto", "needs_review") ORDER BY nt.updated_at DESC')->fetchAll()
-    : [];
-$articleTranslations = table_exists('article_translations')
-    ? db()->query('SELECT at.*, a.title AS source_title FROM article_translations at INNER JOIN articles a ON a.id = at.article_id WHERE at.status IN ("auto", "needs_review") ORDER BY at.updated_at DESC')->fetchAll()
-    : [];
+$newsTranslations = [];
+if ($reviewType !== 'articles' && table_exists('news_translations')) {
+    $newsLocaleSql = $reviewLocale !== '' ? ' AND nt.locale = ?' : '';
+    $newsStmt = db()->prepare('SELECT nt.*, np.title AS source_title, np.excerpt AS source_excerpt, np.content AS source_content FROM news_translations nt INNER JOIN news_posts np ON np.id = nt.news_post_id WHERE nt.status IN ("auto", "needs_review")' . $newsLocaleSql . ' ORDER BY nt.updated_at DESC');
+    $newsStmt->execute($reviewLocale !== '' ? [$reviewLocale] : []);
+    $newsTranslations = $newsStmt->fetchAll() ?: [];
+}
+$articleTranslations = [];
+if ($reviewType !== 'news' && table_exists('article_translations')) {
+    $articleLocaleSql = $reviewLocale !== '' ? ' AND at.locale = ?' : '';
+    $articleStmt = db()->prepare('SELECT at.*, a.title AS source_title, a.excerpt AS source_excerpt, a.content AS source_content FROM article_translations at INNER JOIN articles a ON a.id = at.article_id WHERE at.status IN ("auto", "needs_review")' . $articleLocaleSql . ' ORDER BY at.updated_at DESC');
+    $articleStmt->execute($reviewLocale !== '' ? [$reviewLocale] : []);
+    $articleTranslations = $articleStmt->fetchAll() ?: [];
+}
 
 $chatbotI18nQa = ['ok' => true, 'issues' => []];
 try {
@@ -188,6 +216,30 @@ if (table_exists('member_library_documents')) {
 ob_start();
 ?>
 <div class="stack">
+  <section class="card admin-translation-filter-card">
+    <div class="admin-section-head">
+      <div><h1><?= e((string) $tr('layout')) ?></h1><p class="help"><?= e((string) $tr('meta_desc')) ?></p></div>
+      <span class="badge muted"><?= count($newsTranslations) + count($articleTranslations) ?></span>
+    </div>
+    <form method="get" class="inline-form admin-translation-filters">
+      <label><?= e($filterLabels['language']) ?>
+        <select name="review_locale">
+          <option value=""><?= e($filterLabels['all_languages']) ?></option>
+          <?php foreach ($reviewableLocales as $candidateLocale): ?>
+            <option value="<?= e($candidateLocale) ?>" <?= $reviewLocale === $candidateLocale ? 'selected' : '' ?>><?= e(strtoupper($candidateLocale)) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </label>
+      <label><?= e($filterLabels['type']) ?>
+        <select name="review_type">
+          <option value="all" <?= $reviewType === 'all' ? 'selected' : '' ?>><?= e($filterLabels['all_content']) ?></option>
+          <option value="news" <?= $reviewType === 'news' ? 'selected' : '' ?>><?= e((string) $tr('news_title')) ?></option>
+          <option value="articles" <?= $reviewType === 'articles' ? 'selected' : '' ?>><?= e((string) $tr('article_title')) ?></option>
+        </select>
+      </label>
+      <button class="button secondary" type="submit"><?= e($filterLabels['apply']) ?></button>
+    </form>
+  </section>
   <section class="card">
     <h1><?= e((string) $tr('assistant_title')) ?></h1>
     <p class="help"><?= e((string) $tr('assistant_help')) ?></p>
@@ -224,46 +276,70 @@ ob_start();
     </div>
   </section>
 
-  <div class="grid-2">
+  <div class="stack admin-translation-review-queue">
+    <?php if ($reviewType !== 'articles'): ?>
     <section class="card">
       <h2><?= e((string) $tr('news_title')) ?></h2>
       <?php foreach ($newsTranslations as $translation): ?>
-        <article class="card inner-card">
+        <article class="card inner-card admin-translation-review-card">
           <h3><?= e((string) $translation['source_title']) ?> — <?= strtoupper(e((string) $translation['locale'])) ?></h3>
-          <form method="post" class="stack">
+          <div class="admin-translation-compare">
+          <aside class="admin-translation-source" aria-label="FR">
+            <h4><?= e($filterLabels['source']) ?> — FR</h4>
+            <strong><?= e((string) $translation['source_title']) ?></strong>
+            <p><?= e((string) ($translation['source_excerpt'] ?? '')) ?></p>
+            <div class="admin-translation-source-content"><?= nl2br(e(trim(strip_tags((string) ($translation['source_content'] ?? ''))))) ?></div>
+          </aside>
+          <form method="post" class="stack" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="review_news_translation">
             <input type="hidden" name="id" value="<?= (int) $translation['id'] ?>">
             <input type="hidden" name="locale" value="<?= e((string) $translation['locale']) ?>">
+            <input type="hidden" name="return_locale" value="<?= e($reviewLocale) ?>">
+            <input type="hidden" name="return_type" value="<?= e($reviewType) ?>">
             <label><?= e((string) $tr('label_title')) ?><input type="text" name="title" value="<?= e((string) $translation['title']) ?>"></label>
             <label><?= e((string) $tr('label_excerpt')) ?><textarea name="excerpt" rows="3"><?= e((string) $translation['excerpt']) ?></textarea></label>
             <label><?= e((string) $tr('label_content')) ?><textarea name="content" rows="8"><?= e((string) $translation['content']) ?></textarea></label>
             <button class="button"><?= e((string) $tr('submit')) ?></button>
           </form>
+          </div>
         </article>
       <?php endforeach; ?>
       <?php if ($newsTranslations === []): ?><p><?= e((string) $tr('no_news')) ?></p><?php endif; ?>
     </section>
+    <?php endif; ?>
 
+    <?php if ($reviewType !== 'news'): ?>
     <section class="card">
       <h2><?= e((string) $tr('article_title')) ?></h2>
       <?php foreach ($articleTranslations as $translation): ?>
-        <article class="card inner-card">
+        <article class="card inner-card admin-translation-review-card">
           <h3><?= e((string) $translation['source_title']) ?> — <?= strtoupper(e((string) $translation['locale'])) ?></h3>
-          <form method="post" class="stack">
+          <div class="admin-translation-compare">
+          <aside class="admin-translation-source" aria-label="FR">
+            <h4><?= e($filterLabels['source']) ?> — FR</h4>
+            <strong><?= e((string) $translation['source_title']) ?></strong>
+            <p><?= e((string) ($translation['source_excerpt'] ?? '')) ?></p>
+            <div class="admin-translation-source-content"><?= nl2br(e(trim(strip_tags((string) ($translation['source_content'] ?? ''))))) ?></div>
+          </aside>
+          <form method="post" class="stack" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="review_article_translation">
             <input type="hidden" name="id" value="<?= (int) $translation['id'] ?>">
             <input type="hidden" name="locale" value="<?= e((string) $translation['locale']) ?>">
+            <input type="hidden" name="return_locale" value="<?= e($reviewLocale) ?>">
+            <input type="hidden" name="return_type" value="<?= e($reviewType) ?>">
             <label><?= e((string) $tr('label_title')) ?><input type="text" name="title" value="<?= e((string) $translation['title']) ?>"></label>
             <label><?= e((string) $tr('label_excerpt')) ?><textarea name="excerpt" rows="3"><?= e((string) $translation['excerpt']) ?></textarea></label>
             <label><?= e((string) $tr('label_content')) ?><textarea name="content" rows="8"><?= e((string) $translation['content']) ?></textarea></label>
             <button class="button"><?= e((string) $tr('submit')) ?></button>
           </form>
+          </div>
         </article>
       <?php endforeach; ?>
       <?php if ($articleTranslations === []): ?><p><?= e((string) $tr('no_article')) ?></p><?php endif; ?>
     </section>
+    <?php endif; ?>
   </div>
 </div>
 <?php

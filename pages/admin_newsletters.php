@@ -145,7 +145,7 @@ ob_start();
                                 <?php endif; ?>
                                 <button class="button small secondary" type="submit"><?= (string) $subscriber['status'] === 'active' ? e((string) $t['unsubscribe']) : e((string) $t['reactivate']) ?></button>
                             </form>
-                            <form method="post" style="display:inline-block" onsubmit="return confirm('<?= e((string) $t['confirm_delete_subscriber']) ?>');">
+                            <form method="post" style="display:inline-block" data-confirm-message="<?= e((string) $t['confirm_delete_subscriber']) ?>">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                 <input type="hidden" name="action" value="delete_subscriber">
                                 <input type="hidden" name="subscriber_id" value="<?= (int) $subscriber['id'] ?>">

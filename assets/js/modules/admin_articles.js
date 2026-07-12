@@ -204,10 +204,6 @@
         syncBulkSelection();
         return;
       }
-      const confirmMessage = bulkForm.getAttribute('data-confirm-message') || '';
-      if (confirmMessage !== '' && !window.confirm(confirmMessage)) {
-        event.preventDefault();
-      }
     });
     syncBulkSelection();
     syncBulkAuxiliaryFields();
@@ -249,10 +245,6 @@
         event.preventDefault();
         syncQueueSelection();
         return;
-      }
-      const confirmMessage = queueForm.getAttribute('data-confirm-message') || '';
-      if (confirmMessage !== '' && !window.confirm(confirmMessage)) {
-        event.preventDefault();
       }
     });
     syncQueueSelection();

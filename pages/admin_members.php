@@ -17,7 +17,12 @@ foreach (array_keys($i18n['fr']) as $key) {
 }
 set_page_meta(['title' => (string) $t['layout'], 'description' => (string) $t['meta_desc'], 'robots' => 'noindex,nofollow']);
 
-$returnQuery = http_build_query(['member_q' => (string) ($_GET['member_q'] ?? ''), 'sort' => (string) ($_GET['sort'] ?? 'callsign'), 'dir' => (string) ($_GET['dir'] ?? 'asc')]);
+$returnQuery = http_build_query([
+    'member_q' => (string) ($_GET['member_q'] ?? ''),
+    'sort' => (string) ($_GET['sort'] ?? 'callsign'),
+    'dir' => (string) ($_GET['dir'] ?? 'asc'),
+    'page' => max(1, (int) ($_GET['page'] ?? 1)),
+]);
 $passwordChangeColumnAvailable = table_has_column('members', 'password_change_required');
 $passwordResetMarkerColumnAvailable = table_has_column('members', 'password_reset_forced_at');
 $passwordResetForceAvailable = $passwordChangeColumnAvailable && $passwordResetMarkerColumnAvailable;
@@ -105,7 +110,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             set_flash('success', (string) $t['member_created']);
+            unset($_SESSION['_admin_member_create_old']);
         } catch (Throwable $throwable) {
+            $_SESSION['_admin_member_create_old'] = [
+                'callsign' => (string) ($_POST['callsign'] ?? ''),
+                'full_name' => (string) ($_POST['full_name'] ?? ''),
+                'email' => (string) ($_POST['email'] ?? ''),
+                'locator' => (string) ($_POST['locator'] ?? ''),
+                'is_active' => isset($_POST['is_active']),
+                'is_committee' => isset($_POST['is_committee']),
+                'password_change_required' => isset($_POST['password_change_required']),
+            ];
             set_flash('error', $throwable->getMessage());
         }
         redirect('admin_members');
@@ -134,10 +149,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     parse_str((string) ($_POST['return_query'] ?? ''), $postReturnParams);
     $postReturnSort = (string) ($postReturnParams['sort'] ?? 'callsign');
     $postReturnDir = strtolower((string) ($postReturnParams['dir'] ?? 'asc')) === 'desc' ? 'desc' : 'asc';
+    $postReturnPage = max(1, (int) ($postReturnParams['page'] ?? 1));
     redirect_url(route_url_clean('admin_members', [
         'member_q' => trim((string) ($postReturnParams['member_q'] ?? '')),
         'sort' => in_array($postReturnSort, ['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee'], true) ? $postReturnSort : 'callsign',
         'dir' => $postReturnDir,
+        'page' => $postReturnPage,
     ]));
 }
 
@@ -155,19 +172,36 @@ if ($passwordChangeColumnAvailable) {
 if ($passwordResetMarkerColumnAvailable) {
     $memberColumns .= ', password_reset_forced_at';
 }
-$members = db()->query('SELECT ' . $memberColumns . ' FROM members ORDER BY callsign')->fetchAll();
-usort($members, static function (array $a, array $b) use ($memberSort, $memberDir): int { $cmp = strnatcasecmp((string) ($a[$memberSort] ?? ''), (string) ($b[$memberSort] ?? '')); return $memberDir === 'desc' ? -$cmp : $cmp; });
+$memberWhere = '';
+$memberParams = [];
 if ($memberSearch !== '') {
-    $needle = mb_safe_strtolower($memberSearch);
-    $members = array_values(array_filter($members, static function (array $m) use ($needle): bool {
-        $hay = mb_safe_strtolower((string) ($m['callsign'] ?? '') . ' ' . (string) ($m['full_name'] ?? '') . ' ' . (string) ($m['email'] ?? ''));
-        return str_contains($hay, $needle);
-    }));
+    $memberWhere = ' WHERE callsign LIKE ? OR full_name LIKE ? OR email LIKE ?';
+    $memberNeedle = '%' . $memberSearch . '%';
+    $memberParams = [$memberNeedle, $memberNeedle, $memberNeedle];
 }
-$memberTotal = count($members);
-$memberPages = max(1, (int) ceil($memberTotal / $memberPerPage));
-if ($memberPage > $memberPages) { $memberPage = $memberPages; }
-$members = array_slice($members, ($memberPage - 1) * $memberPerPage, $memberPerPage);
+$memberCountStmt = db()->prepare('SELECT COUNT(*) FROM members' . $memberWhere);
+$memberCountStmt->execute($memberParams);
+$memberTotal = (int) $memberCountStmt->fetchColumn();
+$memberPagination = pagination_state($memberTotal, $memberPage, $memberPerPage);
+$memberPage = $memberPagination['page'];
+$memberPages = $memberPagination['total_pages'];
+$memberOffset = $memberPagination['offset'];
+$memberSortSql = $memberSort . ' ' . strtoupper($memberDir) . ', id ASC';
+$memberListStmt = db()->prepare('SELECT ' . $memberColumns . ' FROM members' . $memberWhere . ' ORDER BY ' . $memberSortSql . ' LIMIT ' . $memberPerPage . ' OFFSET ' . $memberOffset);
+$memberListStmt->execute($memberParams);
+$members = $memberListStmt->fetchAll() ?: [];
+$memberCreateOld = isset($_SESSION['_admin_member_create_old']) && is_array($_SESSION['_admin_member_create_old'])
+    ? $_SESSION['_admin_member_create_old']
+    : [];
+unset($_SESSION['_admin_member_create_old']);
+$memberPageQuery = static function (int $targetPage) use ($memberSearch, $memberSort, $memberDir): string {
+    return route_url_clean('admin_members', [
+        'member_q' => $memberSearch,
+        'sort' => $memberSort,
+        'dir' => $memberDir,
+        'page' => $targetPage,
+    ]);
+};
 
 ob_start();
 ?>
@@ -189,18 +223,18 @@ ob_start();
             <p class="help"><?= e((string) $t['temporary_password']) ?></p>
         </div>
     </div>
-    <form method="post" class="admin-member-create-form">
+    <form method="post" class="admin-member-create-form" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="create_member">
-            <label><?= e((string) $t['th_callsign']) ?><input type="text" name="callsign" maxlength="32" required></label>
-            <label><?= e((string) $t['th_name']) ?><input type="text" name="full_name" maxlength="190" required></label>
-            <label><?= e((string) $t['th_email']) ?><input type="email" name="email" maxlength="190" placeholder="<?= e(member_default_contact_email()) ?>"></label>
-            <label><?= e((string) $t['th_locator']) ?><input type="text" name="locator" maxlength="6"></label>
+            <label><?= e((string) $t['th_callsign']) ?><input type="text" name="callsign" maxlength="32" value="<?= e((string) ($memberCreateOld['callsign'] ?? '')) ?>" required></label>
+            <label><?= e((string) $t['th_name']) ?><input type="text" name="full_name" maxlength="190" value="<?= e((string) ($memberCreateOld['full_name'] ?? '')) ?>" required></label>
+            <label><?= e((string) $t['th_email']) ?><input type="email" name="email" maxlength="190" value="<?= e((string) ($memberCreateOld['email'] ?? '')) ?>" placeholder="<?= e(member_default_contact_email()) ?>"></label>
+            <label><?= e((string) $t['th_locator']) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($memberCreateOld['locator'] ?? '')) ?>"></label>
             <label><?= e((string) $t['temporary_password']) ?><input type="password" name="password" minlength="8" autocomplete="new-password" required></label>
-            <label class="admin-member-toggle"><input type="checkbox" name="is_active" value="1" checked> <?= e((string) $t['th_active']) ?></label>
-            <label class="admin-member-toggle"><input type="checkbox" name="is_committee" value="1"> <?= e((string) $t['th_committee']) ?></label>
+            <label class="admin-member-toggle"><input type="checkbox" name="is_active" value="1" <?= $memberCreateOld === [] || !empty($memberCreateOld['is_active']) ? 'checked' : '' ?>> <?= e((string) $t['th_active']) ?></label>
+            <label class="admin-member-toggle"><input type="checkbox" name="is_committee" value="1" <?= !empty($memberCreateOld['is_committee']) ? 'checked' : '' ?>> <?= e((string) $t['th_committee']) ?></label>
             <?php if ($passwordChangeColumnAvailable): ?>
-                <label class="admin-member-toggle"><input type="checkbox" name="password_change_required" value="1" checked> <?= e((string) $t['password_reset_force']) ?></label>
+                <label class="admin-member-toggle"><input type="checkbox" name="password_change_required" value="1" <?= $memberCreateOld === [] || !empty($memberCreateOld['password_change_required']) ? 'checked' : '' ?>> <?= e((string) $t['password_reset_force']) ?></label>
             <?php endif; ?>
             <button class="button" type="submit"><?= e((string) $t['create_submit']) ?></button>
     </form>
@@ -225,7 +259,7 @@ ob_start();
         <th><?= e((string) $t['th_callsign']) ?></th><th><?= e((string) $t['th_name']) ?></th><th><?= e((string) $t['th_email']) ?></th><th><?= e((string) $t['th_locator']) ?></th><th><?= e((string) $t['th_active']) ?></th><th><?= e((string) $t['th_committee']) ?></th><th><?= e((string) $t['th_password_reset']) ?></th><th><?= e((string) $t['th_actions']) ?></th>
     </tr></thead><tbody>
     <?php foreach ($members as $member): ?>
-        <tr><td colspan="8"><form method="post" class="admin-member-row-form">
+        <tr><td colspan="8"><form method="post" class="admin-member-row-form" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="update_member"><input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>"><input type="hidden" name="return_query" value="<?= e($returnQuery) ?>">
             <input type="text" name="callsign" value="<?= e((string) $member['callsign']) ?>" aria-label="<?= e((string) $t['th_callsign']) ?>"><input type="text" name="full_name" value="<?= e((string) $member['full_name']) ?>" aria-label="<?= e((string) $t['th_name']) ?>"><input type="email" name="email" value="<?= e((string) $member['email']) ?>" aria-label="<?= e((string) $t['th_email']) ?>"><input type="text" name="locator" value="<?= e((string) $member['locator']) ?>" maxlength="6" aria-label="<?= e((string) $t['th_locator']) ?>">
             <label class="admin-member-toggle"><input type="checkbox" name="is_active" value="1" <?= (int) $member['is_active'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['th_active']) ?></label>
@@ -241,6 +275,13 @@ ob_start();
     <?php endforeach; ?>
     <?php if ($members === []): ?><tr><td colspan="8"><?= e((string) $t['members']) ?></td></tr><?php endif; ?>
     </tbody></table></div>
+    <?php if ($memberPages > 1): ?>
+        <nav class="admin-pagination" aria-label="<?= e((string) $t['members']) ?>">
+            <?php if ($memberPage > 1): ?><a class="button secondary small" href="<?= e($memberPageQuery($memberPage - 1)) ?>" rel="prev">←</a><?php endif; ?>
+            <span class="admin-pagination-status" aria-current="page"><?= $memberPage ?> / <?= $memberPages ?></span>
+            <?php if ($memberPage < $memberPages): ?><a class="button secondary small" href="<?= e($memberPageQuery($memberPage + 1)) ?>" rel="next">→</a><?php endif; ?>
+        </nav>
+    <?php endif; ?>
 </section>
 </div>
 <?php

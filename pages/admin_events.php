@@ -150,7 +150,7 @@ ob_start();
 <div class="grid-2">
     <section class="card">
         <h1><?= $edit ? e((string) $t['edit']) : e((string) $t['create']) ?> <?= e((string) $t['form_title']) ?></h1>
-        <form method="post" class="stack">
+        <form method="post" class="stack" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="id" value="<?= (int) ($edit['id'] ?? 0) ?>">
             <label><?= e((string) $t['title']) ?><input type="text" name="title" value="<?= e((string) ($edit['title'] ?? '')) ?>" required></label>
