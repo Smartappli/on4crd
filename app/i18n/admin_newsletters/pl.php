@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Przykład: podpisany formularz na 2026-06-05',
   'consent_admin_help' => 'Dodawanie, importowanie lub ponowna aktywacja wymaga wyraźnego potwierdzenia zgody.',
   'consent' => 'Zgoda',
+
+  'confirm_send_campaign' => 'Wysłać tę kampanię do wszystkich aktywnych subskrybentów? Tej akcji nie można cofnąć.',
 );

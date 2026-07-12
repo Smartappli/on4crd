@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'প্রথমে এই বিষয়ের সব উপ-উপবিষয় মুছে ফেলুন।',
   'err_subsubcategory_has_documents' => 'এই উপ-উপবিষয়ে এখনও নথি আছে। এটি মুছে ফেলার আগে সেই নথিগুলি সরান বা মুছে ফেলুন।',
   'proposal_type_subsubcategory' => 'উপ-উপবিষয়',
+
+  'confirm_reject_proposal' => 'এই লাইব্রেরি প্রস্তাব প্রত্যাখ্যান নিশ্চিত করুন? এই সিদ্ধান্ত তার সম্পাদকীয় কর্মপ্রবাহ পরিবর্তন করে।',
 );

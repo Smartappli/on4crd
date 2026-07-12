@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Vykdoma',
   'status_resolved' => 'Išspręsta',
   'status_rejected' => 'Atmesta',
+
+  'confirm_apply_erasure' => 'Patvirtinti automatinį susijusių failų anonimiškumą ir apdorojimą? Šis veiksmas yra negrįžtamas.',
 );

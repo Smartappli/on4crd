@@ -47,4 +47,6 @@ return array (
   'status_published' => '発行済み',
   'status_rejected' => '拒否されました',
   'status_archived' => 'アーカイブ済み',
+
+  'confirm_moderation_decision' => 'このモデレーション決定を確認しますか?ニュース項目の可視性が変わる可能性があります。',
 );

@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Ibda mill-ġdid l-għażla ✓',
   'updated_at' => 'Verżjoni ta\'',
   'published_at' => 'Ippubblikat - Data tal-pubblikazzjoni',
+
+  'confirm_reject_article' => 'Tikkonferma r-rifjut ta\' dan l-artikolu? L-awtur tiegħu jista\' jiġi nnotifikat.',
 );

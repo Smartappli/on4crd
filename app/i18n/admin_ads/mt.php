@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Żid tqegħid',
   'unknown_owner' => '—',
   'meta_desc' => 'Ġestjoni u moderazzjoni ta\' kampanji ta\' reklamar.',
+
+  'confirm_reject_ad' => 'Tikkonferma r-rifjut ta\' dan ir-riklam? Din id-deċiżjoni tbiddel il-viżibilità tagħha.',
 );

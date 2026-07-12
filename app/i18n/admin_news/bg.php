@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Публикувано',
   'status_rejected' => 'Отхвърлено',
   'status_archived' => 'Архивирано',
+
+  'confirm_moderation_decision' => 'Потвърждаване на това решение за модериране? Може да промени видимостта на новината.',
 );

@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Ejemplo: formulario firmado en 2026-06-05',
   'consent_admin_help' => 'Agregar, importar o reactivar requiere prueba de consentimiento explícito.',
   'consent' => 'Consentir',
+
+  'confirm_send_campaign' => '¿Enviar esta campaña a todos los suscriptores activos? Esta acción no se puede deshacer.',
 );

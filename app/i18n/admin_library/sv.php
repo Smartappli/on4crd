@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Ta först bort alla underunderteman i detta ämne.',
   'err_subsubcategory_has_documents' => 'Detta underundertema innehåller fortfarande dokument. Flytta eller ta bort dokumenten innan du tar bort det.',
   'proposal_type_subsubcategory' => 'Underundertema',
+
+  'confirm_reject_proposal' => 'Bekräfta avslaget på detta biblioteksförslag? Detta beslut ändrar dess redaktionella arbetsflöde.',
 );

@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'حالة',
   'proposal_moderation_note' => 'ملاحظة الاعتدال',
   'proposal_save_status' => 'حفظ',
+
+  'confirm_reject_wiki' => 'هل تريد تأكيد رفض محتوى wiki هذا؟ يغير هذا القرار سير العمل التحريري.',
 );

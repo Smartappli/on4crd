@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Eksempel: underskrevet formular på 2026-06-05',
   'consent_admin_help' => 'Tilføjelse, import eller genaktivering kræver eksplicit samtykkebevis.',
   'consent' => 'Samtykke',
+
+  'confirm_send_campaign' => 'Vil du sende denne kampagne til alle aktive abonnenter? Denne handling kan ikke fortrydes.',
 );

@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Dodajte umestitev',
   'unknown_owner' => '—',
   'meta_desc' => 'Vodenje in moderiranje oglaševalskih kampanj.',
+
+  'confirm_reject_ad' => 'Potrdite zavrnitev tega oglasa? Ta odločitev spremeni njegovo prepoznavnost.',
 );

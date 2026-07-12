@@ -15,6 +15,7 @@ foreach (array_keys($i18n['fr']) as $key) {
     }
     $t[$key] = i18n_localized_value($pool, $locale, 'fr');
 }
+$wizardNavigation = i18n_domain_locale('search', $locale);
 set_page_meta(['title' => (string) $t['layout'], 'description' => (string) $t['meta_desc'], 'robots' => 'noindex,nofollow']);
 
 $returnQuery = http_build_query([
@@ -248,13 +249,18 @@ ob_start();
             <p class="help"><?= e((string) $t['temporary_password']) ?></p>
         </div>
     </div>
-    <form method="post" class="admin-member-create-form" data-admin-dirty-track>
+    <form method="post" class="admin-member-create-form" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['create_title']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="create_member">
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['th_name']) ?>">
             <label><?= e((string) $t['th_callsign']) ?><input type="text" name="callsign" maxlength="32" value="<?= e((string) ($memberCreateOld['callsign'] ?? '')) ?>" required></label>
             <label><?= e((string) $t['th_name']) ?><input type="text" name="full_name" maxlength="190" value="<?= e((string) ($memberCreateOld['full_name'] ?? '')) ?>" required></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['th_email']) ?>">
             <label><?= e((string) $t['th_email']) ?><input type="email" name="email" maxlength="190" value="<?= e((string) ($memberCreateOld['email'] ?? '')) ?>" placeholder="<?= e(member_default_contact_email()) ?>"></label>
             <label><?= e((string) $t['th_locator']) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($memberCreateOld['locator'] ?? '')) ?>"></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['temporary_password']) ?>">
             <label><?= e((string) $t['temporary_password']) ?><input type="password" name="password" minlength="8" autocomplete="new-password" required></label>
             <label class="admin-member-toggle"><input type="checkbox" name="is_active" value="1" <?= $memberCreateOld === [] || !empty($memberCreateOld['is_active']) ? 'checked' : '' ?>> <?= e((string) $t['th_active']) ?></label>
             <label class="admin-member-toggle"><input type="checkbox" name="is_committee" value="1" <?= !empty($memberCreateOld['is_committee']) ? 'checked' : '' ?>> <?= e((string) $t['th_committee']) ?></label>
@@ -262,6 +268,7 @@ ob_start();
                 <label class="admin-member-toggle"><input type="checkbox" name="password_change_required" value="1" <?= $memberCreateOld === [] || !empty($memberCreateOld['password_change_required']) ? 'checked' : '' ?>> <?= e((string) $t['password_reset_force']) ?></label>
             <?php endif; ?>
             <button class="button" type="submit"><?= e((string) $t['create_submit']) ?></button>
+            </section>
     </form>
 </section>
 

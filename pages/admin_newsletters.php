@@ -11,6 +11,7 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
 }
+$wizardNavigation = i18n_domain_locale('search', $locale);
 
 set_page_meta([
     'title' => (string) $t['meta_title'],
@@ -162,19 +163,23 @@ ob_start();
 
     <section class="card">
         <h2><?= e((string) $t['campaigns']) ?></h2>
-        <form method="post" class="stack" data-admin-dirty-track>
+        <form method="post" class="stack" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['campaigns']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="create_campaign">
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['title']) ?>">
             <label><?= e((string) $t['title']) ?>
                 <input type="text" name="title" required>
             </label>
             <label><?= e((string) $t['email_subject']) ?>
                 <input type="text" name="subject" required>
             </label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['content']) ?>">
             <label><?= e((string) $t['content']) ?>
                 <textarea name="content" rows="10" required></textarea>
             </label>
             <p><button class="button"><?= e((string) $t['create_campaign']) ?></button></p>
+            </section>
         </form>
 
         <div class="table-wrap">

@@ -42,4 +42,6 @@ return [
     'add_placement' => '添加展示位置',
     'unknown_owner' => '—',
     'meta_desc' => '管理并审核广告活动。',
+
+  'confirm_reject_ad' => '确认拒绝该广告？这一决定改变了它的知名度。',
 ];

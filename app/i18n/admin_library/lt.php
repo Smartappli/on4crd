@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Pirmiausia ištrinkite visas šios temos po-potemės.',
   'err_subsubcategory_has_documents' => 'Šioje po-potemėje vis dar yra dokumentų. Prieš ištrindami perkelkite arba ištrinkite tuos dokumentus.',
   'proposal_type_subsubcategory' => 'Po-potemė',
+
+  'confirm_reject_proposal' => 'Patvirtinti šio bibliotekos pasiūlymo atmetimą? Šis sprendimas pakeičia redakcinę darbo eigą.',
 );

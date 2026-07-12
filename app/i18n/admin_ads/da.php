@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Tilføj en placering',
   'unknown_owner' => '—',
   'meta_desc' => 'Ledelse og moderering af annoncekampagner.',
+
+  'confirm_reject_ad' => 'Bekræfte afvisning af denne annonce? Denne beslutning ændrer dens synlighed.',
 );

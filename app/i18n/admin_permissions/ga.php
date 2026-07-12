@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Riarthóir',
   'role_super_admin' => 'Sár-Riarachán',
   'role_member' => 'Ball',
+
+  'confirm_remove_role' => 'Bain an ról “%1$s” de %2$s?',
 );

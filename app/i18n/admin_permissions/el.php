@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Διαχειριστής',
   'role_super_admin' => 'Υπερδιαχειριστής',
   'role_member' => 'Μέλος',
+
+  'confirm_remove_role' => 'Να καταργηθεί ο ρόλος "%1$s" από το %2$s;',
 );

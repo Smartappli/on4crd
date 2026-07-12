@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Vispirms dzēsiet visas šīs tēmas apakšapakštēmas.',
   'err_subsubcategory_has_documents' => 'Šajā apakštēmā vēl ir dokumenti. Pirms dzēšanas pārvietojiet vai izdzēsiet šos dokumentus.',
   'proposal_type_subsubcategory' => 'Apakšapakštēma',
+
+  'confirm_reject_proposal' => 'Vai apstiprināt šī bibliotēkas priekšlikuma noraidīšanu? Šis lēmums maina tā redakcijas darbplūsmu.',
 );

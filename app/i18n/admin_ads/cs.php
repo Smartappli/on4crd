@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Přidejte umístění',
   'unknown_owner' => '—',
   'meta_desc' => 'Řízení a moderování reklamních kampaní.',
+
+  'confirm_reject_ad' => 'Potvrdit zamítnutí této reklamy? Toto rozhodnutí mění jeho viditelnost.',
 );

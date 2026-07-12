@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'U tijeku',
   'status_resolved' => 'Riješeno',
   'status_rejected' => 'Odbijen',
+
+  'confirm_apply_erasure' => 'Potvrditi automatiziranu anonimizaciju i obradu povezanih datoteka? Ova radnja je nepovratna.',
 );

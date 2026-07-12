@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Pavyzdys: pasirašyta forma 2026-06-05',
   'consent_admin_help' => 'Norint pridėti, importuoti ar suaktyvinti iš naujo, reikalingas aiškus sutikimo įrodymas.',
   'consent' => 'Sutikimas',
+
+  'confirm_send_campaign' => 'Siųsti šią kampaniją visiems aktyviems prenumeratoriams? Šio veiksmo anuliuoti negalima.',
 );

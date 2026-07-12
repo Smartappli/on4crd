@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Atosaigh an rogha ✓',
   'updated_at' => 'Leagan de',
   'published_at' => 'Foilsithe - Dáta foilsithe',
+
+  'confirm_reject_article' => 'Deimhnigh diúltú don alt seo? Féadfar a údar a chur ar an eolas.',
 );

@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Tilstand',
   'proposal_moderation_note' => 'Moderationsnotat',
   'proposal_save_status' => 'Gem',
+
+  'confirm_reject_wiki' => 'Bekræfte afvisning af dette wiki-indhold? Denne beslutning ændrer dens redaktionelle arbejdsgang.',
 );

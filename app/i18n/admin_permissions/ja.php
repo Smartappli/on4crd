@@ -43,4 +43,6 @@ return array (
   'role_admin' => '管理者',
   'role_super_admin' => 'スーパー管理者',
   'role_member' => 'メンバー',
+
+  'confirm_remove_role' => 'ロール「%1$s」を %2$s から削除しますか?',
 );

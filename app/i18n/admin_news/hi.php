@@ -47,4 +47,6 @@ return array (
   'status_published' => 'प्रकाशित',
   'status_rejected' => 'अस्वीकृत',
   'status_archived' => 'संग्रहीत',
+
+  'confirm_moderation_decision' => 'इस मॉडरेशन निर्णय की पुष्टि करें? इससे समाचार आइटम की दृश्यता बदल सकती है.',
 );

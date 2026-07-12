@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Udgivet',
   'status_rejected' => 'Afvist',
   'status_archived' => 'Arkiveret',
+
+  'confirm_moderation_decision' => 'Vil du bekræfte denne modereringsbeslutning? Det kan ændre synligheden af ​​nyheden.',
 );

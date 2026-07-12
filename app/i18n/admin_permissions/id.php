@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Administrator sistem',
   'role_super_admin' => 'Admin Super',
   'role_member' => 'Anggota',
+
+  'confirm_remove_role' => 'Hapus peran “%1$s” dari %2$s?',
 );

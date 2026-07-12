@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Exempel: undertecknat formulär på 2026-06-05',
   'consent_admin_help' => 'Att lägga till, importera eller återaktivera kräver uttryckligt samtycke.',
   'consent' => 'Samtycke',
+
+  'confirm_send_campaign' => 'Vill du skicka den här kampanjen till alla aktiva prenumeranter? Denna åtgärd kan inte ångras.',
 );

@@ -588,6 +588,48 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group-links {
   font-weight: 800;
 }
 
+.admin-wizard-progress,
+.admin-wizard-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  align-items: center;
+}
+
+.admin-wizard-progress {
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-wizard-progress li {
+  padding: .35rem .65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 800;
+}
+
+.admin-wizard-progress li[aria-current="step"] {
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+  color: var(--accent-strong);
+}
+
+.admin-wizard-controls {
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: .8rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .admin-wizard-controls > .button {
+    flex: 1 1 100%;
+  }
+}
+
 .admin-confirm-dialog {
   width: min(92vw, 32rem);
   padding: 0;

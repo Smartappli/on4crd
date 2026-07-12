@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Pubblicato',
   'status_rejected' => 'Respinto',
   'status_archived' => 'Archiviato',
+
+  'confirm_moderation_decision' => 'Confermi questa decisione di moderazione? Potrebbe modificare la visibilità della notizia.',
 );

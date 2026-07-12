@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Publicat',
   'status_rejected' => 'Respins',
   'status_archived' => 'Arhivat',
+
+  'confirm_moderation_decision' => 'Confirmați această decizie de moderare? Poate schimba vizibilitatea știrii.',
 );

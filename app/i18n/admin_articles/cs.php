@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Restartujte výběr ✓',
   'updated_at' => 'Verze',
   'published_at' => 'Publikováno - Datum zveřejnění',
+
+  'confirm_reject_article' => 'Potvrdit zamítnutí tohoto článku? Jeho autor může být upozorněn.',
 );

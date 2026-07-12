@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Probíhá',
   'status_resolved' => 'Vyřešeno',
   'status_rejected' => 'Odmítnuto',
+
+  'confirm_apply_erasure' => 'Potvrdit automatickou anonymizaci a zpracování přidružených souborů? Tato akce je nevratná.',
 );

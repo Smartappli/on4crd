@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Publicēts',
   'status_rejected' => 'Noraidīts',
   'status_archived' => 'Arhivēts',
+
+  'confirm_moderation_decision' => 'Vai apstiprināt šo regulēšanas lēmumu? Tas var mainīt ziņas redzamību.',
 );

@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Lisää sijoittelu',
   'unknown_owner' => '—',
   'meta_desc' => 'Mainoskampanjoiden hallinta ja moderointi.',
+
+  'confirm_reject_ad' => 'Vahvistatko tämän mainoksen hylkäämisen? Tämä päätös muuttaa sen näkyvyyttä.',
 );

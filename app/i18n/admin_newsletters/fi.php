@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Esimerkki: allekirjoitettu lomake 2026-06-05:ssä',
   'consent_admin_help' => 'Lisääminen, tuonti tai uudelleenaktivointi vaatii nimenomaisen suostumuksen todisteen.',
   'consent' => 'Suostumus',
+
+  'confirm_send_campaign' => 'Lähetetäänkö tämä kampanja kaikille aktiivisille tilaajille? Tätä toimintoa ei voi kumota.',
 );

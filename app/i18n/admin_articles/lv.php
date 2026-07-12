@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Restartējiet atlasi ✓',
   'updated_at' => 'Versija',
   'published_at' => 'Publicēts - Publicēšanas datums',
+
+  'confirm_reject_article' => 'Vai apstiprināt šī raksta noraidīšanu? Tās autors var tikt informēts.',
 );

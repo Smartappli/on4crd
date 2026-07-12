@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Amministratur',
   'role_super_admin' => 'Super Amministratur',
   'role_member' => 'Membru',
+
+  'confirm_remove_role' => 'Neħħi r-rwol “%1$s” minn %2$s?',
 );

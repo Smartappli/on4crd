@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Administrators',
   'role_super_admin' => 'Super administrators',
   'role_member' => 'Biedrs',
+
+  'confirm_remove_role' => 'Vai noņemt lomu “%1$s” no %2$s?',
 );

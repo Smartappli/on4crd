@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Olek',
   'proposal_moderation_note' => 'Mõõduka märkus',
   'proposal_save_status' => 'Salvesta',
+
+  'confirm_reject_wiki' => 'Kas kinnitada selle vikisisu tagasilükkamine? See otsus muudab selle toimetamise töövoogu.',
 );

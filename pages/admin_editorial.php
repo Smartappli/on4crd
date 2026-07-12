@@ -11,6 +11,7 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, $key);
 }
+$wizardNavigation = i18n_domain_locale('search', $locale);
 
 set_page_meta([
     'title' => (string) $t['layout'],
@@ -62,7 +63,7 @@ ob_start();
 <div class="card">
     <h1><?= e((string) $t['title']) ?></h1>
     <p><?= e((string) $t['intro']) ?></p>
-    <form method="post" data-admin-dirty-track>
+    <form method="post" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['title']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <div class="stack">
             <?php foreach ($keys as $contentKey => $label): ?>
@@ -78,7 +79,7 @@ ob_start();
                     $deValue = (string) ($entry['de'] ?? $entry['de_text'] ?? '');
                     $nlValue = (string) ($entry['nl'] ?? $entry['nl_text'] ?? '');
                 ?>
-                <section class="card muted-card">
+                <section class="card muted-card" data-admin-wizard-step data-admin-wizard-title="<?= e($label) ?>">
                     <h2><?= e($label) ?></h2>
                     <div class="grid-2">
                         <label><?= e((string) $t['fr_source']) ?>

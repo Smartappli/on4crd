@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Paskelbta',
   'status_rejected' => 'Atmesta',
   'status_archived' => 'Suarchyvuota',
+
+  'confirm_moderation_decision' => 'Patvirtinti šį moderavimo sprendimą? Tai gali pakeisti naujienų matomumą.',
 );

@@ -5,6 +5,7 @@ require_permission('classifieds.moderate');
 
 $locale = current_locale();
 $t = i18n_domain_locale('classifieds', $locale);
+$wizardNavigation = i18n_domain_locale('search', $locale);
 $tText = static function (string $key) use ($t): string {
     return (string) $t[$key];
 };
@@ -235,26 +236,30 @@ ob_start();
         <?php if ($edit === null): ?>
             <p class="help"><?= e($tText('no_ads')) ?></p>
         <?php else: ?>
-        <form method="post" class="stack" data-admin-dirty-track>
+        <form method="post" class="stack" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e($tText('edit_ad')) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save">
             <input type="hidden" name="id" value="<?= (int) $edit['id'] ?>">
             <p class="help"><?= e($tText('owner')) ?>: <?= e((string) ($edit['callsign'] ?? $tText('not_available'))) ?></p>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e($tText('ad_title')) ?>">
             <label><?= e($tText('category')) ?>
                 <select name="category_code"><?php foreach ($categories as $code => $label): ?><option value="<?= e($code) ?>" <?= (string) $edit['category_code'] === $code ? 'selected' : '' ?>><?= e($label) ?></option><?php endforeach; ?></select>
             </label>
             <label><?= e($tText('ad_title')) ?><input type="text" name="title" maxlength="190" required value="<?= e((string) $edit['title']) ?>"></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e($tText('description')) ?>">
             <label><?= e($tText('description')) ?><textarea name="description" rows="6" required><?= e((string) $edit['description']) ?></textarea></label>
-            <div class="grid-2">
-                <label><?= e($tText('price')) ?><input type="text" name="price" value="<?= e(number_format(((int) $edit['price_cents']) / 100, 2, ',', '')) ?>"></label>
-                <label><?= e($tText('status')) ?>
-                    <select name="status"><?php foreach ($statuses as $code => $label): ?><option value="<?= e($code) ?>" <?= (string) $edit['status'] === $code ? 'selected' : '' ?>><?= e($label) ?></option><?php endforeach; ?></select>
-                </label>
-            </div>
+            <label><?= e($tText('price')) ?><input type="text" name="price" value="<?= e(number_format(((int) $edit['price_cents']) / 100, 2, ',', '')) ?>"></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e($tText('status')) ?>">
             <label><?= e($tText('expires_on')) ?><input type="datetime-local" name="expires_at" value="<?= !empty($edit['expires_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $edit['expires_at']))) : '' ?>"></label>
             <label><?= e($tText('location')) ?><input type="text" name="location" maxlength="120" value="<?= e((string) ($edit['location'] ?? '')) ?>"></label>
             <label><?= e($tText('contact')) ?><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($edit['contact'] ?? '')) ?>"></label>
+            <label><?= e($tText('status')) ?>
+                <select name="status"><?php foreach ($statuses as $code => $label): ?><option value="<?= e($code) ?>" <?= (string) $edit['status'] === $code ? 'selected' : '' ?>><?= e($label) ?></option><?php endforeach; ?></select>
+            </label>
             <p><button class="button"><?= e($tText('save')) ?></button> <a class="button ghost" href="<?= e(route_url('admin_classifieds')) ?>"><?= e($tText('cancel')) ?></a></p>
+            </section>
         </form>
         <form method="post" data-confirm-message="<?= e($tText('delete_confirm')) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $edit['id'] ?>">

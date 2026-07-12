@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Lägg till en placering',
   'unknown_owner' => '—',
   'meta_desc' => 'Hantering och moderering av reklamkampanjer.',
+
+  'confirm_reject_ad' => 'Bekräfta avvisandet av denna annons? Detta beslut ändrar dess synlighet.',
 );

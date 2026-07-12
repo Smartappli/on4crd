@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Scrios na fo-fho-théamaí uile sa téama seo ar dtús.',
   'err_subsubcategory_has_documents' => 'Tá doiciméid fós san fho-théama seo. Bog nó scrios na doiciméid sin sula scriosann tú é.',
   'proposal_type_subsubcategory' => 'Fo-fho-théama',
+
+  'confirm_reject_proposal' => 'Deimhnigh diúltú don mholadh leabharlainne seo? Athraíonn an cinneadh seo a sreabhadh oibre eagarthóireachta.',
 );

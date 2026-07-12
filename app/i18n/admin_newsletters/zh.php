@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => '示例：2026-06-05 上的签名表格',
   'consent_admin_help' => '添加、导入或重新激活需要明确的同意证明。',
   'consent' => '同意',
+
+  'confirm_send_campaign' => '将此活动发送给所有活跃订阅者？此操作无法撤消。',
 );

@@ -105,7 +105,7 @@ final class ArticleDocxImporter
         }
 
         $html = $headerFooterHtml['headers'];
-        $openListTag = null;
+        $openLists = [];
         foreach ($bodyNodes as $block) {
             if (!$block instanceof DOMElement) {
                 continue;
@@ -118,16 +118,14 @@ final class ArticleDocxImporter
                 $context->imageDataUris,
                 $context->numberingFormats,
                 $html,
-                $openListTag,
+                $openLists,
                 $context->noteBodies,
                 $referencedNotes,
                 $context->altChunkHtmlByRelationshipId,
             );
         }
 
-        if ($openListTag !== null) {
-            $html[] = '</' . $openListTag . '>';
-        }
+        article_docx_close_open_list($html, $openLists);
         foreach ($headerFooterHtml['footers'] as $footerHtml) {
             $html[] = '<hr>' . $footerHtml;
         }

@@ -389,6 +389,10 @@ final class FunctionHelpersExtendedTest extends TestCase
       <w:r><w:t>Element de liste</w:t></w:r>
     </w:p>
     <w:p>
+      <w:pPr><w:numPr><w:ilvl w:val="1"/><w:numId w:val="1"/></w:numPr></w:pPr>
+      <w:r><w:t>Element imbrique</w:t></w:r>
+    </w:p>
+    <w:p>
       <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr></w:pPr>
       <w:r><w:t>Element numerote</w:t></w:r>
     </w:p>
@@ -584,7 +588,8 @@ XML;
             self::assertStringContainsString('visible<br>ligne apres retour', $html);
             self::assertStringContainsString('<p>Texte separe par runs</p>', $html);
             self::assertStringContainsString('<ul>', $html);
-            self::assertStringContainsString('<li>Element de liste</li>', $html);
+            self::assertStringContainsString('<li>Element imbrique</li>', $html);
+            self::assertStringContainsString('<li>Element de liste<ul>', $html);
             self::assertStringContainsString('<ol>', $html);
             self::assertStringContainsString('<li>Element numerote</li>', $html);
             self::assertStringContainsString('<p>Texte fallback apres liste</p>', $html);
@@ -655,6 +660,44 @@ XML;
             self::assertStringContainsString('<p>Debut insere suivi</p>', $html);
             self::assertStringContainsString('<p>Debut smartTag</p>', $html);
             self::assertStringContainsString('<p>Suite normale</p>', $html);
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
+    public function testArticleExtractDocxHtmlPreservesWordSpacingBreaksSymbolsAndFieldLinks(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'docx-layout-');
+        self::assertIsString($tmp);
+
+        $documentXml = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:r><w:t>Avant</w:t><w:tab/><w:t>apres tabulation</w:t><w:sym w:font="Wingdings" w:char="F0FC"/></w:r></w:p>
+    <w:p/>
+    <w:p><w:r><w:br w:type="page"/><w:t>Nouvelle page</w:t></w:r></w:p>
+    <w:p><w:pPr><w:pageBreakBefore/></w:pPr><w:r><w:t>Rupture de paragraphe</w:t></w:r></w:p>
+    <w:p><w:fldSimple w:instr=" HYPERLINK &quot;https://example.test/field&quot; "><w:r><w:t>Lien de champ</w:t></w:r></w:fldSimple></w:p>
+    <w:p><w:del w:id="1"><w:r><w:delText>Texte supprime</w:delText></w:r></w:del><w:r><w:t> conserve</w:t></w:r></w:p>
+  </w:body>
+</w:document>
+XML;
+
+        file_put_contents($tmp, self::zipFixture([
+            '[Content_Types].xml' => '<Types><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+            'word/document.xml' => $documentXml,
+        ]));
+
+        try {
+            $html = article_extract_docx_html($tmp);
+
+            self::assertStringContainsString('title="Tabulation"', $html);
+            self::assertStringContainsString('title="Symbole Word"', $html);
+            self::assertStringContainsString('<p><br></p>', $html);
+            self::assertGreaterThanOrEqual(2, substr_count($html, '<hr>'));
+            self::assertStringContainsString('<a href="https://example.test/field">Lien de champ</a>', $html);
+            self::assertStringContainsString('<s>Texte supprime</s> conserve', $html);
         } finally {
             @unlink($tmp);
         }

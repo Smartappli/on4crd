@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Najpierw usuń wszystkie podpodtematy w tym temacie.',
   'err_subsubcategory_has_documents' => 'Ten podpodtemat nadal zawiera dokumenty. Przenieś lub usuń te dokumenty przed jego usunięciem.',
   'proposal_type_subsubcategory' => 'Podpodtemat',
+
+  'confirm_reject_proposal' => 'Potwierdzić odrzucenie tej propozycji biblioteki? Ta decyzja zmienia sposób pracy redakcyjnej.',
 );

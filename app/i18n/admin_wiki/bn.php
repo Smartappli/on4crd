@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'স্ট্যাটাস',
   'proposal_moderation_note' => 'সংযম নোট',
   'proposal_save_status' => 'সংরক্ষণ করুন',
+
+  'confirm_reject_wiki' => 'এই উইকি বিষয়বস্তু প্রত্যাখ্যান নিশ্চিত করুন? এই সিদ্ধান্ত তার সম্পাদকীয় কর্মপ্রবাহ পরিবর্তন করে।',
 );

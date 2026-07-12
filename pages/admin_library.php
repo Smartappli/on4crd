@@ -721,10 +721,10 @@ ob_start();
     </section>
     <?php endif; ?>
 
-    <form method="post" enctype="multipart/form-data" class="admin-library-upload-form" data-admin-dirty-track>
+    <form method="post" enctype="multipart/form-data" class="admin-library-upload-form" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['title']) ?>" data-admin-wizard-previous-label="<?= e((string) $t['prev']) ?>" data-admin-wizard-next-label="<?= e((string) $t['next']) ?>">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <input type="hidden" name="action" value="upload">
-        <div class="admin-library-upload-grid">
+        <section class="admin-library-upload-grid" data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['title_ph']) ?>">
             <label class="admin-library-field">
                 <span><?= e((string) $t['ingestion_template']) ?></span>
                 <select name="template">
@@ -735,6 +735,11 @@ ob_start();
                     <option value="legal"><?= e((string) $t['ingestion_template_legal']) ?></option>
                 </select>
             </label>
+            <label class="admin-library-field"><span><?= e((string) $t['title_ph']) ?></span><input type="text" name="title" required></label>
+            <label class="admin-library-field"><span><?= e((string) $t['tags_ph']) ?></span><input type="text" name="tags" placeholder="<?= e((string) $t['tags_help']) ?>"></label>
+            <label class="admin-library-field admin-library-field-wide"><span><?= e((string) $t['desc_ph']) ?></span><textarea name="description"></textarea></label>
+        </section>
+        <section class="admin-library-upload-grid" data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['category_ph']) ?>">
             <label class="admin-library-field"><span><?= e((string) $t['category_ph']) ?></span><select name="category"><?php foreach ($categoryOptions as $catOpt): ?><option value="<?= e((string) $catOpt['code']) ?>" <?= $adminCategory === (string) $catOpt['code'] ? 'selected' : '' ?>><?= e((string) $catOpt['label']) ?></option><?php endforeach; ?></select></label>
             <label class="admin-library-field">
                 <span><?= e((string) $t['subcategory_ph']) ?></span>
@@ -763,13 +768,12 @@ ob_start();
                     <?php endforeach; ?>
                 </select>
             </label>
-            <label class="admin-library-field"><span><?= e((string) $t['title_ph']) ?></span><input type="text" name="title" required></label>
-            <label class="admin-library-field"><span><?= e((string) $t['tags_ph']) ?></span><input type="text" name="tags" placeholder="<?= e((string) $t['tags_help']) ?>"></label>
-            <label class="admin-library-field admin-library-field-wide"><span><?= e((string) $t['desc_ph']) ?></span><textarea name="description"></textarea></label>
+        </section>
+        <section class="admin-library-upload-grid" data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['file']) ?>">
             <label class="admin-library-field"><span><?= e((string) $t['file']) ?></span><input type="file" name="document" accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/html,text/markdown" required></label>
-        </div>
-        <p class="help"><?= e((string) $t['file_help']) ?></p>
-        <button class="button"><?= e((string) $t['upload']) ?></button>
+            <p class="help"><?= e((string) $t['file_help']) ?></p>
+            <button class="button"><?= e((string) $t['upload']) ?></button>
+        </section>
     </form>
 
     <section class="card admin-library-categories">

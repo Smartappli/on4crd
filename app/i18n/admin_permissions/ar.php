@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'المسؤول',
   'role_super_admin' => 'المشرف الفائق',
   'role_member' => 'عضو',
+
+  'confirm_remove_role' => 'هل تريد إزالة الدور "%1$s" من %2$s؟',
 );

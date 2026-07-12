@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'प्रशासक',
   'role_super_admin' => 'सुपर एडमिन',
   'role_member' => 'सदस्य',
+
+  'confirm_remove_role' => '%2$s से भूमिका "%1$s" हटाएं?',
 );

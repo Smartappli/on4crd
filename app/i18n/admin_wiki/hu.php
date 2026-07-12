@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Állapot',
   'proposal_moderation_note' => 'Moderálási megjegyzés',
   'proposal_save_status' => 'Mentés',
+
+  'confirm_reject_wiki' => 'Megerősíti ennek a wiki-tartalomnak az elutasítását? Ez a döntés megváltoztatja a szerkesztői munkafolyamatot.',
 );

@@ -47,4 +47,6 @@ return array (
   'status_published' => 'প্রকাশিত হয়েছে',
   'status_rejected' => 'প্রত্যাখ্যাত',
   'status_archived' => 'সংরক্ষণাগারভুক্ত',
+
+  'confirm_moderation_decision' => 'এই সংযম সিদ্ধান্ত নিশ্চিত করুন? এটি সংবাদ আইটেমের দৃশ্যমানতা পরিবর্তন করতে পারে।',
 );

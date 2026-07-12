@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Käynnissä',
   'status_resolved' => 'Ratkaistu',
   'status_rejected' => 'Hylätty',
+
+  'confirm_apply_erasure' => 'Vahvistatko yhdistettyjen tiedostojen automaattisen anonymisoinnin ja käsittelyn? Tämä toimenpide on peruuttamaton.',
 );

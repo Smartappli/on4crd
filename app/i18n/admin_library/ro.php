@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Ștergeți mai întâi toate sub-subtemele din această temă.',
   'err_subsubcategory_has_documents' => 'Această sub-subtemă conține încă documente. Mutați sau ștergeți documentele înainte de a o șterge.',
   'proposal_type_subsubcategory' => 'Sub-subtemă',
+
+  'confirm_reject_proposal' => 'Confirmați respingerea acestei propuneri de bibliotecă? Această decizie își schimbă fluxul de lucru editorial.',
 );

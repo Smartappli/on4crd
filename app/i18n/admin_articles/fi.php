@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Käynnistä valinta uudelleen ✓',
   'updated_at' => 'Versio',
   'published_at' => 'Julkaistu - Julkaisupäivä',
+
+  'confirm_reject_article' => 'Vahvistatko tämän artikkelin hylkäämisen? Sen tekijälle voidaan ilmoittaa.',
 );

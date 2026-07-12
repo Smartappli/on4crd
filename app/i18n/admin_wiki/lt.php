@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Būsena',
   'proposal_moderation_note' => 'Moderacijos pastaba',
   'proposal_save_status' => 'Išsaugoti',
+
+  'confirm_reject_wiki' => 'Patvirtinti šio wiki turinio atmetimą? Šis sprendimas pakeičia redakcinę darbo eigą.',
 );

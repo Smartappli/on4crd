@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Starta om markeringen ✓',
   'updated_at' => 'Version av',
   'published_at' => 'Publicerad - Publiceringsdatum',
+
+  'confirm_reject_article' => 'Bekräfta avvisande av denna artikel? Dess författare kan meddelas.',
 );

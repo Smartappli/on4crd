@@ -98,6 +98,71 @@
     });
   });
 
+  document.querySelectorAll('form[data-admin-wizard]').forEach((form) => {
+    if (!(form instanceof HTMLFormElement)) return;
+    const steps = Array.from(form.querySelectorAll('[data-admin-wizard-step]'))
+      .filter((step) => step instanceof HTMLElement);
+    if (steps.length < 2) return;
+    const currentLabel = form.dataset.adminWizardCurrentLabel || 'Current step';
+    const previousLabel = form.dataset.adminWizardPreviousLabel || 'Previous';
+    const nextLabel = form.dataset.adminWizardNextLabel || 'Next';
+    const navigation = document.createElement('ol');
+    navigation.className = 'admin-wizard-progress';
+    navigation.setAttribute('aria-label', form.dataset.adminWizardLabel || 'Progress');
+    const controls = document.createElement('div');
+    controls.className = 'admin-wizard-controls';
+    const previous = document.createElement('button');
+    previous.type = 'button';
+    previous.className = 'button secondary';
+    previous.textContent = previousLabel;
+    const next = document.createElement('button');
+    next.type = 'button';
+    next.className = 'button';
+    next.textContent = nextLabel;
+    controls.append(previous, next);
+    form.prepend(navigation);
+    form.append(controls);
+    let activeStep = 0;
+    const focusActiveStep = () => {
+      steps[activeStep].querySelector('input, select, textarea, button')?.focus();
+    };
+    const render = () => {
+      steps.forEach((step, index) => {
+        const isActive = index === activeStep;
+        step.hidden = !isActive;
+        step.setAttribute('aria-hidden', String(!isActive));
+      });
+      navigation.replaceChildren(...steps.map((step, index) => {
+        const item = document.createElement('li');
+        item.textContent = step.dataset.adminWizardTitle || `${currentLabel} ${index + 1}`;
+        if (index === activeStep) item.setAttribute('aria-current', 'step');
+        return item;
+      }));
+      previous.hidden = activeStep === 0;
+      next.hidden = activeStep === steps.length - 1;
+    };
+    previous.addEventListener('click', () => {
+      activeStep -= 1;
+      render();
+      focusActiveStep();
+    });
+    next.addEventListener('click', () => {
+      const fields = Array.from(steps[activeStep].querySelectorAll('input, select, textarea'))
+        .filter((field) => field instanceof HTMLInputElement
+          || field instanceof HTMLSelectElement
+          || field instanceof HTMLTextAreaElement);
+      const firstInvalid = fields.find((field) => !field.checkValidity());
+      if (firstInvalid) {
+        firstInvalid.reportValidity();
+        return;
+      }
+      activeStep += 1;
+      render();
+      focusActiveStep();
+    });
+    render();
+  });
+
   const trackedForms = Array.from(document.querySelectorAll('form[data-admin-dirty-track]'))
     .filter((form) => form instanceof HTMLFormElement);
   let submittedForm = null;

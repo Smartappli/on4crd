@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Stato',
   'proposal_moderation_note' => 'Nota di moderazione',
   'proposal_save_status' => 'Salva',
+
+  'confirm_reject_wiki' => 'Confermi il rifiuto di questo contenuto wiki? Questa decisione modifica il suo flusso di lavoro editoriale.',
 );

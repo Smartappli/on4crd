@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Tila',
   'proposal_moderation_note' => 'Moderointihuomautus',
   'proposal_save_status' => 'Tallenna',
+
+  'confirm_reject_wiki' => 'Vahvistatko tämän wikisisällön hylkäämisen? Tämä päätös muuttaa sen toimituksellista työnkulkua.',
 );

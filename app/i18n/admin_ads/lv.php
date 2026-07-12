@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Pievienojiet izvietojumu',
   'unknown_owner' => '—',
   'meta_desc' => 'Reklāmas kampaņu vadīšana un moderēšana.',
+
+  'confirm_reject_ad' => 'Vai apstiprināt šīs reklāmas noraidīšanu? Šis lēmums maina tā redzamību.',
 );

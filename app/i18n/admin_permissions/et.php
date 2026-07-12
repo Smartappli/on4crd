@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Administraator',
   'role_super_admin' => 'Superadministraator',
   'role_member' => 'liige',
+
+  'confirm_remove_role' => 'Kas eemaldada roll „%1$s” rollist %2$s?',
 );

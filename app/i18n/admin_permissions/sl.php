@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Skrbnik',
   'role_super_admin' => 'Glavni skrbnik',
   'role_member' => 'član',
+
+  'confirm_remove_role' => 'Odstraniti vlogo »%1$s« iz %2$s?',
 );

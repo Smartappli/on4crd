@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Objavljeno',
   'status_rejected' => 'Odbijen',
   'status_archived' => 'Arhivirano',
+
+  'confirm_moderation_decision' => 'Potvrditi ovu odluku moderiranja? Može promijeniti vidljivost vijesti.',
 );

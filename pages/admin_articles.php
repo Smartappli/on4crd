@@ -975,11 +975,11 @@ ob_start();
                 <?php endif; ?>
             </div>
         </div>
-        <form method="post" enctype="multipart/form-data" class="admin-article-editor-form" data-admin-dirty-track>
+        <form method="post" enctype="multipart/form-data" class="admin-article-editor-form" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e($t('article_editor')) ?>" data-admin-wizard-previous-label="<?= e($t('previous')) ?>" data-admin-wizard-next-label="<?= e($t('next')) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_article">
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
-            <div class="admin-article-form-section">
+            <section class="admin-article-form-section" data-admin-wizard-step data-admin-wizard-title="<?= e($t('content_section')) ?>">
                 <h2><?= e($t('content_section')) ?></h2>
                 <label><?= e($t('title')) ?><input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
                 <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" placeholder="<?= e($t('slug_placeholder')) ?>"></label>
@@ -987,8 +987,8 @@ ob_start();
                 <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4" data-wysiwyg="off"><?= e((string) $editing['excerpt']) ?></textarea></label>
                 <label><?= e($t('content_simple_html')) ?><textarea name="content" rows="16" data-wysiwyg="full" data-wysiwyg-import-docx-url="<?= e(route_url('admin_articles')) ?>"><?= e((string) $editing['content']) ?></textarea></label>
                 <p class="help"><?= e($t('editor_tip')) ?></p>
-            </div>
-            <div class="admin-article-form-section">
+            </section>
+            <section class="admin-article-form-section" data-admin-wizard-step data-admin-wizard-title="<?= e($t('taxonomy_section')) ?>">
                 <h2><?= e($t('taxonomy_section')) ?></h2>
                 <div class="admin-article-form-grid">
                     <label><?= e($t('category')) ?>
@@ -1059,8 +1059,8 @@ ob_start();
                         </select>
                     </label>
                 </div>
-            </div>
-            <div class="admin-article-form-section">
+            </section>
+            <section class="admin-article-form-section" data-admin-wizard-step data-admin-wizard-title="<?= e($t('publication_section')) ?>">
                 <h2><?= e($t('publication_section')) ?></h2>
                 <div class="admin-article-form-grid">
                     <label><?= e($t('status')) ?>
@@ -1073,9 +1073,9 @@ ob_start();
                     <label data-admin-editor-scheduled-field><?= e($t('scheduled_at')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
                 </div>
                 <label data-admin-editor-note-field><?= e($t('moderation_note')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
-            </div>
             <button class="button admin-article-save-button" type="submit"><?= e($t('save')) ?></button>
             <button class="button secondary admin-article-preview-button" type="submit" name="action" value="preview_article"><?= e($t('preview')) ?></button>
+            </section>
         </form>
         <?php if ((int) $editing['id'] > 0): ?>
             <div class="admin-article-moderation-panel">

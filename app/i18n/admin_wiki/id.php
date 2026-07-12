@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Keadaan',
   'proposal_moderation_note' => 'Catatan moderasi',
   'proposal_save_status' => 'Simpan',
+
+  'confirm_reject_wiki' => 'Konfirmasikan penolakan terhadap konten wiki ini? Keputusan ini mengubah alur kerja editorialnya.',
 );

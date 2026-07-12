@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'प्रगति पर है',
   'status_resolved' => 'हल किया',
   'status_rejected' => 'अस्वीकार कर दिया',
+
+  'confirm_apply_erasure' => 'स्वचालित गुमनामीकरण और संबंधित फ़ाइलों के प्रसंस्करण की पुष्टि करें? यह क्रिया अपरिवर्तनीय है.',
 );

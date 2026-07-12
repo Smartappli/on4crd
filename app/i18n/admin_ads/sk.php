@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Pridajte umiestnenie',
   'unknown_owner' => '—',
   'meta_desc' => 'Vedenie a moderovanie reklamných kampaní.',
+
+  'confirm_reject_ad' => 'Chcete potvrdiť odmietnutie tejto reklamy? Toto rozhodnutie mení jeho viditeľnosť.',
 );

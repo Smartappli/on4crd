@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => '进行中',
   'status_resolved' => '已解决',
   'status_rejected' => '被拒绝',
+
+  'confirm_apply_erasure' => '确认相关文件的自动匿名化和处理？此操作是不可逆转的。',
 );

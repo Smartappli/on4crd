@@ -47,4 +47,6 @@ return array (
   'status_published' => 'تم النشر',
   'status_rejected' => 'مرفوض',
   'status_archived' => 'مؤرشف',
+
+  'confirm_moderation_decision' => 'هل تريد تأكيد قرار الاعتدال هذا؟ قد يغير رؤية عنصر الأخبار.',
 );

@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Pridėti vietą',
   'unknown_owner' => '—',
   'meta_desc' => 'Reklaminių kampanijų valdymas ir moderavimas.',
+
+  'confirm_reject_ad' => 'Patvirtinti šio skelbimo atmetimą? Šis sprendimas keičia jo matomumą.',
 );

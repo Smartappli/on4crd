@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Ħassar l-ewwel is-sub-subtemi kollha f’din it-tema.',
   'err_subsubcategory_has_documents' => 'Din is-sub-subtema għadha fiha dokumenti. Mexxi jew ħassar dawk id-dokumenti qabel tħassarha.',
   'proposal_type_subsubcategory' => 'Sub-subtema',
+
+  'confirm_reject_proposal' => 'Tikkonferma ċ-ċaħda ta\' din il-proposta tal-librerija? Din id-deċiżjoni tbiddel il-fluss tax-xogħol editorjali tagħha.',
 );

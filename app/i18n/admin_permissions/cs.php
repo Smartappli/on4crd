@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Správce',
   'role_super_admin' => 'Super správce',
   'role_member' => 'člen',
+
+  'confirm_remove_role' => 'Odebrat roli „%1$s“ z %2$s?',
 );

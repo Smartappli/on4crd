@@ -156,4 +156,6 @@ return array (
   'select_article' => '選択を再試行 ✓',
   'updated_at' => '保存日時',
   'published_at' => '発行済み - 公開日時',
+
+  'confirm_reject_article' => 'この記事の拒否を確認しますか?その作成者に通知される場合があります。',
 );

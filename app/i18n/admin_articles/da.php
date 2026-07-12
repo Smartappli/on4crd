@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Genstart valget ✓',
   'updated_at' => 'Version af',
   'published_at' => 'Udgivet - Udgivelsesdato',
+
+  'confirm_reject_article' => 'Vil du bekræfte afvisningen af ​​denne artikel? Dets forfatter kan blive underrettet.',
 );

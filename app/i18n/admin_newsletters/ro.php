@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Exemplu: formular semnat pe 2026-06-05',
   'consent_admin_help' => 'Adăugarea, importarea sau reactivarea necesită dovada consimțământului explicit.',
   'consent' => 'Consimțământ',
+
+  'confirm_send_campaign' => 'Trimiți această campanie tuturor abonaților activi? Această acțiune nu poate fi anulată.',
 );

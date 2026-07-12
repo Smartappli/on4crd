@@ -5,6 +5,7 @@ require_permission('admin.access');
 require_permission('auctions.manage');
 
 $t = i18n_domain_locale('admin_auctions');
+$wizardNavigation = i18n_domain_locale('search');
 
 set_page_meta([
     'title' => (string) $t['layout'],
@@ -84,20 +85,27 @@ ob_start();
 <div class="grid-2">
     <section class="card">
         <h1><?= $edit ? e((string) $t['edit']) : e((string) $t['create']) ?> <?= e((string) $t['a_lot']) ?></h1>
-        <form method="post" class="stack" data-admin-dirty-track>
+        <form method="post" class="stack" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['a_lot']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="id" value="<?= (int) ($edit['id'] ?? 0) ?>">
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['title']) ?>">
             <label><?= e((string) $t['title']) ?><input type="text" name="title" value="<?= e((string) ($edit['title'] ?? '')) ?>" required></label>
             <label><?= e((string) $t['slug']) ?><input type="text" name="slug" value="<?= e((string) ($edit['slug'] ?? '')) ?>"></label>
             <label><?= e((string) $t['summary']) ?><textarea name="summary" rows="3"><?= e((string) ($edit['summary'] ?? '')) ?></textarea></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['description']) ?>">
             <label><?= e((string) $t['description']) ?><textarea name="description" rows="6"><?= e((string) ($edit['description'] ?? '')) ?></textarea></label>
             <label><?= e((string) $t['image_url']) ?><input type="text" name="image_url" value="<?= e((string) ($edit['image_url'] ?? '')) ?>"></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['starting_price']) ?>">
             <div class="grid-2">
                 <label><?= e((string) $t['starting_price']) ?><input type="text" name="starting_price" value="<?= e(number_format(((int) ($edit['starting_price_cents'] ?? 0)) / 100, 2, ',', '')) ?>"></label>
                 <label><?= e((string) $t['reserve_price']) ?><input type="text" name="reserve_price" value="<?= e(!empty($edit['reserve_price_cents']) ? number_format(((int) $edit['reserve_price_cents']) / 100, 2, ',', '') : '') ?>"></label>
                 <label><?= e((string) $t['min_increment']) ?><input type="text" name="min_increment" value="<?= e(number_format(((int) ($edit['min_increment_cents'] ?? 100)) / 100, 2, ',', '')) ?>"></label>
                 <label><?= e((string) $t['buy_now']) ?><input type="text" name="buy_now_price" value="<?= e(!empty($edit['buy_now_price_cents']) ? number_format(((int) $edit['buy_now_price_cents']) / 100, 2, ',', '') : '') ?>"></label>
             </div>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['status']) ?>">
             <div class="grid-2">
                 <label><?= e((string) $t['start']) ?><input type="datetime-local" name="starts_at" value="<?= !empty($edit['starts_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $edit['starts_at']))) : '' ?>"></label>
                 <label><?= e((string) $t['end']) ?><input type="datetime-local" name="ends_at" value="<?= !empty($edit['ends_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $edit['ends_at']))) : '' ?>"></label>
@@ -110,6 +118,7 @@ ob_start();
                 </select>
             </label>
             <button class="button"><?= e((string) $t['save_lot']) ?></button>
+            </section>
         </form>
     </section>
     <section class="card">

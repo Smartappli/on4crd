@@ -12,6 +12,7 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
 }
+$wizardNavigation = i18n_domain_locale('search', $locale);
 
 set_page_meta([
     'title' => (string) $t['layout'],
@@ -285,27 +286,33 @@ ob_start();
 <section class="card">
     <h1><?= e((string) $t['title']) ?></h1>
     <div class="row-between"><span></span><a class="button secondary" href="<?= e(route_url('admin_dinner_reservations', ['export' => 1])) ?>"><?= e((string) $t['export_csv']) ?></a></div>
-    <form method="post" class="stack" id="dinner-reservation-form" data-admin-dirty-track>
+    <form method="post" class="stack" id="dinner-reservation-form" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['title']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
 
+        <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['reservation_name']) ?>">
         <label>
             <?= e((string) $t['reservation_name']) ?>
             <input type="text" name="reserved_by" required maxlength="190" placeholder="<?= e((string) $t['reservation_name_ph']) ?>">
         </label>
+        </section>
 
+        <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['add_line']) ?>">
         <div class="stack" id="dinner-lines"></div>
 
         <div class="row-between">
             <button type="button" class="button secondary" id="add-dinner-line"><?= e((string) $t['add_line']) ?></button>
             <strong><?= e((string) $t['total_to_pay']) ?> <span id="dinner-total">0,00 €</span></strong>
         </div>
+        </section>
 
+        <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['notes']) ?>">
         <label>
             <?= e((string) $t['notes']) ?>
             <textarea name="notes" rows="3" placeholder="<?= e((string) $t['notes_placeholder']) ?>"></textarea>
         </label>
 
         <button type="submit" class="button"><?= e((string) $t['save_reservation']) ?></button>
+        </section>
     </form>
 </section>
 

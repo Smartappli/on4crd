@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Statuss',
   'proposal_moderation_note' => 'Moderācijas piezīme',
   'proposal_save_status' => 'Saglabāt',
+
+  'confirm_reject_wiki' => 'Vai apstiprināt šī wiki satura noraidīšanu? Šis lēmums maina tā redakcijas darbplūsmu.',
 );

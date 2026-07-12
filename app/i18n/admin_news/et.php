@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Avaldatud',
   'status_rejected' => 'Tagasi lükatud',
   'status_archived' => 'Arhiveeritud',
+
+  'confirm_moderation_decision' => 'Kas kinnitada see modereerimisotsus? See võib muuta uudise nähtavust.',
 );

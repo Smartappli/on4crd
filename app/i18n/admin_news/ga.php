@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Foilsithe',
   'status_rejected' => 'Diúltaithe',
   'status_archived' => 'Cartlannaithe',
+
+  'confirm_moderation_decision' => 'Deimhnigh an cinneadh modhnóireachta seo? Féadfaidh sé infheictheacht na míre nuachta a athrú.',
 );

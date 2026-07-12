@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Administratör',
   'role_super_admin' => 'Superadministratör',
   'role_member' => 'Medlem',
+
+  'confirm_remove_role' => 'Ta bort rollen "%1$s" från %2$s?',
 );

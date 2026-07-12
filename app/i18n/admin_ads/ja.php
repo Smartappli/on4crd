@@ -42,4 +42,6 @@ return [
     'add_placement' => '配置を追加する',
     'unknown_owner' => '—',
     'meta_desc' => '広告キャンペーンを管理・モデレーションします。',
+
+  'confirm_reject_ad' => 'この広告の拒否を確認しますか?この決定により、その可視性が変わります。',
 ];

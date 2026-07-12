@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Julkaistu',
   'status_rejected' => 'Hylätty',
   'status_archived' => 'Arkistoitu',
+
+  'confirm_moderation_decision' => 'Vahvistetaanko tämä valvontapäätös? Se voi muuttaa uutisen näkyvyyttä.',
 );

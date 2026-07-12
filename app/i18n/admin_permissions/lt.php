@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Administratorius',
   'role_super_admin' => 'Super administratorius',
   'role_member' => 'narys',
+
+  'confirm_remove_role' => 'Pašalinti vaidmenį „%1$s“ iš %2$s?',
 );

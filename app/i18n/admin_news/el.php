@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Δημοσιεύθηκε',
   'status_rejected' => 'Απορρίφθηκε',
   'status_archived' => 'Αρχειοθετήθηκε',
+
+  'confirm_moderation_decision' => 'Επιβεβαίωση αυτής της απόφασης εποπτείας; Μπορεί να αλλάξει την ορατότητα της είδησης.',
 );

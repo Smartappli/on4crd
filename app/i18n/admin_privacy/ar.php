@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'في تَقَدم',
   'status_resolved' => 'تم الحل',
   'status_rejected' => 'مرفوض',
+
+  'confirm_apply_erasure' => 'هل تريد تأكيد إخفاء الهوية تلقائيًا ومعالجة الملفات المرتبطة؟ هذا الإجراء لا رجعة فيه.',
 );

@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Megjelent',
   'status_rejected' => 'Elutasítva',
   'status_archived' => 'Archivált',
+
+  'confirm_moderation_decision' => 'Megerősíti ezt a moderálási döntést? Ez megváltoztathatja a hír láthatóságát.',
 );

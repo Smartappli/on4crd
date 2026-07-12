@@ -156,4 +156,6 @@ return array (
   'select_article' => 'إعادة محاولة المحدد ✓',
   'updated_at' => 'إصدار بتاريخ',
   'published_at' => 'منشور - تاريخ النشر',
+
+  'confirm_reject_article' => 'تأكيد رفض هذه المادة؟ ويجوز إخطار مؤلفها.',
 );

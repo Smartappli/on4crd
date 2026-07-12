@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Reporniți selecția ✓',
   'updated_at' => 'Versiunea de',
   'published_at' => 'Publicat - Data publicării',
+
+  'confirm_reject_article' => 'Confirmați respingerea acestui articol? Autorul acesteia poate fi anunțat.',
 );

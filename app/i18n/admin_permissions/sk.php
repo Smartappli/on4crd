@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'správca',
   'role_super_admin' => 'Super správca',
   'role_member' => 'člen',
+
+  'confirm_remove_role' => 'Odstrániť rolu „%1$s“ z %2$s?',
 );

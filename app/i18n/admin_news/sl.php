@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Objavljeno',
   'status_rejected' => 'Zavrnjeno',
   'status_archived' => 'Arhivirano',
+
+  'confirm_moderation_decision' => 'Želite potrditi to odločitev moderiranja? Lahko spremeni vidnost novice.',
 );

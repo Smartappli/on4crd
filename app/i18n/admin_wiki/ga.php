@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Stádas',
   'proposal_moderation_note' => 'Nóta modhnóireachta',
   'proposal_save_status' => 'Sábháil',
+
+  'confirm_reject_wiki' => 'Deimhnigh diúltú don ábhar vicí seo? Athraíonn an cinneadh seo a sreabhadh oibre eagarthóireachta.',
 );

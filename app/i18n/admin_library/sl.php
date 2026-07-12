@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Najprej izbrišite vse podpodteme te teme.',
   'err_subsubcategory_has_documents' => 'Ta podpodtema še vedno vsebuje dokumente. Pred izbrisom jih premaknite ali izbrišite.',
   'proposal_type_subsubcategory' => 'Podpodtema',
+
+  'confirm_reject_proposal' => 'Želite potrditi zavrnitev tega predloga knjižnice? Ta odločitev spremeni potek uredniškega dela.',
 );

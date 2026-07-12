@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_permission('admin.access');
 $user = require_login();
 $t = i18n_domain_locale('admin_news');
+$wizardNavigation = i18n_domain_locale('search');
 
 set_page_meta([
     'title' => (string) $t['layout'],
@@ -154,10 +155,11 @@ ob_start();
 <div class="grid-2 admin-news-workspace">
     <section class="card admin-news-editor-card">
         <h2><?= $editing ? e((string) $t['edit']) : e((string) $t['write']) ?> <?= e((string) $t['news_item']) ?></h2>
-        <form method="post" class="stack admin-news-editor-form" data-admin-dirty-track>
+        <form method="post" class="stack admin-news-editor-form" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['news_item']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_post">
             <input type="hidden" name="post_id" value="<?= (int) ($editing['id'] ?? 0) ?>">
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['section']) ?>">
             <label><?= e((string) $t['section']) ?>
                 <select name="section_id">
                     <?php foreach ($sections as $section): ?>
@@ -168,15 +170,20 @@ ob_start();
             </label>
             <label><?= e((string) $t['title']) ?><input type="text" name="title" value="<?= e((string) ($editing['title'] ?? '')) ?>" required></label>
             <label><?= e((string) $t['slug']) ?><input type="text" name="slug" value="<?= e((string) ($editing['slug'] ?? '')) ?>"></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['simple_html']) ?>">
             <label><?= e((string) $t['excerpt']) ?><textarea name="excerpt" rows="3"><?= e((string) ($editing['excerpt'] ?? '')) ?></textarea></label>
             <label><?= e((string) $t['simple_html']) ?><textarea name="content" rows="12"><?= e((string) ($editing['content'] ?? '<p></p>')) ?></textarea></label>
             <p class="help"><?= e((string) $t['editor_tip']) ?></p>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['status']) ?>">
             <?php if (has_permission('news.moderate')): ?>
                 <label><?= e((string) $t['status']) ?>
                     <select name="status"><?php foreach (['draft', 'pending', 'published', 'rejected'] as $status): ?><option value="<?= e($status) ?>" <?= (($editing['status'] ?? 'published') === $status) ? 'selected' : '' ?>><?= e(news_status_label($status)) ?></option><?php endforeach; ?></select>
                 </label>
             <?php endif; ?>
             <div class="actions"><button class="button"><?= e((string) $t['save']) ?></button></div>
+            </section>
         </form>
     </section>
 

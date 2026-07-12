@@ -10,6 +10,7 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, $key);
 }
+$wizardNavigation = i18n_domain_locale('search', $locale);
 
 set_page_meta([
     'title' => (string) $t['layout_title'],
@@ -141,15 +142,18 @@ ob_start();
 
 <section class="card">
   <h2><?= e((string) $t['placements_title']) ?></h2>
-  <form method="post" class="stack" data-admin-dirty-track>
+  <form method="post" class="stack" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['placements_title']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
     <input type="hidden" name="action" value="add_placement">
+    <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['label_name']) ?>">
     <label><?= e((string) $t['label_code']) ?>
       <input type="text" name="code" placeholder="<?= e((string) $t['placeholder_code']) ?>">
     </label>
     <label><?= e((string) $t['label_name']) ?>
       <input type="text" name="name" placeholder="<?= e((string) $t['placeholder_name']) ?>">
     </label>
+    </section>
+    <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['label_description']) ?>">
     <label><?= e((string) $t['label_description']) ?>
       <textarea name="description" rows="3"></textarea>
     </label>
@@ -157,6 +161,7 @@ ob_start();
       <input type="text" name="sort_order" value="100">
     </label>
     <p><button class="button"><?= e((string) $t['add_placement']) ?></button></p>
+    </section>
   </form>
   <div class="table-wrap">
     <table>

@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Példa: aláírt űrlap 2026-06-05-en',
   'consent_admin_help' => 'A hozzáadáshoz, importáláshoz vagy újraaktiváláshoz kifejezett hozzájárulás szükséges.',
   'consent' => 'Hozzájárulás',
+
+  'confirm_send_campaign' => 'Elküldi ezt a kampányt az összes aktív feliratkozónak? Ez a művelet nem vonható vissza.',
 );

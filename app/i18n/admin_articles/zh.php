@@ -156,4 +156,6 @@ return array (
   'select_article' => '重试所选 ✓',
   'updated_at' => '版本时间',
   'published_at' => '已发表 - 发布日期',
+
+  'confirm_reject_article' => '确认拒绝这篇文章？可能会通知其作者。',
 );

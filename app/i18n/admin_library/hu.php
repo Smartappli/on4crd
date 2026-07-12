@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Először törölje a téma összes altémáját.',
   'err_subsubcategory_has_documents' => 'Ez az al-altéma még tartalmaz dokumentumokat. Törlés előtt helyezze át vagy törölje ezeket a dokumentumokat.',
   'proposal_type_subsubcategory' => 'Al-altéma',
+
+  'confirm_reject_proposal' => 'Megerősíti ennek a könyvtári javaslatnak az elutasítását? Ez a döntés megváltoztatja a szerkesztői munkafolyamatot.',
 );

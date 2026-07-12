@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Hapus semua sub-subtopik dalam topik ini terlebih dahulu.',
   'err_subsubcategory_has_documents' => 'Sub-subtopik ini masih berisi dokumen. Pindahkan atau hapus dokumen tersebut sebelum menghapusnya.',
   'proposal_type_subsubcategory' => 'Sub-subtopik',
+
+  'confirm_reject_proposal' => 'Konfirmasi penolakan proposal perpustakaan ini? Keputusan ini mengubah alur kerja editorialnya.',
 );

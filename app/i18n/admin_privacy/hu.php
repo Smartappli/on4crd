@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Folyamatban van',
   'status_resolved' => 'Megoldva',
   'status_rejected' => 'Elutasítva',
+
+  'confirm_apply_erasure' => 'Megerősíti a kapcsolódó fájlok automatikus anonimizálását és feldolgozását? Ez a művelet visszafordíthatatlan.',
 );

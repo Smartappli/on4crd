@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Adăugați o destinație de plasare',
   'unknown_owner' => '—',
   'meta_desc' => 'Managementul si moderarea campaniilor de publicitate.',
+
+  'confirm_reject_ad' => 'Confirmați respingerea acestei reclame? Această decizie îi schimbă vizibilitatea.',
 );

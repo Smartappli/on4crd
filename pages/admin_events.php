@@ -10,6 +10,7 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
 }
+$wizardNavigation = i18n_domain_locale('search', $locale);
 $calendarLocale = fullcalendar_locale_code($locale);
 $calendarLocaleAsset = fullcalendar_locale_asset_url($locale);
 
@@ -150,12 +151,15 @@ ob_start();
 <div class="grid-2">
     <section class="card">
         <h1><?= $edit ? e((string) $t['edit']) : e((string) $t['create']) ?> <?= e((string) $t['form_title']) ?></h1>
-        <form method="post" class="stack" data-admin-dirty-track>
+        <form method="post" class="stack" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['form_title']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="id" value="<?= (int) ($edit['id'] ?? 0) ?>">
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['title']) ?>">
             <label><?= e((string) $t['title']) ?><input type="text" name="title" value="<?= e((string) ($edit['title'] ?? '')) ?>" required></label>
             <label><?= e((string) $t['slug']) ?><input type="text" name="slug" value="<?= e((string) ($edit['slug'] ?? '')) ?>"></label>
             <label><?= e((string) $t['summary']) ?><textarea name="summary" rows="3"><?= e((string) ($edit['summary'] ?? '')) ?></textarea></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['description']) ?>">
             <label><?= e((string) $t['description']) ?><textarea name="description" rows="6"><?= e((string) ($edit['description'] ?? '')) ?></textarea></label>
             <div class="grid-2">
                 <label><?= e((string) $t['start']) ?><input type="datetime-local" name="start_at" value="<?= !empty($edit['start_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $edit['start_at']))) : '' ?>"></label>
@@ -165,6 +169,8 @@ ob_start();
                 <label><?= e((string) $t['location']) ?><input type="text" name="location" value="<?= e((string) ($edit['location'] ?? '')) ?>"></label>
                 <label><?= e((string) $t['external_url']) ?><input type="text" name="external_url" value="<?= e((string) ($edit['external_url'] ?? '')) ?>"></label>
             </div>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['status']) ?>">
             <div class="grid-2">
                 <label><?= e((string) $t['type']) ?>
                     <select name="kind">
@@ -180,6 +186,7 @@ ob_start();
                 </label>
             </div>
             <button class="button"><?= e((string) $t['save']) ?></button>
+            </section>
         </form>
     </section>
     <section class="card">

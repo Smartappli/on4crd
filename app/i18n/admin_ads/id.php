@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Tambah penempatan',
   'unknown_owner' => '—',
   'meta_desc' => 'Kelola dan moderasi kampanye iklan.',
+
+  'confirm_reject_ad' => 'Konfirmasikan penolakan terhadap iklan ini? Keputusan ini mengubah visibilitasnya.',
 );

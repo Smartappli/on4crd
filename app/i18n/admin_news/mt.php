@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Ippubblikat',
   'status_rejected' => 'Miċħuda',
   'status_archived' => 'Arkivjat',
+
+  'confirm_moderation_decision' => 'Tikkonferma din id-deċiżjoni ta\' moderazzjoni? Jista \'jbiddel il-viżibilità tal-oġġett tal-aħbarijiet.',
 );

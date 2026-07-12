@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'स्थिति',
   'proposal_moderation_note' => 'मॉडरेशन नोट',
   'proposal_save_status' => 'बचाना',
+
+  'confirm_reject_wiki' => 'इस विकी सामग्री की अस्वीकृति की पुष्टि करें? यह निर्णय इसके संपादकीय वर्कफ़्लो को बदल देता है।',
 );

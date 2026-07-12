@@ -43,4 +43,6 @@ return array (
   'role_admin' => '行政人员',
   'role_super_admin' => '超级管理员',
   'role_member' => '成员',
+
+  'confirm_remove_role' => '从 %2$s 中删除角色“%1$s”吗？',
 );

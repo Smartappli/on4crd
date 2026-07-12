@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Indítsa újra a kijelölést ✓',
   'updated_at' => 'verziója',
   'published_at' => 'Megjelent - Megjelenés dátuma',
+
+  'confirm_reject_article' => 'Megerősíti ennek a cikknek az elutasítását? Szerzőjét értesíteni lehet.',
 );

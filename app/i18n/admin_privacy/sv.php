@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Pågår',
   'status_resolved' => 'Löst',
   'status_rejected' => 'Avvisad',
+
+  'confirm_apply_erasure' => 'Bekräfta automatiserad anonymisering och bearbetning av associerade filer? Denna åtgärd är oåterkallelig.',
 );

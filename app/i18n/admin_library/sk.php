@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Najprv odstráňte všetky podpodtémy tejto témy.',
   'err_subsubcategory_has_documents' => 'Táto podpodtéma stále obsahuje dokumenty. Pred odstránením ich presuňte alebo odstráňte.',
   'proposal_type_subsubcategory' => 'Podpodtéma',
+
+  'confirm_reject_proposal' => 'Chcete potvrdiť odmietnutie tohto návrhu knižnice? Toto rozhodnutie mení jeho redakčný pracovný postup.',
 );

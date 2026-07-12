@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Järjestelmänvalvoja',
   'role_super_admin' => 'Pääylläpitäjä',
   'role_member' => 'jäsen',
+
+  'confirm_remove_role' => 'Poistetaanko rooli "%1$s" ryhmästä %2$s?',
 );

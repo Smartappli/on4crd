@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Sedang berlangsung',
   'status_resolved' => 'Terselesaikan',
   'status_rejected' => 'Ditolak',
+
+  'confirm_apply_erasure' => 'Konfirmasikan anonimisasi otomatis dan pemrosesan file terkait? Tindakan ini tidak dapat diubah.',
 );

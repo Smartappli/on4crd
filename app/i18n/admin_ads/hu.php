@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Elhelyezés hozzáadása',
   'unknown_owner' => '—',
   'meta_desc' => 'Reklámkampányok menedzselése, moderálása.',
+
+  'confirm_reject_ad' => 'Megerősíti ennek a hirdetésnek az elutasítását? Ez a döntés megváltoztatja a láthatóságát.',
 );

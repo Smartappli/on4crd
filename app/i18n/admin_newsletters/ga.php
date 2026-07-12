@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Sampla: foirm shínithe ar 2026-06-05',
   'consent_admin_help' => 'Teastaíonn cruthúnas toilithe follasach chun suimiú, iompórtáil nó athghníomhachtú.',
   'consent' => 'Toiliú',
+
+  'confirm_send_campaign' => 'An bhfuil fonn ort an feachtas seo a sheoladh chuig gach síntiúsóir gníomhach? Ní féidir an gníomh seo a chealú.',
 );

@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Añadir ubicación',
   'unknown_owner' => '—',
   'meta_desc' => 'Gestión y moderación de campañas publicitarias.',
+
+  'confirm_reject_ad' => '¿Confirmar el rechazo de este anuncio? Esta decisión cambia su visibilidad.',
 );

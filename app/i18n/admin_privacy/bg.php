@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'В ход',
   'status_resolved' => 'Разрешено',
   'status_rejected' => 'Отхвърлено',
+
+  'confirm_apply_erasure' => 'Потвърждаване на автоматизираната анонимност и обработка на свързаните файлове? Това действие е необратимо.',
 );

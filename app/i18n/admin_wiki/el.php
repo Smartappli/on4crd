@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Κατάσταση',
   'proposal_moderation_note' => 'Σημείωση μετριοπάθειας',
   'proposal_save_status' => 'Αποθήκευση',
+
+  'confirm_reject_wiki' => 'Επιβεβαίωση απόρριψης αυτού του περιεχομένου wiki; Αυτή η απόφαση αλλάζει τη ροή εργασιών σύνταξης.',
 );

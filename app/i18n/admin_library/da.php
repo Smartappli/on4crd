@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Slet først alle underundertemaer i dette emne.',
   'err_subsubcategory_has_documents' => 'Dette underundertema indeholder stadig dokumenter. Flyt eller slet dokumenterne, før du sletter det.',
   'proposal_type_subsubcategory' => 'Underundertema',
+
+  'confirm_reject_proposal' => 'Vil du bekræfte afvisningen af ​​dette biblioteksforslag? Denne beslutning ændrer dens redaktionelle arbejdsgang.',
 );

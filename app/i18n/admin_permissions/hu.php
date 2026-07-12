@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Rendszergazda',
   'role_super_admin' => 'Szuper Admin',
   'role_member' => 'tag',
+
+  'confirm_remove_role' => 'Eltávolítja a „%1$s” szerepet a következőből: %2$s?',
 );

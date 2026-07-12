@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'W toku',
   'status_resolved' => 'Rozwiązany',
   'status_rejected' => 'Odrzucony',
+
+  'confirm_apply_erasure' => 'Potwierdzić automatyczną anonimizację i przetwarzanie powiązanych plików? To działanie jest nieodwracalne.',
 );

@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Primjer: potpisani obrazac na 2026-06-05',
   'consent_admin_help' => 'Dodavanje, uvoz ili ponovno aktiviranje zahtijeva izričit dokaz pristanka.',
   'consent' => 'Pristanak',
+
+  'confirm_send_campaign' => 'Poslati ovu kampanju svim aktivnim pretplatnicima? Ova se radnja ne može poništiti.',
 );

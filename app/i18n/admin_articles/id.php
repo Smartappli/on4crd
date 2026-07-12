@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Coba lagi pilihan ✓',
   'updated_at' => 'Versi pada',
   'published_at' => 'Dipublikasikan - Tanggal publikasi',
+
+  'confirm_reject_article' => 'Konfirmasikan penolakan artikel ini? Penulisnya mungkin diberitahu.',
 );

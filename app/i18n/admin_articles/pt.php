@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Tentar novamente selecao ✓',
   'updated_at' => 'Versão de',
   'published_at' => 'Publicado - Data de publicação',
+
+  'confirm_reject_article' => 'Confirmar a rejeição deste artigo? Seu autor poderá ser notificado.',
 );

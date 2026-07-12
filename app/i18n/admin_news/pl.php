@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Opublikowano',
   'status_rejected' => 'Odrzucony',
   'status_archived' => 'Zarchiwizowane',
+
+  'confirm_moderation_decision' => 'Potwierdzić tę decyzję moderacji? Może to zmienić widoczność wiadomości.',
 );

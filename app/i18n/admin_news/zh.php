@@ -47,4 +47,6 @@ return array (
   'status_published' => '已发表',
   'status_rejected' => '被拒绝',
   'status_archived' => '已存档',
+
+  'confirm_moderation_decision' => '确认此审核决定吗？它可能会改变新闻项目的可见性。',
 );

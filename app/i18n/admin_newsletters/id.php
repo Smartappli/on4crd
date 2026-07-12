@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Contoh: formulir yang ditandatangani di 2026-06-05',
   'consent_admin_help' => 'Menambah, mengimpor, atau mengaktifkan kembali memerlukan bukti persetujuan eksplisit.',
   'consent' => 'Persetujuan',
+
+  'confirm_send_campaign' => 'Kirim kampanye ini ke semua pelanggan aktif? Tindakan ini tidak dapat dibatalkan.',
 );

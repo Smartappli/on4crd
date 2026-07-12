@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Publicerad',
   'status_rejected' => 'Avvisad',
   'status_archived' => 'Arkiverad',
+
+  'confirm_moderation_decision' => 'Bekräfta detta modereringsbeslut? Det kan ändra synligheten för nyheten.',
 );

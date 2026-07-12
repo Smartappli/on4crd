@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Статус',
   'proposal_moderation_note' => 'Бележка за модериране',
   'proposal_save_status' => 'Запазване',
+
+  'confirm_reject_wiki' => 'Потвърждаване на отхвърлянето на това уики съдържание? Това решение променя неговия редакционен работен процес.',
 );

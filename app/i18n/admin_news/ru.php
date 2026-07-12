@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Опубликовано',
   'status_rejected' => 'Отклонено',
   'status_archived' => 'В архиве',
+
+  'confirm_moderation_decision' => 'Подтвердить это решение модерации? Это может изменить видимость новости.',
 );

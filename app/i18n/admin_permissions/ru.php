@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Администратор',
   'role_super_admin' => 'Суперадминистратор',
   'role_member' => 'Член',
+
+  'confirm_remove_role' => 'Удалить роль «%1$s» из %2$s?',
 );

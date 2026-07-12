@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Primer: podpisan obrazec na 2026-06-05',
   'consent_admin_help' => 'Za dodajanje, uvoz ali ponovno aktiviranje je potrebno izrecno dokazilo o soglasju.',
   'consent' => 'Soglasje',
+
+  'confirm_send_campaign' => 'Ali želite to akcijo poslati vsem aktivnim naročnikom? Tega dejanja ni mogoče razveljaviti.',
 );

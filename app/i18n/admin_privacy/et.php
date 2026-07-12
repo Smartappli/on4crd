@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Pooleli',
   'status_resolved' => 'Lahendatud',
   'status_rejected' => 'Tagasi lükatud',
+
+  'confirm_apply_erasure' => 'Kas kinnitada seotud failide automaatne anonüümseks muutmine ja töötlemine? See toiming on pöördumatu.',
 );

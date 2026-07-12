@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Eżempju: formola ffirmata fuq 2026-06-05',
   'consent_admin_help' => 'Iż-żieda, l-importazzjoni jew ir-riattivazzjoni teħtieġ prova ta\' kunsens espliċitu.',
   'consent' => 'Kunsens',
+
+  'confirm_send_campaign' => 'Tibgħat din il-kampanja lill-abbonati attivi kollha? Din l-azzjoni ma tistax titneħħa.',
 );

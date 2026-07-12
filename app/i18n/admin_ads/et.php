@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Lisage paigutus',
   'unknown_owner' => '—',
   'meta_desc' => 'Reklaamikampaaniate juhtimine ja modereerimine.',
+
+  'confirm_reject_ad' => 'Kas kinnitada selle reklaami tagasilükkamine? See otsus muudab selle nähtavust.',
 );

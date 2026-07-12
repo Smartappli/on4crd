@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Em andamento',
   'status_resolved' => 'Resolvido',
   'status_rejected' => 'Rejeitado',
+
+  'confirm_apply_erasure' => 'Confirma o anonimato e o processamento automatizado de arquivos associados? Esta ação é irreversível.',
 );

@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'V teku',
   'status_resolved' => 'Razrešeno',
   'status_rejected' => 'Zavrnjeno',
+
+  'confirm_apply_erasure' => 'Želite potrditi samodejno anonimizacijo in obdelavo povezanih datotek? To dejanje je nepovratno.',
 );

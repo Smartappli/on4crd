@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Cuir socrúchán leis',
   'unknown_owner' => '—',
   'meta_desc' => 'Bainistíocht agus modhnóireacht feachtais fógraíochta.',
+
+  'confirm_reject_ad' => 'Deimhnigh diúltú don fhógra seo? Athraíonn an cinneadh seo a infheictheacht.',
 );

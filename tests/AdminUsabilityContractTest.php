@@ -47,6 +47,62 @@ final class AdminUsabilityContractTest extends TestCase
         self::assertStringContainsString("admin-responsive-table", $script);
         self::assertStringContainsString("cell.scope = 'col'", $script);
         self::assertStringContainsString("table.admin-responsive-table", $styles);
+        self::assertStringContainsString("form[data-admin-wizard]", $script);
+        self::assertStringContainsString("data-admin-wizard-step", $script);
+        self::assertStringContainsString("aria-current', 'step'", $script);
+        self::assertStringContainsString('firstInvalid.reportValidity()', $script);
+        self::assertStringContainsString("admin-wizard-progress", $styles);
+        self::assertStringContainsString("admin-wizard-controls", $styles);
+        self::assertStringContainsString('bindProposalMenuWizards', $this->source('assets/js/modules/module_dialogs.js'));
+        self::assertStringContainsString('proposal-wizard-dialog', $this->source('assets/css/modules/shared.css'));
+    }
+
+    public function testArticleEditorUsesTheProgressiveWizardContract(): void
+    {
+        $source = $this->source('pages/admin_articles.php');
+
+        self::assertStringContainsString('data-admin-wizard', $source);
+        self::assertStringContainsString('data-admin-wizard-step', $source);
+        self::assertStringContainsString("data-admin-wizard-title=\"<?= e(\$t('content_section')) ?>\"", $source);
+        self::assertStringContainsString("data-admin-wizard-title=\"<?= e(\$t('taxonomy_section')) ?>\"", $source);
+        self::assertStringContainsString("data-admin-wizard-title=\"<?= e(\$t('publication_section')) ?>\"", $source);
+    }
+
+    public function testContentAndAgendaFormsUseTheProgressiveWizardContract(): void
+    {
+        foreach ([
+            'pages/admin_library.php',
+            'pages/admin_news.php',
+            'pages/admin_events.php',
+            'pages/admin_members.php',
+            'pages/admin_dinner_reservations.php',
+            'pages/admin_newsletters.php',
+            'pages/admin_auctions.php',
+            'pages/admin_classifieds.php',
+            'pages/admin_committee.php',
+            'pages/admin_ads.php',
+            'pages/admin_press.php',
+            'pages/admin_editorial.php',
+            'pages/admin_live_feeds.php',
+        ] as $path) {
+            $source = $this->source($path);
+
+            self::assertStringContainsString('data-admin-wizard', $source, $path);
+            self::assertStringContainsString('data-admin-wizard-step', $source, $path);
+            self::assertStringContainsString('data-admin-wizard-previous-label', $source, $path);
+            self::assertStringContainsString('data-admin-wizard-next-label', $source, $path);
+        }
+    }
+
+    public function testProposalMenusOpenAFirstStepWizardInsteadOfAVisibleDropdown(): void
+    {
+        $dialogModule = $this->source('assets/js/modules/module_dialogs.js');
+        $renderer = $this->source('app/layout_renderer.php');
+
+        self::assertStringContainsString('details[class*="propose-menu"]', $dialogModule);
+        self::assertStringContainsString('proposal-wizard-choices', $dialogModule);
+        self::assertStringContainsString("menu.hidden = true", $dialogModule);
+        self::assertStringContainsString("'classifieds'", $renderer);
     }
 
     public function testTranslationReviewKeepsFiltersAndSourceComparison(): void

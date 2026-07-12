@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Znova zaženite izbiro ✓',
   'updated_at' => 'Različica od',
   'published_at' => 'Objavljeno - Datum objave',
+
+  'confirm_reject_article' => 'Potrdite zavrnitev tega članka? Njegov avtor bo morda obveščen.',
 );

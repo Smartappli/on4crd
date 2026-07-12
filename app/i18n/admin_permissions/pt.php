@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Administrador',
   'role_super_admin' => 'Superadministrador',
   'role_member' => 'Membro',
+
+  'confirm_remove_role' => 'Remover a função “%1$s” de %2$s?',
 );

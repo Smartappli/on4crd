@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Poista ensin kaikki tämän teeman ali-alateemat.',
   'err_subsubcategory_has_documents' => 'Tämä ali-alateema sisältää vielä asiakirjoja. Siirrä tai poista asiakirjat ennen ali-alateeman poistamista.',
   'proposal_type_subsubcategory' => 'Ali-alateema',
+
+  'confirm_reject_proposal' => 'Vahvistetaanko tämän kirjastoehdotuksen hylkääminen? Tämä päätös muuttaa sen toimituksellista työnkulkua.',
 );

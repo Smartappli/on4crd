@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Fil-progress',
   'status_resolved' => 'Solvuti',
   'status_rejected' => 'Miċħuda',
+
+  'confirm_apply_erasure' => 'Tikkonferma l-anonimizzazzjoni awtomatizzata u l-ipproċessar tal-fajls assoċjati? Din l-azzjoni hija irriversibbli.',
 );

@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Notiek',
   'status_resolved' => 'Atrisināts',
   'status_rejected' => 'Noraidīts',
+
+  'confirm_apply_erasure' => 'Vai apstiprināt saistīto failu automātisko anonimizāciju un apstrādi? Šī darbība ir neatgriezeniska.',
 );

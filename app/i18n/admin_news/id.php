@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Diterbitkan',
   'status_rejected' => 'Ditolak',
   'status_archived' => 'Diarsipkan',
+
+  'confirm_moderation_decision' => 'Konfirmasikan keputusan moderasi ini? Hal ini dapat mengubah visibilitas item berita.',
 );

@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Příklad: podepsaný formulář na 2026-06-05',
   'consent_admin_help' => 'Přidání, import nebo opětovná aktivace vyžaduje výslovný souhlas.',
   'consent' => 'Souhlas',
+
+  'confirm_send_campaign' => 'Odeslat tuto kampaň všem aktivním odběratelům? Tuto akci nelze vrátit zpět.',
 );

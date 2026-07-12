@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'पहले इस विषय के सभी उप-उपविषय हटाएँ.',
   'err_subsubcategory_has_documents' => 'इस उप-उपविषय में अभी भी दस्तावेज़ हैं. इसे हटाने से पहले उन दस्तावेज़ों को स्थानांतरित करें या हटाएँ.',
   'proposal_type_subsubcategory' => 'उप-उपविषय',
+
+  'confirm_reject_proposal' => 'इस पुस्तकालय प्रस्ताव की अस्वीकृति की पुष्टि करें? यह निर्णय इसके संपादकीय वर्कफ़्लो को बदल देता है।',
 );

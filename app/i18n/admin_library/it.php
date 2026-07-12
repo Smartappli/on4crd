@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Elimina prima tutti i sotto-sottotemi di questo tema.',
   'err_subsubcategory_has_documents' => 'Questo sotto-sottotema contiene ancora documenti. Sposta o elimina quei documenti prima di eliminarlo.',
   'proposal_type_subsubcategory' => 'Sotto-sottotema',
+
+  'confirm_reject_proposal' => 'Confermi il rifiuto di questa proposta di biblioteca? Questa decisione modifica il suo flusso di lavoro editoriale.',
 );

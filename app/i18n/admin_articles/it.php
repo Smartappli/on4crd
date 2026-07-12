@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Riprova selezione ✓',
   'updated_at' => 'Versione del',
   'published_at' => 'Pubblicato - Data di pubblicazione',
+
+  'confirm_reject_article' => 'Confermi il rifiuto di questo articolo? Il suo autore può essere informato.',
 );

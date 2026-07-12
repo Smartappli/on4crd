@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Publikováno',
   'status_rejected' => 'Odmítnuto',
   'status_archived' => 'Archivováno',
+
+  'confirm_moderation_decision' => 'Potvrdit toto rozhodnutí o moderování? Může změnit viditelnost novinky.',
 );

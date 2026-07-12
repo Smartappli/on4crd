@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'احذف أولاً كل الموضوعات الفرعية في هذا الموضوع.',
   'err_subsubcategory_has_documents' => 'لا يزال هذا الموضوع الفرعي يحتوي على مستندات. انقل تلك المستندات أو احذفها قبل حذفه.',
   'proposal_type_subsubcategory' => 'موضوع فرعي ثان',
+
+  'confirm_reject_proposal' => 'تأكيد رفض اقتراح المكتبة هذا؟ يغير هذا القرار سير العمل التحريري.',
 );

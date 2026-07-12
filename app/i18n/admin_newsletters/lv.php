@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Piemērs: parakstīta veidlapa 2026-06-05',
   'consent_admin_help' => 'Lai pievienotu, importētu vai atkārtoti aktivizētu, ir nepieciešams skaidrs piekrišanas pierādījums.',
   'consent' => 'Piekrišana',
+
+  'confirm_send_campaign' => 'Vai nosūtīt šo kampaņu visiem aktīvajiem abonentiem? Šo darbību nevar atsaukt.',
 );

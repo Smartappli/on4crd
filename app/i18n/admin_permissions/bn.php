@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'প্রশাসক',
   'role_super_admin' => 'সুপার অ্যাডমিন',
   'role_member' => 'সদস্য',
+
+  'confirm_remove_role' => '%2$s থেকে "%1$s" ভূমিকাটি সরাবেন?',
 );

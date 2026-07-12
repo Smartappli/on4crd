@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Iš naujo paleiskite pasirinkimą ✓',
   'updated_at' => 'versija',
   'published_at' => 'Paskelbta - Publikavimo data',
+
+  'confirm_reject_article' => 'Patvirtinti šio straipsnio atmetimą? Jos autoriui gali būti pranešta.',
 );

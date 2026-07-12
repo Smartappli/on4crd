@@ -47,4 +47,6 @@ return array (
   'status_published' => 'Zverejnené',
   'status_rejected' => 'Odmietnuté',
   'status_archived' => 'Archivované',
+
+  'confirm_moderation_decision' => 'Chcete potvrdiť toto moderovacie rozhodnutie? Môže to zmeniť viditeľnosť novinky.',
 );

@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'În curs',
   'status_resolved' => 'Rezolvat',
   'status_rejected' => 'Respins',
+
+  'confirm_apply_erasure' => 'Confirmați anonimizarea automată și procesarea fișierelor asociate? Această acțiune este ireversibilă.',
 );

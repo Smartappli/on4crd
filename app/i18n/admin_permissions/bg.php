@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Администратор',
   'role_super_admin' => 'Супер администратор',
   'role_member' => 'Член',
+
+  'confirm_remove_role' => 'Премахване на ролята „%1$s“ от %2$s?',
 );

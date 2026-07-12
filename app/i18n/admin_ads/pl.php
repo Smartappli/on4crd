@@ -42,4 +42,6 @@ return array (
   'add_placement' => 'Dodaj miejsce docelowe',
   'unknown_owner' => '—',
   'meta_desc' => 'Zarządzanie i moderacja kampaniami reklamowymi.',
+
+  'confirm_reject_ad' => 'Potwierdzić odrzucenie tego ogłoszenia? Ta decyzja zmienia jej widoczność.',
 );

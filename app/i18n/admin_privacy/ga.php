@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'Ar siúl',
   'status_resolved' => 'Réitíodh',
   'status_rejected' => 'Diúltaithe',
+
+  'confirm_apply_erasure' => 'Deimhnigh anaithnidiú uathoibrithe agus próiseáil na gcomhad gaolmhar? Tá an gníomh seo do-aisiompaithe.',
 );

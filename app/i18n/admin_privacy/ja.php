@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => '進行中',
   'status_resolved' => '解決済み',
   'status_rejected' => '拒否されました',
+
+  'confirm_apply_erasure' => '関連ファイルの自動匿名化と処理を確認しますか?この操作は元に戻すことができません。',
 );

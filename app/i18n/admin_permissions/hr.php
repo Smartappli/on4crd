@@ -43,4 +43,6 @@ return array (
   'role_admin' => 'Upravitelj sustava',
   'role_super_admin' => 'Super Administrator',
   'role_member' => 'član',
+
+  'confirm_remove_role' => 'Ukloniti ulogu "%1$s" iz %2$s?',
 );

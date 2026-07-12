@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => '状態',
   'proposal_moderation_note' => 'モデレーションノート',
   'proposal_save_status' => '保存',
+
+  'confirm_reject_wiki' => 'この Wiki コンテンツの拒否を確認しますか?この決定により、編集ワークフローが変わります。',
 );

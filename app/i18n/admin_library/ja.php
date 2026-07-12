@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => '先にこのトピック内のすべてのサブサブテーマを削除してください。',
   'err_subsubcategory_has_documents' => 'このサブサブテーマにはまだドキュメントがあります。削除する前に移動または削除してください。',
   'proposal_type_subsubcategory' => 'サブサブテーマ',
+
+  'confirm_reject_proposal' => 'このライブラリ提案の拒否を確認しますか?この決定により、編集ワークフローが変わります。',
 );

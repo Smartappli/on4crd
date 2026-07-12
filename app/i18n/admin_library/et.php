@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Kustutage esmalt kõik selle teema alam-alamteemad.',
   'err_subsubcategory_has_documents' => 'See alam-alamteema sisaldab veel dokumente. Teisaldage või kustutage need dokumendid enne selle kustutamist.',
   'proposal_type_subsubcategory' => 'Alam-alamteema',
+
+  'confirm_reject_proposal' => 'Kas kinnitada selle raamatukogu ettepaneku tagasilükkamine? See otsus muudab selle toimetamise töövoogu.',
 );

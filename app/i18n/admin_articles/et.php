@@ -156,4 +156,6 @@ return array (
   'select_article' => 'Taaskäivitage valik ✓',
   'updated_at' => 'Versioon',
   'published_at' => 'Avaldatud - Avaldamise kuupäev',
+
+  'confirm_reject_article' => 'Kas kinnitada selle artikli tagasilükkamine? Selle autorit võidakse teavitada.',
 );

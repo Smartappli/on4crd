@@ -190,14 +190,12 @@ if (!function_exists('article_docx_close_open_list')) {
 /**
  * @param list<string> $html
  */
-function article_docx_close_open_list(array &$html, ?string &$openListTag): void
+function article_docx_close_open_list(array &$html, array &$openLists): void
 {
-    if ($openListTag === null) {
-        return;
+    while ($openLists !== []) {
+        $list = array_pop($openLists);
+        $html[] = '</li></' . $list['tag'] . '>';
     }
-
-    $html[] = '</' . $openListTag . '>';
-    $openListTag = null;
 }
 }
 
@@ -211,11 +209,11 @@ if (!function_exists('article_docx_append_block_html')) {
  * @param array<string,array{type:string,id:string}>|null $referencedNotes
  * @param array<string,string> $altChunkHtmlByRelationshipId
  */
-function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, array $relationships, array $imageDataUris, array $numberingFormats, array &$html, ?string &$openListTag, array $noteBodies = [], ?array &$referencedNotes = null, array $altChunkHtmlByRelationshipId = []): void
+function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, array $relationships, array $imageDataUris, array $numberingFormats, array &$html, array &$openLists, array $noteBodies = [], ?array &$referencedNotes = null, array $altChunkHtmlByRelationshipId = []): void
 {
     $localName = $block->localName;
     if ($localName === 'altChunk') {
-        article_docx_close_open_list($html, $openListTag);
+        article_docx_close_open_list($html, $openLists);
         $relationshipId = article_docx_attribute($block, 'id');
         if ($relationshipId !== '' && isset($altChunkHtmlByRelationshipId[$relationshipId])) {
             $html[] = $altChunkHtmlByRelationshipId[$relationshipId];
@@ -224,7 +222,7 @@ function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, arra
     }
 
     if ($localName === 'tbl') {
-        article_docx_close_open_list($html, $openListTag);
+        article_docx_close_open_list($html, $openLists);
         $table = article_docx_table_html($block, $xpath, $relationships, $imageDataUris, $noteBodies, $referencedNotes);
         if ($table !== '') {
             $html[] = $table;
@@ -235,25 +233,27 @@ function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, arra
     if ($localName === 'p') {
         $inlineHtml = article_docx_inline_html($block, $xpath, $relationships, $imageDataUris, $noteBodies, $referencedNotes);
         if (article_docx_html_is_empty($inlineHtml)) {
-            article_docx_close_open_list($html, $openListTag);
+            article_docx_close_open_list($html, $openLists);
+            // Empty paragraphs are intentional in Word: they carry visual
+            // spacing and, in some templates, an explicit page break. Keeping
+            // them avoids silently collapsing sections during import.
+            $html[] = article_docx_paragraph_has_page_break($block, $xpath) ? '<hr>' : '<p><br></p>';
             return;
         }
 
         $style = article_docx_paragraph_style($block, $xpath);
-        $listTag = article_docx_paragraph_list_tag($block, $xpath, $numberingFormats);
-        if ($listTag !== '') {
-            if ($openListTag !== $listTag) {
-                article_docx_close_open_list($html, $openListTag);
-                $html[] = '<' . $listTag . '>';
-                $openListTag = $listTag;
-            }
-            $html[] = '<li>' . $inlineHtml . '</li>';
+        $listInfo = article_docx_paragraph_list_info($block, $xpath, $numberingFormats);
+        if ($listInfo !== null) {
+            article_docx_append_list_item($html, $openLists, $listInfo, $inlineHtml);
             return;
         }
 
-        article_docx_close_open_list($html, $openListTag);
+        article_docx_close_open_list($html, $openLists);
         $attributes = article_docx_paragraph_attributes($block, $xpath);
         $attributeHtml = article_docx_html_attributes($attributes);
+        if (article_docx_paragraph_has_page_break($block, $xpath)) {
+            $html[] = '<hr>';
+        }
         if (str_contains($style, 'heading') || str_contains($style, 'titre')) {
             $level = preg_match('/([1-6])/', $style, $matches) ? (int) $matches[1] + 1 : 2;
             $level = min(4, max(2, $level));
@@ -267,17 +267,17 @@ function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, arra
     if ($localName === 'AlternateContent') {
         foreach (article_docx_alternate_content_candidates($block) as $candidateNode) {
             $candidateHtml = $html;
-            $candidateOpenListTag = $openListTag;
+            $candidateOpenLists = $openLists;
             $candidateReferencedNotes = $referencedNotes;
             foreach ($candidateNode->childNodes as $child) {
                 if ($child instanceof DOMElement) {
-                    article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $candidateHtml, $candidateOpenListTag, $noteBodies, $candidateReferencedNotes, $altChunkHtmlByRelationshipId);
+                    article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $candidateHtml, $candidateOpenLists, $noteBodies, $candidateReferencedNotes, $altChunkHtmlByRelationshipId);
                 }
             }
             $addedHtml = implode('', array_slice($candidateHtml, count($html)));
             if (!article_docx_html_is_empty($addedHtml)) {
                 $html = $candidateHtml;
-                $openListTag = $candidateOpenListTag;
+                $openLists = $candidateOpenLists;
                 $referencedNotes = $candidateReferencedNotes;
                 return;
             }
@@ -289,7 +289,7 @@ function article_docx_append_block_html(DOMElement $block, DOMXPath $xpath, arra
         if (!$child instanceof DOMElement || str_ends_with($child->localName, 'Pr')) {
             continue;
         }
-        article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openListTag, $noteBodies, $referencedNotes, $altChunkHtmlByRelationshipId);
+        article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openLists, $noteBodies, $referencedNotes, $altChunkHtmlByRelationshipId);
     }
 }
 }
@@ -433,13 +433,13 @@ function article_docx_wordprocessing_part_html(string $path, string $partName, a
     }
 
     $html = [];
-    $openListTag = null;
+    $openLists = [];
     foreach ($blockNodes as $block) {
         if ($block instanceof DOMElement) {
-            article_docx_append_block_html($block, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openListTag, $noteBodies, $referencedNotes, $altChunkHtmlByRelationshipId);
+            article_docx_append_block_html($block, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openLists, $noteBodies, $referencedNotes, $altChunkHtmlByRelationshipId);
         }
     }
-    article_docx_close_open_list($html, $openListTag);
+    article_docx_close_open_list($html, $openLists);
 
     return trim(implode("\n", $html));
 }
@@ -510,13 +510,13 @@ function article_docx_note_bodies(string $path, string $noteType, array $numberi
         }
 
         $html = [];
-        $openListTag = null;
+        $openLists = [];
         foreach ($noteNode->childNodes as $child) {
             if ($child instanceof DOMElement) {
-                article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openListTag);
+                article_docx_append_block_html($child, $xpath, $relationships, $imageDataUris, $numberingFormats, $html, $openLists);
             }
         }
-        article_docx_close_open_list($html, $openListTag);
+        article_docx_close_open_list($html, $openLists);
 
         $noteHtml = trim(implode('', $html));
         if (!article_docx_html_is_empty($noteHtml)) {
@@ -659,25 +659,70 @@ if (!function_exists('article_docx_paragraph_list_tag')) {
  */
 function article_docx_paragraph_list_tag(DOMElement $paragraph, DOMXPath $xpath, array $numberingFormats): string
 {
+    $info = article_docx_paragraph_list_info($paragraph, $xpath, $numberingFormats);
+    return $info['tag'] ?? '';
+}
+}
+
+if (!function_exists('article_docx_paragraph_list_info')) {
+/**
+ * @param array<string,array<string,string>> $numberingFormats
+ * @return array{tag:string,id:string,level:int}|null
+ */
+function article_docx_paragraph_list_info(DOMElement $paragraph, DOMXPath $xpath, array $numberingFormats): ?array
+{
     $numPrNodes = $xpath->query('./*[local-name()="pPr"]/*[local-name()="numPr"]', $paragraph);
     $numPr = $numPrNodes instanceof DOMNodeList ? $numPrNodes->item(0) : null;
     if (!$numPr instanceof DOMElement) {
-        return '';
+        return null;
     }
 
     $numIdNodes = $xpath->query('./*[local-name()="numId"]', $numPr);
     $numIdNode = $numIdNodes instanceof DOMNodeList ? $numIdNodes->item(0) : null;
     $numId = $numIdNode instanceof DOMElement ? article_docx_attribute($numIdNode, 'val') : '';
-    if ($numId === '') {
-        return 'ul';
-    }
+    $numId = $numId === '' ? 'implicit' : $numId;
 
     $levelNodes = $xpath->query('./*[local-name()="ilvl"]', $numPr);
     $levelNode = $levelNodes instanceof DOMNodeList ? $levelNodes->item(0) : null;
     $level = $levelNode instanceof DOMElement ? article_docx_attribute($levelNode, 'val') : '0';
     $format = $numberingFormats[$numId][$level] ?? $numberingFormats[$numId]['0'] ?? '';
 
-    return article_docx_numbering_format_tag($format);
+    return ['tag' => article_docx_numbering_format_tag($format), 'id' => $numId, 'level' => max(0, min(8, (int) $level))];
+}
+}
+
+if (!function_exists('article_docx_append_list_item')) {
+/**
+ * @param list<string> $html
+ * @param list<array{tag:string,id:string,level:int}> $openLists
+ * @param array{tag:string,id:string,level:int} $listInfo
+ */
+function article_docx_append_list_item(array &$html, array &$openLists, array $listInfo, string $inlineHtml): void
+{
+    $targetDepth = $listInfo['level'] + 1;
+    if ($openLists === []) {
+        $targetDepth = 1;
+    }
+
+    while (count($openLists) > $targetDepth) {
+        $list = array_pop($openLists);
+        $html[] = '</li></' . $list['tag'] . '>';
+    }
+
+    $current = $openLists === [] ? null : $openLists[array_key_last($openLists)];
+    if ($current !== null && count($openLists) === $targetDepth && ($current['tag'] !== $listInfo['tag'] || $current['id'] !== $listInfo['id'])) {
+        $html[] = '</li></' . $current['tag'] . '>';
+        array_pop($openLists);
+    } elseif ($current !== null && count($openLists) === $targetDepth) {
+        $html[] = '</li>';
+    }
+
+    while (count($openLists) < $targetDepth) {
+        $html[] = '<' . $listInfo['tag'] . '>';
+        $openLists[] = $listInfo;
+    }
+
+    $html[] = '<li>' . $inlineHtml;
 }
 }
 
@@ -1184,6 +1229,17 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
             $html .= $href !== '' ? '<a href="' . e($href) . '">' . $inner . '</a>' : $inner;
             continue;
         }
+        if ($localName === 'fldSimple') {
+            $inner = article_docx_inline_html($child, $xpath, $relationships, $imageDataUris, $noteBodies, $referencedNotes);
+            $href = article_docx_field_hyperlink_href(article_docx_attribute($child, 'instr'));
+            $html .= $href !== '' && !article_docx_html_is_empty($inner) ? '<a href="' . e($href) . '">' . $inner . '</a>' : $inner;
+            continue;
+        }
+        if ($localName === 'del') {
+            $inner = article_docx_inline_html($child, $xpath, $relationships, $imageDataUris, $noteBodies, $referencedNotes);
+            $html .= article_docx_html_is_empty($inner) ? '' : '<s>' . $inner . '</s>';
+            continue;
+        }
         if ($localName === 'AlternateContent') {
             $html .= article_docx_alternate_content_inline_html($child, $xpath, $relationships, $imageDataUris, $noteBodies, $referencedNotes);
             continue;
@@ -1195,7 +1251,7 @@ function article_docx_inline_html(DOMNode $container, DOMXPath $xpath, array $re
             continue;
         }
         if ($localName === 'tab') {
-            $html .= ' ';
+            $html .= '<span title="Tabulation">&emsp;</span>';
             continue;
         }
         if ($localName === 'br') {
@@ -1256,11 +1312,23 @@ function article_docx_run_html(DOMElement $run, DOMXPath $xpath, array $relation
             continue;
         }
         if ($localName === 'tab') {
-            $html .= ' ';
+            $html .= '<span title="Tabulation">&emsp;</span>';
             continue;
         }
         if ($localName === 'br' || $localName === 'cr') {
-            $html .= '<br>';
+            $breakType = strtolower(article_docx_attribute($child, 'type'));
+            $html .= $breakType === 'page' ? '<hr>' : '<br>';
+            continue;
+        }
+        if ($localName === 'lastRenderedPageBreak') {
+            $html .= '<hr>';
+            continue;
+        }
+        if ($localName === 'sym') {
+            $symbol = strtoupper(trim(article_docx_attribute($child, 'char')));
+            if (preg_match('/^[0-9A-F]{2,6}$/', $symbol) === 1) {
+                $html .= '<span title="Symbole Word">&#x' . $symbol . ';</span>';
+            }
             continue;
         }
         if ($localName === 'noBreakHyphen') {
@@ -1912,6 +1980,31 @@ function article_extract_pdf_text(string $path): string
     }
 
     return trim((string) preg_replace('/[ \t]+/u', ' ', $output));
+}
+}
+
+if (!function_exists('article_docx_field_hyperlink_href')) {
+function article_docx_field_hyperlink_href(string $instruction): string
+{
+    if (preg_match('/\bHYPERLINK\s+(?:"([^"]+)"|([^\s\\]+))/i', $instruction, $matches) !== 1) {
+        return '';
+    }
+
+    $quotedTarget = (string) ($matches[1] ?? '');
+    $unquotedTarget = (string) ($matches[2] ?? '');
+    return article_docx_safe_href($quotedTarget !== '' ? $quotedTarget : $unquotedTarget);
+}
+}
+
+if (!function_exists('article_docx_paragraph_has_page_break')) {
+function article_docx_paragraph_has_page_break(DOMElement $paragraph, DOMXPath $xpath): bool
+{
+    $nodes = $xpath->query(
+        './/*[local-name()="lastRenderedPageBreak"] | ./*[local-name()="pPr"]/*[local-name()="pageBreakBefore"] | .//*[local-name()="br" and translate(@*[local-name()="type"], "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")="page"]',
+        $paragraph,
+    );
+
+    return $nodes instanceof DOMNodeList && $nodes->length > 0;
 }
 }
 

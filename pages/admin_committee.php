@@ -9,6 +9,7 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, $key);
 }
+$wizardNavigation = i18n_domain_locale('search', $locale);
 $tr = static function (string $key) use ($t): string {
     return trim((string) $t[$key]);
 };
@@ -115,9 +116,9 @@ ob_start();
         <?php if ($selectedMember === null): ?>
             <p class="help"><?= e($tr('no_active_members')) ?></p>
         <?php else: ?>
-        <form method="post" class="stack" id="admin-committee-form" data-admin-dirty-track>
+        <form method="post" class="stack" id="admin-committee-form" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['title']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-            <div class="form-grid">
+            <section class="form-grid" data-admin-wizard-step data-admin-wizard-title="<?= e($tr('member')) ?>">
                 <label><?= e($tr('member')) ?>
                     <select name="member_id" required>
                         <?php foreach ($rows as $row): ?>
@@ -127,6 +128,8 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
+            </section>
+            <section class="form-grid" data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['role']) ?>">
                 <label><?= e((string) $t['sort_order']) ?>
                     <input type="number" name="committee_sort_order" value="<?= e((string) ($selectedMember['committee_sort_order'] ?? 100)) ?>">
                 </label>
@@ -137,11 +140,13 @@ ob_start();
                 <label><?= e((string) $t['role']) ?>
                     <input type="text" name="committee_role" maxlength="190" value="<?= e((string) ($selectedMember['committee_role'] ?? '')) ?>">
                 </label>
+            </section>
+            <section class="form-grid" data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['bio']) ?>">
                 <label class="admin-committee-wide"><?= e((string) $t['bio']) ?>
                     <textarea name="committee_bio" rows="4" maxlength="5000"><?= e((string) ($selectedMember['committee_bio'] ?? '')) ?></textarea>
                 </label>
-            </div>
-            <p><button class="button"><?= e((string) $t['save']) ?></button></p>
+                <p><button class="button"><?= e((string) $t['save']) ?></button></p>
+            </section>
         </form>
         <?php endif; ?>
     </section>

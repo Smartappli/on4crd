@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Näide: allkirjastatud vorm 2026-06-05-is',
   'consent_admin_help' => 'Lisamiseks, importimiseks või taasaktiveerimiseks on vaja selgesõnalist nõusolekut.',
   'consent' => 'Nõusolek',
+
+  'confirm_send_campaign' => 'Kas saata see kampaania kõigile aktiivsetele tellijatele? Seda toimingut ei saa tagasi võtta.',
 );

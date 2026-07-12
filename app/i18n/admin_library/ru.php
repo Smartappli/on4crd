@@ -100,4 +100,6 @@ return array (
   'err_subcategory_has_subsubcategories' => 'Сначала удалите все подподтемы этой темы.',
   'err_subsubcategory_has_documents' => 'Эта подподтема всё ещё содержит документы. Переместите или удалите эти документы перед её удалением.',
   'proposal_type_subsubcategory' => 'Подподтема',
+
+  'confirm_reject_proposal' => 'Подтвердить отказ от предложения библиотеки? Это решение меняет редакционный процесс.',
 );

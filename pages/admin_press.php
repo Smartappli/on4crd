@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_module_enabled('press');
 require_permission('admin.access');
 $t = i18n_domain_locale('admin_press');
+$wizardNavigation = i18n_domain_locale('search');
 
 set_page_meta([
     'title' => (string) $t['layout'],
@@ -64,16 +65,22 @@ ob_start();
 <div class="grid-2">
     <section class="card">
         <h1><?= e((string) $t['contacts_title']) ?></h1>
-        <form method="post" data-admin-dirty-track>
+        <form method="post" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['contacts_title']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="contact">
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['full_name']) ?>">
             <label><?= e((string) $t['full_name']) ?><input type="text" name="full_name" required></label>
             <label><?= e((string) $t['role']) ?><input type="text" name="role_label" required></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['email']) ?>">
             <label><?= e((string) $t['email']) ?><input type="email" name="email"></label>
             <label><?= e((string) $t['phone']) ?><input type="text" name="phone"></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['notes']) ?>">
             <label><?= e((string) $t['notes']) ?><textarea name="notes" rows="3"></textarea></label>
             <label><?= e((string) $t['order']) ?><input type="text" name="sort_order" value="100"></label>
             <button class="button"><?= e((string) $t['add']) ?></button>
+            </section>
         </form>
         <div class="inner-card table-wrap">
             <table>
@@ -88,14 +95,18 @@ ob_start();
     </section>
     <section class="card">
         <h1><?= e((string) $t['releases_title']) ?></h1>
-        <form method="post" enctype="multipart/form-data" data-admin-dirty-track>
+        <form method="post" enctype="multipart/form-data" data-admin-dirty-track data-admin-wizard data-admin-wizard-label="<?= e((string) $t['releases_title']) ?>" data-admin-wizard-previous-label="<?= e((string) $wizardNavigation['previous']) ?>" data-admin-wizard-next-label="<?= e((string) $wizardNavigation['next']) ?>">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="release">
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['title']) ?>">
             <label><?= e((string) $t['title']) ?><input type="text" name="title" required></label>
             <label><?= e((string) $t['summary']) ?><textarea name="summary" rows="3"></textarea></label>
+            </section>
+            <section data-admin-wizard-step data-admin-wizard-title="<?= e((string) $t['publish_date']) ?>">
             <label><?= e((string) $t['publish_date']) ?><input type="date" name="published_on" value="<?= e(date('Y-m-d')) ?>"></label>
             <label><?= e((string) $t['pdf_doc']) ?><input type="file" name="pdf" accept="application/pdf,.pdf"></label>
             <button class="button"><?= e((string) $t['add']) ?></button>
+            </section>
         </form>
         <div class="inner-card table-wrap">
             <table>

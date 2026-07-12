@@ -48,4 +48,6 @@ return array (
   'consent_proof_ph' => 'Esempio: modulo firmato su 2026-06-05',
   'consent_admin_help' => 'L\'aggiunta, l\'importazione o la riattivazione richiede la prova esplicita del consenso.',
   'consent' => 'Consenso',
+
+  'confirm_send_campaign' => 'Inviare questa campagna a tutti gli abbonati attivi? Questa azione non può essere annullata.',
 );

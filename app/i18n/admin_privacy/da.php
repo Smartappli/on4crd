@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'I gang',
   'status_resolved' => 'Løst',
   'status_rejected' => 'Afvist',
+
+  'confirm_apply_erasure' => 'Bekræfte automatiseret anonymisering og behandling af tilknyttede filer? Denne handling er irreversibel.',
 );

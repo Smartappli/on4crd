@@ -34,4 +34,6 @@ return array (
   'status_in_progress' => 'চলছে',
   'status_resolved' => 'সমাধান করা হয়েছে',
   'status_rejected' => 'প্রত্যাখ্যাত',
+
+  'confirm_apply_erasure' => 'স্বয়ংক্রিয় বেনামীকরণ এবং সংশ্লিষ্ট ফাইলগুলির প্রক্রিয়াকরণ নিশ্চিত করবেন? এই কর্ম অপরিবর্তনীয়.',
 );
