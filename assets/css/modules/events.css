@@ -92,4 +92,32 @@
     grid-template-columns: 1fr;
   }
 
+  [data-route="events"] .events-proposal-dialog {
+    width: min(100% - 1rem, 640px);
+    max-height: calc(100dvh - 1rem);
+  }
+
+  [data-route="events"] .events-proposal-dialog-card {
+    max-height: calc(100dvh - 1rem);
+    overflow-y: auto;
+    padding: 1rem;
+  }
+
+  [data-route="events"] .fc .fc-toolbar {
+    gap: .45rem;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  [data-route="events"] .fc .fc-toolbar-title {
+    width: 100%;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  [data-route="events"] .fc .fc-button {
+    min-height: 2.5rem;
+    padding: .4rem .55rem;
+  }
+
 }

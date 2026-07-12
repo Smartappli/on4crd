@@ -189,12 +189,23 @@
     locale: config.locale || document.documentElement.lang || 'fr',
     firstDay: 1,
     height: 'auto',
-    initialView: config.initialView || 'dayGridMonth',
+    initialView: window.matchMedia('(max-width: 760px)').matches ? 'listMonth' : (config.initialView || 'dayGridMonth'),
     initialDate: config.initialDate || undefined,
-    headerToolbar: {
+    headerToolbar: window.matchMedia('(max-width: 760px)').matches ? {
+      left: 'prev,next',
+      center: 'title',
+      right: 'listMonth'
+    } : {
       left: 'prev,next today',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,listMonth'
+    },
+    windowResize() {
+      const compact = window.matchMedia('(max-width: 760px)').matches;
+      const desiredView = compact ? 'listMonth' : (config.initialView || 'dayGridMonth');
+      if (calendar.view.type !== desiredView) {
+        calendar.changeView(desiredView);
+      }
     },
     buttonText: config.buttonText || {},
     events: config.eventsUrl || '',

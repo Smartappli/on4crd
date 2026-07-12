@@ -86,6 +86,10 @@ function render_admin_workspace_nav(string $currentRoute, string $currentLocale)
     $searchPlaceholder = (string) ($messages['search_placeholder'] ?? '');
     $searchCta = (string) ($messages['search_cta'] ?? $searchLabel);
     $searchValue = trim((string) ($_GET['q'] ?? ''));
+    $layoutMessages = i18n_domain_locale('layout', $currentLocale);
+    $adminConfirmTitle = (string) ($dashboardLabel !== '' ? $dashboardLabel : 'Administration');
+    $adminConfirmCancel = (string) ($layoutMessages['close_menu'] ?? 'Cancel');
+    $adminConfirmSubmit = (string) ($messages['proposal_save'] ?? 'Confirm');
     $pendingTotal = 0;
     $groupLabelsByLocale = [
         'fr' => ['content' => 'Contenus', 'media' => 'Médias et documents', 'communication' => 'Communication', 'members' => 'Membres et accès', 'settings' => 'Configuration'],
@@ -141,7 +145,7 @@ function render_admin_workspace_nav(string $currentRoute, string $currentLocale)
             . '</summary><div class="admin-shell-group-links">' . $groupLinks . '</div></details>';
     }
 
-    return '<section class="admin-shell-nav" aria-label="' . e($dashboardLabel) . '">'
+    return '<section class="admin-shell-nav" aria-label="' . e($dashboardLabel) . '" data-admin-confirm-title="' . e($adminConfirmTitle) . '" data-admin-confirm-cancel="' . e($adminConfirmCancel) . '" data-admin-confirm-submit="' . e($adminConfirmSubmit) . '">'
         . '<div class="admin-shell-current"><span class="admin-section-kicker">' . e($dashboardLabel) . '</span><strong>' . e($currentLabel) . '</strong></div>'
         . $searchForm
         . $pendingSummary

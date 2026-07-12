@@ -126,25 +126,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect('admin_members');
     }
 
+    $memberId = (int) ($_POST['member_id'] ?? 0);
     $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
     $fullName = trim((string) ($_POST['full_name'] ?? ''));
     $email = trim((string) ($_POST['email'] ?? ''));
     $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
-    if ($callsign === '') { set_flash('error', (string) $t['err_callsign']); redirect('admin_members'); }
-    if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) { set_flash('error', (string) $t['err_email']); redirect('admin_members'); }
-    if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) { set_flash('error', (string) $t['err_locator']); redirect('admin_members'); }
-    $updates = ['callsign = ?', 'full_name = ?', 'email = ?', 'locator = ?', 'is_active = ?', 'is_committee = ?'];
-    $params = [$callsign, $fullName, $email, $locator, isset($_POST['is_active']) ? 1 : 0, isset($_POST['is_committee']) ? 1 : 0];
-    if ($passwordResetForceAvailable) {
-        $forcePasswordReset = isset($_POST['password_change_required']);
-        $updates[] = 'password_change_required = ?';
-        $updates[] = 'password_reset_forced_at = ?';
-        $params[] = $forcePasswordReset ? 1 : 0;
-        $params[] = $forcePasswordReset ? date('Y-m-d H:i:s') : null;
+    try {
+        if ($memberId <= 0 || $callsign === '') {
+            throw new RuntimeException((string) $t['err_callsign']);
+        }
+        if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            throw new RuntimeException((string) $t['err_email']);
+        }
+        if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
+            throw new RuntimeException((string) $t['err_locator']);
+        }
+        $updates = ['callsign = ?', 'full_name = ?', 'email = ?', 'locator = ?', 'is_active = ?', 'is_committee = ?'];
+        $params = [$callsign, $fullName, $email, $locator, isset($_POST['is_active']) ? 1 : 0, isset($_POST['is_committee']) ? 1 : 0];
+        if ($passwordResetForceAvailable) {
+            $forcePasswordReset = isset($_POST['password_change_required']);
+            $updates[] = 'password_change_required = ?';
+            $updates[] = 'password_reset_forced_at = ?';
+            $params[] = $forcePasswordReset ? 1 : 0;
+            $params[] = $forcePasswordReset ? date('Y-m-d H:i:s') : null;
+        }
+        $params[] = $memberId;
+        db()->prepare('UPDATE members SET ' . implode(', ', $updates) . ' WHERE id = ? LIMIT 1')->execute($params);
+        unset($_SESSION['_admin_member_update_old'][$memberId]);
+        set_flash('success', (string) $t['member_updated']);
+    } catch (Throwable $throwable) {
+        $_SESSION['_admin_member_update_old'][$memberId] = [
+            'callsign' => $callsign,
+            'full_name' => $fullName,
+            'email' => $email,
+            'locator' => $locator,
+            'is_active' => isset($_POST['is_active']),
+            'is_committee' => isset($_POST['is_committee']),
+            'password_change_required' => isset($_POST['password_change_required']),
+        ];
+        set_flash('error', $throwable->getMessage());
     }
-    $params[] = (int) ($_POST['member_id'] ?? 0);
-    db()->prepare('UPDATE members SET ' . implode(', ', $updates) . ' WHERE id = ? LIMIT 1')->execute($params);
-    set_flash('success', (string) $t['member_updated']);
     $postReturnParams = [];
     parse_str((string) ($_POST['return_query'] ?? ''), $postReturnParams);
     $postReturnSort = (string) ($postReturnParams['sort'] ?? 'callsign');
@@ -194,6 +215,10 @@ $memberCreateOld = isset($_SESSION['_admin_member_create_old']) && is_array($_SE
     ? $_SESSION['_admin_member_create_old']
     : [];
 unset($_SESSION['_admin_member_create_old']);
+$memberUpdateOld = isset($_SESSION['_admin_member_update_old']) && is_array($_SESSION['_admin_member_update_old'])
+    ? $_SESSION['_admin_member_update_old']
+    : [];
+unset($_SESSION['_admin_member_update_old']);
 $memberPageQuery = static function (int $targetPage) use ($memberSearch, $memberSort, $memberDir): string {
     return route_url_clean('admin_members', [
         'member_q' => $memberSearch,
@@ -259,19 +284,23 @@ ob_start();
         <th><?= e((string) $t['th_callsign']) ?></th><th><?= e((string) $t['th_name']) ?></th><th><?= e((string) $t['th_email']) ?></th><th><?= e((string) $t['th_locator']) ?></th><th><?= e((string) $t['th_active']) ?></th><th><?= e((string) $t['th_committee']) ?></th><th><?= e((string) $t['th_password_reset']) ?></th><th><?= e((string) $t['th_actions']) ?></th>
     </tr></thead><tbody>
     <?php foreach ($members as $member): ?>
-        <tr><td colspan="8"><form method="post" class="admin-member-row-form" data-admin-dirty-track>
-            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="update_member"><input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>"><input type="hidden" name="return_query" value="<?= e($returnQuery) ?>">
-            <input type="text" name="callsign" value="<?= e((string) $member['callsign']) ?>" aria-label="<?= e((string) $t['th_callsign']) ?>"><input type="text" name="full_name" value="<?= e((string) $member['full_name']) ?>" aria-label="<?= e((string) $t['th_name']) ?>"><input type="email" name="email" value="<?= e((string) $member['email']) ?>" aria-label="<?= e((string) $t['th_email']) ?>"><input type="text" name="locator" value="<?= e((string) $member['locator']) ?>" maxlength="6" aria-label="<?= e((string) $t['th_locator']) ?>">
-            <label class="admin-member-toggle"><input type="checkbox" name="is_active" value="1" <?= (int) $member['is_active'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['th_active']) ?></label>
-            <label class="admin-member-toggle"><input type="checkbox" name="is_committee" value="1" <?= (int) $member['is_committee'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['th_committee']) ?></label>
+        <?php $memberId = (int) $member['id']; $memberOld = isset($memberUpdateOld[$memberId]) && is_array($memberUpdateOld[$memberId]) ? $memberUpdateOld[$memberId] : []; ?>
+        <tr><td colspan="8"><details class="admin-member-editor"<?= $memberOld !== [] ? ' open' : '' ?>><summary>
+            <span class="admin-member-editor-identity"><strong><?= e((string) $member['callsign']) ?></strong><span><?= e((string) $member['full_name']) ?></span></span>
+            <span class="admin-member-editor-statuses"><span class="badge muted"><?= (int) $member['is_active'] === 1 ? e((string) $t['th_active']) : '—' ?></span><?php if ((int) $member['is_committee'] === 1): ?><span class="badge muted"><?= e((string) $t['th_committee']) ?></span><?php endif; ?><span class="admin-member-editor-action" aria-hidden="true">✎</span><span class="sr-only"><?= e((string) $t['save']) ?></span></span>
+        </summary><form method="post" class="admin-member-row-form" data-admin-dirty-track>
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="update_member"><input type="hidden" name="member_id" value="<?= $memberId ?>"><input type="hidden" name="return_query" value="<?= e($returnQuery) ?>">
+            <input type="text" name="callsign" value="<?= e((string) ($memberOld['callsign'] ?? $member['callsign'])) ?>" aria-label="<?= e((string) $t['th_callsign']) ?>"><input type="text" name="full_name" value="<?= e((string) ($memberOld['full_name'] ?? $member['full_name'])) ?>" aria-label="<?= e((string) $t['th_name']) ?>"><input type="email" name="email" value="<?= e((string) ($memberOld['email'] ?? $member['email'])) ?>" aria-label="<?= e((string) $t['th_email']) ?>"><input type="text" name="locator" value="<?= e((string) ($memberOld['locator'] ?? $member['locator'])) ?>" maxlength="6" aria-label="<?= e((string) $t['th_locator']) ?>">
+            <label class="admin-member-toggle"><input type="checkbox" name="is_active" value="1" <?= $memberOld === [] ? ((int) $member['is_active'] === 1 ? 'checked' : '') : (!empty($memberOld['is_active']) ? 'checked' : '') ?>> <?= e((string) $t['th_active']) ?></label>
+            <label class="admin-member-toggle"><input type="checkbox" name="is_committee" value="1" <?= $memberOld === [] ? ((int) $member['is_committee'] === 1 ? 'checked' : '') : (!empty($memberOld['is_committee']) ? 'checked' : '') ?>> <?= e((string) $t['th_committee']) ?></label>
             <?php if ($passwordResetForceAvailable): ?>
                 <?php $passwordResetForced = (int) ($member['password_change_required'] ?? 0) === 1 && trim((string) ($member['password_reset_forced_at'] ?? '')) !== ''; ?>
-                <label class="admin-member-toggle"><input type="checkbox" name="password_change_required" value="1" <?= $passwordResetForced ? 'checked' : '' ?>> <?= e((string) $t['password_reset_force']) ?></label>
+                <label class="admin-member-toggle"><input type="checkbox" name="password_change_required" value="1" <?= $memberOld === [] ? ($passwordResetForced ? 'checked' : '') : (!empty($memberOld['password_change_required']) ? 'checked' : '') ?>> <?= e((string) $t['password_reset_force']) ?></label>
             <?php else: ?>
                 <span class="help"><?= e((string) $t['password_reset_unavailable']) ?></span>
             <?php endif; ?>
             <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
-        </form></td></tr>
+        </form></details></td></tr>
     <?php endforeach; ?>
     <?php if ($members === []): ?><tr><td colspan="8"><?= e((string) $t['members']) ?></td></tr><?php endif; ?>
     </tbody></table></div>

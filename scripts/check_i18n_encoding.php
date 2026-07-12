@@ -36,6 +36,15 @@ foreach ($iter as $file) {
 
     $lines = explode("\n", $content);
     foreach ($lines as $idx => $line) {
+        if (basename($path) === 'fr.php' && preg_match('/\p{L}\?\p{L}/u', $line) === 1) {
+            $issues[] = [
+                'file' => $rel,
+                'line' => $idx + 1,
+                'snippet' => trim($line),
+                'pattern' => 'french_replacement_between_letters',
+            ];
+            continue;
+        }
         foreach ($patterns as $pattern) {
             if (preg_match($pattern, $line) === 1) {
                 $issues[] = [

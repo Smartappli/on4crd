@@ -22,6 +22,9 @@ $reviewType = strtolower(trim((string) ($_GET['review_type'] ?? 'all')));
 if (!in_array($reviewType, ['all', 'news', 'articles'], true)) {
     $reviewType = 'all';
 }
+$newsPage = max(1, (int) ($_GET['news_page'] ?? 1));
+$articlePage = max(1, (int) ($_GET['article_page'] ?? 1));
+$translationPerPage = 12;
 $filterLabelsByLocale = [
     'fr' => ['language' => 'Langue', 'all_languages' => 'Toutes les langues', 'type' => 'Type de contenu', 'all_content' => 'Tous les contenus', 'apply' => 'Filtrer', 'source' => 'Source'],
     'en' => ['language' => 'Language', 'all_languages' => 'All languages', 'type' => 'Content type', 'all_content' => 'All content', 'apply' => 'Filter', 'source' => 'Source'],
@@ -73,26 +76,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $returnLocale = strtolower(trim((string) ($_POST['return_locale'] ?? '')));
     $returnType = strtolower(trim((string) ($_POST['return_type'] ?? 'all')));
+    $returnNewsPage = max(1, (int) ($_POST['return_news_page'] ?? 1));
+    $returnArticlePage = max(1, (int) ($_POST['return_article_page'] ?? 1));
     redirect_url(route_url_clean('admin_translation_reviews', [
         'review_locale' => in_array($returnLocale, $reviewableLocales, true) ? $returnLocale : '',
         'review_type' => in_array($returnType, ['all', 'news', 'articles'], true) ? $returnType : 'all',
+        'news_page' => $returnNewsPage,
+        'article_page' => $returnArticlePage,
     ]));
 }
 
 $newsTranslations = [];
+$newsTotal = 0;
+$newsPages = 1;
 if ($reviewType !== 'articles' && table_exists('news_translations')) {
     $newsLocaleSql = $reviewLocale !== '' ? ' AND nt.locale = ?' : '';
-    $newsStmt = db()->prepare('SELECT nt.*, np.title AS source_title, np.excerpt AS source_excerpt, np.content AS source_content FROM news_translations nt INNER JOIN news_posts np ON np.id = nt.news_post_id WHERE nt.status IN ("auto", "needs_review")' . $newsLocaleSql . ' ORDER BY nt.updated_at DESC');
-    $newsStmt->execute($reviewLocale !== '' ? [$reviewLocale] : []);
+    $newsParams = $reviewLocale !== '' ? [$reviewLocale] : [];
+    $newsCountStmt = db()->prepare('SELECT COUNT(*) FROM news_translations nt WHERE nt.status IN ("auto", "needs_review")' . $newsLocaleSql);
+    $newsCountStmt->execute($newsParams);
+    $newsTotal = (int) $newsCountStmt->fetchColumn();
+    $newsPagination = pagination_state($newsTotal, $newsPage, $translationPerPage);
+    $newsPage = $newsPagination['page'];
+    $newsPages = $newsPagination['total_pages'];
+    $newsStmt = db()->prepare('SELECT nt.*, np.title AS source_title, np.excerpt AS source_excerpt, np.content AS source_content FROM news_translations nt INNER JOIN news_posts np ON np.id = nt.news_post_id WHERE nt.status IN ("auto", "needs_review")' . $newsLocaleSql . ' ORDER BY nt.updated_at DESC LIMIT ' . $translationPerPage . ' OFFSET ' . $newsPagination['offset']);
+    $newsStmt->execute($newsParams);
     $newsTranslations = $newsStmt->fetchAll() ?: [];
 }
 $articleTranslations = [];
+$articleTotal = 0;
+$articlePages = 1;
 if ($reviewType !== 'news' && table_exists('article_translations')) {
     $articleLocaleSql = $reviewLocale !== '' ? ' AND at.locale = ?' : '';
-    $articleStmt = db()->prepare('SELECT at.*, a.title AS source_title, a.excerpt AS source_excerpt, a.content AS source_content FROM article_translations at INNER JOIN articles a ON a.id = at.article_id WHERE at.status IN ("auto", "needs_review")' . $articleLocaleSql . ' ORDER BY at.updated_at DESC');
-    $articleStmt->execute($reviewLocale !== '' ? [$reviewLocale] : []);
+    $articleParams = $reviewLocale !== '' ? [$reviewLocale] : [];
+    $articleCountStmt = db()->prepare('SELECT COUNT(*) FROM article_translations at WHERE at.status IN ("auto", "needs_review")' . $articleLocaleSql);
+    $articleCountStmt->execute($articleParams);
+    $articleTotal = (int) $articleCountStmt->fetchColumn();
+    $articlePagination = pagination_state($articleTotal, $articlePage, $translationPerPage);
+    $articlePage = $articlePagination['page'];
+    $articlePages = $articlePagination['total_pages'];
+    $articleStmt = db()->prepare('SELECT at.*, a.title AS source_title, a.excerpt AS source_excerpt, a.content AS source_content FROM article_translations at INNER JOIN articles a ON a.id = at.article_id WHERE at.status IN ("auto", "needs_review")' . $articleLocaleSql . ' ORDER BY at.updated_at DESC LIMIT ' . $translationPerPage . ' OFFSET ' . $articlePagination['offset']);
+    $articleStmt->execute($articleParams);
     $articleTranslations = $articleStmt->fetchAll() ?: [];
 }
+$reviewPageUrl = static function (int $nextNewsPage, int $nextArticlePage) use ($reviewLocale, $reviewType): string {
+    return route_url_clean('admin_translation_reviews', [
+        'review_locale' => $reviewLocale,
+        'review_type' => $reviewType,
+        'news_page' => $nextNewsPage,
+        'article_page' => $nextArticlePage,
+    ]);
+};
 
 $chatbotI18nQa = ['ok' => true, 'issues' => []];
 try {
@@ -219,7 +252,7 @@ ob_start();
   <section class="card admin-translation-filter-card">
     <div class="admin-section-head">
       <div><h1><?= e((string) $tr('layout')) ?></h1><p class="help"><?= e((string) $tr('meta_desc')) ?></p></div>
-      <span class="badge muted"><?= count($newsTranslations) + count($articleTranslations) ?></span>
+      <span class="badge muted"><?= $newsTotal + $articleTotal ?></span>
     </div>
     <form method="get" class="inline-form admin-translation-filters">
       <label><?= e($filterLabels['language']) ?>
@@ -297,6 +330,8 @@ ob_start();
             <input type="hidden" name="locale" value="<?= e((string) $translation['locale']) ?>">
             <input type="hidden" name="return_locale" value="<?= e($reviewLocale) ?>">
             <input type="hidden" name="return_type" value="<?= e($reviewType) ?>">
+            <input type="hidden" name="return_news_page" value="<?= $newsPage ?>">
+            <input type="hidden" name="return_article_page" value="<?= $articlePage ?>">
             <label><?= e((string) $tr('label_title')) ?><input type="text" name="title" value="<?= e((string) $translation['title']) ?>"></label>
             <label><?= e((string) $tr('label_excerpt')) ?><textarea name="excerpt" rows="3"><?= e((string) $translation['excerpt']) ?></textarea></label>
             <label><?= e((string) $tr('label_content')) ?><textarea name="content" rows="8"><?= e((string) $translation['content']) ?></textarea></label>
@@ -306,6 +341,7 @@ ob_start();
         </article>
       <?php endforeach; ?>
       <?php if ($newsTranslations === []): ?><p><?= e((string) $tr('no_news')) ?></p><?php endif; ?>
+      <?php if ($newsPages > 1): ?><nav class="admin-pagination" aria-label="<?= e((string) $tr('news_title')) ?>"><?php if ($newsPage > 1): ?><a class="button secondary small" href="<?= e($reviewPageUrl($newsPage - 1, $articlePage)) ?>" rel="prev">←</a><?php endif; ?><span class="admin-pagination-status" aria-current="page"><?= $newsPage ?> / <?= $newsPages ?></span><?php if ($newsPage < $newsPages): ?><a class="button secondary small" href="<?= e($reviewPageUrl($newsPage + 1, $articlePage)) ?>" rel="next">→</a><?php endif; ?></nav><?php endif; ?>
     </section>
     <?php endif; ?>
 
@@ -329,6 +365,8 @@ ob_start();
             <input type="hidden" name="locale" value="<?= e((string) $translation['locale']) ?>">
             <input type="hidden" name="return_locale" value="<?= e($reviewLocale) ?>">
             <input type="hidden" name="return_type" value="<?= e($reviewType) ?>">
+            <input type="hidden" name="return_news_page" value="<?= $newsPage ?>">
+            <input type="hidden" name="return_article_page" value="<?= $articlePage ?>">
             <label><?= e((string) $tr('label_title')) ?><input type="text" name="title" value="<?= e((string) $translation['title']) ?>"></label>
             <label><?= e((string) $tr('label_excerpt')) ?><textarea name="excerpt" rows="3"><?= e((string) $translation['excerpt']) ?></textarea></label>
             <label><?= e((string) $tr('label_content')) ?><textarea name="content" rows="8"><?= e((string) $translation['content']) ?></textarea></label>
@@ -338,6 +376,7 @@ ob_start();
         </article>
       <?php endforeach; ?>
       <?php if ($articleTranslations === []): ?><p><?= e((string) $tr('no_article')) ?></p><?php endif; ?>
+      <?php if ($articlePages > 1): ?><nav class="admin-pagination" aria-label="<?= e((string) $tr('article_title')) ?>"><?php if ($articlePage > 1): ?><a class="button secondary small" href="<?= e($reviewPageUrl($newsPage, $articlePage - 1)) ?>" rel="prev">←</a><?php endif; ?><span class="admin-pagination-status" aria-current="page"><?= $articlePage ?> / <?= $articlePages ?></span><?php if ($articlePage < $articlePages): ?><a class="button secondary small" href="<?= e($reviewPageUrl($newsPage, $articlePage + 1)) ?>" rel="next">→</a><?php endif; ?></nav><?php endif; ?>
     </section>
     <?php endif; ?>
   </div>

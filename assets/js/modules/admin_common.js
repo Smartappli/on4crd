@@ -13,13 +13,12 @@
     });
   });
 
-  const locale = (document.documentElement.lang || 'en').slice(0, 2).toLowerCase();
+  const adminNav = document.querySelector('.admin-shell-nav');
   const dialogLabels = {
-    fr: { title: 'Confirmer l’action', cancel: 'Annuler', confirm: 'Confirmer' },
-    en: { title: 'Confirm action', cancel: 'Cancel', confirm: 'Confirm' },
-    de: { title: 'Aktion bestätigen', cancel: 'Abbrechen', confirm: 'Bestätigen' },
-    nl: { title: 'Actie bevestigen', cancel: 'Annuleren', confirm: 'Bevestigen' },
-  }[locale] || { title: 'Confirm action', cancel: 'Cancel', confirm: 'Confirm' };
+    title: adminNav?.dataset.adminConfirmTitle || 'Confirm action',
+    cancel: adminNav?.dataset.adminConfirmCancel || 'Cancel',
+    confirm: adminNav?.dataset.adminConfirmSubmit || 'Confirm',
+  };
   const confirmDialog = document.createElement('dialog');
   confirmDialog.className = 'admin-confirm-dialog';
   confirmDialog.innerHTML = `<form method="dialog" class="admin-confirm-card"><h2>${dialogLabels.title}</h2><p data-admin-confirm-copy></p><div class="actions"><button class="button secondary" value="cancel">${dialogLabels.cancel}</button><button class="button danger" value="confirm">${dialogLabels.confirm}</button></div></form>`;
@@ -35,6 +34,10 @@
       const [fieldName, expectedValue] = condition.split(':', 2);
       const field = form.elements.namedItem(fieldName);
       if (!(field instanceof HTMLSelectElement) || field.value !== expectedValue) return;
+    }
+    if (typeof confirmDialog.showModal !== 'function') {
+      if (!window.confirm(message)) event.preventDefault();
+      return;
     }
     event.preventDefault();
     event.stopImmediatePropagation();

@@ -1072,6 +1072,59 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-status {
   margin: 0;
 }
 
+[data-route="admin_members"] .admin-member-editor {
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--panel) 86%, var(--panel-2));
+}
+
+[data-route="admin_members"] .admin-member-editor > summary {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3.15rem;
+  padding: .65rem .75rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+[data-route="admin_members"] .admin-member-editor > summary::-webkit-details-marker {
+  display: none;
+}
+
+[data-route="admin_members"] .admin-member-editor[open] > summary {
+  border-bottom: 1px solid var(--border);
+  background: var(--admin-soft);
+}
+
+[data-route="admin_members"] .admin-member-editor-identity,
+[data-route="admin_members"] .admin-member-editor-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  align-items: center;
+  min-width: 0;
+}
+
+[data-route="admin_members"] .admin-member-editor-identity > span {
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-route="admin_members"] .admin-member-editor-action {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: 999px;
+  color: var(--accent-strong);
+  font-weight: 850;
+}
+
 [data-route="admin_members"] .admin-member-row-form :is(input[type="text"], input[type="email"]) {
   margin-top: 0;
 }
@@ -1181,6 +1234,11 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-status {
   body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-links {
     display: grid;
     overflow: visible;
+  }
+
+  [data-route="admin_members"] .admin-member-editor > summary {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group,

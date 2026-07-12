@@ -60,7 +60,7 @@ return array (
   'tag_cleanup_help' => 'Normalisez les variantes de tags dupliquées avant modération ou export.',
   'tag_from_ph' => 'Tag source',
   'tag_to_ph' => 'Tag canonique',
-  'tag_duplicates_empty' => 'Aucune variante de tag dupliquee detectee.',
+  'tag_duplicates_empty' => 'Aucune variante de tag dupliquée détectée.',
   'ok_tags_merged' => 'Tags fusionnés sur %d document(s).',
   'ingestion_template' => 'Modele d ingestion',
   'ingestion_template_none' => 'Aucun',

@@ -15,6 +15,9 @@ final class AdminUsabilityContractTest extends TestCase
         self::assertStringContainsString('class="admin-pagination"', $source);
         self::assertStringContainsString("'page' => \$postReturnPage", $source);
         self::assertStringContainsString("\$_SESSION['_admin_member_create_old']", $source);
+        self::assertStringContainsString("\$_SESSION['_admin_member_update_old']", $source);
+        self::assertStringContainsString('class="admin-member-editor"', $source);
+        self::assertStringContainsString('<details', $source);
     }
 
     public function testAdminNavigationIsGroupedByTaskDomain(): void
@@ -53,6 +56,22 @@ final class AdminUsabilityContractTest extends TestCase
         self::assertStringContainsString('source_content', $source);
         self::assertStringContainsString('class="admin-translation-compare"', $source);
         self::assertStringContainsString('data-admin-dirty-track', $source);
+        self::assertStringContainsString('SELECT COUNT(*) FROM news_translations', $source);
+        self::assertStringContainsString('SELECT COUNT(*) FROM article_translations', $source);
+        self::assertStringContainsString('news_page', $source);
+        self::assertStringContainsString('article_page', $source);
+        self::assertStringContainsString("LIMIT ' . \$translationPerPage", $source);
+    }
+
+    public function testAdminConfirmationsKeepLocalizedLabelsAndNativeFallback(): void
+    {
+        $renderer = $this->source('app/layout_renderer.php');
+        $script = $this->source('assets/js/modules/admin_common.js');
+
+        self::assertStringContainsString('data-admin-confirm-title', $renderer);
+        self::assertStringContainsString('data-admin-confirm-cancel', $renderer);
+        self::assertStringContainsString("typeof confirmDialog.showModal !== 'function'", $script);
+        self::assertStringContainsString('window.confirm(message)', $script);
     }
 
     private function source(string $relativePath): string

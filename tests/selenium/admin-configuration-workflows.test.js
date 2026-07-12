@@ -374,6 +374,8 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
 
       await visit(driver, 'admin_members', { member_q: callsign });
       const memberForm = await driver.findElement(By.xpath(`//input[@name="member_id" and @value="${memberState.id}"]/ancestor::form[1]`));
+      const memberEditor = await memberForm.findElement(By.xpath('ancestor::details[1]'));
+      await driver.executeScript('arguments[0].open = true;', memberEditor);
       await setFieldValue(driver, await memberForm.findElement(By.css('input[name="full_name"]')), updatedName);
       await setFieldValue(driver, await memberForm.findElement(By.css('input[name="locator"]')), updatedLocator);
       await submitForm(driver, memberForm);

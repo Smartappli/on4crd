@@ -26,98 +26,13 @@ function import_article_document(array $file, bool $persist = true, bool $includ
 {
     $locale = current_locale();
     $tm = i18n_domain_translator('admin_articles_import', $locale);
-    $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
-    if ($error === UPLOAD_ERR_NO_FILE) {
-        return ['excerpt' => '', 'content' => ''];
-    }
-    if ($error !== UPLOAD_ERR_OK) {
-        throw new RuntimeException($tm('upload_failed'));
-    }
-
-    $originalName = trim((string) ($file['name'] ?? 'document'));
-    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-    $allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
-    if (!in_array($extension, $allowedExtensions, true)) {
-        throw new RuntimeException($tm('allowed_formats'));
-    }
-    $size = (int) ($file['size'] ?? 0);
-    if ($size <= 0 || $size > 25 * 1024 * 1024) {
-        throw new RuntimeException($tm('upload_failed'));
-    }
-
-    $tmpPath = (string) ($file['tmp_name'] ?? '');
-    if ($tmpPath === '' || !is_uploaded_file($tmpPath)) {
-        throw new RuntimeException($tm('invalid_doc'));
-    }
-
-    $allowedMimesByExtension = [
-        'pdf' => ['application/pdf', 'application/x-pdf'],
-        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'],
-        'txt' => ['text/plain', 'application/octet-stream'],
-        'md' => ['text/plain', 'text/markdown', 'application/octet-stream'],
-        'html' => ['text/html', 'text/plain', 'application/octet-stream'],
-        'htm' => ['text/html', 'text/plain', 'application/octet-stream'],
-    ];
-    $mime = detect_uploaded_mime_type($tmpPath);
-    if (!in_array($mime, $allowedMimesByExtension[$extension] ?? [], true)) {
-        throw new RuntimeException($tm('invalid_doc'));
-    }
-    if ($extension === 'pdf' || $extension === 'docx') {
-        assert_upload_file_is_valid_signature($tmpPath, [$extension]);
-    }
-    if ($extension === 'docx') {
-        article_assert_docx_document($tmpPath);
-    }
-
-    $absolutePath = $tmpPath;
-    if ($persist) {
-        $targetDir = __DIR__ . '/../storage/private/articles';
-        if (!is_dir($targetDir) && !mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
-            throw new RuntimeException($tm('create_dir'));
-        }
-
-        $basename = slugify(pathinfo($originalName, PATHINFO_FILENAME));
-        if ($basename === '') {
-            $basename = 'article';
-        }
-        $filename = $basename . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
-        $absolutePath = $targetDir . '/' . $filename;
-        if (!move_uploaded_file($tmpPath, $absolutePath)) {
-            throw new RuntimeException($tm('save_doc'));
-        }
-    }
-
-    $sourceLabel = '<p class="help article-source-document">' . e($tm('source_file')) . ': ' . e($originalName) . '</p>';
-    if (in_array($extension, ['txt', 'md'], true)) {
-        $rawText = (string) file_get_contents($absolutePath);
-        $content = article_import_text_to_html($rawText);
-    } elseif (in_array($extension, ['html', 'htm'], true)) {
-        $rawHtml = (string) file_get_contents($absolutePath);
-        $content = article_sanitize_content($rawHtml);
-    } elseif ($extension === 'docx') {
-        $content = article_extract_docx_html($absolutePath);
-        if ($content === '') {
-            $content = '<div class="article-document"><p>' . e($tm('docx_extraction_unavailable')) . '</p></div>';
-        }
-    } elseif ($extension === 'pdf') {
-        $rawText = article_extract_pdf_text($absolutePath);
-        $content = article_import_text_to_html($rawText);
-        if ($content === '') {
-            $content = '<div class="article-document"><p>' . e($tm('pdf_extraction_unavailable')) . '</p></div>';
-        }
-    } else {
-        $content = '';
-    }
-    $content = trim($content);
-    if ($includeSourceLabel && $content !== '') {
-        $content .= "\n" . $sourceLabel;
-    }
-    $content = article_sanitize_content($content);
-
-    return [
-        'excerpt' => '',
-        'content' => $content,
-    ];
+    return article_import_uploaded_document(
+        $file,
+        $persist,
+        $includeSourceLabel,
+        __DIR__ . '/../storage/private/articles',
+        $tm,
+    );
 }
 
 /**
@@ -130,32 +45,6 @@ function admin_articles_json_response(array $payload, int $statusCode = 200): vo
     $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     echo is_string($json) ? $json : '{}';
     exit;
-}
-
-function article_assert_docx_document(string $path): void
-{
-    $locale = current_locale();
-    $tm = i18n_domain_translator('admin_articles_import', $locale);
-    if (class_exists('ZipArchive')) {
-        $zip = new ZipArchive();
-        if ($zip->open($path) !== true) {
-            throw new RuntimeException($tm('invalid_doc'));
-        }
-        $hasContentTypes = $zip->locateName('[Content_Types].xml') !== false;
-        $hasDocument = $zip->locateName('word/document.xml') !== false;
-        $zip->close();
-        if (!$hasContentTypes || !$hasDocument) {
-            throw new RuntimeException($tm('invalid_doc'));
-        }
-        return;
-    }
-
-    if (!function_exists('article_docx_part_contents')
-        || article_docx_part_contents($path, '[Content_Types].xml') === ''
-        || article_docx_part_contents($path, 'word/document.xml') === ''
-    ) {
-        throw new RuntimeException($tm('invalid_doc'));
-    }
 }
 
 /**

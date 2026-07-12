@@ -726,6 +726,30 @@ XML;
         }
     }
 
+    public function testArticleDocxDocumentValidationRequiresTheWordPackageParts(): void
+    {
+        $missingDocument = tempnam(sys_get_temp_dir(), 'docx-incomplete-');
+        $completeDocument = tempnam(sys_get_temp_dir(), 'docx-complete-');
+        self::assertIsString($missingDocument);
+        self::assertIsString($completeDocument);
+
+        file_put_contents($missingDocument, self::zipFixture([
+            '[Content_Types].xml' => '<Types/>',
+        ]));
+        file_put_contents($completeDocument, self::zipFixture([
+            '[Content_Types].xml' => '<Types/>',
+            'word/document.xml' => '<document/>',
+        ]));
+
+        try {
+            self::assertFalse(article_docx_document_is_valid($missingDocument));
+            self::assertTrue(article_docx_document_is_valid($completeDocument));
+        } finally {
+            @unlink($missingDocument);
+            @unlink($completeDocument);
+        }
+    }
+
     public function testUploadSignatureValidatorAcceptsLegacyDocOleHeader(): void
     {
         $tmp = tempnam(sys_get_temp_dir(), 'doc-sig-');
