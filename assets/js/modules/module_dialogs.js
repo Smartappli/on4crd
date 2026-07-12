@@ -125,8 +125,75 @@
     });
   };
 
+  const bindProposalMenuWizards = () => {
+    if (typeof HTMLDialogElement === 'undefined') {
+      return;
+    }
+
+    document.querySelectorAll('details[class*="propose-menu"]').forEach((menu, index) => {
+      if (!(menu instanceof HTMLDetailsElement) || menu.dataset.proposalWizardBound === 'true') {
+        return;
+      }
+      const summary = menu.querySelector(':scope > summary');
+      const choices = Array.from(menu.querySelectorAll('[role="menuitem"]'))
+        .filter((choice) => choice instanceof HTMLAnchorElement);
+      if (!(summary instanceof HTMLElement) || choices.length === 0) {
+        return;
+      }
+
+      menu.dataset.proposalWizardBound = 'true';
+      const label = summary.textContent?.trim() || 'Propose';
+      const trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'button';
+      trigger.textContent = label;
+      trigger.setAttribute('aria-haspopup', 'dialog');
+
+      const dialog = document.createElement('dialog');
+      dialog.className = 'proposal-wizard-dialog';
+      dialog.id = `proposal-wizard-${index + 1}`;
+      dialog.setAttribute('aria-labelledby', `${dialog.id}-title`);
+      const card = document.createElement('div');
+      card.className = 'proposal-wizard-card';
+      const title = document.createElement('h2');
+      title.id = `${dialog.id}-title`;
+      title.textContent = label;
+      const progress = document.createElement('p');
+      progress.className = 'proposal-wizard-progress';
+      progress.textContent = '1 / 1';
+      const list = document.createElement('div');
+      list.className = 'proposal-wizard-choices';
+
+      choices.forEach((choice) => {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className = 'proposal-wizard-choice';
+        option.textContent = choice.textContent?.trim() || choice.href;
+        option.addEventListener('click', () => {
+          closeDialog(dialog);
+          choice.click();
+        });
+        list.append(option);
+      });
+
+      card.append(title, progress, list);
+      dialog.append(card);
+      trigger.setAttribute('aria-controls', dialog.id);
+      trigger.addEventListener('click', () => openDialog(dialog));
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) {
+          closeDialog(dialog);
+        }
+      });
+      menu.before(trigger, dialog);
+      menu.hidden = true;
+    });
+  };
+
   window.ON4CRD.closeDialog = closeDialog;
   window.ON4CRD.openDialog = openDialog;
   window.ON4CRD.bindModalDialogs = bindModalDialogs;
   window.ON4CRD.bindDialogMailtoForms = bindDialogMailtoForms;
+  window.ON4CRD.bindProposalMenuWizards = bindProposalMenuWizards;
+  bindProposalMenuWizards();
 })();

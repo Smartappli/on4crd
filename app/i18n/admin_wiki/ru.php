@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Статус',
   'proposal_moderation_note' => 'Примечание модератора',
   'proposal_save_status' => 'Сохранить',
+
+  'confirm_reject_wiki' => 'Подтвердить отказ от содержания этого вики? Это решение меняет редакционный процесс.',
 );

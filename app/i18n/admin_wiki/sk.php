@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Stav',
   'proposal_moderation_note' => 'Poznámka moderovania',
   'proposal_save_status' => 'Uložiť',
+
+  'confirm_reject_wiki' => 'Chcete potvrdiť odmietnutie tohto obsahu wiki? Toto rozhodnutie mení jeho redakčný pracovný postup.',
 );

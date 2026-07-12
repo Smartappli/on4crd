@@ -147,7 +147,7 @@ return array (
   'view' => 'Viz',
   'front_svg' => 'Přední SVG',
   'back_svg' => 'Zpět SVG',
-  'manual_hint' => 'The designator, band, mode and RST fields are normalized to uppercase during typing.',
+  'manual_hint' => 'Pole označení, pásma, režimu a RST se během psaní převádějí na velká písmena.',
   'band_placeholder' => '20 mil',
   'mode_placeholder' => 'SSB',
   'secure_unavailable' => 'Zabezpečená QSL není k dispozici',

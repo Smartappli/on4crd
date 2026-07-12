@@ -113,6 +113,64 @@
   text-decoration: none;
 }
 
+.proposal-wizard-dialog {
+  width: min(92vw, 34rem);
+  padding: 0;
+  border: 0;
+  border-radius: var(--admin-radius, .75rem);
+  background: transparent;
+  color: var(--text);
+}
+
+.proposal-wizard-dialog::backdrop {
+  background: color-mix(in srgb, #0f172a 60%, transparent);
+}
+
+.proposal-wizard-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: inherit;
+  background: var(--panel);
+  box-shadow: 0 1.25rem 3rem rgb(15 23 42 / .28);
+}
+
+.proposal-wizard-card h2,
+.proposal-wizard-progress {
+  margin: 0;
+}
+
+.proposal-wizard-progress {
+  color: var(--muted);
+  font-size: .86rem;
+  font-weight: 800;
+}
+
+.proposal-wizard-choices {
+  display: grid;
+  gap: .6rem;
+}
+
+.proposal-wizard-choice {
+  width: 100%;
+  padding: .8rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: .55rem;
+  background: var(--panel-2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 750;
+  text-align: left;
+  cursor: pointer;
+}
+
+.proposal-wizard-choice:hover,
+.proposal-wizard-choice:focus-visible {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+}
+
 .module-taxonomy-layout {
   display: grid;
   grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);

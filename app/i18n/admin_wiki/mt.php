@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Stat',
   'proposal_moderation_note' => 'Nota ta\' moderazzjoni',
   'proposal_save_status' => 'Ħlief',
+
+  'confirm_reject_wiki' => 'Tikkonferma r-rifjut ta\' dan il-kontenut tal-wiki? Din id-deċiżjoni tbiddel il-fluss tax-xogħol editorjali tagħha.',
 );

@@ -30,7 +30,7 @@ return array (
   'classifieds_cta' => 'Immaniġġja l-klassifika tiegħi',
   'settings_title' => 'Issettjar',
   'settings_desc' => 'Aġġusta l-preferenzi tal-kont tiegħek.',
-  'settings_cta' => 'Iftaħ is-settings',
+  'settings_cta' => 'Iftaħ l-issettjar',
   'privacy_request_prefix' => 'GDPR',
   'article_status_draft' => 'Abbozz',
   'article_status_pending' => 'Pendenti reviżjoni',

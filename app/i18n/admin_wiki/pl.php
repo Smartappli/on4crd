@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Stan',
   'proposal_moderation_note' => 'Uwaga moderacyjna',
   'proposal_save_status' => 'Zapisz',
+
+  'confirm_reject_wiki' => 'Potwierdzić odrzucenie tej zawartości wiki? Ta decyzja zmienia sposób pracy redakcyjnej.',
 );

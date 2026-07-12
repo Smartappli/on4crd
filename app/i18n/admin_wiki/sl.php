@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Stanje',
   'proposal_moderation_note' => 'Opomba o moderiranju',
   'proposal_save_status' => 'Shrani',
+
+  'confirm_reject_wiki' => 'Želite potrditi zavrnitev te wiki vsebine? Ta odločitev spremeni potek uredniškega dela.',
 );

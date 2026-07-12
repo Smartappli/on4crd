@@ -23,5 +23,5 @@ return array (
   'saved_lots' => 'Lottijiet reġistrati',
   'no_lot' => 'Ebda premjijiet.',
   'layout' => 'Amministrazzjoni tal-irkant',
-  'meta_desc' => 'Ġestjoni tal-lott u settings tal-irkant.',
+  'meta_desc' => 'Ġestjoni tal-lottijiet u l-issettjar tal-irkant.',
 );

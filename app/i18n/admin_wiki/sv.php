@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Läge',
   'proposal_moderation_note' => 'Modereringsanteckning',
   'proposal_save_status' => 'Spara',
+
+  'confirm_reject_wiki' => 'Bekräfta avvisande av detta wikiinnehåll? Detta beslut ändrar dess redaktionella arbetsflöde.',
 );

@@ -47,7 +47,7 @@ return array (
     5 =>
     array (
       'title' => 'Personlige data',
-      'body' => 'Oplysninger om behandling af personoplysninger, registreredes rettigheder og kontaktanmodninger er detaljeret på siden Privacy and GDPR.',
+      'body' => 'Oplysninger om behandling af personoplysninger, registreredes rettigheder og kontaktanmodninger er beskrevet på siden Privatliv og GDPR.',
     ),
     6 =>
     array (

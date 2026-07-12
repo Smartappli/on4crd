@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => '状态',
   'proposal_moderation_note' => '审核说明',
   'proposal_save_status' => '保存',
+
+  'confirm_reject_wiki' => '确认拒绝此 wiki 内容？这一决定改变了其编辑工作流程。',
 );

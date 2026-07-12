@@ -65,4 +65,6 @@ return array (
   'proposal_status_label' => 'Stare',
   'proposal_moderation_note' => 'Notă de moderare',
   'proposal_save_status' => 'Salva',
+
+  'confirm_reject_wiki' => 'Confirmați respingerea acestui conținut wiki? Această decizie își schimbă fluxul de lucru editorial.',
 );
