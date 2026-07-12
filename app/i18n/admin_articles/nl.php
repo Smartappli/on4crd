@@ -56,6 +56,7 @@ return array (
   'ok_deleted' => 'Artikel verwijderd.',
   'slug_placeholder' => 'gegenereerd-uit-titel',
   'confirm_delete' => 'Dit artikel verwijderen?',
+  'confirm_reject_article' => 'Het weigeren van dit artikel bevestigen? De auteur kan hiervan op de hoogte worden gebracht.',
   'delete_article' => 'Artikel verwijderen',
   'delete' => 'Verwijderen',
   'old_articles_cleanup' => 'Oude artikelen verwijderen',

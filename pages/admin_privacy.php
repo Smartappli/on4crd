@@ -139,7 +139,7 @@ ob_start();
                         <?php endif; ?>
                     </td>
                     <td>
-                        <form method="post" class="stack">
+                        <form method="post" class="stack" data-admin-dirty-track data-confirm-message="<?= e($t('confirm_apply_erasure')) ?>" data-confirm-when-checked="apply_erasure">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="request_id" value="<?= $requestId ?>">
                             <label><?= e($t('status')) ?>

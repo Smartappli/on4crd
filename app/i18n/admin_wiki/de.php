@@ -27,6 +27,7 @@ return array (
   'page_not_found' => 'Wiki-Seite nicht gefunden.',
   'source_page_not_found' => 'Quellseite nicht gefunden.',
   'status_saved' => 'Wiki-Status gespeichert.',
+  'confirm_reject_wiki' => 'Die Ablehnung dieses Wiki-Inhalts bestätigen? Diese Entscheidung ändert den redaktionellen Ablauf.',
   'modification_applied' => 'Wiki-Bearbeitung angewendet.',
   'add_category' => 'Thema hinzufügen',
   'add_subcategory' => 'Unterthema hinzufügen',

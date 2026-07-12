@@ -34,6 +34,7 @@ return array (
   'back_to_draft' => 'Terug naar concept',
   'moderation_note' => 'Moderatienota',
   'save_decision' => 'Beslissing opslaan',
+  'confirm_moderation_decision' => 'Deze moderatiebeslissing bevestigen? Ze kan de zichtbaarheid van het nieuwsbericht wijzigen.',
   'no_pending_news' => 'Geen nieuws ter moderatie.',
   'section_managers' => 'Sectieverantwoordelijken',
   'member' => 'Lid',

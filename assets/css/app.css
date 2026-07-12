@@ -57,6 +57,15 @@ html[data-theme="dark"] {
 html, body { min-height: 100%; }
 html { scroll-behavior: smooth; scroll-padding-top: calc(var(--mobile-header-height) + 1rem); }
 body { margin: 0; overflow-x: hidden; font-family: Inter, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
 .layout { min-height: calc(100vh - 160px); }
 h1, h2, h3 { line-height: 1.2; letter-spacing: -.015em; }
 p { margin: .5rem 0 1rem; }
@@ -4179,7 +4188,7 @@ textarea.wysiwyg-source {
   margin: 0;
 }
 .site-search-box label span {
-  color: #000;
+  color: var(--muted);
 }
 .site-search-results {
   display: grid;
@@ -4249,7 +4258,8 @@ textarea.wysiwyg-source {
   background: linear-gradient(180deg, var(--panel-2), var(--panel));
   transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
-.site-search-result-card:hover {
+.site-search-result-card:hover,
+.site-search-result-card:focus-within {
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
   box-shadow: 0 12px 24px color-mix(in srgb, var(--accent) 11%, transparent);

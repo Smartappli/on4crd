@@ -91,7 +91,7 @@ ob_start();
             </div>
             <span class="badge muted"><?= count($catalog) ?></span>
         </div>
-        <form method="post" class="admin-widget-form">
+        <form method="post" class="admin-widget-form" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <div class="admin-widget-list">
                 <?php foreach ($catalog as $widgetKey => $widget): ?>

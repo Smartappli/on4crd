@@ -37,9 +37,15 @@ final class ArticleDocxImporter
 {
     public function isValidDocument(string $path): bool
     {
-        return is_file($path)
-            && article_docx_part_contents($path, '[Content_Types].xml') !== ''
-            && article_docx_part_contents($path, 'word/document.xml') !== '';
+        if (!is_file($path)) {
+            return false;
+        }
+
+        $contentTypesXml = article_docx_part_contents($path, '[Content_Types].xml');
+        $documentXml = article_docx_part_contents($path, 'word/document.xml');
+
+        return $this->hasWordMainDocumentContentType($contentTypesXml)
+            && $this->hasWordDocumentBody($documentXml);
     }
 
     public function extractHtml(string $path): string
@@ -59,12 +65,8 @@ final class ArticleDocxImporter
 
     private function createContext(string $path, string $xml): ?ArticleDocxImportContext
     {
-        $dom = new DOMDocument();
-        $previousUseInternalErrors = libxml_use_internal_errors(true);
-        $loaded = $dom->loadXML($xml);
-        libxml_clear_errors();
-        libxml_use_internal_errors($previousUseInternalErrors);
-        if (!$loaded) {
+        $dom = $this->loadXmlDocument($xml);
+        if ($dom === null) {
             return null;
         }
 
@@ -136,5 +138,59 @@ final class ArticleDocxImporter
         }
 
         return sanitize_rich_html(implode("\n", $html));
+    }
+
+    private function hasWordMainDocumentContentType(string $xml): bool
+    {
+        $dom = $this->loadXmlDocument($xml);
+        if ($dom === null) {
+            return false;
+        }
+
+        $xpath = new DOMXPath($dom);
+        $overrides = $xpath->query('/*[local-name()="Types"]/*[local-name()="Override"]');
+        if (!$overrides instanceof DOMNodeList) {
+            return false;
+        }
+
+        foreach ($overrides as $override) {
+            if (!$override instanceof DOMElement) {
+                continue;
+            }
+
+            if ($override->getAttribute('PartName') === '/word/document.xml'
+                && $override->getAttribute('ContentType') === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasWordDocumentBody(string $xml): bool
+    {
+        $dom = $this->loadXmlDocument($xml);
+        if ($dom === null || $dom->documentElement?->localName !== 'document') {
+            return false;
+        }
+
+        $bodyNodes = (new DOMXPath($dom))->query('/*[local-name()="document"]/*[local-name()="body"]');
+
+        return $bodyNodes instanceof DOMNodeList && $bodyNodes->length > 0;
+    }
+
+    private function loadXmlDocument(string $xml): ?DOMDocument
+    {
+        if ($xml === '') {
+            return null;
+        }
+
+        $dom = new DOMDocument();
+        $previousUseInternalErrors = libxml_use_internal_errors(true);
+        $loaded = $dom->loadXML($xml);
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        return $loaded ? $dom : null;
     }
 }

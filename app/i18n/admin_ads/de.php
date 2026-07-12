@@ -37,6 +37,7 @@ return array (
   'status_paused' => 'Pausieren',
   'status_expired' => 'Ablaufen lassen',
   'status_rejected' => 'Ablehnen',
+  'confirm_reject_ad' => 'Die Ablehnung dieser Anzeige bestätigen? Diese Entscheidung ändert ihre Sichtbarkeit.',
   'placeholder_code' => 'club_sidebar',
   'placeholder_name' => 'Club-Seitenleiste',
   'add_placement' => 'Platzierung hinzufügen',

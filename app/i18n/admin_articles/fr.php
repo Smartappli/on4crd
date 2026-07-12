@@ -77,6 +77,7 @@ return array (
   'ok_deleted' => 'Article supprimé.',
   'slug_placeholder' => 'genere-depuis-le-titre',
   'confirm_delete' => 'Supprimer cet article ?',
+  'confirm_reject_article' => 'Confirmer le refus de cet article ? L’auteur peut en être informé.',
   'delete_article' => 'Supprimer l’article',
   'delete' => 'Supprimer',
   'old_articles_cleanup' => 'Supprimer les anciens articles',

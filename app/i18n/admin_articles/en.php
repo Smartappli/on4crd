@@ -77,6 +77,7 @@ return array (
   'ok_deleted' => 'Article deleted.',
   'slug_placeholder' => 'generated-from-title',
   'confirm_delete' => 'Delete this article?',
+  'confirm_reject_article' => 'Confirm rejection of this article? Its author may be notified.',
   'delete_article' => 'Delete article',
   'delete' => 'Delete',
   'old_articles_cleanup' => 'Delete old articles',

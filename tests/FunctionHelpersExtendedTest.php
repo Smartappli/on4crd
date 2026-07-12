@@ -737,8 +737,8 @@ XML;
             '[Content_Types].xml' => '<Types/>',
         ]));
         file_put_contents($completeDocument, self::zipFixture([
-            '[Content_Types].xml' => '<Types/>',
-            'word/document.xml' => '<document/>',
+            '[Content_Types].xml' => '<Types><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+            'word/document.xml' => '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body/></w:document>',
         ]));
 
         try {
@@ -747,6 +747,23 @@ XML;
         } finally {
             @unlink($missingDocument);
             @unlink($completeDocument);
+        }
+    }
+
+    public function testArticleDocxDocumentValidationRejectsAZipWithoutWordMetadata(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'docx-invalid-manifest-');
+        self::assertIsString($tmp);
+
+        file_put_contents($tmp, self::zipFixture([
+            '[Content_Types].xml' => '<Types><Override PartName="/word/document.xml" ContentType="application/xml"/></Types>',
+            'word/document.xml' => '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body/></w:document>',
+        ]));
+
+        try {
+            self::assertFalse(article_docx_document_is_valid($tmp));
+        } finally {
+            @unlink($tmp);
         }
     }
 

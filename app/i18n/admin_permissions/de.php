@@ -14,6 +14,7 @@ return array (
   'layout' => 'Rollen & Berechtigungen',
   'meta_desc' => 'Rollen und Berechtigungen verwalten.',
   'remove_role' => 'Entfernen',
+  'confirm_remove_role' => 'Die Rolle „%1$s“ von %2$s entfernen?',
   'assignments' => 'Zuweisungen',
   'permission_admin_access' => 'Administrationszugang',
   'permission_members_manage' => 'Mitglieder verwalten',

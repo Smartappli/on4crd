@@ -562,7 +562,7 @@ ob_start();
                         <?php else: ?>
                             <a href="<?= e(route_url('wiki_edit', ['id' => (int) $page['id']])) ?>"><?= e($t('edit')) ?></a>
                         <?php endif; ?>
-                        <form method="post" class="inline-form" style="display:inline-flex;margin-left:.5rem;">
+                        <form method="post" class="inline-form" style="display:inline-flex;margin-left:.5rem;" data-confirm-message="<?= e($tr('confirm_reject_wiki')) ?>" data-confirm-when-select="status:rejected">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="id" value="<?= (int) $page['id'] ?>">
                             <input type="hidden" name="return_status" value="<?= e($statusFilter) ?>">
@@ -621,7 +621,7 @@ ob_start();
                 <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
                     <p class="help"><?= e($tr('proposal_contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
                 <?php endif; ?>
-                <form method="post" class="stack">
+                <form method="post" class="stack" data-admin-dirty-track data-confirm-message="<?= e($tr('confirm_reject_wiki')) ?>" data-confirm-when-select="proposal_status:rejected">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_proposal_status">
                     <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">

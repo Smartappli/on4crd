@@ -84,6 +84,7 @@ return array (
   'proposal_moderation_note' => 'Moderation note',
   'proposal_save_status' => 'Save status',
   'proposal_status_saved' => 'Proposal updated.',
+  'confirm_reject_proposal' => 'Confirm rejection of this library proposal? This decision changes its editorial workflow.',
   'proposal_type_content' => 'Document',
   'proposal_type_subcategory' => 'Subtopic',
   'pending_proposals_empty' => 'No member library proposal is pending review.',

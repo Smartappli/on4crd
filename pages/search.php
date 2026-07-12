@@ -368,7 +368,7 @@ ob_start();
             <h1><?= e((string) $t['title']) ?></h1>
             <p class="directory-lead"><?= e((string) $t['lead']) ?></p>
         </div>
-        <form method="get" class="site-search-box">
+        <form method="get" class="site-search-box" role="search">
             <input type="hidden" name="route" value="search">
             <label>
                 <span><?= e((string) $t['query_label']) ?></span>
@@ -391,7 +391,7 @@ ob_start();
             <div>
                 <h2><?= e((string) $t['results_title']) ?></h2>
                 <?php if ($hasQuery && $isQueryLongEnough): ?>
-                    <p class="help"><?= e(sprintf((string) $t['results_for'], $totalResults, $q)) ?></p>
+                    <p class="help" role="status" aria-live="polite" aria-atomic="true"><?= e(sprintf((string) $t['results_for'], $totalResults, $q)) ?></p>
                 <?php else: ?>
                     <p class="help"><?= e((string) $t['start_hint']) ?></p>
                 <?php endif; ?>
@@ -404,7 +404,7 @@ ob_start();
         <?php if ($hasQuery && $isQueryLongEnough): ?>
             <nav class="site-search-source-tabs" aria-label="<?= e((string) $t['source_label']) ?>">
                 <?php foreach ($sourceDefinitions as $sourceKey => $definition): ?>
-                    <a class="site-search-source-tab<?= $source === $sourceKey ? ' is-active' : '' ?>" href="<?= e(route_url_clean('search', ['q' => $q, 'source' => $sourceKey])) ?>">
+                    <a class="site-search-source-tab<?= $source === $sourceKey ? ' is-active' : '' ?>" href="<?= e(route_url_clean('search', ['q' => $q, 'source' => $sourceKey])) ?>"<?= $source === $sourceKey ? ' aria-current="page"' : '' ?>>
                         <span><?= e((string) $definition['label']) ?></span>
                         <strong><?= (int) ($sourceCounts[$sourceKey] ?? 0) ?></strong>
                     </a>

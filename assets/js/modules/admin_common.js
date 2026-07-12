@@ -19,9 +19,12 @@
     cancel: adminNav?.dataset.adminConfirmCancel || 'Cancel',
     confirm: adminNav?.dataset.adminConfirmSubmit || 'Confirm',
   };
+  const unsavedChangesLabel = adminNav?.dataset.adminUnsavedLabel || 'Unsaved changes';
   const confirmDialog = document.createElement('dialog');
   confirmDialog.className = 'admin-confirm-dialog';
-  confirmDialog.innerHTML = `<form method="dialog" class="admin-confirm-card"><h2>${dialogLabels.title}</h2><p data-admin-confirm-copy></p><div class="actions"><button class="button secondary" value="cancel">${dialogLabels.cancel}</button><button class="button danger" value="confirm">${dialogLabels.confirm}</button></div></form>`;
+  confirmDialog.setAttribute('aria-labelledby', 'admin-confirm-dialog-title');
+  confirmDialog.setAttribute('aria-describedby', 'admin-confirm-dialog-copy');
+  confirmDialog.innerHTML = `<form method="dialog" class="admin-confirm-card"><h2 id="admin-confirm-dialog-title">${dialogLabels.title}</h2><p id="admin-confirm-dialog-copy" data-admin-confirm-copy></p><div class="actions"><button class="button secondary" value="cancel">${dialogLabels.cancel}</button><button class="button danger" value="confirm">${dialogLabels.confirm}</button></div></form>`;
   document.body.appendChild(confirmDialog);
   let pendingConfirmation = null;
   document.addEventListener('submit', (event) => {
@@ -33,7 +36,21 @@
     if (condition.includes(':')) {
       const [fieldName, expectedValue] = condition.split(':', 2);
       const field = form.elements.namedItem(fieldName);
-      if (!(field instanceof HTMLSelectElement) || field.value !== expectedValue) return;
+      const expectedValues = expectedValue.split('|').filter(Boolean);
+      if (!(field instanceof HTMLSelectElement) || !expectedValues.includes(field.value)) return;
+    }
+    const submitActionCondition = form.getAttribute('data-confirm-when-submit-action') || '';
+    if (submitActionCondition !== '') {
+      const submitter = event.submitter;
+      const isActionSubmitter = (submitter instanceof HTMLButtonElement || submitter instanceof HTMLInputElement)
+        && submitter.name === 'action';
+      const expectedActions = submitActionCondition.split('|').filter(Boolean);
+      if (!isActionSubmitter || !expectedActions.includes(submitter.value)) return;
+    }
+    const checkedCondition = form.getAttribute('data-confirm-when-checked') || '';
+    if (checkedCondition !== '') {
+      const field = form.elements.namedItem(checkedCondition);
+      if (!(field instanceof HTMLInputElement) || field.type !== 'checkbox' || !field.checked) return;
     }
     if (typeof confirmDialog.showModal !== 'function') {
       if (!window.confirm(message)) event.preventDefault();
@@ -41,7 +58,10 @@
     }
     event.preventDefault();
     event.stopImmediatePropagation();
-    pendingConfirmation = { form, submitter: event.submitter };
+    const focusTarget = event.submitter instanceof HTMLElement
+      ? event.submitter
+      : (document.activeElement instanceof HTMLElement ? document.activeElement : null);
+    pendingConfirmation = { form, submitter: event.submitter, focusTarget };
     const copy = confirmDialog.querySelector('[data-admin-confirm-copy]');
     if (copy instanceof HTMLElement) copy.textContent = message;
     confirmDialog.returnValue = 'cancel';
@@ -50,14 +70,23 @@
   confirmDialog.addEventListener('close', () => {
     const pending = pendingConfirmation;
     pendingConfirmation = null;
-    if (!pending || confirmDialog.returnValue !== 'confirm') return;
+    if (!pending) return;
+    if (confirmDialog.returnValue !== 'confirm') {
+      pending.focusTarget?.focus();
+      return;
+    }
     pending.form.dataset.adminConfirmed = 'true';
     pending.form.requestSubmit(pending.submitter instanceof HTMLElement ? pending.submitter : undefined);
   });
 
   document.querySelectorAll('#main-content table').forEach((table) => {
     if (!(table instanceof HTMLTableElement)) return;
-    const labels = Array.from(table.querySelectorAll('thead th')).map((cell) => cell.textContent.trim());
+    const headerCells = Array.from(table.querySelectorAll('thead th'))
+      .filter((cell) => cell instanceof HTMLTableCellElement);
+    headerCells.forEach((cell) => {
+      if (!cell.hasAttribute('scope')) cell.scope = 'col';
+    });
+    const labels = headerCells.map((cell) => cell.textContent.trim());
     if (labels.length === 0) return;
     table.classList.add('admin-responsive-table');
     table.querySelectorAll('tbody tr').forEach((row) => {
@@ -85,8 +114,9 @@
       if (dirty && !form.querySelector('.admin-dirty-status')) {
         const status = document.createElement('span');
         status.className = 'admin-dirty-status';
-        status.textContent = '•';
-        status.setAttribute('aria-label', 'Unsaved changes');
+        status.textContent = unsavedChangesLabel;
+        status.setAttribute('role', 'status');
+        status.setAttribute('aria-label', unsavedChangesLabel);
         form.appendChild(status);
       }
       if (!dirty) form.querySelector('.admin-dirty-status')?.remove();

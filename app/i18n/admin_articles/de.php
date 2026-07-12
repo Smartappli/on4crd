@@ -56,6 +56,7 @@ return array (
   'ok_deleted' => 'Artikel gelöscht.',
   'slug_placeholder' => 'generiert aus dem Titel',
   'confirm_delete' => 'Diesen Artikel löschen?',
+  'confirm_reject_article' => 'Die Ablehnung dieses Artikels bestätigen? Der Autor kann darüber informiert werden.',
   'delete_article' => 'Artikel löschen',
   'delete' => 'Löschen',
   'old_articles_cleanup' => 'Alte Artikel löschen',

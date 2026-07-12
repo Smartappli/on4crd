@@ -21,6 +21,7 @@ return array (
   'no_events' => 'Geen gebeurtenis.',
   'events_count' => '%d gebeurtenis(sen)',
   'apply_erasure' => 'Automatische anonimisering toepassen als de status "Afgehandeld" wordt.',
+  'confirm_apply_erasure' => 'Automatische anonimisering en verwerking van gekoppelde bestanden bevestigen? Deze actie kan niet ongedaan worden gemaakt.',
   'admin_notes' => 'Beheerdersnotities',
   'update' => 'Bijwerken',
   'none' => 'Geen GDPR-aanvraag.',

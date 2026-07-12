@@ -38,6 +38,7 @@ return array (
   'action' => 'Action',
   'sent_results' => '%d sent / %d failed',
   'send' => 'Send',
+  'confirm_send_campaign' => 'Send this campaign to all active subscribers? This action cannot be undone.',
   'already_sent' => 'Already sent',
   'email' => 'Email',
   'csv_ph' => 'email\\nfoo@example.org\\nbar@example.org',

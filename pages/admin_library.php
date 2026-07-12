@@ -691,7 +691,7 @@ ob_start();
                 <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
                     <p class="help"><?= e($adminLibraryText('proposal_contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
                 <?php endif; ?>
-                <form method="post" class="admin-library-upload-form">
+                <form method="post" class="admin-library-upload-form" data-admin-dirty-track data-confirm-message="<?= e((string) $t['confirm_reject_proposal']) ?>" data-confirm-when-select="proposal_status:rejected">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_proposal_status">
                     <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
@@ -721,7 +721,7 @@ ob_start();
     </section>
     <?php endif; ?>
 
-    <form method="post" enctype="multipart/form-data" class="admin-library-upload-form">
+    <form method="post" enctype="multipart/form-data" class="admin-library-upload-form" data-admin-dirty-track>
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <input type="hidden" name="action" value="upload">
         <div class="admin-library-upload-grid">
@@ -783,7 +783,7 @@ ob_start();
         </form>
         <div class="admin-library-category-list">
             <?php foreach ($categoryOptions as $catOpt): ?>
-                <form method="post" class="inline-form admin-library-category-item">
+                <form method="post" class="inline-form admin-library-category-item" data-confirm-message="<?= e((string) $t['confirm_delete']) ?>" data-confirm-when-submit-action="delete_category">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $catOpt['code']) ?>">
@@ -813,7 +813,7 @@ ob_start();
         <div class="admin-library-category-list">
             <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
                 <?php foreach ($subcatGroup as $subcatOpt): ?>
-                    <form method="post" class="inline-form admin-library-category-item">
+                    <form method="post" class="inline-form admin-library-category-item" data-confirm-message="<?= e((string) $t['confirm_delete']) ?>" data-confirm-when-submit-action="delete_subcategory">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_category" value="<?= e($parentCode) ?>">
@@ -853,7 +853,7 @@ ob_start();
             <?php foreach ($subsubcategoriesByParent as $parentRef => $subsubcatGroup): ?>
                 <?php [$parentCategoryCode, $parentSubcategoryCode] = array_pad(explode(':', (string) $parentRef, 2), 2, ''); ?>
                 <?php foreach ($subsubcatGroup as $subsubcatOpt): ?>
-                    <form method="post" class="inline-form admin-library-category-item">
+                    <form method="post" class="inline-form admin-library-category-item" data-confirm-message="<?= e((string) $t['confirm_delete']) ?>" data-confirm-when-submit-action="delete_subsubcategory">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="update_subsubcategory">
                         <input type="hidden" name="subsubcategory_category" value="<?= e($parentCategoryCode) ?>">

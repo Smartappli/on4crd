@@ -115,7 +115,7 @@ ob_start();
         <?php if ($selectedMember === null): ?>
             <p class="help"><?= e($tr('no_active_members')) ?></p>
         <?php else: ?>
-        <form method="post" class="stack" id="admin-committee-form">
+        <form method="post" class="stack" id="admin-committee-form" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <div class="form-grid">
                 <label><?= e($tr('member')) ?>

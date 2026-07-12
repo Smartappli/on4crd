@@ -34,6 +34,7 @@ return array (
   'back_to_draft' => 'Repasser en brouillon',
   'moderation_note' => 'Note de modération',
   'save_decision' => 'Enregistrer la décision',
+  'confirm_moderation_decision' => 'Confirmer cette décision de modération ? Elle peut modifier la visibilité de l’actualité.',
   'no_pending_news' => 'Aucune actualité à modérer.',
   'section_managers' => 'Responsables de sections',
   'member' => 'Membre',

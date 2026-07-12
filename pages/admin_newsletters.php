@@ -90,7 +90,7 @@ ob_start();
 <div class="grid-2">
     <section class="card">
         <h1><?= e((string) $t['title_subscribers']) ?></h1>
-        <form method="post" class="stack">
+        <form method="post" class="stack" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="add_subscriber">
             <label><?= e((string) $t['email_to_add']) ?>
@@ -104,7 +104,7 @@ ob_start();
         </form>
 
         <h2><?= e((string) $t['csv_import']) ?></h2>
-        <form method="post" class="stack">
+        <form method="post" class="stack" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="import_csv">
             <label><?= e((string) $t['csv_content']) ?>
@@ -162,7 +162,7 @@ ob_start();
 
     <section class="card">
         <h2><?= e((string) $t['campaigns']) ?></h2>
-        <form method="post" class="stack">
+        <form method="post" class="stack" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="create_campaign">
             <label><?= e((string) $t['title']) ?>
@@ -188,7 +188,7 @@ ob_start();
                         <td><?= sprintf((string) $t['sent_results'], (int) $campaign['sent_count'], (int) $campaign['failed_count']) ?></td>
                         <td>
                             <?php if ((string) $campaign['status'] !== 'sent'): ?>
-                                <form method="post">
+                                <form method="post" data-confirm-message="<?= e((string) $t['confirm_send_campaign']) ?>">
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                     <input type="hidden" name="action" value="send_campaign">
                                     <input type="hidden" name="campaign_id" value="<?= (int) $campaign['id'] ?>">

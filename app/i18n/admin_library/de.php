@@ -84,6 +84,7 @@ return array (
   'proposal_moderation_note' => 'Moderationshinweis',
   'proposal_save_status' => 'Status speichern',
   'proposal_status_saved' => 'Vorschlag aktualisiert.',
+  'confirm_reject_proposal' => 'Die Ablehnung dieses Bibliotheksvorschlags bestätigen? Diese Entscheidung ändert den redaktionellen Ablauf.',
   'proposal_type_content' => 'Dokument',
   'proposal_type_subcategory' => 'Unterthema',
   'pending_proposals_empty' => 'Kein Dokumentvorschlag steht zur Prüfung aus.',

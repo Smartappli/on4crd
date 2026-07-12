@@ -1093,7 +1093,7 @@ ob_start();
                         <button class="button admin-article-publish-button" type="submit"><?= e($t('publish_now')) ?></button>
                     </form>
                 <?php endif; ?>
-                <form method="post" class="admin-article-reject-form">
+                <form method="post" class="admin-article-reject-form" data-confirm-message="<?= e($t('confirm_reject_article')) ?>">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="bulk_update_articles">
                     <input type="hidden" name="ids[]" value="<?= (int) $editing['id'] ?>">
@@ -1505,7 +1505,7 @@ ob_start();
                             <?php if ((string) ($article['status'] ?? '') !== 'rejected'): ?>
                                 <details class="admin-article-row-reject">
                                     <summary class="button small secondary"><?= e($t('reject_article')) ?></summary>
-                                    <form method="post" class="admin-article-row-reject-form">
+                                    <form method="post" class="admin-article-row-reject-form" data-confirm-message="<?= e($t('confirm_reject_article')) ?>">
                                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                         <input type="hidden" name="action" value="bulk_update_articles">
                                         <input type="hidden" name="ids[]" value="<?= (int) $article['id'] ?>">

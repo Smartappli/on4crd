@@ -203,7 +203,7 @@ ob_start();
             <article class="inner-card admin-news-queue-item">
                 <div class="row-between"><div><h3><?= e((string) $post['title']) ?></h3><p class="help"><?= e((string) $post['section_name']) ?> — <?= e((string) ($post['author_callsign'] ?: $t['unknown'])) ?></p></div><span class="badge muted"><?= e(news_status_label((string) $post['status'])) ?></span></div>
                 <p><?= e((string) $post['excerpt']) ?></p>
-                <form method="post" class="stack"><input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="moderate_post"><input type="hidden" name="post_id" value="<?= (int) $post['id'] ?>">
+                <form method="post" class="stack" data-admin-dirty-track data-confirm-message="<?= e((string) $t['confirm_moderation_decision']) ?>" data-confirm-when-select="status:published|rejected"><input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="moderate_post"><input type="hidden" name="post_id" value="<?= (int) $post['id'] ?>">
                     <label><?= e((string) $t['decision']) ?><select name="status"><option value="published"><?= e((string) $t['publish']) ?></option><option value="pending"><?= e((string) $t['keep_pending']) ?></option><option value="rejected"><?= e((string) $t['reject']) ?></option><option value="draft"><?= e((string) $t['back_to_draft']) ?></option></select></label>
                     <label><?= e((string) $t['moderation_note']) ?><textarea name="moderation_note" rows="3"><?= e((string) ($post['moderation_note'] ?? '')) ?></textarea></label>
                     <div class="actions"><button class="button"><?= e((string) $t['save_decision']) ?></button></div>

@@ -27,6 +27,7 @@ return array (
   'page_not_found' => 'Wiki page not found.',
   'source_page_not_found' => 'Source page not found.',
   'status_saved' => 'Wiki status saved.',
+  'confirm_reject_wiki' => 'Confirm rejection of this wiki content? This decision changes its editorial workflow.',
   'modification_applied' => 'Wiki edit applied.',
   'add_category' => 'Add topic',
   'add_subcategory' => 'Add subtopic',

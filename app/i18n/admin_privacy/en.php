@@ -21,6 +21,7 @@ return array (
   'no_events' => 'No event.',
   'events_count' => '%d event(s)',
   'apply_erasure' => 'Apply automatic anonymization if the status changes to resolved.',
+  'confirm_apply_erasure' => 'Confirm automatic anonymization and processing of associated files? This action cannot be undone.',
   'admin_notes' => 'Administrator notes',
   'update' => 'Update',
   'none' => 'No GDPR request.',

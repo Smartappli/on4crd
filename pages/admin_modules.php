@@ -50,7 +50,7 @@ ob_start();
 ?>
 <div class="card">
     <h1><?= e((string) $t['title']) ?></h1>
-    <form method="post">
+    <form method="post" data-admin-dirty-track>
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <div class="stack">
             <?php foreach ($modules as $module): ?>
@@ -83,7 +83,7 @@ ob_start();
                 </div>
             <?php endforeach; ?>
         </div>
-        <p><button class="button"><?= e((string) $t['save']) ?></button></p>
+        <div class="actions admin-modules-save-actions"><button class="button"><?= e((string) $t['save']) ?></button></div>
     </form>
 </div>
 <?php

@@ -64,7 +64,7 @@ ob_start();
 <div class="grid-2">
     <section class="card">
         <h1><?= e((string) $t['contacts_title']) ?></h1>
-        <form method="post">
+        <form method="post" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="contact">
             <label><?= e((string) $t['full_name']) ?><input type="text" name="full_name" required></label>
@@ -88,7 +88,7 @@ ob_start();
     </section>
     <section class="card">
         <h1><?= e((string) $t['releases_title']) ?></h1>
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="release">
             <label><?= e((string) $t['title']) ?><input type="text" name="title" required></label>

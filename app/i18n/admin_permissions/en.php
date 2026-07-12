@@ -14,6 +14,7 @@ return array (
   'layout' => 'Roles & permissions',
   'meta_desc' => 'Manage roles and permissions.',
   'remove_role' => 'Remove',
+  'confirm_remove_role' => 'Remove the “%1$s” role from %2$s?',
   'assignments' => 'Assignments',
   'permission_admin_access' => 'Administration access',
   'permission_members_manage' => 'Manage members',

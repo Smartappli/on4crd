@@ -38,6 +38,7 @@ return array (
   'action' => 'Action',
   'sent_results' => '%d envoyés / %d échecs',
   'send' => 'Envoyer',
+  'confirm_send_campaign' => 'Envoyer cette campagne à tous les abonnés actifs ? Cette action ne peut pas être annulée.',
   'already_sent' => 'Déjà envoyée',
   'email' => 'E-mail',
   'csv_ph' => 'email\\nfoo@example.org\\nbar@example.org',

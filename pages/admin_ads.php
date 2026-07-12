@@ -115,7 +115,7 @@ ob_start();
         <span class="badge muted"><?= e(ad_status_label((string) ad_runtime_status($ad))) ?></span>
       </div>
       <p><?= e((string) $ad['description']) ?></p>
-      <form method="post" class="stack">
+      <form method="post" class="stack" data-admin-dirty-track data-confirm-message="<?= e((string) $t['confirm_reject_ad']) ?>" data-confirm-when-select="status:rejected">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <input type="hidden" name="action" value="moderate_ad">
         <input type="hidden" name="ad_id" value="<?= (int) $ad['id'] ?>">
@@ -141,7 +141,7 @@ ob_start();
 
 <section class="card">
   <h2><?= e((string) $t['placements_title']) ?></h2>
-  <form method="post" class="stack">
+  <form method="post" class="stack" data-admin-dirty-track>
     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
     <input type="hidden" name="action" value="add_placement">
     <label><?= e((string) $t['label_code']) ?>

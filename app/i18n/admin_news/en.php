@@ -34,6 +34,7 @@ return array (
   'back_to_draft' => 'Move back to draft',
   'moderation_note' => 'Moderation note',
   'save_decision' => 'Save decision',
+  'confirm_moderation_decision' => 'Confirm this moderation decision? It may change the visibility of the news item.',
   'no_pending_news' => 'No news to moderate.',
   'section_managers' => 'Section managers',
   'member' => 'Member',

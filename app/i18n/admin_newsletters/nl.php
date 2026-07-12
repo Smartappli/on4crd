@@ -38,6 +38,7 @@ return array (
   'action' => 'Actie',
   'sent_results' => '%d verzonden / %d mislukt',
   'send' => 'Verzenden',
+  'confirm_send_campaign' => 'Deze campagne naar alle actieve abonnees verzenden? Deze actie kan niet ongedaan worden gemaakt.',
   'already_sent' => 'Al verzonden',
   'email' => 'E-mailadres',
   'csv_ph' => 'e-mail \\n foo@example.org \\n bar@example.org',

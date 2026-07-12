@@ -21,6 +21,7 @@ return array (
   'no_events' => 'Kein Ereignis.',
   'events_count' => '%d Ereignis(se)',
   'apply_erasure' => 'Automatische Anonymisierung anwenden, wenn der Status auf "Erledigt" gesetzt wird.',
+  'confirm_apply_erasure' => 'Automatische Anonymisierung und Verarbeitung zugehöriger Dateien bestätigen? Diese Aktion kann nicht rückgängig gemacht werden.',
   'admin_notes' => 'Administratornotizen',
   'update' => 'Aktualisieren',
   'none' => 'Keine DSGVO-Anfrage.',

@@ -21,6 +21,7 @@ return array (
   'no_events' => 'Aucun événement.',
   'events_count' => '%d événement(s)',
   'apply_erasure' => 'Appliquer l’anonymisation automatique si le statut passe à "Résolue".',
+  'confirm_apply_erasure' => 'Confirmer l’anonymisation automatique et le traitement des fichiers associés ? Cette action est irréversible.',
   'admin_notes' => 'Notes administrateur',
   'update' => 'Mettre à jour',
   'none' => 'Aucune demande RGPD.',

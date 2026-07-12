@@ -38,6 +38,7 @@ return array (
   'action' => 'Aktion',
   'sent_results' => '%d gesendet / %d fehlgeschlagen',
   'send' => 'Senden',
+  'confirm_send_campaign' => 'Diese Kampagne an alle aktiven Abonnenten senden? Diese Aktion kann nicht rückgängig gemacht werden.',
   'already_sent' => 'Bereits gesendet',
   'email' => 'E-Mail',
   'csv_ph' => 'E-Mail an \\n foo@example.org \\n bar@example.org',

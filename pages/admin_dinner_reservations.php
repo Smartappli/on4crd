@@ -285,7 +285,7 @@ ob_start();
 <section class="card">
     <h1><?= e((string) $t['title']) ?></h1>
     <div class="row-between"><span></span><a class="button secondary" href="<?= e(route_url('admin_dinner_reservations', ['export' => 1])) ?>"><?= e((string) $t['export_csv']) ?></a></div>
-    <form method="post" class="stack" id="dinner-reservation-form">
+    <form method="post" class="stack" id="dinner-reservation-form" data-admin-dirty-track>
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
 
         <label>

@@ -574,6 +574,15 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-group-links {
 }
 
 .admin-dirty-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 1.7rem;
+  margin-top: .45rem;
+  padding: .2rem .5rem;
+  border: 1px solid color-mix(in srgb, var(--admin-warning) 34%, var(--border));
+  border-radius: 999px;
+  background: var(--admin-warning-bg);
   color: var(--admin-warning);
   font-size: .78rem;
   font-weight: 800;
@@ -1127,6 +1136,23 @@ body:is([data-route="admin"], [data-route^="admin_"]) .admin-shell-status {
 
 [data-route="admin_members"] .admin-member-row-form :is(input[type="text"], input[type="email"]) {
   margin-top: 0;
+}
+
+[data-route="admin_modules"] .admin-modules-save-actions {
+  position: sticky;
+  bottom: .75rem;
+  z-index: 3;
+  padding: .75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--admin-radius);
+  background: color-mix(in srgb, var(--panel) 92%, var(--panel-2));
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .12);
+}
+
+@media (max-width: 640px) {
+  [data-route="admin_modules"] .admin-modules-save-actions {
+    position: static;
+  }
 }
 
 [data-route="admin_permissions"] .admin-role-form,

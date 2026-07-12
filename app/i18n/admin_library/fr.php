@@ -84,6 +84,7 @@ return array (
   'proposal_moderation_note' => 'Note de modération',
   'proposal_save_status' => 'Enregistrer le statut',
   'proposal_status_saved' => 'Proposition mise à jour.',
+  'confirm_reject_proposal' => 'Confirmer le refus de cette proposition de bibliothèque ? Cette décision modifie son cycle éditorial.',
   'proposal_type_content' => 'Document',
   'proposal_type_subcategory' => 'Sous-thématique',
   'pending_proposals_empty' => 'Aucune proposition bibliothèque membres en attente de validation.',

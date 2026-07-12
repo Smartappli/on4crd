@@ -27,6 +27,7 @@ return array (
   'page_not_found' => 'Wiki-pagina niet gevonden.',
   'source_page_not_found' => 'Bronpagina niet gevonden.',
   'status_saved' => 'Wiki-status opgeslagen.',
+  'confirm_reject_wiki' => 'Het weigeren van deze wiki-inhoud bevestigen? Deze beslissing wijzigt de redactionele workflow.',
   'modification_applied' => 'Wiki-bewerking toegepast.',
   'add_category' => 'Onderwerp toevoegen',
   'add_subcategory' => 'Subonderwerp toevoegen',

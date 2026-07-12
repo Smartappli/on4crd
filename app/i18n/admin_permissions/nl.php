@@ -14,6 +14,7 @@ return array (
   'layout' => 'Rollen & rechten',
   'meta_desc' => 'Beheer van rollen en rechten.',
   'remove_role' => 'Verwijderen',
+  'confirm_remove_role' => 'De rol “%1$s” van %2$s verwijderen?',
   'assignments' => 'Toewijzingen',
   'permission_admin_access' => 'Toegang tot administratie',
   'permission_members_manage' => 'Leden beheren',

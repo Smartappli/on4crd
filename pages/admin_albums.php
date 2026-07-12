@@ -1018,7 +1018,7 @@ ob_start();
                 <span class="pill<?= $wizardStep === 3 ? ' is-active' : '' ?>">3. <?= e((string) $t['wizard_step_review']) ?></span>
             </div>
             <?php if ($wizardStep === 1): ?>
-                <form method="post" class="stack admin-album-wizard-form">
+                <form method="post" class="stack admin-album-wizard-form" data-admin-dirty-track>
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="create_album">
                     <label><?= e((string) $t['title']) ?>
@@ -1038,7 +1038,7 @@ ob_start();
                 </form>
             <?php elseif ($wizardStep === 2 && is_array($wizardAlbum)): ?>
                 <h3><?= e((string) ($wizardAlbum['title'] ?? $t['create_album'])) ?></h3>
-                <form method="post" enctype="multipart/form-data" class="stack admin-album-wizard-form">
+                <form method="post" enctype="multipart/form-data" class="stack admin-album-wizard-form" data-admin-dirty-track>
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="upload_photo">
                     <input type="hidden" name="album_id" value="<?= (int) $wizardAlbumId ?>">
@@ -1136,7 +1136,7 @@ ob_start();
                     </div>
                 </div>
             <?php endif; ?>
-            <form method="post" enctype="multipart/form-data" class="admin-album-upload-form">
+            <form method="post" enctype="multipart/form-data" class="admin-album-upload-form" data-admin-dirty-track>
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="upload_photo">
                 <label><?= e((string) $t['album_label']) ?>
@@ -1253,7 +1253,7 @@ ob_start();
                                 </span>
                             <?php endif; ?>
                         </a>
-                        <form id="<?= e($albumEditFormId) ?>" method="post" action="<?= e(route_url('admin_albums')) ?>" class="grid-2 admin-album-edit-form" autocomplete="off">
+                        <form id="<?= e($albumEditFormId) ?>" method="post" action="<?= e(route_url('admin_albums')) ?>" class="grid-2 admin-album-edit-form" autocomplete="off" data-admin-dirty-track>
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_album">
                             <input type="hidden" name="album_id" value="<?= $albumId ?>">
@@ -1376,7 +1376,7 @@ ob_start();
                             <?= album_picture_html($imageSrc, $photoRender['title'], ['loading' => 'lazy', 'decoding' => 'async'], $photoRender['image_webp_src']) ?>
                         <?php endif; ?>
                         <p class="help"><?= e((string) $t['album_word']) ?> : <?= e($photoRender['album_title']) ?></p>
-                        <form method="post">
+                        <form method="post" data-admin-dirty-track>
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">

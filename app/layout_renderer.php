@@ -98,6 +98,13 @@ function render_admin_workspace_nav(string $currentRoute, string $currentLocale)
         'nl' => ['content' => 'Inhoud', 'media' => 'Media en documenten', 'communication' => 'Communicatie', 'members' => 'Leden en toegang', 'settings' => 'Instellingen'],
     ];
     $groupLabels = $groupLabelsByLocale[$currentLocale] ?? $groupLabelsByLocale['en'];
+    $unsavedLabelByLocale = [
+        'fr' => 'Modifications non enregistrées',
+        'en' => 'Unsaved changes',
+        'de' => 'Nicht gespeicherte Änderungen',
+        'nl' => 'Niet-opgeslagen wijzigingen',
+    ];
+    $unsavedLabel = $unsavedLabelByLocale[$currentLocale] ?? $unsavedLabelByLocale['en'];
     $groupedLinks = [];
 
     foreach ($cards as $card) {
@@ -145,7 +152,7 @@ function render_admin_workspace_nav(string $currentRoute, string $currentLocale)
             . '</summary><div class="admin-shell-group-links">' . $groupLinks . '</div></details>';
     }
 
-    return '<section class="admin-shell-nav" aria-label="' . e($dashboardLabel) . '" data-admin-confirm-title="' . e($adminConfirmTitle) . '" data-admin-confirm-cancel="' . e($adminConfirmCancel) . '" data-admin-confirm-submit="' . e($adminConfirmSubmit) . '">'
+    return '<section class="admin-shell-nav" aria-label="' . e($dashboardLabel) . '" data-admin-confirm-title="' . e($adminConfirmTitle) . '" data-admin-confirm-cancel="' . e($adminConfirmCancel) . '" data-admin-confirm-submit="' . e($adminConfirmSubmit) . '" data-admin-unsaved-label="' . e($unsavedLabel) . '">'
         . '<div class="admin-shell-current"><span class="admin-section-kicker">' . e($dashboardLabel) . '</span><strong>' . e($currentLabel) . '</strong></div>'
         . $searchForm
         . $pendingSummary
@@ -378,7 +385,8 @@ function render_layout_impl(string $content, string $title = ''): string
     foreach ($flashes as $flash) {
         $type = (string) ($flash['type'] ?? 'info');
         $message = e((string) ($flash['message'] ?? ''));
-        $flashHtml .= '<div class="flash flash-' . e($type) . '">' . $message . '</div>';
+        $isUrgent = in_array($type, ['error', 'warning'], true);
+        $flashHtml .= '<div class="flash flash-' . e($type) . '" role="' . ($isUrgent ? 'alert' : 'status') . '" aria-live="' . ($isUrgent ? 'assertive' : 'polite') . '">' . $message . '</div>';
     }
 
     $navPrimaryItems = [

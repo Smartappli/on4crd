@@ -84,6 +84,7 @@ return array (
   'proposal_moderation_note' => 'Moderatie opmerking',
   'proposal_save_status' => 'Status opslaan',
   'proposal_status_saved' => 'Voorstel bijgewerkt.',
+  'confirm_reject_proposal' => 'Het weigeren van dit bibliotheekvoorstel bevestigen? Deze beslissing wijzigt de redactionele workflow.',
   'proposal_type_content' => 'Bibliotheekdocument',
   'proposal_type_subcategory' => 'Subthema',
   'pending_proposals_empty' => 'Er is geen Documentvoorstel in afwachting van beoordeling.',

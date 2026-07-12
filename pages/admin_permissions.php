@@ -95,7 +95,7 @@ ob_start();
                 <p class="help"><?= e((string) $t['assignments']) ?></p>
             </div>
         </div>
-        <form method="post" class="admin-role-form">
+        <form method="post" class="admin-role-form" data-admin-dirty-track>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="assign_role">
             <label><?= e((string) $t['member']) ?>
@@ -115,7 +115,7 @@ ob_start();
                     <strong><?= e((string) $member['callsign']) ?></strong>
                     <div class="admin-role-chip-list">
                         <?php foreach ($currentRoles as $r): ?>
-                            <form method="post" class="admin-role-chip-form">
+                            <form method="post" class="admin-role-chip-form" data-confirm-message="<?= e(sprintf((string) $t['confirm_remove_role'], $roleLabel($r), (string) $member['callsign'])) ?>">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                 <input type="hidden" name="action" value="remove_role">
                                 <input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>">

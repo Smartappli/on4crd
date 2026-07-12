@@ -34,6 +34,7 @@ return array (
   'back_to_draft' => 'Zurück auf Entwurf',
   'moderation_note' => 'Moderationsnotiz',
   'save_decision' => 'Entscheidung speichern',
+  'confirm_moderation_decision' => 'Diese Moderationsentscheidung bestätigen? Sie kann die Sichtbarkeit der Nachricht ändern.',
   'no_pending_news' => 'Keine zu moderierenden Nachrichten.',
   'section_managers' => 'Bereichsverantwortliche',
   'member' => 'Mitglied',

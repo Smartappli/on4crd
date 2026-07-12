@@ -27,6 +27,7 @@ return array (
   'page_not_found' => 'Page wiki introuvable.',
   'source_page_not_found' => 'Page source introuvable.',
   'status_saved' => 'Statut wiki enregistré.',
+  'confirm_reject_wiki' => 'Confirmer le refus de ce contenu wiki ? Cette décision modifie son cycle éditorial.',
   'modification_applied' => 'Modification wiki appliquée.',
   'add_category' => 'Ajouter une thématique',
   'add_subcategory' => 'Ajouter une sous-thématique',

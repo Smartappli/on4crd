@@ -37,6 +37,7 @@ return array (
   'status_paused' => 'Pauzeren',
   'status_expired' => 'Laten verlopen',
   'status_rejected' => 'Afwijzen',
+  'confirm_reject_ad' => 'Het afwijzen van deze advertentie bevestigen? Deze beslissing wijzigt de zichtbaarheid.',
   'placeholder_code' => 'club_sidebar',
   'placeholder_name' => 'Club-zijkolom',
   'add_placement' => 'Plaatsing toevoegen',

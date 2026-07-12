@@ -47,7 +47,7 @@ ob_start();
 <div class="card">
     <h1><?= e((string) $t['title']) ?></h1>
     <p><?= e((string) $t['intro']) ?></p>
-    <form method="post">
+    <form method="post" data-admin-dirty-track>
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <div class="stack">
             <?php foreach ($rows as $row): ?>
