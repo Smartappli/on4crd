@@ -89,7 +89,7 @@ jobs:
           tools: composer:v2
 
       - name: Setup Node
-        uses: actions/setup-node@v6 # NOSONAR - reviewed action pin managed by workflow update policy.
+        uses: actions/setup-node@v7 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           node-version: '24'
 
